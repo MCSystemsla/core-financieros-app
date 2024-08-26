@@ -1,3 +1,11 @@
 {
-    "hello": "Hello"
-}
+    "button": {
+     "login": "Login"
+    },
+    "auth": {
+     "user": "User",
+     "password": "Password",
+     "branch": "Branch",
+    "select_branch": "Select a Branch"
+    }
+ }

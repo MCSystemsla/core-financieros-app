@@ -1,3 +1,11 @@
 {
-    "hello": "Hola"
+   "button": {
+    "login": "Iniciar Sesion"
+   },
+   "auth": {
+    "user": "Usuario",
+    "password": "Contraseña",
+    "branch": "Sucursal",
+    "select_branch": "Selecciona una Sucursal"
+   }
 }
