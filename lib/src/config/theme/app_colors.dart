@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+
+abstract class AppColors {
+  static const _blueStone = Color(0xff52C3D4);
+  static const _paleSky = Color(0xff657685);
+  static Color borderGrey = _paleSky.withOpacity(.4);
+  static const white = Color(0xffFFFFFF);
+  static Color boxGrey = white.withOpacity(.4);
+  static const forestGreen = Color(0xff228B22);
+  static const orange = Color(0xffFFA500);
+  static Color orangeWithOpacity = const Color(0xffFFA500).withOpacity(0.8);
+  static Color gold = const Color(0xffFFD700).withOpacity(0.8);
+  static Color itemGreen = const Color(0xff4CAF50).withOpacity(0.7);
+  static Color blueIndigo = const Color(0xff3F51B5).withOpacity(0.7);
+  static Color purple = const Color(0xff9C27B0).withOpacity(0.7);
+  static Color cian = const Color(0xff00BCD4).withOpacity(0.7);
+  static Color grey = const Color(0xff808080);
+  static Color greyWithOpacityV4 = const Color(0xff808080).withOpacity(.4);
+  static const Color _terciaryColor = Color(0xffFF5722);
+  static Color whiteWithOpacity14 = white.withOpacity(0.14);
+  static Color getPrimaryColor() {
+    return _blueStone;
+  }
+
+  static Color getSecondaryColor() {
+    return grey;
+  }
+
+  static Color getTerciaryColor() {
+    return _terciaryColor;
+  }
+
+  static Color primaryColorWithOpacity() {
+    return _blueStone.withOpacity(0.9);
+  }
+}
+
+extension Colorss on BuildContext {
+  ThemeData get _theme {
+    return Theme.of(this);
+  }
+
+  Color primaryColor() {
+    return _theme.primaryColor;
+  }
+}
