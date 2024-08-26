@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -5,9 +6,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('LoginScreen '),
+    return Scaffold(
+      body: Container(
+        margin: const EdgeInsets.all(15),
+        child: const Center(
+          child: Image(image: AssetImage(ImageAsset.logo)),
+        ),
       ),
     );
   }
