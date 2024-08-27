@@ -2,7 +2,6 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
-import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
   Future<void> login({
@@ -15,7 +14,7 @@ abstract class AuthRepository {
 
 class AuthRepositoryImpl extends AuthRepository {
   final _api = global<APIRepository>();
-  final _logger = Logger();
+  // final _logger = Logger();
   @override
   Future<void> login({
     required String user,
