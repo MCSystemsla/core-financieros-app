@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -15,11 +16,16 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
-        ..getBranchTeam(
-          accessCode: '2wydJKIvNuO41hCZ7Y6',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
+            ..getBranchTeam(
+              accessCode: '2wydJKIvNuO41hCZ7Y6',
+            ),
         ),
+        BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+      ],
       child: const Scaffold(
         backgroundColor: Color(0xffF1F1F1),
         body: SafeArea(
@@ -97,7 +103,11 @@ class LoginFormWidget extends StatelessWidget {
         CustomElevatedButton(
           text: 'button.login'.tr(),
           color: Colors.black,
-          onPressed: () {},
+          onPressed: () {
+            context
+                .read<AuthCubit>()
+                .login(userName: '', password: '', dbName: '');
+          },
         )
       ],
     );
