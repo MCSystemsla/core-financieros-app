@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 abstract class AppColors {
   static const _blueStone = Color(0xff52C3D4);
   static const _paleSky = Color(0xff657685);
+  static const greenLatern = Color(0xff5eb837);
   static Color borderGrey = _paleSky.withOpacity(.4);
   static const white = Color(0xffFFFFFF);
   static Color boxGrey = white.withOpacity(.4);
@@ -16,18 +17,25 @@ abstract class AppColors {
   static Color cian = const Color(0xff00BCD4).withOpacity(0.7);
   static Color grey = const Color(0xff808080);
   static Color greyWithOpacityV4 = const Color(0xff808080).withOpacity(.4);
-  static const Color _terciaryColor = Color(0xffFF5722);
+  // static const Color _terciaryColor = Color(0xffFF5722);
   static Color whiteWithOpacity14 = white.withOpacity(0.14);
+  static const _greenEsmerald = Color(0xff45ada2);
+  static const _greyLider = Color(0xff898989);
+  static const _blackComponent = Colors.black;
   static Color getPrimaryColor() {
-    return _blueStone;
+    return greenLatern;
   }
 
   static Color getSecondaryColor() {
-    return grey;
+    return _greenEsmerald;
   }
 
   static Color getTerciaryColor() {
-    return _terciaryColor;
+    return _greyLider;
+  }
+
+  static Color getFourthgColor() {
+    return _blackComponent;
   }
 
   static Color primaryColorWithOpacity() {

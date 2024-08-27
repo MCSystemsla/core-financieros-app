@@ -1,10 +1,13 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -12,29 +15,35 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xffF1F1F1),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ChangeLangWidget(route: '/login'),
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Image(
-                    image: AssetImage(ImageAsset.logo),
+    return BlocProvider(
+      create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
+        ..getBranchTeam(
+          accessCode: '2wydJKIvNuO41hCZ7Y6',
+        ),
+      child: const Scaffold(
+        backgroundColor: Color(0xffF1F1F1),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ChangeLangWidget(route: '/login'),
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: Image(
+                      image: AssetImage(ImageAsset.logo),
+                    ),
                   ),
                 ),
-              ),
-              // const Gap(10),
-              Expanded(
-                flex: 5,
-                child: LoginFormWidget(),
-              ),
-            ],
+                // const Gap(10),
+                Expanded(
+                  flex: 5,
+                  child: LoginFormWidget(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -69,15 +78,20 @@ class LoginFormWidget extends StatelessWidget {
           onChanged: (p0) {},
         ),
         const Gap(25),
-        JLuxDropdown(
-          isContainIcon: true,
-          title: 'auth.branch'.tr(),
-          items: const ['ITEM', 'ITEM2', 'ITEM3'],
-          onChanged: (item) {},
-          toStringItem: (item) {
-            return item;
+        BlocBuilder<BranchteamCubit, BranchteamState>(
+          builder: (context, state) {
+            return JLuxDropdown(
+              isContainIcon: true,
+              isLoading: state.status == Status.inProgress,
+              title: 'auth.branch'.tr(),
+              items: state.branchTeams,
+              onChanged: (item) {},
+              toStringItem: (item) {
+                return item.nombre;
+              },
+              hintText: 'auth.select_branch'.tr(),
+            );
           },
-          hintText: 'auth.select_branch'.tr(),
         ),
         const Gap(30),
         CustomElevatedButton(

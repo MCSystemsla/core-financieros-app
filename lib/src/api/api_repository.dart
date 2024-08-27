@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -113,12 +114,12 @@ class DefaultAPIRepository implements APIRepository {
   Map<String, dynamic> _handleResponse(Response response) {
     _logger.d('Response - statusCode: ${response.statusCode}');
     final decodedBody = json.decode(response.body);
-    if (response.headers.containsKey('authorization')) {
-      // String token = response.headers['authorization'] ?? '';
-      // LocalStorage().setToken = token;
-    } else if (decodedBody.containsKey('token')) {
-      // LocalStorage().setToken = decodedBody['token'] ?? '';
-    }
+    // if (response.headers.containsKey('authorization')) {
+    //   String token = response.headers['authorization'] ?? '';
+    //   LocalStorage().setFcmToken();
+    // } else if (decodedBody.containsKey('token')) {
+    //   // LocalStorage(). = decodedBody['token'] ?? '';
+    // }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       Map<String, dynamic>? map = cast<Map<String, dynamic>>(decodedBody);
@@ -128,16 +129,16 @@ class DefaultAPIRepository implements APIRepository {
         return map;
       }
     }
-    try {
-      //si el error es por falta de token se supondra que se debe cerrar sesión
-      // if (decodedBody['message'] == 'Token not found') {
-      //   NavigationService.pushAndRemoveUntil(
-      //     context: AppConfig.shared.flavor.getNavigationKey().currentContext!,
-      //     screen: LoginScreen(),
-      //     routeName: LoginScreen.routeName,
-      //   );
-      // }
-    } catch (_) {}
+    // try {
+    //   //si el error es por falta de token se supondra que se debe cerrar sesión
+    //   // if (decodedBody['message'] == 'Token not found') {
+    //   //   NavigationService.pushAndRemoveUntil(
+    //   //     context: AppConfig.shared.flavor.getNavigationKey().currentContext!,
+    //   //     screen: LoginScreen(),
+    //   //     routeName: LoginScreen.routeName,
+    //   //   );
+    //   // }
+    // } catch (_) {}
 
     _logger.d('Response error ${response.body}');
     var map = cast<Map<String, dynamic>>(decodedBody);
