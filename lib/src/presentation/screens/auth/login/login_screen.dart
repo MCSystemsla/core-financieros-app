@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -100,13 +101,42 @@ class LoginFormWidget extends StatelessWidget {
           },
         ),
         const Gap(30),
-        CustomElevatedButton(
-          text: 'button.login'.tr(),
-          color: Colors.black,
-          onPressed: () {
-            context
-                .read<AuthCubit>()
-                .login(userName: '', password: '', dbName: '');
+        BlocConsumer<AuthCubit, AuthState>(
+          listener: (context, state) {
+            final status = state.status;
+            if (status == Status.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                  content: Text(state.errorMsg),
+                ),
+              );
+            }
+            if (state.status == Status.done) {
+              context.pushReplacement('/');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                  content: Text('Usuario Loguado exitosamente'),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return CustomElevatedButton(
+              enabled: state.status != Status.inProgress,
+              text: 'button.login'.tr(),
+              color: Colors.black,
+              onPressed: () {
+                context.read<AuthCubit>().login(
+                      userName: 'ABRIZUELA',
+                      password: 'Micredito1.',
+                      dbName: 'MICREDITO_CM',
+                    );
+              },
+            );
           },
         )
       ],
