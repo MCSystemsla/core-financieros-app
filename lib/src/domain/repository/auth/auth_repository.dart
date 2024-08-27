@@ -31,7 +31,7 @@ class AuthRepositoryImpl extends AuthRepository {
       final resp = await _api.request(endpoint: endpoint);
       return resp;
     } catch (e) {
-      throw AppException.toAppException(e);
+      throw AppException.toAppException(e.toString());
     }
   }
 
