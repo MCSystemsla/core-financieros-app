@@ -21,9 +21,7 @@ class LoginScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
-            ..getBranchTeam(
-              accessCode: '2wydJKIvNuO41hCZ7Y6',
-            ),
+            ..getBranchTeam(accessCode: '2wydJKIvNuO41hCZ7Y6'),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
       ],
@@ -58,88 +56,134 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginFormWidget extends StatelessWidget {
+class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({super.key});
 
   @override
+  State<LoginFormWidget> createState() => _LoginFormWidgetState();
+}
+
+class _LoginFormWidgetState extends State<LoginFormWidget> {
+  String? username;
+  String? password;
+  String? branchTeam;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InputSimple(
-          title: 'auth.user'.tr(),
-          activeColor: true,
-          hintText: 'Ejem: John Doe',
-          enabled: true,
-          onChanged: (p0) {},
-          textFieldSettings: const TextFieldSettings(
-            keyboardType: TextInputType.emailAddress,
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          InputSimple(
+            title: 'auth.user'.tr(),
+            activeColor: true,
+            hintText: 'Ejem: John Doe',
+            enabled: true,
+            onChanged: (value) {
+              username = value;
+              setState(() {});
+            },
+            textFieldSettings: TextFieldSettings(
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Usuario es obligatorio';
+                }
+                return null;
+              },
+            ),
           ),
-        ),
-        // const Gap(25),
-        InputSimple(
-          title: 'auth.password'.tr(),
-          activeColor: true,
-          hintText: '****',
-          isPasswordField: true,
-          enabled: true,
-          onChanged: (p0) {},
-        ),
-        const Gap(25),
-        BlocBuilder<BranchteamCubit, BranchteamState>(
-          builder: (context, state) {
-            return JLuxDropdown(
-              isContainIcon: true,
-              isLoading: state.status == Status.inProgress,
-              title: 'auth.branch'.tr(),
-              items: state.branchTeams,
-              onChanged: (item) {},
-              toStringItem: (item) {
-                return item.nombre;
+          // const Gap(25),
+          InputSimple(
+            title: 'auth.password'.tr(),
+            activeColor: true,
+            hintText: '****',
+            isPasswordField: true,
+            enabled: true,
+            textFieldSettings: TextFieldSettings(
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Contrasena es obligatoria';
+                }
+                return null;
               },
-              hintText: 'auth.select_branch'.tr(),
-            );
-          },
-        ),
-        const Gap(30),
-        BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
-            final status = state.status;
-            if (status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(state.errorMsg),
-                ),
+            ),
+            onChanged: (value) {
+              password = value;
+              setState(() {});
+            },
+          ),
+          const Gap(25),
+          BlocBuilder<BranchteamCubit, BranchteamState>(
+            builder: (context, state) {
+              return JLuxDropdown(
+                isContainIcon: true,
+                isLoading: state.status == Status.inProgress,
+                validator: (value) {
+                  if (value == null) return 'La Sucural es obligatorio';
+
+                  return null;
+                },
+                title: 'auth.branch'.tr(),
+                items: state.branchTeams,
+                onChanged: (item) {
+                  if (item == null) return;
+                  branchTeam = item.nombreDb;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item.nombre;
+                },
+                hintText: 'auth.select_branch'.tr(),
               );
-            }
-            if (state.status == Status.done) {
-              context.pushReplacement('/');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text('Usuario Loguado exitosamente'),
-                ),
+            },
+          ),
+          const Gap(30),
+          BlocConsumer<AuthCubit, AuthState>(
+            listener: (context, state) {
+              final status = state.status;
+              if (status == Status.error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    showCloseIcon: true,
+                    content: Text(state.errorMsg),
+                  ),
+                );
+              }
+              if (state.status == Status.done) {
+                context.pushReplacement('/');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    showCloseIcon: true,
+                    content: Text('Usuario Loguado exitosamente'),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              return CustomElevatedButton(
+                enabled: state.status != Status.inProgress,
+                text: 'button.login'.tr(),
+                color: Colors.black,
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    context.read<AuthCubit>().login(
+                          userName: username!,
+                          password: password!,
+                          dbName: branchTeam!,
+                        );
+                  }
+                },
               );
-            }
-          },
-          builder: (context, state) {
-            return CustomElevatedButton(
-              enabled: state.status != Status.inProgress,
-              text: 'button.login'.tr(),
-              color: Colors.black,
-              onPressed: () {
-                context.read<AuthCubit>().login(
-                      userName: 'ABRIZUELA',
-                      password: 'Micredito1.',
-                      dbName: 'MICREDITO_CM',
-                    );
-              },
-            );
-          },
-        )
-      ],
+            },
+          )
+        ],
+      ),
     );
   }
 }

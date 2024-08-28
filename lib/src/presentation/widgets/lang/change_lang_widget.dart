@@ -22,9 +22,9 @@ class ChangeLangWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LangCubit, LangState>(
-      builder: (context, state) {
+      builder: (ctx, state) {
         return InkWell(
-          onTap: () => languageBottomSheet(context, route),
+          onTap: () async => await languageBottomSheet(ctx, route),
           child: Container(
             height: 50,
             width: 50,

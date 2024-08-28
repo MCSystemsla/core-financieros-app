@@ -3,13 +3,14 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
 Future languageBottomSheet(BuildContext context, String route) async {
-  return showModalBottomSheet(
+  return await showModalBottomSheet(
     context: context,
     barrierColor: Colors.black38,
     shape: const RoundedRectangleBorder(
@@ -33,8 +34,9 @@ Future languageBottomSheet(BuildContext context, String route) async {
                   leading: SvgPicture.asset(ImageAsset.homeLangESUrl),
                   onTap: () async {
                     await langProvider.changeLanguage(context, 'es');
-                    if (!context.mounted) return null;
-                    context.pushReplacement(route);
+                    if (context.mounted) {
+                      context.pushTransparentRoute(const LoginScreen());
+                    }
                   },
                   trailing: getLocaleMatchIcon(state.currentLang, 'es'),
                 ),
@@ -46,8 +48,9 @@ Future languageBottomSheet(BuildContext context, String route) async {
                   leading: SvgPicture.asset(ImageAsset.homeLangENUrl),
                   onTap: () async {
                     await langProvider.changeLanguage(context, 'en');
-                    if (!context.mounted) return null;
-                    context.pushReplacement(route);
+                    if (context.mounted) {
+                      context.pushTransparentRoute(const LoginScreen());
+                    }
                   },
                   trailing: getLocaleMatchIcon(state.currentLang, 'en'),
                 ),
