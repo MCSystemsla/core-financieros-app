@@ -89,7 +89,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Usuario es obligatorio';
+                  return 'auth.errors.username'.tr();
                 }
                 return null;
               },
@@ -106,7 +106,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Contrasena es obligatoria';
+                  return 'auth.errors.password'.tr();
                 }
                 return null;
               },
@@ -123,7 +123,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 isContainIcon: true,
                 isLoading: state.status == Status.inProgress,
                 validator: (value) {
-                  if (value == null) return 'La Sucural es obligatorio';
+                  if (value == null) return 'auth.errors.branchTeam'.tr();
 
                   return null;
                 },
@@ -157,10 +157,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               if (state.status == Status.done) {
                 context.pushReplacement('/');
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     behavior: SnackBarBehavior.floating,
                     showCloseIcon: true,
-                    content: Text('Usuario Loguado exitosamente'),
+                    content: Text('auth.logged'.tr()),
                   ),
                 );
               }
@@ -173,8 +173,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     context.read<AuthCubit>().login(
-                          userName: username!,
-                          password: password!,
+                          userName: username!.trim(),
+                          password: password!.trim(),
                           dbName: branchTeam!,
                         );
                   }
