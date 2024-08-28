@@ -6,6 +6,12 @@
      "user": "User",
      "password": "Password",
      "branch": "Branch",
-    "select_branch": "Select a Branch"
+    "select_branch": "Select a Branch",
+    "logged": "User successfully logged in",
+    "errors" : {
+      "username": "User is required",
+      "password": "Password is required",
+      "branchTeam": "The Branch is mandatory"
+    }
     }
  }

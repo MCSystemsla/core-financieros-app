@@ -6,6 +6,13 @@
     "user": "Usuario",
     "password": "Contraseña",
     "branch": "Sucursal",
-    "select_branch": "Selecciona una Sucursal"
+    "select_branch": "Selecciona una Sucursal",
+    "logged": "Usuario Logueado exitosamente",
+    "errors" : {
+      "username": "Usuario es obligatorio",
+      "password": "Contraseña es obligatoria",
+      "branchTeam": "La Sucural es obligatorio"
+
+    }
    }
 }
