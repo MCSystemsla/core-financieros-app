@@ -55,6 +55,7 @@ dependencies:
   get_it: ^7.7.0
   http_parser: ^4.0.2
   path_provider: ^2.1.4
+  internet_connection_checker: ^2.0.0
 
   # Intl
   intl: ^0.19.0

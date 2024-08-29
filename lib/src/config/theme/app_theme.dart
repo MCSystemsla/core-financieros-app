@@ -7,6 +7,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorSchemeSeed: AppColors.getPrimaryColor(),
+      scaffoldBackgroundColor: AppColors.lightGray,
       textTheme: GoogleFonts.robotoTextTheme(
         Theme.of(context).textTheme.copyWith(
               bodyMedium: GoogleFonts.roboto(

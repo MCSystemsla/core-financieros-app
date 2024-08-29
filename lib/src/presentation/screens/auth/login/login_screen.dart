@@ -26,7 +26,6 @@ class LoginScreen extends StatelessWidget {
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
       ],
       child: const Scaffold(
-        backgroundColor: Color(0xffF1F1F1),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(20),

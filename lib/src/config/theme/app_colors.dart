@@ -22,6 +22,7 @@ abstract class AppColors {
   static const _greenEsmerald = Color(0xff45ada2);
   static const _greyLider = Color(0xff898989);
   static const _blackComponent = Colors.black;
+  static Color lightGray = const Color(0xffF1F1F1);
   static Color getPrimaryColor() {
     return greenLatern;
   }
