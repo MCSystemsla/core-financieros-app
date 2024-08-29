@@ -3,4 +3,4 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   min_sdk_android: 21
-  image_path: "assets/images/icon.jpeg"
+  image_path: "assets/images/app_icon.png"
