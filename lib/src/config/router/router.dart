@@ -1,17 +1,46 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
-  initialLocation: '/login',
-
+  initialLocation: '/loading',
   routes: [
     GoRoute(
       path: '/',
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
+      path: '/no-internet',
+      builder: (context, state) => const NoInternetScreen(),
+    ),
+    GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/loading',
+      builder: (context, state) => const LoadingScreen(),
+      redirect: (context, state) async {
+        bool isConnected = await InternetConnectionChecker().hasConnection;
+        // bool isConnected = global<InternetConnectionCubit>().state.isConnected;
+        // const bool isAuthenticated = true;
+        if (!isConnected) {
+          log('Internet access is currently unavailable.');
+          return '/no-internet';
+        }
+        // // ignore: dead_code
+        // if (!isAuthenticated) {
+        //   return '/login';
+        //   // ignore: dead_code
+        // } else {
+        //   return '/';
+        // }
+
+        // ignore: dead_code
+        return '/login';
+      },
     ),
   ],
   // routes: [
