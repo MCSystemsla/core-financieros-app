@@ -21,8 +21,7 @@ Future languageBottomSheet(BuildContext context, String route) async {
     ),
     builder: (context) {
       return BlocBuilder<LangCubit, LangState>(
-        builder: (context, state) {
-          final langProvider = context.read<LangCubit>();
+        builder: (ctx, state) {
           return SizedBox(
             height: 200,
             child: Column(
@@ -33,12 +32,16 @@ Future languageBottomSheet(BuildContext context, String route) async {
                   subtitle: const Text('Cambiar Idioma a Español'),
                   leading: SvgPicture.asset(ImageAsset.homeLangESUrl),
                   onTap: () async {
-                    await langProvider.changeLanguage(context, 'es');
+                    await context
+                        .read<LangCubit>()
+                        .changeLanguage(context, 'es');
+
                     if (context.mounted) {
                       context.pushTransparentRoute(const LoginScreen());
                     }
                   },
-                  trailing: getLocaleMatchIcon(state.currentLang, 'es'),
+                  trailing:
+                      getLocaleMatchIcon(state.currentLang.languageCode, 'es'),
                 ),
                 ListTile(
                   title: const Text(
@@ -47,12 +50,16 @@ Future languageBottomSheet(BuildContext context, String route) async {
                   subtitle: const Text('Change Language to English'),
                   leading: SvgPicture.asset(ImageAsset.homeLangENUrl),
                   onTap: () async {
-                    await langProvider.changeLanguage(context, 'en');
+                    await context
+                        .read<LangCubit>()
+                        .changeLanguage(context, 'en');
+
                     if (context.mounted) {
                       context.pushTransparentRoute(const LoginScreen());
                     }
                   },
-                  trailing: getLocaleMatchIcon(state.currentLang, 'en'),
+                  trailing:
+                      getLocaleMatchIcon(state.currentLang.languageCode, 'en'),
                 ),
               ],
             ),
