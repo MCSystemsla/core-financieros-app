@@ -23,13 +23,13 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              LangCubit(currentLang: LocalStorage().currentLanguage),
+              LangCubit(currentLang: Locale(LocalStorage().currentLanguage)),
           lazy: false,
         ),
       ],
       child: BlocConsumer<LangCubit, LangState>(
-        listener: (context, state) {
-          changeLocale(context, state.currentLang);
+        listener: (context, state) async {
+          await localizationDelegate.changeLocale(state.currentLang);
         },
         builder: (context, state) {
           return LocalizationProvider(
@@ -46,7 +46,7 @@ class App extends StatelessWidget {
                 localizationDelegate,
               ],
               supportedLocales: localizationDelegate.supportedLocales,
-              locale: Locale(state.currentLang),
+              locale: Locale(state.currentLang.languageCode),
             ),
           );
         },

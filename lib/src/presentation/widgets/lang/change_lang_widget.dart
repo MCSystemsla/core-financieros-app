@@ -37,7 +37,7 @@ class ChangeLangWidget extends StatelessWidget {
             child: SvgPicture.asset(
               width: 90,
               height: 90,
-              currentLang(state.currentLang),
+              currentLang(state.currentLang.languageCode),
             ),
           ),
         );

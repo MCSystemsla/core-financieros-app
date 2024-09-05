@@ -26,27 +26,30 @@ class LoginScreen extends StatelessWidget {
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
       ],
       child: const Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ChangeLangWidget(route: '/login'),
-                Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: Image(
-                      image: AssetImage(ImageAsset.logo),
+        body: PopScope(
+          canPop: false,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ChangeLangWidget(route: '/login'),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Image(
+                        image: AssetImage(ImageAsset.logo),
+                      ),
                     ),
                   ),
-                ),
-                // const Gap(10),
-                Expanded(
-                  flex: 5,
-                  child: LoginFormWidget(),
-                ),
-              ],
+                  // const Gap(10),
+                  Expanded(
+                    flex: 5,
+                    child: LoginFormWidget(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

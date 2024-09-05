@@ -5,10 +5,10 @@ class LangState extends Equatable {
   LangState({
     required this.currentLang,
   });
-  String currentLang;
+  Locale currentLang;
 
   LangState copyWith({
-    String? currentLang,
+    Locale? currentLang,
   }) {
     return LangState(
       currentLang: currentLang ?? this.currentLang,
