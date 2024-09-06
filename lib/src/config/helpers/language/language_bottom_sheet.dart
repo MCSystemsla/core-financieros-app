@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_returning_null_for_void
-
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
