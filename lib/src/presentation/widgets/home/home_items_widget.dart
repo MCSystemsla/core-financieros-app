@@ -14,7 +14,7 @@ class HomeItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<HomeItemCard> homeItemData = [
       HomeItemCard(
-        title: 'Tesoreria'.tr(),
+        title: 'home.item1'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.account_balance,
@@ -24,7 +24,7 @@ class HomeItemsWidget extends StatelessWidget {
         onTap: () => context.push('/tesoreria'),
       ),
       HomeItemCard(
-        title: 'Ahorro'.tr(),
+        title: 'home.item2'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.savings,
@@ -34,7 +34,7 @@ class HomeItemsWidget extends StatelessWidget {
         onTap: () => context.push('/ahorro'),
       ),
       HomeItemCard(
-        title: 'PLA'.tr(),
+        title: 'home.item3'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.calculate_rounded,
@@ -44,7 +44,7 @@ class HomeItemsWidget extends StatelessWidget {
         onTap: () => context.push('/pla'),
       ),
       HomeItemCard(
-        title: 'Requerimientos'.tr(),
+        title: 'home.item4'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.assignment,

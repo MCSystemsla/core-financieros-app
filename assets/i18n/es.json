@@ -2,6 +2,12 @@
    "button": {
     "login": "Iniciar Sesion"
    },
+   "home": {
+    "item1": "Tesoreria",
+    "item2": "Ahorro",
+    "item3": "PLA",
+    "item4": "Requerimientos"
+   },
    "auth": {
     "user": "Usuario",
     "password": "Contraseña",
@@ -12,7 +18,6 @@
       "username": "Usuario es obligatorio",
       "password": "Contraseña es obligatoria",
       "branchTeam": "La Sucural es obligatorio"
-
     }
    }
 }
