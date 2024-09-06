@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
-  initialLocation: '/loading',
+  // initialLocation: '/loading',
   routes: [
     GoRoute(
       path: '/',
@@ -18,6 +18,22 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/pla',
+      builder: (context, state) => const PLAScreen(),
+    ),
+    GoRoute(
+      path: '/ahorro',
+      builder: (context, state) => const AhorroScreen(),
+    ),
+    GoRoute(
+      path: '/tesoreria',
+      builder: (context, state) => const TesoreriaScreen(),
+    ),
+    GoRoute(
+      path: '/requerimiento',
+      builder: (context, state) => const RequerimientoScreen(),
     ),
     GoRoute(
       path: '/loading',

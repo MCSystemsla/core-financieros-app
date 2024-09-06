@@ -4,4 +4,7 @@ abstract class ImageAsset {
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
 
   // * Auth
+
+  // * Home
+  static const String homeItemBg = 'assets/images/background.png';
 }

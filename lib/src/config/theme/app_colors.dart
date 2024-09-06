@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
-  static const _blueStone = Color(0xff52C3D4);
   static const _paleSky = Color(0xff657685);
   static const greenLatern = Color(0xff5eb837);
   static Color borderGrey = _paleSky.withOpacity(.4);
@@ -39,8 +38,12 @@ abstract class AppColors {
     return _blackComponent;
   }
 
+  static Color getFourthgColorWithOpacity() {
+    return _blackComponent.withOpacity(0.8);
+  }
+
   static Color primaryColorWithOpacity() {
-    return _blueStone.withOpacity(0.9);
+    return _greenEsmerald.withOpacity(0.8);
   }
 }
 

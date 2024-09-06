@@ -2,6 +2,12 @@
     "button": {
      "login": "Login"
     },
+    "home": {
+    "item1": "Treasury",
+    "item2": "Saving",
+    "item3": "PLA",
+    "item4": "Requirements"
+   },
     "auth": {
      "user": "User",
      "password": "Password",
