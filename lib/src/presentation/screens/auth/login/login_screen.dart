@@ -34,7 +34,9 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ChangeLangWidget(route: '/login'),
+                  ChangeLangWidget(
+                    child: LoginScreen(),
+                  ),
                   Expanded(
                     flex: 2,
                     child: Center(

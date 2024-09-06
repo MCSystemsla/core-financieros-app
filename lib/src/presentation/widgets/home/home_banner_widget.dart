@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,9 @@ class HomeBannerWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ChangeLangWidget(route: '/'),
+              ChangeLangWidget(
+                child: HomeScreen(),
+              ),
               // * Comentado por Ahora Hasta Version 2.0
               // NotificationWidget(),
             ],
