@@ -20,6 +20,22 @@ final router = GoRouter(
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
+      path: '/pla',
+      builder: (context, state) => const PLAScreen(),
+    ),
+    GoRoute(
+      path: '/ahorro',
+      builder: (context, state) => const AhorroScreen(),
+    ),
+    GoRoute(
+      path: '/tesoreria',
+      builder: (context, state) => const TesoreriaScreen(),
+    ),
+    GoRoute(
+      path: '/requerimiento',
+      builder: (context, state) => const RequerimientoScreen(),
+    ),
+    GoRoute(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
       redirect: (context, state) async {

@@ -21,7 +21,7 @@ class HomeItemsWidget extends StatelessWidget {
           color: AppColors.white,
         ),
         color: AppColors.primaryColorWithOpacity(),
-        onTap: () => context.push('/news'),
+        onTap: () => context.push('/tesoreria'),
       ),
       HomeItemCard(
         title: 'Ahorro'.tr(),
@@ -31,7 +31,7 @@ class HomeItemsWidget extends StatelessWidget {
           color: AppColors.white,
         ),
         color: AppColors.cian,
-        onTap: () => context.push('/section'),
+        onTap: () => context.push('/ahorro'),
       ),
       HomeItemCard(
         title: 'PLA'.tr(),
@@ -41,7 +41,7 @@ class HomeItemsWidget extends StatelessWidget {
           color: AppColors.white,
         ),
         color: AppColors.getFourthgColorWithOpacity(),
-        onTap: () => context.push('/kilowath_calculation'),
+        onTap: () => context.push('/pla'),
       ),
       HomeItemCard(
         title: 'Requerimientos'.tr(),
@@ -51,7 +51,7 @@ class HomeItemsWidget extends StatelessWidget {
           color: AppColors.white,
         ),
         color: AppColors.blueIndigo,
-        onTap: () => context.push('/educational_data'),
+        onTap: () => context.push('/requerimiento'),
       ),
     ];
 
