@@ -3,13 +3,12 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-Future languageBottomSheet(BuildContext context, String route) async {
+Future languageBottomSheet(BuildContext context, Widget child) async {
   return await showModalBottomSheet(
     context: context,
     barrierColor: Colors.black38,
@@ -37,7 +36,7 @@ Future languageBottomSheet(BuildContext context, String route) async {
                         .changeLanguage(context, 'es');
 
                     if (context.mounted) {
-                      context.pushTransparentRoute(const LoginScreen());
+                      context.pushTransparentRoute(child);
                     }
                   },
                   trailing:
@@ -55,7 +54,7 @@ Future languageBottomSheet(BuildContext context, String route) async {
                         .changeLanguage(context, 'en');
 
                     if (context.mounted) {
-                      context.pushTransparentRoute(const LoginScreen());
+                      context.pushTransparentRoute(child);
                     }
                   },
                   trailing:

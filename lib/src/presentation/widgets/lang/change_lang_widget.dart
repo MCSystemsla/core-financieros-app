@@ -8,23 +8,23 @@ import 'package:flutter_svg/svg.dart';
 
 class ChangeLangWidget extends StatelessWidget {
   final Color? color;
-  final String route;
+  final Widget child;
   const ChangeLangWidget({
     super.key,
-    required this.route,
+    required this.child,
   }) : color = null;
 
   const ChangeLangWidget.withCustomColor({
     super.key,
     required this.color,
-    required this.route,
+    required this.child,
   });
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LangCubit, LangState>(
       builder: (ctx, state) {
         return InkWell(
-          onTap: () async => await languageBottomSheet(ctx, route),
+          onTap: () async => await languageBottomSheet(ctx, child),
           child: Container(
             height: 50,
             width: 50,
