@@ -28,7 +28,7 @@ class ChangeLangWidget extends StatelessWidget {
           child: Container(
             height: 50,
             width: 50,
-            // margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: color ?? AppColors.boxGrey,
               borderRadius: BorderRadius.circular(18),
