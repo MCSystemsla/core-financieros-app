@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,16 @@ class HomeBannerWidget extends StatelessWidget {
         Container(
           height: size.height * 0.5,
           width: size.width,
-          alignment: Alignment.topCenter,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                'https://res.cloudinary.com/dfp17v5ve/image/upload/v1725636595/miCredito/mnv97jazm3u1ugohtdlt.jpg',
-              ),
+          alignment: Alignment.center,
+          child: const FadeInImage(
+            alignment: Alignment.center,
+            placeholderFit: BoxFit.contain,
+            fit: BoxFit.cover,
+            placeholder: AssetImage(
+              ImageAsset.loader,
+            ),
+            image: NetworkImage(
+              'https://res.cloudinary.com/dfp17v5ve/image/upload/v1725636595/miCredito/mnv97jazm3u1ugohtdlt.jpg',
             ),
           ),
         ),
