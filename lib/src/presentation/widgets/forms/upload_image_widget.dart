@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 class UploadImageWidget extends StatelessWidget {
@@ -43,12 +44,8 @@ class UploadImageWidget extends StatelessWidget {
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: const Image(
-                    width: 150,
-                    height: double.infinity,
-                    image: AssetImage(
-                      ImageAsset.imgForm,
-                    ),
+                  child: SvgPicture.asset(
+                    ImageAsset.imgForm,
                   ),
                 ),
               ),

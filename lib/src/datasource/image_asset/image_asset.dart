@@ -10,5 +10,5 @@ abstract class ImageAsset {
   static const String homeItemBg = 'assets/images/background.png';
 
   // Forms
-  static const String imgForm = 'assets/images/no-image.png';
+  static const String imgForm = 'assets/images/icon_add_image.svg';
 }
