@@ -1,4 +1,9 @@
 {
+  "upload_image": {
+    "title": "Selecciona una Opcion",
+    "camera": "Camara",
+    "gallery": "Galeria"
+  },
    "button": {
     "login": "Iniciar Sesion"
    },
