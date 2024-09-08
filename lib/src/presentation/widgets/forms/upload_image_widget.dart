@@ -64,7 +64,9 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: selectedImage != null
-                      ? Image.file(File(selectedImage!.path))
+                      ? FadeInImage(
+                          placeholder: const AssetImage(ImageAsset.loader),
+                          image: FileImage(File(selectedImage!.path)))
                       : SvgPicture.asset(
                           ImageAsset.imgForm,
                         ),
