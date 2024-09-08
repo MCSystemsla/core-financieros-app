@@ -1,4 +1,9 @@
 {
+  "upload_image": {
+    "title": "Select an Option",
+    "camera": "Camera",
+    "gallery": "Gallery"
+  },
     "button": {
      "login": "Login"
     },
