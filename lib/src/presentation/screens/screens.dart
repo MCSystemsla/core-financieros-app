@@ -1,3 +1,4 @@
+export 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/requerimiento/requerimiento_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/tesoreria/tesoreria_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/ahorro/ahorro_screen.dart';
