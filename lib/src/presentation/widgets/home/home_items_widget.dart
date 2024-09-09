@@ -14,13 +14,23 @@ class HomeItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<HomeItemCard> homeItemData = [
       HomeItemCard(
+        title: 'Cartera'.tr(),
+        subtitle: 'Descripcion'.tr(),
+        icon: const Icon(
+          Icons.wallet_rounded,
+          color: AppColors.white,
+        ),
+        color: AppColors.primaryColorWithOpacity(),
+        onTap: () => context.push('/cartera'),
+      ),
+      HomeItemCard(
         title: 'home.item1'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.account_balance,
           color: AppColors.white,
         ),
-        color: AppColors.primaryColorWithOpacity(),
+        color: AppColors.purple,
         onTap: () => context.push('/tesoreria'),
       ),
       HomeItemCard(
