@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class KivaFormScreen extends StatelessWidget {
   const KivaFormScreen({super.key});
@@ -19,7 +20,7 @@ class KivaFormScreen extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: const Text('17112 - Edgardo Avila Ruiz'),
-            onTap: () {},
+            onTap: () => context.push('/no-internet/form/saneamiento'),
             subtitle: Text(DateTime.now().formatDate()),
             trailing: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
