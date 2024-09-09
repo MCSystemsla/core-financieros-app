@@ -11,4 +11,7 @@ abstract class ImageAsset {
 
   // Forms
   static const String imgForm = 'assets/images/icon_add_image.svg';
+
+  // Cartera
+  static const String carteraBg = 'assets/images/cartera_banner.jpg';
 }

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
-  initialLocation: '/loading',
+  // initialLocation: '/loading',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -29,6 +29,16 @@ final router = GoRouter(
     GoRoute(
       path: '/pla',
       builder: (context, state) => const PLAScreen(),
+    ),
+    GoRoute(
+      path: '/cartera',
+      builder: (context, state) => const CarteraScreen(),
+      routes: [
+        GoRoute(
+          path: 'formulario-kiva',
+          builder: (context, state) => const KivaFormScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/ahorro',
