@@ -23,18 +23,18 @@ class MetasYAspiracionesWidget extends StatelessWidget {
             ),
             const Gap(20),
             Text(
-              'Metas y aspiraciones',
+              'forms.metas_y_aspiraciones.title'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(10),
             CommentaryWidget(
-              title: '¿Cuáles son sus planes para los próximos años?'.tr(),
+              title: 'forms.metas_y_aspiraciones.question1'.tr(),
             ),
             const Gap(10),
             CommentaryWidget(
-              title: 'Otros datos relevantes e interesantes del cliente'.tr(),
+              title: 'forms.metas_y_aspiraciones.question2'.tr(),
             ),
             const Gap(10),
             ButtonActionsWidget(

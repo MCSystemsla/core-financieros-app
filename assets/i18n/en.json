@@ -62,6 +62,19 @@
     "firmar": {
       "title": "Signature of the Advisor",
       "description": "I certify that I have completely read this consent and release form to the person named above, and that they have given verbal consent to the release."
+    },
+    "mejora_de_vivienda": {
+        "title": "New home improvement",
+        "impacto_social": {
+          "title": "Kiva Social Impact (specific use, objectives, goals of the loan)."
+        },
+        "question1": "Why did you request the loan? Explain.",
+        "question2": "How do you think this credit will help you improve your quality of life?"
+    },
+    "metas_y_aspiraciones": {
+      "title": "Goals and aspirations",
+      "question1": "What are your plans for the next few years?",
+      "question2": "Other relevant and interesting customer data"
     }
   },
   "cartera": {

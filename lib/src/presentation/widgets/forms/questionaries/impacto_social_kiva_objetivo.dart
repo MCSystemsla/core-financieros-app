@@ -23,20 +23,18 @@ class ImpactoSocialKivaObjetiveWidget extends StatelessWidget {
             ),
             const Gap(20),
             Text(
-              'Impacto Social de Kiva (uso específico, objetivos, metas del préstamo).',
+              'forms.mejora_de_vivienda.impacto_social.title'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(10),
             CommentaryWidget(
-              title: '¿Para qué solicitó el préstamo? Explique.'.tr(),
+              title: 'forms.mejora_de_vivienda.question1'.tr(),
             ),
             const Gap(10),
             CommentaryWidget(
-              title:
-                  '¿Cómo estima usted que este crédito le ayudará a mejorar su calidad de vida?'
-                      .tr(),
+              title: 'forms.mejora_de_vivienda.question2'.tr(),
             ),
             const Gap(10),
             ButtonActionsWidget(

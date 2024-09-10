@@ -12,7 +12,7 @@ class MejoraDeViviendaScreen extends StatelessWidget {
     final pageController = PageController();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mejora de vivienda nueva'.tr()),
+        title: Text('forms.mejora_de_vivienda.title'.tr()),
       ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
