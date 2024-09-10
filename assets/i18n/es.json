@@ -62,6 +62,19 @@
     "firmar": {
       "title": "Firma del Asesor",
       "description": "Certifico que leí completamente este formulario de consentimiento y liberación a la persona cuyo nombre aparece arriba, y que ella dio su consentimiento verbal a la exención."
+    },
+    "mejora_de_vivienda": {
+      "title": "Mejora de vivienda nueva",
+      "impacto_social": {
+        "title": "Impacto Social de Kiva (uso específico, objetivos, metas del préstamo)."
+      },
+      "question1": "¿Para qué solicitó el préstamo? Explique.",
+      "question2": "¿Cómo estima usted que este crédito le ayudará a mejorar su calidad de vida?"
+    },
+    "metas_y_aspiraciones": {
+      "title": "Metas y aspiraciones",
+      "question1": "¿Cuáles son sus planes para los próximos años?",
+      "question2": "Otros datos relevantes e interesantes del cliente"
     }
   },
   "cartera": {
