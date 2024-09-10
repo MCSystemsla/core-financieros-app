@@ -53,10 +53,10 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: [
-          _SaneamientoContent(
+          SaneamientoContent(
             controller: _pageController,
           ),
-          _EntornoSocialWidget(
+          EntornoSocialWidget(
             controller: _pageController,
           ),
           DescripcionYDesarrolloWidget(
@@ -72,15 +72,15 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   }
 }
 
-class _SaneamientoContent extends StatefulWidget {
+class SaneamientoContent extends StatefulWidget {
   final PageController controller;
-  const _SaneamientoContent({required this.controller});
+  const SaneamientoContent({super.key, required this.controller});
 
   @override
-  State<_SaneamientoContent> createState() => _SaneamientoContentState();
+  State<SaneamientoContent> createState() => _SaneamientoContentState();
 }
 
-class _SaneamientoContentState extends State<_SaneamientoContent>
+class _SaneamientoContentState extends State<SaneamientoContent>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,7 @@ class _SaneamientoContentState extends State<_SaneamientoContent>
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
             ),
             const Gap(20),
-            _ButtonActionsWidget(
+            ButtonActionsWidget(
               onPreviousPressed: () {
                 widget.controller.previousPage(
                   duration: const Duration(
@@ -146,12 +146,13 @@ class _SaneamientoContentState extends State<_SaneamientoContent>
   bool get wantKeepAlive => true;
 }
 
-class _ButtonActionsWidget extends StatelessWidget {
+class ButtonActionsWidget extends StatelessWidget {
   final void Function()? onPreviousPressed;
   final void Function()? onNextPressed;
   final String previousTitle;
   final String nextTitle;
-  const _ButtonActionsWidget({
+  const ButtonActionsWidget({
+    super.key,
     required this.onPreviousPressed,
     required this.onNextPressed,
     required this.previousTitle,
@@ -187,15 +188,15 @@ class _ButtonActionsWidget extends StatelessWidget {
   }
 }
 
-class _EntornoSocialWidget extends StatefulWidget {
+class EntornoSocialWidget extends StatefulWidget {
   final PageController controller;
-  const _EntornoSocialWidget({required this.controller});
+  const EntornoSocialWidget({super.key, required this.controller});
 
   @override
-  State<_EntornoSocialWidget> createState() => _EntornoSocialWidgetState();
+  State<EntornoSocialWidget> createState() => _EntornoSocialWidgetState();
 }
 
-class _EntornoSocialWidgetState extends State<_EntornoSocialWidget>
+class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
@@ -227,7 +228,7 @@ class _EntornoSocialWidgetState extends State<_EntornoSocialWidget>
               title: 'forms.entorno_familiar.childs_education'.tr(),
             ),
             const Gap(15),
-            _ButtonActionsWidget(
+            ButtonActionsWidget(
               onPreviousPressed: () {
                 widget.controller.previousPage(
                   duration: const Duration(
@@ -298,7 +299,7 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
               title:
                   'forms.develpment_and_description.have_othe_invertion'.tr(),
             ),
-            _ButtonActionsWidget(
+            ButtonActionsWidget(
               onPreviousPressed: () {
                 controller.previousPage(
                   duration: const Duration(
@@ -365,7 +366,7 @@ class ImpactoSocialKivaWidget extends StatelessWidget {
             CommentaryWidget(
               title: 'forms.impacto_social_kiva.another_user_data'.tr(),
             ),
-            _ButtonActionsWidget(
+            ButtonActionsWidget(
               onPreviousPressed: () {
                 controller.previousPage(
                   duration: const Duration(
