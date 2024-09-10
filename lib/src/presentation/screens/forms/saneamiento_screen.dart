@@ -47,7 +47,7 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saneamiento'),
+        title: Text('forms.saneamiento.appbar'.tr()),
       ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -96,23 +96,24 @@ class _SaneamientoContentState extends State<_SaneamientoContent>
             ),
             const Gap(20),
             Text(
-              'El fondo KIVA es quien apoya a MiCrédito y a sus clientes a obtener financiamientos con tasas de interés que se adaptan a sus capacidades. El propósito de esta entrevista es para que usted pueda compartir el impacto del préstamo de KIVA a través de MiCrédito.',
+              'forms.saneamiento.title'.tr(),
+              textAlign: TextAlign.justify,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(25),
-            const UploadImageWidget(
-              title: '1- Foto Cliente',
+            UploadImageWidget(
+              title: '1- ${'forms.saneamiento.client_photo'.tr()}',
             ),
             const Gap(20),
-            const UploadImageWidget(
-              title: '2- Foto Cliente',
+            UploadImageWidget(
+              title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
             ),
             const Gap(15),
-            const UploadImageWidget(
-              title: '3- Foto Cliente',
+            UploadImageWidget(
+              title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
             ),
             const Gap(20),
             _ButtonActionsWidget(
@@ -132,8 +133,8 @@ class _SaneamientoContentState extends State<_SaneamientoContent>
                   curve: Curves.easeIn,
                 );
               },
-              previousTitle: 'Anterior',
-              nextTitle: 'Siguiente',
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
             ),
           ],
         ),
@@ -211,18 +212,19 @@ class _EntornoSocialWidgetState extends State<_EntornoSocialWidget>
             ),
             const Gap(20),
             Text(
-              'Entorno Familiar',
+              'forms.entorno_familiar.title'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(10),
-            const CommentaryWidget(title: '¿De dónde es originario?'),
+            CommentaryWidget(
+                title: 'forms.entorno_familiar.person_origin'.tr()),
             const Gap(10),
-            const CommentaryWidget(title: '¿Qué edades tienen sus hijos?'),
+            CommentaryWidget(title: 'forms.entorno_familiar.childs_age'.tr()),
             const Gap(10),
-            const CommentaryWidget(
-              title: '¿Qué tipo de estudios reciben sus hijos?¿Porqué?',
+            CommentaryWidget(
+              title: 'forms.entorno_familiar.childs_education'.tr(),
             ),
             const Gap(15),
             _ButtonActionsWidget(
@@ -242,8 +244,8 @@ class _EntornoSocialWidgetState extends State<_EntornoSocialWidget>
                   curve: Curves.easeIn,
                 );
               },
-              previousTitle: 'Anterior',
-              nextTitle: 'Siguiente',
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
             ),
             const Gap(10),
           ],
@@ -274,29 +276,27 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
             ),
             const Gap(20),
             Text(
-              'Descripción y desarrollo del financiamiento',
+              'forms.develpment_and_description.title'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿Cuéntenos que le impulsó a optar por este tipo de crédito?',
+            CommentaryWidget(
+              title: 'forms.develpment_and_description.titleaboutCredit'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿Quién o quiénes lo apoyarán a cumplir lo que se ha propuesto con este financiamiento?',
+            CommentaryWidget(
+              title: 'forms.develpment_and_description.who_support'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿Cree usted que con este crédito va poder cumplir este proyecto?',
+            CommentaryWidget(
+              title: 'forms.develpment_and_description.about_future'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title: '¿Tiene otros ingresos? ¿Cuáles?',
+            CommentaryWidget(
+              title:
+                  'forms.develpment_and_description.have_othe_invertion'.tr(),
             ),
             _ButtonActionsWidget(
               onPreviousPressed: () {
@@ -315,8 +315,8 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
                   curve: Curves.easeIn,
                 );
               },
-              previousTitle: 'Anterior',
-              nextTitle: 'Siguiente',
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
             ),
             const Gap(10),
           ],
@@ -344,27 +344,26 @@ class ImpactoSocialKivaWidget extends StatelessWidget {
             ),
             const Gap(20),
             Text(
-              'Impacto social de Kiva',
+              'forms.impacto_social_kiva.title'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title: '¿En qué planea utilizar este préstamo?',
+            CommentaryWidget(
+              title: 'forms.impacto_social_kiva.what_plan'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿Cómo cree usted que este crédito va a mejorar su calidad de vida?',
+            CommentaryWidget(
+              title: 'forms.impacto_social_kiva.how_perform'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title: '¿Cuáles son sus planes para los próximos 10 años?',
+            CommentaryWidget(
+              title: 'forms.impacto_social_kiva.what_plan_in_10_years'.tr(),
             ),
             const Gap(10),
-            const CommentaryWidget(
-              title: 'Otros datos relevantes e interesantes del cliente:',
+            CommentaryWidget(
+              title: 'forms.impacto_social_kiva.another_user_data'.tr(),
             ),
             _ButtonActionsWidget(
               onPreviousPressed: () {
@@ -383,8 +382,8 @@ class ImpactoSocialKivaWidget extends StatelessWidget {
                   curve: Curves.easeIn,
                 );
               },
-              previousTitle: 'Anterior',
-              nextTitle: 'Firmar',
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.signed'.tr(),
             ),
             const Gap(10),
           ],
@@ -415,7 +414,7 @@ class SignQuestionaryWidget extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  'Firma del oficial'.tr(),
+                  'forms.firmar.title'.tr(),
                   style: TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
@@ -423,8 +422,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                 ),
                 const Gap(10),
                 Text(
-                  'Certifico que leí completamente este formulario de consentimiento y liberación a la persona cuyo nombre aparece arriba, y que ella dio su consentimiento verbal a la exención.'
-                      .tr(),
+                  'forms.firmar.description'.tr(),
                   style: TextStyle(
                     color: AppColors.greyWithOpacityV4,
                   ),
@@ -473,7 +471,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                     color: AppColors.white,
                   ),
                   positionIcon: PositionIcon.left,
-                  text: 'Enviar'.tr(),
+                  text: 'button.send'.tr(),
                   color: context.primaryColor(),
                   onPressed: () {},
                 ),

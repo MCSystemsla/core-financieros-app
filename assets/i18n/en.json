@@ -5,8 +5,15 @@
     "gallery": "Gallery"
   },
     "button": {
-     "login": "Login"
+    "login": "Login",
+    "previous": "Previous",
+    "next": "Next",
+    "signed": "Sign",
+    "send": "Send"
     },
+    "input": {
+    "placeholder": "Enter your text"
+   },
     "home": {
     "item1": "Treasury",
     "item2": "Saving",
@@ -24,5 +31,36 @@
       "password": "Password is required",
       "branchTeam": "The Branch is mandatory"
     }
+  },
+  "forms": {
+    "saneamiento": {
+      "appbar": "Sanitation",
+      "title": "The KIVA fund is the one that supports MiCrédito and its clients to obtain financing with interest rates that adapt to their capabilities. The purpose of this interview is so that you can share the impact of the KIVA loan through MiCrédito.",
+      "client_photo": "Client Photo"
+    },
+    "entorno_familiar": {
+      "title": "Family Environment",
+      "person_origin": "Where is it originally from?",
+      "childs_age": "What ages are your children?",
+      "childs_education": "What type of studies do your children receive? Why?"
+    },
+    "develpment_and_description": {
+      "title": "Description and development of financing",
+      "aboutCredit": "Tell us what prompted you to opt for this type of credit?",
+      "who_support": "Who will support you in accomplishing what you have proposed with this financing?",
+      "about_future": "Do you think that with this credit you will be able to complete this project?",
+      "have_othe_invertion": "Do you have other income? Which is it?"
+    },
+    "impacto_social_kiva": {
+      "title": "Kiva Social Impact",
+      "what_plan": "What do you plan to use this loan for?",
+      "how_perform": "How do you think this credit will improve your quality of life?",
+      "what_plan_in_10_years": "What are your plans for the next 10 years?",
+      "another_user_data": "Other relevant and interesting customer data:"
+    },
+    "firmar": {
+      "title": "Signature of the Advisor",
+      "description": "I certify that I have completely read this consent and release form to the person named above, and that they have given verbal consent to the release."
     }
+  }
  }

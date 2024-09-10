@@ -5,7 +5,14 @@
     "gallery": "Galeria"
   },
    "button": {
-    "login": "Iniciar Sesion"
+    "login": "Iniciar Sesion",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "signed": "Firmar",
+    "send": "Enviar"
+   },
+   "input": {
+    "placeholder": "Ingresa tu texto"
    },
    "home": {
     "item1": "Tesoreria",
@@ -24,5 +31,36 @@
       "password": "Contraseña es obligatoria",
       "branchTeam": "La Sucural es obligatorio"
     }
-   }
+  },
+  "forms": {
+    "saneamiento": {
+      "appbar": "Saneamiento",
+      "title": "El fondo KIVA es quien apoya a MiCrédito y a sus clientes a obtener financiamientos con tasas de interés que se adaptan a sus capacidades. El propósito de esta entrevista es para que usted pueda compartir el impacto del préstamo de KIVA a través de MiCrédito.",
+      "client_photo": "Foto Cliente"
+    },
+    "entorno_familiar": {
+      "title": "Entorno Familiar",
+      "person_origin": "¿De dónde es originario?",
+      "childs_age": "¿Qué edades tienen sus hijos?",
+      "childs_education": "¿Qué tipo de estudios reciben sus hijos?¿Porqué?"
+    },
+    "develpment_and_description": {
+      "title": "Descripción y desarrollo del financiamiento",
+      "aboutCredit": "¿Cuéntenos que le impulsó a optar por este tipo de crédito?",
+      "who_support": "¿Quién o quiénes lo apoyarán a cumplir lo que se ha propuesto con este financiamiento?",
+      "about_future": "¿Cree usted que con este crédito va poder cumplir este proyecto?",
+      "have_othe_invertion": "¿Tiene otros ingresos? ¿Cuáles?"
+    },
+    "impacto_social_kiva": {
+      "title": "Impacto social de Kiva",
+      "what_plan": "¿En qué planea utilizar este préstamo?",
+      "how_perform": "¿Cómo cree usted que este crédito va a mejorar su calidad de vida?",
+      "what_plan_in_10_years": "¿Cuáles son sus planes para los próximos 10 años?",
+      "another_user_data": "Otros datos relevantes e interesantes del cliente:"
+    },
+    "firmar": {
+      "title": "Firma del Asesor",
+      "description": "Certifico que leí completamente este formulario de consentimiento y liberación a la persona cuyo nombre aparece arriba, y que ella dio su consentimiento verbal a la exención."
+    }
+  }
 }
