@@ -42,6 +42,7 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   gap: ^3.0.1
   google_fonts: ^6.2.1
+  signature: ^5.5.0
 
    # Logic
   go_router: ^14.2.7
