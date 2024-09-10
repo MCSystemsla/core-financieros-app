@@ -14,7 +14,7 @@ class HomeItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<HomeItemCard> homeItemData = [
       HomeItemCard(
-        title: 'Cartera'.tr(),
+        title: 'home.item5'.tr(),
         subtitle: 'Descripcion'.tr(),
         icon: const Icon(
           Icons.wallet_rounded,

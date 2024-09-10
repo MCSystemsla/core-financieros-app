@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -15,19 +16,19 @@ class CarteraScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomBannerWidget(
-              icon: Icon(
+            CustomBannerWidget(
+              icon: const Icon(
                 Icons.wallet_rounded,
                 color: AppColors.white,
               ),
-              title: 'Cartera',
+              title: 'home.item5'.tr(),
               image: ImageAsset.carteraBg,
             ),
             const Gap(20),
             Container(
               margin: const EdgeInsets.all(18),
               child: Text(
-                'Ingresa una opcion de cartera',
+                'cartera.description'.tr(),
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontSize: 19,
                     ),
@@ -35,8 +36,8 @@ class CarteraScreen extends StatelessWidget {
             ),
             _Card(
               onTap: () {},
-              title: 'Creditos',
-              subtitle: 'Modulo de Credito',
+              title: 'cartera.credit'.tr(),
+              subtitle: 'cartera.credit_title'.tr(),
               firstColor: AppColors.getSecondaryColor(),
               secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
               icon: const Icon(
@@ -47,8 +48,8 @@ class CarteraScreen extends StatelessWidget {
             ),
             _Card(
               onTap: () => context.push('/cartera/formulario-kiva'),
-              title: 'Formularios KIVA',
-              subtitle: 'Modulo de Formularios Kiva',
+              title: 'cartera.kiva'.tr(),
+              subtitle: 'cartera.kiva_description'.tr(),
               firstColor: AppColors.blueIndigo,
               secondColor:
                   AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
