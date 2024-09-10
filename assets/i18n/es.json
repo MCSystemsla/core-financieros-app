@@ -18,7 +18,8 @@
     "item1": "Tesoreria",
     "item2": "Ahorro",
     "item3": "PLA",
-    "item4": "Requerimientos"
+    "item4": "Requerimientos",
+    "item5": "Cartera"
    },
    "auth": {
     "user": "Usuario",
@@ -62,5 +63,13 @@
       "title": "Firma del Asesor",
       "description": "Certifico que leí completamente este formulario de consentimiento y liberación a la persona cuyo nombre aparece arriba, y que ella dio su consentimiento verbal a la exención."
     }
+  },
+  "cartera": {
+    "title": "Solicitudes en Tramite",
+    "description": "Ingresa una opcion de cartera",
+    "credit": "Creditos",
+    "credit_title": "Modulo de Credito",
+    "kiva": "Formularios KIVA",
+    "kiva_description": "Modulo de Formularios Kiva"
   }
 }

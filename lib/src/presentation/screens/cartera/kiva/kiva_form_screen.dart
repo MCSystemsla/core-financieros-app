@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +11,7 @@ class KivaFormScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Solicitudes en Tramite'),
+        title: Text('cartera.title'.tr()),
       ),
       body: ListView.separated(
         itemCount: 20,

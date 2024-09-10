@@ -283,7 +283,7 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
             ),
             const Gap(10),
             CommentaryWidget(
-              title: 'forms.develpment_and_description.titleaboutCredit'.tr(),
+              title: 'forms.develpment_and_description.aboutCredit'.tr(),
             ),
             const Gap(10),
             CommentaryWidget(

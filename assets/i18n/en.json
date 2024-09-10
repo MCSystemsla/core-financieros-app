@@ -18,7 +18,8 @@
     "item1": "Treasury",
     "item2": "Saving",
     "item3": "AML",
-    "item4": "Requirements"
+    "item4": "Requirements",
+    "item5": "Wallet"
    },
     "auth": {
      "user": "User",
@@ -62,5 +63,14 @@
       "title": "Signature of the Advisor",
       "description": "I certify that I have completely read this consent and release form to the person named above, and that they have given verbal consent to the release."
     }
+  },
+  "cartera": {
+    "title": "Applications in Process",
+    "description": "Enter a wallet option",
+    "credit": "Credits",
+    "credit_title": "Credit Module",
+    "kiva": "KIVA Forms",
+    "kiva_description": "Kiva Forms Module"
   }
+  
  }
