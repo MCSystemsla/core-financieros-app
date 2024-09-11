@@ -21,7 +21,7 @@ class KivaFormScreen extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: const Text('17112 - Edgardo Avila Ruiz'),
-            onTap: () => context.push('/no-internet/form/seguimiento'),
+            onTap: () => context.push('/no-internet/form/migrantes-economicos'),
             subtitle: Text(DateTime.now().formatDate()),
             trailing: const Column(
               mainAxisAlignment: MainAxisAlignment.center,

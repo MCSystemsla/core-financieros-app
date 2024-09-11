@@ -84,6 +84,20 @@
       "question3": "¿Cuáles son las dificultades que se le han presentado?",
       "question4": "¿Cuáles son las metas a las que aspira?",
       "question5": "Otros datos relevantes o interesantes del cliente"
+    },
+    "migrantes_economicos": {
+      "title": "Migrantes Economicos",
+      "primer_prestamo": {
+        "title": "Primer Prestamo",
+        "question1": "¿Para que utilizó su primer préstamo?",
+        "question2": "¿De qué manera le ayudó este préstamo KIVA?"
+      },
+      "impacto_social": {
+        "question1": "¿Para qué solicitó este nuevo crédito?",
+        "question2": "¿Hay alguien que le esté apoyando en este nuevo préstamo?",
+        "question3": "¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida y la de su familia? ¿Por qué?",
+        "question4": "Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?"
+      }
     }
   },
   "cartera": {
