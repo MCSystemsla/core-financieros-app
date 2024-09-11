@@ -12,7 +12,11 @@
     "send": "Send"
     },
     "input": {
-    "placeholder": "Enter your text"
+    "placeholder": "Enter your text",
+    "select_option": "Select an option",
+    "input_validator": "This field is required",
+    "yes": "Yes",
+    "no": "No"
    },
     "home": {
     "item1": "Treasury",
@@ -43,7 +47,13 @@
       "title": "Family Environment",
       "person_origin": "Where is it originally from?",
       "childs_age": "What ages are your children?",
-      "childs_education": "What type of studies do your children receive? Why?"
+      "childs_education": "What type of studies do your children receive? Why?",
+      "question1": "What inspired you to choose this career?",
+      "question2": "Do you feel like you are fulfilling yourself professionally? Why?",
+      "question3": "Who or who supports you in your studies?",
+      "question4": "What work or business do your parents or guardians have?",
+      "question5": "Do you have other income?",
+      "question6": "What are they?"
     },
     "develpment_and_description": {
       "title": "Description and development of financing",
@@ -98,6 +108,14 @@
         "question3": "Do you consider that this new investment will help you improve your living conditions and that of your family? Because?",
         "question4": "Once this loan is finished, what would be your next goal?"
       }
+    },
+    "miCredi_estudio": {
+      "question1": "Why did you request the loan?",
+      "question2": "How do you think this credit will help you grow professionally?",
+      "question3": "What are your plans in the next 10 years?",
+      "question4": "Are you thinking of opting for another higher education? Which?",
+      "question5": "What do you aspire for at work?",
+      "question6": "Other relevant and interesting customer data"
     }
   },
   "cartera": {

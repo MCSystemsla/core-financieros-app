@@ -32,6 +32,10 @@ final router = GoRouter(
           path: 'form/migrantes-economicos',
           builder: (context, state) => const MigrantesEconomicosScreen(),
         ),
+        GoRoute(
+          path: 'form/micredito-estudio',
+          builder: (context, state) => const MiCreditoEstudioScreen(),
+        ),
       ],
     ),
     GoRoute(
