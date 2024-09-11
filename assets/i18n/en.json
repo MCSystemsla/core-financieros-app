@@ -75,6 +75,15 @@
       "title": "Goals and aspirations",
       "question1": "What are your plans for the next few years?",
       "question2": "Other relevant and interesting customer data"
+    },
+    "seguimiento": {
+      "title": "Follow-up",
+      "description": "Survey Group",
+      "question1": "What was the destination of the credit specifically? If this changed, how did you invest it?",
+      "question2": "Since receiving the loan, how has your life changed?",
+      "question3": "What are the difficulties that have arisen?",
+      "question4": "What are the goals you aspire to?",
+      "question5": "Other relevant or interesting customer data"
     }
   },
   "cartera": {
