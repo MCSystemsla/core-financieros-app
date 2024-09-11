@@ -12,7 +12,11 @@
     "send": "Enviar"
    },
    "input": {
-    "placeholder": "Ingresa tu texto"
+    "placeholder": "Ingresa tu texto",
+    "select_option": "Selecciona una opcion",
+    "input_validator": "Este campo es obligatorio",
+    "yes": "Si",
+    "no": "No"
    },
    "home": {
     "item1": "Tesoreria",
@@ -43,7 +47,13 @@
       "title": "Entorno Familiar",
       "person_origin": "¿De dónde es originario?",
       "childs_age": "¿Qué edades tienen sus hijos?",
-      "childs_education": "¿Qué tipo de estudios reciben sus hijos?¿Porqué?"
+      "childs_education": "¿Qué tipo de estudios reciben sus hijos?¿Porqué?",
+      "question1": "¿Qué le inspiró a escoger esta carrera?",
+      "question2": "¿Sentís que te estas realizando profesionalmente? ¿Por qué?",
+      "question3": "¿Quién o quiénes te apoyan en tus estudios?",
+      "question4": "¿En quá trabaja o qué negocio tienen tus padres o tutores?",
+      "question5": "¿Tienes otros ingresos?",
+      "question6": "¿Cuáles son?"
     },
     "develpment_and_description": {
       "title": "Descripción y desarrollo del financiamiento",
@@ -60,7 +70,7 @@
       "another_user_data": "Otros datos relevantes e interesantes del cliente:"
     },
     "firmar": {
-      "title": "Firma del Asesor",
+      "title": "Firma del Cliente",
       "description": "Certifico que leí completamente este formulario de consentimiento y liberación a la persona cuyo nombre aparece arriba, y que ella dio su consentimiento verbal a la exención."
     },
     "mejora_de_vivienda": {
@@ -98,6 +108,14 @@
         "question3": "¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida y la de su familia? ¿Por qué?",
         "question4": "Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?"
       }
+    },
+    "miCredi_estudio": {
+      "question1": "¿Para qué solicitó el préstamo?",
+      "question2": "¿Cómo estima usted que este crédito le ayudará crecer profesionalmente?",
+      "question3": "¿Cuáles son sus planes en los próximos 10 años?",
+      "question4": "¿Piensa optar a otro estudio superior? ¿Cuál?",
+      "question5": "¿Qué aspira laboralmente?",
+      "question6": "Otros datos relevantes e interesantes del cliente"
     }
   },
   "cartera": {
