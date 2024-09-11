@@ -1,3 +1,4 @@
+export 'package:core_financiero_app/src/presentation/screens/forms/migrantes_economicos_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/seguimiento_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_form_screen.dart';

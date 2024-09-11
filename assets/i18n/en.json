@@ -84,6 +84,20 @@
       "question3": "What are the difficulties that have arisen?",
       "question4": "What are the goals you aspire to?",
       "question5": "Other relevant or interesting customer data"
+    },
+    "migrantes_economicos": {
+      "title": "Economic Migrants",
+      "primer_prestamo": {
+        "title": "First Loan",
+        "question1": "What did you use your first loan for?",
+        "question2": "How did this KIVA loan help you?"
+      },
+      "impacto_social": {
+        "question1": "Why did you request this new credit?",
+        "question2": "Is there anyone helping you with this new loan?",
+        "question3": "Do you consider that this new investment will help you improve your living conditions and that of your family? Because?",
+        "question4": "Once this loan is finished, what would be your next goal?"
+      }
     }
   },
   "cartera": {
