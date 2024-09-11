@@ -75,6 +75,15 @@
       "title": "Metas y aspiraciones",
       "question1": "¿Cuáles son sus planes para los próximos años?",
       "question2": "Otros datos relevantes e interesantes del cliente"
+    },
+    "seguimiento": {
+      "title": "Seguimiento",
+      "description": "Grupo Encuesta",
+      "question1": "¿Cuál era el destino del crédito específicamente? Si este cambió ¿Cómo lo invirtió?",
+      "question2": "¿Desde que recibió el préstamo, cómo ha cambiado su vida?",
+      "question3": "¿Cuáles son las dificultades que se le han presentado?",
+      "question4": "¿Cuáles son las metas a las que aspira?",
+      "question5": "Otros datos relevantes o interesantes del cliente"
     }
   },
   "cartera": {
