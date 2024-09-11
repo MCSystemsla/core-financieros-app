@@ -55,7 +55,7 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
           children: [
             const MiCreditoProgress(
               steps: 3,
-              currentStep: 2,
+              currentStep: 1,
             ),
             const Gap(20),
             Text(
