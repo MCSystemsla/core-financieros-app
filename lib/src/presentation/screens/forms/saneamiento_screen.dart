@@ -86,6 +86,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -202,6 +203,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(
