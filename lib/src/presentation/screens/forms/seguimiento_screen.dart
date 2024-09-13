@@ -44,6 +44,7 @@ class _GrupoEncuestaWidgetState extends State<GrupoEncuestaWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(

@@ -48,6 +48,7 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -118,6 +119,7 @@ class _ImpactoSocialMigranteEconomicoState
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
