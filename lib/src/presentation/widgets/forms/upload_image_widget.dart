@@ -51,12 +51,12 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
                 ),
               ),
               onPressed: () async {
-                _showSelectImageDialog(
-                  context,
-                  (file) {
-                    setState(() {
-                      selectedImage = file;
-                    });
+                picker.pickImage(source: ImageSource.camera).then(
+                  (XFile? photo) {
+                    if (photo != null) {
+                      selectedImage = photo;
+                      setState(() {});
+                    }
                   },
                 );
               },

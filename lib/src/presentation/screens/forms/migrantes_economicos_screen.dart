@@ -1,8 +1,11 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class MigrantesEconomicosScreen extends StatelessWidget {
@@ -12,25 +15,31 @@ class MigrantesEconomicosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final pageController = PageController();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('forms.migrantes_economicos.title'.tr()),
-      ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        children: [
-          SaneamientoContent(
-            controller: pageController,
-          ),
-          PrimerPrestamoWidget(
-            controller: pageController,
-          ),
-          _ImpactoSocialMigranteEconomico(
-            controller: pageController,
-          ),
-          const SignQuestionaryWidget(),
-        ],
+    return BlocProvider(
+      create: (ctx) => ResponseCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('forms.migrantes_economicos.title'.tr()),
+        ),
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            SaneamientoContent(
+              controller: pageController,
+            ),
+            PrimerPrestamoWidget(
+              controller: pageController,
+            ),
+            _ImpactoSocialMigranteEconomico(
+              controller: pageController,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            const SignQuestionaryWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -44,9 +53,15 @@ class PrimerPrestamoWidget extends StatefulWidget {
   State<PrimerPrestamoWidget> createState() => _PrimerPrestamoWidgetState();
 }
 
-class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
+class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
+    with AutomaticKeepAliveClientMixin {
+  final question1Controller = TextEditingController();
+  final question2Controller = TextEditingController();
+  final question3Controller = TextEditingController();
+  final question4Controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
@@ -70,11 +85,13 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
             CommentaryWidget(
               title:
                   'forms.migrantes_economicos.primer_prestamo.question1'.tr(),
+              textEditingController: question1Controller,
             ),
             const Gap(20),
             CommentaryWidget(
               title:
                   'forms.migrantes_economicos.primer_prestamo.question2'.tr(),
+              textEditingController: question2Controller,
             ),
             const Gap(20),
             ButtonActionsWidget(
@@ -87,6 +104,22 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
                 );
               },
               onNextPressed: () {
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.primer_prestamo.question1'
+                              .tr(),
+                      response: question1Controller.text.trim(),
+                    ),
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.primer_prestamo.question2'
+                              .tr(),
+                      response: question2Controller.text.trim(),
+                    ),
+                  ],
+                );
                 widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
@@ -103,6 +136,9 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _ImpactoSocialMigranteEconomico extends StatefulWidget {
@@ -115,9 +151,15 @@ class _ImpactoSocialMigranteEconomico extends StatefulWidget {
 }
 
 class _ImpactoSocialMigranteEconomicoState
-    extends State<_ImpactoSocialMigranteEconomico> {
+    extends State<_ImpactoSocialMigranteEconomico>
+    with AutomaticKeepAliveClientMixin {
+  final question1Controller = TextEditingController();
+  final question2Controller = TextEditingController();
+  final question3Controller = TextEditingController();
+  final question4Controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
@@ -140,18 +182,22 @@ class _ImpactoSocialMigranteEconomicoState
             const Gap(20),
             CommentaryWidget(
               title: 'forms.migrantes_economicos.impacto_social.question1'.tr(),
+              textEditingController: question1Controller,
             ),
             const Gap(20),
             CommentaryWidget(
               title: 'forms.migrantes_economicos.impacto_social.question2'.tr(),
+              textEditingController: question2Controller,
             ),
             const Gap(20),
             CommentaryWidget(
               title: 'forms.migrantes_economicos.impacto_social.question3'.tr(),
+              textEditingController: question3Controller,
             ),
             const Gap(20),
             CommentaryWidget(
               title: 'forms.migrantes_economicos.impacto_social.question4'.tr(),
+              textEditingController: question4Controller,
             ),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -163,6 +209,34 @@ class _ImpactoSocialMigranteEconomicoState
                 );
               },
               onNextPressed: () {
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.impacto_social.question1'
+                              .tr(),
+                      response: question1Controller.text.trim(),
+                    ),
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.impacto_social.question2'
+                              .tr(),
+                      response: question2Controller.text.trim(),
+                    ),
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.impacto_social.question3'
+                              .tr(),
+                      response: question3Controller.text.trim(),
+                    ),
+                    Response(
+                      question:
+                          'forms.migrantes_economicos.impacto_social.question4'
+                              .tr(),
+                      response: question4Controller.text.trim(),
+                    ),
+                  ],
+                );
                 widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
@@ -179,4 +253,7 @@ class _ImpactoSocialMigranteEconomicoState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

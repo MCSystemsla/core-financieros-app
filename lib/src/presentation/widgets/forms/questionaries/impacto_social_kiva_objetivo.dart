@@ -1,16 +1,31 @@
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ImpactoSocialKivaObjetiveWidget extends StatelessWidget {
+import '../../../../domain/entities/responses.dart';
+
+class ImpactoSocialKivaObjetiveWidget extends StatefulWidget {
   final PageController controller;
   const ImpactoSocialKivaObjetiveWidget({super.key, required this.controller});
 
   @override
+  State<ImpactoSocialKivaObjetiveWidget> createState() =>
+      _ImpactoSocialKivaObjetiveWidgetState();
+}
+
+class _ImpactoSocialKivaObjetiveWidgetState
+    extends State<ImpactoSocialKivaObjetiveWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    final question1Controller = TextEditingController();
+    final question2Controller = TextEditingController();
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
@@ -32,15 +47,17 @@ class ImpactoSocialKivaObjetiveWidget extends StatelessWidget {
             const Gap(10),
             CommentaryWidget(
               title: 'forms.mejora_de_vivienda.question1'.tr(),
+              textEditingController: question1Controller,
             ),
             const Gap(10),
             CommentaryWidget(
               title: 'forms.mejora_de_vivienda.question2'.tr(),
+              textEditingController: question2Controller,
             ),
             const Gap(10),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                controller.previousPage(
+                widget.controller.previousPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -48,7 +65,19 @@ class ImpactoSocialKivaObjetiveWidget extends StatelessWidget {
                 );
               },
               onNextPressed: () {
-                controller.nextPage(
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question: 'forms.mejora_de_vivienda.question1'.tr(),
+                      response: question1Controller.text.trim(),
+                    ),
+                    Response(
+                      question: 'forms.mejora_de_vivienda.question2'.tr(),
+                      response: question2Controller.text.trim(),
+                    ),
+                  ],
+                );
+                widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -64,4 +93,7 @@ class ImpactoSocialKivaObjetiveWidget extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -6,16 +6,19 @@ import 'package:gap/gap.dart';
 class CommentaryWidget extends StatelessWidget {
   final bool haveCounter;
   final String? hintText;
+  final TextEditingController? textEditingController;
   final String title;
   const CommentaryWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
     required this.title,
+    this.textEditingController,
   }) : haveCounter = false;
   const CommentaryWidget.withCounter({
     super.key,
     this.hintText = 'Ingresa tu texto',
     required this.title,
+    this.textEditingController,
   }) : haveCounter = true;
 
   @override
@@ -45,6 +48,7 @@ class CommentaryWidget extends StatelessWidget {
               ),
             ),
             child: TextFormField(
+              controller: textEditingController,
               maxLength: 500,
               maxLines: null,
               onChanged: (value) {},
