@@ -1,16 +1,31 @@
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class MetasYAspiracionesWidget extends StatelessWidget {
+import '../../../../domain/entities/responses.dart';
+
+class MetasYAspiracionesWidget extends StatefulWidget {
   final PageController controller;
   const MetasYAspiracionesWidget({super.key, required this.controller});
 
   @override
+  State<MetasYAspiracionesWidget> createState() =>
+      _MetasYAspiracionesWidgetState();
+}
+
+class _MetasYAspiracionesWidgetState extends State<MetasYAspiracionesWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final question1Controller = TextEditingController();
+    final question2Controller = TextEditingController();
+
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
@@ -31,16 +46,18 @@ class MetasYAspiracionesWidget extends StatelessWidget {
             ),
             const Gap(10),
             CommentaryWidget(
+              textEditingController: question1Controller,
               title: 'forms.metas_y_aspiraciones.question1'.tr(),
             ),
             const Gap(10),
             CommentaryWidget(
+              textEditingController: question2Controller,
               title: 'forms.metas_y_aspiraciones.question2'.tr(),
             ),
             const Gap(10),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                controller.previousPage(
+                widget.controller.previousPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -48,7 +65,19 @@ class MetasYAspiracionesWidget extends StatelessWidget {
                 );
               },
               onNextPressed: () {
-                controller.nextPage(
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question: 'forms.metas_y_aspiraciones.question1'.tr(),
+                      response: question1Controller.text.trim(),
+                    ),
+                    Response(
+                      question: 'forms.metas_y_aspiraciones.question2'.tr(),
+                      response: question2Controller.text.trim(),
+                    ),
+                  ],
+                );
+                widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -56,7 +85,7 @@ class MetasYAspiracionesWidget extends StatelessWidget {
                 );
               },
               previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.signed'.tr(),
+              nextTitle: 'button.next'.tr(),
             ),
             const Gap(10),
           ],
@@ -64,4 +93,7 @@ class MetasYAspiracionesWidget extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

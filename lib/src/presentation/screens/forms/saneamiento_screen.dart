@@ -1,7 +1,12 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,28 +50,34 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('forms.saneamiento.appbar'.tr()),
-      ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        children: [
-          SaneamientoContent(
-            controller: _pageController,
-          ),
-          EntornoSocialWidget(
-            controller: _pageController,
-          ),
-          DescripcionYDesarrolloWidget(
-            controller: _pageController,
-          ),
-          ImpactoSocialKivaWidget(
-            controller: _pageController,
-          ),
-          const SignQuestionaryWidget(),
-        ],
+    return BlocProvider(
+      create: (ctx) => ResponseCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('forms.saneamiento.appbar'.tr()),
+        ),
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: [
+            SaneamientoContent(
+              controller: _pageController,
+            ),
+            EntornoSocialWidget(
+              controller: _pageController,
+            ),
+            DescripcionYDesarrolloWidget(
+              controller: _pageController,
+            ),
+            ImpactoSocialKivaWidget(
+              controller: _pageController,
+            ),
+            FormResponses(
+              controller: _pageController,
+            ),
+            const SignQuestionaryWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -199,9 +210,12 @@ class EntornoSocialWidget extends StatefulWidget {
 
 class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
     with AutomaticKeepAliveClientMixin {
+  String? personOrigin;
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final question2Controller = TextEditingController();
+    final question3Controller = TextEditingController();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
@@ -221,13 +235,29 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                   ),
             ),
             const Gap(10),
-            CommentaryWidget(
-                title: 'forms.entorno_familiar.person_origin'.tr()),
+            WhiteCard(
+              marginTop: 15,
+              padding: const EdgeInsets.all(10),
+              child: JLuxDropdown(
+                title: 'forms.entorno_familiar.person_origin'.tr(),
+                items: const ['Managua', 'Chinandega', 'Leon'],
+                onChanged: (item) {
+                  if (item == null) return;
+                  personOrigin = item;
+                },
+                toStringItem: (item) => item,
+                hintText: 'Selecciona un Departamento',
+              ),
+            ),
             const Gap(10),
-            CommentaryWidget(title: 'forms.entorno_familiar.childs_age'.tr()),
+            CommentaryWidget(
+              title: 'forms.entorno_familiar.childs_age'.tr(),
+              textEditingController: question2Controller,
+            ),
             const Gap(10),
             CommentaryWidget(
               title: 'forms.entorno_familiar.childs_education'.tr(),
+              textEditingController: question3Controller,
             ),
             const Gap(15),
             ButtonActionsWidget(
@@ -245,6 +275,22 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     milliseconds: 350,
                   ),
                   curve: Curves.easeIn,
+                );
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question: 'forms.entorno_familiar.person_origin'.tr(),
+                      response: personOrigin!,
+                    ),
+                    Response(
+                      question: 'forms.entorno_familiar.childs_age'.tr(),
+                      response: question2Controller.text.trim(),
+                    ),
+                    Response(
+                      question: 'forms.entorno_familiar.childs_education'.tr(),
+                      response: question3Controller.text.trim(),
+                    ),
+                  ],
                 );
               },
               previousTitle: 'button.previous'.tr(),
@@ -264,7 +310,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
 class DescripcionYDesarrolloWidget extends StatelessWidget {
   final PageController controller;
   const DescripcionYDesarrolloWidget({super.key, required this.controller});
-
+// TODO: AGREGAR FUNCIONALIODAD DE FORMULARIO
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
