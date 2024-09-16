@@ -1,5 +1,8 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -50,8 +53,17 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => ResponseCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => DepartamentosCubit(
+            DepartamentosRepositoryImpl(),
+          )..getDepartamentos(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: Text('forms.saneamiento.appbar'.tr()),
@@ -235,19 +247,25 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                   ),
             ),
             const Gap(10),
-            WhiteCard(
-              marginTop: 15,
-              padding: const EdgeInsets.all(10),
-              child: JLuxDropdown(
-                title: 'forms.entorno_familiar.person_origin'.tr(),
-                items: const ['Managua', 'Chinandega', 'Leon'],
-                onChanged: (item) {
-                  if (item == null) return;
-                  personOrigin = item;
-                },
-                toStringItem: (item) => item,
-                hintText: 'Selecciona un Departamento',
-              ),
+            BlocBuilder<DepartamentosCubit, DepartamentosState>(
+              builder: (context, state) {
+                return WhiteCard(
+                  marginTop: 15,
+                  padding: const EdgeInsets.all(10),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    isLoading: state.status == Status.inProgress,
+                    title: 'forms.entorno_familiar.person_origin'.tr(),
+                    items: state.departamentos,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      personOrigin = item.nombre;
+                    },
+                    toStringItem: (item) => item.nombre,
+                    hintText: 'Selecciona un Departamento',
+                  ),
+                );
+              },
             ),
             const Gap(10),
             CommentaryWidget(
