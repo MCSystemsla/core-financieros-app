@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -17,7 +18,10 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(state.copyWith(status: Status.inProgress));
       final resp = await repository.login(
-          userName: userName, password: password, dbName: dbName);
+        userName: userName,
+        password: password,
+        dbName: dbName,
+      );
       if (resp['statusCode'] != 201) {
         emit(state.copyWith(
           errorMsg: resp['message'],
@@ -25,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         ));
         return;
       }
+      await LocalStorage().setJWT(resp['accessToken']);
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
