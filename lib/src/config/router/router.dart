@@ -13,6 +13,47 @@ final router = GoRouter(
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
+      path: '/online',
+      routes: [
+        GoRoute(
+          path: 'form/saneamiento',
+          builder: (context, state) => const SaneamientoScreen(),
+        ),
+        GoRoute(
+          path: 'form/mejora-de-vivienda',
+          builder: (context, state) {
+            return const MejoraDeViviendaScreen();
+          },
+        ),
+        GoRoute(
+          path: 'form/seguimiento',
+          builder: (context, state) => const SeguimientoScreen(),
+        ),
+        GoRoute(
+          path: 'form/migrantes-economicos',
+          builder: (context, state) => const MigrantesEconomicosScreen(),
+        ),
+        GoRoute(
+          path: 'form/micredito-estudio',
+          builder: (context, state) => const MiCreditoEstudioScreen(),
+        ),
+      ],
+      redirect: (context, state) async {
+        final String tipoProducto = state.extra.toString();
+        log('tipo producto: $tipoProducto');
+        if (tipoProducto == 'ESTANDAR NUEVO') {
+          return '/online/form/mejora-de-vivienda';
+        }
+        if (tipoProducto == 'MUJER EMPRENDE NUEVO') {
+          return '/online/form/seguimiento';
+        }
+        if (tipoProducto == 'SEGUIMIENTO') {
+          return '/online/form/micredito-estudio';
+        }
+        return null;
+      },
+    ),
+    GoRoute(
       path: '/no-internet',
       builder: (context, state) => const NoInternetScreen(),
       routes: [

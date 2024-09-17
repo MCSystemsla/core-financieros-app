@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
@@ -14,8 +16,16 @@ class MejoraDeViviendaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return BlocProvider(
-      create: (ctx) => ResponseCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
+            ..getDepartamentos(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: Text('forms.mejora_de_vivienda.title'.tr()),
@@ -62,7 +72,7 @@ class FormResponses extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Respuestas Completadas en los Formularios'.tr(),
+              'input.form_response'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),

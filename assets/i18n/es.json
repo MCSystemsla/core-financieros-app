@@ -9,14 +9,17 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "signed": "Firmar",
-    "send": "Enviar"
+    "send": "Enviar",
+    "exit": "Salir"
    },
    "input": {
     "placeholder": "Ingresa tu texto",
     "select_option": "Selecciona una opcion",
     "input_validator": "Este campo es obligatorio",
     "yes": "Si",
-    "no": "No"
+    "no": "No",
+    "form_response": "Respuestas Completadas en los Formularios",
+    "select_department": "Selecciona un Departamento"
    },
    "home": {
     "item1": "Tesoreria",

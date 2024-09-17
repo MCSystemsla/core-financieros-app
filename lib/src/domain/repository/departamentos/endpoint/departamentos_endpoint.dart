@@ -11,7 +11,7 @@ class DepartamentosEndpoint extends Endpoint {
   @override
   Map<String, String> get headers => {
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNEQVZJTEEiLCJzdWIiOiIyNzIiLCJpYXQiOjE3MjY1MDY5NjgsImV4cCI6MTcyNjU5MzM2OH0.AKJtqQzNeM4BTBd8XWY47tmjN0x9jb7nZm-bVLp_3jk',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNEQVZJTEEiLCJzdWIiOiIyNzIiLCJpYXQiOjE3MjY1OTcwMDAsImV4cCI6MTcyNjY4MzQwMH0.5AHS01uKtqheJ0Ch-lZPUnKm-ATlpf5vzDfEqqRbJSA',
       };
   @override
   Map<String, dynamic> get queryParameters => {
