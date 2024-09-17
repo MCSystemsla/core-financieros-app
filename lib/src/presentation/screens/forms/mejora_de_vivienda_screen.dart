@@ -72,7 +72,7 @@ class FormResponses extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Respuestas Completadas en los Formularios'.tr(),
+              'input.form_response'.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w500,
                   ),

@@ -63,8 +63,7 @@ class _RequestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-          '${solicitud.producto.capitalizeAll} - ${solicitud.nombre.capitalizeAll}'),
+      title: Text('${solicitud.numero} - ${solicitud.nombre.capitalizeAll}'),
       onTap: () => context.push('/online', extra: solicitud.producto),
       subtitle: Text(
         solicitud.fecha.formatDateV2(),

@@ -258,7 +258,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       personOrigin = item.nombre;
                     },
                     toStringItem: (item) => item.nombre,
-                    hintText: 'Selecciona un Departamento',
+                    hintText: 'input.select_department'.tr(),
                   ),
                 );
               },
@@ -321,12 +321,26 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
   bool get wantKeepAlive => true;
 }
 
-class DescripcionYDesarrolloWidget extends StatelessWidget {
+class DescripcionYDesarrolloWidget extends StatefulWidget {
   final PageController controller;
   const DescripcionYDesarrolloWidget({super.key, required this.controller});
-// TODO: AGREGAR FUNCIONALIODAD DE FORMULARIO
+
+  @override
+  State<DescripcionYDesarrolloWidget> createState() =>
+      _DescripcionYDesarrolloWidgetState();
+}
+
+class _DescripcionYDesarrolloWidgetState
+    extends State<DescripcionYDesarrolloWidget>
+    with AutomaticKeepAliveClientMixin {
+  final question1Controller = TextEditingController();
+  final question2Controller = TextEditingController();
+  final question3Controller = TextEditingController();
+  final question4Controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -347,23 +361,27 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
             const Gap(10),
             CommentaryWidget(
               title: 'forms.develpment_and_description.aboutCredit'.tr(),
+              textEditingController: question1Controller,
             ),
             const Gap(10),
             CommentaryWidget(
               title: 'forms.develpment_and_description.who_support'.tr(),
+              textEditingController: question2Controller,
             ),
             const Gap(10),
             CommentaryWidget(
               title: 'forms.develpment_and_description.about_future'.tr(),
+              textEditingController: question3Controller,
             ),
             const Gap(10),
             CommentaryWidget(
               title:
                   'forms.develpment_and_description.have_othe_invertion'.tr(),
+              textEditingController: question4Controller,
             ),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                controller.previousPage(
+                widget.controller.previousPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -371,7 +389,28 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
                 );
               },
               onNextPressed: () {
-                controller.nextPage(
+                context.read<ResponseCubit>().addResponses(
+                  responses: [
+                    Response(
+                      question: 'forms.develpment_and_description.aboutCredit',
+                      response: question1Controller.text.trim(),
+                    ),
+                    Response(
+                      question: 'forms.develpment_and_description.who_support',
+                      response: question2Controller.text.trim(),
+                    ),
+                    Response(
+                      question: 'forms.develpment_and_description.about_future',
+                      response: question3Controller.text.trim(),
+                    ),
+                    Response(
+                      question:
+                          'forms.develpment_and_description.have_othe_invertion',
+                      response: question4Controller.text.trim(),
+                    ),
+                  ],
+                );
+                widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -387,6 +426,9 @@ class DescripcionYDesarrolloWidget extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ImpactoSocialKivaWidget extends StatelessWidget {

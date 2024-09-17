@@ -17,7 +17,9 @@
     "select_option": "Select an option",
     "input_validator": "This field is required",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "form_response": "Completed Responses on Forms",
+    "select_department": "Select a Department"
    },
     "home": {
     "item1": "Treasury",
