@@ -9,7 +9,8 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "signed": "Firmar",
-    "send": "Enviar"
+    "send": "Enviar",
+    "exit": "Salir"
    },
    "input": {
     "placeholder": "Ingresa tu texto",

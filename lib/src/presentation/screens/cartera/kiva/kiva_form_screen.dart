@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -28,59 +29,24 @@ class KivaFormScreen extends StatelessWidget {
         body:
             BlocBuilder<SolicitudesPendientesCubit, SolicitudesPendientesState>(
           builder: (context, state) {
-            if (state is OnSolicitudesPendientesLoading) {
-              return const CircularProgressIndicator();
-            }
-            if (state is OnSolicitudesPendientesError) {
-              return const Text('error');
-            }
-            if (state is OnSolicitudesPendientesSuccess) {
-              return ListView.separated(
-                itemCount:
-                    state.solicitudesPendienteResponse.solicitudes.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Gap(10);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(
-                        '${state.solicitudesPendienteResponse.solicitudes[index].producto.capitalizeAll} - ${state.solicitudesPendienteResponse.solicitudes[index].nombre.capitalizeAll}'),
-                    // onTap: () => context.push('/no-internet/form/micredito-estudio'),
-                    onTap: () => context.push('/no-internet/form/saneamiento'),
-                    // onTap: () => context.push('/no-internet/form/mejora-de-vivienda'),
-                    // onTap: () => context.push('/no-internet/form/seguimiento'),
-                    // onTap: () => context
-                    //     .push('/no-internet/form/${formsKiva[index].route}'),
-                    subtitle: Text(
-                      state
-                          .solicitudesPendienteResponse.solicitudes[index].fecha
-                          .formatDateV2(),
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${state.solicitudesPendienteResponse.solicitudes[index].monto} ${state.solicitudesPendienteResponse.solicitudes[index].moneda}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                          ),
-                        ),
-                        const Gap(5),
-                        Text(
-                          state.solicitudesPendienteResponse.solicitudes[index]
-                              .estado,
-                        ),
-                      ],
-                    ),
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.wallet),
-                    ),
-                  );
-                },
-              );
-            }
-            return const SizedBox();
+            return switch (state) {
+              OnSolicitudesPendientesLoading() =>
+                const Center(child: CircularProgressIndicator()),
+              OnSolicitudesPendientesError() => const Text('Error'),
+              OnSolicitudesPendientesSuccess() => ListView.separated(
+                  itemCount:
+                      state.solicitudesPendienteResponse.solicitudes.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Gap(10),
+                  itemBuilder: (BuildContext context, int index) {
+                    return _RequestWidget(
+                      solicitud:
+                          state.solicitudesPendienteResponse.solicitudes[index],
+                    );
+                  },
+                ),
+              _ => const SizedBox()
+            };
           },
         ),
       ),
@@ -88,55 +54,38 @@ class KivaFormScreen extends StatelessWidget {
   }
 }
 
-class FormsKivaData {
-  final String estado;
-  final String moneda;
-  final String monto;
-  final String nombre;
-  final int numero;
-  final String route;
-
-  FormsKivaData({
-    required this.estado,
-    required this.moneda,
-    required this.monto,
-    required this.nombre,
-    required this.numero,
-    required this.route,
+class _RequestWidget extends StatelessWidget {
+  final Solicitud solicitud;
+  const _RequestWidget({
+    required this.solicitud,
   });
-}
 
-final formsKiva = [
-  FormsKivaData(
-    estado: 'Estado',
-    moneda: 'USD',
-    monto: '12,000',
-    nombre: 'Edwin leonardo ruiz',
-    numero: 12212,
-    route: 'micredito-estudio',
-  ),
-  FormsKivaData(
-    estado: 'Estado',
-    moneda: 'USD',
-    monto: '12,000',
-    nombre: 'Edwin leonardo ruiz',
-    numero: 12212,
-    route: 'saneamiento',
-  ),
-  FormsKivaData(
-    estado: 'Estado',
-    moneda: 'USD',
-    monto: '12,000',
-    nombre: 'Edwin leonardo ruiz',
-    numero: 12212,
-    route: 'mejora-de-vivienda',
-  ),
-  FormsKivaData(
-    estado: 'Estado',
-    moneda: 'USD',
-    monto: '12,000',
-    nombre: 'Edwin leonardo ruiz',
-    numero: 12212,
-    route: 'seguimiento',
-  ),
-];
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+          '${solicitud.producto.capitalizeAll} - ${solicitud.nombre.capitalizeAll}'),
+      onTap: () => context.push('/online', extra: solicitud.producto),
+      subtitle: Text(
+        solicitud.fecha.formatDateV2(),
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '${solicitud.monto} ${solicitud.moneda}',
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+            ),
+          ),
+          const Gap(5),
+          Text(solicitud.estado),
+        ],
+      ),
+      leading: const CircleAvatar(
+        child: Icon(Icons.wallet),
+      ),
+    );
+  }
+}

@@ -9,7 +9,8 @@
     "previous": "Previous",
     "next": "Next",
     "signed": "Sign",
-    "send": "Send"
+    "send": "Send",
+    "exit": "Exit"
     },
     "input": {
     "placeholder": "Enter your text",

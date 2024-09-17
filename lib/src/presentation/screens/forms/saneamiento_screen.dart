@@ -18,6 +18,7 @@ import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:go_router/go_router.dart';
 import 'package:signature/signature.dart';
 
 class SaneamientoScreen extends StatefulWidget {
@@ -142,12 +143,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
+                context.pop();
               },
               onNextPressed: () {
                 widget.controller.nextPage(
@@ -157,7 +153,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   curve: Curves.easeIn,
                 );
               },
-              previousTitle: 'button.previous'.tr(),
+              previousTitle: 'button.exit'.tr(),
               nextTitle: 'button.next'.tr(),
             ),
           ],
