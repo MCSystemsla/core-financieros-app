@@ -22,8 +22,10 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              LangCubit(currentLang: Locale(LocalStorage().currentLanguage)),
+          create: (context) => LangCubit(
+              currentLang: Locale(
+            LocalStorage().currentLanguage,
+          )),
           lazy: false,
         ),
       ],
