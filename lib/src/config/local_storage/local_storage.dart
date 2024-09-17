@@ -11,6 +11,10 @@ class LocalStorage {
     return prefs.getString('lang') ?? 'es';
   }
 
+  String get jwt {
+    return prefs.getString('jwt') ?? '';
+  }
+
   String get fcmToken {
     return prefs.getString('token') ?? '';
   }
@@ -21,5 +25,9 @@ class LocalStorage {
 
   Future<void> setFcmToken(String value) async {
     await prefs.setString('token', value);
+  }
+
+  Future<void> setJWT(String value) async {
+    await prefs.setString('jwt', value);
   }
 }

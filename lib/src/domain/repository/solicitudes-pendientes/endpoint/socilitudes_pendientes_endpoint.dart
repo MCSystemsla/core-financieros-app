@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class SolicitudesPendientesEndpoints extends Endpoint {
   SolicitudesPendientesEndpoints();
@@ -10,8 +11,7 @@ class SolicitudesPendientesEndpoints extends Endpoint {
   String get path => '/kiva/solicitudes-pendientes';
   @override
   Map<String, String> get headers => {
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNEQVZJTEEiLCJzdWIiOiIyNzIiLCJpYXQiOjE3MjY1OTcwMDAsImV4cCI6MTcyNjY4MzQwMH0.5AHS01uKtqheJ0Ch-lZPUnKm-ATlpf5vzDfEqqRbJSA',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
   Map<String, dynamic> get queryParameters => {
