@@ -121,5 +121,9 @@ final router = GoRouter(
         return '/login';
       },
     ),
+    GoRoute(
+      path: '/credito',
+      builder: (context, state) => const CreditoScreen(),
+    )
   ],
 );
