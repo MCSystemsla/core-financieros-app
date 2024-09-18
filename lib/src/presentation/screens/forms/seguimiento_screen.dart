@@ -17,25 +17,29 @@ class SeguimientoScreen extends StatelessWidget {
     final pageController = PageController();
     return BlocProvider(
       create: (ctx) => ResponseCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('forms.seguimiento.title'.tr()),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            GrupoEncuestaWidget(
-              controller: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('forms.seguimiento.title'.tr()),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              GrupoEncuestaWidget(
+                controller: pageController,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );

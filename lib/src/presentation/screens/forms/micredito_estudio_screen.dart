@@ -18,26 +18,30 @@ class MiCreditoEstudioScreen extends StatelessWidget {
     final PageController pageController = PageController();
     return BlocProvider(
       create: (ctx) => ResponseCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('MiCredi Estudio'.tr()),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            _EntornoSocialEstudioWidget(
-              controller: pageController,
-            ),
-            _ImpactoSocialCrediEstudioWidget(
-              controller: pageController,
-            ),
-            FormResponses(controller: pageController),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('MiCredi Estudio'.tr()),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              _EntornoSocialEstudioWidget(
+                controller: pageController,
+              ),
+              _ImpactoSocialCrediEstudioWidget(
+                controller: pageController,
+              ),
+              FormResponses(controller: pageController),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );

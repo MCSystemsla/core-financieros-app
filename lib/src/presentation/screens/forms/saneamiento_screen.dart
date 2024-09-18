@@ -65,31 +65,35 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
           )..getDepartamentos(),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('forms.saneamiento.appbar'.tr()),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          children: [
-            SaneamientoContent(
-              controller: _pageController,
-            ),
-            EntornoSocialWidget(
-              controller: _pageController,
-            ),
-            DescripcionYDesarrolloWidget(
-              controller: _pageController,
-            ),
-            ImpactoSocialKivaWidget(
-              controller: _pageController,
-            ),
-            FormResponses(
-              controller: _pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('forms.saneamiento.appbar'.tr()),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _pageController,
+            children: [
+              SaneamientoContent(
+                controller: _pageController,
+              ),
+              EntornoSocialWidget(
+                controller: _pageController,
+              ),
+              DescripcionYDesarrolloWidget(
+                controller: _pageController,
+              ),
+              ImpactoSocialKivaWidget(
+                controller: _pageController,
+              ),
+              FormResponses(
+                controller: _pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );
