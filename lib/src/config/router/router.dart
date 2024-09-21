@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
-  // initialLocation: '/loading',
+  initialLocation: '/loading',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
