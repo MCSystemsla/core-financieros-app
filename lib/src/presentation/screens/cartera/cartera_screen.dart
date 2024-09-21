@@ -35,7 +35,7 @@ class CarteraScreen extends StatelessWidget {
               ),
             ),
             _Card(
-              onTap: () {},
+              onTap: () => context.push('/credito'),
               title: 'cartera.credit'.tr(),
               subtitle: 'cartera.credit_title'.tr(),
               firstColor: AppColors.getSecondaryColor(),

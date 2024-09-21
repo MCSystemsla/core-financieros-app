@@ -17,28 +17,32 @@ class MigrantesEconomicosScreen extends StatelessWidget {
 
     return BlocProvider(
       create: (ctx) => ResponseCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('forms.migrantes_economicos.title'.tr()),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            PrimerPrestamoWidget(
-              controller: pageController,
-            ),
-            _ImpactoSocialMigranteEconomico(
-              controller: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('forms.migrantes_economicos.title'.tr()),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              PrimerPrestamoWidget(
+                controller: pageController,
+              ),
+              _ImpactoSocialMigranteEconomico(
+                controller: pageController,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );

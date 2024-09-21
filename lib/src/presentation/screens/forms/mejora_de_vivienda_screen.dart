@@ -26,31 +26,35 @@ class MejoraDeViviendaScreen extends StatelessWidget {
             ..getDepartamentos(),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('forms.mejora_de_vivienda.title'.tr()),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            EntornoSocialWidget(
-              controller: pageController,
-            ),
-            ImpactoSocialKivaObjetiveWidget(
-              controller: pageController,
-            ),
-            MetasYAspiracionesWidget(
-              controller: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('forms.mejora_de_vivienda.title'.tr()),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              EntornoSocialWidget(
+                controller: pageController,
+              ),
+              ImpactoSocialKivaObjetiveWidget(
+                controller: pageController,
+              ),
+              MetasYAspiracionesWidget(
+                controller: pageController,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
-  initialLocation: '/loading',
+  // initialLocation: '/loading',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -41,13 +41,16 @@ final router = GoRouter(
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
-        if (tipoProducto == 'ESTANDAR NUEVO') {
+        if (tipoProducto == 'YANDELI YADIRA LEIVA SUAZO') {
           return '/online/form/mejora-de-vivienda';
         }
-        if (tipoProducto == 'MUJER EMPRENDE NUEVO') {
+        if (tipoProducto == 'DENIS OMAR ROJAS AGUILAR') {
           return '/online/form/seguimiento';
         }
-        if (tipoProducto == 'SEGUIMIENTO') {
+        if (tipoProducto == 'ANA CAROLINA ROMERO ') {
+          return '/online/form/migrantes-economicos';
+        }
+        if (tipoProducto == 'JORGE LUIS PALACIOS GARCIA') {
           return '/online/form/micredito-estudio';
         }
         return null;
@@ -121,5 +124,9 @@ final router = GoRouter(
         return '/login';
       },
     ),
+    GoRoute(
+      path: '/credito',
+      builder: (context, state) => const CreditoScreen(),
+    )
   ],
 );
