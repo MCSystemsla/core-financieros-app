@@ -120,7 +120,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
         child: Column(
           children: [
             const MiCreditoProgress(
-              steps: 5,
+              steps: 4,
               currentStep: 1,
             ),
             const Gap(20),
