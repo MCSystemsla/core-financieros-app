@@ -37,12 +37,16 @@ final router = GoRouter(
           path: 'form/micredito-estudio',
           builder: (context, state) => const MiCreditoEstudioScreen(),
         ),
+        GoRoute(
+          path: 'form/mujer-emprende',
+          builder: (context, state) => const MujerEmprenderScreen(),
+        ),
       ],
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
         if (tipoProducto == 'YANDELI YADIRA LEIVA SUAZO') {
-          return '/online/form/mejora-de-vivienda';
+          return '/online/form/mujer-emprende';
         }
         if (tipoProducto == 'DENIS OMAR ROJAS AGUILAR') {
           return '/online/form/seguimiento';
