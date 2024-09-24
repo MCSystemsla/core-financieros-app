@@ -41,6 +41,10 @@ final router = GoRouter(
           path: 'form/mujer-emprende',
           builder: (context, state) => const MujerEmprenderScreen(),
         ),
+        GoRoute(
+          path: 'form/energia-limpia',
+          builder: (context, state) => const EnergiaLimpiaScreen(),
+        ),
       ],
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
@@ -49,7 +53,7 @@ final router = GoRouter(
           return '/online/form/mujer-emprende';
         }
         if (tipoProducto == 'DENIS OMAR ROJAS AGUILAR') {
-          return '/online/form/seguimiento';
+          return '/online/form/energia-limpia';
         }
         if (tipoProducto == 'ANA CAROLINA ROMERO ') {
           return '/online/form/migrantes-economicos';
