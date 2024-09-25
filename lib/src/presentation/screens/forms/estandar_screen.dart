@@ -15,6 +15,7 @@ class EstandarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isRecurrentForm = true;
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
@@ -39,15 +40,19 @@ class EstandarScreen extends StatelessWidget {
               controller: pageController,
             ),
             EstandarAditionalData(
+              isRecurrenteForm: false,
               pageController: pageController,
             ),
             EstandarEntornoFamiliar(
+              isRecurrenteForm: isRecurrentForm,
               pageController: pageController,
             ),
             EstandarDescripciondelNegocio(
+              isRecurrentForm: isRecurrentForm,
               pageController: pageController,
             ),
             EstandarImpactoSocial(
+              isRecurrentForm: isRecurrentForm,
               pageController: pageController,
             ),
             FormResponses(
