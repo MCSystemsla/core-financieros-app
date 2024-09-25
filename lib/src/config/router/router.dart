@@ -45,6 +45,10 @@ final router = GoRouter(
           path: 'form/energia-limpia',
           builder: (context, state) => const EnergiaLimpiaScreen(),
         ),
+        GoRoute(
+          path: 'form/estandar',
+          builder: (context, state) => const EstandarScreen(),
+        ),
       ],
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
@@ -59,7 +63,7 @@ final router = GoRouter(
           return '/online/form/migrantes-economicos';
         }
         if (tipoProducto == 'JORGE LUIS PALACIOS GARCIA') {
-          return '/online/form/micredito-estudio';
+          return '/online/form/estandar';
         }
         return null;
       },
