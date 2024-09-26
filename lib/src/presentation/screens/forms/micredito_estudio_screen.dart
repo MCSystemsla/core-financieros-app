@@ -1,4 +1,7 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -16,10 +19,18 @@ class MiCreditoEstudioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const isRecurrentForm = true;
+    const isRecurrentForm = false;
     final PageController pageController = PageController();
-    return BlocProvider(
-      create: (ctx) => ResponseCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
+            ..getDepartamentos(),
+        ),
+      ],
       child: PopScope(
         canPop: false,
         child: Scaffold(
@@ -106,42 +117,10 @@ class _EntornoSocialEstudioWidgetState
                         fontWeight: FontWeight.w500,
                       ),
                 ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.person_origin'.tr(),
-                  textEditingController: question1Controller,
+                const CommentaryWidget(
+                  title: 'Profesión u Oficio:',
                 ),
                 const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.childs_age'.tr(),
-                  textEditingController: question2Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.childs_education'.tr(),
-                  textEditingController: question3Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.question1'.tr(),
-                  textEditingController: question4Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.question2'.tr(),
-                  textEditingController: question5Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.question3'.tr(),
-                  textEditingController: question6Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.entorno_familiar.question4'.tr(),
-                  textEditingController: question7Controller,
-                ),
-                const Gap(20),
                 WhiteCard(
                   padding: const EdgeInsets.all(5),
                   child: JLuxDropdown(
@@ -151,7 +130,32 @@ class _EntornoSocialEstudioWidgetState
 
                       return null;
                     },
-                    title: 'forms.entorno_familiar.question5'.tr(),
+                    title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                    items: ['input.yes'.tr(), 'input.no'.tr()],
+                    onChanged: (item) {
+                      if (item == null) return;
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
+                const Gap(20),
+                CommentaryWidget(
+                  title: 'Tiempo de la actividad (meses o años)'.tr(),
+                  textEditingController: question1Controller,
+                ),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+
+                      return null;
+                    },
+                    title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                     items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       if (item == null) return;
@@ -171,6 +175,66 @@ class _EntornoSocialEstudioWidgetState
                     title: 'forms.entorno_familiar.question6'.tr(),
                     textEditingController: questio8Controller,
                   ),
+                BlocBuilder<DepartamentosCubit, DepartamentosState>(
+                  builder: (context, state) {
+                    return WhiteCard(
+                      marginTop: 15,
+                      padding: const EdgeInsets.all(10),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        isLoading: state.status == Status.inProgress,
+                        title: 'forms.entorno_familiar.person_origin'.tr(),
+                        items: state.departamentos,
+                        onChanged: (item) {
+                          if (item == null) return;
+                        },
+                        toStringItem: (item) => item.nombre,
+                        hintText: 'input.select_department'.tr(),
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                CommentaryWidget(
+                  title: 'Número de personas a cargo:*'.tr(),
+                  textEditingController: question2Controller,
+                ),
+                const Gap(20),
+                CommentaryWidget(
+                  title: 'Número de hijos:*'.tr(),
+                  textEditingController: question2Controller,
+                ),
+                const Gap(20),
+                CommentaryWidget(
+                  title: 'forms.entorno_familiar.childs_age'.tr(),
+                  textEditingController: question2Controller,
+                ),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+                      return null;
+                    },
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
                 const Gap(20),
                 ButtonActionsWidget(
                   onPreviousPressed: () {
@@ -257,6 +321,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -285,7 +350,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
 
                   return null;
                 },
-                title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
@@ -412,27 +477,31 @@ class _ImpactoSocialCrediEstudioWidgetState
                 ),
                 const Gap(10),
                 CommentaryWidget(
-                  title: 'forms.miCredi_estudio.question2'.tr(),
+                  title:
+                      '¿De qué manera este financiamiento le ayudará a crecer profesionalemente? Explique'
+                          .tr(),
                   textEditingController: question2Controller,
                 ),
                 const Gap(10),
                 CommentaryWidget(
-                  title: 'forms.miCredi_estudio.question3'.tr(),
+                  title: '¿Piensa optar a otro estudio superior? ¿Cuál?*'.tr(),
                   textEditingController: question3Controller,
                 ),
                 const Gap(10),
                 CommentaryWidget(
-                  title: 'forms.miCredi_estudio.question4'.tr(),
+                  title:
+                      '¿Cuáles son sus planes en los próximos 10 años?*'.tr(),
                   textEditingController: question4Controller,
                 ),
                 const Gap(10),
                 CommentaryWidget(
-                  title: 'forms.miCredi_estudio.question5'.tr(),
+                  title: '¿Qué aspira laboralmente?*'.tr(),
                   textEditingController: question5Controller,
                 ),
                 const Gap(10),
                 CommentaryWidget(
-                  title: 'forms.miCredi_estudio.question6'.tr(),
+                  title:
+                      'Otros datos relevantes e interesantes del cliente'.tr(),
                   textEditingController: question6Controller,
                 ),
                 const Gap(10),
