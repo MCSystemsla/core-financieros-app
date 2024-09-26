@@ -54,7 +54,7 @@ final router = GoRouter(
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
         if (tipoProducto == 'YANDELI YADIRA LEIVA SUAZO') {
-          return '/online/form/mujer-emprende';
+          return '/online/form/micredito-estudio';
         }
         if (tipoProducto == 'DENIS OMAR ROJAS AGUILAR') {
           return '/online/form/energia-limpia';
