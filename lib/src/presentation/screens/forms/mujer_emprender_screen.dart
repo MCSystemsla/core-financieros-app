@@ -13,6 +13,7 @@ class MujerEmprenderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isRecurrentForm = true;
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
@@ -38,12 +39,15 @@ class MujerEmprenderScreen extends StatelessWidget {
             ),
             MujerEmprendeEntornoSocialWidget(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             DescripcionYDesarrolloDelNegocioWidget(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             MujerEmprendeImpactoSocial(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             FormResponses(
               controller: pageController,
