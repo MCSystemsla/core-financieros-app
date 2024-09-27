@@ -144,6 +144,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
             ),
+            const Gap(15),
+            UploadImageWidget(
+              title: '3-  ${'Agregar foto de cedula'.tr()}',
+            ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
