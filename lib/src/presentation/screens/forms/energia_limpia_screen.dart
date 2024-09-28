@@ -13,6 +13,7 @@ class EnergiaLimpiaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
+    const isRecurrentForm = true;
     return BlocProvider(
       create: (ctx) => ResponseCubit(),
       child: Scaffold(
@@ -29,12 +30,15 @@ class EnergiaLimpiaScreen extends StatelessWidget {
             ),
             EnergiaLimpiaAditionalDataWidget(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             EnergiaLimpiaEntornoFamiliar(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             EnergiaLimpiaImpactoSocial(
               pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
             ),
             FormResponses(
               controller: pageController,

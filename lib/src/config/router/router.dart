@@ -63,7 +63,7 @@ final router = GoRouter(
           return '/online/form/saneamiento';
         }
         if (tipoProducto == 'JORGE LUIS PALACIOS GARCIA') {
-          return '/online/form/estandar';
+          return '/online/form/energia-limpia';
         }
         return null;
       },
