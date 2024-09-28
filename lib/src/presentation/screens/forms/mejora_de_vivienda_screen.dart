@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/response_cubit/respons
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/metas_y_aspiraciones_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class MejoraDeViviendaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isRecurrentForm = true;
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
@@ -42,6 +44,7 @@ class MejoraDeViviendaScreen extends StatelessWidget {
               ),
               EntornoSocialWidget(
                 controller: pageController,
+                isRecurrentForm: isRecurrentForm,
               ),
               ImpactoSocialKivaObjetiveWidget(
                 controller: pageController,
