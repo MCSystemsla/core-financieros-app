@@ -55,6 +55,11 @@ class _ImpactoSocialKivaObjetiveWidgetState
               textEditingController: question2Controller,
             ),
             const Gap(10),
+            const CommentaryWidget(
+                title: '¿Cuáles son sus planes para los próximos años?'),
+            const Gap(10),
+            const CommentaryWidget(
+                title: 'Otros datos relevantes e interesantes del cliente'),
             ButtonActionsWidget(
               onPreviousPressed: () {
                 widget.controller.previousPage(

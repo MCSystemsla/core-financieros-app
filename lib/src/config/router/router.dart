@@ -53,11 +53,11 @@ final router = GoRouter(
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
-        if (tipoProducto == 'YANDELI YADIRA LEIVA SUAZO') {
-          return '/online/form/micredito-estudio';
+        if (tipoProducto == 'VIVIENDA NUEVA') {
+          return '/online/form/mejora-de-vivienda';
         }
-        if (tipoProducto == 'DENIS OMAR ROJAS AGUILAR') {
-          return '/online/form/mujer-emprende';
+        if (tipoProducto == 'ESTANDAR NUEVO') {
+          return '/online/form/estandar';
         }
         if (tipoProducto == 'ANA CAROLINA ROMERO ') {
           return '/online/form/saneamiento';

@@ -27,39 +27,42 @@ class EstandarScreen extends StatelessWidget {
             ..getDepartamentos(),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Estandar'),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            EstandarAditionalData(
-              isRecurrenteForm: false,
-              pageController: pageController,
-            ),
-            EstandarEntornoFamiliar(
-              isRecurrenteForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            EstandarDescripciondelNegocio(
-              isRecurrentForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            EstandarImpactoSocial(
-              isRecurrentForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Estandar'),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              EstandarAditionalData(
+                isRecurrenteForm: false,
+                pageController: pageController,
+              ),
+              EstandarEntornoFamiliar(
+                isRecurrenteForm: isRecurrentForm,
+                pageController: pageController,
+              ),
+              EstandarDescripciondelNegocio(
+                isRecurrentForm: isRecurrentForm,
+                pageController: pageController,
+              ),
+              EstandarImpactoSocial(
+                isRecurrentForm: isRecurrentForm,
+                pageController: pageController,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );
