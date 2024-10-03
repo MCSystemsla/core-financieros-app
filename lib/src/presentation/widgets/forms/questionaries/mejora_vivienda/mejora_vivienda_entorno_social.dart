@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -108,25 +109,30 @@ class _MejoraViviendaEntornoSocialState
               },
             ),
             const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+            BlocBuilder<ComunidadesCubit, ComunidadesState>(
+              builder: (context, state) {
+                return WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    isLoading: state.status == Status.inProgress,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
 
-                  return null;
-                },
-                title: 'Su comunidad es:'.tr(),
-                items: ['Urbana'.tr(), 'Rural'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
-              ),
+                      return null;
+                    },
+                    title: 'Su comunidad es:'.tr(),
+                    items: state.comunidades,
+                    onChanged: (item) {
+                      if (item == null) return;
+                    },
+                    toStringItem: (item) {
+                      return item.nombre;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                );
+              },
             ),
             const Gap(20),
             const CommentaryWidget(title: 'Número de personas a cargo:*'),

@@ -53,16 +53,27 @@ final router = GoRouter(
       redirect: (context, state) async {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
-        if (tipoProducto == 'VIVIENDA NUEVA') {
-          return '/online/form/mejora-de-vivienda';
+        if (tipoProducto == 'MICREDIESTUDIO NUEVO' ||
+            tipoProducto == 'MICREDIESTUDIO RECURRENTE') {
+          return '/online/form/micredito-estudio';
         }
-        if (tipoProducto == 'ESTANDAR NUEVO') {
+        if (tipoProducto == 'ESTANDAR NUEVO' ||
+            tipoProducto == 'ESTANDAR RECURRENTE') {
           return '/online/form/estandar';
         }
-        if (tipoProducto == 'ANA CAROLINA ROMERO ') {
+        if (tipoProducto == 'VIVIENDA NUEVA' ||
+            tipoProducto == 'VIVIENDA REPRESTAMO') {
+          return '/online/form/mejora-de-vivienda';
+        }
+
+        if (tipoProducto == 'AGUA Y SANEAMIENTO NUEVO' ||
+            tipoProducto == 'AGUA Y SANEAMIENTO RECURRENTE') {
           return '/online/form/saneamiento';
         }
-        if (tipoProducto == 'JORGE LUIS PALACIOS GARCIA') {
+        if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
+          return '/online/form/energia-limpia';
+        }
+        if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
           return '/online/form/energia-limpia';
         }
         return null;

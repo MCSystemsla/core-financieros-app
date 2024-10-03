@@ -1,5 +1,9 @@
+import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
@@ -21,11 +25,18 @@ class MejoraDeViviendaScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (ctx) => MejoraViviendaCubit(ResponsesRepositoryImpl()),
+        ),
+        BlocProvider(
           create: (ctx) => ResponseCubit(),
         ),
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
+        ),
+        BlocProvider(
+          create: (ctx) =>
+              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
         ),
       ],
       child: PopScope(
@@ -132,6 +143,7 @@ class FormResponses extends StatelessWidget {
                 );
               },
               onNextPressed: () {
+                context.read<MejoraViviendaCubit>().sendAnswers();
                 controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,

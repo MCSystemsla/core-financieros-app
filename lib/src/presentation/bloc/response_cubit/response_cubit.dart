@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:equatable/equatable.dart';
@@ -31,7 +29,5 @@ class ResponseCubit extends Cubit<ResponseState> {
 
     // Emitir el nuevo estado con las respuestas actualizadas
     emit(state.copyWith(responses: updatedResponses));
-    log(state.responses.map((e) => e.question).toList().toString());
-    log(state.responses.map((e) => e.response).toList().toString());
   }
 }

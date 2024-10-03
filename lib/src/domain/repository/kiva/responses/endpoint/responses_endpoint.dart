@@ -1,8 +1,10 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 
-class KivaResponsesEndpoin extends Endpoint {
-  KivaResponsesEndpoin();
+class MejoraViviendaKivaResponsesEndpoind extends Endpoint {
+  final MejoraViviendaAnswer mejoraViviendaAnswer;
+  MejoraViviendaKivaResponsesEndpoind({required this.mejoraViviendaAnswer});
 
   @override
   Method get method => Method.post;
@@ -13,9 +15,7 @@ class KivaResponsesEndpoin extends Endpoint {
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
+
   @override
-  Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
-        'database': 'MC_CH',
-      };
+  Map<String, dynamic> get body => mejoraViviendaAnswer.toJson();
 }
