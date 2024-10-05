@@ -3,70 +3,70 @@ part of 'mejora_vivienda_cubit.dart';
 
 class MejoraViviendaState extends Equatable {
   final Status status;
-  final int? solicitudNuevamenorId;
-  final String? username;
-  final bool? tieneTrabajo;
-  final String? database;
-  final String? trabajoNegocioDescripcion;
-  final int? tiempoActividad;
-  final bool? otrosIngresos;
-  final String? otrosIngresosDescripcion;
-  final String? objOrigenCatalogoValorId;
-  final String? objTipoComunidadId;
-  final String? necesidadesComunidad;
-  final String? personasCargo;
-  final int? numeroHijos;
-  final String? edadHijos;
-  final String? tipoEstudioHijos;
-  final String? motivoPrestamo;
-  final String? comoAyudara;
-  final String? planesFuturo;
-  final String? otrosDatosCliente;
+  final int solicitudNuevamenorId;
+  final String username;
+  final bool tieneTrabajo;
+  final String database;
+  final String trabajoNegocioDescripcion;
+  final int tiempoActividad;
+  final bool otrosIngresos;
+  final String otrosIngresosDescripcion;
+  final String objOrigenCatalogoValorId;
+  final String objTipoComunidadId;
+  final String necesidadesComunidad;
+  final String personasCargo;
+  final int numeroHijos;
+  final String edadHijos;
+  final String tipoEstudioHijos;
+  final String motivoPrestamo;
+  final String comoAyudara;
+  final String planesFuturo;
+  final String otrosDatosCliente;
   const MejoraViviendaState({
-    this.solicitudNuevamenorId,
-    this.username,
-    this.tieneTrabajo,
-    this.database,
-    this.trabajoNegocioDescripcion,
-    this.tiempoActividad,
-    this.otrosIngresos,
-    this.otrosIngresosDescripcion,
-    this.objOrigenCatalogoValorId,
-    this.objTipoComunidadId,
-    this.necesidadesComunidad,
-    this.personasCargo,
-    this.numeroHijos,
-    this.edadHijos,
-    this.tipoEstudioHijos,
-    this.motivoPrestamo,
-    this.comoAyudara,
-    this.planesFuturo,
-    this.otrosDatosCliente,
+    this.solicitudNuevamenorId = 0,
+    this.username = '',
+    this.tieneTrabajo = false,
+    this.database = '',
+    this.trabajoNegocioDescripcion = '',
+    this.tiempoActividad = 0,
+    this.otrosIngresos = false,
+    this.otrosIngresosDescripcion = '',
+    this.objOrigenCatalogoValorId = '',
+    this.objTipoComunidadId = '',
+    this.necesidadesComunidad = '',
+    this.personasCargo = '',
+    this.numeroHijos = 0,
+    this.edadHijos = '',
+    this.tipoEstudioHijos = '',
+    this.motivoPrestamo = '',
+    this.comoAyudara = '',
+    this.planesFuturo = '',
+    this.otrosDatosCliente = '',
     this.status = Status.notStarted,
   });
 
   @override
   List<Object> get props => [
         status,
-        solicitudNuevamenorId!,
-        username!,
-        tieneTrabajo!,
-        database!,
-        trabajoNegocioDescripcion!,
-        tiempoActividad!,
-        otrosIngresos!,
-        otrosIngresosDescripcion!,
-        objOrigenCatalogoValorId!,
-        objTipoComunidadId!,
-        necesidadesComunidad!,
-        personasCargo!,
-        numeroHijos!,
-        edadHijos!,
-        tipoEstudioHijos!,
-        motivoPrestamo!,
-        comoAyudara!,
-        planesFuturo!,
-        otrosDatosCliente!,
+        solicitudNuevamenorId,
+        username,
+        tieneTrabajo,
+        database,
+        trabajoNegocioDescripcion,
+        tiempoActividad,
+        otrosIngresos,
+        otrosIngresosDescripcion,
+        objOrigenCatalogoValorId,
+        objTipoComunidadId,
+        necesidadesComunidad,
+        personasCargo,
+        numeroHijos,
+        edadHijos,
+        tipoEstudioHijos,
+        motivoPrestamo,
+        comoAyudara,
+        planesFuturo,
+        otrosDatosCliente,
       ];
 
   MejoraViviendaState copyWith({

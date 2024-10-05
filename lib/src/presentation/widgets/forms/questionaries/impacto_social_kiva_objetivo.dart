@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -21,10 +22,12 @@ class ImpactoSocialKivaObjetiveWidget extends StatefulWidget {
 class _ImpactoSocialKivaObjetiveWidgetState
     extends State<ImpactoSocialKivaObjetiveWidget>
     with AutomaticKeepAliveClientMixin {
+  final question1Controller = TextEditingController();
+  final question2Controller = TextEditingController();
+  final question3Controller = TextEditingController();
+  final question4Controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final question1Controller = TextEditingController();
-    final question2Controller = TextEditingController();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -55,11 +58,15 @@ class _ImpactoSocialKivaObjetiveWidgetState
               textEditingController: question2Controller,
             ),
             const Gap(10),
-            const CommentaryWidget(
-                title: '¿Cuáles son sus planes para los próximos años?'),
+            CommentaryWidget(
+              title: '¿Cuáles son sus planes para los próximos años?',
+              textEditingController: question3Controller,
+            ),
             const Gap(10),
-            const CommentaryWidget(
-                title: 'Otros datos relevantes e interesantes del cliente'),
+            CommentaryWidget(
+              textEditingController: question4Controller,
+              title: 'Otros datos relevantes e interesantes del cliente',
+            ),
             ButtonActionsWidget(
               onPreviousPressed: () {
                 widget.controller.previousPage(
@@ -70,6 +77,12 @@ class _ImpactoSocialKivaObjetiveWidgetState
                 );
               },
               onNextPressed: () {
+                context.read<MejoraViviendaCubit>().saveAnswer2(
+                      motivoPrestamo: question2Controller.text.trim(),
+                      comoAyudara: question2Controller.text.trim(),
+                      planesFuturo: question3Controller.text.trim(),
+                      otrosDatosCliente: question4Controller.text.trim(),
+                    );
                 context.read<ResponseCubit>().addResponses(
                   responses: [
                     Response(

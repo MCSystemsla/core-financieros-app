@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -23,10 +24,22 @@ class MejoraViviendaEntornoSocial extends StatefulWidget {
       _MejoraViviendaEntornoSocialState();
 }
 
+String? question1;
+final question2 = TextEditingController();
+String? question3;
+String? question4;
+String? question5;
+final question6 = TextEditingController();
+final question7 = TextEditingController();
+final question8 = TextEditingController();
+String? question9;
+
 class _MejoraViviendaEntornoSocialState
-    extends State<MejoraViviendaEntornoSocial> {
+    extends State<MejoraViviendaEntornoSocial>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -58,6 +71,8 @@ class _MejoraViviendaEntornoSocialState
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  question1 = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
@@ -66,7 +81,10 @@ class _MejoraViviendaEntornoSocialState
               ),
             ),
             const Gap(20),
-            const CommentaryWidget(title: 'Tiempo de la actividad:*'),
+            CommentaryWidget(
+              textEditingController: question2,
+              title: 'Tiempo de la actividad:*',
+            ),
             const Gap(20),
             WhiteCard(
               padding: const EdgeInsets.all(5),
@@ -81,6 +99,8 @@ class _MejoraViviendaEntornoSocialState
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  question3 = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
@@ -101,6 +121,7 @@ class _MejoraViviendaEntornoSocialState
                     items: state.departamentos,
                     onChanged: (item) {
                       if (item == null) return;
+                      question4 = item.valor;
                     },
                     toStringItem: (item) => item.nombre,
                     hintText: 'input.select_department'.tr(),
@@ -125,6 +146,8 @@ class _MejoraViviendaEntornoSocialState
                     items: state.comunidades,
                     onChanged: (item) {
                       if (item == null) return;
+                      question5 = item.nombre;
+                      setState(() {});
                     },
                     toStringItem: (item) {
                       return item.nombre;
@@ -135,11 +158,20 @@ class _MejoraViviendaEntornoSocialState
               },
             ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de personas a cargo:*'),
+            CommentaryWidget(
+              textEditingController: question6,
+              title: 'Número de personas a cargo:*',
+            ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de hijos:*'),
+            CommentaryWidget(
+              textEditingController: question7,
+              title: 'Número de hijos:*',
+            ),
             const Gap(20),
-            const CommentaryWidget(title: '¿Que edades tienen sus hijos? '),
+            CommentaryWidget(
+              textEditingController: question8,
+              title: '¿Que edades tienen sus hijos? ',
+            ),
             const Gap(20),
             WhiteCard(
               padding: const EdgeInsets.all(5),
@@ -160,6 +192,8 @@ class _MejoraViviendaEntornoSocialState
                 ],
                 onChanged: (item) {
                   if (item == null) return;
+                  question9 = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
@@ -178,6 +212,17 @@ class _MejoraViviendaEntornoSocialState
                 );
               },
               onNextPressed: () {
+                context.read<MejoraViviendaCubit>().saveAnswer1(
+                      tieneTrabajo: question1 == 'input.yes'.tr(),
+                      tiempoActividad: int.parse(question2.text.trim()),
+                      otrosIngresos: question3 == 'input.yes'.tr(),
+                      objOrigenCatalogoValorId: question4!,
+                      objTipoComunidadId: question5!,
+                      personasCargo: question6.text.trim(),
+                      numeroHijos: int.parse(question7.text.trim()),
+                      edadHijos: question8.text.trim(),
+                      tipoEstudioHijos: question9!,
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
@@ -194,4 +239,7 @@ class _MejoraViviendaEntornoSocialState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

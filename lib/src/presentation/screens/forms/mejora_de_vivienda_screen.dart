@@ -8,7 +8,6 @@ import 'package:core_financiero_app/src/presentation/bloc/response_cubit/respons
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/metas_y_aspiraciones_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -63,9 +62,9 @@ class MejoraDeViviendaScreen extends StatelessWidget {
               ImpactoSocialKivaObjetiveWidget(
                 controller: pageController,
               ),
-              MetasYAspiracionesWidget(
-                controller: pageController,
-              ),
+              // MetasYAspiracionesWidget(
+              //   controller: pageController,
+              // ),
               FormResponses(
                 controller: pageController,
               ),
