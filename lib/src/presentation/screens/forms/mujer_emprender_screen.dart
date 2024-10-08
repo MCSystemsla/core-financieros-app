@@ -25,35 +25,38 @@ class MujerEmprenderScreen extends StatelessWidget {
             ..getDepartamentos(),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Mujer Emprende'),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            MujerEmprendeEntornoSocialWidget(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            DescripcionYDesarrolloDelNegocioWidget(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            MujerEmprendeImpactoSocial(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Mujer Emprende'),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              MujerEmprendeEntornoSocialWidget(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              DescripcionYDesarrolloDelNegocioWidget(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              MujerEmprendeImpactoSocial(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );

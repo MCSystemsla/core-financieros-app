@@ -1,6 +1,8 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
@@ -181,12 +183,14 @@ class ButtonActionsWidget extends StatelessWidget {
   final void Function()? onNextPressed;
   final String previousTitle;
   final String nextTitle;
+  final bool? disabled;
   const ButtonActionsWidget({
     super.key,
     required this.onPreviousPressed,
     required this.onNextPressed,
     required this.previousTitle,
     required this.nextTitle,
+    this.disabled = false,
   });
 
   @override
@@ -205,12 +209,14 @@ class ButtonActionsWidget extends StatelessWidget {
           ),
           const Gap(20),
           Expanded(
-            child: CustomElevatedButton(
-              alignment: MainAxisAlignment.center,
-              text: nextTitle,
-              color: AppColors.getPrimaryColor(),
-              onPressed: () => onNextPressed!(),
-            ),
+            child: disabled == null || disabled == true
+                ? const CircularProgressIndicator()
+                : CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: nextTitle,
+                    color: AppColors.getPrimaryColor(),
+                    onPressed: () => onNextPressed!(),
+                  ),
           )
         ],
       ),
@@ -290,15 +296,46 @@ class SignQuestionaryWidget extends StatelessWidget {
                   ),
                 ),
                 const Gap(30),
-                CustomElevatedButton(
-                  icon: const Icon(
-                    Icons.edit,
-                    color: AppColors.white,
-                  ),
-                  positionIcon: PositionIcon.left,
-                  text: 'button.send'.tr(),
-                  color: context.primaryColor(),
-                  onPressed: () {},
+                BlocConsumer<MejoraViviendaCubit, MejoraViviendaState>(
+                  listener: (context, state) {
+                    final status = state.status;
+                    if (status == Status.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content: Text('Error inesperado'),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.done) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content:
+                              Text('Formulario enviado exitosamente!!'.tr()),
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.white,
+                      ),
+                      enabled: state.status != Status.inProgress,
+                      positionIcon: PositionIcon.left,
+                      text: state.status == Status.inProgress
+                          ? 'Cargando...'
+                          : 'button.send'.tr(),
+                      color: context.primaryColor(),
+                      onPressed: () {
+                        context.read<MejoraViviendaCubit>().sendAnswers();
+                      },
+                    );
+                  },
                 ),
                 const Gap(10),
               ],

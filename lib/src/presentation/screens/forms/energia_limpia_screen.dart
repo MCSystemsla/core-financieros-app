@@ -16,35 +16,38 @@ class EnergiaLimpiaScreen extends StatelessWidget {
     const isRecurrentForm = true;
     return BlocProvider(
       create: (ctx) => ResponseCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Energia Limpia'),
-        ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: [
-            SaneamientoContent(
-              controller: pageController,
-            ),
-            EnergiaLimpiaAditionalDataWidget(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            EnergiaLimpiaEntornoFamiliar(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            EnergiaLimpiaImpactoSocial(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            const SignQuestionaryWidget(),
-          ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Energia Limpia'),
+          ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              SaneamientoContent(
+                controller: pageController,
+              ),
+              EnergiaLimpiaAditionalDataWidget(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              EnergiaLimpiaEntornoFamiliar(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              EnergiaLimpiaImpactoSocial(
+                pageController: pageController,
+                isRecurrentForm: isRecurrentForm,
+              ),
+              FormResponses(
+                controller: pageController,
+              ),
+              const SignQuestionaryWidget(),
+            ],
+          ),
         ),
       ),
     );
