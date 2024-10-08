@@ -23,17 +23,17 @@ class MejoraViviendaState extends Equatable {
   final String planesFuturo;
   final String otrosDatosCliente;
   const MejoraViviendaState({
-    this.solicitudNuevamenorId = 0,
+    this.solicitudNuevamenorId = 262,
     this.username = '',
     this.tieneTrabajo = false,
-    this.database = '',
+    this.database = 'MC_CH',
     this.trabajoNegocioDescripcion = '',
     this.tiempoActividad = 0,
     this.otrosIngresos = false,
-    this.otrosIngresosDescripcion = '',
+    this.otrosIngresosDescripcion = 'preuba',
     this.objOrigenCatalogoValorId = '',
     this.objTipoComunidadId = '',
-    this.necesidadesComunidad = '',
+    this.necesidadesComunidad = 'prueba',
     this.personasCargo = '',
     this.numeroHijos = 0,
     this.edadHijos = '',

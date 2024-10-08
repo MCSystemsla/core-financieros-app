@@ -3,22 +3,27 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+typedef ValidatorCallback<T> = String? Function(T? value)?;
+
 class CommentaryWidget extends StatelessWidget {
   final bool haveCounter;
   final String? hintText;
   final TextEditingController? textEditingController;
   final String title;
+  final ValidatorCallback validator;
   const CommentaryWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
     required this.title,
     this.textEditingController,
+    this.validator,
   }) : haveCounter = false;
   const CommentaryWidget.withCounter({
     super.key,
     this.hintText = 'Ingresa tu texto',
     required this.title,
     this.textEditingController,
+    this.validator,
   }) : haveCounter = true;
 
   @override
@@ -49,6 +54,7 @@ class CommentaryWidget extends StatelessWidget {
             ),
             child: TextFormField(
               controller: textEditingController,
+              validator: validator,
               maxLength: 500,
               maxLines: null,
               onChanged: (value) {},

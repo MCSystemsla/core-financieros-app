@@ -142,7 +142,6 @@ class FormResponses extends StatelessWidget {
                 );
               },
               onNextPressed: () {
-                context.read<MejoraViviendaCubit>().sendAnswers();
                 controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,

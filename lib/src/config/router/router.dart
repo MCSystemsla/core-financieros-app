@@ -6,6 +6,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
   initialLocation: '/loading',
+  // initialLocation: '/online/form/mejora-de-vivienda',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

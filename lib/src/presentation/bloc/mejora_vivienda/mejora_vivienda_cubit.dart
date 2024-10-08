@@ -23,6 +23,9 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
     required int numeroHijos,
     required String edadHijos,
     required String tipoEstudioHijos,
+    String? trabajoNegocioDescripcion,
+    required necesidadesComunidad,
+    String? otrosIngresosDescription,
   }) {
     emit(
       state.copyWith(
@@ -35,6 +38,9 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
         numeroHijos: numeroHijos,
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
+        trabajoNegocioDescripcion: trabajoNegocioDescripcion ?? 'N/A',
+        necesidadesComunidad: necesidadesComunidad,
+        otrosIngresosDescripcion: otrosIngresosDescription,
       ),
     );
     log(state.toString());
@@ -58,8 +64,8 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
   }
 
   Future<void> sendAnswers() async {
+    emit(state.copyWith(status: Status.inProgress));
     try {
-      emit(state.copyWith(status: Status.inProgress));
       await repository.mejoraViviendaAnswer(
           mejoraVivienda: MejoraViviendaAnswer(
         solicitudNuevamenorId: state.solicitudNuevamenorId,

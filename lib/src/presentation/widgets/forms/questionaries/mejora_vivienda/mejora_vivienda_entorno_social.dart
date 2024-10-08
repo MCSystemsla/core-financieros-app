@@ -1,7 +1,9 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -32,7 +34,13 @@ String? question5;
 final question6 = TextEditingController();
 final question7 = TextEditingController();
 final question8 = TextEditingController();
+final storeDescription = TextEditingController();
+final necesidadesController = TextEditingController();
+final otrosIngresosController = TextEditingController();
 String? question9;
+String? otrosIngresos;
+
+final formKey = GlobalKey<FormState>();
 
 class _MejoraViviendaEntornoSocialState
     extends State<MejoraViviendaEntornoSocial>
@@ -43,198 +51,295 @@ class _MejoraViviendaEntornoSocialState
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'Entorno Social'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              Text(
+                'Entorno Social'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+
+                    return null;
+                  },
+                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    question1 = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              if (question1 == 'input.yes'.tr())
+                CommentaryWidget(
+                  textEditingController: storeDescription,
+                  title: 'Cual?',
+                ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question2,
                 validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
 
                   return null;
                 },
-                title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  question1 = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+                title: 'Tiempo de la actividad:*',
               ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: question2,
-              title: 'Tiempo de la actividad:*',
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
+                    return null;
+                  },
+                  title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    question3 = item;
+
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              if (question3 == 'input.yes'.tr())
+                CommentaryWidget(
+                  textEditingController: otrosIngresosController,
+                  title: 'Describe tus otros Ingresos',
+                ),
+              const Gap(20),
+              BlocBuilder<DepartamentosCubit, DepartamentosState>(
+                builder: (context, state) {
+                  return WhiteCard(
+                    marginTop: 15,
+                    padding: const EdgeInsets.all(10),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      isLoading: state.status == Status.inProgress,
+                      title: 'forms.entorno_familiar.person_origin'.tr(),
+                      items: state.departamentos,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        question4 = item.valor;
+                        setState(() {});
+                      },
+                      toStringItem: (item) => item.nombre,
+                      hintText: 'input.select_department'.tr(),
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                builder: (context, state) {
+                  return WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      isLoading: state.status == Status.inProgress,
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+
+                        return null;
+                      },
+                      title: 'Su comunidad es:'.tr(),
+                      items: state.comunidades,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        question5 = item.valor;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item.nombre;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: necesidadesController,
+                title: '¿Cuáles son las necesidades en su comunidad?',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question6,
+                title: 'Número de personas a cargo:*',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  question3 = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            BlocBuilder<DepartamentosCubit, DepartamentosState>(
-              builder: (context, state) {
-                return WhiteCard(
-                  marginTop: 15,
-                  padding: const EdgeInsets.all(10),
-                  child: JLuxDropdown(
-                    isContainIcon: true,
-                    isLoading: state.status == Status.inProgress,
-                    title: 'forms.entorno_familiar.person_origin'.tr(),
-                    items: state.departamentos,
-                    onChanged: (item) {
-                      if (item == null) return;
-                      question4 = item.valor;
-                    },
-                    toStringItem: (item) => item.nombre,
-                    hintText: 'input.select_department'.tr(),
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            BlocBuilder<ComunidadesCubit, ComunidadesState>(
-              builder: (context, state) {
-                return WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
-                    isContainIcon: true,
-                    isLoading: state.status == Status.inProgress,
-                    validator: (value) {
-                      if (value == null) return 'input.input_validator'.tr();
-
-                      return null;
-                    },
-                    title: 'Su comunidad es:'.tr(),
-                    items: state.comunidades,
-                    onChanged: (item) {
-                      if (item == null) return;
-                      question5 = item.nombre;
-                      setState(() {});
-                    },
-                    toStringItem: (item) {
-                      return item.nombre;
-                    },
-                    hintText: 'input.select_option'.tr(),
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: question6,
-              title: 'Número de personas a cargo:*',
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: question7,
-              title: 'Número de hijos:*',
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: question8,
-              title: '¿Que edades tienen sus hijos? ',
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-                  return null;
-                },
-                title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                items: const [
-                  'Ninguno',
-                  'Preescolar',
-                  'Primaria',
-                  'Secundaria',
-                  'Técnico',
-                  'Universitario'
-                ],
-                onChanged: (item) {
-                  if (item == null) return;
-                  question9 = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question7,
+                title: 'Número de hijos:*',
               ),
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<MejoraViviendaCubit>().saveAnswer1(
-                      tieneTrabajo: question1 == 'input.yes'.tr(),
-                      tiempoActividad: int.parse(question2.text.trim()),
-                      otrosIngresos: question3 == 'input.yes'.tr(),
-                      objOrigenCatalogoValorId: question4!,
-                      objTipoComunidadId: question5!,
-                      personasCargo: question6.text.trim(),
-                      numeroHijos: int.parse(question7.text.trim()),
-                      edadHijos: question8.text.trim(),
-                      tipoEstudioHijos: question9!,
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question8,
+                title: '¿Que edades tienen sus hijos?',
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    question9 = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<MejoraViviendaCubit>().saveAnswer1(
+                          tieneTrabajo: question1 == 'input.yes'.tr(),
+                          tiempoActividad: int.parse(question2.text.trim()),
+                          otrosIngresos: question3 == 'input.yes'.tr(),
+                          objOrigenCatalogoValorId: question4!,
+                          objTipoComunidadId: question5!,
+                          personasCargo: question6.text.trim(),
+                          numeroHijos: int.parse(question7.text.trim()),
+                          edadHijos: question8.text.trim(),
+                          tipoEstudioHijos: question9!,
+                          trabajoNegocioDescripcion:
+                              storeDescription.text.trim(),
+                          necesidadesComunidad:
+                              necesidadesController.text.trim(),
+                          otrosIngresosDescription:
+                              otrosIngresosController.text.trim(),
+                        );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                          response: question1!,
+                        ),
+                        Response(
+                          question: 'Tiempo de la actividad:*',
+                          response: question2.text.trim(),
+                        ),
+                        Response(
+                          question: '¿Tiene otros ingresos?¿Cuales?*',
+                          response: question3!,
+                        ),
+                        Response(
+                          question: 'Describe tus otros Ingresos',
+                          response: otrosIngresosController.text.trim(),
+                        ),
+                        Response(
+                          question: 'forms.entorno_familiar.person_origin'.tr(),
+                          response: question4!,
+                        ),
+                        Response(
+                          question: 'Su comunidad es:'.tr(),
+                          response: question5!,
+                        ),
+                        Response(
+                          question:
+                              '¿Cuáles son las necesidades en su comunidad?'
+                                  .tr(),
+                          response: necesidadesController.text.trim(),
+                        ),
+                        Response(
+                          question: 'Número de personas a cargo:*'.tr(),
+                          response: necesidadesController.text.trim(),
+                        ),
+                        Response(
+                          question: 'Número de personas a cargo:*'.tr(),
+                          response: question6.text.trim(),
+                        ),
+                        Response(
+                          question: 'Número de hijos:*'.tr(),
+                          response: question7.text.trim(),
+                        ),
+                        Response(
+                          question: '¿Que edades tienen sus hijos?'.tr(),
+                          response: question7.text.trim(),
+                        ),
+                        Response(
+                          question:
+                              '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                          response: question9!,
+                        ),
+                      ],
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );
