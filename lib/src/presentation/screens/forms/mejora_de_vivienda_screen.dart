@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -14,12 +18,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class MejoraDeViviendaScreen extends StatelessWidget {
+class MejoraDeViviendaScreen extends StatefulWidget {
   const MejoraDeViviendaScreen({super.key});
 
   @override
+  State<MejoraDeViviendaScreen> createState() => _MejoraDeViviendaScreenState();
+}
+
+class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
+  bool? isRecurrentForm;
+  @override
+  void initState() {
+    super.initState();
+    isRecurrentForm = true;
+    log(isRecurrentForm.toString());
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // const isRecurrentForm = true;
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
@@ -33,6 +50,9 @@ class MejoraDeViviendaScreen extends StatelessWidget {
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
         ),
+        BlocProvider(
+            create: (ctx) =>
+                RecurrenteMejoraViviendaCubit(ResponsesRepositoryImpl())),
         BlocProvider(
           create: (ctx) =>
               ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
@@ -58,8 +78,14 @@ class MejoraDeViviendaScreen extends StatelessWidget {
               // ),
               MejoraViviendaEntornoSocial(
                 pageController: pageController,
+                isRecurrentForm: isRecurrentForm ?? false,
               ),
+              if (isRecurrentForm ?? false)
+                MejoraViviendaCreditoDescrip(
+                  pageController: pageController,
+                ),
               ImpactoSocialKivaObjetiveWidget(
+                isRecurrentForm: isRecurrentForm ?? false,
                 controller: pageController,
               ),
               // MetasYAspiracionesWidget(

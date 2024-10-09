@@ -51,7 +51,7 @@ final router = GoRouter(
           builder: (context, state) => const EstandarScreen(),
         ),
       ],
-      redirect: (context, state) async {
+      redirect: (context, state) {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
         if (tipoProducto == 'MICREDIESTUDIO NUEVO' ||
@@ -89,9 +89,10 @@ final router = GoRouter(
           builder: (context, state) => const SaneamientoScreen(),
         ),
         GoRoute(
-          path: 'form/mejora-de-vivienda',
-          builder: (context, state) => const MejoraDeViviendaScreen(),
-        ),
+            path: 'form/mejora-de-vivienda',
+            builder: (context, state) {
+              return const MejoraDeViviendaScreen();
+            }),
         GoRoute(
           path: 'form/seguimiento',
           builder: (context, state) => const SeguimientoScreen(),
