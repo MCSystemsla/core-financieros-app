@@ -27,6 +27,65 @@ class RecurrenteMejoraViviendaCubit
     }
   }
 
-  Future<void> saveAnswers1() async {}
-  Future<void> saveAnswers2() async {}
+  Future<void> saveAnswers1({
+    bool? tieneTrabajo,
+    String? trabajoNegocioDescripcion,
+    int? tiempoActividad,
+    bool? otrosIngresos,
+    String? otrosIngresosDescripcion,
+    String? objTipoComunidadId,
+    String? necesidadesComunidad,
+    String? personasCargo,
+    int? numeroHijos,
+    String? edadHijos,
+    String? tipoEstudioHijos,
+  }) async {
+    emit(
+      state.copyWith(
+        tieneTrabajo: tieneTrabajo,
+        trabajoNegocioDescripcion: trabajoNegocioDescripcion,
+        tiempoActividad: tiempoActividad,
+        otrosIngresos: otrosIngresos,
+        otrosIngresosDescripcion: otrosIngresosDescripcion,
+        objTipoComunidadId: objTipoComunidadId,
+        necesidadesComunidad: necesidadesComunidad,
+        personasCargo: personasCargo,
+        numeroHijos: numeroHijos,
+        edadHijos: edadHijos,
+        tipoEstudioHijos: tipoEstudioHijos,
+      ),
+    );
+  }
+
+  Future<void> saveAnswers2({
+    String? motivoPrestamo,
+    String? descripcionCreditoAnterior,
+    String? motivoCreditoAnterior,
+    bool? coincideRespuesta,
+  }) async {
+    emit(
+      state.copyWith(
+        motivoPrestamo: motivoPrestamo,
+        descripcionCreditoAnterior: descripcionCreditoAnterior,
+        motivoCreditoAnterior: motivoCreditoAnterior,
+        coincideRespuesta: coincideRespuesta,
+      ),
+    );
+  }
+
+  Future<void> saveAnswers3({
+    String? mejoraSeguridadFamilia,
+    String? quienApoya,
+    String? siguienteMeta,
+    String? explicacionInversion,
+  }) async {
+    emit(
+      state.copyWith(
+        mejoraSeguridadFamilia: mejoraSeguridadFamilia,
+        quienApoya: quienApoya,
+        siguienteMeta: siguienteMeta,
+        explicacionInversion: explicacionInversion,
+      ),
+    );
+  }
 }
