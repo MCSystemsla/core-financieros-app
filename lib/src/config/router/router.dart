@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
@@ -23,7 +25,12 @@ final router = GoRouter(
         GoRoute(
           path: 'form/mejora-de-vivienda',
           builder: (context, state) {
-            return const MejoraDeViviendaScreen();
+            final typeProduct =
+                context.read<KivaRouteCubit>().state.currentRoute;
+
+            return MejoraDeViviendaScreen(
+              typeProducto: typeProduct,
+            );
           },
         ),
         GoRoute(
@@ -91,7 +98,11 @@ final router = GoRouter(
         GoRoute(
             path: 'form/mejora-de-vivienda',
             builder: (context, state) {
-              return const MejoraDeViviendaScreen();
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MejoraDeViviendaScreen(
+                typeProducto: typeProduct,
+              );
             }),
         GoRoute(
           path: 'form/seguimiento',

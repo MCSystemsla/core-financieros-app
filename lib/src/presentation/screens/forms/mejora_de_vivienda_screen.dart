@@ -23,7 +23,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class MejoraDeViviendaScreen extends StatefulWidget {
-  const MejoraDeViviendaScreen({super.key});
+  final String typeProducto;
+  const MejoraDeViviendaScreen({super.key, required this.typeProducto});
 
   @override
   State<MejoraDeViviendaScreen> createState() => _MejoraDeViviendaScreenState();
@@ -34,9 +35,8 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
   @override
   void initState() {
     super.initState();
-    isRecurrentForm = false;
+    isRecurrentForm = widget.typeProducto == 'VIVIENDA REPRESTAMO';
     log(isRecurrentForm.toString());
-    setState(() {});
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -64,7 +65,12 @@ class _RequestWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text('${solicitud.numero} - ${solicitud.nombre.capitalizeAll}'),
-      onTap: () => context.push('/online', extra: solicitud.producto),
+      onTap: () async {
+        context
+            .read<KivaRouteCubit>()
+            .setCurrentRouteProduct(solicitud.producto);
+        await context.push('/online', extra: solicitud.producto);
+      },
       subtitle: Text(
         solicitud.fecha.formatDateV2(),
       ),
