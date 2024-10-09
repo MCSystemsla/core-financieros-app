@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 typedef ValidatorCallback<T> = String? Function(T? value)?;
+typedef OnChangeCallback<T> = Function(T? value)?;
 
 class CommentaryWidget extends StatelessWidget {
   final bool haveCounter;
@@ -11,12 +12,18 @@ class CommentaryWidget extends StatelessWidget {
   final TextEditingController? textEditingController;
   final String title;
   final ValidatorCallback validator;
+  final OnChangeCallback? onChange;
+  final String? initialValue;
+  final double? marginTop;
   const CommentaryWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
     required this.title,
     this.textEditingController,
     this.validator,
+    this.initialValue,
+    this.onChange,
+    this.marginTop = 10,
   }) : haveCounter = false;
   const CommentaryWidget.withCounter({
     super.key,
@@ -24,12 +31,15 @@ class CommentaryWidget extends StatelessWidget {
     required this.title,
     this.textEditingController,
     this.validator,
+    this.initialValue,
+    this.onChange,
+    this.marginTop = 10,
   }) : haveCounter = true;
 
   @override
   Widget build(BuildContext context) {
     return WhiteCard(
-      marginTop: 10,
+      marginTop: marginTop,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,9 +65,10 @@ class CommentaryWidget extends StatelessWidget {
             child: TextFormField(
               controller: textEditingController,
               validator: validator,
+              initialValue: initialValue,
               maxLength: 500,
               maxLines: null,
-              onChanged: (value) {},
+              onChanged: onChange,
               style: TextStyle(
                 color: AppColors.greyWithOpacityV4,
                 fontSize: 16,

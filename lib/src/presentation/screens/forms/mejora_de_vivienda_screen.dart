@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
@@ -9,9 +11,11 @@ import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +34,7 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
   @override
   void initState() {
     super.initState();
-    isRecurrentForm = true;
+    isRecurrentForm = false;
     log(isRecurrentForm.toString());
     setState(() {});
   }
@@ -103,13 +107,18 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
   }
 }
 
-class FormResponses extends StatelessWidget {
+class FormResponses extends StatefulWidget {
   final PageController controller;
   const FormResponses({
     super.key,
     required this.controller,
   });
 
+  @override
+  State<FormResponses> createState() => _FormResponsesState();
+}
+
+class _FormResponsesState extends State<FormResponses> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -134,25 +143,7 @@ class FormResponses extends StatelessWidget {
                     return const Gap(20);
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    return WhiteCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            state.responses[index].question,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.w400),
-                          ),
-                          const Gap(20),
-                          Text(
-                            state.responses[index].response,
-                            style: Theme.of(context).textTheme.bodyMedium!,
-                          ),
-                        ],
-                      ),
-                    );
+                    return _ResponseWidget(response: state.responses[index]);
                   },
                 );
               },
@@ -160,7 +151,7 @@ class FormResponses extends StatelessWidget {
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                controller.previousPage(
+                widget.controller.previousPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -168,7 +159,7 @@ class FormResponses extends StatelessWidget {
                 );
               },
               onNextPressed: () {
-                controller.nextPage(
+                widget.controller.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
@@ -178,6 +169,99 @@ class FormResponses extends StatelessWidget {
               previousTitle: 'button.previous'.tr(),
               nextTitle: 'button.signed'.tr(),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ResponseWidget extends StatefulWidget {
+  final Response response;
+  const _ResponseWidget({required this.response});
+
+  @override
+  State<_ResponseWidget> createState() => _ResponseWidgetState();
+}
+
+class _ResponseWidgetState extends State<_ResponseWidget> {
+  bool onEditAnswer = false;
+  final answerController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  String? responseEditedAnswer;
+
+  @override
+  Widget build(BuildContext context) {
+    return WhiteCard(
+      child: Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 250,
+                  ),
+                  child: Text(
+                    widget.response.question,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.w400),
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    onEditAnswer = !onEditAnswer;
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
+            ),
+            const Gap(20),
+            Text(
+              widget.response.response,
+              style: Theme.of(context).textTheme.bodyMedium!,
+            ),
+            if (onEditAnswer)
+              CommentaryWidget(
+                marginTop: 2,
+                initialValue: widget.response.response,
+                title: '',
+                // textEditingController: answerController,
+                onChange: (value) {
+                  responseEditedAnswer = value;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+            if (onEditAnswer)
+              CustomElevatedButton(
+                text: 'Guardar',
+                color: AppColors.getPrimaryColor(),
+                onPressed: () {
+                  context.read<ResponseCubit>().addResponses(
+                    responses: [
+                      Response(
+                        question: widget.response.question,
+                        response: responseEditedAnswer!,
+                      ),
+                    ],
+                  );
+                  onEditAnswer = !onEditAnswer;
+                  setState(() {});
+                },
+              ),
           ],
         ),
       ),

@@ -317,6 +317,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                               Text('Formulario enviado exitosamente!!'.tr()),
                         ),
                       );
+                      context.pushReplacement('/');
                     }
                   },
                   builder: (context, state) {
