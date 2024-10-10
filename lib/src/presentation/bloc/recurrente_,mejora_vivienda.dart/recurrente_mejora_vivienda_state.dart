@@ -18,8 +18,6 @@ class RecurrenteMejoraViviendaState extends Equatable {
   final String edadHijos;
   final String tipoEstudioHijos;
   final String motivoPrestamo;
-  final String descripcionCreditoAnterior;
-  final String motivoCreditoAnterior;
   final bool coincideRespuesta;
   final String explicacionInversion;
   final String viviendaAntesDespues;
@@ -43,8 +41,6 @@ class RecurrenteMejoraViviendaState extends Equatable {
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
     this.motivoPrestamo = '',
-    this.descripcionCreditoAnterior = '',
-    this.motivoCreditoAnterior = '',
     this.coincideRespuesta = false,
     this.explicacionInversion = '',
     this.viviendaAntesDespues = '',
@@ -71,8 +67,6 @@ class RecurrenteMejoraViviendaState extends Equatable {
         edadHijos,
         tipoEstudioHijos,
         motivoPrestamo,
-        descripcionCreditoAnterior,
-        motivoCreditoAnterior,
         coincideRespuesta,
         explicacionInversion,
         viviendaAntesDespues,
@@ -98,8 +92,6 @@ class RecurrenteMejoraViviendaState extends Equatable {
     String? edadHijos,
     String? tipoEstudioHijos,
     String? motivoPrestamo,
-    String? descripcionCreditoAnterior,
-    String? motivoCreditoAnterior,
     bool? coincideRespuesta,
     String? explicacionInversion,
     String? viviendaAntesDespues,
@@ -127,10 +119,6 @@ class RecurrenteMejoraViviendaState extends Equatable {
       edadHijos: edadHijos ?? this.edadHijos,
       tipoEstudioHijos: tipoEstudioHijos ?? this.tipoEstudioHijos,
       motivoPrestamo: motivoPrestamo ?? this.motivoPrestamo,
-      descripcionCreditoAnterior:
-          descripcionCreditoAnterior ?? this.descripcionCreditoAnterior,
-      motivoCreditoAnterior:
-          motivoCreditoAnterior ?? this.motivoCreditoAnterior,
       coincideRespuesta: coincideRespuesta ?? this.coincideRespuesta,
       explicacionInversion: explicacionInversion ?? this.explicacionInversion,
       viviendaAntesDespues: viviendaAntesDespues ?? this.viviendaAntesDespues,

@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
@@ -16,11 +17,14 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:signature/signature.dart';
 
 class MejoraDeViviendaScreen extends StatefulWidget {
   final String typeProducto;
@@ -98,11 +102,140 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
               FormResponses(
                 controller: pageController,
               ),
-              const SignQuestionaryWidget(),
+              isRecurrentForm ?? false
+                  ? const RecurrentSign()
+                  : const SignQuestionaryWidget(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class RecurrentSign extends StatelessWidget {
+  const RecurrentSign({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final controller = SignatureController();
+    return Column(
+      children: [
+        const MiCreditoProgress(
+          steps: 5,
+          currentStep: 5,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'forms.firmar.title'.tr(),
+                  style: TextStyle(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Gap(10),
+                Text(
+                  'forms.firmar.description'.tr(),
+                  style: TextStyle(
+                    color: AppColors.greyWithOpacityV4,
+                  ),
+                ),
+                const Gap(20),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            // height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(30),
+                BlocConsumer<RecurrenteMejoraViviendaCubit,
+                    RecurrenteMejoraViviendaState>(
+                  listener: (context, state) {
+                    final status = state.status;
+                    if (status == Status.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content: Text('Error inesperado'),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.done) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content:
+                              Text('Formulario enviado exitosamente!!'.tr()),
+                        ),
+                      );
+                      // context.pushReplacement('/');
+                    }
+                  },
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.white,
+                      ),
+                      enabled: state.status != Status.inProgress,
+                      positionIcon: PositionIcon.left,
+                      text: state.status == Status.inProgress
+                          ? 'Cargando...'
+                          : 'button.send'.tr(),
+                      color: context.primaryColor(),
+                      onPressed: () {
+                        context
+                            .read<RecurrenteMejoraViviendaCubit>()
+                            .sendAnswers();
+                      },
+                    );
+                  },
+                ),
+                const Gap(10),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

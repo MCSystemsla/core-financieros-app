@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -161,6 +162,12 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  final question1 = TextEditingController();
+  final question2 = TextEditingController();
+  final question3 = TextEditingController();
+  final question4 = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -168,63 +175,104 @@ class _RecurrentFormState extends State<_RecurrentForm>
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'forms.mejora_de_vivienda.impacto_social.title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿En qué piensa invertir este nuevo préstamo de Mejora de Vivienda?* Explique',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Cómo cree usted que este nuevo préstamo vaya a mejorar la seguridad de su familia?*',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              const Text('recurrente'),
+              Text(
+                'forms.mejora_de_vivienda.impacto_social.title'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question1,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                title:
+                    '¿En qué piensa invertir este nuevo préstamo de Mejora de Vivienda?* Explique',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question2,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                title:
+                    '¿Cómo cree usted que este nuevo préstamo vaya a mejorar la seguridad de su familia?*',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question3,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                title:
+                    '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: question4,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                title:
+                    'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMejoraViviendaCubit>().saveAnswers3(
+                          motivoPrestamo: question1.text.trim(),
+                          explicacionInversion: question1.text.trim(),
+                          mejoraSeguridadFamilia: question2.text.trim(),
+                          quienApoya: question3.text.trim(),
+                          siguienteMeta: question4.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

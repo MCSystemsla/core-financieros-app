@@ -13,13 +13,33 @@ class RecurrenteMejoraViviendaCubit
 
   final ResponsesRepository repository;
 
-  Future<void> sendAnswers({
-    required MejoraViviendaRecurrente mejoraViviendaRecurrente,
-  }) async {
+  Future<void> sendAnswers() async {
     try {
       emit(state.copyWith(status: Status.inProgress));
       await repository.mejoraViviendaRecurrenteAnswer(
-        mejoraViviendaRecurrente: mejoraViviendaRecurrente,
+        mejoraViviendaRecurrente: MejoraViviendaRecurrente(
+          database: state.database,
+          objSolicitudRecurrenteId: state.objSolicitudRecurrenteId,
+          username: state.username,
+          tieneTrabajo: state.tieneTrabajo,
+          trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
+          tiempoActividad: state.tiempoActividad,
+          otrosIngresos: state.otrosIngresos,
+          otrosIngresosDescripcion: state.otrosIngresosDescripcion,
+          objTipoComunidadId: state.objTipoComunidadId,
+          necesidadesComunidad: state.necesidadesComunidad,
+          personasCargo: state.personasCargo,
+          numeroHijos: state.numeroHijos,
+          edadHijos: state.edadHijos,
+          tipoEstudioHijos: state.tipoEstudioHijos,
+          motivoPrestamo: state.motivoPrestamo,
+          coincideRespuesta: state.coincideRespuesta,
+          explicacionInversion: state.explicacionInversion,
+          viviendaAntesDespues: state.viviendaAntesDespues,
+          mejoraSeguridadFamilia: state.mejoraSeguridadFamilia,
+          quienApoya: state.quienApoya,
+          siguienteMeta: state.siguienteMeta,
+        ),
       );
       emit(state.copyWith(status: Status.done));
     } catch (e) {
@@ -58,17 +78,15 @@ class RecurrenteMejoraViviendaCubit
   }
 
   Future<void> saveAnswers2({
-    String? motivoPrestamo,
-    String? descripcionCreditoAnterior,
-    String? motivoCreditoAnterior,
     bool? coincideRespuesta,
+    String? explicacionInversion,
+    String? viviendaAntesDespues,
   }) async {
     emit(
       state.copyWith(
-        motivoPrestamo: motivoPrestamo,
-        descripcionCreditoAnterior: descripcionCreditoAnterior,
-        motivoCreditoAnterior: motivoCreditoAnterior,
         coincideRespuesta: coincideRespuesta,
+        explicacionInversion: explicacionInversion,
+        viviendaAntesDespues: viviendaAntesDespues,
       ),
     );
   }
@@ -78,9 +96,11 @@ class RecurrenteMejoraViviendaCubit
     String? quienApoya,
     String? siguienteMeta,
     String? explicacionInversion,
+    String? motivoPrestamo,
   }) async {
     emit(
       state.copyWith(
+        motivoPrestamo: motivoPrestamo,
         mejoraSeguridadFamilia: mejoraSeguridadFamilia,
         quienApoya: quienApoya,
         siguienteMeta: siguienteMeta,

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -383,6 +384,8 @@ class _RecurrentFormState extends State<_RecurrentForm> {
   final otrosIngresosController = TextEditingController();
   String? question9;
   String? otrosIngresos;
+  final cualesOtrosIngresosController = TextEditingController();
+  final cualesOtroTrabajoController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -412,11 +415,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 padding: const EdgeInsets.all(5),
                 child: JLuxDropdown(
                   isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
                   title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
@@ -433,19 +431,17 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               const Gap(20),
               if (question1 == 'input.yes'.tr())
                 CommentaryWidget(
-                  textEditingController: storeDescription,
                   title: 'Cual?',
+                  textEditingController: cualesOtroTrabajoController,
                 ),
+              // if (question1 == 'input.yes'.tr())
+              //   CommentaryWidget(
+              //     textEditingController: storeDescription,
+              //     title: 'Cual?',
+              //   ),
               const Gap(20),
               CommentaryWidget(
                 textEditingController: question2,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-
-                  return null;
-                },
                 title: 'Tiempo de la actividad:*',
               ),
               const Gap(20),
@@ -473,6 +469,12 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 ),
               ),
               const Gap(20),
+              if (question3 == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Cuales Ingresos son?',
+                  textEditingController: cualesOtrosIngresosController,
+                ),
+              const Gap(20),
               BlocBuilder<ComunidadesCubit, ComunidadesState>(
                 builder: (context, state) {
                   return WhiteCard(
@@ -480,13 +482,13 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                     child: JLuxDropdown(
                       isContainIcon: true,
                       isLoading: state.status == Status.inProgress,
-                      validator: (value) {
-                        if (value == null) {
-                          return 'input.input_validator'.tr();
-                        }
+                      // validator: (value) {
+                      //   if (value == null) {
+                      //     return 'input.input_validator'.tr();
+                      //   }
 
-                        return null;
-                      },
+                      //   return null;
+                      // },
                       title: 'Su comunidad es:'.tr(),
                       items: state.comunidades,
                       onChanged: (item) {
@@ -521,6 +523,12 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               const Gap(20),
               CommentaryWidget(
                 textEditingController: question7,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
                 title: 'Número de hijos:*',
               ),
               const Gap(20),
@@ -533,10 +541,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 padding: const EdgeInsets.all(5),
                 child: JLuxDropdown(
                   isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-                    return null;
-                  },
                   title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
                   items: const [
                     'Ninguno',
@@ -569,6 +573,24 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 },
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMejoraViviendaCubit>().saveAnswers1(
+                          tieneTrabajo: question1 == 'input.yes'.tr(),
+                          tiempoActividad: int.tryParse(question2.text),
+                          otrosIngresos: question3 == 'input.yes'.tr(),
+                          objTipoComunidadId: question5,
+                          necesidadesComunidad:
+                              necesidadesController.text.trim(),
+                          personasCargo: question6.text.trim(),
+                          numeroHijos: int.parse(
+                            question7.text.trim(),
+                          ),
+                          edadHijos: question8.text.trim(),
+                          tipoEstudioHijos: question9,
+                          otrosIngresosDescripcion:
+                              cualesOtrosIngresosController.text.trim(),
+                          trabajoNegocioDescripcion:
+                              cualesOtroTrabajoController.text.trim(),
+                        );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

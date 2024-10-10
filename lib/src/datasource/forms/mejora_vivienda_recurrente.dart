@@ -19,8 +19,6 @@ class MejoraViviendaRecurrente {
   final String edadHijos;
   final String tipoEstudioHijos;
   final String motivoPrestamo;
-  final String descripcionCreditoAnterior;
-  final String motivoCreditoAnterior;
   final bool coincideRespuesta;
   final String explicacionInversion;
   final String viviendaAntesDespues;
@@ -44,8 +42,6 @@ class MejoraViviendaRecurrente {
     required this.edadHijos,
     required this.tipoEstudioHijos,
     required this.motivoPrestamo,
-    required this.descripcionCreditoAnterior,
-    required this.motivoCreditoAnterior,
     required this.coincideRespuesta,
     required this.explicacionInversion,
     required this.viviendaAntesDespues,
@@ -70,8 +66,6 @@ class MejoraViviendaRecurrente {
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
         'motivoPrestamo': motivoPrestamo,
-        'descripcionCreditoAnterior': descripcionCreditoAnterior,
-        'motivoCreditoAnterior': motivoCreditoAnterior,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'viviendaAntesDespues': viviendaAntesDespues,
