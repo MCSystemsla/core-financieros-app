@@ -73,6 +73,12 @@ class _ImpactoSocialKivaObjetiveWidgetState
                   CommentaryWidget(
                     title: 'forms.mejora_de_vivienda.question2'.tr(),
                     textEditingController: question2Controller,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
                   ),
                   const Gap(10),
                   CommentaryWidget(

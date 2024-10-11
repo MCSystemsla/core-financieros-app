@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -297,7 +299,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                 ),
                 const Gap(30),
                 BlocConsumer<MejoraViviendaCubit, MejoraViviendaState>(
-                  listener: (context, state) {
+                  listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -309,15 +311,19 @@ class SignQuestionaryWidget extends StatelessWidget {
                       );
                     }
                     if (state.status == Status.done) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content:
-                              Text('Formulario enviado exitosamente!!'.tr()),
-                        ),
+                      await customPopUp(
+                        context: context,
+                        size: size,
+                        title: 'Formulario Kiva Enviado exitosamente!!',
+                        subtitle: 'Las respuestas se han enviado Exitosamente',
+                        dialogType: DialogType.success,
+                        buttonAcept: true,
+                        textButtonAcept: 'Ok',
+                        colorButtonAcept: AppColors.getPrimaryColor(),
+                        onPressedAccept: () {
+                          context.pushReplacement('/');
+                        },
                       );
-                      context.pushReplacement('/');
                     }
                   },
                   builder: (context, state) {
@@ -332,8 +338,25 @@ class SignQuestionaryWidget extends StatelessWidget {
                           ? 'Cargando...'
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
-                      onPressed: () {
-                        context.read<MejoraViviendaCubit>().sendAnswers();
+                      onPressed: () async {
+                        await customPopUp(
+                          context: context,
+                          size: size,
+                          title:
+                              'Confirmas que has leido y confirmado el Formulario Kiva?',
+                          dialogType: DialogType.warning,
+                          buttonAcept: true,
+                          buttonCancel: true,
+                          colorButtonCancel: AppColors.red,
+                          textButtonAcept: 'Aceptar',
+                          textButtonCancel: 'Cancelar',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.read<MejoraViviendaCubit>().sendAnswers();
+                            context.pop();
+                          },
+                          onPressedCancel: () => context.pop(),
+                        );
                       },
                     );
                   },

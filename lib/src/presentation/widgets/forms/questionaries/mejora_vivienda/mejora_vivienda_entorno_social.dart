@@ -79,11 +79,6 @@ class _MejoraViviendaEntornoSocialState
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
                       isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-
-                        return null;
-                      },
                       title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                       items: ['input.yes'.tr(), 'input.no'.tr()],
                       onChanged: (item) {
@@ -152,6 +147,13 @@ class _MejoraViviendaEntornoSocialState
                         padding: const EdgeInsets.all(10),
                         child: JLuxDropdown(
                           isContainIcon: true,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'input.input_validator'.tr();
+                            }
+
+                            return null;
+                          },
                           isLoading: state.status == Status.inProgress,
                           title: 'forms.entorno_familiar.person_origin'.tr(),
                           items: state.departamentos,
@@ -174,13 +176,6 @@ class _MejoraViviendaEntornoSocialState
                         child: JLuxDropdown(
                           isContainIcon: true,
                           isLoading: state.status == Status.inProgress,
-                          validator: (value) {
-                            if (value == null) {
-                              return 'input.input_validator'.tr();
-                            }
-
-                            return null;
-                          },
                           title: 'Su comunidad es:'.tr(),
                           items: state.comunidades,
                           onChanged: (item) {
@@ -216,6 +211,13 @@ class _MejoraViviendaEntornoSocialState
                   CommentaryWidget(
                     textEditingController: question7,
                     title: 'Número de hijos:*',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+
+                      return null;
+                    },
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -227,10 +229,6 @@ class _MejoraViviendaEntornoSocialState
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
                       isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-                        return null;
-                      },
                       title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
                       items: const [
                         'Ninguno',
@@ -265,14 +263,15 @@ class _MejoraViviendaEntornoSocialState
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MejoraViviendaCubit>().saveAnswer1(
                               tieneTrabajo: question1 == 'input.yes'.tr(),
-                              tiempoActividad: int.parse(question2.text.trim()),
+                              tiempoActividad:
+                                  int.tryParse(question2.text.trim()),
                               otrosIngresos: question3 == 'input.yes'.tr(),
-                              objOrigenCatalogoValorId: question4!,
-                              objTipoComunidadId: question5!,
+                              objOrigenCatalogoValorId: question4,
+                              objTipoComunidadId: question5,
                               personasCargo: question6.text.trim(),
-                              numeroHijos: int.parse(question7.text.trim()),
+                              numeroHijos: int.tryParse(question7.text.trim()),
                               edadHijos: question8.text.trim(),
-                              tipoEstudioHijos: question9!,
+                              tipoEstudioHijos: question9,
                               trabajoNegocioDescripcion:
                                   storeDescription.text.trim(),
                               necesidadesComunidad:
@@ -285,7 +284,7 @@ class _MejoraViviendaEntornoSocialState
                             Response(
                               question:
                                   '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                              response: question1!,
+                              response: question1 ?? 'N/A',
                             ),
                             Response(
                               question: 'Tiempo de la actividad:*',
@@ -293,7 +292,7 @@ class _MejoraViviendaEntornoSocialState
                             ),
                             Response(
                               question: '¿Tiene otros ingresos?¿Cuales?*',
-                              response: question3!,
+                              response: question3 ?? 'N/A',
                             ),
                             Response(
                               question: 'Describe tus otros Ingresos',
@@ -302,11 +301,11 @@ class _MejoraViviendaEntornoSocialState
                             Response(
                               question:
                                   'forms.entorno_familiar.person_origin'.tr(),
-                              response: question4!,
+                              response: question4 ?? 'N/A',
                             ),
                             Response(
                               question: 'Su comunidad es:'.tr(),
-                              response: question5!,
+                              response: question5 ?? 'N/A',
                             ),
                             Response(
                               question:
@@ -334,7 +333,7 @@ class _MejoraViviendaEntornoSocialState
                               question:
                                   '¿Qué tipo de estudios reciben sus hijos?'
                                       .tr(),
-                              response: question9!,
+                              response: question9 ?? 'N/A',
                             ),
                           ],
                         );
