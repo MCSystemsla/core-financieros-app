@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
+import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
 import 'package:logger/logger.dart';
@@ -8,6 +9,9 @@ import 'package:logger/logger.dart';
 abstract class ResponsesRepository {
   Future<void> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
+  });
+  Future<void> mejoraViviendaRecurrenteAnswer({
+    required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   });
 }
 
@@ -27,6 +31,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       _logger.i(resp);
     } catch (e) {
       throw AppException.toAppException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> mejoraViviendaRecurrenteAnswer({
+    required MejoraViviendaRecurrente mejoraViviendaRecurrente,
+  }) async {
+    try {
+      final endpoint = RecurrenteMejoraViviendaEndpoint(
+        mejoraViviendaAnswer: mejoraViviendaRecurrente,
+      );
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
+      throw AppException.toAppException(e);
     }
   }
 }

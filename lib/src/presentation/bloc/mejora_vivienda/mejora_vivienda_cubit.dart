@@ -14,17 +14,17 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
   MejoraViviendaCubit(this.repository) : super(MejoraViviendaInitial());
   final _logger = Logger();
   void saveAnswer1({
-    required bool tieneTrabajo,
-    required int tiempoActividad,
-    required bool otrosIngresos,
-    required String objOrigenCatalogoValorId,
-    required String objTipoComunidadId,
-    required String personasCargo,
-    required int numeroHijos,
-    required String edadHijos,
-    required String tipoEstudioHijos,
+    bool? tieneTrabajo,
+    int? tiempoActividad,
+    bool? otrosIngresos,
+    String? objOrigenCatalogoValorId,
+    String? objTipoComunidadId,
+    String? personasCargo,
+    int? numeroHijos,
+    String? edadHijos,
+    String? tipoEstudioHijos,
     String? trabajoNegocioDescripcion,
-    required necesidadesComunidad,
+    String? necesidadesComunidad,
     String? otrosIngresosDescription,
   }) {
     emit(
