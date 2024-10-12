@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -5,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class EnergiaLimpiaAditionalDataWidget extends StatefulWidget {
@@ -24,6 +26,13 @@ class EnergiaLimpiaAditionalDataWidget extends StatefulWidget {
 class _EnergiaLimpiaAditionalDataWidgetState
     extends State<EnergiaLimpiaAditionalDataWidget>
     with AutomaticKeepAliveClientMixin {
+  String? tieneTrabajo;
+  String? otrosIngresos;
+  final trabajoNegocioDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
+  final otrosIngresosDescripcion = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -33,80 +42,130 @@ class _EnergiaLimpiaAditionalDataWidgetState
         ),
       false => Padding(
           padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              const MiCreditoProgress(
-                steps: 4,
-                currentStep: 2,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-              const Gap(10),
-              const CommentaryWidget(
-                title: 'Tiempo de la actividad:*',
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
-                  title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-              const Gap(20),
-              ButtonActionsWidget(
-                onPreviousPressed: () {
-                  widget.pageController.previousPage(
-                    duration: const Duration(
-                      milliseconds: 350,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const MiCreditoProgress(
+                    steps: 4,
+                    currentStep: 2,
+                  ),
+                  const Gap(20),
+                  WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+                        return null;
+                      },
+                      title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                      items: ['input.yes'.tr(), 'input.no'.tr()],
+                      onChanged: (item) {
+                        if (item == null) return;
+                        tieneTrabajo = item;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item;
+                      },
+                      hintText: 'input.select_option'.tr(),
                     ),
-                    curve: Curves.easeIn,
-                  );
-                },
-                onNextPressed: () {
-                  widget.pageController.nextPage(
-                    duration: const Duration(
-                      milliseconds: 350,
+                  ),
+                  if (tieneTrabajo == 'input.yes'.tr())
+                    CommentaryWidget(
+                      title: 'Cual',
+                      textEditingController: trabajoNegocioDescripcion,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
                     ),
-                    curve: Curves.easeIn,
-                  );
-                },
-                previousTitle: 'button.previous'.tr(),
-                nextTitle: 'button.next'.tr(),
+                  const Gap(10),
+                  CommentaryWidget(
+                    title: 'Tiempo de la actividad:*',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
+                    textEditingController: tiempoActividad,
+                  ),
+                  const Gap(20),
+                  WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+
+                        return null;
+                      },
+                      title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                      items: ['input.yes'.tr(), 'input.no'.tr()],
+                      onChanged: (item) {
+                        if (item == null) return;
+                        otrosIngresos = item;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                  if (otrosIngresos == 'input.yes'.tr())
+                    CommentaryWidget(
+                      title: 'Cuales Otros Ingresos?',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                      textEditingController: otrosIngresosDescripcion,
+                    ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    onPreviousPressed: () {
+                      widget.pageController.previousPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onNextPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        context.read<EnergiaLimpiaCubit>().saveAnswer1(
+                              otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                              otrosIngresosDescripcion:
+                                  otrosIngresosDescripcion.text.trim(),
+                              tiempoActividad:
+                                  int.tryParse(tiempoActividad.text.trim()),
+                              tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                              trabajoNegocioDescripcion:
+                                  trabajoNegocioDescripcion.text.trim(),
+                            );
+                        widget.pageController.nextPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
     };
