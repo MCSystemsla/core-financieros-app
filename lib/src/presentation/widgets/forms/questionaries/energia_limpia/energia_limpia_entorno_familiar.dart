@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -92,27 +93,27 @@ class _EnergiaLimpiaEntornoFamiliarState
                     },
                   ),
                   const Gap(10),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-
-                        return null;
-                      },
-                      title: 'Su comunidad es'.tr(),
-                      items: ['Urbana'.tr(), 'Rural'.tr()],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        objTipoComunidadId = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
+                  BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                    builder: (context, state) {
+                      return WhiteCard(
+                        padding: const EdgeInsets.all(5),
+                        child: JLuxDropdown(
+                          isContainIcon: true,
+                          isLoading: state.status == Status.inProgress,
+                          title: 'Su comunidad es:'.tr(),
+                          items: state.comunidades,
+                          onChanged: (item) {
+                            if (item == null) return;
+                            objTipoComunidadId = item.valor;
+                            setState(() {});
+                          },
+                          toStringItem: (item) {
+                            return item.nombre;
+                          },
+                          hintText: 'input.select_option'.tr(),
+                        ),
+                      );
+                    },
                   ),
                   const Gap(20),
                   WhiteCard(
