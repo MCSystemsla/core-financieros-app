@@ -1,8 +1,10 @@
+import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class EnergiaLimpiaImpactoSocial extends StatefulWidget {
@@ -21,6 +23,11 @@ class EnergiaLimpiaImpactoSocial extends StatefulWidget {
 
 class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final planesFuturo = TextEditingController();
+  final otrosDatosCliente = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -31,55 +38,75 @@ class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 4,
-                  currentStep: 4,
-                ),
-                const Gap(20),
-                Text(
-                  'Impacto Social de Kiva (uso específico, objetivos, metas del préstamo).'
-                      .tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const CommentaryWidget(
-                  title: '¿Por qué y para qué solicitó el préstamo? Explique.*',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title: '¿Cuáles son sus planes para los próximos años?',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title: 'Otros datos relevantes e interesantes del cliente',
-                ),
-                const Gap(20),
-                ButtonActionsWidget(
-                  onPreviousPressed: () {
-                    widget.pageController.previousPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onNextPressed: () {
-                    widget.pageController.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  previousTitle: 'button.previous'.tr(),
-                  nextTitle: 'button.next'.tr(),
-                ),
-                const Gap(10),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MiCreditoProgress(
+                    steps: 4,
+                    currentStep: 4,
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Impacto Social de Kiva (uso específico, objetivos, metas del préstamo).'
+                        .tr(),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  CommentaryWidget(
+                    title:
+                        '¿Por qué y para qué solicitó el préstamo? Explique.*',
+                    textEditingController: motivoPrestamo,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Cuáles son sus planes para los próximos años?',
+                    textEditingController: planesFuturo,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Otros datos relevantes e interesantes del cliente',
+                    textEditingController: otrosDatosCliente,
+                  ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    onPreviousPressed: () {
+                      widget.pageController.previousPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onNextPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        context.read<EnergiaLimpiaCubit>().saveAnswer3(
+                              motivoPrestamo: motivoPrestamo.text.trim(),
+                              otrosDatosCliente: otrosDatosCliente.text.trim(),
+                              planesFuturo: planesFuturo.text.trim(),
+                            );
+                        widget.pageController.nextPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                  const Gap(10),
+                ],
+              ),
             ),
           ),
         ),

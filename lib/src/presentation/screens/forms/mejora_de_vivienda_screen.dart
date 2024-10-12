@@ -74,7 +74,8 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('forms.mejora_de_vivienda.title'.tr()),
+            title: Text(
+                '${'forms.mejora_de_vivienda.title'.tr()} ${isRecurrentForm! ? 'Recurrente' : 'Nuevo'}'),
           ),
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),

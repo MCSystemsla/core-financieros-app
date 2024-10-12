@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -12,6 +13,9 @@ abstract class ResponsesRepository {
   });
   Future<void> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
+  });
+  Future<void> energiaLimpia({
+    required EnergiaLimpiaModel energiaLimpiaModel,
   });
 }
 
@@ -45,6 +49,22 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       final resp = await _api.request(endpoint: endpoint);
       _logger.i(resp);
     } catch (e) {
+      throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<void> energiaLimpia({
+    required EnergiaLimpiaModel energiaLimpiaModel,
+  }) async {
+    final endpoint = EnergiaLimpiaEndpoint(
+      energiaLimpiaModel: energiaLimpiaModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
       throw AppException.toAppException(e);
     }
   }
