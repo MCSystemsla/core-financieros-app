@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -127,6 +128,10 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final comoMejoraSituacion = TextEditingController();
+  final quienApoya = TextEditingController();
+  final siguienteMeta = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -149,24 +154,28 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title:
                   '¿En qué piensa invertir este nuevo crédito de energía limpia?* Explique',
+              textEditingController: motivoPrestamo,
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title:
                   '¿Cómo cree usted que este nuevo préstamo vaya a mejorar su situación y la de su familia?*',
+              textEditingController: comoMejoraSituacion,
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title:
                   '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
+              textEditingController: quienApoya,
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title:
                   'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+              textEditingController: siguienteMeta,
             ),
             const Gap(20),
             ButtonActionsWidget(
@@ -179,6 +188,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
+                      motivoPrestamo: motivoPrestamo.text.trim(),
+                      comoMejoraSituacion: comoMejoraSituacion.text.trim(),
+                      quienApoya: quienApoya.text.trim(),
+                      siguienteMeta: siguienteMeta.text.trim(),
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
