@@ -313,6 +313,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                     if (state.status == Status.done) {
                       await customPopUp(
                         context: context,
+                        dismissOnTouchOutside: false,
                         size: size,
                         title: 'Formulario Kiva Enviado exitosamente!!',
                         subtitle: 'Las respuestas se han enviado Exitosamente',

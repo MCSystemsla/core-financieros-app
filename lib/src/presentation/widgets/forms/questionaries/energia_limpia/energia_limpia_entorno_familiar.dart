@@ -1,6 +1,8 @@
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -92,27 +94,27 @@ class _EnergiaLimpiaEntornoFamiliarState
                     },
                   ),
                   const Gap(10),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-
-                        return null;
-                      },
-                      title: 'Su comunidad es'.tr(),
-                      items: ['Urbana'.tr(), 'Rural'.tr()],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        objTipoComunidadId = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
+                  BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                    builder: (context, state) {
+                      return WhiteCard(
+                        padding: const EdgeInsets.all(5),
+                        child: JLuxDropdown(
+                          isContainIcon: true,
+                          isLoading: state.status == Status.inProgress,
+                          title: 'Su comunidad es:'.tr(),
+                          items: state.comunidades,
+                          onChanged: (item) {
+                            if (item == null) return;
+                            objTipoComunidadId = item.valor;
+                            setState(() {});
+                          },
+                          toStringItem: (item) {
+                            return item.nombre;
+                          },
+                          hintText: 'input.select_option'.tr(),
+                        ),
+                      );
+                    },
                   ),
                   const Gap(20),
                   WhiteCard(
@@ -252,90 +254,175 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  String? objTipoComunidadId;
+  String? tieneProblemasEnergia;
+  String? tipoEstudioHijos;
+  final personasCargo = TextEditingController();
+  final numeroHijos = TextEditingController();
+  final edadHijos = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Column(
-        children: [
-          const MiCreditoProgress(
-            steps: 4,
-            currentStep: 3,
-          ),
-          const Gap(20),
-          Text(
-            'Descripción del entorno familiar.'.tr(),
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-          const Gap(10),
-          WhiteCard(
-            padding: const EdgeInsets.all(5),
-            child: JLuxDropdown(
-              isContainIcon: true,
-              validator: (value) {
-                if (value == null) return 'input.input_validator'.tr();
+      child: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              Text(
+                'Descripción del entorno familiar.'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(10),
+              BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                builder: (context, state) {
+                  return WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      isLoading: state.status == Status.inProgress,
+                      title: 'Su comunidad es:'.tr(),
+                      items: state.comunidades,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        objTipoComunidadId = item.valor;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item.nombre;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
-                return null;
-              },
-              title: 'Su comunidad es'.tr(),
-              items: ['Urbana'.tr(), 'Rural'.tr()],
-              onChanged: (item) {
-                if (item == null) return;
-              },
-              toStringItem: (item) {
-                return item;
-              },
-              hintText: 'input.select_option'.tr(),
-            ),
-          ),
-          const Gap(20),
-          WhiteCard(
-            padding: const EdgeInsets.all(5),
-            child: JLuxDropdown(
-              isContainIcon: true,
-              validator: (value) {
-                if (value == null) return 'input.input_validator'.tr();
-
-                return null;
-              },
-              title:
-                  '¿Usted tiene problemas de energía eléctrica en su comunidad?'
-                      .tr(),
-              items: ['input.yes'.tr(), 'input.no'.tr()],
-              onChanged: (item) {
-                if (item == null) return;
-              },
-              toStringItem: (item) {
-                return item;
-              },
-              hintText: 'input.select_option'.tr(),
-            ),
-          ),
-          const Gap(20),
-          ButtonActionsWidget(
-            onPreviousPressed: () {
-              widget.pageController.previousPage(
-                duration: const Duration(
-                  milliseconds: 350,
+                    return null;
+                  },
+                  title:
+                      '¿Usted tiene problemas de energía eléctrica en su comunidad?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tieneProblemasEnergia = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
                 ),
-                curve: Curves.easeIn,
-              );
-            },
-            onNextPressed: () {
-              widget.pageController.nextPage(
-                duration: const Duration(
-                  milliseconds: 350,
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Numero de persona a cargo',
+                textEditingController: personasCargo,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Número de hijos:*',
+                textEditingController: numeroHijos,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Qué edades tienen sus hijos?',
+                textEditingController: edadHijos,
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tipoEstudioHijos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
                 ),
-                curve: Curves.easeIn,
-              );
-            },
-            previousTitle: 'button.previous'.tr(),
-            nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer2(
+                          edadHijos: edadHijos.text.trim(),
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                          objTipoComunidadId: objTipoComunidadId,
+                          personasCargo: personasCargo.text.trim(),
+                          tieneProblemasEnergia:
+                              tieneProblemasEnergia == 'input.yes'.tr(),
+                          tipoEstudioHijos: tipoEstudioHijos,
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
