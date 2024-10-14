@@ -132,80 +132,115 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final comoMejoraSituacion = TextEditingController();
   final quienApoya = TextEditingController();
   final siguienteMeta = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 4,
-            ),
-            const Gap(20),
-            Text(
-              'Impacto Social de Kiva (uso específico, objetivos, metas del préstamo).'
-                  .tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  '¿En qué piensa invertir este nuevo crédito de energía limpia?* Explique',
-              textEditingController: motivoPrestamo,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  '¿Cómo cree usted que este nuevo préstamo vaya a mejorar su situación y la de su familia?*',
-              textEditingController: comoMejoraSituacion,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
-              textEditingController: quienApoya,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
-              textEditingController: siguienteMeta,
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
-                      motivoPrestamo: motivoPrestamo.text.trim(),
-                      comoMejoraSituacion: comoMejoraSituacion.text.trim(),
-                      quienApoya: quienApoya.text.trim(),
-                      siguienteMeta: siguienteMeta.text.trim(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 4,
+              ),
+              const Gap(20),
+              Text(
+                'Impacto Social de Kiva (uso específico, objetivos, metas del préstamo).'
+                    .tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title:
+                    '¿En qué piensa invertir este nuevo crédito de energía limpia?* Explique',
+                textEditingController: motivoPrestamo,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title:
+                    '¿Cómo cree usted que este nuevo préstamo vaya a mejorar su situación y la de su familia?*',
+                textEditingController: comoMejoraSituacion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title:
+                    '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
+                textEditingController: quienApoya,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title:
+                    'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+                textEditingController: siguienteMeta,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+
+                  return null;
+                },
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
+                          motivoPrestamo: motivoPrestamo.text.trim(),
+                          comoMejoraSituacion: comoMejoraSituacion.text.trim(),
+                          quienApoya: quienApoya.text.trim(),
+                          siguienteMeta: siguienteMeta.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

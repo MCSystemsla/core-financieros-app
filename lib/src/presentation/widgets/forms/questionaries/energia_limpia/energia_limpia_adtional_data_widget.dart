@@ -236,7 +236,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 ),
               const Gap(10),
               CommentaryWidget(
-                title: 'Tiempo de la actividad:*',
+                title: 'Tiempo de la actividad:',
                 textEditingController: tiempoActividad,
               ),
               const Gap(20),
@@ -278,22 +278,24 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                   );
                 },
                 onNextPressed: () {
-                  context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer1(
-                        otrosIngresos: otrosIngresos == 'input.yes'.tr(),
-                        otrosIngresosDescripcion:
-                            otrosIngresosDescripcion.text.trim(),
-                        tiempoActividad:
-                            int.tryParse(tiempoActividad.text.trim()),
-                        tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                        trabajoNegocioDescripcion:
-                            trabajoNegocioDescripcion.text.trim(),
-                      );
-                  widget.pageController.nextPage(
-                    duration: const Duration(
-                      milliseconds: 350,
-                    ),
-                    curve: Curves.easeIn,
-                  );
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer1(
+                          otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                          otrosIngresosDescripcion:
+                              otrosIngresosDescripcion.text.trim(),
+                          tiempoActividad:
+                              int.tryParse(tiempoActividad.text.trim()),
+                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                          trabajoNegocioDescripcion:
+                              trabajoNegocioDescripcion.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
                 },
                 previousTitle: 'button.previous'.tr(),
                 nextTitle: 'button.next'.tr(),

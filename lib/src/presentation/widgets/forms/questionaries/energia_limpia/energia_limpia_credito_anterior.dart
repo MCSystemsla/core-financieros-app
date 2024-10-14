@@ -32,90 +32,94 @@ class _EnergiaLimpiaCreditoAnteriorState
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const MiCreditoProgress(
-            steps: 4,
-            currentStep: 3,
-          ),
-          const Gap(20),
-          Text(
-            'Descripción del entorno familiar.'.tr(),
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-          const Gap(10),
-          const Text(
-            '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-          ),
-          const Gap(20),
-          WhiteCard(
-            padding: const EdgeInsets.all(5),
-            child: JLuxDropdown(
-              isContainIcon: true,
-              validator: (value) {
-                if (value == null) return 'input.input_validator'.tr();
-
-                return null;
-              },
-              title:
-                  '¿Coincide la respuesta del cliente con el formato anterior?'
-                      .tr(),
-              items: ['input.yes'.tr(), 'input.no'.tr()],
-              onChanged: (item) {
-                if (item == null) return;
-                coincideRespuesta = item;
-                setState(() {});
-              },
-              toStringItem: (item) {
-                return item;
-              },
-              hintText: 'input.select_option'.tr(),
+      child: Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const MiCreditoProgress(
+              steps: 4,
+              currentStep: 3,
             ),
-          ),
-          if (coincideRespuesta == 'input.no'.tr())
+            const Gap(20),
+            Text(
+              'Descripción del entorno familiar.'.tr(),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+            const Gap(10),
+            const Text(
+              '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+            ),
+            const Gap(20),
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title:
+                    '¿Coincide la respuesta del cliente con el formato anterior?'
+                        .tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  coincideRespuesta = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            if (coincideRespuesta == 'input.no'.tr())
+              CommentaryWidget(
+                title:
+                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                textEditingController: explicacionInversion,
+              ),
+            const Gap(20),
             CommentaryWidget(
               title:
-                  '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-              textEditingController: explicacionInversion,
+                  '¿Cómo era su situación antes de adquirir esta solución energética y cómo es ahora ?',
+              textEditingController: situacionAntesAhora,
             ),
-          const Gap(20),
-          CommentaryWidget(
-            title:
-                '¿Cómo era su situación antes de adquirir esta solución energética y cómo es ahora ?',
-            textEditingController: situacionAntesAhora,
-          ),
-          const Gap(20),
-          ButtonActionsWidget(
-            onPreviousPressed: () {
-              widget.pageController.previousPage(
-                duration: const Duration(
-                  milliseconds: 350,
-                ),
-                curve: Curves.easeIn,
-              );
-            },
-            onNextPressed: () {
-              // if (formKey.currentState?.validate() ?? false) {
-              context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
-                    coincideRespuesta: coincideRespuesta == 'input.yes'.tr(),
-                    explicacionInversion: explicacionInversion.text.trim(),
-                    situacionAntesAhora: situacionAntesAhora.text.trim(),
+            const Gap(20),
+            ButtonActionsWidget(
+              onPreviousPressed: () {
+                widget.pageController.previousPage(
+                  duration: const Duration(
+                    milliseconds: 350,
+                  ),
+                  curve: Curves.easeIn,
+                );
+              },
+              onNextPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
+                        coincideRespuesta:
+                            coincideRespuesta == 'input.yes'.tr(),
+                        explicacionInversion: explicacionInversion.text.trim(),
+                        situacionAntesAhora: situacionAntesAhora.text.trim(),
+                      );
+                  widget.pageController.nextPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
                   );
-              widget.pageController.nextPage(
-                duration: const Duration(
-                  milliseconds: 350,
-                ),
-                curve: Curves.easeIn,
-              );
-              // }
-            },
-            previousTitle: 'button.previous'.tr(),
-            nextTitle: 'button.next'.tr(),
-          ),
-        ],
+                }
+              },
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
+            ),
+          ],
+        ),
       ),
     );
   }
