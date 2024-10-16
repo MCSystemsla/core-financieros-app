@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
@@ -20,6 +21,9 @@ abstract class ResponsesRepository {
   });
   Future<void> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
+  });
+  Future<void> aguaYSaneamientoAnswer({
+    required AguaSaneamientoModel aguaSaneamientoModel,
   });
 }
 
@@ -79,6 +83,22 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   }) async {
     final endpoint = RecurrenteEnergiaLimpiaEndpoint(
       recurrenteEnergiaLimpiaModel: energiaLimpiaModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+      throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<void> aguaYSaneamientoAnswer({
+    required AguaSaneamientoModel aguaSaneamientoModel,
+  }) async {
+    final endpoint = AguaSaneamientoEndpoint(
+      aguaSaneamientoModel: aguaSaneamientoModel,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

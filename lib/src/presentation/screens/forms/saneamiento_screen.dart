@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
@@ -56,7 +58,7 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const isRecurrentForm = true;
+    const isRecurrentForm = false;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -66,6 +68,9 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
           create: (ctx) => DepartamentosCubit(
             DepartamentosRepositoryImpl(),
           )..getDepartamentos(),
+        ),
+        BlocProvider(
+          create: (ctx) => AguaYSaneamientoCubit(ResponsesRepositoryImpl()),
         ),
       ],
       child: PopScope(
@@ -97,7 +102,7 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
               FormResponses(
                 controller: _pageController,
               ),
-              const SignQuestionaryWidget(),
+              const _SaneamientoSign(),
             ],
           ),
         ),
@@ -222,6 +227,152 @@ class ButtonActionsWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class _SaneamientoSign extends StatelessWidget {
+  const _SaneamientoSign();
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final controller = SignatureController();
+    return Column(
+      children: [
+        const MiCreditoProgress(
+          steps: 5,
+          currentStep: 5,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'forms.firmar.title'.tr(),
+                  style: TextStyle(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Gap(10),
+                Text(
+                  'forms.firmar.description'.tr(),
+                  style: TextStyle(
+                    color: AppColors.greyWithOpacityV4,
+                  ),
+                ),
+                const Gap(20),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            // height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(30),
+                BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
+                  listener: (context, state) async {
+                    final status = state.status;
+                    if (status == Status.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content: Text('Error inesperado'),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.done) {
+                      await customPopUp(
+                        context: context,
+                        dismissOnTouchOutside: false,
+                        size: size,
+                        title: 'Formulario Kiva Enviado exitosamente!!',
+                        subtitle: 'Las respuestas se han enviado Exitosamente',
+                        dialogType: DialogType.success,
+                        buttonAcept: true,
+                        textButtonAcept: 'Ok',
+                        colorButtonAcept: AppColors.getPrimaryColor(),
+                        onPressedAccept: () {
+                          context.pushReplacement('/');
+                        },
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.white,
+                      ),
+                      enabled: state.status != Status.inProgress,
+                      positionIcon: PositionIcon.left,
+                      text: state.status == Status.inProgress
+                          ? 'Cargando...'
+                          : 'button.send'.tr(),
+                      color: context.primaryColor(),
+                      onPressed: () async {
+                        await customPopUp(
+                          context: context,
+                          size: size,
+                          title:
+                              'Confirmas que has leido y confirmado el Formulario Kiva?',
+                          dialogType: DialogType.warning,
+                          buttonAcept: true,
+                          buttonCancel: true,
+                          colorButtonCancel: AppColors.red,
+                          textButtonAcept: 'Aceptar',
+                          textButtonCancel: 'Cancelar',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.read<AguaYSaneamientoCubit>().sendAnswers();
+                            context.pop();
+                          },
+                          onPressedCancel: () => context.pop(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Gap(10),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

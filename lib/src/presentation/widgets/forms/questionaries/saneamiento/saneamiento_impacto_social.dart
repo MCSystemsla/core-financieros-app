@@ -1,8 +1,11 @@
+import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ImpactoSocialKivaWidget extends StatefulWidget {
@@ -18,6 +21,12 @@ class ImpactoSocialKivaWidget extends StatefulWidget {
 
 class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final mejoraCalidadVida = TextEditingController();
+  final siguienteProyectoCalidadVida = TextEditingController();
+  final metasProximas = TextEditingController();
+  final otrosDatosCliente = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -46,25 +55,30 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                 const Gap(10),
                 CommentaryWidget(
                   title: '¿Para que solicitó este préstamo? Explique'.tr(),
+                  textEditingController: motivoPrestamo,
                 ),
                 const Gap(10),
                 CommentaryWidget(
                   title: 'forms.impacto_social_kiva.how_perform'.tr(),
+                  textEditingController: mejoraCalidadVida,
                 ),
                 const Gap(10),
                 CommentaryWidget(
                   title:
                       '¿Cuál sería el siguiente proyecto para enriquecer su calidad de vida ?*'
                           .tr(),
+                  textEditingController: siguienteProyectoCalidadVida,
                 ),
                 const Gap(10),
                 CommentaryWidget(
                   title: '¿Cuáles son sus metas para los próximos años?*'.tr(),
+                  textEditingController: metasProximas,
                 ),
                 const Gap(10),
                 CommentaryWidget(
                   title: '¿Otros datos relevantes e interesantes del cliente:'
                       .tr(),
+                  textEditingController: otrosDatosCliente,
                 ),
                 const Gap(20),
                 ButtonActionsWidget(
@@ -77,6 +91,14 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                     );
                   },
                   onNextPressed: () {
+                    context.read<AguaYSaneamientoCubit>().saveAnswers(
+                          motivoPrestamo: motivoPrestamo.text.trim(),
+                          mejoraCalidadVida: mejoraCalidadVida.text.trim(),
+                          siguienteProyectoCalidadVida:
+                              siguienteProyectoCalidadVida.text.trim(),
+                          metasProximas: metasProximas.text.trim(),
+                          otrosDatosCliente: otrosDatosCliente.text.trim(),
+                        );
                     widget.controller.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
@@ -75,4 +76,22 @@ class RecurrenteEnergiaLimpiaEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => recurrenteEnergiaLimpiaModel.toJson();
+}
+
+class AguaSaneamientoEndpoint extends Endpoint {
+  final AguaSaneamientoModel aguaSaneamientoModel;
+  AguaSaneamientoEndpoint({required this.aguaSaneamientoModel});
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-agua-saneamiento';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => aguaSaneamientoModel.toJson();
 }

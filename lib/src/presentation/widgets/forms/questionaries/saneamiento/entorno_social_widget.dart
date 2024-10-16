@@ -1,9 +1,9 @@
-import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -24,12 +24,20 @@ class EntornoSocialWidget extends StatefulWidget {
 
 class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
     with AutomaticKeepAliveClientMixin {
+  String? tieneTrabajo;
   String? personOrigin;
+  String? otrosIngresos;
+  String? tipoEstudioHijos;
+  final question2Controller = TextEditingController();
+  final question3Controller = TextEditingController();
+  final trabajoNegocioDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
+  final personasCargo = TextEditingController();
+  final numeroHijos = TextEditingController();
+  final otrosIngresosDescripcion = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final question2Controller = TextEditingController();
-    final question3Controller = TextEditingController();
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           controller: widget.controller,
@@ -62,14 +70,22 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     items: const ['Si', 'No'],
                     onChanged: (item) {
                       if (item == null) return;
+                      tieneTrabajo = item;
+                      setState(() {});
                     },
                     toStringItem: (item) => item,
                     hintText: 'input.select_option'.tr(),
                   ),
                 ),
+                if (tieneTrabajo == 'input.yes'.tr())
+                  CommentaryWidget(
+                      title: 'Cual?',
+                      textEditingController: trabajoNegocioDescripcion),
                 const Gap(10),
-                const CommentaryWidget(
-                    title: 'Tiempo de la actividad (meses o años)'),
+                CommentaryWidget(
+                  title: 'Tiempo de la actividad (meses o años)',
+                  textEditingController: tiempoActividad,
+                ),
                 const Gap(10),
                 WhiteCard(
                   marginTop: 15,
@@ -77,14 +93,21 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                   child: JLuxDropdown(
                     isContainIcon: true,
                     title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-                    items: const ['Si', 'No'],
+                    items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       if (item == null) return;
+                      otrosIngresos = item;
+                      setState(() {});
                     },
                     toStringItem: (item) => item,
                     hintText: 'input.select_option'.tr(),
                   ),
                 ),
+                if (otrosIngresos == 'input.yes'.tr())
+                  CommentaryWidget(
+                    title: 'Cuales?',
+                    textEditingController: otrosIngresosDescripcion,
+                  ),
                 const Gap(10),
                 BlocBuilder<DepartamentosCubit, DepartamentosState>(
                   builder: (context, state) {
@@ -98,7 +121,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         items: state.departamentos,
                         onChanged: (item) {
                           if (item == null) return;
-                          personOrigin = item.nombre;
+                          personOrigin = item.valor;
                         },
                         toStringItem: (item) => item.nombre,
                         hintText: 'input.select_department'.tr(),
@@ -107,9 +130,15 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                   },
                 ),
                 const Gap(10),
-                const CommentaryWidget(title: 'Número de personas a cargo:*'),
+                CommentaryWidget(
+                  title: 'Número de personas a cargo:*',
+                  textEditingController: personasCargo,
+                ),
                 const Gap(10),
-                const CommentaryWidget(title: 'Numero de Hijos'),
+                CommentaryWidget(
+                  title: 'Numero de Hijos',
+                  textEditingController: numeroHijos,
+                ),
                 const Gap(10),
                 CommentaryWidget(
                   title: 'forms.entorno_familiar.childs_age'.tr(),
@@ -135,6 +164,8 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     ],
                     onChanged: (item) {
                       if (item == null) return;
+                      tipoEstudioHijos = item;
+                      setState(() {});
                     },
                     toStringItem: (item) {
                       return item;
@@ -153,28 +184,25 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     );
                   },
                   onNextPressed: () {
+                    context.read<AguaYSaneamientoCubit>().saveAnswers(
+                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                          trabajoNegocioDescripcion:
+                              trabajoNegocioDescripcion.text.trim(),
+                          otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                          otrosIngresosDescripcion:
+                              otrosIngresosController.text.trim(),
+                          objOrigenCatalogoValorId: personOrigin,
+                          personasCargo: personasCargo.text.trim(),
+                          edadHijos: question2Controller.text.trim(),
+                          tipoEstudioHijos: tipoEstudioHijos,
+                          tiempoActividad:
+                              int.tryParse(tiempoActividad.text.trim()),
+                        );
                     widget.controller.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
                       ),
                       curve: Curves.easeIn,
-                    );
-                    context.read<ResponseCubit>().addResponses(
-                      responses: [
-                        Response(
-                          question: 'forms.entorno_familiar.person_origin'.tr(),
-                          response: personOrigin!,
-                        ),
-                        Response(
-                          question: 'forms.entorno_familiar.childs_age'.tr(),
-                          response: question2Controller.text.trim(),
-                        ),
-                        Response(
-                          question:
-                              'forms.entorno_familiar.childs_education'.tr(),
-                          response: question3Controller.text.trim(),
-                        ),
-                      ],
                     );
                   },
                   previousTitle: 'button.previous'.tr(),

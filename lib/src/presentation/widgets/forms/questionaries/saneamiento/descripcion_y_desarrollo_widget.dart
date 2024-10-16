@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -31,6 +32,8 @@ class _DescripcionYDesarrolloWidgetState
   final question2Controller = TextEditingController();
   final question3Controller = TextEditingController();
   final question4Controller = TextEditingController();
+  final explicacionCumpliriaPropuesta = TextEditingController();
+  String? cumpliriaPropuesta;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +87,8 @@ class _DescripcionYDesarrolloWidgetState
                     items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       if (item == null) return;
+                      cumpliriaPropuesta = item;
+                      setState(() {});
                     },
                     toStringItem: (item) {
                       return item;
@@ -92,7 +97,11 @@ class _DescripcionYDesarrolloWidgetState
                   ),
                 ),
                 const Gap(10),
-                const CommentaryWidget(title: 'Porque?'),
+                if (cumpliriaPropuesta == 'input.yes'.tr())
+                  CommentaryWidget(
+                    title: 'Porque?',
+                    textEditingController: explicacionCumpliriaPropuesta,
+                  ),
                 const Gap(20),
                 ButtonActionsWidget(
                   onPreviousPressed: () {
@@ -104,30 +113,15 @@ class _DescripcionYDesarrolloWidgetState
                     );
                   },
                   onNextPressed: () {
-                    context.read<ResponseCubit>().addResponses(
-                      responses: [
-                        Response(
-                          question:
-                              'forms.develpment_and_description.aboutCredit',
-                          response: question1Controller.text.trim(),
-                        ),
-                        Response(
-                          question:
-                              'forms.develpment_and_description.who_support',
-                          response: question2Controller.text.trim(),
-                        ),
-                        Response(
-                          question:
-                              'forms.develpment_and_description.about_future',
-                          response: question3Controller.text.trim(),
-                        ),
-                        Response(
-                          question:
-                              'forms.develpment_and_description.have_othe_invertion',
-                          response: question4Controller.text.trim(),
-                        ),
-                      ],
-                    );
+                    context.read<AguaYSaneamientoCubit>().saveAnswers(
+                          motivacionCredito: question1Controller.text.trim(),
+                          importanciaMejorarCondiciones:
+                              question2Controller.text.trim(),
+                          cumpliriaPropuesta:
+                              cumpliriaPropuesta == 'input.yes'.tr(),
+                          explicacionCumpliriaPropuesta:
+                              explicacionCumpliriaPropuesta.text.trim(),
+                        );
                     widget.controller.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

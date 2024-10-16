@@ -80,8 +80,8 @@ final router = GoRouter(
           return '/online/form/mejora-de-vivienda';
         }
 
-        if (tipoProducto == 'AGUA Y SANEAMIENTO NUEVO' ||
-            tipoProducto == 'AGUA Y SANEAMIENTO RECURRENTE') {
+        if (tipoProducto == 'SANEAMIENTO NUEVO' ||
+            tipoProducto == 'SANEAMIENTO RECURRENTE') {
           return '/online/form/saneamiento';
         }
         if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
@@ -89,6 +89,10 @@ final router = GoRouter(
         }
         if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
           return '/online/form/energia-limpia';
+        }
+        if (tipoProducto == 'MUJER EMPRENDE NUEVO' ||
+            tipoProducto == 'MUJER EMPRENDE NUEVO') {
+          return '/online/form/mujer-emprende';
         }
         return null;
       },
