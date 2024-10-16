@@ -32,6 +32,7 @@ class _DescripcionYDesarrolloWidgetState
   final question4Controller = TextEditingController();
   final explicacionCumpliriaPropuesta = TextEditingController();
   String? cumpliriaPropuesta;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,95 +44,112 @@ class _DescripcionYDesarrolloWidgetState
       false => SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 5,
-                  currentStep: 3,
-                ),
-                const Gap(20),
-                Text(
-                  'forms.develpment_and_description.title'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.develpment_and_description.aboutCredit'.tr(),
-                  textEditingController: question1Controller,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title:
-                      '¿Porqué considera importante mejorar las condiciones higiénicas en su familia?'
-                          .tr(),
-                  textEditingController: question2Controller,
-                ),
-                const Gap(10),
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
-                    isContainIcon: true,
-                    validator: (value) {
-                      if (value == null) return 'input.input_validator'.tr();
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const MiCreditoProgress(
+                      steps: 5,
+                      currentStep: 3,
+                    ),
+                    const Gap(20),
+                    Text(
+                      'forms.develpment_and_description.title'.tr(),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title:
+                          'forms.develpment_and_description.aboutCredit'.tr(),
+                      textEditingController: question1Controller,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title:
+                          '¿Porqué considera importante mejorar las condiciones higiénicas en su familia?*'
+                              .tr(),
+                      textEditingController: question2Controller,
+                    ),
+                    const Gap(10),
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
 
-                      return null;
-                    },
-                    title:
-                        '¿Cree usted que con este crédito va poder cumplir el proyecto que se ha propuesto? ¿Por qué?'
-                            .tr(),
-                    items: ['input.yes'.tr(), 'input.no'.tr()],
-                    onChanged: (item) {
-                      if (item == null) return;
-                      cumpliriaPropuesta = item;
-                      setState(() {});
-                    },
-                    toStringItem: (item) {
-                      return item;
-                    },
-                    hintText: 'input.select_option'.tr(),
-                  ),
-                ),
-                const Gap(10),
-                if (cumpliriaPropuesta == 'input.yes'.tr())
-                  CommentaryWidget(
-                    title: 'Porque?',
-                    textEditingController: explicacionCumpliriaPropuesta,
-                  ),
-                const Gap(20),
-                ButtonActionsWidget(
-                  onPreviousPressed: () {
-                    widget.controller.previousPage(
-                      duration: const Duration(
-                        milliseconds: 350,
+                          return null;
+                        },
+                        title:
+                            '¿Cree usted que con este crédito va poder cumplir el proyecto que se ha propuesto? ¿Por qué?'
+                                .tr(),
+                        items: ['input.yes'.tr(), 'input.no'.tr()],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          cumpliriaPropuesta = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
                       ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onNextPressed: () {
-                    context.read<AguaYSaneamientoCubit>().saveAnswers(
-                          motivacionCredito: question1Controller.text.trim(),
-                          importanciaMejorarCondiciones:
-                              question2Controller.text.trim(),
-                          cumpliriaPropuesta:
-                              cumpliriaPropuesta == 'input.yes'.tr(),
-                          explicacionCumpliriaPropuesta:
-                              explicacionCumpliriaPropuesta.text.trim(),
+                    ),
+                    const Gap(10),
+                    if (cumpliriaPropuesta == 'input.yes'.tr())
+                      CommentaryWidget(
+                        title: 'Porque?',
+                        textEditingController: explicacionCumpliriaPropuesta,
+                      ),
+                    const Gap(20),
+                    ButtonActionsWidget(
+                      onPreviousPressed: () {
+                        widget.controller.previousPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
                         );
-                    widget.controller.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  previousTitle: 'button.previous'.tr(),
-                  nextTitle: 'button.next'.tr(),
+                      },
+                      onNextPressed: () {
+                        if (formKey.currentState?.validate() ?? false) {
+                          context.read<AguaYSaneamientoCubit>().saveAnswers(
+                                motivacionCredito:
+                                    question1Controller.text.trim(),
+                                importanciaMejorarCondiciones:
+                                    question2Controller.text.trim(),
+                                cumpliriaPropuesta:
+                                    cumpliriaPropuesta == 'input.yes'.tr(),
+                                explicacionCumpliriaPropuesta:
+                                    explicacionCumpliriaPropuesta.text.trim(),
+                              );
+                          widget.controller.nextPage(
+                            duration: const Duration(
+                              milliseconds: 350,
+                            ),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      previousTitle: 'button.previous'.tr(),
+                      nextTitle: 'button.next'.tr(),
+                    ),
+                    const Gap(10),
+                  ],
                 ),
-                const Gap(10),
-              ],
+              ),
             ),
           ),
         ),

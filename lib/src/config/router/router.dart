@@ -19,9 +19,14 @@ final router = GoRouter(
       path: '/online',
       routes: [
         GoRoute(
-          path: 'form/saneamiento',
-          builder: (context, state) => const SaneamientoScreen(),
-        ),
+            path: 'form/saneamiento',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return SaneamientoScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
           path: 'form/mejora-de-vivienda',
           builder: (context, state) {
@@ -80,8 +85,8 @@ final router = GoRouter(
           return '/online/form/mejora-de-vivienda';
         }
 
-        if (tipoProducto == 'SANEAMIENTO NUEVO' ||
-            tipoProducto == 'SANEAMIENTO RECURRENTE') {
+        if (tipoProducto == 'AGUA Y SANEAMIENTO NUEVO' ||
+            tipoProducto == 'AGUA Y SANEAMIENTO RECURRENTE') {
           return '/online/form/saneamiento';
         }
         if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
@@ -102,9 +107,14 @@ final router = GoRouter(
       builder: (context, state) => const NoInternetScreen(),
       routes: [
         GoRoute(
-          path: 'form/saneamiento',
-          builder: (context, state) => const SaneamientoScreen(),
-        ),
+            path: 'form/saneamiento',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return SaneamientoScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/mejora-de-vivienda',
             builder: (context, state) {

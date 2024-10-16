@@ -25,6 +25,7 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
   final siguienteProyectoCalidadVida = TextEditingController();
   final metasProximas = TextEditingController();
   final otrosDatosCliente = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,80 +37,115 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
       false => SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 5,
-                  currentStep: 4,
-                ),
-                const Gap(20),
-                Text(
-                  'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
-                      .tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: '¿Para que solicitó este préstamo? Explique'.tr(),
-                  textEditingController: motivoPrestamo,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: 'forms.impacto_social_kiva.how_perform'.tr(),
-                  textEditingController: mejoraCalidadVida,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title:
-                      '¿Cuál sería el siguiente proyecto para enriquecer su calidad de vida ?*'
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const MiCreditoProgress(
+                      steps: 5,
+                      currentStep: 4,
+                    ),
+                    const Gap(20),
+                    Text(
+                      'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
                           .tr(),
-                  textEditingController: siguienteProyectoCalidadVida,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: '¿Cuáles son sus metas para los próximos años?*'.tr(),
-                  textEditingController: metasProximas,
-                ),
-                const Gap(10),
-                CommentaryWidget(
-                  title: '¿Otros datos relevantes e interesantes del cliente:'
-                      .tr(),
-                  textEditingController: otrosDatosCliente,
-                ),
-                const Gap(20),
-                ButtonActionsWidget(
-                  onPreviousPressed: () {
-                    widget.controller.previousPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onNextPressed: () {
-                    context.read<AguaYSaneamientoCubit>().saveAnswers(
-                          motivoPrestamo: motivoPrestamo.text.trim(),
-                          mejoraCalidadVida: mejoraCalidadVida.text.trim(),
-                          siguienteProyectoCalidadVida:
-                              siguienteProyectoCalidadVida.text.trim(),
-                          metasProximas: metasProximas.text.trim(),
-                          otrosDatosCliente: otrosDatosCliente.text.trim(),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title: '¿Para que solicitó este préstamo? Explique'.tr(),
+                      textEditingController: motivoPrestamo,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title: 'forms.impacto_social_kiva.how_perform'.tr(),
+                      textEditingController: mejoraCalidadVida,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title:
+                          '¿Cuál sería el siguiente proyecto para enriquecer su calidad de vida ?*'
+                              .tr(),
+                      textEditingController: siguienteProyectoCalidadVida,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title:
+                          '¿Cuáles son sus metas para los próximos años?*'.tr(),
+                      textEditingController: metasProximas,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(10),
+                    CommentaryWidget(
+                      title:
+                          '¿Otros datos relevantes e interesantes del cliente:'
+                              .tr(),
+                      textEditingController: otrosDatosCliente,
+                    ),
+                    const Gap(20),
+                    ButtonActionsWidget(
+                      onPreviousPressed: () {
+                        widget.controller.previousPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
                         );
-                    widget.controller.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  previousTitle: 'button.previous'.tr(),
-                  nextTitle: 'button.next'.tr(),
+                      },
+                      onNextPressed: () {
+                        if (formKey.currentState?.validate() ?? false) {
+                          context.read<AguaYSaneamientoCubit>().saveAnswers(
+                                motivoPrestamo: motivoPrestamo.text.trim(),
+                                mejoraCalidadVida:
+                                    mejoraCalidadVida.text.trim(),
+                                siguienteProyectoCalidadVida:
+                                    siguienteProyectoCalidadVida.text.trim(),
+                                metasProximas: metasProximas.text.trim(),
+                                otrosDatosCliente:
+                                    otrosDatosCliente.text.trim(),
+                              );
+                          widget.controller.nextPage(
+                            duration: const Duration(
+                              milliseconds: 350,
+                            ),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      previousTitle: 'button.previous'.tr(),
+                      nextTitle: 'button.next'.tr(),
+                    ),
+                    const Gap(10),
+                  ],
                 ),
-                const Gap(10),
-              ],
+              ),
             ),
           ),
         ),

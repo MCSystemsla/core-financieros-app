@@ -26,7 +26,9 @@ import 'package:go_router/go_router.dart';
 import 'package:signature/signature.dart';
 
 class SaneamientoScreen extends StatefulWidget {
-  const SaneamientoScreen({super.key});
+  final String typeProduct;
+
+  const SaneamientoScreen({super.key, required this.typeProduct});
 
   @override
   State<SaneamientoScreen> createState() => _SaneamientoScreenState();
@@ -58,7 +60,8 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const isRecurrentForm = false;
+    final isRecurrentForm =
+        widget.typeProduct == 'AGUA Y SANEAMIENTO RECURRENTE';
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -78,7 +81,8 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('forms.saneamiento.appbar'.tr()),
+            title: Text(
+                '${'forms.saneamiento.appbar'.tr()} ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
           ),
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
