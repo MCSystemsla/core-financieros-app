@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -171,89 +172,115 @@ class _RecurrentForm extends StatefulWidget {
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
   String? item1;
+  String? coincideRespuesta;
+  final explicacionInversion = TextEditingController();
+  final comoAyudoCondiciones = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'forms.develpment_and_description.title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-            ),
-            const Gap(10),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              Text(
+                'forms.develpment_and_description.title'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(10),
+              // const CommentaryWidget(
+              //   title:
+              //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+              // ),
+              const Gap(10),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
+                    return null;
+                  },
+                  title:
+                      '¿Coincide la respuesta del cliente con el formato anterior?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    coincideRespuesta = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(10),
+              if (coincideRespuesta == 'input.no'.tr())
+                CommentaryWidget(
+                  textEditingController: explicacionInversion,
+                  title:
+                      '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                ),
+              const Gap(10),
+              CommentaryWidget(
+                title:
+                    '¿De qué manera le ayudó este préstamo Kiva a mejorar sus condiciones en la familia?*',
+                textEditingController: comoAyudoCondiciones,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title:
-                    '¿Coincide la respuesta del cliente con el formato anterior?'
-                        .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  item1 = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(10),
-            if (item1 == 'input.no'.tr())
-              const CommentaryWidget(
-                title:
-                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteAguaYSaneamientoCubit>().saveAnswers(
+                          coincideRespuesta:
+                              coincideRespuesta == 'input.yes'.tr(),
+                          explicacionInversion:
+                              explicacionInversion.text.trim(),
+                          comoAyudoCondiciones:
+                              comoAyudoCondiciones.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
               ),
-            const Gap(10),
-            const CommentaryWidget(
-              title:
-                  '¿De qué manera le ayudó este préstamo Kiva a mejorar sus condiciones en la familia?*',
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

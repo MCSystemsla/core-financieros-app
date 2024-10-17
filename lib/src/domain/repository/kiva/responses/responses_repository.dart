@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
@@ -24,6 +25,9 @@ abstract class ResponsesRepository {
   });
   Future<void> aguaYSaneamientoAnswer({
     required AguaSaneamientoModel aguaSaneamientoModel,
+  });
+  Future<void> recurrenteAguaYSaneamientoAnswer({
+    required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
   });
 }
 
@@ -105,6 +109,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       _logger.i(resp);
     } catch (e) {
       _logger.e(e);
+      throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<void> recurrenteAguaYSaneamientoAnswer({
+    required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
+  }) async {
+    final endpoint = RecurrenteAguaSaneamientoEndpoint(
+      recurrenteAguaSaneamientoModel: recurrenteAguaSaneamientoModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
       throw AppException.toAppException(e);
     }
   }
