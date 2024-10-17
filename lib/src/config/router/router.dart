@@ -51,9 +51,14 @@ final router = GoRouter(
           builder: (context, state) => const MiCreditoEstudioScreen(),
         ),
         GoRoute(
-          path: 'form/mujer-emprende',
-          builder: (context, state) => const MujerEmprenderScreen(),
-        ),
+            path: 'form/mujer-emprende',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MujerEmprenderScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/energia-limpia',
             builder: (context, state) {

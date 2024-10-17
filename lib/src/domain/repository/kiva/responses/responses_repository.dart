@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
+import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
 import 'package:logger/logger.dart';
@@ -28,6 +29,9 @@ abstract class ResponsesRepository {
   });
   Future<void> recurrenteAguaYSaneamientoAnswer({
     required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
+  });
+  Future<void> mujerEmprendeAnswer({
+    required MujerEmprendeModel mujerEmprendeModel,
   });
 }
 
@@ -124,6 +128,22 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       final resp = await _api.request(endpoint: endpoint);
       _logger.i(resp);
     } catch (e) {
+      throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<void> mujerEmprendeAnswer({
+    required MujerEmprendeModel mujerEmprendeModel,
+  }) async {
+    final endpoint = MujerEmprendeEndpoint(
+      mujerEmprendeModel: mujerEmprendeModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
       throw AppException.toAppException(e);
     }
   }
