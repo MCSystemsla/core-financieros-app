@@ -168,155 +168,186 @@ class _RecurrentFormState extends State<_RecurrentForm>
   String? cuantosApoyan;
   String? mejoraraEntorno;
   String? alcanzaraMeta;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
-                  .tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: motivoPrestamo,
-              title:
-                  '¿En qué piensa invertir este nuevo préstamo de Mujer Emprende?* Explique',
-            ),
-            const Gap(20),
-            WhiteCard(
-              marginTop: 15,
-              padding: const EdgeInsets.all(10),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                title: '¿Hay alguien que le apoye en su negocio?'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  apoyanNegocio = item;
-                  setState(() {});
-                },
-                toStringItem: (item) => item,
-                hintText: 'input.select_option'.tr(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 3,
               ),
-            ),
-            if (apoyanNegocio == 'input.yes'.tr())
+              const Gap(20),
+              Text(
+                'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
+                    .tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: motivoPrestamo,
+                title:
+                    '¿En qué piensa invertir este nuevo préstamo de Mujer Emprende?* Explique',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
               WhiteCard(
                 marginTop: 15,
                 padding: const EdgeInsets.all(10),
                 child: JLuxDropdown(
                   isContainIcon: true,
-                  title:
-                      'De ser positivo, favor responder cuántas personas'.tr(),
-                  items: const ['1 a 3', '4 a 6', '7 o mas'],
+                  title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
-                    cuantosApoyan = item;
+                    apoyanNegocio = item;
                     setState(() {});
                   },
                   toStringItem: (item) => item,
                   hintText: 'input.select_option'.tr(),
                 ),
               ),
-            const Gap(20),
-            WhiteCard(
-              marginTop: 15,
-              padding: const EdgeInsets.all(10),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                title:
-                    '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?'
+              if (apoyanNegocio == 'input.yes'.tr())
+                WhiteCard(
+                  marginTop: 15,
+                  padding: const EdgeInsets.all(10),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    title: 'De ser positivo, favor responder cuántas personas'
                         .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  mejoraraEntorno = item;
-                  setState(() {});
-                },
-                toStringItem: (item) => item,
-                hintText: 'input.select_option'.tr(),
-              ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: '¿Porqué?*',
-              textEditingController: mejoraEntornoExplicacion,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'A futuro ¿Cuál sería su siguiente paso?',
-              textEditingController: siguientePaso,
-            ),
-            const Gap(20),
-            WhiteCard(
-              marginTop: 15,
-              padding: const EdgeInsets.all(10),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                title:
-                    '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta?'
-                        .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  alcanzaraMeta = item;
-                  setState(() {});
-                },
-                toStringItem: (item) => item,
-                hintText: 'input.select_option'.tr(),
-              ),
-            ),
-            CommentaryWidget(
-              title: '¿Por qué?*',
-              textEditingController: alcanzaraMetaExplicacion,
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
+                    items: const ['1 a 3', '4 a 6', '7 o mas'],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      cuantosApoyan = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) => item,
+                    hintText: 'input.select_option'.tr(),
                   ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
-                      apoyanNegocio: apoyanNegocio == 'input.yes'.tr(),
-                      cuantosApoyan: int.tryParse(cuantosApoyan!),
-                      motivoPrestamo: motivoPrestamo.text.trim(),
-                      mejoraraEntorno: mejoraraEntorno == 'input.yes'.tr(),
-                      mejoraraEntornoExplicacion:
-                          mejoraEntornoExplicacion.text.trim(),
-                      siguientePaso: siguientePaso.text.trim(),
-                      alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
-                      explicacionAlcanzaraMeta:
-                          alcanzaraMetaExplicacion.text.trim(),
+                ),
+              const Gap(20),
+              WhiteCard(
+                marginTop: 15,
+                padding: const EdgeInsets.all(10),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title:
+                      '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    mejoraraEntorno = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) => item,
+                  hintText: 'input.select_option'.tr(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Porqué?*',
+                textEditingController: mejoraEntornoExplicacion,
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'A futuro ¿Cuál sería su siguiente paso?',
+                textEditingController: siguientePaso,
+              ),
+              const Gap(20),
+              WhiteCard(
+                marginTop: 15,
+                padding: const EdgeInsets.all(10),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title:
+                      '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    alcanzaraMeta = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) => item,
+                  hintText: 'input.select_option'.tr(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              CommentaryWidget(
+                title: '¿Por qué?*',
+                textEditingController: alcanzaraMetaExplicacion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          apoyanNegocio: apoyanNegocio == 'input.yes'.tr(),
+                          cuantosApoyan: cuantosApoyan,
+                          motivoPrestamo: motivoPrestamo.text.trim(),
+                          mejoraraEntorno: mejoraraEntorno == 'input.yes'.tr(),
+                          mejoraraEntornoExplicacion:
+                              mejoraEntornoExplicacion.text.trim(),
+                          siguientePaso: siguientePaso.text.trim(),
+                          alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
+                          explicacionAlcanzaraMeta:
+                              alcanzaraMetaExplicacion.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

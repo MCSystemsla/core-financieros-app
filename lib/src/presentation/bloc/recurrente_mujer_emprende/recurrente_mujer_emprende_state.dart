@@ -16,7 +16,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
   final String explicacionInversion;
   final String comoAyudo;
   final bool apoyanNegocio;
-  final int cuantosApoyan;
+  final String cuantosApoyan;
   final bool mejoraraEntorno;
   final String mejoraraEntornoExplicacion;
   final String siguientePaso;
@@ -37,7 +37,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     this.explicacionInversion = '',
     this.comoAyudo = '',
     this.apoyanNegocio = false,
-    this.cuantosApoyan = 0,
+    this.cuantosApoyan = '',
     this.mejoraraEntorno = false,
     this.mejoraraEntornoExplicacion = '',
     this.siguientePaso = '',
@@ -84,7 +84,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     String? explicacionInversion,
     String? comoAyudo,
     bool? apoyanNegocio,
-    int? cuantosApoyan,
+    String? cuantosApoyan,
     bool? mejoraraEntorno,
     String? mejoraraEntornoExplicacion,
     String? siguientePaso,

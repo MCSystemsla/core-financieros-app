@@ -138,89 +138,104 @@ class _RecurrentFormState extends State<_RecurrentForm>
   String? coincideRespuesta;
   final explicacionInversion = TextEditingController();
   final comoAyudo = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Descripción del crédito anterior Mujer Emprende'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            // const CommentaryWidget(
-            //   title:
-            //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-            // ),
-            const Gap(20),
-            WhiteCard(
-              marginTop: 15,
-              padding: const EdgeInsets.all(10),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                title:
-                    '¿Coincide la respuesta del cliente con el formato anterior?'
-                        .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  coincideRespuesta = item;
-                  setState(() {});
-                },
-                toStringItem: (item) => item,
-                hintText: 'input.select_department'.tr(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 2,
               ),
-            ),
-            const Gap(20),
-            if (coincideRespuesta == 'input.no'.tr())
+              const Gap(20),
+              Text(
+                'Descripción del crédito anterior Mujer Emprende'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              // const CommentaryWidget(
+              //   title:
+              //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+              // ),
+              const Gap(20),
+              WhiteCard(
+                marginTop: 15,
+                padding: const EdgeInsets.all(10),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title:
+                      '¿Coincide la respuesta del cliente con el formato anterior?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    coincideRespuesta = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) => item,
+                  hintText: 'input.select_department'.tr(),
+                ),
+              ),
+              const Gap(20),
+              if (coincideRespuesta == 'input.no'.tr())
+                CommentaryWidget(
+                  textEditingController: explicacionInversion,
+                  title:
+                      '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                ),
+              const Gap(20),
               CommentaryWidget(
-                textEditingController: explicacionInversion,
-                title:
-                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                title: '¿De qué manera le ayudó este préstamo Kiva?*',
+                textEditingController: comoAyudo,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
-            const Gap(20),
-            CommentaryWidget(
-              title: '¿De qué manera le ayudó este préstamo Kiva?*',
-              textEditingController: comoAyudo,
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
-                      coincideRespuesta: coincideRespuesta == 'input.yes'.tr(),
-                      explicacionInversion: explicacionInversion.text.trim(),
-                      comoAyudo: comoAyudo.text.trim(),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          coincideRespuesta:
+                              coincideRespuesta == 'input.yes'.tr(),
+                          explicacionInversion:
+                              explicacionInversion.text.trim(),
+                          comoAyudo: comoAyudo.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+            ],
+          ),
         ),
       ),
     );

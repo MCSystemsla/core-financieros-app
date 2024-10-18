@@ -56,7 +56,7 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
     String? explicacionInversion,
     String? comoAyudo,
     bool? apoyanNegocio,
-    int? cuantosApoyan,
+    String? cuantosApoyan,
     bool? mejoraraEntorno,
     String? mejoraraEntornoExplicacion,
     String? siguientePaso,

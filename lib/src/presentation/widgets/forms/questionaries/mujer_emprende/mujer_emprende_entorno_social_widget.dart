@@ -243,128 +243,149 @@ class _RecurrentFormState extends State<_RecurrentForm> {
   final personasCargo = TextEditingController();
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'forms.entorno_familiar.title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(10),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 2,
+              ),
+              const Gap(20),
+              Text(
+                'forms.entorno_familiar.title'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(10),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
-                  return null;
-                },
-                title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  otrosIngresos = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+                    return null;
+                  },
+                  title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    otrosIngresos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-            ),
-            if (otrosIngresos == 'input.yes'.tr())
+              if (otrosIngresos == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Cuales?',
+                  textEditingController: otrosIngresosDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
+              const Gap(20),
               CommentaryWidget(
-                title: 'Cuales?',
-                textEditingController: otrosIngresosDescripcion,
-              ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Número de personas a cargo:*',
-              textEditingController: personasCargo,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Número de hijos:*',
-              textEditingController: numeroHijos,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: '¿Que edades tienen sus hijos? ',
-              textEditingController: edadHijos,
-            ),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
+                title: 'Número de personas a cargo:*',
+                textEditingController: personasCargo,
                 validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                items: const [
-                  'Ninguno',
-                  'Preescolar',
-                  'Primaria',
-                  'Secundaria',
-                  'Técnico',
-                  'Universitario'
-                ],
-                onChanged: (item) {
-                  if (item == null) return;
-                  tipoEstudioHijos = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
-                      otrosIngresos: otrosIngresos == 'input.yes'.tr(),
-                      otrosIngresosDescripcion:
-                          otrosIngresosDescripcion.text.trim(),
-                      personasCargo: int.tryParse(personasCargo.text.trim()),
-                      numeroHijos: int.tryParse(numeroHijos.text.trim()),
-                      edadHijos: edadHijos.text.trim(),
-                      tipoEstudioHijos: tipoEstudioHijos,
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Número de hijos:*',
+                textEditingController: numeroHijos,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Que edades tienen sus hijos? ',
+                textEditingController: edadHijos,
+              ),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tipoEstudioHijos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                          otrosIngresosDescripcion:
+                              otrosIngresosDescripcion.text.trim(),
+                          personasCargo:
+                              int.tryParse(personasCargo.text.trim()),
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                          edadHijos: edadHijos.text.trim(),
+                          tipoEstudioHijos: tipoEstudioHijos,
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

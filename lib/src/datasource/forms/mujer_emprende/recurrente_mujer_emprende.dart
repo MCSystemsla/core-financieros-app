@@ -17,7 +17,7 @@ class RecurrenteMujerEmprendeModel {
   final String explicacionInversion;
   final String comoAyudo;
   final bool apoyanNegocio;
-  final int cuantosApoyan;
+  final String cuantosApoyan;
   final bool mejoraraEntorno;
   final String mejoraraEntornoExplicacion;
   final String siguientePaso;
