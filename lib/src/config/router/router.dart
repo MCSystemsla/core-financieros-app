@@ -19,9 +19,14 @@ final router = GoRouter(
       path: '/online',
       routes: [
         GoRoute(
-          path: 'form/saneamiento',
-          builder: (context, state) => const SaneamientoScreen(),
-        ),
+            path: 'form/saneamiento',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return SaneamientoScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
           path: 'form/mejora-de-vivienda',
           builder: (context, state) {
@@ -46,9 +51,14 @@ final router = GoRouter(
           builder: (context, state) => const MiCreditoEstudioScreen(),
         ),
         GoRoute(
-          path: 'form/mujer-emprende',
-          builder: (context, state) => const MujerEmprenderScreen(),
-        ),
+            path: 'form/mujer-emprende',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MujerEmprenderScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/energia-limpia',
             builder: (context, state) {
@@ -90,6 +100,10 @@ final router = GoRouter(
         if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
           return '/online/form/energia-limpia';
         }
+        if (tipoProducto == 'MUJER EMPRENDE NUEVO' ||
+            tipoProducto == 'MUJER EMPRENDE RECURRENTE') {
+          return '/online/form/mujer-emprende';
+        }
         return null;
       },
     ),
@@ -98,9 +112,14 @@ final router = GoRouter(
       builder: (context, state) => const NoInternetScreen(),
       routes: [
         GoRoute(
-          path: 'form/saneamiento',
-          builder: (context, state) => const SaneamientoScreen(),
-        ),
+            path: 'form/saneamiento',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return SaneamientoScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/mejora-de-vivienda',
             builder: (context, state) {
