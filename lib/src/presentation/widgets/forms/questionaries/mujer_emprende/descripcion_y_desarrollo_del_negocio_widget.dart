@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -134,6 +135,9 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  String? coincideRespuesta;
+  final explicacionInversion = TextEditingController();
+  final comoAyudo = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -155,10 +159,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-            ),
+            // const CommentaryWidget(
+            //   title:
+            //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+            // ),
             const Gap(20),
             WhiteCard(
               marginTop: 15,
@@ -168,22 +172,27 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 title:
                     '¿Coincide la respuesta del cliente con el formato anterior?'
                         .tr(),
-                items: const ['Si', 'No'],
+                items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  coincideRespuesta = item;
+                  setState(() {});
                 },
                 toStringItem: (item) => item,
                 hintText: 'input.select_department'.tr(),
               ),
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-            ),
+            if (coincideRespuesta == 'input.no'.tr())
+              CommentaryWidget(
+                textEditingController: explicacionInversion,
+                title:
+                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+              ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title: '¿De qué manera le ayudó este préstamo Kiva?*',
+              textEditingController: comoAyudo,
             ),
             const Gap(20),
             ButtonActionsWidget(
@@ -196,6 +205,11 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                      coincideRespuesta: coincideRespuesta == 'input.yes'.tr(),
+                      explicacionInversion: explicacionInversion.text.trim(),
+                      comoAyudo: comoAyudo.text.trim(),
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,

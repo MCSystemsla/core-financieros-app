@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
@@ -27,6 +28,7 @@ class MujerEmprenderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = ResponsesRepositoryImpl();
     final isRecurrentForm = typeProduct == 'MUJER EMPRENDE RECURRENTE';
     final pageController = PageController();
     return MultiBlocProvider(
@@ -35,7 +37,10 @@ class MujerEmprenderScreen extends StatelessWidget {
           create: (ctx) => ResponseCubit(),
         ),
         BlocProvider(
-          create: (ctx) => MujerEmprendeCubit(ResponsesRepositoryImpl()),
+          create: (ctx) => RecurrenteMujerEmprendeCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => MujerEmprendeCubit(repository),
         ),
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
@@ -72,11 +77,162 @@ class MujerEmprenderScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
-              const _SignSignature(),
+              isRecurrentForm
+                  ? const _RecurrentSignSignature()
+                  : const _SignSignature(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _RecurrentSignSignature extends StatelessWidget {
+  const _RecurrentSignSignature();
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final controller = SignatureController();
+    return Column(
+      children: [
+        const MiCreditoProgress(
+          steps: 5,
+          currentStep: 5,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'forms.firmar.title'.tr(),
+                  style: TextStyle(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Gap(10),
+                Text(
+                  'forms.firmar.description'.tr(),
+                  style: TextStyle(
+                    color: AppColors.greyWithOpacityV4,
+                  ),
+                ),
+                const Gap(20),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            // height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(30),
+                BlocConsumer<RecurrenteMujerEmprendeCubit,
+                    RecurrenteMujerEmprendeState>(
+                  listener: (context, state) async {
+                    final status = state.status;
+                    if (status == Status.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content: Text('Error inesperado'),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.done) {
+                      await customPopUp(
+                        context: context,
+                        dismissOnTouchOutside: false,
+                        size: size,
+                        title: 'Formulario Kiva Enviado exitosamente!!',
+                        subtitle: 'Las respuestas se han enviado Exitosamente',
+                        dialogType: DialogType.success,
+                        buttonAcept: true,
+                        textButtonAcept: 'Ok',
+                        colorButtonAcept: AppColors.getPrimaryColor(),
+                        onPressedAccept: () {
+                          context.pushReplacement('/');
+                        },
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.white,
+                      ),
+                      enabled: state.status != Status.inProgress,
+                      positionIcon: PositionIcon.left,
+                      text: state.status == Status.inProgress
+                          ? 'Cargando...'
+                          : 'button.send'.tr(),
+                      color: context.primaryColor(),
+                      onPressed: () async {
+                        await customPopUp(
+                          context: context,
+                          size: size,
+                          title:
+                              'Confirmas que has leido y confirmado el Formulario Kiva?',
+                          dialogType: DialogType.warning,
+                          buttonAcept: true,
+                          buttonCancel: true,
+                          colorButtonCancel: AppColors.red,
+                          textButtonAcept: 'Aceptar',
+                          textButtonCancel: 'Cancelar',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context
+                                .read<RecurrenteMujerEmprendeCubit>()
+                                .sendAnswers();
+                            context.pop();
+                          },
+                          onPressedCancel: () => context.pop(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Gap(10),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -101,7 +101,7 @@ final router = GoRouter(
           return '/online/form/energia-limpia';
         }
         if (tipoProducto == 'MUJER EMPRENDE NUEVO' ||
-            tipoProducto == 'MUJER EMPRENDE NUEVO') {
+            tipoProducto == 'MUJER EMPRENDE RECURRENTE') {
           return '/online/form/mujer-emprende';
         }
         return null;

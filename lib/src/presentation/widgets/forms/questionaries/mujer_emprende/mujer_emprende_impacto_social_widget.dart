@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -159,6 +160,14 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final mejoraEntornoExplicacion = TextEditingController();
+  final siguientePaso = TextEditingController();
+  final alcanzaraMetaExplicacion = TextEditingController();
+  String? apoyanNegocio;
+  String? cuantosApoyan;
+  String? mejoraraEntorno;
+  String? alcanzaraMeta;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -181,7 +190,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
+              textEditingController: motivoPrestamo,
               title:
                   '¿En qué piensa invertir este nuevo préstamo de Mujer Emprende?* Explique',
             ),
@@ -191,30 +201,86 @@ class _RecurrentFormState extends State<_RecurrentForm>
               padding: const EdgeInsets.all(10),
               child: JLuxDropdown(
                 isContainIcon: true,
-                title:
-                    '¿Hay alguien que le apoye en su negocio? de ser positivo, favor responder cuántas personas'
-                        .tr(),
-                items: const ['1 a 3', '4 a 6', '7 o mas'],
+                title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  apoyanNegocio = item;
+                  setState(() {});
+                },
+                toStringItem: (item) => item,
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            if (apoyanNegocio == 'input.yes'.tr())
+              WhiteCard(
+                marginTop: 15,
+                padding: const EdgeInsets.all(10),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title:
+                      'De ser positivo, favor responder cuántas personas'.tr(),
+                  items: const ['1 a 3', '4 a 6', '7 o mas'],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    cuantosApoyan = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) => item,
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            const Gap(20),
+            WhiteCard(
+              marginTop: 15,
+              padding: const EdgeInsets.all(10),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                title:
+                    '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?'
+                        .tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  mejoraraEntorno = item;
+                  setState(() {});
                 },
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar? ¿Porqué?* ',
+            CommentaryWidget(
+              title: '¿Porqué?*',
+              textEditingController: mejoraEntornoExplicacion,
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
               title: 'A futuro ¿Cuál sería su siguiente paso?',
+              textEditingController: siguientePaso,
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta? ¿Por qué?*',
+            WhiteCard(
+              marginTop: 15,
+              padding: const EdgeInsets.all(10),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                title:
+                    '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta?'
+                        .tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  alcanzaraMeta = item;
+                  setState(() {});
+                },
+                toStringItem: (item) => item,
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            CommentaryWidget(
+              title: '¿Por qué?*',
+              textEditingController: alcanzaraMetaExplicacion,
             ),
             const Gap(20),
             ButtonActionsWidget(
@@ -227,6 +293,18 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                      apoyanNegocio: apoyanNegocio == 'input.yes'.tr(),
+                      cuantosApoyan: int.tryParse(cuantosApoyan!),
+                      motivoPrestamo: motivoPrestamo.text.trim(),
+                      mejoraraEntorno: mejoraraEntorno == 'input.yes'.tr(),
+                      mejoraraEntornoExplicacion:
+                          mejoraEntornoExplicacion.text.trim(),
+                      siguientePaso: siguientePaso.text.trim(),
+                      alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
+                      explicacionAlcanzaraMeta:
+                          alcanzaraMetaExplicacion.text.trim(),
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,

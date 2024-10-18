@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurren
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
 import 'package:logger/logger.dart';
@@ -32,6 +33,9 @@ abstract class ResponsesRepository {
   });
   Future<void> mujerEmprendeAnswer({
     required MujerEmprendeModel mujerEmprendeModel,
+  });
+  Future<void> recurrenteMujerEmprendeAnswer({
+    required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
   });
 }
 
@@ -138,6 +142,22 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   }) async {
     final endpoint = MujerEmprendeEndpoint(
       mujerEmprendeModel: mujerEmprendeModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+      throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<void> recurrenteMujerEmprendeAnswer({
+    required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
+  }) async {
+    final endpoint = RecurrenteMujerEmprendeEndpoint(
+      recurrenteMujerEmprendeModel: recurrenteMujerEmprendeModel,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

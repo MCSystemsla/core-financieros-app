@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurren
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 
 class MejoraViviendaKivaResponsesEndpoind extends Endpoint {
   final MejoraViviendaAnswer mejoraViviendaAnswer;
@@ -136,4 +137,24 @@ class MujerEmprendeEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => mujerEmprendeModel.toJson();
+}
+
+class RecurrenteMujerEmprendeEndpoint extends Endpoint {
+  final RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel;
+  RecurrenteMujerEmprendeEndpoint({
+    required this.recurrenteMujerEmprendeModel,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-mujer-emprende-recurrente';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => recurrenteMujerEmprendeModel.toJson();
 }

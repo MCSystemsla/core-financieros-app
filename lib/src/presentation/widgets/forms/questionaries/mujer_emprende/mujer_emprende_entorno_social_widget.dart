@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -236,6 +237,12 @@ class _RecurrentForm extends StatefulWidget {
 }
 
 class _RecurrentFormState extends State<_RecurrentForm> {
+  String? otrosIngresos;
+  String? tipoEstudioHijos;
+  final otrosIngresosDescripcion = TextEditingController();
+  final personasCargo = TextEditingController();
+  final numeroHijos = TextEditingController();
+  final edadHijos = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -269,6 +276,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  otrosIngresos = item;
                   setState(() {});
                 },
                 toStringItem: (item) {
@@ -277,12 +285,26 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
+            if (otrosIngresos == 'input.yes'.tr())
+              CommentaryWidget(
+                title: 'Cuales?',
+                textEditingController: otrosIngresosDescripcion,
+              ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de personas a cargo:*'),
+            CommentaryWidget(
+              title: 'Número de personas a cargo:*',
+              textEditingController: personasCargo,
+            ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de hijos:*'),
+            CommentaryWidget(
+              title: 'Número de hijos:*',
+              textEditingController: numeroHijos,
+            ),
             const Gap(20),
-            const CommentaryWidget(title: '¿Que edades tienen sus hijos? '),
+            CommentaryWidget(
+              title: '¿Que edades tienen sus hijos? ',
+              textEditingController: edadHijos,
+            ),
             WhiteCard(
               padding: const EdgeInsets.all(5),
               child: JLuxDropdown(
@@ -302,6 +324,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 ],
                 onChanged: (item) {
                   if (item == null) return;
+                  tipoEstudioHijos = item;
                   setState(() {});
                 },
                 toStringItem: (item) {
@@ -321,6 +344,15 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                      otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                      otrosIngresosDescripcion:
+                          otrosIngresosDescripcion.text.trim(),
+                      personasCargo: int.tryParse(personasCargo.text.trim()),
+                      numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                      edadHijos: edadHijos.text.trim(),
+                      tipoEstudioHijos: tipoEstudioHijos,
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
