@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
+import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 
@@ -157,4 +158,24 @@ class RecurrenteMujerEmprendeEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => recurrenteMujerEmprendeModel.toJson();
+}
+
+class MiCrediEstudioEndpoint extends Endpoint {
+  final MiCrediEstudioModel miCrediEstudioModel;
+  MiCrediEstudioEndpoint({
+    required this.miCrediEstudioModel,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-micredi-estudio';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => miCrediEstudioModel.toJson();
 }
