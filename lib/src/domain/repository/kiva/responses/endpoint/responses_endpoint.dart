@@ -4,9 +4,12 @@ import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 
@@ -178,4 +181,64 @@ class MiCrediEstudioEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => miCrediEstudioModel.toJson();
+}
+
+class RecurrenteMiCrediEstudioEndpoint extends Endpoint {
+  final RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel;
+  RecurrenteMiCrediEstudioEndpoint({
+    required this.recurrenteMiCrediEstudioModel,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-micredi-estudio-recurrente';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => recurrenteMiCrediEstudioModel.toJson();
+}
+
+class EstandarEndpoint extends Endpoint {
+  final EstandarModel estandarModel;
+  EstandarEndpoint({
+    required this.estandarModel,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-credito-estandar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => estandarModel.toJson();
+}
+
+class RecurrenteEstandarEndpoint extends Endpoint {
+  final RecurrenteEstandarModel recurrenteEstandarModel;
+  RecurrenteEstandarEndpoint({
+    required this.recurrenteEstandarModel,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-credito-estandar-recurrente';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => recurrenteEstandarModel.toJson();
 }

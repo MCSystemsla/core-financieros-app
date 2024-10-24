@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurren
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -40,6 +41,9 @@ abstract class ResponsesRepository {
   });
   Future<void> miCrediEstudioAnswer({
     required MiCrediEstudioModel miCrediEstudioModel,
+  });
+  Future<bool> recurrenteMiCrediEstudioAnswer({
+    required RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel,
   });
 }
 
@@ -185,6 +189,24 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     } catch (e) {
       _logger.e(e);
       throw AppException.toAppException(e);
+    }
+  }
+
+  @override
+  Future<bool> recurrenteMiCrediEstudioAnswer({
+    required RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel,
+  }) async {
+    final endpoint = RecurrenteMiCrediEstudioEndpoint(
+      recurrenteMiCrediEstudioModel: recurrenteMiCrediEstudioModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
+      _logger.i(resp);
+      return true;
+    } catch (e) {
+      _logger.e(e);
+      return false;
     }
   }
 }

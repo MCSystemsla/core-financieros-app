@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/micredi_estudio/micredi_estudio_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -31,13 +32,17 @@ class MiCreditoEstudioScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isRecurrentForm = typeProduct == 'MICREDIESTUDIO RECURRENTE';
     final PageController pageController = PageController();
+    final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (ctx) => ResponseCubit(),
         ),
         BlocProvider(
-          create: (ctx) => MicrediEstudioCubit(ResponsesRepositoryImpl()),
+          create: (ctx) => RecurrenteMicrediEstudioCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => MicrediEstudioCubit(repository),
         ),
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
@@ -68,14 +73,279 @@ class MiCreditoEstudioScreen extends StatelessWidget {
                 pageController: pageController,
                 isRecurrentForm: isRecurrentForm,
               ),
+              if (isRecurrentForm)
+                MicreditoCreditoAnterior(
+                  pageController: pageController,
+                ),
               _ImpactoSocialCrediEstudioWidget(
                 controller: pageController,
                 isRecurrentForm: isRecurrentForm,
               ),
               FormResponses(controller: pageController),
-              const _SignUserSignature(),
+              isRecurrentForm
+                  ? const _RecurrentSigntature()
+                  : const _SignUserSignature(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RecurrentSigntature extends StatelessWidget {
+  const _RecurrentSigntature();
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final controller = SignatureController();
+    return Column(
+      children: [
+        const MiCreditoProgress(
+          steps: 5,
+          currentStep: 5,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'forms.firmar.title'.tr(),
+                  style: TextStyle(
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Gap(10),
+                Text(
+                  'forms.firmar.description'.tr(),
+                  style: TextStyle(
+                    color: AppColors.greyWithOpacityV4,
+                  ),
+                ),
+                const Gap(20),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            // height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(30),
+                BlocConsumer<RecurrenteMicrediEstudioCubit,
+                    RecurrenteMicrediEstudioState>(
+                  listener: (context, state) async {
+                    final status = state.status;
+                    if (status == Status.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+                          content: Text('Error inesperado'),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.done) {
+                      await customPopUp(
+                        context: context,
+                        dismissOnTouchOutside: false,
+                        size: size,
+                        title: 'Formulario Kiva Enviado exitosamente!!',
+                        subtitle: 'Las respuestas se han enviado Exitosamente',
+                        dialogType: DialogType.success,
+                        buttonAcept: true,
+                        textButtonAcept: 'Ok',
+                        colorButtonAcept: AppColors.getPrimaryColor(),
+                        onPressedAccept: () {
+                          context.pushReplacement('/');
+                        },
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return CustomElevatedButton(
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.white,
+                      ),
+                      enabled: state.status != Status.inProgress,
+                      positionIcon: PositionIcon.left,
+                      text: state.status == Status.inProgress
+                          ? 'Cargando...'
+                          : 'button.send'.tr(),
+                      color: context.primaryColor(),
+                      onPressed: () async {
+                        await customPopUp(
+                          context: context,
+                          size: size,
+                          title:
+                              'Confirmas que has leido y confirmado el Formulario Kiva?',
+                          dialogType: DialogType.warning,
+                          buttonAcept: true,
+                          buttonCancel: true,
+                          colorButtonCancel: AppColors.red,
+                          textButtonAcept: 'Aceptar',
+                          textButtonCancel: 'Cancelar',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context
+                                .read<RecurrenteMicrediEstudioCubit>()
+                                .sendAnswers();
+                            context.pop();
+                          },
+                          onPressedCancel: () => context.pop(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Gap(10),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MicreditoCreditoAnterior extends StatefulWidget {
+  final PageController pageController;
+  const MicreditoCreditoAnterior({
+    super.key,
+    required this.pageController,
+  });
+
+  @override
+  State<MicreditoCreditoAnterior> createState() =>
+      _MicreditoCreditoAnteriorState();
+}
+
+class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
+  String? coincideRespuesta;
+  final explicacionInversion = TextEditingController();
+  final comoAyudoProfesionalmente = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const MiCreditoProgress(
+              steps: 5,
+              currentStep: 2,
+            ),
+            const Gap(20),
+            Text(
+              'Descripción del crédito anterior MiCrédiEstudio'.tr(),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+            const Gap(20),
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title:
+                    '¿Coincide la respuesta del cliente con el formato anterior?'
+                        .tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  coincideRespuesta = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            const Gap(20),
+            if (coincideRespuesta == 'input.no'.tr())
+              CommentaryWidget(
+                title:
+                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                textEditingController: explicacionInversion,
+              ),
+            const Gap(20),
+            CommentaryWidget(
+              title:
+                  '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
+              textEditingController: comoAyudoProfesionalmente,
+            ),
+            const Gap(20),
+            ButtonActionsWidget(
+              onPreviousPressed: () {
+                widget.pageController.previousPage(
+                  duration: const Duration(
+                    milliseconds: 350,
+                  ),
+                  curve: Curves.easeIn,
+                );
+              },
+              onNextPressed: () {
+                // if (formKey.currentState?.validate() ?? false) {
+                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                      coincideRespuesta: coincideRespuesta == 'input.yes'.tr(),
+                      explicacionInversion: explicacionInversion.text.trim(),
+                      comoAyudoProfesionalmente:
+                          comoAyudoProfesionalmente.text.trim(),
+                    );
+                widget.pageController.nextPage(
+                  duration: const Duration(
+                    milliseconds: 350,
+                  ),
+                  curve: Curves.easeIn,
+                );
+                // }
+              },
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
+            ),
+            const Gap(20),
+          ],
         ),
       ),
     );
@@ -323,6 +593,12 @@ class _EntornoSocialEstudioWidgetState
                     CommentaryWidget(
                       title: 'Cual?',
                       textEditingController: trabajoNegocioDescripcion,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
                     ),
                   const Gap(20),
                   CommentaryWidget(
@@ -378,6 +654,12 @@ class _EntornoSocialEstudioWidgetState
                             if (item == null) return;
                             objOrigenCatalogoValorId = item.valor;
                             setState(() {});
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
                           },
                           toStringItem: (item) => item.nombre,
                           hintText: 'input.select_department'.tr(),
@@ -511,6 +793,14 @@ class _RecurrentForm extends StatefulWidget {
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
   String? tipoEstudioHijos;
+  String? tieneTrabajo;
+  String? otrosIngresos;
+  final trabajoNegocioDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
+  final otrosIngresosDescripcion = TextEditingController();
+  final personasCargo = TextEditingController();
+  final numeroHijos = TextEditingController();
+  final edadHijos = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -533,10 +823,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title: 'Profesión u Oficio:',
-            ),
-            const Gap(20),
             WhiteCard(
               padding: const EdgeInsets.all(5),
               child: JLuxDropdown(
@@ -550,6 +836,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
+                  tieneTrabajo = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
@@ -557,12 +845,58 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 hintText: 'input.select_option'.tr(),
               ),
             ),
+            if (tieneTrabajo == 'input.yes'.tr())
+              CommentaryWidget(
+                title: 'Cual?',
+                textEditingController: trabajoNegocioDescripcion,
+              ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de personas a cargo:*'),
+            CommentaryWidget(
+              title: 'Tiempo de la actividad (meses o años)',
+              textEditingController: tiempoActividad,
+            ),
             const Gap(20),
-            const CommentaryWidget(title: 'Número de hijos:*'),
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title: '¿Tiene otros ingresos?'.tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  otrosIngresos = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            if (otrosIngresos == 'input.yes'.tr())
+              CommentaryWidget(
+                title: '¿Cuáles?',
+                textEditingController: otrosIngresosDescripcion,
+              ),
+            CommentaryWidget(
+              title: 'Número de personas a cargo:*',
+              textEditingController: personasCargo,
+            ),
             const Gap(20),
-            const CommentaryWidget(title: '¿Que edades tienen sus hijos? '),
+            CommentaryWidget(
+              title: 'Número de hijos:*',
+              textEditingController: numeroHijos,
+            ),
+            const Gap(20),
+            CommentaryWidget(
+              title: '¿Que edades tienen sus hijos? ',
+              textEditingController: edadHijos,
+            ),
             const Gap(20),
             WhiteCard(
               padding: const EdgeInsets.all(5),
@@ -603,6 +937,20 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                      tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                      trabajoNegocioDescripcion:
+                          trabajoNegocioDescripcion.text.trim(),
+                      tiempoActividad:
+                          int.tryParse(tiempoActividad.text.trim()),
+                      otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                      otrosIngresosDescripcion:
+                          otrosIngresosDescripcion.text.trim(),
+                      personasCargo: personasCargo.text.trim(),
+                      numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                      edadHijos: edadHijos.text.trim(),
+                      tipoEstudioHijos: tipoEstudioHijos,
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
@@ -850,6 +1198,11 @@ class _RecurrentFormImpactoSocial extends StatefulWidget {
 
 class _RecurrentFormImpactoSocialState
     extends State<_RecurrentFormImpactoSocial> {
+  final motivoPrestamo = TextEditingController();
+  final comoAyudaCrecer = TextEditingController();
+  String? alcanzaraMeta;
+  final explicacionAlcanzaraMeta = TextEditingController();
+  final siguentePaso = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -871,22 +1224,52 @@ class _RecurrentFormImpactoSocialState
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
+              textEditingController: motivoPrestamo,
               title:
                   '¿En qué piensa invertir este nuevo préstamo de MiCrediestudio?* Explique',
             ),
             const Gap(20),
-            const CommentaryWidget(
+            CommentaryWidget(
+              textEditingController: comoAyudaCrecer,
               title:
                   '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title:
+                    '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  alcanzaraMeta = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
             ),
             const Gap(20),
-            const CommentaryWidget(title: '¿Cuál sería su siguiente paso?'),
+            if (alcanzaraMeta == 'input.yes'.tr())
+              CommentaryWidget(
+                textEditingController: explicacionAlcanzaraMeta,
+                title: 'Explica la meta?',
+              ),
+            const Gap(20),
+            CommentaryWidget(
+              textEditingController: siguentePaso,
+              title: '¿Cuál sería su siguiente paso?',
+            ),
             ButtonActionsWidget(
               onPreviousPressed: () {
                 widget.pageController.previousPage(
@@ -897,6 +1280,14 @@ class _RecurrentFormImpactoSocialState
                 );
               },
               onNextPressed: () {
+                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                      motivoPrestamo: motivoPrestamo.text.trim(),
+                      comoAyudaCrecer: comoAyudaCrecer.text.trim(),
+                      alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
+                      explicacionAlcanzaraMeta:
+                          explicacionAlcanzaraMeta.text.trim(),
+                      siguientePaso: siguentePaso.text.trim(),
+                    );
                 widget.pageController.nextPage(
                   duration: const Duration(
                     milliseconds: 350,
