@@ -47,9 +47,14 @@ final router = GoRouter(
           builder: (context, state) => const MigrantesEconomicosScreen(),
         ),
         GoRoute(
-          path: 'form/micredito-estudio',
-          builder: (context, state) => const MiCreditoEstudioScreen(),
-        ),
+            path: 'form/micredito-estudio',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MiCreditoEstudioScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/mujer-emprende',
             builder: (context, state) {
@@ -138,9 +143,12 @@ final router = GoRouter(
           builder: (context, state) => const MigrantesEconomicosScreen(),
         ),
         GoRoute(
-          path: 'form/micredito-estudio',
-          builder: (context, state) => const MiCreditoEstudioScreen(),
-        ),
+            path: 'form/micredito-estudio',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MiCreditoEstudioScreen(typeProduct: typeProduct);
+            }),
       ],
     ),
     GoRoute(
