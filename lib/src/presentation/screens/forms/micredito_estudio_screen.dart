@@ -258,94 +258,107 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
   String? coincideRespuesta;
   final explicacionInversion = TextEditingController();
   final comoAyudoProfesionalmente = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Descripción del crédito anterior MiCrédiEstudio'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-
-                  return null;
-                },
-                title:
-                    '¿Coincide la respuesta del cliente con el formato anterior?'
-                        .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  coincideRespuesta = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 2,
               ),
-            ),
-            const Gap(20),
-            if (coincideRespuesta == 'input.no'.tr())
+              const Gap(20),
+              Text(
+                'Descripción del crédito anterior MiCrédiEstudio'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+
+                    return null;
+                  },
+                  title:
+                      '¿Coincide la respuesta del cliente con el formato anterior?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    coincideRespuesta = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              if (coincideRespuesta == 'input.no'.tr())
+                CommentaryWidget(
+                  title:
+                      '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                  textEditingController: explicacionInversion,
+                ),
+              const Gap(20),
               CommentaryWidget(
                 title:
-                    '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-                textEditingController: explicacionInversion,
+                    '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
+                textEditingController: comoAyudoProfesionalmente,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
-              textEditingController: comoAyudoProfesionalmente,
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                // if (formKey.currentState?.validate() ?? false) {
-                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
-                      coincideRespuesta: coincideRespuesta == 'input.yes'.tr(),
-                      explicacionInversion: explicacionInversion.text.trim(),
-                      comoAyudoProfesionalmente:
-                          comoAyudoProfesionalmente.text.trim(),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          coincideRespuesta:
+                              coincideRespuesta == 'input.yes'.tr(),
+                          explicacionInversion:
+                              explicacionInversion.text.trim(),
+                          comoAyudoProfesionalmente:
+                              comoAyudoProfesionalmente.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-                // }
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(20),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(20),
+            ],
+          ),
         ),
       ),
     );
@@ -801,6 +814,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final personasCargo = TextEditingController();
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -808,161 +823,184 @@ class _RecurrentFormState extends State<_RecurrentForm>
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 3,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Descripción del entorno familiar'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 3,
+                currentStep: 2,
+              ),
+              const Gap(20),
+              Text(
+                'Descripción del entorno familiar'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
-                  return null;
-                },
-                title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  tieneTrabajo = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+                    return null;
+                  },
+                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tieneTrabajo = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-            ),
-            if (tieneTrabajo == 'input.yes'.tr())
+              if (tieneTrabajo == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Cual?',
+                  textEditingController: trabajoNegocioDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
+              const Gap(20),
               CommentaryWidget(
-                title: 'Cual?',
-                textEditingController: trabajoNegocioDescripcion,
+                title: 'Tiempo de la actividad (meses o años)',
+                textEditingController: tiempoActividad,
               ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Tiempo de la actividad (meses o años)',
-              textEditingController: tiempoActividad,
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
 
-                  return null;
-                },
-                title: '¿Tiene otros ingresos?'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  otrosIngresos = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
+                    return null;
+                  },
+                  title: '¿Tiene otros ingresos?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    otrosIngresos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-            ),
-            if (otrosIngresos == 'input.yes'.tr())
+              if (otrosIngresos == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: '¿Cuáles?',
+                  textEditingController: otrosIngresosDescripcion,
+                ),
               CommentaryWidget(
-                title: '¿Cuáles?',
-                textEditingController: otrosIngresosDescripcion,
-              ),
-            CommentaryWidget(
-              title: 'Número de personas a cargo:*',
-              textEditingController: personasCargo,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Número de hijos:*',
-              textEditingController: numeroHijos,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: '¿Que edades tienen sus hijos? ',
-              textEditingController: edadHijos,
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
+                title: 'Número de personas a cargo:*',
+                textEditingController: personasCargo,
                 validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                items: const [
-                  'Ninguno',
-                  'Preescolar',
-                  'Primaria',
-                  'Secundaria',
-                  'Técnico',
-                  'Universitario'
-                ],
-                onChanged: (item) {
-                  if (item == null) return;
-                  tipoEstudioHijos = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
-                      tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                      trabajoNegocioDescripcion:
-                          trabajoNegocioDescripcion.text.trim(),
-                      tiempoActividad:
-                          int.tryParse(tiempoActividad.text.trim()),
-                      otrosIngresos: otrosIngresos == 'input.yes'.tr(),
-                      otrosIngresosDescripcion:
-                          otrosIngresosDescripcion.text.trim(),
-                      personasCargo: personasCargo.text.trim(),
-                      numeroHijos: int.tryParse(numeroHijos.text.trim()),
-                      edadHijos: edadHijos.text.trim(),
-                      tipoEstudioHijos: tipoEstudioHijos,
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Número de hijos:*',
+                textEditingController: numeroHijos,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Que edades tienen sus hijos? ',
+                textEditingController: edadHijos,
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tipoEstudioHijos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                          trabajoNegocioDescripcion:
+                              trabajoNegocioDescripcion.text.trim(),
+                          tiempoActividad:
+                              int.tryParse(tiempoActividad.text.trim()),
+                          otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                          otrosIngresosDescripcion:
+                              otrosIngresosDescripcion.text.trim(),
+                          personasCargo: personasCargo.text.trim(),
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                          edadHijos: edadHijos.text.trim(),
+                          tipoEstudioHijos: tipoEstudioHijos,
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );
@@ -1203,103 +1241,116 @@ class _RecurrentFormImpactoSocialState
   String? alcanzaraMeta;
   final explicacionAlcanzaraMeta = TextEditingController();
   final siguentePaso = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 3,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
-                  .tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: motivoPrestamo,
-              title:
-                  '¿En qué piensa invertir este nuevo préstamo de MiCrediestudio?* Explique',
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: comoAyudaCrecer,
-              title:
-                  '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 3,
+                currentStep: 2,
+              ),
+              const Gap(20),
+              Text(
+                'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
+                    .tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: motivoPrestamo,
+                title:
+                    '¿En qué piensa invertir este nuevo préstamo de MiCrediestudio?* Explique',
                 validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title:
-                    '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  alcanzaraMeta = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            if (alcanzaraMeta == 'input.yes'.tr())
+              const Gap(20),
               CommentaryWidget(
-                textEditingController: explicacionAlcanzaraMeta,
-                title: 'Explica la meta?',
+                textEditingController: comoAyudaCrecer,
+                title:
+                    '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
               ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: siguentePaso,
-              title: '¿Cuál sería su siguiente paso?',
-            ),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
-                      motivoPrestamo: motivoPrestamo.text.trim(),
-                      comoAyudaCrecer: comoAyudaCrecer.text.trim(),
-                      alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
-                      explicacionAlcanzaraMeta:
-                          explicacionAlcanzaraMeta.text.trim(),
-                      siguientePaso: siguentePaso.text.trim(),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+
+                    return null;
+                  },
+                  title:
+                      '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    alcanzaraMeta = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              if (alcanzaraMeta == 'input.yes'.tr())
+                CommentaryWidget(
+                  textEditingController: explicacionAlcanzaraMeta,
+                  title: 'Explica la meta?',
+                ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: siguentePaso,
+                title: '¿Cuál sería su siguiente paso?',
+              ),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          motivoPrestamo: motivoPrestamo.text.trim(),
+                          comoAyudaCrecer: comoAyudaCrecer.text.trim(),
+                          alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
+                          explicacionAlcanzaraMeta:
+                              explicacionAlcanzaraMeta.text.trim(),
+                          siguientePaso: siguentePaso.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

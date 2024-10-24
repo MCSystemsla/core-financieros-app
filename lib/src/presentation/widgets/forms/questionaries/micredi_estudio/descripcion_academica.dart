@@ -196,75 +196,89 @@ class _RecurrentFormState extends State<_RecurrentForm> {
   final tiempoCarrera = TextEditingController();
   final universidad = TextEditingController();
   final quienApoya = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Descripcion Academica'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Carrera: ',
-              textEditingController: carrera,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'Años de la carrera:',
-              textEditingController: tiempoCarrera,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: universidad,
-              title: 'Universidad a la que pertenece',
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              textEditingController: quienApoya,
-              title:
-                  '¿Quién o quiénes le estarían apoyando en esta nueva etapa?*',
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
-                      carrera: carrera.text.trim(),
-                      tiempoCarrera: int.tryParse(tiempoCarrera.text.trim()),
-                      universidad: universidad.text.trim(),
-                      quienApoya: quienApoya.text.trim(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 2,
+              ),
+              const Gap(20),
+              Text(
+                'Descripcion Academica'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Carrera: ',
+                textEditingController: carrera,
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Años de la carrera:',
+                textEditingController: tiempoCarrera,
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: universidad,
+                title: 'Universidad a la que pertenece',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: quienApoya,
+                title:
+                    '¿Quién o quiénes le estarían apoyando en esta nueva etapa?*',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          carrera: carrera.text.trim(),
+                          tiempoCarrera:
+                              int.tryParse(tiempoCarrera.text.trim()),
+                          universidad: universidad.text.trim(),
+                          quienApoya: quienApoya.text.trim(),
+                        );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
                     );
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );
