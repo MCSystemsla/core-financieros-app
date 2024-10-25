@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -16,9 +17,12 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_coincide_respuesta.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_comunidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_explicacion_invertido.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_motivo_invertir.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_numero_personas.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos_description.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_situacion_antes_y_ahora.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiempo_actividades_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiene_problema_energia.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tipo_estudio.dart';
@@ -50,6 +54,10 @@ class EnergiaLimpiaScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => MotivoPrestamoCubit(responseRepository)
+            ..getMotivoPrestamo(numero: 1071),
         ),
         BlocProvider(
           create: (ctx) => EnergiaLimpiaCubit(responseRepository),
@@ -155,6 +163,13 @@ class _FormResponses extends StatelessWidget {
             const EnergiaLimpiaTipoEstudio(),
             const Gap(10),
             const EnergiaLimpiaCoincideRespuesta(),
+            const Gap(10),
+            const EnergiaLimpiaExplicacionInverido(),
+            const Gap(10),
+            const EnergiaLimpiaSituacionAntesyAhora(),
+            const Gap(10),
+            const EnergiaLimpiaMotivoInvertir(),
+            const Gap(10),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {

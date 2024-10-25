@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -49,8 +50,16 @@ class _EnergiaLimpiaCreditoAnteriorState
                   ),
             ),
             const Gap(10),
-            const Text(
-              '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+            BlocBuilder<MotivoPrestamoCubit, MotivoPrestamoState>(
+              builder: (context, state) {
+                if (state is OnMotivoPrestamoLoading) {
+                  return const CircularProgressIndicator();
+                }
+                if (state is OnMotivoPrestamoSuccess) {
+                  return Text(state.motivoPrestamo);
+                }
+                return const SizedBox();
+              },
             ),
             const Gap(20),
             WhiteCard(

@@ -45,6 +45,9 @@ abstract class ResponsesRepository {
   Future<bool> recurrenteMiCrediEstudioAnswer({
     required RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel,
   });
+  Future<String> motivoPrestamo({
+    required int numero,
+  });
 }
 
 class ResponsesRepositoryImpl extends ResponsesRepository {
@@ -207,6 +210,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     } catch (e) {
       _logger.e(e);
       return false;
+    }
+  }
+
+  @override
+  Future<String> motivoPrestamo({
+    required int numero,
+  }) async {
+    try {
+      final endpoint = KivaMotivoAnteriorEndpoint(numero: numero);
+      final resp = await _api.request(endpoint: endpoint);
+      _logger.i(resp);
+      return resp['MotivoAnterior'];
+    } catch (e) {
+      _logger.e(e);
+      throw AppException.toAppException(e);
     }
   }
 }
