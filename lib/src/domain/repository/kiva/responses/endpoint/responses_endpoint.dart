@@ -242,3 +242,24 @@ class RecurrenteEstandarEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => recurrenteEstandarModel.toJson();
 }
+
+class KivaMotivoAnteriorEndpoint extends Endpoint {
+  final int numero;
+  KivaMotivoAnteriorEndpoint({required this.numero});
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/motivo-anterior';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => {
+        'database': 'MC_CH',
+        'numero': numero,
+      };
+}
