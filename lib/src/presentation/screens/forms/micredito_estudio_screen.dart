@@ -1174,29 +1174,35 @@ class _ImpactoSocialCrediEstudioWidgetState
                         context.read<ResponseCubit>().addResponses(
                           responses: [
                             Response(
+                              index: 1,
                               question: 'forms.miCredi_estudio.question1'.tr(),
                               response: question1Controller.text.trim(),
                             ),
                             Response(
-                              question: 'forms.miCredi_estudio.question2'.tr(),
-                              response: question2Controller.text.trim(),
-                            ),
+                                question:
+                                    'forms.miCredi_estudio.question2'.tr(),
+                                response: question2Controller.text.trim(),
+                                index: 1),
                             Response(
-                              question: 'forms.miCredi_estudio.question3'.tr(),
-                              response: question3Controller.text.trim(),
-                            ),
+                                question:
+                                    'forms.miCredi_estudio.question3'.tr(),
+                                response: question3Controller.text.trim(),
+                                index: 1),
                             Response(
-                              question: 'forms.miCredi_estudio.question4'.tr(),
-                              response: question4Controller.text.trim(),
-                            ),
+                                question:
+                                    'forms.miCredi_estudio.question4'.tr(),
+                                response: question4Controller.text.trim(),
+                                index: 1),
                             Response(
-                              question: 'forms.miCredi_estudio.question5'.tr(),
-                              response: question5Controller.text.trim(),
-                            ),
+                                question:
+                                    'forms.miCredi_estudio.question5'.tr(),
+                                response: question5Controller.text.trim(),
+                                index: 1),
                             Response(
-                              question: 'forms.miCredi_estudio.question6'.tr(),
-                              response: question6Controller.text.trim(),
-                            ),
+                                question:
+                                    'forms.miCredi_estudio.question6'.tr(),
+                                response: question6Controller.text.trim(),
+                                index: 1),
                           ],
                         );
                         widget.controller.nextPage(

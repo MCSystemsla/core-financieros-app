@@ -7,24 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class EnergiaLimpiaSituacionAntesyAhora extends StatefulWidget {
-  const EnergiaLimpiaSituacionAntesyAhora({
+class EnergiaLimpiaQuienApoyan extends StatefulWidget {
+  const EnergiaLimpiaQuienApoyan({
     super.key,
   });
 
   @override
-  State<EnergiaLimpiaSituacionAntesyAhora> createState() =>
-      _EnergiaLimpiaSituacionAntesyAhoraState();
+  State<EnergiaLimpiaQuienApoyan> createState() =>
+      _EnergiaLimpiaQuienApoyanState();
 }
 
-class _EnergiaLimpiaSituacionAntesyAhoraState
-    extends State<EnergiaLimpiaSituacionAntesyAhora> {
+class _EnergiaLimpiaQuienApoyanState extends State<EnergiaLimpiaQuienApoyan> {
   bool onEditAnswer = false;
-  String? newsituacionAntesAhora;
+  String? newquienApoya;
   @override
   Widget build(BuildContext context) {
     final energiaLimpiaProvider = context.watch<RecurrenteEnergiaLimpiaCubit>();
-
     return WhiteCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +34,7 @@ class _EnergiaLimpiaSituacionAntesyAhoraState
                   maxWidth: 250,
                 ),
                 child: Text(
-                  '¿ Cómo era su situación antes de adquirir esta solución energética y cómo es ahora ?',
+                  '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
@@ -57,7 +55,7 @@ class _EnergiaLimpiaSituacionAntesyAhoraState
           ),
           const Gap(20),
           Text(
-            energiaLimpiaProvider.state.situacionAntesAhora,
+            energiaLimpiaProvider.state.quienApoya,
             style: Theme.of(context).textTheme.bodyMedium!,
           ),
           if (onEditAnswer)
@@ -68,11 +66,10 @@ class _EnergiaLimpiaSituacionAntesyAhoraState
                   child: CommentaryWidget(
                     title: '',
                     onChange: (value) {
-                      newsituacionAntesAhora = value;
+                      newquienApoya = value;
                       setState(() {});
                     },
-                    initialValue:
-                        energiaLimpiaProvider.state.situacionAntesAhora,
+                    initialValue: energiaLimpiaProvider.state.quienApoya,
                   ),
                 ),
                 const Gap(20),
@@ -81,7 +78,7 @@ class _EnergiaLimpiaSituacionAntesyAhoraState
                   color: AppColors.getPrimaryColor(),
                   onPressed: () {
                     context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
-                          situacionAntesAhora: newsituacionAntesAhora,
+                          quienApoya: newquienApoya,
                         );
                     onEditAnswer = !onEditAnswer;
                     setState(() {});

@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -216,7 +218,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
 
                     return null;
                   },
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
@@ -289,6 +291,37 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                           trabajoNegocioDescripcion:
                               trabajoNegocioDescripcion.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                          response: tieneTrabajo ?? 'N/A',
+                          index: 1,
+                        ),
+                        if (otrosIngresosDescripcion.text.isEmpty)
+                          Response(
+                            question: 'Cual?',
+                            response: otrosIngresosDescripcion.text.trim(),
+                            index: 1,
+                          ),
+                        Response(
+                          question: 'Tiempo de la actividad:',
+                          response: tiempoActividad.text.trim(),
+                          index: 1,
+                        ),
+                        Response(
+                          question: '¿Tiene otros ingresos?¿Cuales?*',
+                          response: otrosIngresos ?? 'N/A',
+                          index: 1,
+                        ),
+                        if (otrosIngresos == 'input.yes'.tr())
+                          Response(
+                            question: 'Ingrese los otros ingresos',
+                            response: otrosIngresosDescripcion.text.trim(),
+                            index: 1,
+                          ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

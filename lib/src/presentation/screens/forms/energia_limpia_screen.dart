@@ -10,7 +10,9 @@ import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_adtional_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
@@ -19,9 +21,11 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_comunidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_explicacion_invertido.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_motivo_invertir.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_nuevo_prestamo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_numero_personas.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos_description.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_quien_apoya.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_situacion_antes_y_ahora.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiempo_actividades_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiene_problema_energia.dart';
@@ -105,13 +109,13 @@ class EnergiaLimpiaScreen extends StatelessWidget {
                 pageController: pageController,
                 isRecurrentForm: isRecurrentForm,
               ),
-              if (isRecurrentForm)
-                _FormResponses(
-                  controller: pageController,
-                ),
-              // FormResponses(
-              //   controller: pageController,
-              // ),
+              // if (isRecurrentForm)
+              //   _FormResponses(
+              //     controller: pageController,
+              //   ),
+              FormResponses(
+                controller: pageController,
+              ),
               isRecurrentForm
                   ? const _RecurrentSignQuestionary()
                   : const _SignQuestionary(),
@@ -170,6 +174,11 @@ class _FormResponses extends StatelessWidget {
             const Gap(10),
             const EnergiaLimpiaMotivoInvertir(),
             const Gap(10),
+            const EnergiaLimpiaNuevoPrestamo(),
+            const Gap(10),
+            const EnergiaLimpiaQuienApoyan(),
+            const Gap(10),
+            const EnergiaLimpiaUnavezFinalzado(),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -193,6 +202,93 @@ class _FormResponses extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class EnergiaLimpiaUnavezFinalzado extends StatefulWidget {
+  const EnergiaLimpiaUnavezFinalzado({
+    super.key,
+  });
+
+  @override
+  State<EnergiaLimpiaUnavezFinalzado> createState() =>
+      _EnergiaLimpiaUnavezFinalzadoState();
+}
+
+class _EnergiaLimpiaUnavezFinalzadoState
+    extends State<EnergiaLimpiaUnavezFinalzado> {
+  bool onEditAnswer = false;
+  String? newsiguienteMeta;
+  @override
+  Widget build(BuildContext context) {
+    final energiaLimpiaProvider = context.watch<RecurrenteEnergiaLimpiaCubit>();
+
+    return WhiteCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 250,
+                ),
+                child: Text(
+                  'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.w400),
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  onEditAnswer = !onEditAnswer;
+                  setState(() {});
+                },
+                icon: const Icon(Icons.edit),
+              ),
+            ],
+          ),
+          const Gap(20),
+          Text(
+            energiaLimpiaProvider.state.siguienteMeta,
+            style: Theme.of(context).textTheme.bodyMedium!,
+          ),
+          if (onEditAnswer)
+            Column(
+              children: [
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: CommentaryWidget(
+                    title: '',
+                    onChange: (value) {
+                      newsiguienteMeta = value;
+                      setState(() {});
+                    },
+                    initialValue: energiaLimpiaProvider.state.siguienteMeta,
+                  ),
+                ),
+                const Gap(20),
+                CustomElevatedButton(
+                  text: 'Guardar',
+                  color: AppColors.getPrimaryColor(),
+                  onPressed: () {
+                    context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer3(
+                          siguienteMeta: newsiguienteMeta,
+                        );
+                    onEditAnswer = !onEditAnswer;
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }

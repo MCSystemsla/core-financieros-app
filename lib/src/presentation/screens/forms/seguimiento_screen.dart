@@ -124,22 +124,27 @@ class _GrupoEncuestaWidgetState extends State<GrupoEncuestaWidget>
                     Response(
                       question: 'forms.seguimiento.question1'.tr(),
                       response: question1Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question: 'forms.seguimiento.question2'.tr(),
                       response: question2Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question: 'forms.seguimiento.question3'.tr(),
                       response: question3Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question: 'forms.seguimiento.question4'.tr(),
                       response: question4Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question: 'forms.seguimiento.question5'.tr(),
                       response: question5Controller.text.trim(),
+                      index: 1,
                     ),
                   ],
                 );

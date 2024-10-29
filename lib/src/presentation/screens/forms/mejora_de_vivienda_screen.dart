@@ -303,7 +303,10 @@ class _FormResponsesState extends State<FormResponses> {
                     return const Gap(20);
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    return _ResponseWidget(response: state.responses[index]);
+                    return _ResponseWidget(
+                      response: state.responses[index],
+                      controller: widget.controller,
+                    );
                   },
                 );
               },
@@ -337,8 +340,9 @@ class _FormResponsesState extends State<FormResponses> {
 }
 
 class _ResponseWidget extends StatefulWidget {
+  final PageController controller;
   final Response response;
-  const _ResponseWidget({required this.response});
+  const _ResponseWidget({required this.response, required this.controller});
 
   @override
   State<_ResponseWidget> createState() => _ResponseWidgetState();
@@ -377,10 +381,17 @@ class _ResponseWidgetState extends State<_ResponseWidget> {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    onEditAnswer = !onEditAnswer;
-                    setState(() {});
+                    // onEditAnswer = !onEditAnswer;
+                    widget.controller.animateToPage(
+                      widget.response.index,
+                      duration: const Duration(milliseconds: 700),
+                      curve: Curves.easeIn,
+                    );
                   },
-                  icon: const Icon(Icons.edit),
+                  icon: Icon(
+                    Icons.edit,
+                    color: AppColors.getPrimaryColor(),
+                  ),
                 ),
               ],
             ),
@@ -415,6 +426,7 @@ class _ResponseWidgetState extends State<_ResponseWidget> {
                       Response(
                         question: widget.response.question,
                         response: responseEditedAnswer!,
+                        index: 1,
                       ),
                     ],
                   );

@@ -115,12 +115,14 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
                           'forms.migrantes_economicos.primer_prestamo.question1'
                               .tr(),
                       response: question1Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question:
                           'forms.migrantes_economicos.primer_prestamo.question2'
                               .tr(),
                       response: question2Controller.text.trim(),
+                      index: 1,
                     ),
                   ],
                 );
@@ -220,24 +222,28 @@ class _ImpactoSocialMigranteEconomicoState
                           'forms.migrantes_economicos.impacto_social.question1'
                               .tr(),
                       response: question1Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question:
                           'forms.migrantes_economicos.impacto_social.question2'
                               .tr(),
                       response: question2Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question:
                           'forms.migrantes_economicos.impacto_social.question3'
                               .tr(),
                       response: question3Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
                       question:
                           'forms.migrantes_economicos.impacto_social.question4'
                               .tr(),
                       response: question4Controller.text.trim(),
+                      index: 1,
                     ),
                   ],
                 );

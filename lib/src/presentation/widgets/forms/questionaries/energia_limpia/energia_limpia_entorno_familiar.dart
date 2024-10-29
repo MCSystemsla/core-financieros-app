@@ -1,8 +1,10 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -409,6 +411,36 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               tieneProblemasEnergia == 'input.yes'.tr(),
                           tipoEstudioHijos: tipoEstudioHijos,
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: 2,
+                          question: 'Su comunidad es:',
+                          response: objTipoComunidadId ?? 'N/A',
+                        ),
+                        Response(
+                          index: 2,
+                          question:
+                              '¿Usted tiene problemas de energía eléctrica en su comunidad?',
+                          response: tieneProblemasEnergia ?? 'N/A',
+                        ),
+                        Response(
+                          index: 2,
+                          question: 'Numero de persona a cargo',
+                          response: tieneProblemasEnergia ?? 'N/A',
+                        ),
+                        Response(
+                          index: 2,
+                          question: '¿Qué edades tienen sus hijos?',
+                          response: edadHijos.text.trim(),
+                        ),
+                        Response(
+                          index: 2,
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

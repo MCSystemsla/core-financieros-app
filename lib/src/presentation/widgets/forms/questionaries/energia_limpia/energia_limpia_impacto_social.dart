@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -227,6 +229,34 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           quienApoya: quienApoya.text.trim(),
                           siguienteMeta: siguienteMeta.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: 4,
+                          question:
+                              '¿En qué piensa invertir este nuevo crédito de energía limpia?* Explique',
+                          response: motivoPrestamo.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              '¿Cómo cree usted que este nuevo préstamo vaya a mejorar su situación y la de su familia?*',
+                          response: comoMejoraSituacion.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
+                          response: quienApoya.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+                          response: siguienteMeta.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
