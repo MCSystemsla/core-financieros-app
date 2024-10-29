@@ -71,8 +71,7 @@ class _EnergiaLimpiaMotivoInvertirState
                       newmotivoPrestamo = value;
                       setState(() {});
                     },
-                    initialValue:
-                        energiaLimpiaProvider.state.explicacionInversion,
+                    initialValue: energiaLimpiaProvider.state.motivoPrestamo,
                   ),
                 ),
                 const Gap(20),

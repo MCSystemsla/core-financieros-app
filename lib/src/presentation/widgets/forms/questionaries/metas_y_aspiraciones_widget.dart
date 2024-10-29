@@ -70,11 +70,12 @@ class _MetasYAspiracionesWidgetState extends State<MetasYAspiracionesWidget>
                     Response(
                       question: 'forms.metas_y_aspiraciones.question1'.tr(),
                       response: question1Controller.text.trim(),
+                      index: 1,
                     ),
                     Response(
-                      question: 'forms.metas_y_aspiraciones.question2'.tr(),
-                      response: question2Controller.text.trim(),
-                    ),
+                        question: 'forms.metas_y_aspiraciones.question2'.tr(),
+                        response: question2Controller.text.trim(),
+                        index: 1),
                   ],
                 );
                 widget.controller.nextPage(

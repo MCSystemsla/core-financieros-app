@@ -285,55 +285,67 @@ class _MejoraViviendaEntornoSocialState
                               question:
                                   '¿Tiene algún trabajo o negocio? ¿Cuál?',
                               response: question1 ?? 'N/A',
+                              index: 1,
                             ),
                             Response(
                               question: 'Tiempo de la actividad:*',
                               response: question2.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question: '¿Tiene otros ingresos?¿Cuales?*',
                               response: question3 ?? 'N/A',
+                              index: 1,
                             ),
                             Response(
                               question: 'Describe tus otros Ingresos',
                               response: otrosIngresosController.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question:
                                   'forms.entorno_familiar.person_origin'.tr(),
                               response: question4 ?? 'N/A',
+                              index: 1,
                             ),
                             Response(
                               question: 'Su comunidad es:'.tr(),
                               response: question5 ?? 'N/A',
+                              index: 1,
                             ),
                             Response(
                               question:
                                   '¿Cuáles son las necesidades en su comunidad?'
                                       .tr(),
                               response: necesidadesController.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question: 'Número de personas a cargo:*'.tr(),
                               response: necesidadesController.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question: 'Número de personas a cargo:*'.tr(),
                               response: question6.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question: 'Número de hijos:*'.tr(),
                               response: question7.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question: '¿Que edades tienen sus hijos?'.tr(),
                               response: question7.text.trim(),
+                              index: 1,
                             ),
                             Response(
                               question:
                                   '¿Qué tipo de estudios reciben sus hijos?'
                                       .tr(),
                               response: question9 ?? 'N/A',
+                              index: 1,
                             ),
                           ],
                         );

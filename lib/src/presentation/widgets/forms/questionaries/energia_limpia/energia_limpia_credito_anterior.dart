@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -57,6 +59,9 @@ class _EnergiaLimpiaCreditoAnteriorState
                 }
                 if (state is OnMotivoPrestamoSuccess) {
                   return Text(state.motivoPrestamo);
+                }
+                if (state is OnMotivoPrestamoError) {
+                  return const Text('error');
                 }
                 return const SizedBox();
               },
@@ -116,6 +121,30 @@ class _EnergiaLimpiaCreditoAnteriorState
                         explicacionInversion: explicacionInversion.text.trim(),
                         situacionAntesAhora: situacionAntesAhora.text.trim(),
                       );
+
+                  context.read<ResponseCubit>().addResponses(
+                    responses: [
+                      Response(
+                        index: 3,
+                        question:
+                            '¿Coincide la respuesta del cliente con el formato anterior?',
+                        response: coincideRespuesta ?? 'N/A',
+                      ),
+                      if (coincideRespuesta == 'input.no'.tr())
+                        Response(
+                          index: 3,
+                          question:
+                              '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                          response: explicacionInversion.text.trim(),
+                        ),
+                      Response(
+                        index: 3,
+                        question:
+                            '¿Cómo era su situación antes de adquirir esta solución energética y cómo es ahora ?',
+                        response: situacionAntesAhora.text.trim(),
+                      ),
+                    ],
+                  );
                   widget.pageController.nextPage(
                     duration: const Duration(
                       milliseconds: 350,
