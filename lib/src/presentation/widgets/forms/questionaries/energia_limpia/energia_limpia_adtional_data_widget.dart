@@ -155,6 +155,38 @@ class _EnergiaLimpiaAditionalDataWidgetState
                               trabajoNegocioDescripcion:
                                   trabajoNegocioDescripcion.text.trim(),
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: 1,
+                              question:
+                                  '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                              response: tieneTrabajo ?? 'N/A',
+                            ),
+                            if (tieneTrabajo == 'input.yes'.tr())
+                              Response(
+                                index: 1,
+                                question: 'Cual',
+                                response: trabajoNegocioDescripcion.text.trim(),
+                              ),
+                            Response(
+                              index: 1,
+                              question: 'Tiempo de la actividad:*',
+                              response: tiempoActividad.text.trim(),
+                            ),
+                            Response(
+                              index: 1,
+                              question: '¿Tiene otros ingresos?¿Cuales?*',
+                              response: otrosIngresos ?? 'N/A',
+                            ),
+                            if (otrosIngresos == 'input.yes'.tr())
+                              Response(
+                                index: 1,
+                                question: 'Cuales Otros Ingresos?',
+                                response: otrosIngresosDescripcion.text.trim(),
+                              ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,

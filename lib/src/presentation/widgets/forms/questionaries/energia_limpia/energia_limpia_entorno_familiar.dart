@@ -223,6 +223,54 @@ class _EnergiaLimpiaEntornoFamiliarState
                                   tieneProblemasEnergia == 'input.yes'.tr(),
                               tipoEstudioHijos: tipoEstudioHijos,
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: 2,
+                              question:
+                                  'forms.entorno_familiar.person_origin'.tr(),
+                              response: objOrigenCatalogoValorId ?? 'N/A',
+                            ),
+                            Response(
+                              index: 2,
+                              question: 'Su comunidad es:',
+                              response: objTipoComunidadId ?? 'N/A',
+                            ),
+                            Response(
+                              index: 2,
+                              question:
+                                  '¿Usted tiene problemas de energía eléctrica en su comunidad?',
+                              response: tieneProblemasEnergia ?? 'N/A',
+                            ),
+                            Response(
+                              index: 2,
+                              question:
+                                  '¿Usted tiene problemas de energía eléctrica en su comunidad?',
+                              response: tieneProblemasEnergia ?? 'N/A',
+                            ),
+                            Response(
+                              index: 2,
+                              question: 'Número de personas a cargo:*',
+                              response: personasCargo.text.trim(),
+                            ),
+                            Response(
+                              index: 2,
+                              question: 'Número de hijos:*',
+                              response: numeroHijos.text.trim(),
+                            ),
+                            Response(
+                              index: 2,
+                              question: '¿Qué edades tienen sus hijos?',
+                              response: edadHijos.text.trim(),
+                            ),
+                            Response(
+                              index: 2,
+                              question:
+                                  '¿Qué tipo de estudios reciben sus hijos?',
+                              response: tipoEstudioHijos ?? 'N/A',
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,
