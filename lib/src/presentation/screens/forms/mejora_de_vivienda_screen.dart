@@ -94,6 +94,7 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
               ),
               if (isRecurrentForm ?? false)
                 MejoraViviendaCreditoDescrip(
+                  isRecurrentForm: isRecurrentForm ?? false,
                   pageController: pageController,
                 ),
               ImpactoSocialKivaObjetiveWidget(

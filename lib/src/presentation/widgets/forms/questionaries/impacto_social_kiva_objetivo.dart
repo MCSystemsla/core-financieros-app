@@ -114,27 +114,27 @@ class _ImpactoSocialKivaObjetiveWidgetState
                               question:
                                   'forms.mejora_de_vivienda.question1'.tr(),
                               response: question1Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   'forms.mejora_de_vivienda.question2'.tr(),
                               response: question2Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   '¿Cuáles son sus planes para los próximos años?'
                                       .tr(),
                               response: question3Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   'Otros datos relevantes e interesantes del cliente'
                                       .tr(),
                               response: question4Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                           ],
                         );
@@ -195,7 +195,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 currentStep: 3,
               ),
               const Gap(20),
-              const Text('recurrente'),
               Text(
                 'forms.mejora_de_vivienda.impacto_social.title'.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -269,6 +268,34 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           quienApoya: question3.text.trim(),
                           siguienteMeta: question4.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: 4,
+                          question:
+                              '¿En qué piensa invertir este nuevo préstamo de Mejora de Vivienda?* Explique',
+                          response: question1.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              '¿Cómo cree usted que este nuevo préstamo vaya a mejorar la seguridad de su familia?*',
+                          response: question2.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
+                          response: question3.text.trim(),
+                        ),
+                        Response(
+                          index: 4,
+                          question:
+                              'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+                          response: question4.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

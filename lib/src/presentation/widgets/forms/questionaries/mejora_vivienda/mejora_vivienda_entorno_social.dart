@@ -288,6 +288,11 @@ class _MejoraViviendaEntornoSocialState
                               index: 1,
                             ),
                             Response(
+                              question: '¿Cuál?',
+                              response: storeDescription.text.trim(),
+                              index: 1,
+                            ),
+                            Response(
                               question: 'Tiempo de la actividad:*',
                               response: question2.text.trim(),
                               index: 1,
@@ -317,11 +322,6 @@ class _MejoraViviendaEntornoSocialState
                               question:
                                   '¿Cuáles son las necesidades en su comunidad?'
                                       .tr(),
-                              response: necesidadesController.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
-                              question: 'Número de personas a cargo:*'.tr(),
                               response: necesidadesController.text.trim(),
                               index: 1,
                             ),
@@ -602,6 +602,63 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                           trabajoNegocioDescripcion:
                               cualesOtroTrabajoController.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: 1,
+                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                          response: question1 ?? 'N/A',
+                        ),
+                        if (question1 == 'input.yes'.tr())
+                          Response(
+                            index: 1,
+                            question: 'Cual?',
+                            response: cualesOtroTrabajoController.text.trim(),
+                          ),
+                        Response(
+                          index: 1,
+                          question: 'Tiempo de la actividad:*',
+                          response: question2.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question: '¿Tiene otros ingresos?¿Cuales?*',
+                          response: question3 ?? 'N/A',
+                        ),
+                        if (question3 == 'input.yes'.tr())
+                          Response(
+                            index: 1,
+                            question: 'Cuales Ingresos son?',
+                            response: cualesOtrosIngresosController.text.trim(),
+                          ),
+                        Response(
+                          index: 1,
+                          question: 'Su comunidad es:',
+                          response: question5 ?? 'N/A',
+                        ),
+                        Response(
+                          index: 1,
+                          question:
+                              '¿Cuáles son las necesidades en su comunidad?',
+                          response: necesidadesController.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question: 'Número de personas a cargo:*',
+                          response: question6.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question: 'Número de hijos:*',
+                          response: question7.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question: '¿Qué tipo de estudios reciben sus hijos?',
+                          response: question9 ?? 'N/A',
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

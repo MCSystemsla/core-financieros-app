@@ -1,4 +1,6 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -10,10 +12,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class MejoraViviendaCreditoDescrip extends StatefulWidget {
+  final bool isRecurrentForm;
   final PageController pageController;
   const MejoraViviendaCreditoDescrip({
     super.key,
     required this.pageController,
+    required this.isRecurrentForm,
   });
 
   @override
@@ -53,18 +57,18 @@ class _MejoraViviendaCreditoDescripState
                     ),
               ),
               const Gap(20),
-              CommentaryWidget(
-                textEditingController: question1,
-                validator: (value) {
-                  // if (value == null || value.isEmpty) {
-                  //   return 'input.input_validator'.tr();
-                  // }
+              // CommentaryWidget(
+              //   textEditingController: question1,
+              //   validator: (value) {
+              //     // if (value == null || value.isEmpty) {
+              //     //   return 'input.input_validator'.tr();
+              //     // }
 
-                  return null;
-                },
-                title:
-                    '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-              ),
+              //     return null;
+              //   },
+              //   title:
+              //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
+              // ),
               const Gap(20),
               WhiteCard(
                 padding: const EdgeInsets.all(5),
@@ -98,9 +102,10 @@ class _MejoraViviendaCreditoDescripState
                       '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),
               const Gap(20),
-              const CommentaryWidget(
+              CommentaryWidget(
                 title:
                     '¿Cómo era su vivienda anteriormente y describa como está ahora?',
+                textEditingController: viviendaAntesyDespuesController,
               ),
               const Gap(20),
               ButtonActionsWidget(
@@ -121,6 +126,29 @@ class _MejoraViviendaCreditoDescripState
                           viviendaAntesDespues:
                               viviendaAntesyDespuesController.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.isRecurrentForm ? 3 : 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: question2 ?? 'N/A',
+                        ),
+                        if (question2 == 'input.no'.tr())
+                          Response(
+                            index: widget.isRecurrentForm ? 3 : 0,
+                            question:
+                                '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                            response: isNotCoincideResponse.text.trim(),
+                          ),
+                        Response(
+                          index: widget.isRecurrentForm ? 3 : 0,
+                          question:
+                              '¿Cómo era su vivienda anteriormente y describa como está ahora?',
+                          response: isNotCoincideResponse.text.trim(),
+                        ),
+                      ],
+                    );
 
                     widget.pageController.nextPage(
                       duration: const Duration(

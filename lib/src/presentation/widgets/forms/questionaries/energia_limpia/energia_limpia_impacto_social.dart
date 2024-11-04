@@ -96,6 +96,28 @@ class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
                               otrosDatosCliente: otrosDatosCliente.text.trim(),
                               planesFuturo: planesFuturo.text.trim(),
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.isRecurrentForm ? 4 : 3,
+                              question:
+                                  '¿Por qué y para qué solicitó el préstamo? Explique.*',
+                              response: motivoPrestamo.text.trim(),
+                            ),
+                            Response(
+                              index: widget.isRecurrentForm ? 4 : 3,
+                              question:
+                                  '¿Cuáles son sus planes para los próximos años?',
+                              response: planesFuturo.text.trim(),
+                            ),
+                            Response(
+                              index: widget.isRecurrentForm ? 4 : 3,
+                              question:
+                                  'Otros datos relevantes e interesantes del cliente',
+                              response: otrosDatosCliente.text.trim(),
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,

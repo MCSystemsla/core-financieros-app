@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
@@ -5,6 +9,7 @@ import 'package:core_financiero_app/src/domain/repository/departamentos/departam
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
@@ -43,6 +48,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 class EnergiaLimpiaScreen extends StatelessWidget {
@@ -58,6 +64,9 @@ class EnergiaLimpiaScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(responseRepository),
         ),
         BlocProvider(
           create: (ctx) => MotivoPrestamoCubit(responseRepository)
@@ -491,7 +500,7 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                       );
                     }
                   },
-                  builder: (context, state) {
+                  builder: (ctx, state) {
                     return CustomElevatedButton(
                       icon: const Icon(
                         Icons.edit,
@@ -504,6 +513,16 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -516,7 +535,10 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            context
+                                .read<UploadUserFileCubit>()
+                                .uploadUserFiles(file);
                             context
                                 .read<RecurrenteEnergiaLimpiaCubit>()
                                 .sendAnswers();

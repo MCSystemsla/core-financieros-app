@@ -61,7 +61,7 @@ class _EnergiaLimpiaCreditoAnteriorState
                   return Text(state.motivoPrestamo);
                 }
                 if (state is OnMotivoPrestamoError) {
-                  return const Text('error');
+                  return const Text('Error inesperado');
                 }
                 return const SizedBox();
               },
