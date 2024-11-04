@@ -260,6 +260,41 @@ class KivaMotivoAnteriorEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => {
         'database': 'MC_CH',
-        'numero': numero,
+        'solicitudId': numero,
       };
+}
+
+class FileEndpoint extends Endpoint {
+  final int numSolicitud;
+  final String formularioKiva;
+  FileEndpoint({
+    required this.imgPath,
+    required this.numSolicitud,
+    required this.formularioKiva,
+  });
+  final ImagesModelEndpoint imgPath;
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  String get path => 'kiva/subir-imagenes';
+
+  @override
+  TypeBody get typeBody => TypeBody.formData;
+
+  @override
+  Map<String, dynamic> get body => {
+        'database': 'MC_CH',
+        'solicitudId': 3925,
+        'fotoCliente1': 3925,
+      };
+
+  @override
+  List<ImagesModelEndpoint> get files => [imgPath];
 }

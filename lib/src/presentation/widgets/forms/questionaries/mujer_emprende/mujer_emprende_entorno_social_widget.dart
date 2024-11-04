@@ -1,7 +1,9 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -202,6 +204,49 @@ class _MujerEmprendeEntornoSocialWidgetState
                               numeroHijos: int.tryParse(question3.text.trim()),
                               tipoEstudioHijos: academicLevelItem,
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: '¿Tiene otros ingresos?¿Cuales?*',
+                              response: otrosIngresosItem ?? 'N/A',
+                            ),
+                            if (otrosIngresosItem == 'input.yes'.tr())
+                              Response(
+                                index: widget.pageController.page?.toInt() ?? 0,
+                                question: 'Cuales',
+                                response: otrosIngresosDescripcion.text.trim(),
+                              ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  'forms.entorno_familiar.person_origin'.tr(),
+                              response: originItem ?? 'N/A',
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: 'Número de personas a cargo:*'.tr(),
+                              response: question1.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: '¿Que edades tienen sus hijos?'.tr(),
+                              response: question2.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: 'Número de hijos:*'.tr(),
+                              response: question3.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Qué tipo de estudios reciben sus hijos?'
+                                      .tr(),
+                              response: academicLevelItem ?? 'N/A',
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,
@@ -372,6 +417,15 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                           edadHijos: edadHijos.text.trim(),
                           tipoEstudioHijos: tipoEstudioHijos,
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Tiene otros ingresos?¿Cuales?*',
+                          response: otrosIngresos ?? 'N/A',
+                        )
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

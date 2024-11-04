@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/micredi_estudio/micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -58,7 +60,7 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
-                    title: 'Carrera: ',
+                    title: 'Carrera:',
                     textEditingController: carrera,
                   ),
                   const Gap(20),
@@ -160,6 +162,56 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica> {
                               quienApoya: quienApoya.text.trim(),
                               ocupacionPadres: ocupacionPadres.text.trim(),
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.round() ?? 3,
+                              question: 'Carrera:',
+                              response: carrera.text.trim(),
+                            ),
+                            Response(
+                              index: 3,
+                              question: 'Universidad a la que pertenece:',
+                              response: universidad.text.trim(),
+                            ),
+                            Response(
+                              index: 3,
+                              question: 'Años de la carrera:',
+                              response: tiempoCarreras.text.trim(),
+                            ),
+                            Response(
+                              index: 3,
+                              question: '¿Qué te motivó a elegir esa carrera?',
+                              response: motivoCarrera.text.trim(),
+                            ),
+                            Response(
+                              index: 3,
+                              question:
+                                  '¿Sentís que te estás realizando profesionalmente?*',
+                              response: relizandoProfesionalmente ?? 'N/A',
+                            ),
+                            if (relizandoProfesionalmente == 'input.yes'.tr())
+                              Response(
+                                index: 3,
+                                question: 'Por que?',
+                                response: explicacionRelizandoProfesionalmente
+                                    .text
+                                    .trim(),
+                              ),
+                            Response(
+                              index: 3,
+                              question:
+                                  '¿Quién o quiénes te apoyan en tus estudios?*',
+                              response: quienApoya.text.trim(),
+                            ),
+                            Response(
+                              index: 3,
+                              question:
+                                  '¿En qué trabaja o qué negocio tienen tus padres o tutores?*',
+                              response: ocupacionPadres.text.trim(),
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,
@@ -221,7 +273,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               ),
               const Gap(20),
               CommentaryWidget(
-                title: 'Carrera: ',
+                title: 'Carrera:',
                 textEditingController: carrera,
               ),
               const Gap(20),
@@ -265,6 +317,31 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                           universidad: universidad.text.trim(),
                           quienApoya: quienApoya.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Carrera:',
+                          response: carrera.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Años de la carrera:',
+                          response: tiempoCarrera.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Universidad a la que pertenece',
+                          response: universidad.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Quién o quiénes le estarían apoyando en esta nueva etapa?*',
+                          response: quienApoya.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

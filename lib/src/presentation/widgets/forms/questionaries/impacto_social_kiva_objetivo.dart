@@ -114,27 +114,27 @@ class _ImpactoSocialKivaObjetiveWidgetState
                               question:
                                   'forms.mejora_de_vivienda.question1'.tr(),
                               response: question1Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   'forms.mejora_de_vivienda.question2'.tr(),
                               response: question2Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   '¿Cuáles son sus planes para los próximos años?'
                                       .tr(),
                               response: question3Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                             Response(
                               question:
                                   'Otros datos relevantes e interesantes del cliente'
                                       .tr(),
                               response: question4Controller.text.trim(),
-                              index: 1,
+                              index: widget.isRecurrentForm ? 4 : 3,
                             ),
                           ],
                         );

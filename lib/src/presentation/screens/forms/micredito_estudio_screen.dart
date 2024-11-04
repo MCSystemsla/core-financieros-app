@@ -345,6 +345,35 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
                           comoAyudoProfesionalmente:
                               comoAyudoProfesionalmente.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: coincideRespuesta ?? 'N/A',
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: coincideRespuesta ?? 'N/A',
+                        ),
+                        if (coincideRespuesta == 'input.no'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                            response: explicacionInversion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
+                          response: comoAyudoProfesionalmente.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
@@ -1174,35 +1203,49 @@ class _ImpactoSocialCrediEstudioWidgetState
                         context.read<ResponseCubit>().addResponses(
                           responses: [
                             Response(
-                              index: 1,
+                              index: widget.controller.page?.toInt() ?? 0,
                               question: 'forms.miCredi_estudio.question1'.tr(),
                               response: question1Controller.text.trim(),
                             ),
                             Response(
-                                question:
-                                    'forms.miCredi_estudio.question2'.tr(),
-                                response: question2Controller.text.trim(),
-                                index: 1),
+                              index: widget.controller.page?.toInt() ?? 0,
+                              question:
+                                  '¿De qué manera este financiamiento le ayudará a crecer profesionalemente? Explique'
+                                      .tr(),
+                              response: question2Controller.text.trim(),
+                            ),
                             Response(
-                                question:
-                                    'forms.miCredi_estudio.question3'.tr(),
-                                response: question3Controller.text.trim(),
-                                index: 1),
+                              index: widget.controller.page?.toInt() ?? 0,
+                              question:
+                                  '¿Piensa optar a otro estudio superior?*'
+                                      .tr(),
+                              response: optarOtroEstudio ?? 'N/A',
+                            ),
+                            if (optarOtroEstudio == 'input.yes'.tr())
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question: 'Porque?'.tr(),
+                                response: cualEstudio.text.trim(),
+                              ),
                             Response(
-                                question:
-                                    'forms.miCredi_estudio.question4'.tr(),
-                                response: question4Controller.text.trim(),
-                                index: 1),
+                              index: widget.controller.page?.toInt() ?? 0,
+                              question:
+                                  '¿Cuáles son sus planes en los próximos 10 años?*'
+                                      .tr(),
+                              response: question4Controller.text.trim(),
+                            ),
                             Response(
-                                question:
-                                    'forms.miCredi_estudio.question5'.tr(),
-                                response: question5Controller.text.trim(),
-                                index: 1),
+                              index: widget.controller.page?.toInt() ?? 0,
+                              question: '¿Qué aspira laboralmente?*'.tr(),
+                              response: question5Controller.text.trim(),
+                            ),
                             Response(
-                                question:
-                                    'forms.miCredi_estudio.question6'.tr(),
-                                response: question6Controller.text.trim(),
-                                index: 1),
+                              index: widget.controller.page?.toInt() ?? 0,
+                              question:
+                                  'Otros datos relevantes e interesantes del cliente'
+                                      .tr(),
+                              response: question6Controller.text.trim(),
+                            ),
                           ],
                         );
                         widget.controller.nextPage(
@@ -1343,6 +1386,39 @@ class _RecurrentFormImpactoSocialState
                               explicacionAlcanzaraMeta.text.trim(),
                           siguientePaso: siguentePaso.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: 1,
+                          question:
+                              '¿En qué piensa invertir este nuevo préstamo de MiCrediestudio?* Explique',
+                          response: motivoPrestamo.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question:
+                              '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
+                          response: comoAyudaCrecer.text.trim(),
+                        ),
+                        Response(
+                          index: 1,
+                          question:
+                              '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
+                          response: alcanzaraMeta ?? 'N/A',
+                        ),
+                        if (alcanzaraMeta == 'input.yes'.tr())
+                          Response(
+                            index: 1,
+                            question: 'Explica la meta?',
+                            response: explicacionAlcanzaraMeta.text.trim(),
+                          ),
+                        Response(
+                          index: 1,
+                          question: '¿Cuál sería su siguiente paso?',
+                          response: siguentePaso.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

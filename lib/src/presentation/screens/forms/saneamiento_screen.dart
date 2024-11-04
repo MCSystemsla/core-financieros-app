@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
@@ -24,6 +27,7 @@ import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:signature/signature.dart';
 
 class SaneamientoScreen extends StatefulWidget {
@@ -281,8 +285,15 @@ class SaneamientoContent extends StatefulWidget {
 
 class _SaneamientoContentState extends State<SaneamientoContent>
     with AutomaticKeepAliveClientMixin {
+  final ImagePicker picker = ImagePicker();
+  XFile? selectedImage;
+  XFile? selectedImage2;
+  XFile? selectedImage3;
+  XFile? selectedImage4;
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -305,32 +316,104 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             ),
             const Gap(25),
             UploadImageWidget(
+              selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
+              onPressed: () {
+                picker.pickImage(source: ImageSource.camera).then(
+                  (XFile? photo) {
+                    if (photo != null) {
+                      selectedImage = photo;
+                      setState(() {});
+                    }
+                  },
+                );
+              },
             ),
             const Gap(20),
             UploadImageWidget(
+              selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
+              onPressed: () {
+                picker.pickImage(source: ImageSource.camera).then(
+                  (XFile? photo) {
+                    if (photo != null) {
+                      selectedImage2 = photo;
+                      setState(() {});
+                    }
+                  },
+                );
+              },
             ),
             const Gap(15),
             UploadImageWidget(
+              selectedImage: selectedImage3,
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
+              onPressed: () {
+                picker.pickImage(source: ImageSource.camera).then(
+                  (XFile? photo) {
+                    if (photo != null) {
+                      selectedImage3 = photo;
+                      setState(() {});
+                    }
+                  },
+                );
+              },
             ),
             const Gap(15),
             UploadImageWidget(
+              selectedImage: selectedImage4,
               title: '3-  ${'Agregar foto de cedula'.tr()}',
+              onPressed: () {
+                picker.pickImage(source: ImageSource.camera).then(
+                  (XFile? photo) {
+                    if (photo != null) {
+                      selectedImage4 = photo;
+                      setState(() {});
+                    }
+                  },
+                );
+              },
             ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
                 context.pop();
               },
-              onNextPressed: () {
-                widget.controller.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
+              onNextPressed: () async {
+                if (selectedImage == null ||
+                    selectedImage2 == null ||
+                    selectedImage3 == null ||
+                    selectedImage4 == null) {
+                  await customPopUp(
+                    context: context,
+                    dismissOnTouchOutside: false,
+                    size: size,
+                    title: 'Las imagenes son obligatorias',
+                    subtitle: 'Rellena todas las imagenes solicitadas',
+                    dialogType: DialogType.warning,
+                    buttonAcept: true,
+                    textButtonAcept: 'Ok',
+                    colorButtonAcept: AppColors.getPrimaryColor(),
+                    onPressedAccept: () {
+                      context.pop();
+                    },
+                  );
+                  return;
+                }
+                if (context.mounted) {
+                  context.read<UploadUserFileCubit>().saveImages(
+                        imagen1: File(selectedImage!.path),
+                        imagen2: File(selectedImage2!.path),
+                        imagen3: File(selectedImage3!.path),
+                        fotoCedula: File(selectedImage4!.path),
+                      );
+                  widget.controller.nextPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                }
               },
               previousTitle: 'button.exit'.tr(),
               nextTitle: 'button.next'.tr(),

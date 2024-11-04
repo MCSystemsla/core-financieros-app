@@ -9,16 +9,21 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadImageWidget extends StatefulWidget {
+  final VoidCallback onPressed;
   final String title;
-  const UploadImageWidget({super.key, required this.title});
+  final XFile? selectedImage;
+  const UploadImageWidget({
+    super.key,
+    required this.title,
+    required this.onPressed,
+    this.selectedImage,
+  });
 
   @override
   State<UploadImageWidget> createState() => _UploadImageWidgetState();
 }
 
 class _UploadImageWidgetState extends State<UploadImageWidget> {
-  final ImagePicker picker = ImagePicker();
-  XFile? selectedImage;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -50,23 +55,14 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
                   ),
                 ),
               ),
-              onPressed: () async {
-                picker.pickImage(source: ImageSource.camera).then(
-                  (XFile? photo) {
-                    if (photo != null) {
-                      selectedImage = photo;
-                      setState(() {});
-                    }
-                  },
-                );
-              },
+              onPressed: () => widget.onPressed(),
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: selectedImage != null
+                  child: widget.selectedImage != null
                       ? FadeInImage(
                           placeholder: const AssetImage(ImageAsset.loader),
-                          image: FileImage(File(selectedImage!.path)))
+                          image: FileImage(File(widget.selectedImage!.path)))
                       : SvgPicture.asset(
                           ImageAsset.imgForm,
                         ),
