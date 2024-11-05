@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -95,6 +96,12 @@ class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
                               motivoPrestamo: motivoPrestamo.text.trim(),
                               otrosDatosCliente: otrosDatosCliente.text.trim(),
                               planesFuturo: planesFuturo.text.trim(),
+                              solicitudNuevamenorId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
                             );
                         context.read<ResponseCubit>().addResponses(
                           responses: [
@@ -250,6 +257,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           comoMejoraSituacion: comoMejoraSituacion.text.trim(),
                           quienApoya: quienApoya.text.trim(),
                           siguienteMeta: siguienteMeta.text.trim(),
+                          objSolicitudRecurrenteId: int.parse(
+                            context.read<KivaRouteCubit>().state.solicitudId,
+                          ),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [

@@ -97,6 +97,7 @@ class RecurrenteMejoraViviendaCubit
     String? siguienteMeta,
     String? explicacionInversion,
     String? motivoPrestamo,
+    int? objSolicitudRecurrenteId,
   }) async {
     emit(
       state.copyWith(
@@ -105,6 +106,7 @@ class RecurrenteMejoraViviendaCubit
         quienApoya: quienApoya,
         siguienteMeta: siguienteMeta,
         explicacionInversion: explicacionInversion,
+        objSolicitudRecurrenteId: objSolicitudRecurrenteId,
       ),
     );
   }

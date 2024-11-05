@@ -1,6 +1,10 @@
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_aditional_data.dart';
@@ -17,6 +21,7 @@ class EstandarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const isRecurrentForm = true;
     final pageController = PageController();
+    final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -25,6 +30,17 @@ class EstandarScreen extends StatelessWidget {
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
+        ),
+        BlocProvider(
+          create: (ctx) => MotivoPrestamoCubit(repository)
+            ..getMotivoPrestamo(
+              numero: int.parse(
+                context.read<KivaRouteCubit>().state.solicitudId,
+              ),
+            ),
+        ),
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(repository),
         ),
       ],
       child: PopScope(

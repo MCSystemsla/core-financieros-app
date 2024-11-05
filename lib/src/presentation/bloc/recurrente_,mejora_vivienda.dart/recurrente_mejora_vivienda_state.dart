@@ -26,7 +26,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
   final String siguienteMeta;
   const RecurrenteMejoraViviendaState({
     this.status = Status.notStarted,
-    this.objSolicitudRecurrenteId = 262,
+    this.objSolicitudRecurrenteId = 0,
     this.username = '',
     this.tieneTrabajo = false,
     this.database = 'MC_CH',

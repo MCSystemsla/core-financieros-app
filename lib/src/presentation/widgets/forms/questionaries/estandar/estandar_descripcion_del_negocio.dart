@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -146,10 +147,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
             ),
             const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-            ),
+            const MotivoPrestamoWidget(),
             const Gap(20),
             WhiteCard(
               padding: const EdgeInsets.all(5),

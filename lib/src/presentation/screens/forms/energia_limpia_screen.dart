@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -9,6 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/departamentos/departam
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
@@ -70,7 +69,11 @@ class EnergiaLimpiaScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => MotivoPrestamoCubit(responseRepository)
-            ..getMotivoPrestamo(numero: 1071),
+            ..getMotivoPrestamo(
+              numero: int.parse(
+                context.read<KivaRouteCubit>().state.solicitudId,
+              ),
+            ),
         ),
         BlocProvider(
           create: (ctx) => EnergiaLimpiaCubit(responseRepository),
@@ -536,9 +539,15 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () async {
-                            context
-                                .read<UploadUserFileCubit>()
-                                .uploadUserFiles(file);
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context
                                 .read<RecurrenteEnergiaLimpiaCubit>()
                                 .sendAnswers();
@@ -673,6 +682,15 @@ class _SignQuestionary extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -686,6 +704,15 @@ class _SignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context.read<EnergiaLimpiaCubit>().sendAnswers();
                             context.pop();
                           },

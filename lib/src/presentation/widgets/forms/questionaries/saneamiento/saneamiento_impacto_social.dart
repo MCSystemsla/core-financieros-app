@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -133,6 +134,12 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                                 metasProximas: metasProximas.text.trim(),
                                 otrosDatosCliente:
                                     otrosDatosCliente.text.trim(),
+                                solicitudNuevamenorId: int.parse(
+                                  context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudId,
+                                ),
                               );
                           widget.controller.nextPage(
                             duration: const Duration(
@@ -295,6 +302,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
                           explicacionAlcanzaraMeta:
                               explicacionAlcanzaraMeta.text.trim(),
+                          objSolicitudRecurrenteId: int.parse(
+                            context.read<KivaRouteCubit>().state.solicitudId,
+                          ),
                         );
                     widget.controller.nextPage(
                       duration: const Duration(

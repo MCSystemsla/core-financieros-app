@@ -56,6 +56,7 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
     String? comoImpactariaNegocio,
     String? comoMejoraCalidadVida,
     String? otrosDatosCliente,
+    int? objSolicitudNuevamenorId,
   }) {
     emit(
       state.copyWith(
@@ -74,6 +75,7 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
         comoImpactariaNegocio: comoImpactariaNegocio,
         comoMejoraCalidadVida: comoMejoraCalidadVida,
         otrosDatosCliente: otrosDatosCliente,
+        objSolicitudNuevamenorId: objSolicitudNuevamenorId,
       ),
     );
   }

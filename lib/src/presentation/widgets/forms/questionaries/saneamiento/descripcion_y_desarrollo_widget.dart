@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agu
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -203,6 +204,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
               //   title:
               //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
               // ),
+
+              const Gap(10),
+              const MotivoPrestamoWidget(),
               const Gap(10),
               WhiteCard(
                 padding: const EdgeInsets.all(5),

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -27,14 +28,17 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     ));
   }
 
-  Future<void> uploadUserFiles(File fotoFirma) async {
+  Future<void> uploadUserFiles({
+    required File fotoFirma,
+    required int solicitudId,
+  }) async {
     await repository.uploadUserFiles(
       imagen1: state.imagen1!,
       imagen2: state.imagen2!,
       imagen3: state.imagen3!,
       fotoFirma: fotoFirma,
       fotoCedula: state.fotoCedula!,
-      solicitudId: 3925,
+      solicitudId: solicitudId,
       formularioKiva: 'ScrKivaCreditoEstandarRecurrente',
       database: 'MC_CH',
     );
@@ -51,9 +55,9 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
 
       emit(state.copyWith(fotoFirma: file));
       // Actualiza el estado con la ruta del archivo
-      print('Firma guardada en: $filePath');
+      log('Firma guardada en: $filePath');
     } catch (e) {
-      print("Error al guardar la firma: $e");
+      log('Error al guardar la firma: $e');
     }
   }
 }

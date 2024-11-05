@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -9,9 +10,12 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
@@ -27,6 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 class MejoraDeViviendaScreen extends StatefulWidget {
@@ -52,6 +57,9 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (ctx) => UploadUserFileCubit(ResponsesRepositoryImpl()),
+        ),
+        BlocProvider(
           create: (ctx) => MejoraViviendaCubit(ResponsesRepositoryImpl()),
         ),
         BlocProvider(
@@ -67,6 +75,14 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
         BlocProvider(
           create: (ctx) =>
               ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
+        ),
+        BlocProvider(
+          create: (ctx) => MotivoPrestamoCubit(ResponsesRepositoryImpl())
+            ..getMotivoPrestamo(
+              numero: int.parse(
+                context.read<KivaRouteCubit>().state.solicitudId,
+              ),
+            ),
         ),
       ],
       child: PopScope(
@@ -234,6 +250,25 @@ class RecurrentSign extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
+                        context
+                            .read<RecurrenteMejoraViviendaCubit>()
+                            .saveAnswers3(
+                              objSolicitudRecurrenteId: int.tryParse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                            );
                         await customPopUp(
                           context: context,
                           size: size,
@@ -247,6 +282,15 @@ class RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context
                                 .read<RecurrenteMejoraViviendaCubit>()
                                 .sendAnswers();

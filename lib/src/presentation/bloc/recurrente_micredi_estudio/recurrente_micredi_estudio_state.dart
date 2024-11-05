@@ -44,7 +44,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     this.quienApoya = '',
     this.motivoPrestamo = '',
     this.comoAyudaCrecer = '',
-    this.objSolicitudRecurrenteId = 262,
+    this.objSolicitudRecurrenteId = 0,
     this.coincideRespuesta = false,
     this.explicacionInversion = '',
     this.comoAyudoProfesionalmente = '',

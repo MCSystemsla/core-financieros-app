@@ -73,6 +73,7 @@ class RecurrenteMicrediEstudioCubit
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    int? objSolicitudRecurrenteId,
   }) {
     emit(
       state.copyWith(
@@ -97,6 +98,7 @@ class RecurrenteMicrediEstudioCubit
         siguientePaso: siguientePaso,
         alcanzaraMeta: alcanzaraMeta,
         explicacionAlcanzaraMeta: explicacionAlcanzaraMeta,
+        objSolicitudRecurrenteId: objSolicitudRecurrenteId,
       ),
     );
   }

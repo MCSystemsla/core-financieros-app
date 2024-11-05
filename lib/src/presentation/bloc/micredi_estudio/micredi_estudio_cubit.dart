@@ -109,6 +109,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
         planFuturo: planFuturo,
         aspiraLaboralmente: aspiraLaboralmente,
         otrosDatosCliente: otrosDatosCliente,
+        objSolicitudNuevamenorId: objSolicitudNuevamenorId,
       ),
     );
   }

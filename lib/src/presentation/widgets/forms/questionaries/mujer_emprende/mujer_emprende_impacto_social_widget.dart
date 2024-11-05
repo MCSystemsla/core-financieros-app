@@ -1,7 +1,9 @@
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -128,6 +130,12 @@ class _MujerEmprendeImpactoSocialState
                               comoImpactariaNegocio: question3.text.trim(),
                               comoMejoraCalidadVida: question4.text.trim(),
                               otrosDatosCliente: question5.text.trim(),
+                              objSolicitudNuevamenorId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
                             );
                         widget.pageController.nextPage(
                           duration: const Duration(
@@ -193,6 +201,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                       fontWeight: FontWeight.w500,
                     ),
               ),
+              const MotivoPrestamoWidget(),
               const Gap(20),
               CommentaryWidget(
                 textEditingController: motivoPrestamo,
@@ -333,6 +342,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
                           explicacionAlcanzaraMeta:
                               alcanzaraMetaExplicacion.text.trim(),
+                          objSolicitudRecurrenteId: int.parse(
+                            context.read<KivaRouteCubit>().state.solicitudId,
+                          ),
                         );
                     widget.pageController.nextPage(
                       duration: const Duration(
