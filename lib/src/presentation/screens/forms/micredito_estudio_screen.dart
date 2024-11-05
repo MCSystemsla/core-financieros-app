@@ -381,6 +381,9 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
                               explicacionInversion.text.trim(),
                           comoAyudoProfesionalmente:
                               comoAyudoProfesionalmente.text.trim(),
+                          objSolicitudRecurrenteId: int.parse(
+                            context.read<KivaRouteCubit>().state.solicitudId,
+                          ),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [

@@ -34,7 +34,7 @@ class MicrediEstudioState extends Equatable {
   const MicrediEstudioState({
     this.status = Status.notStarted,
     this.database = 'MC_CH',
-    this.objSolicitudNuevamenorId = 262,
+    this.objSolicitudNuevamenorId = 0,
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
     this.tiempoActividad = 0,
