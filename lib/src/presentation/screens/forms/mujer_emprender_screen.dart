@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_entorno_social_widget.dart';
@@ -20,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 class MujerEmprenderScreen extends StatelessWidget {
@@ -45,6 +50,9 @@ class MujerEmprenderScreen extends StatelessWidget {
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
+        ),
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(repository),
         ),
       ],
       child: PopScope(
@@ -203,6 +211,15 @@ class _RecurrentSignSignature extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -216,6 +233,15 @@ class _RecurrentSignSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context
                                 .read<RecurrenteMujerEmprendeCubit>()
                                 .sendAnswers();
@@ -351,6 +377,15 @@ class _SignSignature extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -364,6 +399,15 @@ class _SignSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context.read<MujerEmprendeCubit>().sendAnswers();
                             context.pop();
                           },

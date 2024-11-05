@@ -37,7 +37,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
     this.motivoPrestamo = '',
-    this.objSolicitudRecurrenteId = 262,
+    this.objSolicitudRecurrenteId = 0,
     this.coincideRespuesta = false,
     this.explicacionInversion = '',
     this.situacionAntesAhora = '',

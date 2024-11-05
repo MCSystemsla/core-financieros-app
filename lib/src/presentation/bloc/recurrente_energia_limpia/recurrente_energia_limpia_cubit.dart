@@ -90,6 +90,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
     String? comoMejoraSituacion,
     String? quienApoya,
     String? siguienteMeta,
+    int? objSolicitudRecurrenteId,
   }) {
     emit(
       state.copyWith(
@@ -100,6 +101,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
         comoMejoraSituacion: comoMejoraSituacion,
         quienApoya: quienApoya,
         siguienteMeta: siguienteMeta,
+        objSolicitudRecurrenteId: objSolicitudRecurrenteId,
       ),
     );
   }

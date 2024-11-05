@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -102,6 +103,12 @@ class _ImpactoSocialKivaObjetiveWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MejoraViviendaCubit>().saveAnswer2(
+                              solicitudNuevamenorId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
                               motivoPrestamo: question2Controller.text.trim(),
                               comoAyudara: question2Controller.text.trim(),
                               planesFuturo: question3Controller.text.trim(),

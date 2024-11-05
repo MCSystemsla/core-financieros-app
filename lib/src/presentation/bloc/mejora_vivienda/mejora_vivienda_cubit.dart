@@ -51,6 +51,7 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
     required String comoAyudara,
     required String planesFuturo,
     required String otrosDatosCliente,
+    required int solicitudNuevamenorId,
   }) {
     emit(
       state.copyWith(
@@ -58,6 +59,7 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
         comoAyudara: comoAyudara,
         planesFuturo: planesFuturo,
         otrosDatosCliente: otrosDatosCliente,
+        solicitudNuevamenorId: solicitudNuevamenorId,
       ),
     );
     log(state.toString());

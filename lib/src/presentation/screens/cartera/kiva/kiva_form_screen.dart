@@ -66,9 +66,8 @@ class _RequestWidget extends StatelessWidget {
     return ListTile(
       title: Text('${solicitud.numero} - ${solicitud.nombre.capitalizeAll}'),
       onTap: () async {
-        context
-            .read<KivaRouteCubit>()
-            .setCurrentRouteProduct(solicitud.producto);
+        context.read<KivaRouteCubit>().setCurrentRouteProduct(
+            route: solicitud.producto, solicitudId: solicitud.id);
         await context.push('/online', extra: solicitud.producto);
       },
       subtitle: Text(

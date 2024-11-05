@@ -84,12 +84,14 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
     String? motivoPrestamo,
     String? planesFuturo,
     String? otrosDatosCliente,
+    int? solicitudNuevamenorId,
   }) {
     emit(
       state.copyWith(
         motivoPrestamo: motivoPrestamo,
         planesFuturo: planesFuturo,
         otrosDatosCliente: otrosDatosCliente,
+        solicitudNuevamenorId: solicitudNuevamenorId,
       ),
     );
   }

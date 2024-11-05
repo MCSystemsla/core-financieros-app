@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/domain/repository/departamentos/departam
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
@@ -28,6 +29,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 class SaneamientoScreen extends StatefulWidget {
@@ -83,6 +85,9 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
         ),
         BlocProvider(
           create: (ctx) => RecurrenteAguaYSaneamientoCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(repository),
         ),
       ],
       child: PopScope(
@@ -241,6 +246,15 @@ class _RecurrentSign extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -254,6 +268,15 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context
                                 .read<RecurrenteAguaYSaneamientoCubit>()
                                 .sendAnswers();
@@ -588,6 +611,15 @@ class _SaneamientoSign extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -601,6 +633,15 @@ class _SaneamientoSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context.read<AguaYSaneamientoCubit>().sendAnswers();
                             context.pop();
                           },
@@ -734,6 +775,15 @@ class SignQuestionaryWidget extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -747,6 +797,15 @@ class SignQuestionaryWidget extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            context.read<UploadUserFileCubit>().uploadUserFiles(
+                                  fotoFirma: file,
+                                  solicitudId: int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                );
                             context.read<MejoraViviendaCubit>().sendAnswers();
                             context.pop();
                           },

@@ -306,7 +306,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     //   return false;
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.fields['solicitudId'] = '3925';
+      request.fields['solicitudId'] = solicitudId.toString();
       request.fields['formularioKiva'] = 'ScrKivaCreditoEstandarRecurrente';
       request.fields['database'] = 'MC_CH';
 
