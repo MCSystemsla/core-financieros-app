@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -53,6 +54,14 @@ class MujerEmprenderScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => UploadUserFileCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => MotivoPrestamoCubit(repository)
+            ..getMotivoPrestamo(
+              numero: int.parse(
+                context.read<KivaRouteCubit>().state.solicitudId,
+              ),
+            ),
         ),
       ],
       child: PopScope(

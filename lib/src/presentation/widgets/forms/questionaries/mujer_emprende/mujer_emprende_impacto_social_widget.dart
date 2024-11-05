@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_e
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -200,6 +201,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                       fontWeight: FontWeight.w500,
                     ),
               ),
+              const MotivoPrestamoWidget(),
               const Gap(20),
               CommentaryWidget(
                 textEditingController: motivoPrestamo,

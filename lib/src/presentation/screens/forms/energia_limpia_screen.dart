@@ -69,7 +69,11 @@ class EnergiaLimpiaScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => MotivoPrestamoCubit(responseRepository)
-            ..getMotivoPrestamo(numero: 1071),
+            ..getMotivoPrestamo(
+              numero: int.parse(
+                context.read<KivaRouteCubit>().state.solicitudId,
+              ),
+            ),
         ),
         BlocProvider(
           create: (ctx) => EnergiaLimpiaCubit(responseRepository),

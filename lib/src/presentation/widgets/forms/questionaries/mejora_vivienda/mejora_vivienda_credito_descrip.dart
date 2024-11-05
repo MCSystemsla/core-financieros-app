@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_viv
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -69,6 +70,7 @@ class _MejoraViviendaCreditoDescripState
               //   title:
               //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
               // ),
+              const MotivoPrestamoWidget(),
               const Gap(20),
               WhiteCard(
                 padding: const EdgeInsets.all(5),
