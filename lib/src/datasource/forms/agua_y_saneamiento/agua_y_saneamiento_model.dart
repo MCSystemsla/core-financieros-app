@@ -5,7 +5,7 @@ String aguaSaneamientoModelToJson(AguaSaneamientoModel data) =>
 
 class AguaSaneamientoModel {
   final String database;
-  final int solicitudNuevamenorId;
+  final int objSolicitudNuevamenorId;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
   final int tiempoActividad;
@@ -28,7 +28,7 @@ class AguaSaneamientoModel {
 
   AguaSaneamientoModel({
     required this.database,
-    required this.solicitudNuevamenorId,
+    required this.objSolicitudNuevamenorId,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
     required this.tiempoActividad,
@@ -52,7 +52,7 @@ class AguaSaneamientoModel {
 
   Map<String, dynamic> toJson() => {
         'database': database,
-        'solicitudNuevamenorId': solicitudNuevamenorId,
+        'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,
