@@ -16,7 +16,7 @@ class RecurrenteMejoraViviendaCubit
   Future<void> sendAnswers() async {
     try {
       emit(state.copyWith(status: Status.inProgress));
-      await repository.mejoraViviendaRecurrenteAnswer(
+      final resp = await repository.mejoraViviendaRecurrenteAnswer(
         mejoraViviendaRecurrente: MejoraViviendaRecurrente(
           database: state.database,
           objSolicitudRecurrenteId: state.objSolicitudRecurrenteId,
@@ -41,6 +41,10 @@ class RecurrenteMejoraViviendaCubit
           siguienteMeta: state.siguienteMeta,
         ),
       );
+      if (!resp) {
+        emit(state.copyWith(status: Status.error));
+        return;
+      }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error));

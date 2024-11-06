@@ -13,7 +13,7 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      await repository.mujerEmprendeAnswer(
+      final resp = await repository.mujerEmprendeAnswer(
         mujerEmprendeModel: MujerEmprendeModel(
           database: state.database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
@@ -34,6 +34,10 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
+      if (!resp) {
+        emit(state.copyWith(status: Status.error));
+        return;
+      }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error));

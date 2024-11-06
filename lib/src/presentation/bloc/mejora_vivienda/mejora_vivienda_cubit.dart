@@ -68,7 +68,7 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      await repository.mejoraViviendaAnswer(
+      final resp = await repository.mejoraViviendaAnswer(
           mejoraVivienda: MejoraViviendaAnswer(
         solicitudNuevamenorId: state.solicitudNuevamenorId,
         username: state.username,
@@ -90,6 +90,10 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
         planesFuturo: state.planesFuturo,
         otrosDatosCliente: state.otrosDatosCliente,
       ));
+      if (!resp) {
+        emit(state.copyWith(status: Status.error));
+        return;
+      }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error));

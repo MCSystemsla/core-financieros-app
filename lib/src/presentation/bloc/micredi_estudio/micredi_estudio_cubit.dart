@@ -13,7 +13,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      await repository.miCrediEstudioAnswer(
+      final resp = await repository.miCrediEstudioAnswer(
         miCrediEstudioModel: MiCrediEstudioModel(
           database: state.database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
@@ -45,6 +45,10 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
+      if (!resp) {
+        emit(state.copyWith(status: Status.error));
+        return;
+      }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error));

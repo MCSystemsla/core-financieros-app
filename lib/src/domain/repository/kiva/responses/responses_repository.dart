@@ -19,31 +19,31 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ResponsesRepository {
-  Future<void> mejoraViviendaAnswer({
+  Future<bool> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   });
-  Future<void> mejoraViviendaRecurrenteAnswer({
+  Future<bool> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   });
-  Future<void> energiaLimpia({
+  Future<bool> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   });
-  Future<void> recurrenteREnergiaLimpiaAnswer({
+  Future<bool> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   });
-  Future<void> aguaYSaneamientoAnswer({
+  Future<bool> aguaYSaneamientoAnswer({
     required AguaSaneamientoModel aguaSaneamientoModel,
   });
-  Future<void> recurrenteAguaYSaneamientoAnswer({
+  Future<bool> recurrenteAguaYSaneamientoAnswer({
     required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
   });
-  Future<void> mujerEmprendeAnswer({
+  Future<bool> mujerEmprendeAnswer({
     required MujerEmprendeModel mujerEmprendeModel,
   });
-  Future<void> recurrenteMujerEmprendeAnswer({
+  Future<bool> recurrenteMujerEmprendeAnswer({
     required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
   });
-  Future<void> miCrediEstudioAnswer({
+  Future<bool> miCrediEstudioAnswer({
     required MiCrediEstudioModel miCrediEstudioModel,
   });
   Future<bool> recurrenteMiCrediEstudioAnswer({
@@ -69,7 +69,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   final _logger = Logger();
 
   @override
-  Future<void> mejoraViviendaAnswer({
+  Future<bool> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   }) async {
     final endpoint = MejoraViviendaKivaResponsesEndpoind(
@@ -77,14 +77,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
-      throw AppException.toAppException(e.toString());
+      _logger.e(e);
+      return false;
     }
   }
 
   @override
-  Future<void> mejoraViviendaRecurrenteAnswer({
+  Future<bool> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   }) async {
     try {
@@ -92,14 +95,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         mejoraViviendaAnswer: mejoraViviendaRecurrente,
       );
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
-      throw AppException.toAppException(e);
+      _logger.e(e);
+      return false;
     }
   }
 
   @override
-  Future<void> energiaLimpia({
+  Future<bool> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = EnergiaLimpiaEndpoint(
@@ -107,15 +113,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
   @override
-  Future<void> recurrenteREnergiaLimpiaAnswer({
+  Future<bool> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = RecurrenteEnergiaLimpiaEndpoint(
@@ -123,15 +131,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
   @override
-  Future<void> aguaYSaneamientoAnswer({
+  Future<bool> aguaYSaneamientoAnswer({
     required AguaSaneamientoModel aguaSaneamientoModel,
   }) async {
     final endpoint = AguaSaneamientoEndpoint(
@@ -139,15 +149,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
   @override
-  Future<void> recurrenteAguaYSaneamientoAnswer({
+  Future<bool> recurrenteAguaYSaneamientoAnswer({
     required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
   }) async {
     final endpoint = RecurrenteAguaSaneamientoEndpoint(
@@ -155,14 +167,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
-      throw AppException.toAppException(e);
+      _logger.e(e);
+      return false;
     }
   }
 
   @override
-  Future<void> mujerEmprendeAnswer({
+  Future<bool> mujerEmprendeAnswer({
     required MujerEmprendeModel mujerEmprendeModel,
   }) async {
     final endpoint = MujerEmprendeEndpoint(
@@ -170,15 +185,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
   @override
-  Future<void> recurrenteMujerEmprendeAnswer({
+  Future<bool> recurrenteMujerEmprendeAnswer({
     required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
   }) async {
     final endpoint = RecurrenteMujerEmprendeEndpoint(
@@ -186,15 +203,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
   @override
-  Future<void> miCrediEstudioAnswer({
+  Future<bool> miCrediEstudioAnswer({
     required MiCrediEstudioModel miCrediEstudioModel,
   }) async {
     final endpoint = MiCrediEstudioEndpoint(
@@ -202,10 +221,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
       _logger.i(resp);
+      return true;
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return false;
     }
   }
 
