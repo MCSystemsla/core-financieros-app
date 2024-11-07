@@ -368,7 +368,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               ),
               const Gap(20),
               CommentaryWidget(
-                title: '¿Que edades tienen sus hijos? ',
+                title: '¿Que edades tienen sus hijos?',
                 textEditingController: edadHijos,
               ),
               WhiteCard(
@@ -423,7 +423,33 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                           index: widget.pageController.page?.toInt() ?? 0,
                           question: '¿Tiene otros ingresos?¿Cuales?*',
                           response: otrosIngresos ?? 'N/A',
-                        )
+                        ),
+                        if (otrosIngresos == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question: 'Cuales?',
+                            response: otrosIngresosDescripcion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Número de personas a cargo:*',
+                          response: personasCargo.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Que edades tienen sus hijos?',
+                          response: edadHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Qué tipo de estudios reciben sus hijos?',
+                          response: tipoEstudioHijos ?? 'N/A',
+                        ),
                       ],
                     );
                     widget.pageController.nextPage(

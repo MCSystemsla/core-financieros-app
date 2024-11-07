@@ -1,7 +1,10 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -101,6 +104,28 @@ class _DescripcionYDesarrolloDelNegocioWidgetState
                               conocioMujerEmprende: question2.text.trim(),
                               impulsoOptar: question3.text.trim(),
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  'Cuéntenos, ¿Qué la motivó a emprender su negocio?*',
+                              response: question1.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  'Coméntenos, ¿ Cómo conoció el proyecto de Mujer Emprende en MiCrédito?',
+                              response: question2.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Qué la impulsó a optar a este tipo de crédito?*',
+                              response: question3.text.trim(),
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,
@@ -167,6 +192,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               //   title:
               //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
               // ),
+              const MotivoPrestamoWidget(),
               const Gap(20),
               WhiteCard(
                 marginTop: 15,
@@ -223,6 +249,29 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               explicacionInversion.text.trim(),
                           comoAyudo: comoAyudo.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: coincideRespuesta ?? 'N/A',
+                        ),
+                        if (coincideRespuesta == 'input.no'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                            response: explicacionInversion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿De qué manera le ayudó este préstamo Kiva?*',
+                          response: comoAyudo.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
