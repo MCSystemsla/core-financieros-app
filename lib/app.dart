@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +32,10 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => KivaRouteCubit(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (ctx) => SolicitudesPendientesLocalDbCubit()..initDB(),
         ),
       ],
       child: BlocConsumer<LangCubit, LangState>(
