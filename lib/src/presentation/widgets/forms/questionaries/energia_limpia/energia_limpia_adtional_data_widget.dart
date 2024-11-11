@@ -218,7 +218,8 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? tieneTrabajo;
   String? otrosIngresos;
@@ -228,6 +229,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Form(
@@ -372,4 +374,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,7 +1,9 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
@@ -232,6 +234,17 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                                 tiempoActividad:
                                     int.tryParse(tiempoActividad.text.trim()),
                               );
+                          context.read<ResponseCubit>().addResponses(
+                            responses: [
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                                response: tieneTrabajo ?? 'N/A',
+                              ),
+                            ],
+                          );
+
                           widget.controller.nextPage(
                             duration: const Duration(
                               milliseconds: 350,
@@ -265,7 +278,8 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   final personasCargo = TextEditingController();
   final trabajoNegocioDescripcion = TextEditingController();
   final tiempoActividad = TextEditingController();
@@ -280,6 +294,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -462,4 +477,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

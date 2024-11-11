@@ -20,9 +20,11 @@ class EstandarAditionalData extends StatefulWidget {
   State<EstandarAditionalData> createState() => _EstandarAditionalDataState();
 }
 
-class _EstandarAditionalDataState extends State<EstandarAditionalData> {
+class _EstandarAditionalDataState extends State<EstandarAditionalData>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrenteForm) {
       true => const SizedBox(),
       false => Column(
@@ -77,4 +79,7 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData> {
         ),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

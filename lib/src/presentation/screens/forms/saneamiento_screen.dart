@@ -350,8 +350,15 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () {
-                picker.pickImage(source: ImageSource.camera).then(
+              onPressed: () async {
+                await picker
+                    .pickImage(
+                  source: ImageSource.camera,
+                  maxHeight: 600,
+                  maxWidth: 600,
+                  imageQuality: 85,
+                )
+                    .then(
                   (XFile? photo) {
                     if (photo != null) {
                       selectedImage = photo;
@@ -365,8 +372,8 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () {
-                picker.pickImage(source: ImageSource.camera).then(
+              onPressed: () async {
+                await picker.pickImage(source: ImageSource.camera).then(
                   (XFile? photo) {
                     if (photo != null) {
                       selectedImage2 = photo;
@@ -380,8 +387,8 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage3,
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () {
-                picker.pickImage(source: ImageSource.camera).then(
+              onPressed: () async {
+                await picker.pickImage(source: ImageSource.camera).then(
                   (XFile? photo) {
                     if (photo != null) {
                       selectedImage3 = photo;
@@ -395,8 +402,8 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage4,
               title: '3-  ${'Agregar foto de cedula'.tr()}',
-              onPressed: () {
-                picker.pickImage(source: ImageSource.camera).then(
+              onPressed: () async {
+                await picker.pickImage(source: ImageSource.camera).then(
                   (XFile? photo) {
                     if (photo != null) {
                       selectedImage4 = photo;

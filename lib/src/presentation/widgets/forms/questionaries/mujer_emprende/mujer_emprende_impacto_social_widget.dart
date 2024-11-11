@@ -1,6 +1,8 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
@@ -26,8 +28,8 @@ class MujerEmprendeImpactoSocial extends StatefulWidget {
       _MujerEmprendeImpactoSocialState();
 }
 
-class _MujerEmprendeImpactoSocialState
-    extends State<MujerEmprendeImpactoSocial> {
+class _MujerEmprendeImpactoSocialState extends State<MujerEmprendeImpactoSocial>
+    with AutomaticKeepAliveClientMixin {
   final question1 = TextEditingController();
   final question2 = TextEditingController();
   final question3 = TextEditingController();
@@ -37,6 +39,7 @@ class _MujerEmprendeImpactoSocialState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           pageController: widget.pageController,
@@ -137,6 +140,40 @@ class _MujerEmprendeImpactoSocialState
                                     .solicitudId,
                               ),
                             );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Para qué solicitó este préstamo?* Explique',
+                              response: question1.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Quién o quiénes le estarían apoyando en su emprendimiento?*',
+                              response: question2.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿De qué manera este financiamiento va impactar en su negocio ?*',
+                              response: question3.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Cómo cree usted que este crédito va a mejorar su calidad de vida?*',
+                              response: question4.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  'Otros datos relevantes e interesantes del cliente',
+                              response: question5.text.trim(),
+                            ),
+                          ],
+                        );
                         widget.pageController.nextPage(
                           duration: const Duration(
                             milliseconds: 350,
@@ -156,6 +193,9 @@ class _MujerEmprendeImpactoSocialState
         )
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrentForm extends StatefulWidget {
@@ -275,10 +315,11 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 ),
               ),
               const Gap(20),
-              CommentaryWidget(
-                title: '¿Porqué?*',
-                textEditingController: mejoraEntornoExplicacion,
-              ),
+              if (mejoraraEntorno == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: '¿Porqué?*',
+                  textEditingController: mejoraEntornoExplicacion,
+                ),
               const Gap(20),
               CommentaryWidget(
                 title: 'A futuro ¿Cuál sería su siguiente paso?',
@@ -309,16 +350,17 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   },
                 ),
               ),
-              CommentaryWidget(
-                title: '¿Por qué?*',
-                textEditingController: alcanzaraMetaExplicacion,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
-              ),
+              if (alcanzaraMeta == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: '¿Por qué?*',
+                  textEditingController: alcanzaraMetaExplicacion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -346,6 +388,56 @@ class _RecurrentFormState extends State<_RecurrentForm>
                             context.read<KivaRouteCubit>().state.solicitudId,
                           ),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿En qué piensa invertir este nuevo préstamo de Mujer Emprende?* Explique',
+                          response: motivoPrestamo.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Hay alguien que le apoye en su negocio?',
+                          response: apoyanNegocio ?? 'N/A',
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Hay alguien que le apoye en su negocio?',
+                          response: apoyanNegocio ?? 'N/A',
+                        ),
+                        if (apoyanNegocio == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                'De ser positivo, favor responder cuántas personas',
+                            response: cuantosApoyan ?? 'N/A',
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?',
+                          response: mejoraraEntorno ?? 'N/A',
+                        ),
+                        if (mejoraraEntorno == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question: '¿Porqué?*',
+                            response: mejoraEntornoExplicacion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'A futuro ¿Cuál sería su siguiente paso?',
+                          response: siguientePaso.text.trim(),
+                        ),
+                        if (alcanzaraMeta == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question: '¿Por qué?*',
+                            response: alcanzaraMetaExplicacion.text.trim(),
+                          ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
