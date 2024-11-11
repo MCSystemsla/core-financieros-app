@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'solicitudes_pendientes.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,14 @@ part of 'user.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetUserCollection on Isar {
-  IsarCollection<User> get users => this.collection();
+extension GetSolicitudesPendientesCollection on Isar {
+  IsarCollection<SolicitudesPendientes> get solicitudesPendientes =>
+      this.collection();
 }
 
-const UserSchema = CollectionSchema(
-  name: r'User',
-  id: -7838171048429979076,
+const SolicitudesPendientesSchema = CollectionSchema(
+  name: r'SolicitudesPendientes',
+  id: -897172854623419597,
   properties: {
     r'estado': PropertySchema(
       id: 0,
@@ -27,53 +28,63 @@ const UserSchema = CollectionSchema(
       name: r'fecha',
       type: IsarType.dateTime,
     ),
-    r'moneda': PropertySchema(
+    r'idAsesor': PropertySchema(
       id: 2,
+      name: r'idAsesor',
+      type: IsarType.long,
+    ),
+    r'moneda': PropertySchema(
+      id: 3,
       name: r'moneda',
       type: IsarType.string,
     ),
     r'monto': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'monto',
       type: IsarType.double,
     ),
     r'nombre': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'numero': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'numero',
       type: IsarType.string,
     ),
     r'producto': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'producto',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'solicitudId',
+      type: IsarType.string,
+    ),
+    r'sucursal': PropertySchema(
+      id: 9,
+      name: r'sucursal',
       type: IsarType.string,
     )
   },
-  estimateSize: _userEstimateSize,
-  serialize: _userSerialize,
-  deserialize: _userDeserialize,
-  deserializeProp: _userDeserializeProp,
+  estimateSize: _solicitudesPendientesEstimateSize,
+  serialize: _solicitudesPendientesSerialize,
+  deserialize: _solicitudesPendientesDeserialize,
+  deserializeProp: _solicitudesPendientesDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {},
   embeddedSchemas: {},
-  getId: _userGetId,
-  getLinks: _userGetLinks,
-  attach: _userAttach,
+  getId: _solicitudesPendientesGetId,
+  getLinks: _solicitudesPendientesGetLinks,
+  attach: _solicitudesPendientesAttach,
   version: '3.1.0+1',
 );
 
-int _userEstimateSize(
-  User object,
+int _solicitudesPendientesEstimateSize(
+  SolicitudesPendientes object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -114,45 +125,55 @@ int _userEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.sucursal;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
-void _userSerialize(
-  User object,
+void _solicitudesPendientesSerialize(
+  SolicitudesPendientes object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.estado);
   writer.writeDateTime(offsets[1], object.fecha);
-  writer.writeString(offsets[2], object.moneda);
-  writer.writeDouble(offsets[3], object.monto);
-  writer.writeString(offsets[4], object.nombre);
-  writer.writeString(offsets[5], object.numero);
-  writer.writeString(offsets[6], object.producto);
-  writer.writeString(offsets[7], object.solicitudId);
+  writer.writeLong(offsets[2], object.idAsesor);
+  writer.writeString(offsets[3], object.moneda);
+  writer.writeDouble(offsets[4], object.monto);
+  writer.writeString(offsets[5], object.nombre);
+  writer.writeString(offsets[6], object.numero);
+  writer.writeString(offsets[7], object.producto);
+  writer.writeString(offsets[8], object.solicitudId);
+  writer.writeString(offsets[9], object.sucursal);
 }
 
-User _userDeserialize(
+SolicitudesPendientes _solicitudesPendientesDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = User();
+  final object = SolicitudesPendientes();
   object.estado = reader.readStringOrNull(offsets[0]);
   object.fecha = reader.readDateTimeOrNull(offsets[1]);
   object.id = id;
-  object.moneda = reader.readStringOrNull(offsets[2]);
-  object.monto = reader.readDoubleOrNull(offsets[3]);
-  object.nombre = reader.readStringOrNull(offsets[4]);
-  object.numero = reader.readStringOrNull(offsets[5]);
-  object.producto = reader.readStringOrNull(offsets[6]);
-  object.solicitudId = reader.readStringOrNull(offsets[7]);
+  object.idAsesor = reader.readLongOrNull(offsets[2]);
+  object.moneda = reader.readStringOrNull(offsets[3]);
+  object.monto = reader.readDoubleOrNull(offsets[4]);
+  object.nombre = reader.readStringOrNull(offsets[5]);
+  object.numero = reader.readStringOrNull(offsets[6]);
+  object.producto = reader.readStringOrNull(offsets[7]);
+  object.solicitudId = reader.readStringOrNull(offsets[8]);
+  object.sucursal = reader.readStringOrNull(offsets[9]);
   return object;
 }
 
-P _userDeserializeProp<P>(
+P _solicitudesPendientesDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -164,44 +185,54 @@ P _userDeserializeProp<P>(
     case 1:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 3:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 4:
       return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Id _userGetId(User object) {
+Id _solicitudesPendientesGetId(SolicitudesPendientes object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _userGetLinks(User object) {
+List<IsarLinkBase<dynamic>> _solicitudesPendientesGetLinks(
+    SolicitudesPendientes object) {
   return [];
 }
 
-void _userAttach(IsarCollection<dynamic> col, Id id, User object) {
+void _solicitudesPendientesAttach(
+    IsarCollection<dynamic> col, Id id, SolicitudesPendientes object) {
   object.id = id;
 }
 
-extension UserQueryWhereSort on QueryBuilder<User, User, QWhere> {
-  QueryBuilder<User, User, QAfterWhere> anyId() {
+extension SolicitudesPendientesQueryWhereSort
+    on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QWhere> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhere>
+      anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
-  QueryBuilder<User, User, QAfterWhereClause> idEqualTo(Id id) {
+extension SolicitudesPendientesQueryWhere on QueryBuilder<SolicitudesPendientes,
+    SolicitudesPendientes, QWhereClause> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhereClause>
+      idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -210,7 +241,8 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
     });
   }
 
-  QueryBuilder<User, User, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhereClause>
+      idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -232,8 +264,8 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
     });
   }
 
-  QueryBuilder<User, User, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhereClause>
+      idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -241,8 +273,8 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
     });
   }
 
-  QueryBuilder<User, User, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhereClause>
+      idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -250,7 +282,8 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
     });
   }
 
-  QueryBuilder<User, User, QAfterWhereClause> idBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterWhereClause>
+      idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -267,8 +300,10 @@ extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
   }
 }
 
-extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
-  QueryBuilder<User, User, QAfterFilterCondition> estadoIsNull() {
+extension SolicitudesPendientesQueryFilter on QueryBuilder<
+    SolicitudesPendientes, SolicitudesPendientes, QFilterCondition> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'estado',
@@ -276,7 +311,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'estado',
@@ -284,7 +320,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -297,7 +334,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -312,7 +350,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -327,7 +366,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -346,7 +386,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -359,7 +400,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -372,8 +414,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoContains(String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      estadoContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'estado',
@@ -383,8 +426,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoMatches(String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      estadoMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'estado',
@@ -394,7 +438,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'estado',
@@ -403,7 +448,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> estadoIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> estadoIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'estado',
@@ -412,7 +458,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'fecha',
@@ -420,7 +467,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'fecha',
@@ -428,8 +476,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaEqualTo(
-      DateTime? value) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'fecha',
@@ -438,7 +486,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaGreaterThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -451,7 +500,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaLessThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -464,7 +514,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> fechaBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> fechaBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
@@ -481,7 +532,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -490,7 +542,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -503,7 +556,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> idLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -516,7 +570,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> idBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -533,7 +588,82 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'idAsesor',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'idAsesor',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'idAsesor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'idAsesor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'idAsesor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> idAsesorBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'idAsesor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'moneda',
@@ -541,7 +671,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'moneda',
@@ -549,7 +680,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -562,7 +694,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -577,7 +710,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -592,7 +726,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -611,7 +746,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -624,7 +760,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -637,8 +774,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaContains(String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      monedaContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'moneda',
@@ -648,8 +786,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaMatches(String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      monedaMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'moneda',
@@ -659,7 +798,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'moneda',
@@ -668,7 +808,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> monedaIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> monedaIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'moneda',
@@ -677,7 +818,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'monto',
@@ -685,7 +827,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'monto',
@@ -693,7 +836,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoEqualTo(
     double? value, {
     double epsilon = Query.epsilon,
   }) {
@@ -706,7 +850,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoGreaterThan(
     double? value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -721,7 +866,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoLessThan(
     double? value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -736,7 +882,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> montoBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> montoBetween(
     double? lower,
     double? upper, {
     bool includeLower = true,
@@ -755,7 +902,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'nombre',
@@ -763,7 +911,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'nombre',
@@ -771,7 +920,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -784,7 +934,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -799,7 +950,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -814,7 +966,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -833,7 +986,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -846,7 +1000,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -859,8 +1014,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreContains(String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      nombreContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'nombre',
@@ -870,8 +1026,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreMatches(String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      nombreMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'nombre',
@@ -881,7 +1038,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'nombre',
@@ -890,7 +1048,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> nombreIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'nombre',
@@ -899,7 +1058,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'numero',
@@ -907,7 +1067,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'numero',
@@ -915,7 +1076,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -928,7 +1090,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -943,7 +1106,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -958,7 +1122,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -977,7 +1142,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -990,7 +1156,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1003,8 +1170,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroContains(String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      numeroContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'numero',
@@ -1014,8 +1182,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroMatches(String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      numeroMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'numero',
@@ -1025,7 +1194,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'numero',
@@ -1034,7 +1204,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> numeroIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> numeroIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'numero',
@@ -1043,7 +1214,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'producto',
@@ -1051,7 +1223,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'producto',
@@ -1059,7 +1232,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1072,7 +1246,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1087,7 +1262,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1102,7 +1278,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1121,7 +1298,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1134,7 +1312,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1147,8 +1326,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoContains(String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      productoContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'producto',
@@ -1158,9 +1338,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      productoMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'producto',
@@ -1170,7 +1350,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'producto',
@@ -1179,7 +1360,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> productoIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> productoIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'producto',
@@ -1188,7 +1370,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdIsNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'solicitudId',
@@ -1196,7 +1379,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdIsNotNull() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'solicitudId',
@@ -1204,7 +1388,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdEqualTo(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1217,7 +1402,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdGreaterThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1232,7 +1418,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdLessThan(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1247,7 +1434,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdBetween(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1266,7 +1454,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdStartsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1279,7 +1468,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdEndsWith(
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1292,9 +1482,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      solicitudIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'solicitudId',
@@ -1304,9 +1494,9 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      solicitudIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'solicitudId',
@@ -1316,7 +1506,8 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdIsEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'solicitudId',
@@ -1325,336 +1516,627 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
-  QueryBuilder<User, User, QAfterFilterCondition> solicitudIdIsNotEmpty() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> solicitudIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'solicitudId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'sucursal',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sucursal',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sucursal',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      sucursalContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'sucursal',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      sucursalMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'sucursal',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sucursal',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> sucursalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'sucursal',
         value: '',
       ));
     });
   }
 }
 
-extension UserQueryObject on QueryBuilder<User, User, QFilterCondition> {}
+extension SolicitudesPendientesQueryObject on QueryBuilder<
+    SolicitudesPendientes, SolicitudesPendientes, QFilterCondition> {}
 
-extension UserQueryLinks on QueryBuilder<User, User, QFilterCondition> {}
+extension SolicitudesPendientesQueryLinks on QueryBuilder<SolicitudesPendientes,
+    SolicitudesPendientes, QFilterCondition> {}
 
-extension UserQuerySortBy on QueryBuilder<User, User, QSortBy> {
-  QueryBuilder<User, User, QAfterSortBy> sortByEstado() {
+extension SolicitudesPendientesQuerySortBy
+    on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QSortBy> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByEstado() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'estado', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByEstadoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByEstadoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'estado', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByFecha() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByFechaDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByFechaDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByMoneda() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByIdAsesor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'idAsesor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByIdAsesorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'idAsesor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByMoneda() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByMonedaDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByMonedaDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByMonto() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByMonto() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'monto', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByMontoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByMontoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'monto', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByNombre() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNombre() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByNombreDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNombreDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByNumero() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNumero() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByNumeroDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNumeroDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByProducto() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByProducto() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'producto', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortByProductoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByProductoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'producto', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortBySolicitudId() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortBySolicitudId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudId', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> sortBySolicitudIdDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortBySolicitudIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudId', Sort.desc);
     });
   }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortBySucursal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sucursal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortBySucursalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sucursal', Sort.desc);
+    });
+  }
 }
 
-extension UserQuerySortThenBy on QueryBuilder<User, User, QSortThenBy> {
-  QueryBuilder<User, User, QAfterSortBy> thenByEstado() {
+extension SolicitudesPendientesQuerySortThenBy
+    on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QSortThenBy> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByEstado() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'estado', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByEstadoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByEstadoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'estado', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByFecha() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByFechaDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByFechaDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fecha', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenById() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByMoneda() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByIdAsesor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'idAsesor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByIdAsesorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'idAsesor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByMoneda() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByMonedaDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByMonedaDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByMonto() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByMonto() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'monto', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByMontoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByMontoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'monto', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByNombre() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNombre() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByNombreDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNombreDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nombre', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByNumero() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNumero() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByNumeroDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNumeroDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByProducto() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByProducto() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'producto', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenByProductoDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByProductoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'producto', Sort.desc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenBySolicitudId() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenBySolicitudId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudId', Sort.asc);
     });
   }
 
-  QueryBuilder<User, User, QAfterSortBy> thenBySolicitudIdDesc() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenBySolicitudIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudId', Sort.desc);
     });
   }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenBySucursal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sucursal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenBySucursalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sucursal', Sort.desc);
+    });
+  }
 }
 
-extension UserQueryWhereDistinct on QueryBuilder<User, User, QDistinct> {
-  QueryBuilder<User, User, QDistinct> distinctByEstado(
-      {bool caseSensitive = true}) {
+extension SolicitudesPendientesQueryWhereDistinct
+    on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByEstado({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'estado', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByFecha() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByFecha() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fecha');
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByMoneda(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByIdAsesor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'idAsesor');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByMoneda({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'moneda', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByMonto() {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByMonto() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'monto');
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByNombre(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByNombre({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'nombre', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByNumero(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByNumero({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'numero', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctByProducto(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByProducto({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'producto', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<User, User, QDistinct> distinctBySolicitudId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctBySolicitudId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'solicitudId', caseSensitive: caseSensitive);
     });
   }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctBySucursal({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'sucursal', caseSensitive: caseSensitive);
+    });
+  }
 }
 
-extension UserQueryProperty on QueryBuilder<User, User, QQueryProperty> {
-  QueryBuilder<User, int, QQueryOperations> idProperty() {
+extension SolicitudesPendientesQueryProperty on QueryBuilder<
+    SolicitudesPendientes, SolicitudesPendientes, QQueryProperty> {
+  QueryBuilder<SolicitudesPendientes, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> estadoProperty() {
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      estadoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'estado');
     });
   }
 
-  QueryBuilder<User, DateTime?, QQueryOperations> fechaProperty() {
+  QueryBuilder<SolicitudesPendientes, DateTime?, QQueryOperations>
+      fechaProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fecha');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> monedaProperty() {
+  QueryBuilder<SolicitudesPendientes, int?, QQueryOperations>
+      idAsesorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'idAsesor');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      monedaProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'moneda');
     });
   }
 
-  QueryBuilder<User, double?, QQueryOperations> montoProperty() {
+  QueryBuilder<SolicitudesPendientes, double?, QQueryOperations>
+      montoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'monto');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> nombreProperty() {
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      nombreProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nombre');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> numeroProperty() {
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      numeroProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'numero');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> productoProperty() {
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      productoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'producto');
     });
   }
 
-  QueryBuilder<User, String?, QQueryOperations> solicitudIdProperty() {
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      solicitudIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'solicitudId');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      sucursalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sucursal');
     });
   }
 }

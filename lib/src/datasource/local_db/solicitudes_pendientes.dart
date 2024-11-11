@@ -1,10 +1,10 @@
 import 'package:isar/isar.dart';
 
-part 'user.g.dart';
+part 'solicitudes_pendientes.g.dart';
 
 @Collection()
-class User {
-  Id id = Isar.autoIncrement; // you can also use id = null to auto increment
+class SolicitudesPendientes {
+  Id id = Isar.autoIncrement;
   String? solicitudId;
   String? nombre;
   String? estado;
@@ -13,4 +13,6 @@ class User {
   String? producto;
   DateTime? fecha;
   String? numero;
+  String? sucursal;
+  int? idAsesor;
 }
