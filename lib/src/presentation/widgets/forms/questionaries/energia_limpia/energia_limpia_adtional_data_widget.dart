@@ -235,6 +235,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
       child: Form(
         key: formKey,
         child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

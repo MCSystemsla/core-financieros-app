@@ -42,6 +42,7 @@ class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Form(
               key: formKey,
               child: Column(
@@ -171,6 +172,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
           key: formKey,
           child: Column(
