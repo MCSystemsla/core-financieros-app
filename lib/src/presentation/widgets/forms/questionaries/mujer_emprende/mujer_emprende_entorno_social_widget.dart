@@ -48,6 +48,7 @@ class _MujerEmprendeEntornoSocialWidgetState
           pageController: widget.pageController,
         ),
       false => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Form(
@@ -294,6 +295,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Form(

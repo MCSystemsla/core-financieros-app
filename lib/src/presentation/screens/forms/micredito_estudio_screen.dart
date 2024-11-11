@@ -1134,6 +1134,7 @@ class _ImpactoSocialCrediEstudioWidgetState
           pageController: widget.controller,
         ),
       false => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Form(
@@ -1368,6 +1369,7 @@ class _RecurrentFormImpactoSocialState
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
           key: formKey,
           child: Column(
