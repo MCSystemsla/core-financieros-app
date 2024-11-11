@@ -290,7 +290,8 @@ class MicreditoCreditoAnterior extends StatefulWidget {
       _MicreditoCreditoAnteriorState();
 }
 
-class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
+class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior>
+    with AutomaticKeepAliveClientMixin {
   String? coincideRespuesta;
   final explicacionInversion = TextEditingController();
   final comoAyudoProfesionalmente = TextEditingController();
@@ -298,6 +299,7 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -432,6 +434,9 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _SignUserSignature extends StatelessWidget {
@@ -1348,7 +1353,8 @@ class _RecurrentFormImpactoSocial extends StatefulWidget {
 }
 
 class _RecurrentFormImpactoSocialState
-    extends State<_RecurrentFormImpactoSocial> {
+    extends State<_RecurrentFormImpactoSocial>
+    with AutomaticKeepAliveClientMixin {
   final motivoPrestamo = TextEditingController();
   final comoAyudaCrecer = TextEditingController();
   String? alcanzaraMeta;
@@ -1358,6 +1364,7 @@ class _RecurrentFormImpactoSocialState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -1504,4 +1511,7 @@ class _RecurrentFormImpactoSocialState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

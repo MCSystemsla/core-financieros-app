@@ -24,9 +24,11 @@ class EstandarEntornoFamiliar extends StatefulWidget {
       _EstandarEntornoFamiliarState();
 }
 
-class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar> {
+class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrenteForm) {
       true => _RecurrenteFormWidget(
           pageController: widget.pageController,
@@ -131,6 +133,9 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar> {
         ),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrenteFormWidget extends StatefulWidget {

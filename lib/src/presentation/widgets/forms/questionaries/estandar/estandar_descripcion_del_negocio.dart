@@ -23,9 +23,11 @@ class EstandarDescripciondelNegocio extends StatefulWidget {
 }
 
 class _EstandarDescripciondelNegocioState
-    extends State<EstandarDescripciondelNegocio> {
+    extends State<EstandarDescripciondelNegocio>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           pageController: widget.pageController,
@@ -113,6 +115,9 @@ class _EstandarDescripciondelNegocioState
         ),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrentForm extends StatefulWidget {

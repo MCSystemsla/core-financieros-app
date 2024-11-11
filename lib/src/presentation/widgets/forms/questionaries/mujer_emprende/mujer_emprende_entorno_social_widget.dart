@@ -281,7 +281,8 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   String? otrosIngresos;
   String? tipoEstudioHijos;
   final otrosIngresosDescripcion = TextEditingController();
@@ -291,6 +292,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -470,4 +472,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -18,9 +18,11 @@ class EstandarImpactoSocial extends StatefulWidget {
   State<EstandarImpactoSocial> createState() => _EstandarImpactoSocialState();
 }
 
-class _EstandarImpactoSocialState extends State<EstandarImpactoSocial> {
+class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           pageController: widget.pageController,
@@ -89,6 +91,9 @@ class _EstandarImpactoSocialState extends State<EstandarImpactoSocial> {
         ),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrentForm extends StatefulWidget {
@@ -99,9 +104,11 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -165,4 +172,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

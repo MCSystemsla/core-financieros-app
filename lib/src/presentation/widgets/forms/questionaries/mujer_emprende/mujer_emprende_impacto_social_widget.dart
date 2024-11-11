@@ -28,8 +28,8 @@ class MujerEmprendeImpactoSocial extends StatefulWidget {
       _MujerEmprendeImpactoSocialState();
 }
 
-class _MujerEmprendeImpactoSocialState
-    extends State<MujerEmprendeImpactoSocial> {
+class _MujerEmprendeImpactoSocialState extends State<MujerEmprendeImpactoSocial>
+    with AutomaticKeepAliveClientMixin {
   final question1 = TextEditingController();
   final question2 = TextEditingController();
   final question3 = TextEditingController();
@@ -39,6 +39,7 @@ class _MujerEmprendeImpactoSocialState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           pageController: widget.pageController,
@@ -192,6 +193,9 @@ class _MujerEmprendeImpactoSocialState
         )
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrentForm extends StatefulWidget {

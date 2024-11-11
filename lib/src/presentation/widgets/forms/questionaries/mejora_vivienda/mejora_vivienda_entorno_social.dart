@@ -381,7 +381,8 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   String? question1;
   final question2 = TextEditingController();
   String? question3;
@@ -402,6 +403,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -677,4 +679,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

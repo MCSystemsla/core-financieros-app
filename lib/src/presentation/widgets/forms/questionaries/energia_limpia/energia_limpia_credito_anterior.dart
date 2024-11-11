@@ -25,7 +25,8 @@ class EnergiaLimpiaCreditoAnterior extends StatefulWidget {
 }
 
 class _EnergiaLimpiaCreditoAnteriorState
-    extends State<EnergiaLimpiaCreditoAnterior> {
+    extends State<EnergiaLimpiaCreditoAnterior>
+    with AutomaticKeepAliveClientMixin {
   String? coincideRespuesta;
   final explicacionInversion = TextEditingController();
   final situacionAntesAhora = TextEditingController();
@@ -33,6 +34,7 @@ class _EnergiaLimpiaCreditoAnteriorState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Form(
@@ -161,4 +163,7 @@ class _EnergiaLimpiaCreditoAnteriorState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

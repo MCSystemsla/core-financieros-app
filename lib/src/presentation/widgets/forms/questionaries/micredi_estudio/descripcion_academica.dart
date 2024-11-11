@@ -22,7 +22,8 @@ class DescripcionAcademica extends StatefulWidget {
   State<DescripcionAcademica> createState() => _DescripcionAcademicaState();
 }
 
-class _DescripcionAcademicaState extends State<DescripcionAcademica> {
+class _DescripcionAcademicaState extends State<DescripcionAcademica>
+    with AutomaticKeepAliveClientMixin {
   final carrera = TextEditingController();
   final universidad = TextEditingController();
   final tiempoCarreras = TextEditingController();
@@ -35,6 +36,7 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
           pageController: widget.pageController,
@@ -231,6 +233,9 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica> {
         ),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _RecurrentForm extends StatefulWidget {
@@ -243,7 +248,8 @@ class _RecurrentForm extends StatefulWidget {
   State<_RecurrentForm> createState() => _RecurrentFormState();
 }
 
-class _RecurrentFormState extends State<_RecurrentForm> {
+class _RecurrentFormState extends State<_RecurrentForm>
+    with AutomaticKeepAliveClientMixin {
   final carrera = TextEditingController();
   final tiempoCarrera = TextEditingController();
   final universidad = TextEditingController();
@@ -252,6 +258,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
@@ -360,4 +367,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
