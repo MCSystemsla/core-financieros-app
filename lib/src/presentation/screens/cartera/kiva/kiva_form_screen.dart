@@ -77,7 +77,7 @@ class _RequestWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${solicitud.monto} ${solicitud.moneda}',
+            '${double.tryParse(solicitud.monto.toString())} ${solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,

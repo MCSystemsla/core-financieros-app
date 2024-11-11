@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/endpoint/socilitudes_pendientes_endpoint.dart';
+import 'package:logger/logger.dart';
 
 abstract class SolicitudesPendientesRepository {
   Future<SolicitudesPendienteResponse> getSolicitudesPendientes();
@@ -11,6 +12,7 @@ abstract class SolicitudesPendientesRepository {
 class SolicitudesPendientesRepositoryImpl
     extends SolicitudesPendientesRepository {
   final _api = global<APIRepository>();
+  final _logger = Logger();
 
   @override
   Future<SolicitudesPendienteResponse> getSolicitudesPendientes() async {
@@ -20,6 +22,7 @@ class SolicitudesPendientesRepositoryImpl
       final data = SolicitudesPendienteResponse.fromJson(resp);
       return data;
     } catch (e) {
+      _logger.e(e);
       throw AppException.toAppException(e.toString());
     }
   }
