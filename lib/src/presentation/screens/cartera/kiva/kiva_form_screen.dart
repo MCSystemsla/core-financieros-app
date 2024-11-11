@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../datasource/local_db/solicitudes_pendientes.dart';
 import '../../../bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 
 class KivaFormScreen extends StatefulWidget {
@@ -21,14 +23,6 @@ class KivaFormScreen extends StatefulWidget {
 }
 
 class _KivaFormScreenState extends State<KivaFormScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .saveSolicitudesPendientes();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -43,8 +37,28 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
         appBar: AppBar(
           title: Text('cartera.title'.tr()),
         ),
-        body:
-            BlocBuilder<SolicitudesPendientesCubit, SolicitudesPendientesState>(
+        body: BlocConsumer<SolicitudesPendientesCubit,
+            SolicitudesPendientesState>(
+          listener: (context, state) {
+            if (state.status == Status.done) {
+              context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .saveSolicitudesPendientes(
+                    solicitudes: state.solicitudesPendienteResponse.map(
+                      (e) {
+                        return SolicitudesPendientes()
+                          ..estado = e.estado
+                          ..fecha = e.fecha
+                          ..moneda = e.moneda
+                          ..numero = e.numero
+                          ..producto = e.producto
+                          ..solicitudId = e.id
+                          ..sucursal = LocalStorage().database;
+                      },
+                    ).toList(),
+                  );
+            }
+          },
           builder: (context, state) {
             return switch (state.status) {
               Status.inProgress =>

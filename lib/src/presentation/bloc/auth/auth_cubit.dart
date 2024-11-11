@@ -30,6 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
       await LocalStorage().setJWT(resp['accessToken']);
+      await LocalStorage().setDatabase(dbName);
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));

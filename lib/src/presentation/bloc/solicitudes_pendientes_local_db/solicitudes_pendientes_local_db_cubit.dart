@@ -31,36 +31,17 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
-  Future<void> saveSolicitudesPendientes() async {
-    List<SolicitudesPendientes> solicitudes = [
-      SolicitudesPendientes()
-        ..solicitudId = '001'
-        ..nombre = 'Juan Perez'
-        ..estado = 'Pendiente'
-        ..moneda = 'USD'
-        ..monto = 100.0
-        ..producto = 'Préstamo'
-        ..fecha = DateTime.now()
-        ..numero = '123456'
-        ..idAsesor = 21
-        ..sucursal = 'Sucursal Centro',
-      SolicitudesPendientes()
-        ..solicitudId = '002'
-        ..nombre = 'Ana Gomez'
-        ..estado = 'Aprobada'
-        ..moneda = 'USD'
-        ..monto = 250.0
-        ..idAsesor = 21
-        ..producto = 'Tarjeta de Crédito'
-        ..fecha = DateTime.now().subtract(const Duration(days: 1))
-        ..numero = '654321'
-        ..sucursal = 'Sucursal Norte',
-    ];
-    final resp = await state.isar!.writeTxn(
-      () {
-        return state.isar!.solicitudesPendientes.putAll(solicitudes);
-      },
-    );
-    log(resp.toString());
+  Future<void> saveSolicitudesPendientes(
+      {required List<SolicitudesPendientes> solicitudes}) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.solicitudesPendientes.putAll(solicitudes);
+        },
+      );
+      log(resp.toString());
+    } catch (e) {
+      _logger.e(e);
+    }
   }
 }
