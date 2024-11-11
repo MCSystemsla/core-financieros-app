@@ -23,7 +23,7 @@ class Solicitud {
   String nombre;
   String estado;
   String moneda;
-  int monto;
+  dynamic monto;
   String producto;
   DateTime fecha;
   String numero;
@@ -50,58 +50,17 @@ class Solicitud {
         fecha: DateTime.parse(json['fecha']).toLocal(),
       );
 
-  Solicitud copyWith({
-    String? id,
-    String? nombre,
-    String? estado,
-    String? moneda,
-    int? monto,
-    String? producto,
-    DateTime? fecha,
-    String? numero,
-  }) {
-    return Solicitud(
-      id: id ?? this.id,
-      nombre: nombre ?? this.nombre,
-      estado: estado ?? this.estado,
-      moneda: moneda ?? this.moneda,
-      monto: monto ?? this.monto,
-      producto: producto ?? this.producto,
-      fecha: fecha ?? this.fecha,
-      numero: numero ?? this.numero,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'nombre': nombre,
-      'estado': estado,
-      'moneda': moneda,
-      'monto': monto,
-      'producto': producto,
-      'fecha': fecha.millisecondsSinceEpoch,
-      'numero': numero,
-    };
-  }
-
   factory Solicitud.fromMap(Map<String, dynamic> map) {
     return Solicitud(
       id: map['id'] as String,
       nombre: map['nombre'] as String,
       estado: map['estado'] as String,
       moneda: map['moneda'] as String,
-      monto: map['monto'] as int,
+      monto: map['monto'],
       producto: map['producto'] as String,
       fecha: DateTime.fromMillisecondsSinceEpoch(map['fecha'] as int),
       numero: map['numero'] as String,
     );
-  }
-
-  String toJson() => json.encode(toMap());
-  @override
-  String toString() {
-    return 'Solicitud(id: $id, nombre: $nombre, estado: $estado, moneda: $moneda, monto: $monto, producto: $producto, fecha: $fecha, numero: $numero)';
   }
 
   @override
