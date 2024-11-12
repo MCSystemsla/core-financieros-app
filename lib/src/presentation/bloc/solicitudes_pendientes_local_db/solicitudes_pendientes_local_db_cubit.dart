@@ -56,7 +56,6 @@ class SolicitudesPendientesLocalDbCubit
           await state.isar!.writeTxn(() {
             return state.isar!.solicitudesPendientes.put(solicitud);
           });
-          _logger.i('Solicitud con ID ${solicitud.solicitudId} guardada.');
         }
         emit(state.copyWith(status: Status.done));
       }
