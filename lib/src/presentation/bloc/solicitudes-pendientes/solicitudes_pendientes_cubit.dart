@@ -13,7 +13,7 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
   SolicitudesPendientesCubit(this.solicitudesPendientesRepository)
       : super(SolicitudesPendientesInitial());
 
-  getSolicitudesPendientes() async {
+  Future<void> getSolicitudesPendientes() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       final data =

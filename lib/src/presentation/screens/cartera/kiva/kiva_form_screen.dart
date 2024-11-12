@@ -87,43 +87,48 @@ class _KIvaFormContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          BlocConsumer<SolicitudesPendientesLocalDbCubit,
-              SolicitudesPendientesLocalDbState>(
-            listener: (context, state) {
-              if (state.status == Status.done) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    showCloseIcon: true,
-                    content:
-                        Text('Solicitudes Guardadas Localmente exitosamente!!'),
-                  ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            BlocConsumer<SolicitudesPendientesLocalDbCubit,
+                SolicitudesPendientesLocalDbState>(
+              listener: (context, state) {
+                if (state.status == Status.done) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      showCloseIcon: true,
+                      content: Text(
+                          'Solicitudes Guardadas Localmente exitosamente!!'),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return switch (state.status) {
+                  Status.inProgress => const LinearProgressIndicator(),
+                  _ => const SizedBox(),
+                };
+              },
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: solicitudesPendienteResponse.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Gap(10),
+              itemBuilder: (BuildContext context, int index) {
+                return _RequestWidget(
+                  solicitud: solicitudesPendienteResponse[index],
                 );
-              }
-            },
-            builder: (context, state) {
-              if (state.status == Status.inProgress) {
-                return const LinearProgressIndicator();
-              }
-              return const SizedBox();
-            },
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: solicitudesPendienteResponse.length,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Gap(10),
-            itemBuilder: (BuildContext context, int index) {
-              return _RequestWidget(
-                solicitud: solicitudesPendienteResponse[index],
-              );
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
