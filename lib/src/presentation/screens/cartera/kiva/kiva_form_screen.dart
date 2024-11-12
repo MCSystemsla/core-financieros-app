@@ -56,7 +56,8 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                           ..sucursal = LocalStorage().database
                           ..nombre = e.nombre
                           ..monto = double.tryParse(e.monto.toString()) ?? 0.00
-                          ..tipoSolicitud = e.tipoSolicitud;
+                          ..tipoSolicitud = e.tipoSolicitud
+                          ..idAsesor = int.tryParse(LocalStorage().userId);
                       },
                     ).toList(),
                   );
