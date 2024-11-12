@@ -65,4 +65,16 @@ class SolicitudesPendientesLocalDbCubit
       emit(state.copyWith(status: Status.error));
     }
   }
+
+  Future<void> getSolicitudes() async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final solicitudes =
+          await state.isar!.solicitudesPendientes.where().findAll();
+      emit(state.copyWith(status: Status.done, solicitudes: solicitudes));
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+    }
+  }
 }
