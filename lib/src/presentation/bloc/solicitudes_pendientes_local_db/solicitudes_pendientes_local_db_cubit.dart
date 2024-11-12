@@ -33,6 +33,7 @@ class SolicitudesPendientesLocalDbCubit
   Future<void> saveSolicitudesPendientes(
       {required List<SolicitudesPendientes> solicitudes}) async {
     emit(state.copyWith(status: Status.inProgress));
+    await Future.delayed(const Duration(seconds: 3));
     try {
       for (var solicitud in solicitudes) {
         final existingIds = await state.isar!.solicitudesPendientes
