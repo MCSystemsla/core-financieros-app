@@ -53,7 +53,10 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                           ..numero = e.numero
                           ..producto = e.producto
                           ..solicitudId = e.id
-                          ..sucursal = LocalStorage().database;
+                          ..sucursal = LocalStorage().database
+                          ..nombre = e.nombre
+                          ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+                          ..tipoSolicitud = e.tipoSolicitud;
                       },
                     ).toList(),
                   );
@@ -64,20 +67,62 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
               Status.inProgress =>
                 const Center(child: CircularProgressIndicator()),
               Status.error => const Text('Error'),
-              Status.done => ListView.separated(
-                  itemCount: state.solicitudesPendienteResponse.length,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Gap(10),
-                  itemBuilder: (BuildContext context, int index) {
-                    return _RequestWidget(
-                      solicitud: state.solicitudesPendienteResponse[index],
-                    );
-                  },
+              Status.done => _KIvaFormContent(
+                  solicitudesPendienteResponse:
+                      state.solicitudesPendienteResponse,
                 ),
               _ => const SizedBox()
             };
           },
         ),
+      ),
+    );
+  }
+}
+
+class _KIvaFormContent extends StatelessWidget {
+  final List<Solicitud> solicitudesPendienteResponse;
+  const _KIvaFormContent({required this.solicitudesPendienteResponse});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          BlocConsumer<SolicitudesPendientesLocalDbCubit,
+              SolicitudesPendientesLocalDbState>(
+            listener: (context, state) {
+              if (state.status == Status.done) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    showCloseIcon: true,
+                    content:
+                        Text('Solicitudes Guardadas Localmente exitosamente!!'),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state.status == Status.inProgress) {
+                return const LinearProgressIndicator();
+              }
+              return const SizedBox();
+            },
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: solicitudesPendienteResponse.length,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Gap(10),
+            itemBuilder: (BuildContext context, int index) {
+              return _RequestWidget(
+                solicitud: solicitudesPendienteResponse[index],
+              );
+            },
+          ),
+        ],
       ),
     );
   }

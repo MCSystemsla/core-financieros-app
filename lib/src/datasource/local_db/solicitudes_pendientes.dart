@@ -15,4 +15,5 @@ class SolicitudesPendientes {
   String? numero;
   String? sucursal;
   int? idAsesor;
+  String? tipoSolicitud;
 }

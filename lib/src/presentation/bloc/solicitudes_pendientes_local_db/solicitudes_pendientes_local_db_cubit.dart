@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 import 'package:logger/logger.dart';
@@ -33,15 +32,37 @@ class SolicitudesPendientesLocalDbCubit
 
   Future<void> saveSolicitudesPendientes(
       {required List<SolicitudesPendientes> solicitudes}) async {
+    emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await state.isar!.writeTxn(
-        () {
-          return state.isar!.solicitudesPendientes.putAll(solicitudes);
-        },
-      );
-      log(resp.toString());
+      for (var solicitud in solicitudes) {
+        final existingIds = await state.isar!.solicitudesPendientes
+            .filter()
+            .solicitudIdEqualTo(solicitud.solicitudId)
+            .findFirst();
+        final isnumerosIdExists = await state.isar!.solicitudesPendientes
+            .filter()
+            .numeroEqualTo(solicitud.numero)
+            .findFirst();
+        final issucursalExists = await state.isar!.solicitudesPendientes
+            .filter()
+            .sucursalEqualTo(solicitud.sucursal)
+            .findFirst();
+        if (existingIds != null &&
+            isnumerosIdExists != null &&
+            issucursalExists != null) {
+          _logger
+              .i('Ya existe esta solicitud con el ID ${solicitud.solicitudId}');
+        } else {
+          await state.isar!.writeTxn(() {
+            return state.isar!.solicitudesPendientes.put(solicitud);
+          });
+          _logger.i('Solicitud con ID ${solicitud.solicitudId} guardada.');
+        }
+        emit(state.copyWith(status: Status.done));
+      }
     } catch (e) {
       _logger.e(e);
+      emit(state.copyWith(status: Status.error));
     }
   }
 }
