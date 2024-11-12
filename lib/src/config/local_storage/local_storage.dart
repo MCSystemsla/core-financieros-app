@@ -19,6 +19,10 @@ class LocalStorage {
     return prefs.getString('database') ?? '';
   }
 
+  String get userId {
+    return prefs.getString('userId') ?? '';
+  }
+
   String get fcmToken {
     return prefs.getString('token') ?? '';
   }
@@ -37,5 +41,9 @@ class LocalStorage {
 
   Future<void> setDatabase(String value) async {
     await prefs.setString('database', value);
+  }
+
+  Future<void> setUserId(String value) async {
+    await prefs.setString('userId', value);
   }
 }
