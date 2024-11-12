@@ -16,7 +16,7 @@ class MotivoPrestamoWidget extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         if (state is OnMotivoPrestamoError) {
-          return const Text('Error inesperado');
+          return const Text('No hay motivo Anterior');
         }
         if (state is OnMotivoPrestamoSuccess) {
           return Column(
