@@ -12,7 +12,7 @@ void setUpGlobalLocator() {
   global.registerLazySingleton(() => Logger());
   global.registerFactory<APIRepository>(() => DefaultAPIRepository());
   global.registerFactory<InternetConnectionCubit>(
-    () => InternetConnectionCubit(),
+    () => InternetConnectionCubit()..getInternetStatusConnection(),
   );
 
   _injectStorage();

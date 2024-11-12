@@ -4,19 +4,25 @@ part of 'solicitudes_pendientes_local_db_cubit.dart';
 class SolicitudesPendientesLocalDbState extends Equatable {
   final Isar? isar;
   final Status status;
-  const SolicitudesPendientesLocalDbState(
-      {this.status = Status.notStarted, this.isar});
+  final List<SolicitudesPendientes> solicitudes;
+  const SolicitudesPendientesLocalDbState({
+    this.status = Status.notStarted,
+    this.isar,
+    this.solicitudes = const [],
+  });
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [status, solicitudes];
 
   SolicitudesPendientesLocalDbState copyWith({
     Isar? isar,
     Status? status,
+    List<SolicitudesPendientes>? solicitudes,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
       status: status ?? this.status,
+      solicitudes: solicitudes ?? this.solicitudes,
     );
   }
 }
