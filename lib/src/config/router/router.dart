@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final router = GoRouter(
   initialLocation: '/loading',
@@ -184,7 +185,12 @@ final router = GoRouter(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
       redirect: (context, state) async {
-        return '/login';
+        bool isHaveConnection = await InternetConnectionChecker().hasConnection;
+
+        return switch (isHaveConnection) {
+          true => '/login',
+          false => '/',
+        };
       },
     ),
     GoRoute(

@@ -61,6 +61,9 @@ dependencies:
   image_picker: ^1.1.2
   mime: ^1.0.0
   dio: ^5.7.0
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  internet_connection_checker: ^1.0.0+1
 
 
   # Intl
@@ -71,8 +74,6 @@ dependencies:
   firebase_core: ^3.3.0
   firebase_messaging: ^15.0.4
   flutter_local_notifications: ^17.2.2
-  isar: ^3.1.0+1
-  isar_flutter_libs: ^3.1.0+1
 
 
 

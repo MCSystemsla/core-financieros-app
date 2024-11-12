@@ -17,14 +17,20 @@ class HomeBannerWidget extends StatelessWidget {
           height: size.height * 0.5,
           width: size.width,
           alignment: Alignment.center,
-          child: const FadeInImage(
+          child: FadeInImage(
+            imageErrorBuilder: (context, error, stackTrace) {
+              return const Icon(
+                Icons.wifi_off_outlined,
+                size: 90,
+              );
+            },
             alignment: Alignment.center,
             placeholderFit: BoxFit.contain,
             fit: BoxFit.cover,
-            placeholder: AssetImage(
+            placeholder: const AssetImage(
               ImageAsset.loader,
             ),
-            image: NetworkImage(
+            image: const NetworkImage(
               'https://res.cloudinary.com/dfp17v5ve/image/upload/v1731003510/miCredito/7b7d17c5-a726-4702-877d-027783c7c93c.jpg',
             ),
           ),
