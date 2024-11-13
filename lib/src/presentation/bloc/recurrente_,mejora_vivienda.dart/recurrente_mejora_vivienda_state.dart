@@ -40,7 +40,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
     this.numeroHijos = 0,
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
-    this.motivoPrestamo = '',
+    this.motivoPrestamo = 'N/A',
     this.coincideRespuesta = false,
     this.explicacionInversion = '',
     this.viviendaAntesDespues = '',

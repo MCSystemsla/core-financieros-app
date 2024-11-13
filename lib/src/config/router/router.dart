@@ -189,9 +189,9 @@ final router = GoRouter(
     GoRoute(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
-      redirect: (context, state) async {
+      redirect: (ctx, state) async {
         final isInternetConnection =
-            context.read<InternetConnectionCubit>().state.isConnected;
+            ctx.watch<InternetConnectionCubit>().state.isConnected;
 
         return switch (isInternetConnection) {
           true => '/login',

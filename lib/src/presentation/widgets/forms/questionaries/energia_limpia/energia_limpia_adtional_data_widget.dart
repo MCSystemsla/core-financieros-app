@@ -333,7 +333,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           response: tieneTrabajo ?? 'N/A',
                           index: 1,
                         ),
-                        if (otrosIngresosDescripcion.text.isEmpty)
+                        if (tieneTrabajo == 'input.yes'.tr())
                           Response(
                             question: 'Cual?',
                             response: otrosIngresosDescripcion.text.trim(),

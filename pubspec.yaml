@@ -64,6 +64,7 @@ dependencies:
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   internet_connection_checker: ^1.0.0+1
+  connectivity_plus: ^6.1.0
 
 
   # Intl

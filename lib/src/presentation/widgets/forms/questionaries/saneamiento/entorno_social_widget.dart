@@ -459,6 +459,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),
+                          edadHijos: edadHijos.text.trim(),
                         );
                     widget.controller.nextPage(
                       duration: const Duration(
