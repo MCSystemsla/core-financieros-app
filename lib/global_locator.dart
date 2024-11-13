@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/src/api/api_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:logger/logger.dart';
@@ -11,9 +10,9 @@ void setUpGlobalLocator() {
 
   global.registerLazySingleton(() => Logger());
   global.registerFactory<APIRepository>(() => DefaultAPIRepository());
-  global.registerFactory<InternetConnectionCubit>(
-    () => InternetConnectionCubit()..getInternetStatusConnection(),
-  );
+  // global.registerFactory<InternetConnectionCubit>(
+  //   () => InternetConnectionCubit()..getInternetStatusConnection(),
+  // );
 
   _injectStorage();
 }
