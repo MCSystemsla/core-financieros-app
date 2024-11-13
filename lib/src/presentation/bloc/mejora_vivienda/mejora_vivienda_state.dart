@@ -38,7 +38,7 @@ class MejoraViviendaState extends Equatable {
     this.numeroHijos = 0,
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
-    this.motivoPrestamo = '',
+    this.motivoPrestamo = 'N/A',
     this.comoAyudara = '',
     this.planesFuturo = '',
     this.otrosDatosCliente = '',

@@ -344,7 +344,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'fotoCliente2',
         imagen2.path,
         filename: imagen2.path,
-        contentType: MediaType('image', 'jpg'),
+        contentType: MediaType('image', 'jpeg'),
       ));
 
       request.files.add(await http.MultipartFile.fromPath(

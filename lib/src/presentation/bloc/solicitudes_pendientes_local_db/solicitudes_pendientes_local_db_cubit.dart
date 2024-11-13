@@ -1,4 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/estandar_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/recurrente_estandar_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/mejora_vivienda_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/recurrente_mejora_vivienda_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/micredi_estudio_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/recurrente_micredi_estudio_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/mujer_emprende_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/recurrente_mujer_emprende_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/recurrente_saneamiento_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/saneamiento_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -18,7 +30,21 @@ class SolicitudesPendientesLocalDbCubit
       final dir = await getApplicationDocumentsDirectory();
       final isar = await Isar.open(
         inspector: true,
-        [SolicitudesPendientesSchema],
+        [
+          SolicitudesPendientesSchema,
+          EnergiaLimpiaDbLocalSchema,
+          RecurrenteEnergiaLimpiaDbLocalSchema,
+          MiCrediEstudioDbLocalSchema,
+          RecurrenteMiCrediEstudioDbLocalSchema,
+          MejoraViviendaDbLocalSchema,
+          RecurrenteMejoraViviendaDbLocalSchema,
+          MujerEmprendeDbLocalSchema,
+          RecurrenteMujerEmprendeDbLocalSchema,
+          SaneamientoDbLocalSchema,
+          RecurrenteSaneamientoDbLocalSchema,
+          EstandarDbLocalSchema,
+          RecurrenteEstandarDbLocalSchema,
+        ],
         directory: dir.path,
       );
       if (isar.isOpen) {
@@ -75,6 +101,21 @@ class SolicitudesPendientesLocalDbCubit
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  Future<void> saveEnergiaLimpia({
+    required EnergiaLimpiaDbLocal energiaLimpiaDBLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.energiaLimpiaDbLocals.put(energiaLimpiaDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
     }
   }
 }

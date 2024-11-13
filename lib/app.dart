@@ -35,6 +35,7 @@ class App extends StatelessWidget {
           create: (ctx) => KivaRouteCubit(),
         ),
         BlocProvider(
+          lazy: false,
           create: (ctx) =>
               InternetConnectionCubit()..getInternetStatusConnection(),
         ),
