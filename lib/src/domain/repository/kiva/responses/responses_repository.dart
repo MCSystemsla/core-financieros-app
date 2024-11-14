@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
@@ -51,6 +52,9 @@ abstract class ResponsesRepository {
   });
   Future<String> motivoPrestamo({
     required int numero,
+  });
+  Future<bool> estandar({
+    required EstandarModel estandarModel,
   });
   Future<bool> uploadUserFiles({
     required File imagen1,
@@ -379,6 +383,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   return true;
       // }
       _logger.i(response.reasonPhrase);
+      return true;
+    } catch (e) {
+      _logger.e(e);
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> estandar({required EstandarModel estandarModel}) async {
+    final endpoint = EstandarEndpoint(estandarModel: estandarModel);
+
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return false;
+      _logger.i(resp);
       return true;
     } catch (e) {
       _logger.e(e);

@@ -76,9 +76,12 @@ final router = GoRouter(
               );
             }),
         GoRoute(
-          path: 'form/estandar',
-          builder: (context, state) => const EstandarScreen(),
-        ),
+            path: 'form/estandar',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return EstandarScreen(typeProduct: typeProduct);
+            }),
       ],
       redirect: (context, state) {
         final String tipoProducto = state.extra.toString();
