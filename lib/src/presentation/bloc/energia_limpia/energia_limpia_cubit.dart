@@ -13,7 +13,7 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await repository.energiaLimpia(
+      final (isOk, message) = await repository.energiaLimpia(
         energiaLimpiaModel: EnergiaLimpiaModel(
           database: state.database,
           solicitudNuevamenorId: state.solicitudNuevamenorId,
@@ -34,13 +34,13 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
-      if (!resp) {
-        emit(state.copyWith(status: Status.error));
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
         return;
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 

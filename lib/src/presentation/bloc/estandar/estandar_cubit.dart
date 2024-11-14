@@ -13,7 +13,7 @@ class EstandarCubit extends Cubit<EstandarState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await repository.estandar(
+      final (isOK, message) = await repository.estandar(
         estandarModel: EstandarModel(
           database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
@@ -35,13 +35,13 @@ class EstandarCubit extends Cubit<EstandarState> {
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
-      if (!resp) {
-        emit(state.copyWith(status: Status.error));
+      if (!isOK) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
         return;
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 

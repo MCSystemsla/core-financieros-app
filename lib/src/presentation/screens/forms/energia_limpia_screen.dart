@@ -479,14 +479,30 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                     final status = state.status;
                     if (status == Status.error) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           behavior: SnackBarBehavior.floating,
                           showCloseIcon: true,
-                          content: Text('Error inesperado'),
+                          content: Text(state.errorMsg),
                         ),
                       );
                     }
                     if (state.status == Status.done) {
+                      final signatureImage = await controller.toPngBytes();
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final filePath = '${directory.path}/signature.png';
+
+                      // Guarda la imagen en el archivo
+                      final file = File(filePath);
+                      await file.writeAsBytes(signatureImage!);
+
+                      if (!context.mounted) return;
+                      context.read<UploadUserFileCubit>().uploadUserFiles(
+                            fotoFirma: file,
+                            solicitudId: int.parse(
+                              context.read<KivaRouteCubit>().state.solicitudId,
+                            ),
+                          );
                       await customPopUp(
                         context: context,
                         dismissOnTouchOutside: false,
@@ -516,16 +532,6 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
-                        final signatureImage = await controller.toPngBytes();
-                        final directory =
-                            await getApplicationDocumentsDirectory();
-                        final filePath = '${directory.path}/signature.png';
-
-                        // Guarda la imagen en el archivo
-                        final file = File(filePath);
-                        await file.writeAsBytes(signatureImage!);
-
-                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -539,15 +545,6 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () async {
-                            context.read<UploadUserFileCubit>().uploadUserFiles(
-                                  fotoFirma: file,
-                                  solicitudId: int.parse(
-                                    context
-                                        .read<KivaRouteCubit>()
-                                        .state
-                                        .solicitudId,
-                                  ),
-                                );
                             context
                                 .read<RecurrenteEnergiaLimpiaCubit>()
                                 .sendAnswers();
@@ -646,14 +643,29 @@ class _SignQuestionary extends StatelessWidget {
                     final status = state.status;
                     if (status == Status.error) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           behavior: SnackBarBehavior.floating,
                           showCloseIcon: true,
-                          content: Text('Error inesperado'),
+                          content: Text(state.errorMsg),
                         ),
                       );
                     }
                     if (state.status == Status.done) {
+                      final signatureImage = await controller.toPngBytes();
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final filePath = '${directory.path}/signature.png';
+
+                      // Guarda la imagen en el archivo
+                      final file = File(filePath);
+                      await file.writeAsBytes(signatureImage!);
+                      if (!context.mounted) return;
+                      context.read<UploadUserFileCubit>().uploadUserFiles(
+                            fotoFirma: file,
+                            solicitudId: int.parse(
+                              context.read<KivaRouteCubit>().state.solicitudId,
+                            ),
+                          );
                       await customPopUp(
                         context: context,
                         size: size,
@@ -682,15 +694,6 @@ class _SignQuestionary extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
-                        final signatureImage = await controller.toPngBytes();
-                        final directory =
-                            await getApplicationDocumentsDirectory();
-                        final filePath = '${directory.path}/signature.png';
-
-                        // Guarda la imagen en el archivo
-                        final file = File(filePath);
-                        await file.writeAsBytes(signatureImage!);
-                        if (!context.mounted) return;
                         await customPopUp(
                           context: context,
                           size: size,
@@ -704,15 +707,6 @@ class _SignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.read<UploadUserFileCubit>().uploadUserFiles(
-                                  fotoFirma: file,
-                                  solicitudId: int.parse(
-                                    context
-                                        .read<KivaRouteCubit>()
-                                        .state
-                                        .solicitudId,
-                                  ),
-                                );
                             context.read<EnergiaLimpiaCubit>().sendAnswers();
                             context.pop();
                           },

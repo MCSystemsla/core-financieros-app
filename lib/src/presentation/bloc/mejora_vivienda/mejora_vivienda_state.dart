@@ -22,6 +22,7 @@ class MejoraViviendaState extends Equatable {
   final String comoAyudara;
   final String planesFuturo;
   final String otrosDatosCliente;
+  final String errorMsg;
   const MejoraViviendaState({
     this.solicitudNuevamenorId = 0,
     this.username = '',
@@ -43,6 +44,7 @@ class MejoraViviendaState extends Equatable {
     this.planesFuturo = '',
     this.otrosDatosCliente = '',
     this.status = Status.notStarted,
+    this.errorMsg = '',
   });
 
   @override
@@ -67,6 +69,7 @@ class MejoraViviendaState extends Equatable {
         comoAyudara,
         planesFuturo,
         otrosDatosCliente,
+        errorMsg,
       ];
 
   MejoraViviendaState copyWith({
@@ -90,6 +93,7 @@ class MejoraViviendaState extends Equatable {
     String? comoAyudara,
     String? planesFuturo,
     String? otrosDatosCliente,
+    String? errorMsg,
   }) {
     return MejoraViviendaState(
       status: status ?? this.status,
@@ -116,6 +120,7 @@ class MejoraViviendaState extends Equatable {
       comoAyudara: comoAyudara ?? this.comoAyudara,
       planesFuturo: planesFuturo ?? this.planesFuturo,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

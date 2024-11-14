@@ -24,6 +24,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
   final String mejoraSeguridadFamilia;
   final String quienApoya;
   final String siguienteMeta;
+  final String errorMsg;
   const RecurrenteMejoraViviendaState({
     this.status = Status.notStarted,
     this.objSolicitudRecurrenteId = 0,
@@ -47,6 +48,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
     this.mejoraSeguridadFamilia = '',
     this.quienApoya = '',
     this.siguienteMeta = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -72,7 +74,8 @@ class RecurrenteMejoraViviendaState extends Equatable {
         viviendaAntesDespues,
         mejoraSeguridadFamilia,
         quienApoya,
-        siguienteMeta
+        siguienteMeta,
+        errorMsg,
       ];
 
   RecurrenteMejoraViviendaState copyWith({
@@ -98,6 +101,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
     String? mejoraSeguridadFamilia,
     String? quienApoya,
     String? siguienteMeta,
+    String? errorMsg,
   }) {
     return RecurrenteMejoraViviendaState(
       status: status ?? this.status,
@@ -126,6 +130,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
           mejoraSeguridadFamilia ?? this.mejoraSeguridadFamilia,
       quienApoya: quienApoya ?? this.quienApoya,
       siguienteMeta: siguienteMeta ?? this.siguienteMeta,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

@@ -212,14 +212,29 @@ class RecurrentSign extends StatelessWidget {
                     final status = state.status;
                     if (status == Status.error) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           behavior: SnackBarBehavior.floating,
                           showCloseIcon: true,
-                          content: Text('Error inesperado'),
+                          content: Text(state.errorMsg),
                         ),
                       );
                     }
                     if (state.status == Status.done) {
+                      final signatureImage = await controller.toPngBytes();
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final filePath = '${directory.path}/signature.png';
+
+                      // Guarda la imagen en el archivo
+                      final file = File(filePath);
+                      await file.writeAsBytes(signatureImage!);
+                      if (!context.mounted) return;
+                      context.read<UploadUserFileCubit>().uploadUserFiles(
+                            fotoFirma: file,
+                            solicitudId: int.parse(
+                              context.read<KivaRouteCubit>().state.solicitudId,
+                            ),
+                          );
                       await customPopUp(
                         context: context,
                         dismissOnTouchOutside: false,
@@ -250,15 +265,6 @@ class RecurrentSign extends StatelessWidget {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
-                        final signatureImage = await controller.toPngBytes();
-                        final directory =
-                            await getApplicationDocumentsDirectory();
-                        final filePath = '${directory.path}/signature.png';
-
-                        // Guarda la imagen en el archivo
-                        final file = File(filePath);
-                        await file.writeAsBytes(signatureImage!);
-                        if (!context.mounted) return;
                         context
                             .read<RecurrenteMejoraViviendaCubit>()
                             .saveAnswers3(
@@ -282,15 +288,6 @@ class RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.read<UploadUserFileCubit>().uploadUserFiles(
-                                  fotoFirma: file,
-                                  solicitudId: int.parse(
-                                    context
-                                        .read<KivaRouteCubit>()
-                                        .state
-                                        .solicitudId,
-                                  ),
-                                );
                             context
                                 .read<RecurrenteMejoraViviendaCubit>()
                                 .sendAnswers();

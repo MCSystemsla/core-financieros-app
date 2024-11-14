@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recu
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
@@ -20,16 +21,16 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ResponsesRepository {
-  Future<bool> mejoraViviendaAnswer({
+  Future<(bool, String)> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   });
-  Future<bool> mejoraViviendaRecurrenteAnswer({
+  Future<(bool, String)> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   });
-  Future<bool> energiaLimpia({
+  Future<(bool, String)> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   });
-  Future<bool> recurrenteREnergiaLimpiaAnswer({
+  Future<(bool, String)> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   });
   Future<bool> aguaYSaneamientoAnswer({
@@ -53,8 +54,11 @@ abstract class ResponsesRepository {
   Future<String> motivoPrestamo({
     required int numero,
   });
-  Future<bool> estandar({
+  Future<(bool, String)> estandar({
     required EstandarModel estandarModel,
+  });
+  Future<(bool, String)> recurrenteEstandar({
+    required RecurrenteEstandarModel recurrenteEstandarModel,
   });
   Future<bool> uploadUserFiles({
     required File imagen1,
@@ -73,7 +77,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   final _logger = Logger();
 
   @override
-  Future<bool> mejoraViviendaAnswer({
+  Future<(bool, String)> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   }) async {
     final endpoint = MejoraViviendaKivaResponsesEndpoind(
@@ -81,17 +85,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> mejoraViviendaRecurrenteAnswer({
+  Future<(bool, String)> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   }) async {
     try {
@@ -99,17 +103,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         mejoraViviendaAnswer: mejoraViviendaRecurrente,
       );
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> energiaLimpia({
+  Future<(bool, String)> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = EnergiaLimpiaEndpoint(
@@ -117,17 +121,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> recurrenteREnergiaLimpiaAnswer({
+  Future<(bool, String)> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = RecurrenteEnergiaLimpiaEndpoint(
@@ -135,12 +139,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
@@ -391,17 +395,44 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   }
 
   @override
-  Future<bool> estandar({required EstandarModel estandarModel}) async {
+  Future<(bool, String)> estandar(
+      {required EstandarModel estandarModel}) async {
     final endpoint = EstandarEndpoint(estandarModel: estandarModel);
 
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (
+        true,
+        resp.toString(),
+      );
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (
+        false,
+        e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<(bool, String)> recurrenteEstandar({
+    required RecurrenteEstandarModel recurrenteEstandarModel,
+  }) async {
+    final endpoint = RecurrenteEstandarEndpoint(
+      recurrenteEstandarModel: recurrenteEstandarModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      return (
+        true,
+        resp.toString(),
+      );
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
     }
   }
 }
