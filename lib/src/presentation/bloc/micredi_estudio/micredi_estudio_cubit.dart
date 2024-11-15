@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -15,7 +16,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
     try {
       final (isOk, message) = await repository.miCrediEstudioAnswer(
         miCrediEstudioModel: MiCrediEstudioModel(
-          database: state.database,
+          database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,

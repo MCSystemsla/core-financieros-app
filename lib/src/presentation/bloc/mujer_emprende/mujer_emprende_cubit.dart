@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -15,7 +16,7 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
     try {
       final (isOk, message) = await repository.mujerEmprendeAnswer(
         mujerEmprendeModel: MujerEmprendeModel(
-          database: state.database,
+          database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           otrosIngresos: state.otrosIngresos,
           otrosIngresosDescripcion: state.otrosIngresosDescripcion,

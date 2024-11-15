@@ -1,5 +1,7 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -108,6 +110,12 @@ class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
                               comoMejoraVida: comoMejoraVida.text.trim(),
                               planesFuturo: planesFuturo.text.trim(),
                               otrosDatosCliente: otrosDatosCliente.text.trim(),
+                              objSolicitudNuevamenorId: int.tryParse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
                             );
                         context.read<ResponseCubit>().addResponses(
                           responses: [
@@ -171,68 +179,125 @@ class _RecurrentForm extends StatefulWidget {
 
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final comoFortalece = TextEditingController();
+  final siguientePaso = TextEditingController();
+  final personaAutoSuficiente = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
-                  .tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title: '¿En qué piensa invertir este nuevo préstamo? Explique',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title: 'A futuro ¿Cuál seria su siguiente paso?*',
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title:
-                  'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              Text(
+                'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
+                    .tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: motivoPrestamo,
+                title: '¿En qué piensa invertir este nuevo préstamo? Explique',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: comoFortalece,
+                title:
+                    '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: siguientePaso,
+                title: 'A futuro ¿Cuál seria su siguiente paso?*',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: personaAutoSuficiente,
+                title:
+                    'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEstandartCubit>().saveAnswers(
+                          motivoPrestamo: motivoPrestamo.text.trim(),
+                          comoFortalece: comoFortalece.text.trim(),
+                          siguientePaso: siguientePaso.text.trim(),
+                          personaAutoSuficiente:
+                              personaAutoSuficiente.text.trim(),
+                          objSolicitudRecurrenteId: int.tryParse(
+                              context.read<KivaRouteCubit>().state.solicitudId),
+                        );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿En qué piensa invertir este nuevo préstamo? Explique',
+                          response: motivoPrestamo.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
+                          response: comoFortalece.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'A futuro ¿Cuál seria su siguiente paso?*',
+                          response: siguientePaso.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
+                          response: personaAutoSuficiente.text.trim(),
+                        ),
+                      ],
+                    );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

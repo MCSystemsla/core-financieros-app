@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -234,84 +235,148 @@ class _RecurrenteFormWidget extends StatefulWidget {
 
 class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
     with AutomaticKeepAliveClientMixin {
+  final personasCargo = TextEditingController();
+  final numeroHijos = TextEditingController();
+  final edadHijos = TextEditingController();
+  String? tipoEstudioHijos;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'Descripción del entorno familiar.'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            const CommentaryWidget(
-              title: 'Número de personas a cargo:*',
-            ),
-            const Gap(20),
-            const CommentaryWidget(title: 'Número de hijos:*'),
-            const Gap(20),
-            const CommentaryWidget(title: '¿Que edades tienen sus hijos? '),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 2,
+              ),
+              const Gap(20),
+              Text(
+                'Descripción del entorno familiar.'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Número de personas a cargo:*',
+                textEditingController: personasCargo,
                 validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
                   return null;
                 },
-                title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                items: const [
-                  'Ninguno',
-                  'Preescolar',
-                  'Primaria',
-                  'Secundaria',
-                  'Técnico',
-                  'Universitario'
-                ],
-                onChanged: (item) {
-                  if (item == null) return;
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Número de hijos:*',
+                textEditingController: numeroHijos,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Que edades tienen sus hijos?',
+                textEditingController: edadHijos,
+              ),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tipoEstudioHijos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEstandartCubit>().saveAnswers(
+                          personasCargo:
+                              int.tryParse(personasCargo.text.trim()),
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                          edadHijos: numeroHijos.text.trim(),
+                          tipoEstudioHijos: tipoEstudioHijos,
+                        );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Número de personas a cargo:*',
+                          response: personasCargo.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Que edades tienen sus hijos?',
+                          response: edadHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Qué tipo de estudios reciben sus hijos?',
+                          response: tipoEstudioHijos ?? 'N/A',
+                        ),
+                      ],
+                    );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

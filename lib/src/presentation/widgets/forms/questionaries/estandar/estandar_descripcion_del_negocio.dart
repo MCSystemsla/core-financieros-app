@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -243,110 +244,189 @@ class _RecurrentForm extends StatefulWidget {
 class _RecurrentFormState extends State<_RecurrentForm>
     with AutomaticKeepAliveClientMixin {
   String? decisionItem;
+  final explicacionInversion = TextEditingController();
+  String? apoyanNegocio;
+  String? cuantosApoyan;
+  final comoMejoroEntorno = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 4,
-              currentStep: 3,
-            ),
-            const Gap(20),
-            Text(
-              'Descripcíon del crédito anterior'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            const MotivoPrestamoWidget(),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-                  return null;
-                },
-                title:
-                    '¿Coincide la respuesta del cliente con el formato anterior?'
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 4,
+                currentStep: 3,
+              ),
+              const Gap(20),
+              Text(
+                'Descripcíon del crédito anterior'.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              const MotivoPrestamoWidget(),
+              const Gap(20),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title:
+                      '¿Coincide la respuesta del cliente con el formato anterior?'
+                          .tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    decisionItem = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              if (decisionItem == 'input.no'.tr())
+                CommentaryWidget(
+                  textEditingController: explicacionInversion,
+                  title:
+                      'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                ),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
+                  title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    apoyanNegocio = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              const Gap(20),
+              if (apoyanNegocio == 'input.yes'.tr())
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+                      return null;
+                    },
+                    title: 'De ser positivo, favor responder cuántas personas'
                         .tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  decisionItem = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
-              ),
-            ),
-            if (decisionItem == 'input.no'.tr())
-              const CommentaryWidget(
-                title:
-                    'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-              ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-                  return null;
-                },
-                title:
-                    '¿Hay alguien que le apoye en su negocio? de ser positivo, favor responder cuántas personas'
-                        .tr(),
-                items: const [
-                  '1 a 3',
-                  '4 a 6',
-                  '7 o mas',
-                ],
-                onChanged: (item) {
-                  if (item == null) return;
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
-              ),
-            ),
-            const CommentaryWidget(
-              title:
-                  '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique. ',
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
+                    items: const [
+                      '1 a 3',
+                      '4 a 6',
+                      '7 o mas',
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      cuantosApoyan = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
                   ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(10),
-          ],
+                ),
+              CommentaryWidget(
+                textEditingController: comoMejoroEntorno,
+                title:
+                    '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<RecurrenteEstandartCubit>().saveAnswers(
+                          coincideRespuesta: decisionItem == 'input.yes'.tr(),
+                          explicacionInversion:
+                              explicacionInversion.text.trim(),
+                          apoyanNegocio: apoyanNegocio == 'input.yes'.tr(),
+                          cuantosApoyan: cuantosApoyan,
+                          comoMejoraEntorno: comoMejoroEntorno.text.trim(),
+                        );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: decisionItem ?? 'N/A',
+                        ),
+                        if (decisionItem == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                            response: explicacionInversion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: '¿Hay alguien que le apoye en su negocio?',
+                          response: apoyanNegocio ?? 'N/A',
+                        ),
+                        if (apoyanNegocio == 'input.yes'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                'De ser positivo, favor responder cuántas personas',
+                            response: cuantosApoyan ?? 'N/A',
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
+                          response: cuantosApoyan ?? 'N/A',
+                        ),
+                      ],
+                    );
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );
