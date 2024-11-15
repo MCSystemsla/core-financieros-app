@@ -47,6 +47,7 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Form(
               key: formKey,
               child: Column(
