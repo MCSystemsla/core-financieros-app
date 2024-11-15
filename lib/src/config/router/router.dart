@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/offline_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
@@ -192,15 +190,6 @@ final router = GoRouter(
     GoRoute(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
-      redirect: (ctx, state) async {
-        final isInternetConnection =
-            ctx.watch<InternetConnectionCubit>().state.isConnected;
-
-        return switch (isInternetConnection) {
-          true => '/login',
-          false => '/',
-        };
-      },
     ),
     GoRoute(
       path: '/credito',
