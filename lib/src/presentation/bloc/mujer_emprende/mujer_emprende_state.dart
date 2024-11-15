@@ -20,6 +20,7 @@ class MujerEmprendeState extends Equatable {
   final String comoImpactariaNegocio;
   final String comoMejoraCalidadVida;
   final String otrosDatosCliente;
+  final String errorMsg;
   const MujerEmprendeState({
     this.status = Status.notStarted,
     this.database = 'MC_CH',
@@ -39,6 +40,7 @@ class MujerEmprendeState extends Equatable {
     this.comoImpactariaNegocio = '',
     this.comoMejoraCalidadVida = '',
     this.otrosDatosCliente = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -61,6 +63,7 @@ class MujerEmprendeState extends Equatable {
         comoImpactariaNegocio,
         comoMejoraCalidadVida,
         otrosDatosCliente,
+        errorMsg
       ];
 
   MujerEmprendeState copyWith({
@@ -82,6 +85,7 @@ class MujerEmprendeState extends Equatable {
     String? comoImpactariaNegocio,
     String? comoMejoraCalidadVida,
     String? otrosDatosCliente,
+    String? errorMsg,
   }) {
     return MujerEmprendeState(
       status: status ?? this.status,
@@ -107,6 +111,7 @@ class MujerEmprendeState extends Equatable {
       comoMejoraCalidadVida:
           comoMejoraCalidadVida ?? this.comoMejoraCalidadVida,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

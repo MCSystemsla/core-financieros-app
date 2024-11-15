@@ -58,7 +58,7 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await repository.aguaYSaneamientoAnswer(
+      final (isOk, message) = await repository.aguaYSaneamientoAnswer(
         aguaSaneamientoModel: AguaSaneamientoModel(
           database: state.database,
           objSolicitudNuevamenorId: state.solicitudNuevamenorId,
@@ -83,13 +83,13 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
-      if (!resp) {
-        emit(state.copyWith(status: Status.error));
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
         return;
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 }

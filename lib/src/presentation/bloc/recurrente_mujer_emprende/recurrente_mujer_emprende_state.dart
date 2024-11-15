@@ -22,6 +22,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
   final String siguientePaso;
   final bool alcanzaraMeta;
   final String explicacionAlcanzaraMeta;
+  final String errorMsg;
   const RecurrenteMujerEmprendeState({
     this.status = Status.notStarted,
     this.database = 'MC_CH',
@@ -43,6 +44,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     this.siguientePaso = '',
     this.alcanzaraMeta = false,
     this.explicacionAlcanzaraMeta = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -67,6 +69,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
         siguientePaso,
         alcanzaraMeta,
         explicacionAlcanzaraMeta,
+        errorMsg,
       ];
 
   RecurrenteMujerEmprendeState copyWith({
@@ -90,6 +93,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    String? errorMsg,
   }) {
     return RecurrenteMujerEmprendeState(
       status: status ?? this.status,
@@ -116,6 +120,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
       alcanzaraMeta: alcanzaraMeta ?? this.alcanzaraMeta,
       explicacionAlcanzaraMeta:
           explicacionAlcanzaraMeta ?? this.explicacionAlcanzaraMeta,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

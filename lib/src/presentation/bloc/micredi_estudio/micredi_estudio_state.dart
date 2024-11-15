@@ -30,6 +30,7 @@ class MicrediEstudioState extends Equatable {
   final String planFuturo;
   final String aspiraLaboralmente;
   final String otrosDatosCliente;
+  final String errorMsg;
 
   const MicrediEstudioState({
     this.status = Status.notStarted,
@@ -60,6 +61,7 @@ class MicrediEstudioState extends Equatable {
     this.planFuturo = '',
     this.aspiraLaboralmente = '',
     this.otrosDatosCliente = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -92,6 +94,7 @@ class MicrediEstudioState extends Equatable {
         planFuturo,
         aspiraLaboralmente,
         otrosDatosCliente,
+        errorMsg,
       ];
 
   MicrediEstudioState copyWith({
@@ -123,6 +126,7 @@ class MicrediEstudioState extends Equatable {
     String? planFuturo,
     String? aspiraLaboralmente,
     String? otrosDatosCliente,
+    String? errorMsg,
   }) {
     return MicrediEstudioState(
       status: status ?? this.status,
@@ -160,6 +164,7 @@ class MicrediEstudioState extends Equatable {
       planFuturo: planFuturo ?? this.planFuturo,
       aspiraLaboralmente: aspiraLaboralmente ?? this.aspiraLaboralmente,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

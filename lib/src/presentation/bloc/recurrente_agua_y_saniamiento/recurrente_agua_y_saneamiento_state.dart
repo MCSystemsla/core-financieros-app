@@ -24,6 +24,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
   final String siguientePaso;
   final bool alcanzaraMeta;
   final String explicacionAlcanzaraMeta;
+  final String errorMsg;
   const RecurrenteAguaYSaneamientoState({
     this.status = Status.notStarted,
     this.objSolicitudRecurrenteId = 262,
@@ -47,6 +48,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
     this.siguientePaso = '',
     this.alcanzaraMeta = false,
     this.explicacionAlcanzaraMeta = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -73,6 +75,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
         siguientePaso,
         alcanzaraMeta,
         explicacionAlcanzaraMeta,
+        errorMsg,
       ];
 
   RecurrenteAguaYSaneamientoState copyWith({
@@ -98,6 +101,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    String? errorMsg,
   }) {
     return RecurrenteAguaYSaneamientoState(
       status: status ?? this.status,
@@ -127,6 +131,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
       alcanzaraMeta: alcanzaraMeta ?? this.alcanzaraMeta,
       explicacionAlcanzaraMeta:
           explicacionAlcanzaraMeta ?? this.explicacionAlcanzaraMeta,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }
