@@ -2,57 +2,65 @@ import 'dart:io';
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
-import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ResponsesRepository {
-  Future<bool> mejoraViviendaAnswer({
+  Future<(bool, String)> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   });
-  Future<bool> mejoraViviendaRecurrenteAnswer({
+  Future<(bool, String)> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   });
-  Future<bool> energiaLimpia({
+  Future<(bool, String)> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   });
-  Future<bool> recurrenteREnergiaLimpiaAnswer({
+  Future<(bool, String)> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   });
-  Future<bool> aguaYSaneamientoAnswer({
+  Future<(bool, String)> aguaYSaneamientoAnswer({
     required AguaSaneamientoModel aguaSaneamientoModel,
   });
-  Future<bool> recurrenteAguaYSaneamientoAnswer({
+  Future<(bool, String)> recurrenteAguaYSaneamientoAnswer({
     required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
   });
-  Future<bool> mujerEmprendeAnswer({
+  Future<(bool, String)> mujerEmprendeAnswer({
     required MujerEmprendeModel mujerEmprendeModel,
   });
-  Future<bool> recurrenteMujerEmprendeAnswer({
+  Future<(bool, String)> recurrenteMujerEmprendeAnswer({
     required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
   });
-  Future<bool> miCrediEstudioAnswer({
+  Future<(bool, String)> miCrediEstudioAnswer({
     required MiCrediEstudioModel miCrediEstudioModel,
   });
-  Future<bool> recurrenteMiCrediEstudioAnswer({
+  Future<(bool, String)> recurrenteMiCrediEstudioAnswer({
     required RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel,
   });
   Future<String> motivoPrestamo({
     required int numero,
   });
-  Future<bool> uploadUserFiles({
+  Future<(bool, String)> estandar({
+    required EstandarModel estandarModel,
+  });
+  Future<(bool, String)> recurrenteEstandar({
+    required RecurrenteEstandarModel recurrenteEstandarModel,
+  });
+  Future<(bool, String)> uploadUserFiles({
     required File imagen1,
     required File imagen2,
     required File imagen3,
@@ -69,7 +77,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   final _logger = Logger();
 
   @override
-  Future<bool> mejoraViviendaAnswer({
+  Future<(bool, String)> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
   }) async {
     final endpoint = MejoraViviendaKivaResponsesEndpoind(
@@ -77,17 +85,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> mejoraViviendaRecurrenteAnswer({
+  Future<(bool, String)> mejoraViviendaRecurrenteAnswer({
     required MejoraViviendaRecurrente mejoraViviendaRecurrente,
   }) async {
     try {
@@ -95,17 +103,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         mejoraViviendaAnswer: mejoraViviendaRecurrente,
       );
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> energiaLimpia({
+  Future<(bool, String)> energiaLimpia({
     required EnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = EnergiaLimpiaEndpoint(
@@ -113,17 +121,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> recurrenteREnergiaLimpiaAnswer({
+  Future<(bool, String)> recurrenteREnergiaLimpiaAnswer({
     required RecurrenteEnergiaLimpiaModel energiaLimpiaModel,
   }) async {
     final endpoint = RecurrenteEnergiaLimpiaEndpoint(
@@ -131,17 +139,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> aguaYSaneamientoAnswer({
+  Future<(bool, String)> aguaYSaneamientoAnswer({
     required AguaSaneamientoModel aguaSaneamientoModel,
   }) async {
     final endpoint = AguaSaneamientoEndpoint(
@@ -149,17 +157,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> recurrenteAguaYSaneamientoAnswer({
+  Future<(bool, String)> recurrenteAguaYSaneamientoAnswer({
     required RecurrenteAguaSaneamientoModel recurrenteAguaSaneamientoModel,
   }) async {
     final endpoint = RecurrenteAguaSaneamientoEndpoint(
@@ -167,17 +175,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> mujerEmprendeAnswer({
+  Future<(bool, String)> mujerEmprendeAnswer({
     required MujerEmprendeModel mujerEmprendeModel,
   }) async {
     final endpoint = MujerEmprendeEndpoint(
@@ -185,17 +193,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> recurrenteMujerEmprendeAnswer({
+  Future<(bool, String)> recurrenteMujerEmprendeAnswer({
     required RecurrenteMujerEmprendeModel recurrenteMujerEmprendeModel,
   }) async {
     final endpoint = RecurrenteMujerEmprendeEndpoint(
@@ -203,17 +211,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> miCrediEstudioAnswer({
+  Future<(bool, String)> miCrediEstudioAnswer({
     required MiCrediEstudioModel miCrediEstudioModel,
   }) async {
     final endpoint = MiCrediEstudioEndpoint(
@@ -221,17 +229,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
   @override
-  Future<bool> recurrenteMiCrediEstudioAnswer({
+  Future<(bool, String)> recurrenteMiCrediEstudioAnswer({
     required RecurrenteMiCrediEstudioModel recurrenteMiCrediEstudioModel,
   }) async {
     final endpoint = RecurrenteMiCrediEstudioEndpoint(
@@ -239,12 +247,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return false;
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
       _logger.i(resp);
-      return true;
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
     }
   }
 
@@ -256,15 +264,18 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       final endpoint = KivaMotivoAnteriorEndpoint(numero: numero);
       final resp = await _api.request(endpoint: endpoint);
       _logger.i(resp);
+      if (resp['MotivoAnterior'] == null) {
+        return 'Este Usuario no tiene un prestamo anterior.';
+      }
       return resp['MotivoAnterior'];
     } catch (e) {
       _logger.e(e);
-      throw AppException.toAppException(e);
+      return e.toString();
     }
   }
 
   @override
-  Future<bool> uploadUserFiles({
+  Future<(bool, String)> uploadUserFiles({
     required File imagen1,
     required File imagen2,
     required File imagen3,
@@ -329,7 +340,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
       request.fields['formularioKiva'] = 'ScrKivaCreditoEstandarRecurrente';
-      request.fields['database'] = 'MC_CH';
+      request.fields['database'] = LocalStorage().database;
 
       // Agregar imágenes
       request.files.add(await http.MultipartFile.fromPath(
@@ -379,10 +390,46 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   return true;
       // }
       _logger.i(response.reasonPhrase);
-      return true;
+      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
-      return false;
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> estandar(
+      {required EstandarModel estandarModel}) async {
+    final endpoint = EstandarEndpoint(estandarModel: estandarModel);
+
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      _logger.i(resp);
+      return (true, resp.toString());
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> recurrenteEstandar({
+    required RecurrenteEstandarModel recurrenteEstandarModel,
+  }) async {
+    final endpoint = RecurrenteEstandarEndpoint(
+      recurrenteEstandarModel: recurrenteEstandarModel,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      return (
+        true,
+        resp.toString(),
+      );
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
     }
   }
 }

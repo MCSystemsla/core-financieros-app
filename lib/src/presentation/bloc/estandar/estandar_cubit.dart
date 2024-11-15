@@ -1,21 +1,21 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
-part 'mujer_emprende_state.dart';
+part 'estandar_state.dart';
 
-class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
+class EstandarCubit extends Cubit<EstandarState> {
   final ResponsesRepository repository;
-  MujerEmprendeCubit(this.repository) : super(MujerEmprendeInitial());
-
+  EstandarCubit(this.repository) : super(EstandarInitial());
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, message) = await repository.mujerEmprendeAnswer(
-        mujerEmprendeModel: MujerEmprendeModel(
-          database: state.database,
+      final (isOK, message) = await repository.estandar(
+        estandarModel: EstandarModel(
+          database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           otrosIngresos: state.otrosIngresos,
           otrosIngresosDescripcion: state.otrosIngresosDescripcion,
@@ -24,17 +24,18 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
           numeroHijos: state.numeroHijos,
           edadHijos: state.edadHijos,
           tipoEstudioHijos: state.tipoEstudioHijos,
-          motivoEmprender: state.motivoEmprender,
-          conocioMujerEmprende: state.conocioMujerEmprende,
-          impulsoOptar: state.impulsoOptar,
+          inicioNegocio: DateTime.tryParse(state.inicioNegocio)!,
+          apoyanNegocio: state.apoyanNegocio,
+          cuantosApoyan: state.cuantosApoyan,
+          publicitarNegocio: state.publicitarNegocio,
+          negocioProximosAnios: state.negocioProximosAnios,
           motivoPrestamo: state.motivoPrestamo,
-          quienApoya: state.quienApoya,
-          comoImpactariaNegocio: state.comoImpactariaNegocio,
-          comoMejoraCalidadVida: state.comoMejoraCalidadVida,
+          comoMejoraVida: state.comoMejoraVida,
+          planesFuturo: state.planesFuturo,
           otrosDatosCliente: state.otrosDatosCliente,
         ),
       );
-      if (!isOk) {
+      if (!isOK) {
         emit(state.copyWith(status: Status.error, errorMsg: message));
         return;
       }
@@ -45,6 +46,8 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
   }
 
   void saveAnswers({
+    String? database,
+    int? objSolicitudNuevamenorId,
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
     String? objOrigenCatalogoValorId,
@@ -52,18 +55,20 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
-    String? motivoEmprender,
-    String? conocioMujerEmprende,
-    String? impulsoOptar,
+    String? inicioNegocio,
+    bool? apoyanNegocio,
+    String? cuantosApoyan,
+    String? publicitarNegocio,
+    String? negocioProximosAnios,
     String? motivoPrestamo,
-    String? quienApoya,
-    String? comoImpactariaNegocio,
-    String? comoMejoraCalidadVida,
+    String? comoMejoraVida,
+    String? planesFuturo,
     String? otrosDatosCliente,
-    int? objSolicitudNuevamenorId,
   }) {
     emit(
       state.copyWith(
+        database: database,
+        objSolicitudNuevamenorId: objSolicitudNuevamenorId,
         otrosIngresos: otrosIngresos,
         otrosIngresosDescripcion: otrosIngresosDescripcion,
         objOrigenCatalogoValorId: objOrigenCatalogoValorId,
@@ -71,15 +76,15 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
         numeroHijos: numeroHijos,
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
-        motivoEmprender: motivoEmprender,
-        conocioMujerEmprende: state.conocioMujerEmprende,
-        impulsoOptar: impulsoOptar,
+        inicioNegocio: inicioNegocio,
+        apoyanNegocio: apoyanNegocio,
+        cuantosApoyan: cuantosApoyan,
+        publicitarNegocio: publicitarNegocio,
+        negocioProximosAnios: negocioProximosAnios,
         motivoPrestamo: motivoPrestamo,
-        quienApoya: quienApoya,
-        comoImpactariaNegocio: comoImpactariaNegocio,
-        comoMejoraCalidadVida: comoMejoraCalidadVida,
+        comoMejoraVida: comoMejoraVida,
+        planesFuturo: planesFuturo,
         otrosDatosCliente: otrosDatosCliente,
-        objSolicitudNuevamenorId: objSolicitudNuevamenorId,
       ),
     );
   }

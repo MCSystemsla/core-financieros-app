@@ -24,6 +24,7 @@ class AguaYSaneamientoState extends Equatable {
   final String siguienteProyectoCalidadVida;
   final String metasProximas;
   final String otrosDatosCliente;
+  final String errorMsg;
 
   const AguaYSaneamientoState({
     this.status = Status.notStarted,
@@ -48,6 +49,7 @@ class AguaYSaneamientoState extends Equatable {
     this.siguienteProyectoCalidadVida = '',
     this.metasProximas = '',
     this.otrosDatosCliente = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -74,6 +76,7 @@ class AguaYSaneamientoState extends Equatable {
         siguienteProyectoCalidadVida,
         metasProximas,
         otrosDatosCliente,
+        errorMsg,
       ];
 
   AguaYSaneamientoState copyWith({
@@ -99,6 +102,7 @@ class AguaYSaneamientoState extends Equatable {
     String? siguienteProyectoCalidadVida,
     String? metasProximas,
     String? otrosDatosCliente,
+    String? errorMsg,
   }) {
     return AguaYSaneamientoState(
       status: status ?? this.status,
@@ -130,6 +134,7 @@ class AguaYSaneamientoState extends Equatable {
           siguienteProyectoCalidadVida ?? this.siguienteProyectoCalidadVida,
       metasProximas: metasProximas ?? this.metasProximas,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

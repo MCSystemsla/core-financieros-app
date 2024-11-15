@@ -15,7 +15,7 @@ class RecurrenteMicrediEstudioCubit
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await repository.recurrenteMiCrediEstudioAnswer(
+      final (isOk, message) = await repository.recurrenteMiCrediEstudioAnswer(
         recurrenteMiCrediEstudioModel: RecurrenteMiCrediEstudioModel(
           database: state.database,
           tieneTrabajo: state.tieneTrabajo,
@@ -42,12 +42,12 @@ class RecurrenteMicrediEstudioCubit
           explicacionAlcanzaraMeta: state.explicacionAlcanzaraMeta,
         ),
       );
-      if (!resp) {
-        return emit(state.copyWith(status: Status.error));
+      if (!isOk) {
+        return emit(state.copyWith(status: Status.error, errorMsg: message));
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 

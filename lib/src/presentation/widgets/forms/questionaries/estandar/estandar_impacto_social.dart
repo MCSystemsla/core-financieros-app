@@ -1,8 +1,12 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class EstandarImpactoSocial extends StatefulWidget {
@@ -20,6 +24,12 @@ class EstandarImpactoSocial extends StatefulWidget {
 
 class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
     with AutomaticKeepAliveClientMixin {
+  final motivoPrestamo = TextEditingController();
+  final planesFuturo = TextEditingController();
+  final otrosDatosCliente = TextEditingController();
+  final comoMejoraVida = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -30,62 +40,117 @@ class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 4,
-                  currentStep: 3,
-                ),
-                const Gap(20),
-                Text(
-                  'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
-                      .tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title: '¿Para qué solicitó el préstamo? Explique',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title:
-                      '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title:
-                      '¿Cuáles son sus planes personales para los proximos 5 años?*',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title: 'Otros datos relevantes e interesantes del cliente',
-                ),
-                const Gap(20),
-                ButtonActionsWidget(
-                  onPreviousPressed: () {
-                    widget.pageController.previousPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onNextPressed: () {
-                    widget.pageController.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  previousTitle: 'button.previous'.tr(),
-                  nextTitle: 'button.next'.tr(),
-                ),
-                const Gap(10),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MiCreditoProgress(
+                    steps: 4,
+                    currentStep: 3,
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
+                        .tr(),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Para qué solicitó el préstamo? Explique',
+                    textEditingController: motivoPrestamo,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: planesFuturo,
+                    title:
+                        '¿Cuáles son sus planes personales para los proximos 5 años?*',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: comoMejoraVida,
+                    title:
+                        '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: otrosDatosCliente,
+                    title: 'Otros datos relevantes e interesantes del cliente',
+                  ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    onPreviousPressed: () {
+                      widget.pageController.previousPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onNextPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        context.read<EstandarCubit>().saveAnswers(
+                              motivoPrestamo: motivoPrestamo.text.trim(),
+                              comoMejoraVida: comoMejoraVida.text.trim(),
+                              planesFuturo: planesFuturo.text.trim(),
+                              otrosDatosCliente: otrosDatosCliente.text.trim(),
+                            );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Para qué solicitó el préstamo? Explique',
+                              response: motivoPrestamo.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Cuáles son sus planes personales para los proximos 5 años?*',
+                              response: planesFuturo.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
+                              response: comoMejoraVida.text.trim(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  'Otros datos relevantes e interesantes del cliente',
+                              response: otrosDatosCliente.text.trim(),
+                            ),
+                          ],
+                        );
+                        widget.pageController.nextPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                  const Gap(10),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,11 +1,18 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/dates_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class EstandarDescripciondelNegocio extends StatefulWidget {
@@ -25,6 +32,33 @@ class EstandarDescripciondelNegocio extends StatefulWidget {
 class _EstandarDescripciondelNegocioState
     extends State<EstandarDescripciondelNegocio>
     with AutomaticKeepAliveClientMixin {
+  late DateTime _selectedDate;
+  String? apoyanNegocio;
+  final publicitarNegocio = TextEditingController();
+  final negocioProximosAnios = TextEditingController();
+  String? coincideRespuesta;
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _selectedDate = DateTime.now();
+    super.initState();
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      _selectedDate = picked;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -35,81 +69,159 @@ class _EstandarDescripciondelNegocioState
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 4,
-                  currentStep: 3,
-                ),
-                const Gap(20),
-                Text(
-                  'Descripción y desarrollo del negocio.'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.w500,
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MiCreditoProgress(
+                    steps: 4,
+                    currentStep: 3,
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Descripción y desarrollo del negocio.'.tr(),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const Gap(20),
+                  DatesWidget(
+                    title: '¿Cuenténos cómo inició su negocio?*',
+                    onSelectedDate: () => selectDate(context),
+                    selectedDate: _selectedDate,
+                  ),
+                  const Gap(20),
+                  WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+
+                        return null;
+                      },
+                      title:
+                          '¿Hay alguien que le apoye en su negocio? de ser positivo,?'
+                              .tr(),
+                      items: ['input.yes'.tr(), 'input.no'.tr()],
+                      onChanged: (item) {
+                        if (item == null) return;
+                        coincideRespuesta = item;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                  const Gap(20),
+                  if (coincideRespuesta == 'input.yes'.tr())
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        title: 'Favor responder cuántas personas'.tr(),
+                        items: const [
+                          '1 a 3',
+                          '4 a 6',
+                          '7 o mas',
+                        ],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          apoyanNegocio = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
                       ),
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                    title: '¿Cuenténos cómo inició su negocio?*'),
-                const Gap(20),
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
-                    isContainIcon: true,
+                    ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
+                    textEditingController: publicitarNegocio,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Cómo mira su negocio en los proximos años?*',
+                    textEditingController: negocioProximosAnios,
                     validator: (value) {
-                      if (value == null) return 'input.input_validator'.tr();
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
                       return null;
                     },
-                    title:
-                        '¿Hay alguien que le apoye en su negocio? de ser positivo, favor responder cuántas personas'
-                            .tr(),
-                    items: const [
-                      '1 a 3',
-                      '4 a 6',
-                      '7 o mas',
-                    ],
-                    onChanged: (item) {
-                      if (item == null) return;
-                    },
-                    toStringItem: (item) {
-                      return item;
-                    },
-                    hintText: 'input.select_option'.tr(),
                   ),
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title:
-                      '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
-                ),
-                const Gap(20),
-                const CommentaryWidget(
-                  title: '¿Cómo mira su negocio en los proximos años?*',
-                ),
-                const Gap(20),
-                ButtonActionsWidget(
-                  onPreviousPressed: () {
-                    widget.pageController.previousPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onNextPressed: () {
-                    widget.pageController.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  previousTitle: 'button.previous'.tr(),
-                  nextTitle: 'button.next'.tr(),
-                ),
-                const Gap(10),
-              ],
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    onPreviousPressed: () {
+                      widget.pageController.previousPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onNextPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        context.read<EstandarCubit>().saveAnswers(
+                              inicioNegocio: _selectedDate.toString(),
+                              cuantosApoyan: apoyanNegocio,
+                              publicitarNegocio: publicitarNegocio.text.trim(),
+                              negocioProximosAnios:
+                                  negocioProximosAnios.text.trim(),
+                            );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: '¿Cuenténos cómo inició su negocio?*',
+                              response: _selectedDate.formatDate(),
+                            ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
+                              response: coincideRespuesta ?? 'N/A',
+                            ),
+                            if (coincideRespuesta == 'input.yes'.tr())
+                              Response(
+                                index: widget.pageController.page?.toInt() ?? 0,
+                                question: 'Favor responder cuántas personas',
+                                response: apoyanNegocio ?? 'N/A',
+                              ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question:
+                                  '¿Cómo mira su negocio en los proximos años?*',
+                              response: negocioProximosAnios.text.trim(),
+                            ),
+                          ],
+                        );
+                        widget.pageController.nextPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                  const Gap(10),
+                ],
+              ),
             ),
           ),
         ),

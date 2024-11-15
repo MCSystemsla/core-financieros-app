@@ -14,7 +14,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
   Future<void> sendAnswers() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await _repository.recurrenteREnergiaLimpiaAnswer(
+      final (isOk, message) = await _repository.recurrenteREnergiaLimpiaAnswer(
         energiaLimpiaModel: RecurrenteEnergiaLimpiaModel(
           database: state.database,
           tieneTrabajo: state.tieneTrabajo,
@@ -38,13 +38,13 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
           siguienteMeta: state.siguienteMeta,
         ),
       );
-      if (!resp) {
-        emit(state.copyWith(status: Status.error));
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
         return;
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 

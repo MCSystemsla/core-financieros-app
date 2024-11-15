@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
@@ -15,15 +16,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EstandarScreen extends StatelessWidget {
-  const EstandarScreen({super.key});
+  final String typeProduct;
+  const EstandarScreen({super.key, required this.typeProduct});
 
   @override
   Widget build(BuildContext context) {
-    const isRecurrentForm = true;
+    final isRecurrentForm = typeProduct == 'ESTANDAR NUEVO';
     final pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (ctx) => EstandarCubit(repository),
+        ),
         BlocProvider(
           create: (ctx) => ResponseCubit(),
         ),
@@ -48,7 +53,7 @@ class EstandarScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: const Text('Estandar'),
+            title: Text('Estandar ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
           ),
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
@@ -58,7 +63,7 @@ class EstandarScreen extends StatelessWidget {
                 controller: pageController,
               ),
               EstandarAditionalData(
-                isRecurrenteForm: false,
+                isRecurrenteForm: isRecurrentForm,
                 pageController: pageController,
               ),
               EstandarEntornoFamiliar(
@@ -76,7 +81,7 @@ class EstandarScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
-              const SignQuestionaryWidget(),
+              const EstandarSign(),
             ],
           ),
         ),

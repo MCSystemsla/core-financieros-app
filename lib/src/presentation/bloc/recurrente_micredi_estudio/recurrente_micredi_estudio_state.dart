@@ -26,6 +26,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
   final String siguientePaso;
   final bool alcanzaraMeta;
   final String explicacionAlcanzaraMeta;
+  final String errorMsg;
   const RecurrenteMicrediEstudioState({
     this.status = Status.notStarted,
     this.database = 'MC_CH',
@@ -51,6 +52,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     this.siguientePaso = '',
     this.alcanzaraMeta = false,
     this.explicacionAlcanzaraMeta = '',
+    this.errorMsg = '',
   });
 
   @override
@@ -79,6 +81,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
         siguientePaso,
         alcanzaraMeta,
         explicacionAlcanzaraMeta,
+        errorMsg,
       ];
 
   RecurrenteMicrediEstudioState copyWith({
@@ -106,6 +109,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    String? errorMsg,
   }) {
     return RecurrenteMicrediEstudioState(
       status: status ?? this.status,
@@ -137,6 +141,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
       alcanzaraMeta: alcanzaraMeta ?? this.alcanzaraMeta,
       explicacionAlcanzaraMeta:
           explicacionAlcanzaraMeta ?? this.explicacionAlcanzaraMeta,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

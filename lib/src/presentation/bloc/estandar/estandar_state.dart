@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'mujer_emprende_cubit.dart';
+part of 'estandar_cubit.dart';
 
-class MujerEmprendeState extends Equatable {
+class EstandarState extends Equatable {
   final Status status;
   final String database;
   final int objSolicitudNuevamenorId;
@@ -12,19 +12,20 @@ class MujerEmprendeState extends Equatable {
   final int numeroHijos;
   final String edadHijos;
   final String tipoEstudioHijos;
-  final String motivoEmprender;
-  final String conocioMujerEmprende;
-  final String impulsoOptar;
+  final String inicioNegocio;
+  final bool apoyanNegocio;
+  final String cuantosApoyan;
+  final String publicitarNegocio;
+  final String negocioProximosAnios;
   final String motivoPrestamo;
-  final String quienApoya;
-  final String comoImpactariaNegocio;
-  final String comoMejoraCalidadVida;
+  final String comoMejoraVida;
+  final String planesFuturo;
   final String otrosDatosCliente;
   final String errorMsg;
-  const MujerEmprendeState({
+  const EstandarState({
     this.status = Status.notStarted,
-    this.database = 'MC_CH',
-    this.objSolicitudNuevamenorId = 262,
+    this.database = '',
+    this.objSolicitudNuevamenorId = 0,
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
     this.objOrigenCatalogoValorId = '',
@@ -32,13 +33,14 @@ class MujerEmprendeState extends Equatable {
     this.numeroHijos = 0,
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
-    this.motivoEmprender = '',
-    this.conocioMujerEmprende = '',
-    this.impulsoOptar = '',
+    this.inicioNegocio = '',
+    this.apoyanNegocio = false,
+    this.cuantosApoyan = '',
+    this.publicitarNegocio = '',
+    this.negocioProximosAnios = '',
     this.motivoPrestamo = '',
-    this.quienApoya = '',
-    this.comoImpactariaNegocio = '',
-    this.comoMejoraCalidadVida = '',
+    this.comoMejoraVida = '',
+    this.planesFuturo = '',
     this.otrosDatosCliente = '',
     this.errorMsg = '',
   });
@@ -55,18 +57,19 @@ class MujerEmprendeState extends Equatable {
         numeroHijos,
         edadHijos,
         tipoEstudioHijos,
-        motivoEmprender,
-        conocioMujerEmprende,
-        impulsoOptar,
+        inicioNegocio,
+        apoyanNegocio,
+        cuantosApoyan,
+        publicitarNegocio,
+        negocioProximosAnios,
         motivoPrestamo,
-        quienApoya,
-        comoImpactariaNegocio,
-        comoMejoraCalidadVida,
+        comoMejoraVida,
+        planesFuturo,
         otrosDatosCliente,
         errorMsg
       ];
 
-  MujerEmprendeState copyWith({
+  EstandarState copyWith({
     Status? status,
     String? database,
     int? objSolicitudNuevamenorId,
@@ -77,17 +80,18 @@ class MujerEmprendeState extends Equatable {
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
-    String? motivoEmprender,
-    String? conocioMujerEmprende,
-    String? impulsoOptar,
+    String? inicioNegocio,
+    bool? apoyanNegocio,
+    String? cuantosApoyan,
+    String? publicitarNegocio,
+    String? negocioProximosAnios,
     String? motivoPrestamo,
-    String? quienApoya,
-    String? comoImpactariaNegocio,
-    String? comoMejoraCalidadVida,
+    String? comoMejoraVida,
+    String? planesFuturo,
     String? otrosDatosCliente,
     String? errorMsg,
   }) {
-    return MujerEmprendeState(
+    return EstandarState(
       status: status ?? this.status,
       database: database ?? this.database,
       objSolicitudNuevamenorId:
@@ -101,19 +105,18 @@ class MujerEmprendeState extends Equatable {
       numeroHijos: numeroHijos ?? this.numeroHijos,
       edadHijos: edadHijos ?? this.edadHijos,
       tipoEstudioHijos: tipoEstudioHijos ?? this.tipoEstudioHijos,
-      motivoEmprender: motivoEmprender ?? this.motivoEmprender,
-      conocioMujerEmprende: conocioMujerEmprende ?? this.conocioMujerEmprende,
-      impulsoOptar: impulsoOptar ?? this.impulsoOptar,
+      inicioNegocio: inicioNegocio ?? this.inicioNegocio,
+      apoyanNegocio: apoyanNegocio ?? this.apoyanNegocio,
+      cuantosApoyan: cuantosApoyan ?? this.cuantosApoyan,
+      publicitarNegocio: publicitarNegocio ?? this.publicitarNegocio,
+      negocioProximosAnios: negocioProximosAnios ?? this.negocioProximosAnios,
       motivoPrestamo: motivoPrestamo ?? this.motivoPrestamo,
-      quienApoya: quienApoya ?? this.quienApoya,
-      comoImpactariaNegocio:
-          comoImpactariaNegocio ?? this.comoImpactariaNegocio,
-      comoMejoraCalidadVida:
-          comoMejoraCalidadVida ?? this.comoMejoraCalidadVida,
+      comoMejoraVida: comoMejoraVida ?? this.comoMejoraVida,
+      planesFuturo: planesFuturo ?? this.planesFuturo,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
       errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }
 
-final class MujerEmprendeInitial extends MujerEmprendeState {}
+final class EstandarInitial extends EstandarState {}
