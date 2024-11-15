@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class OfflineFormKivaScreen extends StatefulWidget {
   const OfflineFormKivaScreen({super.key});
@@ -88,7 +89,7 @@ class _RequestWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${double.tryParse(solicitud.monto.toString())} ${solicitud.moneda}',
+            '${NumberFormat('#,##0.00', 'en_US').format(solicitud.monto)} ${solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
