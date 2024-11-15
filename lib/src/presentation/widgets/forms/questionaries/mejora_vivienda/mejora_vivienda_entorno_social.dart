@@ -98,6 +98,12 @@ class _MejoraViviendaEntornoSocialState
                     CommentaryWidget(
                       textEditingController: storeDescription,
                       title: 'Cual?',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
                     ),
                   const Gap(20),
                   CommentaryWidget(

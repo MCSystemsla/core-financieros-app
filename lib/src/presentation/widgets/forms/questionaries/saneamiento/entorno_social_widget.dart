@@ -75,6 +75,12 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       child: JLuxDropdown(
                         isContainIcon: true,
                         title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
                         items: ['input.yes'.tr(), 'input.no'.tr()],
                         onChanged: (item) {
                           if (item == null) return;
@@ -87,8 +93,15 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     ),
                     if (tieneTrabajo == 'input.yes'.tr())
                       CommentaryWidget(
-                          title: 'Cual?',
-                          textEditingController: trabajoNegocioDescripcion),
+                        title: 'Cual?',
+                        textEditingController: trabajoNegocioDescripcion,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                      ),
                     const Gap(10),
                     CommentaryWidget(
                       title: 'Tiempo de la actividad (meses o años)',
@@ -334,6 +347,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   isContainIcon: true,
                   title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                   items: ['input.yes'.tr(), 'input.no'.tr()],
+                  validator: (value) {
+                    if (value == null) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   onChanged: (item) {
                     if (item == null) return;
                     tieneTrabajo = item;
@@ -347,6 +366,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   title: 'Cual?',
                   textEditingController: trabajoNegocioDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               CommentaryWidget(
                 textEditingController: tiempoActividad,

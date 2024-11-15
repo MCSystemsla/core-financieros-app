@@ -270,6 +270,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   title: 'Cual?',
                   textEditingController: trabajoNegocioDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               const Gap(10),
               CommentaryWidget(
