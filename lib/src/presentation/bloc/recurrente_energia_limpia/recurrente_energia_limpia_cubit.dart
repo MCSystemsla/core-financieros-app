@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -16,7 +17,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
     try {
       final (isOk, message) = await _repository.recurrenteREnergiaLimpiaAnswer(
         energiaLimpiaModel: RecurrenteEnergiaLimpiaModel(
-          database: state.database,
+          database: LocalStorage().database,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
           tiempoActividad: state.tiempoActividad,

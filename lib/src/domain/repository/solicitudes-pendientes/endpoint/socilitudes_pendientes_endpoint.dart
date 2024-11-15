@@ -16,6 +16,6 @@ class SolicitudesPendientesEndpoints extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         // if (queryParams != null) ...queryParams!,
-        'database': 'MC_CH',
+        'database': LocalStorage().database,
       };
 }

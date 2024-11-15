@@ -16,6 +16,6 @@ class DepartamentosEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         // if (queryParams != null) ...queryParams!,
-        'database': 'MC_JU',
+        'database': LocalStorage().database,
       };
 }

@@ -259,7 +259,7 @@ class KivaMotivoAnteriorEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => {
-        'database': 'MC_CH',
+        'database': LocalStorage().database,
         'solicitudId': numero,
       };
 }
@@ -290,9 +290,7 @@ class FileEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => {
-        'database': 'MC_CH',
-        'solicitudId': 3925,
-        'fotoCliente1': 3925,
+        'database': LocalStorage().database,
       };
 
   @override
