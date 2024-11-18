@@ -131,6 +131,7 @@ class _MujerEmprendeEntornoSocialWidgetState
                   ),
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
+                    textInputType: TextInputType.number,
                     textEditingController: question1,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -146,6 +147,7 @@ class _MujerEmprendeEntornoSocialWidgetState
                   CommentaryWidget(
                     title: 'Número de hijos:*',
                     textEditingController: question3,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -352,6 +354,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de personas a cargo:*',
                 textEditingController: personasCargo,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
@@ -363,6 +366,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de hijos:*',
                 textEditingController: numeroHijos,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();

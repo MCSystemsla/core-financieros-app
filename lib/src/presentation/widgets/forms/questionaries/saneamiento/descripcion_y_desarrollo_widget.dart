@@ -238,6 +238,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
               if (coincideRespuesta == 'input.no'.tr())
                 CommentaryWidget(
                   textEditingController: explicacionInversion,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title:
                       '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),

@@ -18,7 +18,7 @@
     "input_validator": "Este campo es obligatorio",
     "yes": "Si",
     "no": "No",
-    "form_response": "Respuestas Completadas en los Formularios",
+    "form_response": "Resumen de respuestas completadas en el formulario",
     "select_department": "Selecciona un Departamento"
    },
    "home": {

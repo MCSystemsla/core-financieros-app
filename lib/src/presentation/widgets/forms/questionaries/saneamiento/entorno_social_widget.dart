@@ -105,6 +105,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     const Gap(10),
                     CommentaryWidget(
                       title: 'Tiempo de la actividad (meses o años)',
+                      textInputType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'input.input_validator'.tr();
@@ -171,6 +172,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     const Gap(10),
                     CommentaryWidget(
                       title: 'Número de personas a cargo:*',
+                      textInputType: TextInputType.number,
                       textEditingController: personasCargo,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -183,6 +185,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     CommentaryWidget(
                       title: 'Numero de Hijos',
                       textEditingController: numeroHijos,
+                      textInputType: TextInputType.number,
                     ),
                     const Gap(10),
                     CommentaryWidget(

@@ -96,6 +96,7 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
                     textEditingController: personasCargo,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -107,6 +108,7 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                   CommentaryWidget(
                     title: 'Número de hijos:*',
                     textEditingController: numeroHijos,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -268,6 +270,7 @@ class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
               const Gap(20),
               CommentaryWidget(
                 title: 'Número de personas a cargo:*',
+                textInputType: TextInputType.number,
                 textEditingController: personasCargo,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -280,6 +283,7 @@ class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
               CommentaryWidget(
                 title: 'Número de hijos:*',
                 textEditingController: numeroHijos,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();

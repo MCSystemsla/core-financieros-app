@@ -91,6 +91,7 @@ class _EnergiaLimpiaAditionalDataWidgetState
                   const Gap(10),
                   CommentaryWidget(
                     title: 'Tiempo de la actividad:*',
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -280,6 +281,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               const Gap(10),
               CommentaryWidget(
                 title: 'Tiempo de la actividad:',
+                textInputType: TextInputType.number,
                 textEditingController: tiempoActividad,
               ),
               const Gap(20),

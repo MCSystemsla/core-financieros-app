@@ -278,6 +278,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   marginTop: 15,
                   padding: const EdgeInsets.all(10),
                   child: JLuxDropdown(
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+                      return null;
+                    },
                     isContainIcon: true,
                     title: 'De ser positivo, favor responder cuántas personas'
                         .tr(),

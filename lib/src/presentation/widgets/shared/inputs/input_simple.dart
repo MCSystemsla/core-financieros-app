@@ -46,9 +46,12 @@ class InputSimpleState extends State<InputSimple> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: TextFormField(
+            enableSuggestions: false,
             obscureText: widget.isPasswordField,
             validator: widget.textFieldSettings?.validator,
             keyboardType: widget.textFieldSettings?.keyboardType,
+            textCapitalization: widget.textFieldSettings?.textCapitalization ??
+                TextCapitalization.none,
             autocorrect: false,
             initialValue: widget.initialValue,
             enabled: widget.enabled,
@@ -81,7 +84,9 @@ class TextFieldSettings {
   const TextFieldSettings({
     this.keyboardType,
     this.validator,
+    this.textCapitalization,
   });
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
 }
