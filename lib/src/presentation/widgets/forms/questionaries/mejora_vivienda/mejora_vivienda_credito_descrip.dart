@@ -101,6 +101,12 @@ class _MejoraViviendaCreditoDescripState
               if (question2 == 'input.no'.tr())
                 CommentaryWidget(
                   textEditingController: isNotCoincideResponse,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title:
                       '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),

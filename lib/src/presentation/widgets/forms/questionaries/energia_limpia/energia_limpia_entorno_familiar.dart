@@ -148,6 +148,7 @@ class _EnergiaLimpiaEntornoFamiliarState
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
                     textEditingController: personasCargo,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -159,6 +160,7 @@ class _EnergiaLimpiaEntornoFamiliarState
                   CommentaryWidget(
                     title: 'Número de hijos:*',
                     textEditingController: numeroHijos,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();

@@ -489,6 +489,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
 
   @override
   Widget build(BuildContext context) {
+    final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
     final size = MediaQuery.sizeOf(context);
     super.build(context);
     return SingleChildScrollView(
@@ -496,10 +497,19 @@ class _SaneamientoContentState extends State<SaneamientoContent>
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MiCreditoProgress(
               steps: 4,
               currentStep: 1,
+            ),
+            const Gap(20),
+            Text(
+              'Cliente: $solicitudCliente',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
             const Gap(20),
             Text(

@@ -90,7 +90,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               setState(() {});
             },
             textFieldSettings: TextFieldSettings(
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.name,
+              textCapitalization: TextCapitalization.characters,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'auth.errors.username'.tr();
@@ -107,7 +108,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             isPasswordField: true,
             enabled: true,
             textFieldSettings: TextFieldSettings(
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.text,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'auth.errors.password'.tr();

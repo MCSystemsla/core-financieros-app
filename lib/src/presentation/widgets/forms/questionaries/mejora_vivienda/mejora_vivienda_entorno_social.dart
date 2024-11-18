@@ -98,6 +98,12 @@ class _MejoraViviendaEntornoSocialState
                     CommentaryWidget(
                       textEditingController: storeDescription,
                       title: 'Cual?',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
                     ),
                   const Gap(20),
                   CommentaryWidget(
@@ -110,6 +116,7 @@ class _MejoraViviendaEntornoSocialState
                       return null;
                     },
                     title: 'Tiempo de la actividad:*',
+                    textInputType: TextInputType.number,
                   ),
                   const Gap(20),
                   WhiteCard(
@@ -201,6 +208,7 @@ class _MejoraViviendaEntornoSocialState
                   CommentaryWidget(
                     textEditingController: question6,
                     title: 'Número de personas a cargo:*',
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -212,6 +220,7 @@ class _MejoraViviendaEntornoSocialState
                   CommentaryWidget(
                     textEditingController: question7,
                     title: 'Número de hijos:*',
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -458,6 +467,13 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 textEditingController: question2,
                 title: 'Tiempo de la actividad:*',
+                textInputType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
               const Gap(20),
               WhiteCard(
@@ -488,6 +504,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   title: 'Cuales Ingresos son?',
                   textEditingController: cualesOtrosIngresosController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               const Gap(20),
               BlocBuilder<ComunidadesCubit, ComunidadesState>(
@@ -528,6 +550,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 textEditingController: question6,
                 title: 'Número de personas a cargo:*',
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
@@ -544,6 +567,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   }
                   return null;
                 },
+                textInputType: TextInputType.number,
                 title: 'Número de hijos:*',
               ),
               const Gap(20),

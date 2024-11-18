@@ -70,6 +70,7 @@ class _EstandarDescripciondelNegocioState
       false => Padding(
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Form(
               key: formKey,
               child: Column(
@@ -256,6 +257,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
           key: formKey,
           child: Column(
@@ -301,6 +303,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
               if (decisionItem == 'input.no'.tr())
                 CommentaryWidget(
                   textEditingController: explicacionInversion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title:
                       'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),

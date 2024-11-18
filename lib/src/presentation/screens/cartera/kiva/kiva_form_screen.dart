@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../datasource/local_db/solicitudes_pendientes.dart';
 import '../../../bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -120,7 +122,7 @@ class _KIvaFormContent extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: solicitudesPendienteResponse.length,
               separatorBuilder: (BuildContext context, int index) =>
-                  const Gap(10),
+                  const KivaFormSpacing(),
               itemBuilder: (BuildContext context, int index) {
                 return _RequestWidget(
                   solicitud: solicitudesPendienteResponse[index],
@@ -146,7 +148,10 @@ class _RequestWidget extends StatelessWidget {
       title: Text('${solicitud.numero} - ${solicitud.nombre.capitalizeAll}'),
       onTap: () async {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
-            route: solicitud.producto, solicitudId: solicitud.id);
+              route: solicitud.producto,
+              solicitudId: solicitud.id,
+              nombre: solicitud.nombre,
+            );
         await context.push('/online', extra: solicitud.producto);
       },
       subtitle: Text(
@@ -156,7 +161,7 @@ class _RequestWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${double.tryParse(solicitud.monto.toString())} ${solicitud.moneda}',
+            '${NumberFormat('#,##0.00', 'en_US').format(solicitud.monto)} ${solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,

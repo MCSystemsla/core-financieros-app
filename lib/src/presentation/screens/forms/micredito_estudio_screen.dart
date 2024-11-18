@@ -348,6 +348,12 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior>
                   title:
                       '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                   textEditingController: explicacionInversion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               const Gap(20),
               CommentaryWidget(
@@ -703,6 +709,7 @@ class _EntornoSocialEstudioWidgetState
                   CommentaryWidget(
                     title: 'Tiempo de la actividad (meses o años)'.tr(),
                     textEditingController: tiempoActividad,
+                    textInputType: TextInputType.number,
                   ),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -1428,6 +1435,12 @@ class _RecurrentFormImpactoSocialState
                 CommentaryWidget(
                   textEditingController: explicacionAlcanzaraMeta,
                   title: 'Explica la meta?',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               const Gap(20),
               CommentaryWidget(
