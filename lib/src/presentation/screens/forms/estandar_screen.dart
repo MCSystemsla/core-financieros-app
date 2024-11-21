@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
@@ -117,6 +118,8 @@ class _RecurrentSign extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -253,10 +256,11 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            saveOfflineResponses(context, state);
-                            context
-                                .read<RecurrenteEstandartCubit>()
-                                .sendAnswers();
+                            !isConnected
+                                ? saveOfflineResponses(context, state)
+                                : context
+                                    .read<RecurrenteEstandartCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
