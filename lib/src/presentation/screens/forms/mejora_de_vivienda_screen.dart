@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/recurrente_mejora_vivienda_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -15,6 +17,7 @@ import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -288,6 +291,7 @@ class RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveRecurrentForm(context, state);
                             context
                                 .read<RecurrenteMejoraViviendaCubit>()
                                 .sendAnswers();
@@ -306,6 +310,35 @@ class RecurrentSign extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveRecurrentForm(
+      BuildContext context, RecurrenteMejoraViviendaState state) {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrenteMejoraViviendaForm(
+          recurrenteMejoraViviendaDBLocal: RecurrenteMejoraViviendaDbLocal()
+            ..coincideRespuesta = state.coincideRespuesta
+            ..database = LocalStorage().database
+            ..edadHijos = state.edadHijos
+            ..explicacionInversion = state.explicacionInversion
+            ..mejoraSeguridadFamilia = state.mejoraSeguridadFamilia
+            ..motivoPrestamo = state.motivoPrestamo
+            ..necesidadesComunidad = state.necesidadesComunidad
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..objTipoComunidadId = state.objTipoComunidadId
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..quienApoya = state.quienApoya
+            ..siguienteMeta = state.siguienteMeta
+            ..tiempoActividad = state.tiempoActividad
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..viviendaAntesDespues = state.viviendaAntesDespues,
+        );
   }
 }
 

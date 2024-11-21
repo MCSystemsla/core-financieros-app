@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/mujer_emprende_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/recurrente_mujer_emprende_db_local.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -11,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
@@ -248,6 +251,7 @@ class _RecurrentSignSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveOnLocalDB(context, state);
                             context
                                 .read<RecurrenteMujerEmprendeCubit>()
                                 .sendAnswers();
@@ -266,6 +270,33 @@ class _RecurrentSignSignature extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveOnLocalDB(BuildContext context, RecurrenteMujerEmprendeState state) {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrenteMujerEmprendeForm(
+          recurrenteMujerEmprendeDbLocal: RecurrenteMujerEmprendeDbLocal()
+            ..alcanzaraMeta = state.alcanzaraMeta
+            ..apoyanNegocio = state.apoyanNegocio
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoAyudo = state.comoAyudo
+            ..cuantosApoyan = state.cuantosApoyan
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionAlcanzaraMeta = state.explicacionAlcanzaraMeta
+            ..explicacionInversion = state.explicacionInversion
+            ..mejoraraEntorno = state.mejoraraEntorno
+            ..mejoraraEntornoExplicacion = state.mejoraraEntornoExplicacion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..siguientePaso = state.siguientePaso
+            ..tipoEstudioHijos = state.tipoEstudioHijos,
+        );
   }
 }
 
@@ -411,6 +442,7 @@ class _SignSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveAnwersLocalDb(context, state);
                             context.read<MujerEmprendeCubit>().sendAnswers();
                             context.pop();
                           },
@@ -427,5 +459,28 @@ class _SignSignature extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveAnwersLocalDb(BuildContext context, MujerEmprendeState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveMujerEmprendeForm(
+          mujerEmprendeDbLocal: MujerEmprendeDbLocal()
+            ..comoImpactariaNegocio = state.comoImpactariaNegocio
+            ..comoMejoraCalidadVida = state.comoMejoraCalidadVida
+            ..conocioMujerEmprende = state.conocioMujerEmprende
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..impulsoOptar = state.impulsoOptar
+            ..motivoEmprender = state.motivoEmprender
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objSolicitudNuevamenorId = state.objSolicitudNuevamenorId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..quienApoya = state.quienApoya
+            ..tipoEstudioHijos = state.tipoEstudioHijos,
+        );
   }
 }

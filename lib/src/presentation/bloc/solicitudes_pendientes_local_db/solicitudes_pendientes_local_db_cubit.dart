@@ -118,4 +118,174 @@ class SolicitudesPendientesLocalDbCubit
       _logger.e(e);
     }
   }
+
+  Future<void> saveRecurrenteEnergiaLimpia({
+    required RecurrenteEnergiaLimpiaDbLocal recurrenteEnergiaLimpiaDBLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteEnergiaLimpiaDbLocals
+              .put(recurrenteEnergiaLimpiaDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveEstandarForm(
+      {required EstandarDbLocal estandarDBLocal}) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.estandarDbLocals.put(estandarDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrentEstandarForm(
+      {required RecurrenteEstandarDbLocal recurrenteEstandarModel}) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteEstandarDbLocals
+              .put(recurrenteEstandarModel);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveMejoraViviendaForm(
+      {required MejoraViviendaDbLocal mejoraViviendaDBLocal}) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.mejoraViviendaDbLocals.put(mejoraViviendaDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrenteMejoraViviendaForm({
+    required RecurrenteMejoraViviendaDbLocal recurrenteMejoraViviendaDBLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteMejoraViviendaDbLocals
+              .put(recurrenteMejoraViviendaDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveMiCrediEstudioForm({
+    required MiCrediEstudioDbLocal miCrediEstudioModelDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.miCrediEstudioDbLocals
+              .put(miCrediEstudioModelDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrentMiCrediEstudioForm({
+    required RecurrenteMiCrediEstudioDbLocal
+        recurrenteMiCrediEstudioModelDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteMiCrediEstudioDbLocals
+              .put(recurrenteMiCrediEstudioModelDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveMujerEmprendeForm({
+    required MujerEmprendeDbLocal mujerEmprendeDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.mujerEmprendeDbLocals.put(mujerEmprendeDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrenteMujerEmprendeForm({
+    required RecurrenteMujerEmprendeDbLocal recurrenteMujerEmprendeDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteMujerEmprendeDbLocals
+              .put(recurrenteMujerEmprendeDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveSaneamientoForm({
+    required SaneamientoDbLocal saneamientoDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.saneamientoDbLocals.put(saneamientoDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrentSaneamientoForm({
+    required RecurrenteSaneamientoDbLocal recurrenteSaneamientoDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteSaneamientoDbLocals
+              .put(recurrenteSaneamientoDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
 }

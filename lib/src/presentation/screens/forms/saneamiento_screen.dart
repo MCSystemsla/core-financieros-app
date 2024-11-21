@@ -1,14 +1,21 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/estandar_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/mejora_vivienda_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/recurrente_saneamiento_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/saneamiento_db_local.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
@@ -284,6 +291,7 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveAnswersOnLocalDB(context, state);
                             context
                                 .read<RecurrenteAguaYSaneamientoCubit>()
                                 .sendAnswers();
@@ -303,6 +311,37 @@ class _RecurrentSign extends StatelessWidget {
       ],
     );
   }
+
+  void saveAnswersOnLocalDB(
+    BuildContext context,
+    RecurrenteAguaYSaneamientoState state,
+  ) {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrentSaneamientoForm(
+          recurrenteSaneamientoDbLocal: RecurrenteSaneamientoDbLocal()
+            ..alcanzaraMeta = state.alcanzaraMeta
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoAyudoCondiciones = state.comoAyudoCondiciones
+            ..comoMejoraCondicionesEntorno = state.comoMejoraCondicionesEntorno
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionAlcanzaraMeta = state.explicacionAlcanzaraMeta
+            ..explicacionInversion = state.explicacionInversion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..quienApoya = state.quienApoya
+            ..siguientePaso = state.siguientePaso
+            ..tiempoActividad = state.tiempoActividad
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos,
+        );
+  }
 }
 
 class EstandarSign extends StatefulWidget {
@@ -317,6 +356,8 @@ class _EstandarSignState extends State<EstandarSign> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -439,6 +480,7 @@ class _EstandarSignState extends State<EstandarSign> {
                           : 'button.send'.tr(),
                       color: context.primaryColor(),
                       onPressed: () async {
+                        FocusScope.of(context).unfocus();
                         await customPopUp(
                           context: context,
                           size: size,
@@ -452,7 +494,10 @@ class _EstandarSignState extends State<EstandarSign> {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.read<EstandarCubit>().sendAnswers();
+                            FocusScope.of(context).unfocus();
+                            !isConnected
+                                ? saveOfflineResponses(context, state)
+                                : context.read<EstandarCubit>().sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -468,6 +513,30 @@ class _EstandarSignState extends State<EstandarSign> {
         ),
       ],
     );
+  }
+
+  saveOfflineResponses(BuildContext context, EstandarState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveEstandarForm(
+          estandarDBLocal: EstandarDbLocal()
+            ..apoyanNegocio = state.apoyanNegocio
+            ..cuantosApoyan = state.cuantosApoyan
+            ..comoMejoraVida = state.comoMejoraVida
+            ..database = LocalStorage().database
+            ..edadHijos = state.edadHijos
+            ..inicioNegocio = DateTime.parse(state.inicioNegocio)
+            ..motivoPrestamo = state.motivoPrestamo
+            ..negocioProximosAnios = state.negocioProximosAnios
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objSolicitudNuevamenorId = state.objSolicitudNuevamenorId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..planesFuturo = state.planesFuturo
+            ..publicitarNegocio = state.publicitarNegocio
+            ..tipoEstudioHijos = state.tipoEstudioHijos,
+        );
   }
 }
 
@@ -867,6 +936,35 @@ class _SaneamientoSign extends StatelessWidget {
       ],
     );
   }
+
+  void saveAnswersOnLocalDB(BuildContext context, AguaYSaneamientoState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveSaneamientoForm(
+          saneamientoDbLocal: SaneamientoDbLocal()
+            ..cumpliriaPropuesta = state.cumpliriaPropuesta
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionCumpliriaPropuesta =
+                state.explicacionCumpliriaPropuesta
+            ..importanciaMejorarCondiciones =
+                state.importanciaMejorarCondiciones
+            ..mejoraCalidadVida = state.mejoraCalidadVida
+            ..metasProximas = state.metasProximas
+            ..motivacionCredito = state.motivacionCredito
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objSolicitudNuevamenorId = state.solicitudNuevamenorId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..siguienteProyectoCalidadVida = state.siguienteProyectoCalidadVida
+            ..tiempoActividad = state.tiempoActividad
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
+        );
+  }
 }
 
 class SignQuestionaryWidget extends StatelessWidget {
@@ -1011,6 +1109,8 @@ class SignQuestionaryWidget extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveMejoraViviendaForm(context, state);
+
                             context.read<MejoraViviendaCubit>().sendAnswers();
                             context.pop();
                           },
@@ -1027,5 +1127,29 @@ class SignQuestionaryWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  saveMejoraViviendaForm(BuildContext context, MejoraViviendaState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveMejoraViviendaForm(
+          mejoraViviendaDBLocal: MejoraViviendaDbLocal()
+            ..comoAyudara = state.comoAyudara
+            ..database = LocalStorage().database
+            ..edadHijos = state.edadHijos
+            ..motivoPrestamo = state.motivoPrestamo
+            ..necesidadesComunidad = state.necesidadesComunidad
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objTipoComunidadId = state.objTipoComunidadId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..planesFuturo = state.planesFuturo
+            ..solicitudNuevamenorId = state.solicitudNuevamenorId
+            ..tiempoActividad = state.tiempoActividad
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..username = '',
+        );
   }
 }
