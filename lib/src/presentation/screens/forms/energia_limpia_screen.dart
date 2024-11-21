@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
@@ -545,6 +549,8 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () async {
+                            saveEnergiaLimpiaAnswers(context, state);
+
                             context
                                 .read<RecurrenteEnergiaLimpiaCubit>()
                                 .sendAnswers();
@@ -563,6 +569,37 @@ class _RecurrentSignQuestionary extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  saveEnergiaLimpiaAnswers(
+    BuildContext context,
+    RecurrenteEnergiaLimpiaState state,
+  ) {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrenteEnergiaLimpia(
+          recurrenteEnergiaLimpiaDBLocal: RecurrenteEnergiaLimpiaDbLocal()
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoMejoraSituacion = state.comoMejoraSituacion
+            ..database = LocalStorage().database
+            ..edadHijos = state.edadHijos
+            ..explicacionInversion = state.explicacionInversion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..objTipoComunidadId = state.objTipoComunidadId
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..quienApoya = state.quienApoya
+            ..siguienteMeta = state.siguienteMeta
+            ..situacionAntesAhora = state.situacionAntesAhora
+            ..tiempoActividad = state.tiempoActividad
+            ..tieneProblemasEnergia = state.tieneProblemasEnergia
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
+        );
   }
 }
 
@@ -707,6 +744,7 @@ class _SignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveEnergiaLocalDB(context, state);
                             context.read<EnergiaLimpiaCubit>().sendAnswers();
                             context.pop();
                           },
@@ -723,5 +761,28 @@ class _SignQuestionary extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveEnergiaLocalDB(BuildContext context, EnergiaLimpiaState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
+          energiaLimpiaDBLocal: EnergiaLimpiaDbLocal()
+            ..database = LocalStorage().database
+            ..edadHijos = state.edadHijos
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objTipoComunidadId = state.objTipoComunidadId
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..planesFuturo = state.planesFuturo
+            ..solicitudNuevamenorId = state.solicitudNuevamenorId
+            ..tiempoActividad = state.tiempoActividad
+            ..tieneProblemasEnergia = state.tieneProblemasEnergia
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
+        );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/recurrente_estandar_db_local.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -251,6 +253,7 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveOfflineResponses(context, state);
                             context
                                 .read<RecurrenteEstandartCubit>()
                                 .sendAnswers();
@@ -269,5 +272,26 @@ class _RecurrentSign extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  saveOfflineResponses(BuildContext context, RecurrenteEstandartState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
+          recurrenteEstandarModel: RecurrenteEstandarDbLocal()
+            ..apoyanNegocio = state.apoyanNegocio
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoFortalece = state.comoFortalece
+            ..comoMejoraEntorno = state.comoMejoraEntorno
+            ..cuantosApoyan = state.cuantosApoyan
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionInversion = state.explicacionInversion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personaAutoSuficiente = state.personaAutoSuficiente
+            ..personasCargo = state.personasCargo,
+        );
   }
 }

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/micredi_estudio_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/recurrente_micredi_estudio_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
@@ -12,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/bloc/micredi_estudio/micred
 import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -254,6 +257,7 @@ class _RecurrentSigntature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveFormAnswers(context, state);
                             context
                                 .read<RecurrenteMicrediEstudioCubit>()
                                 .sendAnswers();
@@ -272,6 +276,39 @@ class _RecurrentSigntature extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveFormAnswers(
+      BuildContext context, RecurrenteMicrediEstudioState state) {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrentMiCrediEstudioForm(
+          recurrenteMiCrediEstudioModelDbLocal:
+              RecurrenteMiCrediEstudioDbLocal()
+                ..alcanzaraMeta = state.alcanzaraMeta
+                ..carrera = state.carrera
+                ..coincideRespuesta = state.coincideRespuesta
+                ..comoAyudaCrecer = state.comoAyudaCrecer
+                ..comoAyudoProfesionalmente = state.comoAyudoProfesionalmente
+                ..database = state.database
+                ..edadHijos = state.edadHijos
+                ..explicacionAlcanzaraMeta = state.explicacionAlcanzaraMeta
+                ..explicacionInversion = state.explicacionInversion
+                ..motivoPrestamo = state.motivoPrestamo
+                ..numeroHijos = state.numeroHijos
+                ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+                ..otrosIngresos = state.otrosIngresos
+                ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+                ..personasCargo = state.personasCargo
+                ..quienApoya = state.quienApoya
+                ..siguientePaso = state.siguientePaso
+                ..tiempoActividad = state.tiempoActividad
+                ..tiempoCarrera = state.tiempoCarrera
+                ..tieneTrabajo = state.tieneTrabajo
+                ..tipoEstudioHijos = state.tipoEstudioHijos
+                ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+                ..universidad = state.universidad,
+        );
   }
 }
 
@@ -584,6 +621,7 @@ class _SignUserSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
+                            saveOnLocalDB(context, state);
                             context.read<MicrediEstudioCubit>().sendAnswers();
                             context.pop();
                           },
@@ -600,6 +638,40 @@ class _SignUserSignature extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveOnLocalDB(BuildContext context, MicrediEstudioState state) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveMiCrediEstudioForm(
+          miCrediEstudioModelDbLocal: MiCrediEstudioDbLocal()
+            ..aspiraLaboralmente = state.aspiraLaboralmente
+            ..carrera = state.carrera
+            ..comoAyudaCrecer = state.comoAyudaCrecer
+            ..cualEstudio = state.cualEstudio
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionRelizandoProfesionalmente =
+                state.explicacionRelizandoProfesionalmente
+            ..motivoCarrera = state.motivoCarrera
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objOrigenCatalogoValorId = state.objOrigenCatalogoValorId
+            ..objSolicitudNuevamenorId = state.objSolicitudNuevamenorId
+            ..ocupacionPadres = state.ocupacionPadres
+            ..optarOtroEstudio = state.optarOtroEstudio
+            ..otrosDatosCliente = state.otrosDatosCliente
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personasCargo = state.personasCargo
+            ..planFuturo = state.planFuturo
+            ..quienApoya = state.quienApoya
+            ..relizandoProfesionalmente = state.relizandoProfesionalmente
+            ..tiempoActividad = state.tiempoActividad
+            ..tiempoCarrera = state.tiempoCarrera
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..universidad = state.universidad,
+        );
   }
 }
 
