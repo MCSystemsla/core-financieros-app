@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/domain/repository/departamentos/departam
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
@@ -412,6 +413,8 @@ class _RecurrentSignQuestionary extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -549,11 +552,11 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () async {
-                            saveEnergiaLimpiaAnswers(context, state);
-
-                            context
-                                .read<RecurrenteEnergiaLimpiaCubit>()
-                                .sendAnswers();
+                            !isConnected
+                                ? saveEnergiaLimpiaAnswers(context, state)
+                                : context
+                                    .read<RecurrenteEnergiaLimpiaCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -610,6 +613,8 @@ class _SignQuestionary extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -744,8 +749,11 @@ class _SignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            saveEnergiaLocalDB(context, state);
-                            context.read<EnergiaLimpiaCubit>().sendAnswers();
+                            !isConnected
+                                ? saveEnergiaLocalDB(context, state)
+                                : context
+                                    .read<EnergiaLimpiaCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),

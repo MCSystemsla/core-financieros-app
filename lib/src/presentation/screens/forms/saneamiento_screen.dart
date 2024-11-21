@@ -155,6 +155,8 @@ class _RecurrentSign extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -291,10 +293,11 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            saveAnswersOnLocalDB(context, state);
-                            context
-                                .read<RecurrenteAguaYSaneamientoCubit>()
-                                .sendAnswers();
+                            !isConnected
+                                ? saveAnswersOnLocalDB(context, state)
+                                : context
+                                    .read<RecurrenteAguaYSaneamientoCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -784,6 +787,8 @@ class _SaneamientoSign extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -919,7 +924,11 @@ class _SaneamientoSign extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.read<AguaYSaneamientoCubit>().sendAnswers();
+                            !isConnected
+                                ? saveAnswersOnLocalDB(context, state)
+                                : context
+                                    .read<AguaYSaneamientoCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -974,6 +983,7 @@ class SignQuestionaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+
     return Column(
       children: [
         const MiCreditoProgress(
