@@ -365,7 +365,8 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
           if (onEditAnswer)
             Column(
               children: [
-                BlocBuilder<DepartamentosCubit, DepartamentosState>(
+                BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                    SolicitudesPendientesLocalDbState>(
                   builder: (context, state) {
                     return WhiteCard(
                       marginTop: 15,
@@ -380,7 +381,7 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
                           originItem = item.valor;
                           setState(() {});
                         },
-                        toStringItem: (item) => item.nombre,
+                        toStringItem: (item) => item.nombre ?? '',
                         hintText: 'input.select_department'.tr(),
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/estandar_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/recurrente_estandar_db_local.dart';
@@ -44,6 +45,7 @@ class SolicitudesPendientesLocalDbCubit
           RecurrenteSaneamientoDbLocalSchema,
           EstandarDbLocalSchema,
           RecurrenteEstandarDbLocalSchema,
+          DepartamentosDbLocalSchema
         ],
         directory: dir.path,
       );
@@ -61,31 +63,33 @@ class SolicitudesPendientesLocalDbCubit
     emit(state.copyWith(status: Status.inProgress));
     await Future.delayed(const Duration(seconds: 3));
     try {
+      await state.isar!.writeTxn(() {
+        return state.isar!.solicitudesPendientes.clear();
+      });
       for (var solicitud in solicitudes) {
-        final existingIds = await state.isar!.solicitudesPendientes
-            .filter()
-            .solicitudIdEqualTo(solicitud.solicitudId)
-            .findFirst();
-        final isnumerosIdExists = await state.isar!.solicitudesPendientes
-            .filter()
-            .numeroEqualTo(solicitud.numero)
-            .findFirst();
-        final issucursalExists = await state.isar!.solicitudesPendientes
-            .filter()
-            .sucursalEqualTo(solicitud.sucursal)
-            .findFirst();
-        if (existingIds != null &&
-            isnumerosIdExists != null &&
-            issucursalExists != null) {
-          _logger
-              .i('Ya existe esta solicitud con el ID ${solicitud.solicitudId}');
-        } else {
-          await state.isar!.writeTxn(() {
-            return state.isar!.solicitudesPendientes.put(solicitud);
-          });
-        }
-        emit(state.copyWith(status: Status.done));
+        //   final existingIds = await state.isar!.solicitudesPendientes
+        //       .filter()
+        //       .solicitudIdEqualTo(solicitud.solicitudId)
+        //       .findFirst();
+        //   final isnumerosIdExists = await state.isar!.solicitudesPendientes
+        //       .filter()
+        //       .numeroEqualTo(solicitud.numero)
+        //       .findFirst();
+        //   final issucursalExists = await state.isar!.solicitudesPendientes
+        //       .filter()
+        //       .sucursalEqualTo(solicitud.sucursal)
+        //       .findFirst();
+        // if (existingIds != null &&
+        //     isnumerosIdExists != null &&
+        //     issucursalExists != null) {
+        //   _logger
+        //       .i('Ya existe esta solicitud con el ID ${solicitud.solicitudId}');
+        // } else {
+        await state.isar!.writeTxn(() {
+          return state.isar!.solicitudesPendientes.put(solicitud);
+        });
       }
+      emit(state.copyWith(status: Status.done));
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -98,6 +102,18 @@ class SolicitudesPendientesLocalDbCubit
       final solicitudes =
           await state.isar!.solicitudesPendientes.where().findAll();
       emit(state.copyWith(status: Status.done, solicitudes: solicitudes));
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  Future<void> getDepartamentos() async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final departamentos =
+          await state.isar!.departamentosDbLocals.where().findAll();
+      emit(state.copyWith(status: Status.done, departamentos: departamentos));
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -281,6 +297,27 @@ class SolicitudesPendientesLocalDbCubit
         () {
           return state.isar!.recurrenteSaneamientoDbLocals
               .put(recurrenteSaneamientoDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveDepartaments({
+    required List<DepartamentosDbLocal> departaments,
+  }) async {
+    try {
+      await state.isar!.writeTxn(
+        () {
+          return state.isar!.departamentosDbLocals.clear();
+        },
+      );
+
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.departamentosDbLocals.putAll(departaments);
         },
       );
       _logger.i(resp);

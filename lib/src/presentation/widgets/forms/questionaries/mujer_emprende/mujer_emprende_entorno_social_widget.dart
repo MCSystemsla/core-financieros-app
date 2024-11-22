@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -102,7 +102,8 @@ class _MujerEmprendeEntornoSocialWidgetState
                       },
                     ),
                   const Gap(20),
-                  BlocBuilder<DepartamentosCubit, DepartamentosState>(
+                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                      SolicitudesPendientesLocalDbState>(
                     builder: (context, state) {
                       return WhiteCard(
                         marginTop: 15,
@@ -123,7 +124,7 @@ class _MujerEmprendeEntornoSocialWidgetState
                             originItem = item.valor;
                             setState(() {});
                           },
-                          toStringItem: (item) => item.nombre,
+                          toStringItem: (item) => item.nombre ?? '',
                           hintText: 'input.select_department'.tr(),
                         ),
                       );
