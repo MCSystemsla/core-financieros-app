@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -34,6 +34,7 @@ class _EnergiaLimpiaCreditoAnteriorState
 
   @override
   Widget build(BuildContext context) {
+    final motivoAnterior = context.read<KivaRouteCubit>().state.motivoAnterior;
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -56,20 +57,7 @@ class _EnergiaLimpiaCreditoAnteriorState
                     ),
               ),
               const Gap(10),
-              BlocBuilder<MotivoPrestamoCubit, MotivoPrestamoState>(
-                builder: (context, state) {
-                  if (state is OnMotivoPrestamoLoading) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (state is OnMotivoPrestamoSuccess) {
-                    return Text(state.motivoPrestamo);
-                  }
-                  if (state is OnMotivoPrestamoError) {
-                    return const Text('Error inesperado');
-                  }
-                  return const SizedBox();
-                },
-              ),
+              Text(motivoAnterior),
               const Gap(20),
               WhiteCard(
                 padding: const EdgeInsets.all(5),

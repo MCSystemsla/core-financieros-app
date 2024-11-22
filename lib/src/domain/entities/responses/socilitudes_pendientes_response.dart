@@ -28,6 +28,7 @@ class Solicitud {
   DateTime fecha;
   String numero;
   String tipoSolicitud;
+  String? motivoAnterior;
 
   Solicitud({
     required this.id,
@@ -39,6 +40,7 @@ class Solicitud {
     required this.fecha,
     required this.numero,
     required this.tipoSolicitud,
+    this.motivoAnterior,
   });
 
   factory Solicitud.fromJson(Map<String, dynamic> json) => Solicitud(
@@ -51,6 +53,7 @@ class Solicitud {
         numero: json['numero'],
         tipoSolicitud: json['tipoSolicitud'],
         fecha: DateTime.parse(json['fecha']).toLocal(),
+        motivoAnterior: json['motivoAnterior'],
       );
 
   factory Solicitud.fromMap(Map<String, dynamic> map) {
@@ -64,6 +67,7 @@ class Solicitud {
       producto: map['producto'] as String,
       fecha: DateTime.fromMillisecondsSinceEpoch(map['fecha'] as int),
       numero: map['numero'] as String,
+      motivoAnterior: map['motivoAnterior'] as String,
     );
   }
 

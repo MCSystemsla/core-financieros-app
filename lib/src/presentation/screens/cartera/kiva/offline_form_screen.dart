@@ -79,6 +79,7 @@ class _RequestWidget extends StatelessWidget {
               route: solicitud.tipoSolicitud!,
               solicitudId: solicitud.id.toString(),
               nombre: solicitud.nombre ?? 'N/A',
+              motivoAnterior: solicitud.motivoAnterior ?? 'N/A',
             );
         await context.push('/online', extra: solicitud.producto);
       },

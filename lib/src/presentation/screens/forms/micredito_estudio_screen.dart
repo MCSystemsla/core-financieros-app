@@ -827,7 +827,8 @@ class _EntornoSocialEstudioWidgetState
                         return null;
                       },
                     ),
-                  BlocBuilder<DepartamentosCubit, DepartamentosState>(
+                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                      SolicitudesPendientesLocalDbState>(
                     builder: (context, state) {
                       return WhiteCard(
                         marginTop: 15,
@@ -848,7 +849,7 @@ class _EntornoSocialEstudioWidgetState
                             }
                             return null;
                           },
-                          toStringItem: (item) => item.nombre,
+                          toStringItem: (item) => item.nombre ?? '',
                           hintText: 'input.select_department'.tr(),
                         ),
                       );

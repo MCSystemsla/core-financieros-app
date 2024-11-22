@@ -5,24 +5,32 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final Isar? isar;
   final Status status;
   final List<SolicitudesPendientes> solicitudes;
+  final List<DepartamentosDbLocal> departamentos;
+  final List<ComunidadesLocalDb> comunidades;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
     this.solicitudes = const [],
+    this.departamentos = const [],
+    this.comunidades = const [],
   });
 
   @override
-  List<Object> get props => [status, solicitudes];
+  List<Object> get props => [status, solicitudes, departamentos, comunidades];
 
   SolicitudesPendientesLocalDbState copyWith({
     Isar? isar,
     Status? status,
     List<SolicitudesPendientes>? solicitudes,
+    List<DepartamentosDbLocal>? departamentos,
+    List<ComunidadesLocalDb>? comunidades,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
       status: status ?? this.status,
       solicitudes: solicitudes ?? this.solicitudes,
+      departamentos: departamentos ?? this.departamentos,
+      comunidades: comunidades ?? this.comunidades,
     );
   }
 }

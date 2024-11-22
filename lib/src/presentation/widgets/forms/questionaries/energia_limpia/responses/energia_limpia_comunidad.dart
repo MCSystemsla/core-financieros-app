@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -63,7 +63,8 @@ class _EnergiaLimpiaComunidadState extends State<EnergiaLimpiaComunidad> {
           if (onEditAnswer)
             Column(
               children: [
-                BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                    SolicitudesPendientesLocalDbState>(
                   builder: (context, state) {
                     return WhiteCard(
                       marginTop: 15,
@@ -78,7 +79,7 @@ class _EnergiaLimpiaComunidadState extends State<EnergiaLimpiaComunidad> {
                           comunidadItem = item.valor;
                           setState(() {});
                         },
-                        toStringItem: (item) => item.nombre,
+                        toStringItem: (item) => item.nombre ?? '',
                         hintText: 'input.select_department'.tr(),
                       ),
                     );
