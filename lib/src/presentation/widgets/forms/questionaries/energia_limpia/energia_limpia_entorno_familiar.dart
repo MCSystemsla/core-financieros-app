@@ -1,6 +1,5 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -98,7 +97,8 @@ class _EnergiaLimpiaEntornoFamiliarState
                     },
                   ),
                   const Gap(10),
-                  BlocBuilder<ComunidadesCubit, ComunidadesState>(
+                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                      SolicitudesPendientesLocalDbState>(
                     builder: (context, state) {
                       return WhiteCard(
                         padding: const EdgeInsets.all(5),
@@ -113,7 +113,7 @@ class _EnergiaLimpiaEntornoFamiliarState
                             setState(() {});
                           },
                           toStringItem: (item) {
-                            return item.nombre;
+                            return item.nombre ?? '';
                           },
                           hintText: 'input.select_option'.tr(),
                         ),
@@ -340,7 +340,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     ),
               ),
               const Gap(10),
-              BlocBuilder<ComunidadesCubit, ComunidadesState>(
+              BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                  SolicitudesPendientesLocalDbState>(
                 builder: (context, state) {
                   return WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -355,7 +356,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                         setState(() {});
                       },
                       toStringItem: (item) {
-                        return item.nombre;
+                        return item.nombre ?? '';
                       },
                       hintText: 'input.select_option'.tr(),
                     ),

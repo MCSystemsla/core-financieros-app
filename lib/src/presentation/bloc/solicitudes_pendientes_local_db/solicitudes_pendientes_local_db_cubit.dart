@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/local_db/comunidades/comunidades_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/estandar_db_local.dart';
@@ -45,7 +46,8 @@ class SolicitudesPendientesLocalDbCubit
           RecurrenteSaneamientoDbLocalSchema,
           EstandarDbLocalSchema,
           RecurrenteEstandarDbLocalSchema,
-          DepartamentosDbLocalSchema
+          DepartamentosDbLocalSchema,
+          ComunidadesLocalDbSchema
         ],
         directory: dir.path,
       );
@@ -114,6 +116,18 @@ class SolicitudesPendientesLocalDbCubit
       final departamentos =
           await state.isar!.departamentosDbLocals.where().findAll();
       emit(state.copyWith(status: Status.done, departamentos: departamentos));
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  Future<void> getComunidades() async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final comunidades =
+          await state.isar!.comunidadesLocalDbs.where().findAll();
+      emit(state.copyWith(status: Status.done, comunidades: comunidades));
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -318,6 +332,27 @@ class SolicitudesPendientesLocalDbCubit
       final resp = await state.isar!.writeTxn(
         () {
           return state.isar!.departamentosDbLocals.putAll(departaments);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveComunidades({
+    required List<ComunidadesLocalDb> comunidades,
+  }) async {
+    try {
+      await state.isar!.writeTxn(
+        () {
+          return state.isar!.comunidadesLocalDbs.clear();
+        },
+      );
+
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.comunidadesLocalDbs.putAll(comunidades);
         },
       );
       _logger.i(resp);
