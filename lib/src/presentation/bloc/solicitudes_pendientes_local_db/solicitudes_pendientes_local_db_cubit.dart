@@ -154,6 +154,44 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<EstandarDbLocal?> getEstandar(int solicitudId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final estandar = await state.isar!.estandarDbLocals
+          .filter()
+          .objSolicitudNuevamenorIdEqualTo(solicitudId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        estandarDbLocal: estandar,
+      ));
+      return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<MiCrediEstudioDbLocal?> getMiCrediEstudio(int solicitudId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final solicitud = await state.isar!.miCrediEstudioDbLocals
+          .filter()
+          .objSolicitudNuevamenorIdEqualTo(solicitudId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        miCrediEstudioDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
   Future<List<int?>> getItemsRecurrents({required String typeProduct}) async {
     emit(state.copyWith(status: Status.inProgress));
     try {

@@ -9,6 +9,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final List<ComunidadesLocalDb> comunidades;
   final Map<String, bool> isMatchingMap;
   final RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal;
+  final EstandarDbLocal? estandarDbLocal;
+  final MiCrediEstudioDbLocal? miCrediEstudioDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -17,6 +19,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.comunidades = const [],
     this.isMatchingMap = const {},
     this.recurrenteEstandarDbLocal,
+    this.estandarDbLocal,
+    this.miCrediEstudioDbLocal,
   });
 
   @override
@@ -35,6 +39,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     List<ComunidadesLocalDb>? comunidades,
     Map<String, bool>? isMatchingMap,
     RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal,
+    EstandarDbLocal? estandarDbLocal,
+    MiCrediEstudioDbLocal? miCrediEstudioDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -45,6 +51,9 @@ class SolicitudesPendientesLocalDbState extends Equatable {
       isMatchingMap: isMatchingMap ?? this.isMatchingMap,
       recurrenteEstandarDbLocal:
           recurrenteEstandarDbLocal ?? this.recurrenteEstandarDbLocal,
+      estandarDbLocal: estandarDbLocal ?? this.estandarDbLocal,
+      miCrediEstudioDbLocal:
+          miCrediEstudioDbLocal ?? this.miCrediEstudioDbLocal,
     );
   }
 }
