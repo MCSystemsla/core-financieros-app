@@ -134,6 +134,80 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<RecurrenteEstandarDbLocal?> getRecurrentEstandar(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final estandar = await state.isar!.recurrenteEstandarDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteEstandarDbLocal: estandar,
+      ));
+      return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<List<int?>> getItemsRecurrents({required String typeProduct}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      switch (typeProduct) {
+        case 'MICREDIESTUDIO RECURRENTE':
+          return await state.isar!.recurrenteMiCrediEstudioDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'ESTANDAR RECURRENTE':
+          return await state.isar!.recurrenteEstandarDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'VIVIENDA REPRESTAMO':
+          return await state.isar!.recurrenteMejoraViviendaDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'AGUA Y SANEAMIENTO RECURRENTE':
+          return await state.isar!.recurrenteSaneamientoDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'ASER RECURRENTE':
+          return await state.isar!.recurrenteEnergiaLimpiaDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'MUJER EMPRENDE RECURRENTE':
+          return await state.isar!.recurrenteMujerEmprendeDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+      }
+      return [];
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return [];
+    }
+  }
+
+  Future<void> checkMatching(String typeProduct, String solicitudId) async {
+    final Map<String, bool> isMatchingMap = {};
+
+    final numSolicitud = await getItemsRecurrents(typeProduct: typeProduct);
+    // ignore: unrelated_type_equality_checks
+    final isMatching = numSolicitud == int.tryParse(solicitudId);
+
+    isMatchingMap[typeProduct] = isMatching;
+    emit(state.copyWith(isMatchingMap: Map.from(isMatchingMap)));
+  }
+
   Future<void> saveEnergiaLimpia({
     required EnergiaLimpiaDbLocal energiaLimpiaDBLocal,
   }) async {

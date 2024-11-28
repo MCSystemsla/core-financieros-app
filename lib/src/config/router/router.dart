@@ -80,6 +80,15 @@ final router = GoRouter(
                   context.read<KivaRouteCubit>().state.currentRoute;
               return EstandarScreen(typeProduct: typeProduct);
             }),
+        GoRoute(
+            path: 'form/offline-confirmation',
+            builder: (context, state) {
+              final typeProduct = context.watch<KivaRouteCubit>().state;
+
+              return ConfirmationOfflineResponsesScreen(
+                typeProduct: typeProduct.currentRoute,
+              );
+            }),
       ],
       redirect: (context, state) {
         final String tipoProducto = state.extra.toString();

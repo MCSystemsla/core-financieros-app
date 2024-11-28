@@ -39,7 +39,7 @@ class EstandarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct == 'ESTANDAR NUEVO';
+    final isRecurrentForm = typeProduct.trim() == 'ESTANDAR RECURRENTE';
     final pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -120,6 +120,7 @@ class _RecurrentSign extends StatelessWidget {
     final controller = SignatureController();
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
+    final imageProvider = context.read<UploadUserFileCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -199,21 +200,37 @@ class _RecurrentSign extends StatelessWidget {
                       );
                     }
                     if (state.status == Status.done) {
-                      final signatureImage = await controller.toPngBytes();
                       final directory =
                           await getApplicationDocumentsDirectory();
                       final filePath = '${directory.path}/signature.png';
+
+                      final signatureImage = await controller.toPngBytes();
 
                       // Guarda la imagen en el archivo
                       final file = File(filePath);
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
-                      context.read<UploadUserFileCubit>().uploadUserFiles(
-                            fotoFirma: file,
-                            solicitudId: int.parse(
-                              context.read<KivaRouteCubit>().state.solicitudId,
-                            ),
-                          );
+                      !isConnected
+                          ? context
+                              .read<SolicitudesPendientesLocalDbCubit>()
+                              .saveRecurrentEstandarForm(
+                                recurrenteEstandarModel:
+                                    RecurrenteEstandarDbLocal()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1!.path
+                                      ..imagen2 = imageProvider.imagen2!.path
+                                      ..imagen3 = imageProvider.imagen3!.path
+                                      ..imagen4 = imageProvider.imagen4!.path,
+                              )
+                          : context.read<UploadUserFileCubit>().uploadUserFiles(
+                                fotoFirma: file,
+                                solicitudId: int.parse(
+                                  context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudId,
+                                ),
+                              );
                       await customPopUp(
                         context: context,
                         dismissOnTouchOutside: false,
@@ -278,7 +295,9 @@ class _RecurrentSign extends StatelessWidget {
     );
   }
 
-  saveOfflineResponses(BuildContext context, RecurrenteEstandartState state) {
+  saveOfflineResponses(
+      BuildContext context, RecurrenteEstandartState state) async {
+    if (!context.mounted) return;
     context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
           recurrenteEstandarModel: RecurrenteEstandarDbLocal()
             ..apoyanNegocio = state.apoyanNegocio
@@ -291,10 +310,13 @@ class _RecurrentSign extends StatelessWidget {
             ..explicacionInversion = state.explicacionInversion
             ..motivoPrestamo = state.motivoPrestamo
             ..numeroHijos = state.numeroHijos
-            ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+            ..objSolicitudRecurrenteId =
+                int.tryParse(context.read<KivaRouteCubit>().state.solicitudId)
             ..otrosIngresos = state.otrosIngresos
             ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
             ..personaAutoSuficiente = state.personaAutoSuficiente
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..siguientePaso = state.siguientePaso
             ..personasCargo = state.personasCargo,
         );
   }

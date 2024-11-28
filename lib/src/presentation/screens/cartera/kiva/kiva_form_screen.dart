@@ -189,45 +189,78 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
   }
 }
 
-class _RequestWidget extends StatelessWidget {
+class _RequestWidget extends StatefulWidget {
   final Solicitud solicitud;
   const _RequestWidget({
     required this.solicitud,
   });
 
   @override
+  State<_RequestWidget> createState() => _RequestWidgetState();
+}
+
+class _RequestWidgetState extends State<_RequestWidget> {
+  int? numSolicitud;
+  bool isMatching = false;
+  @override
+  void initState() {
+    _getNumSolicitud();
+    super.initState();
+  }
+
+  Future<void> _getNumSolicitud() async {
+    final result = await context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getItemsRecurrents(typeProduct: widget.solicitud.producto);
+
+    setState(() {
+      isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // bool isMatching = numSolicitud == int.tryParse(widget.solicitud.id);
+
     return ListTile(
-      title: Text('${solicitud.numero} - ${solicitud.nombre.capitalizeAll}'),
+      title: Text(
+          '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
-              route: solicitud.producto,
-              solicitudId: solicitud.id,
-              nombre: solicitud.nombre,
-              motivoAnterior:
-                  solicitud.motivoAnterior ?? 'Motivo Anterior no registrado',
+              route: widget.solicitud.producto,
+              solicitudId: widget.solicitud.id,
+              nombre: widget.solicitud.nombre,
+              motivoAnterior: widget.solicitud.motivoAnterior ??
+                  'Motivo Anterior no registrado',
             );
-        await context.push('/online', extra: solicitud.producto);
+        if (isMatching) {
+          context.push('/online/form/offline-confirmation',
+              extra: widget.solicitud.id);
+          return;
+        }
+
+        await context.push('/online', extra: widget.solicitud.producto);
       },
       subtitle: Text(
-        solicitud.fecha.formatDateV2(),
+        widget.solicitud.fecha.formatDateV2(),
       ),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${NumberFormat('#,##0.00', 'en_US').format(solicitud.monto)} ${solicitud.moneda}',
+            '${NumberFormat('#,##0.00', 'en_US').format(widget.solicitud.monto)} ${widget.solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
           ),
           const Gap(5),
-          Text(solicitud.estado),
+          Text(widget.solicitud.estado),
         ],
       ),
-      leading: const CircleAvatar(
-        child: Icon(Icons.wallet),
+      leading: CircleAvatar(
+        backgroundColor: isMatching ? Colors.yellow : Colors.green,
+        child: const Icon(Icons.wallet),
       ),
     );
   }

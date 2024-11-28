@@ -58,48 +58,73 @@ const RecurrenteEstandarDbLocalSchema = CollectionSchema(
       name: r'explicacionInversion',
       type: IsarType.string,
     ),
-    r'motivoPrestamo': PropertySchema(
+    r'imagen1': PropertySchema(
       id: 8,
+      name: r'imagen1',
+      type: IsarType.string,
+    ),
+    r'imagen2': PropertySchema(
+      id: 9,
+      name: r'imagen2',
+      type: IsarType.string,
+    ),
+    r'imagen3': PropertySchema(
+      id: 10,
+      name: r'imagen3',
+      type: IsarType.string,
+    ),
+    r'imagen4': PropertySchema(
+      id: 11,
+      name: r'imagen4',
+      type: IsarType.string,
+    ),
+    r'imagenFirma': PropertySchema(
+      id: 12,
+      name: r'imagenFirma',
+      type: IsarType.string,
+    ),
+    r'motivoPrestamo': PropertySchema(
+      id: 13,
       name: r'motivoPrestamo',
       type: IsarType.string,
     ),
     r'numeroHijos': PropertySchema(
-      id: 9,
+      id: 14,
       name: r'numeroHijos',
       type: IsarType.long,
     ),
     r'objSolicitudRecurrenteId': PropertySchema(
-      id: 10,
+      id: 15,
       name: r'objSolicitudRecurrenteId',
       type: IsarType.long,
     ),
     r'otrosIngresos': PropertySchema(
-      id: 11,
+      id: 16,
       name: r'otrosIngresos',
       type: IsarType.bool,
     ),
     r'otrosIngresosDescripcion': PropertySchema(
-      id: 12,
+      id: 17,
       name: r'otrosIngresosDescripcion',
       type: IsarType.string,
     ),
     r'personaAutoSuficiente': PropertySchema(
-      id: 13,
+      id: 18,
       name: r'personaAutoSuficiente',
       type: IsarType.string,
     ),
     r'personasCargo': PropertySchema(
-      id: 14,
+      id: 19,
       name: r'personasCargo',
       type: IsarType.long,
     ),
     r'siguientePaso': PropertySchema(
-      id: 15,
+      id: 20,
       name: r'siguientePaso',
       type: IsarType.string,
     ),
     r'tipoEstudioHijos': PropertySchema(
-      id: 16,
+      id: 21,
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     )
@@ -161,6 +186,36 @@ int _recurrenteEstandarDbLocalEstimateSize(
     }
   }
   {
+    final value = object.imagen1;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.imagen2;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.imagen3;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.imagen4;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.imagenFirma;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.motivoPrestamo;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -207,15 +262,20 @@ void _recurrenteEstandarDbLocalSerialize(
   writer.writeString(offsets[5], object.database);
   writer.writeString(offsets[6], object.edadHijos);
   writer.writeString(offsets[7], object.explicacionInversion);
-  writer.writeString(offsets[8], object.motivoPrestamo);
-  writer.writeLong(offsets[9], object.numeroHijos);
-  writer.writeLong(offsets[10], object.objSolicitudRecurrenteId);
-  writer.writeBool(offsets[11], object.otrosIngresos);
-  writer.writeString(offsets[12], object.otrosIngresosDescripcion);
-  writer.writeString(offsets[13], object.personaAutoSuficiente);
-  writer.writeLong(offsets[14], object.personasCargo);
-  writer.writeString(offsets[15], object.siguientePaso);
-  writer.writeString(offsets[16], object.tipoEstudioHijos);
+  writer.writeString(offsets[8], object.imagen1);
+  writer.writeString(offsets[9], object.imagen2);
+  writer.writeString(offsets[10], object.imagen3);
+  writer.writeString(offsets[11], object.imagen4);
+  writer.writeString(offsets[12], object.imagenFirma);
+  writer.writeString(offsets[13], object.motivoPrestamo);
+  writer.writeLong(offsets[14], object.numeroHijos);
+  writer.writeLong(offsets[15], object.objSolicitudRecurrenteId);
+  writer.writeBool(offsets[16], object.otrosIngresos);
+  writer.writeString(offsets[17], object.otrosIngresosDescripcion);
+  writer.writeString(offsets[18], object.personaAutoSuficiente);
+  writer.writeLong(offsets[19], object.personasCargo);
+  writer.writeString(offsets[20], object.siguientePaso);
+  writer.writeString(offsets[21], object.tipoEstudioHijos);
 }
 
 RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
@@ -234,15 +294,20 @@ RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
   object.edadHijos = reader.readStringOrNull(offsets[6]);
   object.explicacionInversion = reader.readStringOrNull(offsets[7]);
   object.id = id;
-  object.motivoPrestamo = reader.readStringOrNull(offsets[8]);
-  object.numeroHijos = reader.readLongOrNull(offsets[9]);
-  object.objSolicitudRecurrenteId = reader.readLongOrNull(offsets[10]);
-  object.otrosIngresos = reader.readBoolOrNull(offsets[11]);
-  object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[12]);
-  object.personaAutoSuficiente = reader.readStringOrNull(offsets[13]);
-  object.personasCargo = reader.readLongOrNull(offsets[14]);
-  object.siguientePaso = reader.readStringOrNull(offsets[15]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[16]);
+  object.imagen1 = reader.readStringOrNull(offsets[8]);
+  object.imagen2 = reader.readStringOrNull(offsets[9]);
+  object.imagen3 = reader.readStringOrNull(offsets[10]);
+  object.imagen4 = reader.readStringOrNull(offsets[11]);
+  object.imagenFirma = reader.readStringOrNull(offsets[12]);
+  object.motivoPrestamo = reader.readStringOrNull(offsets[13]);
+  object.numeroHijos = reader.readLongOrNull(offsets[14]);
+  object.objSolicitudRecurrenteId = reader.readLongOrNull(offsets[15]);
+  object.otrosIngresos = reader.readBoolOrNull(offsets[16]);
+  object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[17]);
+  object.personaAutoSuficiente = reader.readStringOrNull(offsets[18]);
+  object.personasCargo = reader.readLongOrNull(offsets[19]);
+  object.siguientePaso = reader.readStringOrNull(offsets[20]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[21]);
   return object;
 }
 
@@ -272,11 +337,11 @@ P _recurrenteEstandarDbLocalDeserializeProp<P>(
     case 8:
       return (reader.readStringOrNull(offset)) as P;
     case 9:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
@@ -284,8 +349,18 @@ P _recurrenteEstandarDbLocalDeserializeProp<P>(
     case 14:
       return (reader.readLongOrNull(offset)) as P;
     case 15:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 16:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 17:
+      return (reader.readStringOrNull(offset)) as P;
+    case 18:
+      return (reader.readStringOrNull(offset)) as P;
+    case 19:
+      return (reader.readLongOrNull(offset)) as P;
+    case 20:
+      return (reader.readStringOrNull(offset)) as P;
+    case 21:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1433,6 +1508,786 @@ extension RecurrenteEstandarDbLocalQueryFilter on QueryBuilder<
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1IsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imagen1',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1IsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imagen1',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1EqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1GreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1LessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1Between(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imagen1',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1StartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1EndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen1Contains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imagen1',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen1Matches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imagen1',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1IsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen1',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen1IsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imagen1',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2IsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imagen2',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2IsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imagen2',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2EqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2GreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2LessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2Between(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imagen2',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2StartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2EndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen2Contains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imagen2',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen2Matches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imagen2',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2IsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen2',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen2IsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imagen2',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3IsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imagen3',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3IsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imagen3',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3EqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3GreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3LessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3Between(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imagen3',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3StartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3EndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen3Contains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imagen3',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen3Matches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imagen3',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3IsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen3',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen3IsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imagen3',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4IsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imagen4',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4IsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imagen4',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4EqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4GreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4LessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4Between(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imagen4',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4StartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4EndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen4Contains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imagen4',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagen4Matches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imagen4',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4IsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagen4',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagen4IsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imagen4',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imagenFirma',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imagenFirma',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'imagenFirma',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagenFirmaContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'imagenFirma',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      imagenFirmaMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'imagenFirma',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagenFirma',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> imagenFirmaIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imagenFirma',
+        value: '',
       ));
     });
   }
@@ -2592,6 +3447,76 @@ extension RecurrenteEstandarDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen1() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen1', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen1Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen1', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen2() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen2', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen2Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen2', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen3() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen3', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen3Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen3', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen4() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen4', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagen4Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen4', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagenFirma() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagenFirma', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByImagenFirmaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagenFirma', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> sortByMotivoPrestamo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'motivoPrestamo', Sort.asc);
@@ -2847,6 +3772,76 @@ extension RecurrenteEstandarDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen1() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen1', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen1Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen1', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen2() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen2', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen2Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen2', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen3() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen3', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen3Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen3', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen4() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen4', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagen4Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagen4', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagenFirma() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagenFirma', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByImagenFirmaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagenFirma', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> thenByMotivoPrestamo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'motivoPrestamo', Sort.asc);
@@ -3036,6 +4031,41 @@ extension RecurrenteEstandarDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByImagen1({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagen1', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByImagen2({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagen2', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByImagen3({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagen3', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByImagen4({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagen4', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByImagenFirma({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagenFirma', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
       distinctByMotivoPrestamo({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'motivoPrestamo',
@@ -3165,6 +4195,41 @@ extension RecurrenteEstandarDbLocalQueryProperty on QueryBuilder<
       explicacionInversionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'explicacionInversion');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      imagen1Property() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagen1');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      imagen2Property() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagen2');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      imagen3Property() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagen3');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      imagen4Property() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagen4');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      imagenFirmaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagenFirma');
     });
   }
 
