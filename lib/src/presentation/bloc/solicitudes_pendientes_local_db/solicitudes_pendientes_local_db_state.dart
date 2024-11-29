@@ -11,6 +11,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal;
   final EstandarDbLocal? estandarDbLocal;
   final MiCrediEstudioDbLocal? miCrediEstudioDbLocal;
+  final RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -21,6 +22,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.recurrenteEstandarDbLocal,
     this.estandarDbLocal,
     this.miCrediEstudioDbLocal,
+    this.recurrenteMiCrediEstudioDbLocal,
   });
 
   @override
@@ -41,6 +43,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal,
     EstandarDbLocal? estandarDbLocal,
     MiCrediEstudioDbLocal? miCrediEstudioDbLocal,
+    RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -54,6 +57,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
       estandarDbLocal: estandarDbLocal ?? this.estandarDbLocal,
       miCrediEstudioDbLocal:
           miCrediEstudioDbLocal ?? this.miCrediEstudioDbLocal,
+      recurrenteMiCrediEstudioDbLocal: recurrenteMiCrediEstudioDbLocal ??
+          this.recurrenteMiCrediEstudioDbLocal,
     );
   }
 }

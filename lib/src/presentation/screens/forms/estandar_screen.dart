@@ -319,5 +319,6 @@ class _RecurrentSign extends StatelessWidget {
             ..siguientePaso = state.siguientePaso
             ..personasCargo = state.personasCargo,
         );
+    context.pushReplacement('/');
   }
 }

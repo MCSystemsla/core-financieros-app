@@ -305,211 +305,251 @@ class EstandarForm extends StatefulWidget {
 
 class _EstandarFormState extends State<EstandarForm> {
   @override
-  void initState() {
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getEstandar(widget.solicitudId);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return BlocBuilder<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Tiene otros ingresos?¿Cuales?*',
-                initialValue: state.estandarDbLocal?.otrosIngresos ?? false
-                    ? 'input.yes'.tr()
-                    : 'input.no'.tr(),
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Cuales?',
-                initialValue:
-                    state.estandarDbLocal?.otrosIngresosDescripcion ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'forms.entorno_familiar.person_origin'.tr(),
-                initialValue:
-                    state.estandarDbLocal?.objOrigenCatalogoValorId ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Número de personas a cargo:*',
-                initialValue:
-                    state.estandarDbLocal?.personasCargo.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Número de hijos:*',
-                initialValue:
-                    state.estandarDbLocal?.numeroHijos.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Que edades tienen sus hijos?',
-                initialValue:
-                    state.estandarDbLocal?.edadHijos.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Qué tipo de estudios reciben sus hijos?',
-                initialValue:
-                    state.estandarDbLocal?.tipoEstudioHijos.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Qué tipo de estudios reciben sus hijos?',
-                initialValue:
-                    state.estandarDbLocal?.tipoEstudioHijos.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Cuenténos cómo inició su negocio?*',
-                initialValue:
-                    state.estandarDbLocal?.inicioNegocio.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title:
-                    '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
-                initialValue:
-                    state.estandarDbLocal?.inicioNegocio.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title:
-                    '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
-                initialValue:
-                    state.estandarDbLocal?.apoyanNegocio.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Favor responder cuántas personas',
-                initialValue:
-                    state.estandarDbLocal?.cuantosApoyan.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title:
-                    '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
-                initialValue:
-                    state.estandarDbLocal?.publicitarNegocio.toString() ??
-                        'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Cómo mira su negocio en los proximos años?*',
-                initialValue:
-                    state.estandarDbLocal?.negocioProximosAnios.toString() ??
-                        'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Para qué solicitó el préstamo? Explique',
-                initialValue:
-                    state.estandarDbLocal?.motivoPrestamo.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title:
-                    '¿Cuáles son sus planes personales para los proximos 5 años?*',
-                initialValue:
-                    state.estandarDbLocal?.planesFuturo.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title:
-                    '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
-                initialValue:
-                    state.estandarDbLocal?.comoMejoraVida.toString() ?? 'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Otros datos relevantes e interesantes del cliente',
-                initialValue:
-                    state.estandarDbLocal?.otrosDatosCliente.toString() ??
-                        'N/A',
-                readOnly: true,
-              ),
-              const Gap(20),
-              ButtonActionsWidget(
-                // disabled: state.status == Status.inProgress ||
-                // response.status == Status.inProgress,
-                onPreviousPressed: () {
-                  context.pop();
+        return BlocConsumer<EstandarCubit, EstandarState>(
+          listener: (context, state) async {
+            if (state.status == Status.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                  content: Text(state.errorMsg),
+                ),
+              );
+            }
+            if (state.status == Status.done) {
+              await customPopUp(
+                context: context,
+                dismissOnTouchOutside: false,
+                size: size,
+                title: 'Formulario Kiva Enviado exitosamente!!',
+                subtitle: 'Las respuestas se han enviado Exitosamente',
+                dialogType: DialogType.success,
+                buttonAcept: true,
+                textButtonAcept: 'Ok',
+                colorButtonAcept: AppColors.getPrimaryColor(),
+                onPressedAccept: () {
+                  context.pushReplacement('/');
                 },
-                onNextPressed: () {
-                  context.read<EstandarCubit>().sendOffilneAnswers(
-                        estandarModel: EstandarModel(
-                          objSolicitudNuevamenorId:
-                              state.estandarDbLocal?.objSolicitudNuevamenorId ??
+              );
+            }
+          },
+          builder: (context, response) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Tiene otros ingresos?¿Cuales?*',
+                    initialValue: state.estandarDbLocal?.otrosIngresos ?? false
+                        ? 'input.yes'.tr()
+                        : 'input.no'.tr(),
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Cuales?',
+                    initialValue:
+                        state.estandarDbLocal?.otrosIngresosDescripcion ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'forms.entorno_familiar.person_origin'.tr(),
+                    initialValue:
+                        state.estandarDbLocal?.objOrigenCatalogoValorId ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Número de personas a cargo:*',
+                    initialValue:
+                        state.estandarDbLocal?.personasCargo.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Número de hijos:*',
+                    initialValue:
+                        state.estandarDbLocal?.numeroHijos.toString() ?? 'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Que edades tienen sus hijos?',
+                    initialValue:
+                        state.estandarDbLocal?.edadHijos.toString() ?? 'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Qué tipo de estudios reciben sus hijos?',
+                    initialValue:
+                        state.estandarDbLocal?.tipoEstudioHijos.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Qué tipo de estudios reciben sus hijos?',
+                    initialValue:
+                        state.estandarDbLocal?.tipoEstudioHijos.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Cuenténos cómo inició su negocio?*',
+                    initialValue:
+                        state.estandarDbLocal?.inicioNegocio.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
+                    initialValue:
+                        state.estandarDbLocal?.inicioNegocio.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
+                    initialValue:
+                        state.estandarDbLocal?.apoyanNegocio.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Favor responder cuántas personas',
+                    initialValue:
+                        state.estandarDbLocal?.cuantosApoyan.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
+                    initialValue:
+                        state.estandarDbLocal?.publicitarNegocio.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Cómo mira su negocio en los proximos años?*',
+                    initialValue: state.estandarDbLocal?.negocioProximosAnios
+                            .toString() ??
+                        'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Para qué solicitó el préstamo? Explique',
+                    initialValue:
+                        state.estandarDbLocal?.motivoPrestamo.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿Cuáles son sus planes personales para los proximos 5 años?*',
+                    initialValue:
+                        state.estandarDbLocal?.planesFuturo.toString() ?? 'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title:
+                        '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
+                    initialValue:
+                        state.estandarDbLocal?.comoMejoraVida.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Otros datos relevantes e interesantes del cliente',
+                    initialValue:
+                        state.estandarDbLocal?.otrosDatosCliente.toString() ??
+                            'N/A',
+                    readOnly: true,
+                  ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    // disabled: state.status == Status.inProgress ||
+                    // response.status == Status.inProgress,
+                    onPreviousPressed: () {
+                      context.pop();
+                    },
+                    onNextPressed: () {
+                      context.read<EstandarCubit>().sendOffilneAnswers(
+                            estandarModel: EstandarModel(
+                              objSolicitudNuevamenorId: state.estandarDbLocal
+                                      ?.objSolicitudNuevamenorId ??
                                   0,
-                          database: state.estandarDbLocal?.database ?? '',
-                          otrosIngresos:
-                              state.estandarDbLocal?.otrosIngresos ?? false,
-                          otrosIngresosDescripcion:
-                              state.estandarDbLocal?.otrosIngresosDescripcion ??
+                              database: state.estandarDbLocal?.database ?? '',
+                              otrosIngresos:
+                                  state.estandarDbLocal?.otrosIngresos ?? false,
+                              otrosIngresosDescripcion: state.estandarDbLocal
+                                      ?.otrosIngresosDescripcion ??
                                   '',
-                          objOrigenCatalogoValorId:
-                              state.estandarDbLocal?.objOrigenCatalogoValorId ??
+                              objOrigenCatalogoValorId: state.estandarDbLocal
+                                      ?.objOrigenCatalogoValorId ??
                                   '',
-                          personasCargo:
-                              state.estandarDbLocal?.personasCargo ?? 0,
-                          numeroHijos: state.estandarDbLocal?.numeroHijos ?? 0,
-                          edadHijos: state.estandarDbLocal?.edadHijos ?? '',
-                          tipoEstudioHijos:
-                              state.estandarDbLocal?.tipoEstudioHijos ?? '',
-                          inicioNegocio: state.estandarDbLocal?.inicioNegocio ??
-                              DateTime.now(),
-                          apoyanNegocio:
-                              state.estandarDbLocal?.apoyanNegocio ?? false,
-                          cuantosApoyan:
-                              state.estandarDbLocal?.cuantosApoyan ?? '',
-                          publicitarNegocio:
-                              state.estandarDbLocal?.publicitarNegocio ?? '',
-                          negocioProximosAnios:
-                              state.estandarDbLocal?.negocioProximosAnios ?? '',
-                          motivoPrestamo:
-                              state.estandarDbLocal?.motivoPrestamo ?? '',
-                          comoMejoraVida:
-                              state.estandarDbLocal?.comoMejoraVida ?? '',
-                          planesFuturo:
-                              state.estandarDbLocal?.planesFuturo ?? '',
-                          otrosDatosCliente:
-                              state.estandarDbLocal?.otrosDatosCliente ?? '',
-                        ),
-                      );
-                },
-                previousTitle: 'Salir',
-                nextTitle: 'Enviar',
+                              personasCargo:
+                                  state.estandarDbLocal?.personasCargo ?? 0,
+                              numeroHijos:
+                                  state.estandarDbLocal?.numeroHijos ?? 0,
+                              edadHijos: state.estandarDbLocal?.edadHijos ?? '',
+                              tipoEstudioHijos:
+                                  state.estandarDbLocal?.tipoEstudioHijos ?? '',
+                              inicioNegocio:
+                                  state.estandarDbLocal?.inicioNegocio ??
+                                      DateTime.now(),
+                              apoyanNegocio:
+                                  state.estandarDbLocal?.apoyanNegocio ?? false,
+                              cuantosApoyan:
+                                  state.estandarDbLocal?.cuantosApoyan ?? '',
+                              publicitarNegocio:
+                                  state.estandarDbLocal?.publicitarNegocio ??
+                                      '',
+                              negocioProximosAnios:
+                                  state.estandarDbLocal?.negocioProximosAnios ??
+                                      '',
+                              motivoPrestamo:
+                                  state.estandarDbLocal?.motivoPrestamo ?? '',
+                              comoMejoraVida:
+                                  state.estandarDbLocal?.comoMejoraVida ?? '',
+                              planesFuturo:
+                                  state.estandarDbLocal?.planesFuturo ?? '',
+                              otrosDatosCliente:
+                                  state.estandarDbLocal?.otrosDatosCliente ??
+                                      '',
+                            ),
+                          );
+                    },
+                    previousTitle: 'Salir',
+                    nextTitle: 'Enviar',
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
