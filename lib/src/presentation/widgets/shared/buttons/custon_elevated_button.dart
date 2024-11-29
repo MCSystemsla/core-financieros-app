@@ -29,11 +29,11 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: enabled ? onPressed : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
+        backgroundColor: enabled ? color : AppColors.borderGrey,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        disabledBackgroundColor: AppColors.borderGrey,
+        disabledBackgroundColor: AppColors.grey,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 12),

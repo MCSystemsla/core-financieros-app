@@ -22,6 +22,8 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
   @override
   void initState() {
     context.read<SolicitudesPendientesLocalDbCubit>().getSolicitudes();
+    context.read<SolicitudesPendientesLocalDbCubit>().getComunidades();
+    context.read<SolicitudesPendientesLocalDbCubit>().getDepartamentos();
     super.initState();
   }
 
@@ -64,40 +66,47 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
   }
 }
 
-class _RequestWidget extends StatelessWidget {
+class _RequestWidget extends StatefulWidget {
   final SolicitudesPendientes solicitud;
   const _RequestWidget({
     required this.solicitud,
   });
 
   @override
+  State<_RequestWidget> createState() => _RequestWidgetState();
+}
+
+class _RequestWidgetState extends State<_RequestWidget> {
+  @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('${solicitud.numero} - ${solicitud.nombre!.capitalizeAll}'),
+      title: Text(
+          '${widget.solicitud.numero} - ${widget.solicitud.nombre!.capitalizeAll}'),
       onTap: () async {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
-              route: solicitud.tipoSolicitud!,
-              solicitudId: solicitud.id.toString(),
-              nombre: solicitud.nombre ?? 'N/A',
-              motivoAnterior: solicitud.motivoAnterior ?? 'N/A',
+              route: widget.solicitud.producto ?? 'N/A',
+              solicitudId: widget.solicitud.solicitudId.toString(),
+              nombre: widget.solicitud.nombre ?? 'N/A',
+              motivoAnterior: widget.solicitud.motivoAnterior ??
+                  'Motivo Anterior no registrado',
             );
-        await context.push('/online', extra: solicitud.producto);
+        await context.push('/online', extra: widget.solicitud.producto);
       },
       subtitle: Text(
-        solicitud.fecha?.formatDateV2() ?? '',
+        widget.solicitud.fecha?.formatDateV2() ?? '',
       ),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${NumberFormat('#,##0.00', 'en_US').format(solicitud.monto)} ${solicitud.moneda}',
+            '${NumberFormat('#,##0.00', 'en_US').format(widget.solicitud.monto)} ${widget.solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
           ),
           const Gap(5),
-          Text(solicitud.estado ?? 'N/A'),
+          Text(widget.solicitud.estado ?? 'N/A'),
         ],
       ),
       leading: const CircleAvatar(

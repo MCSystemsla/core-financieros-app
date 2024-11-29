@@ -983,6 +983,8 @@ class SignQuestionaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
 
     return Column(
       children: [
@@ -1119,9 +1121,11 @@ class SignQuestionaryWidget extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            saveMejoraViviendaForm(context, state);
-
-                            context.read<MejoraViviendaCubit>().sendAnswers();
+                            !isConnected
+                                ? saveMejoraViviendaForm(context, state)
+                                : context
+                                    .read<MejoraViviendaCubit>()
+                                    .sendAnswers();
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),

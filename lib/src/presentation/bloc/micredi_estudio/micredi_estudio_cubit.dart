@@ -56,6 +56,22 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required MiCrediEstudioModel miCrediEstudioModel}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.miCrediEstudioAnswer(
+          miCrediEstudioModel: miCrediEstudioModel);
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     Status? status,
     String? database,

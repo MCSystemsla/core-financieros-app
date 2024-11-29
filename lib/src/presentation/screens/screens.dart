@@ -1,3 +1,4 @@
+export 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/estandar_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/energia_limpia_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/mujer_emprender_screen.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/local_db/comunidades/comunidades_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
@@ -132,6 +134,171 @@ class SolicitudesPendientesLocalDbCubit
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
     }
+  }
+
+  Future<RecurrenteEstandarDbLocal?> getRecurrentEstandar(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final estandar = await state.isar!.recurrenteEstandarDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteEstandarDbLocal: estandar,
+      ));
+      return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<RecurrenteMiCrediEstudioDbLocal?> getRecurrentMiCrediEstudio(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final solicitud = await state.isar!.recurrenteMiCrediEstudioDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteMiCrediEstudioDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<EstandarDbLocal?> getEstandar(int solicitudId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final estandar = await state.isar!.estandarDbLocals
+          .filter()
+          .objSolicitudNuevamenorIdEqualTo(solicitudId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        estandarDbLocal: estandar,
+      ));
+      log(estandar.toString());
+      return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<MiCrediEstudioDbLocal?> getMiCrediEstudio(int solicitudId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final solicitud = await state.isar!.miCrediEstudioDbLocals
+          .filter()
+          .objSolicitudNuevamenorIdEqualTo(solicitudId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        miCrediEstudioDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<List<int?>> getItemsRecurrents({required String typeProduct}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      switch (typeProduct) {
+        case 'MICREDIESTUDIO RECURRENTE':
+          return await state.isar!.recurrenteMiCrediEstudioDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'MICREDIESTUDIO NUEVO':
+          return await state.isar!.miCrediEstudioDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+        case 'ESTANDAR RECURRENTE':
+          return await state.isar!.recurrenteEstandarDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'ESTANDAR NUEVO':
+          return await state.isar!.estandarDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+        case 'VIVIENDA REPRESTAMO':
+          return await state.isar!.recurrenteMejoraViviendaDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'VIVIENDA NUEVA':
+          return await state.isar!.mejoraViviendaDbLocals
+              .where()
+              .solicitudNuevamenorIdProperty()
+              .findAll();
+        case 'AGUA Y SANEAMIENTO RECURRENTE':
+          return await state.isar!.recurrenteSaneamientoDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'AGUA Y SANEAMIENTO NUEVO':
+          return await state.isar!.saneamientoDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+        case 'ASER RECURRENTE':
+          return await state.isar!.recurrenteEnergiaLimpiaDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'ASER NUEVO':
+          return await state.isar!.energiaLimpiaDbLocals
+              .where()
+              .solicitudNuevamenorIdProperty()
+              .findAll();
+        case 'MUJER EMPRENDE RECURRENTE':
+          return await state.isar!.recurrenteMujerEmprendeDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'MUJER EMPRENDE NUEVO':
+          return await state.isar!.mujerEmprendeDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+      }
+      return [];
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return [];
+    }
+  }
+
+  Future<void> checkMatching(String typeProduct, String solicitudId) async {
+    final Map<String, bool> isMatchingMap = {};
+
+    final numSolicitud = await getItemsRecurrents(typeProduct: typeProduct);
+    // ignore: unrelated_type_equality_checks
+    final isMatching = numSolicitud == int.tryParse(solicitudId);
+
+    isMatchingMap[typeProduct] = isMatching;
+    emit(state.copyWith(isMatchingMap: Map.from(isMatchingMap)));
   }
 
   Future<void> saveEnergiaLimpia({

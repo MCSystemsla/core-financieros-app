@@ -23,4 +23,9 @@ class EstandarDbLocal {
   String? comoMejoraVida;
   String? planesFuturo;
   String? otrosDatosCliente;
+  String? imagen1;
+  String? imagen2;
+  String? imagen3;
+  String? imagen4;
+  String? imagenFirma;
 }

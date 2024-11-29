@@ -7,16 +7,31 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final List<SolicitudesPendientes> solicitudes;
   final List<DepartamentosDbLocal> departamentos;
   final List<ComunidadesLocalDb> comunidades;
+  final Map<String, bool> isMatchingMap;
+  final RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal;
+  final EstandarDbLocal? estandarDbLocal;
+  final MiCrediEstudioDbLocal? miCrediEstudioDbLocal;
+  final RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
     this.solicitudes = const [],
     this.departamentos = const [],
     this.comunidades = const [],
+    this.isMatchingMap = const {},
+    this.recurrenteEstandarDbLocal,
+    this.estandarDbLocal,
+    this.miCrediEstudioDbLocal,
+    this.recurrenteMiCrediEstudioDbLocal,
   });
 
   @override
-  List<Object> get props => [status, solicitudes, departamentos, comunidades];
+  List<Object> get props => [
+        status,
+        solicitudes,
+        departamentos,
+        comunidades,
+      ];
 
   SolicitudesPendientesLocalDbState copyWith({
     Isar? isar,
@@ -24,6 +39,11 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     List<SolicitudesPendientes>? solicitudes,
     List<DepartamentosDbLocal>? departamentos,
     List<ComunidadesLocalDb>? comunidades,
+    Map<String, bool>? isMatchingMap,
+    RecurrenteEstandarDbLocal? recurrenteEstandarDbLocal,
+    EstandarDbLocal? estandarDbLocal,
+    MiCrediEstudioDbLocal? miCrediEstudioDbLocal,
+    RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -31,6 +51,14 @@ class SolicitudesPendientesLocalDbState extends Equatable {
       solicitudes: solicitudes ?? this.solicitudes,
       departamentos: departamentos ?? this.departamentos,
       comunidades: comunidades ?? this.comunidades,
+      isMatchingMap: isMatchingMap ?? this.isMatchingMap,
+      recurrenteEstandarDbLocal:
+          recurrenteEstandarDbLocal ?? this.recurrenteEstandarDbLocal,
+      estandarDbLocal: estandarDbLocal ?? this.estandarDbLocal,
+      miCrediEstudioDbLocal:
+          miCrediEstudioDbLocal ?? this.miCrediEstudioDbLocal,
+      recurrenteMiCrediEstudioDbLocal: recurrenteMiCrediEstudioDbLocal ??
+          this.recurrenteMiCrediEstudioDbLocal,
     );
   }
 }

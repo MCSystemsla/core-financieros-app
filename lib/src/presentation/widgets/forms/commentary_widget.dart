@@ -17,6 +17,7 @@ class CommentaryWidget extends StatelessWidget {
   final double? marginTop;
   final TextInputType? textInputType;
   final TextCapitalization? textCapitalization;
+  final bool? readOnly;
   const CommentaryWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -28,6 +29,7 @@ class CommentaryWidget extends StatelessWidget {
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
+    this.readOnly = false,
   }) : haveCounter = false;
   const CommentaryWidget.withCounter({
     super.key,
@@ -40,6 +42,7 @@ class CommentaryWidget extends StatelessWidget {
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
+    this.readOnly = false,
   }) : haveCounter = true;
 
   @override
@@ -77,6 +80,7 @@ class CommentaryWidget extends StatelessWidget {
               maxLines: null,
               onChanged: onChange,
               textCapitalization: textCapitalization ?? TextCapitalization.none,
+              readOnly: readOnly ?? false,
               style: TextStyle(
                 color: AppColors.greyWithOpacityV4,
                 fontSize: 16,

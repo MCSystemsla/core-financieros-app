@@ -45,6 +45,22 @@ class EstandarCubit extends Cubit<EstandarState> {
     }
   }
 
+  Future<void> sendOffilneAnswers(
+      {required EstandarModel estandarModel}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOK, message) =
+          await repository.estandar(estandarModel: estandarModel);
+      if (!isOK) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     String? database,
     int? objSolicitudNuevamenorId,

@@ -44,6 +44,22 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required RecurrenteEstandarModel recurrentEstandarModel}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.recurrenteEstandar(
+          recurrenteEstandarModel: recurrentEstandarModel);
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, erroMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, erroMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
