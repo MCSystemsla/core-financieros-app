@@ -100,4 +100,22 @@ class RecurrenteAguaYSaneamientoCubit
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
+
+  Future<void> sendOfflineAnswers({
+    required RecurrenteAguaSaneamientoModel recurrenteAguaSaniamientoModel,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.recurrenteAguaYSaneamientoAnswer(
+        recurrenteAguaSaneamientoModel: recurrenteAguaSaniamientoModel,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
 }

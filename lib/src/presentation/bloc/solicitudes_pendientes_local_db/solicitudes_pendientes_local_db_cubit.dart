@@ -241,6 +241,27 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<RecurrenteSaneamientoDbLocal?> getSaneamientoRecurrente(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final solicitud = await state.isar!.recurrenteSaneamientoDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteSaneamientoDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
   Future<EstandarDbLocal?> getEstandar(int solicitudId) async {
     emit(state.copyWith(status: Status.inProgress));
     try {

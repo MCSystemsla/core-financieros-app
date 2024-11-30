@@ -1,9 +1,11 @@
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/micredi_estudio/micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar_confirmation/recurrente_estandar_confirmation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -41,9 +43,21 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
             ..getRecurrentResponses(
                 isar: isar, solicitudId: int.tryParse(solicitudId) ?? 0),
         ),
-        BlocProvider(create: (ctx) => MejoraViviendaCubit(respository)),
         BlocProvider(
-            create: (ctx) => RecurrenteMejoraViviendaCubit(respository)),
+          create: (ctx) => MejoraViviendaCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => RecurrenteMejoraViviendaCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => RecurrenteMejoraViviendaCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => AguaYSaneamientoCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => RecurrenteAguaYSaneamientoCubit(respository),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -92,13 +106,32 @@ class _CurrentForm extends StatelessWidget {
       'AGUA Y SANEAMIENTO NUEVO' => AguaSaneamientoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'AGUA Y SANEAMIENTO RECURRENTE' =>
-        const Text('agua saneamiento recurrente'),
-      'ASER NUEVO' => const Text(' Energia Limpia'),
+      'AGUA Y SANEAMIENTO RECURRENTE' => RecurrenteSaneamientoOffline(
+          solicitudId: int.tryParse(solicitudId) ?? 0,
+        ),
+      'ASER NUEVO' => const EnergiaLImpiaOffline(),
       'ASER RECURRENTE' => const Text('Energia Recurrente'),
       'MUJER EMPRENDE NUEVO' => const Text(' Mujer Emprende'),
       'MUJER EMPRENDE RECURRENTE' => const Text(' Mujer Emprende recurrente'),
       _ => const SizedBox(),
     };
+  }
+}
+
+class EnergiaLImpiaOffline extends StatelessWidget {
+  const EnergiaLImpiaOffline({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(' Energia Limpia'),
+        ],
+      ),
+    );
   }
 }
