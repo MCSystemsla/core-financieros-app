@@ -52,6 +52,23 @@ class RecurrenteMejoraViviendaCubit
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required MejoraViviendaRecurrente recurrentemejoravivienda}) async {
+    try {
+      emit(state.copyWith(status: Status.inProgress));
+      final (isOk, message) = await repository.mejoraViviendaRecurrenteAnswer(
+        mejoraViviendaRecurrente: recurrentemejoravivienda,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   Future<void> saveAnswers1({
     bool? tieneTrabajo,
     String? trabajoNegocioDescripcion,

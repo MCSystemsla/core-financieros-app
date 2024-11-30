@@ -13,6 +13,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final MiCrediEstudioDbLocal? miCrediEstudioDbLocal;
   final RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal;
   final MejoraViviendaDbLocal? mejoraViviendaDbLocal;
+  final RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal;
+  final SaneamientoDbLocal? saneamientoDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -25,6 +27,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.miCrediEstudioDbLocal,
     this.recurrenteMiCrediEstudioDbLocal,
     this.mejoraViviendaDbLocal,
+    this.recurrenteMejoraViviendaDbLocal,
+    this.saneamientoDbLocal,
   });
 
   @override
@@ -47,6 +51,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     MiCrediEstudioDbLocal? miCrediEstudioDbLocal,
     RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal,
     MejoraViviendaDbLocal? mejoraViviendaDbLocal,
+    RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal,
+    SaneamientoDbLocal? saneamientoDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -64,6 +70,9 @@ class SolicitudesPendientesLocalDbState extends Equatable {
           this.recurrenteMiCrediEstudioDbLocal,
       mejoraViviendaDbLocal:
           mejoraViviendaDbLocal ?? this.mejoraViviendaDbLocal,
+      recurrenteMejoraViviendaDbLocal: recurrenteMejoraViviendaDbLocal ??
+          this.recurrenteMejoraViviendaDbLocal,
+      saneamientoDbLocal: saneamientoDbLocal ?? this.saneamientoDbLocal,
     );
   }
 }

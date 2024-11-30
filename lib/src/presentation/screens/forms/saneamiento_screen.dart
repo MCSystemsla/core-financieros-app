@@ -973,6 +973,7 @@ class _SaneamientoSign extends StatelessWidget {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
+    context.pushReplacement('/');
   }
 }
 
