@@ -49,6 +49,23 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required RecurrenteEnergiaLimpiaModel recurrenteEnergiaLimpia}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await _repository.recurrenteREnergiaLimpiaAnswer(
+        energiaLimpiaModel: recurrenteEnergiaLimpia,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswer1({
     bool? tieneTrabajo,
     String? trabajoNegocioDescripcion,

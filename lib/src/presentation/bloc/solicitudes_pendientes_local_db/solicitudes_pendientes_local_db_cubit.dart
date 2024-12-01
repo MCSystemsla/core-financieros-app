@@ -262,6 +262,49 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<EnergiaLimpiaDbLocal?> getEnergiaLimpia(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final solicitud = await state.isar!.energiaLimpiaDbLocals
+          .filter()
+          .solicitudNuevamenorIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        energiaLimpiaDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<RecurrenteEnergiaLimpiaDbLocal?> getEnergiaLimpiaRecurrente(
+    int solicitudRecurrenteId,
+  ) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final solicitud = await state.isar!.recurrenteEnergiaLimpiaDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteEnergiaLimpiaDbLocal: solicitud,
+      ));
+      return solicitud;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
   Future<EstandarDbLocal?> getEstandar(int solicitudId) async {
     emit(state.copyWith(status: Status.inProgress));
     try {

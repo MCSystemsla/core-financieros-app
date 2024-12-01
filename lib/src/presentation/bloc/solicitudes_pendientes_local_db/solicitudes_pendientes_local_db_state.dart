@@ -16,6 +16,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal;
   final SaneamientoDbLocal? saneamientoDbLocal;
   final RecurrenteSaneamientoDbLocal? recurrenteSaneamientoDbLocal;
+  final EnergiaLimpiaDbLocal? energiaLimpiaDbLocal;
+  final RecurrenteEnergiaLimpiaDbLocal? recurrenteEnergiaLimpiaDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -31,6 +33,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.recurrenteMejoraViviendaDbLocal,
     this.saneamientoDbLocal,
     this.recurrenteSaneamientoDbLocal,
+    this.energiaLimpiaDbLocal,
+    this.recurrenteEnergiaLimpiaDbLocal,
   });
 
   @override
@@ -56,6 +60,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal,
     SaneamientoDbLocal? saneamientoDbLocal,
     RecurrenteSaneamientoDbLocal? recurrenteSaneamientoDbLocal,
+    EnergiaLimpiaDbLocal? energiaLimpiaDbLocal,
+    RecurrenteEnergiaLimpiaDbLocal? recurrenteEnergiaLimpiaDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -78,6 +84,9 @@ class SolicitudesPendientesLocalDbState extends Equatable {
       saneamientoDbLocal: saneamientoDbLocal ?? this.saneamientoDbLocal,
       recurrenteSaneamientoDbLocal:
           recurrenteSaneamientoDbLocal ?? this.recurrenteSaneamientoDbLocal,
+      energiaLimpiaDbLocal: energiaLimpiaDbLocal ?? this.energiaLimpiaDbLocal,
+      recurrenteEnergiaLimpiaDbLocal:
+          recurrenteEnergiaLimpiaDbLocal ?? this.recurrenteEnergiaLimpiaDbLocal,
     );
   }
 }
