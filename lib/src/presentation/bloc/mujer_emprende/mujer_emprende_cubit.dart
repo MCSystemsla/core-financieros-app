@@ -45,6 +45,24 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
     }
   }
 
+  Future<void> sendOfflineAnswers({
+    required MujerEmprendeModel mujerEmprendeModel,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.mujerEmprendeAnswer(
+        mujerEmprendeModel: mujerEmprendeModel,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,

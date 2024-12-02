@@ -277,7 +277,33 @@ class _RecurrenteEnergiaLimpiaOfflineState
       builder: (context, state) {
         return BlocConsumer<RecurrenteEnergiaLimpiaCubit,
             RecurrenteEnergiaLimpiaState>(
-          listener: (context, state) {},
+          listener: (context, state) async {
+            if (state.status == Status.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                  content: Text(state.errorMsg),
+                ),
+              );
+            }
+            if (state.status == Status.done) {
+              await customPopUp(
+                context: context,
+                dismissOnTouchOutside: false,
+                size: MediaQuery.sizeOf(context),
+                title: 'Formulario Kiva Enviado exitosamente!!',
+                subtitle: 'Las respuestas se han enviado Exitosamente',
+                dialogType: DialogType.success,
+                buttonAcept: true,
+                textButtonAcept: 'Ok',
+                colorButtonAcept: AppColors.getPrimaryColor(),
+                onPressedAccept: () {
+                  context.pushReplacement('/');
+                },
+              );
+            }
+          },
           builder: (context, response) {
             return SingleChildScrollView(
               child: Column(
