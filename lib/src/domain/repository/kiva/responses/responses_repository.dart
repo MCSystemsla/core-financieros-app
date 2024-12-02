@@ -70,6 +70,16 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
   });
+  Future<(bool, String)> uploadUserFilesOffline({
+    required String imagen1,
+    required String imagen2,
+    required String imagen3,
+    required String fotoFirma,
+    required String fotoCedula,
+    required int solicitudId,
+    required String formularioKiva,
+    required String database,
+  });
 }
 
 class ResponsesRepositoryImpl extends ResponsesRepository {
@@ -427,6 +437,88 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         true,
         resp.toString(),
       );
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> uploadUserFilesOffline({
+    required String imagen1,
+    required String imagen2,
+    required String imagen3,
+    required String fotoFirma,
+    required String fotoCedula,
+    required int solicitudId,
+    required String formularioKiva,
+    required String database,
+  }) async {
+    const url =
+        'https://core-financiero-backend-1.onrender.com/kiva/subir-imagenes';
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields['solicitudId'] = solicitudId.toString();
+      request.fields['formularioKiva'] = 'ScrKivaCreditoEstandarRecurrente';
+      request.fields['database'] = LocalStorage().database;
+
+      // Agregar imágenes
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoCliente1',
+        imagen1,
+        filename:
+            imagen1, // Asegúrate de que el nombre del archivo sea correcto
+        contentType: MediaType('image', 'jpg'),
+      ));
+
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoCliente2',
+        imagen2,
+        filename: imagen2,
+        contentType: MediaType('image', 'jpg'),
+      ));
+
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoCliente3',
+        imagen3,
+        filename: imagen3,
+        contentType: MediaType('image', 'jpg'),
+      ));
+
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoFirmaDigital',
+        fotoFirma,
+        filename: fotoFirma,
+        contentType: MediaType('image', 'png'),
+      ));
+
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoCedula',
+        fotoCedula,
+        filename: fotoCedula,
+        contentType: MediaType('image', 'jpg'),
+      ));
+      // Agregar encabezados (si es necesario)
+      request.headers.addAll({
+        'Accept': 'application/json', // Indica que se espera una respuesta JSON
+        'Content-Type': 'multipart/form-data',
+      });
+      // Enviar la solicitud
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+      } else {
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+      }
+      // if (response.statusCode == 201) {
+      //   print(
+      //       '¡Éxito! Respuesta del servidor: ${await http.Response.fromStream(response)}');
+      //   return true;
+      // }
+      _logger.i(response.reasonPhrase);
+      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());

@@ -605,9 +605,14 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   imageQuality: 85,
                 )
                     .then(
-                  (XFile? photo) {
+                  (XFile? photo) async {
                     if (photo != null) {
                       selectedImage = photo;
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final savedPath = '${directory.path}/imagen1.jpg';
+                      await File(photo.path).copy(savedPath);
+
                       setState(() {});
                     }
                   },
@@ -627,9 +632,13 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   imageQuality: 85,
                 )
                     .then(
-                  (XFile? photo) {
+                  (XFile? photo) async {
                     if (photo != null) {
                       selectedImage2 = photo;
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final savedPath = '${directory.path}/imagen2.jpg';
+                      await File(photo.path).copy(savedPath);
                       setState(() {});
                     }
                   },
@@ -649,9 +658,13 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   imageQuality: 85,
                 )
                     .then(
-                  (XFile? photo) {
+                  (XFile? photo) async {
                     if (photo != null) {
                       selectedImage3 = photo;
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final savedPath = '${directory.path}/imagen3.jpg';
+                      await File(photo.path).copy(savedPath);
                       setState(() {});
                     }
                   },
@@ -671,9 +684,13 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   imageQuality: 85,
                 )
                     .then(
-                  (XFile? photo) {
+                  (XFile? photo) async {
                     if (photo != null) {
                       selectedImage4 = photo;
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final savedPath = '${directory.path}/imagen4.jpg';
+                      await File(photo.path).copy(savedPath);
                       setState(() {});
                     }
                   },

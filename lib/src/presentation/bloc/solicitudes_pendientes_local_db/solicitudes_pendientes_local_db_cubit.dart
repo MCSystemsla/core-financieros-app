@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/recurrente_saneamiento_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/saneamiento_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -49,7 +50,8 @@ class SolicitudesPendientesLocalDbCubit
           EstandarDbLocalSchema,
           RecurrenteEstandarDbLocalSchema,
           DepartamentosDbLocalSchema,
-          ComunidadesLocalDbSchema
+          ComunidadesLocalDbSchema,
+          ImageModelSchema,
         ],
         directory: dir.path,
       );
@@ -150,6 +152,26 @@ class SolicitudesPendientesLocalDbCubit
         recurrenteEstandarDbLocal: estandar,
       ));
       return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<ImageModel?> getImagesModel(int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final solicitud = await state.isar!.imageModels
+          .filter()
+          .solicitudIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        imageModel: solicitud,
+      ));
+      return solicitud;
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -457,6 +479,21 @@ class SolicitudesPendientesLocalDbCubit
       final resp = await state.isar!.writeTxn(
         () {
           return state.isar!.energiaLimpiaDbLocals.put(energiaLimpiaDBLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveImagesLocal({
+    required ImageModel imageModel,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.imageModels.put(imageModel);
         },
       );
       _logger.i(resp);
