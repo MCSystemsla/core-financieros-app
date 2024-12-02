@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/recurrente_estandar_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -120,7 +121,7 @@ class _RecurrentSign extends StatelessWidget {
     final controller = SignatureController();
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
-    final imageProvider = context.read<UploadUserFileCubit>().state;
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -189,6 +190,15 @@ class _RecurrentSign extends StatelessWidget {
                 BlocConsumer<RecurrenteEstandartCubit,
                     RecurrenteEstandartState>(
                   listener: (context, state) async {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final filePath = '${directory.path}/signature.png';
+
+                    final signatureImage = await controller.toPngBytes();
+
+                    // Guarda la imagen en el archivo
+                    final file = File(filePath);
+                    await file.writeAsBytes(signatureImage!);
+                    if (!context.mounted) return;
                     final status = state.status;
                     if (status == Status.error) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -200,37 +210,18 @@ class _RecurrentSign extends StatelessWidget {
                       );
                     }
                     if (state.status == Status.done) {
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final filePath = '${directory.path}/signature.png';
-
-                      final signatureImage = await controller.toPngBytes();
-
-                      // Guarda la imagen en el archivo
-                      final file = File(filePath);
-                      await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
-                      !isConnected
-                          ? context
-                              .read<SolicitudesPendientesLocalDbCubit>()
-                              .saveRecurrentEstandarForm(
-                                recurrenteEstandarModel:
-                                    RecurrenteEstandarDbLocal()
-                                      ..imagenFirma = file.path
-                                      ..imagen1 = imageProvider.imagen1!.path
-                                      ..imagen2 = imageProvider.imagen2!.path
-                                      ..imagen3 = imageProvider.imagen3!.path
-                                      ..imagen4 = imageProvider.imagen4!.path,
-                              )
-                          : context.read<UploadUserFileCubit>().uploadUserFiles(
-                                fotoFirma: file,
-                                solicitudId: int.parse(
-                                  context
-                                      .read<KivaRouteCubit>()
-                                      .state
-                                      .solicitudId,
-                                ),
-                              );
+                      if (isConnected) {
+                        context.read<UploadUserFileCubit>().uploadUserFiles(
+                              fotoFirma: file,
+                              solicitudId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                            );
+                      }
                       await customPopUp(
                         context: context,
                         dismissOnTouchOutside: false,
@@ -274,10 +265,33 @@ class _RecurrentSign extends StatelessWidget {
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
                             !isConnected
-                                ? saveOfflineResponses(context, state)
+                                ? saveOfflineResponses(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma =
+                                          imageProvider.imagen1?.path ??
+                                              'No Path'
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<RecurrenteEstandartCubit>()
                                     .sendAnswers();
+
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -295,9 +309,13 @@ class _RecurrentSign extends StatelessWidget {
     );
   }
 
-  saveOfflineResponses(
-      BuildContext context, RecurrenteEstandartState state) async {
+  saveOfflineResponses(BuildContext context, RecurrenteEstandartState state,
+      ImageModel imageModel) async {
     if (!context.mounted) return;
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
+
     context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
           recurrenteEstandarModel: RecurrenteEstandarDbLocal()
             ..apoyanNegocio = state.apoyanNegocio

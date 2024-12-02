@@ -101,4 +101,23 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
       _logger.e(e);
     }
   }
+
+  Future<void> sendOfflineAnswers({
+    required MejoraViviendaAnswer mejoravivienda,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.mejoraViviendaAnswer(
+        mejoraVivienda: mejoravivienda,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      _logger.e(e);
+    }
+  }
 }

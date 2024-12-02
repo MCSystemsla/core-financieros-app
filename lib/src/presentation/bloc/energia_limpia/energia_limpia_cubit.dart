@@ -44,6 +44,23 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required EnergiaLimpiaModel energiaLimpia}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.energiaLimpia(
+        energiaLimpiaModel: energiaLimpia,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswer1({
     bool? tieneTrabajo,
     bool? otrosIngresos,

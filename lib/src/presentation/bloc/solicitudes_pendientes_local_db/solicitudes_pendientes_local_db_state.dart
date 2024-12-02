@@ -12,6 +12,14 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final EstandarDbLocal? estandarDbLocal;
   final MiCrediEstudioDbLocal? miCrediEstudioDbLocal;
   final RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal;
+  final MejoraViviendaDbLocal? mejoraViviendaDbLocal;
+  final RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal;
+  final SaneamientoDbLocal? saneamientoDbLocal;
+  final RecurrenteSaneamientoDbLocal? recurrenteSaneamientoDbLocal;
+  final EnergiaLimpiaDbLocal? energiaLimpiaDbLocal;
+  final RecurrenteEnergiaLimpiaDbLocal? recurrenteEnergiaLimpiaDbLocal;
+  final MujerEmprendeDbLocal? mujerEmprendeDbLocal;
+  final ImageModel? imageModel;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -23,6 +31,14 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.estandarDbLocal,
     this.miCrediEstudioDbLocal,
     this.recurrenteMiCrediEstudioDbLocal,
+    this.mejoraViviendaDbLocal,
+    this.recurrenteMejoraViviendaDbLocal,
+    this.saneamientoDbLocal,
+    this.recurrenteSaneamientoDbLocal,
+    this.energiaLimpiaDbLocal,
+    this.recurrenteEnergiaLimpiaDbLocal,
+    this.mujerEmprendeDbLocal,
+    this.imageModel,
   });
 
   @override
@@ -44,6 +60,14 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     EstandarDbLocal? estandarDbLocal,
     MiCrediEstudioDbLocal? miCrediEstudioDbLocal,
     RecurrenteMiCrediEstudioDbLocal? recurrenteMiCrediEstudioDbLocal,
+    MejoraViviendaDbLocal? mejoraViviendaDbLocal,
+    RecurrenteMejoraViviendaDbLocal? recurrenteMejoraViviendaDbLocal,
+    SaneamientoDbLocal? saneamientoDbLocal,
+    RecurrenteSaneamientoDbLocal? recurrenteSaneamientoDbLocal,
+    EnergiaLimpiaDbLocal? energiaLimpiaDbLocal,
+    RecurrenteEnergiaLimpiaDbLocal? recurrenteEnergiaLimpiaDbLocal,
+    MujerEmprendeDbLocal? mujerEmprendeDbLocal,
+    ImageModel? imageModel,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -59,6 +83,18 @@ class SolicitudesPendientesLocalDbState extends Equatable {
           miCrediEstudioDbLocal ?? this.miCrediEstudioDbLocal,
       recurrenteMiCrediEstudioDbLocal: recurrenteMiCrediEstudioDbLocal ??
           this.recurrenteMiCrediEstudioDbLocal,
+      mejoraViviendaDbLocal:
+          mejoraViviendaDbLocal ?? this.mejoraViviendaDbLocal,
+      recurrenteMejoraViviendaDbLocal: recurrenteMejoraViviendaDbLocal ??
+          this.recurrenteMejoraViviendaDbLocal,
+      saneamientoDbLocal: saneamientoDbLocal ?? this.saneamientoDbLocal,
+      recurrenteSaneamientoDbLocal:
+          recurrenteSaneamientoDbLocal ?? this.recurrenteSaneamientoDbLocal,
+      energiaLimpiaDbLocal: energiaLimpiaDbLocal ?? this.energiaLimpiaDbLocal,
+      recurrenteEnergiaLimpiaDbLocal:
+          recurrenteEnergiaLimpiaDbLocal ?? this.recurrenteEnergiaLimpiaDbLocal,
+      mujerEmprendeDbLocal: mujerEmprendeDbLocal ?? this.mujerEmprendeDbLocal,
+      imageModel: imageModel ?? this.imageModel,
     );
   }
 }

@@ -1,11 +1,16 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -14,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EstandarOfflineForm extends StatefulWidget {
   final String typeProduct;
@@ -35,6 +41,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getRecurrentEstandar(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
     super.initState();
   }
 
@@ -44,7 +53,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
     return BlocConsumer<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
       listener: (context, state) {},
-      builder: (context, state) {
+      builder: (context, resp) {
         return BlocConsumer<RecurrenteEstandartCubit, RecurrenteEstandartState>(
           listener: (context, state) async {
             if (state.status == Status.error) {
@@ -57,6 +66,28 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
               );
             }
             if (state.status == Status.done) {
+              final dir = await getApplicationDocumentsDirectory();
+              final file = File('${dir.path}/imagen1.jpg');
+
+              // Verifica que el archivo exista antes de enviarlo
+              if (!file.existsSync()) {
+                log('El archivo no existe en la ruta proporcionada.');
+                return;
+              } else {
+                log('Si existe ${file.path}');
+              }
+
+              if (!context.mounted) return;
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: '${dir.path}/imagen1.jpg',
+                    imagen2: '${dir.path}/imagen1.jpg',
+                    imagen3: '${dir.path}/imagen1.jpg',
+                    fotoCedula: '${dir.path}/imagen1.jpg',
+                    fotoFirma: '${dir.path}/imagen1.jpg',
+                    solicitudId: int.tryParse(
+                            context.read<KivaRouteCubit>().state.solicitudId) ??
+                        0,
+                  );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -80,18 +111,19 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                 children: [
                   CommentaryWidget(
                     title: '¿Tiene otros ingresos?¿Cuales?*',
-                    initialValue: state.recurrenteEstandarDbLocal?.otrosIngresos
+                    initialValue: resp.recurrenteEstandarDbLocal?.otrosIngresos
                         .toString(),
                     readOnly: true,
                   ),
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Cuales?*',
-                    initialValue: state.recurrenteEstandarDbLocal!
+                    initialValue: resp.recurrenteEstandarDbLocal!
                             .otrosIngresosDescripcion!.isEmpty
                         ? 'N/A'
-                        : state.recurrenteEstandarDbLocal!
-                            .otrosIngresosDescripcion!,
+                        : resp.recurrenteEstandarDbLocal!
+                                .otrosIngresosDescripcion ??
+                            'N/A',
                     readOnly: true,
                   ),
                   const Gap(20),
@@ -99,7 +131,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title: 'Número de personas a cargo:*',
                     readOnly: true,
                     textInputType: TextInputType.number,
-                    initialValue: state.recurrenteEstandarDbLocal?.personasCargo
+                    initialValue: resp.recurrenteEstandarDbLocal?.personasCargo
                             .toString() ??
                         '0',
                   ),
@@ -107,7 +139,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   CommentaryWidget(
                     title: 'Número de hijos:*',
                     readOnly: true,
-                    initialValue: state.recurrenteEstandarDbLocal?.numeroHijos
+                    initialValue: resp.recurrenteEstandarDbLocal?.numeroHijos
                             .toString() ??
                         '0',
                   ),
@@ -116,14 +148,14 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title: '¿Que edades tienen sus hijos?',
                     readOnly: true,
                     initialValue:
-                        state.recurrenteEstandarDbLocal?.edadHijos.toString() ??
+                        resp.recurrenteEstandarDbLocal?.edadHijos.toString() ??
                             'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                     readOnly: true,
-                    initialValue: state
+                    initialValue: resp
                             .recurrenteEstandarDbLocal?.tipoEstudioHijos
                             .toString() ??
                         'N/A',
@@ -133,7 +165,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         '¿Coincide la respuesta del cliente con el formato anterior?',
                     readOnly: true,
-                    initialValue: state
+                    initialValue: resp
                             .recurrenteEstandarDbLocal?.coincideRespuesta
                             .toString() ??
                         'N/A',
@@ -143,7 +175,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                     readOnly: true,
-                    initialValue: state
+                    initialValue: resp
                             .recurrenteEstandarDbLocal?.explicacionInversion
                             .toString() ??
                         'N/A',
@@ -152,7 +184,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   CommentaryWidget(
                     title: '¿Hay alguien que le apoye en su negocio?',
                     readOnly: true,
-                    initialValue: state.recurrenteEstandarDbLocal?.apoyanNegocio
+                    initialValue: resp.recurrenteEstandarDbLocal?.apoyanNegocio
                             .toString() ??
                         'N/A',
                   ),
@@ -160,7 +192,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   CommentaryWidget(
                     title: 'De ser positivo, favor responder cuántas personas',
                     readOnly: true,
-                    initialValue: state.recurrenteEstandarDbLocal?.cuantosApoyan
+                    initialValue: resp.recurrenteEstandarDbLocal?.cuantosApoyan
                             .toString() ??
                         'N/A',
                   ),
@@ -169,7 +201,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
                     readOnly: true,
-                    initialValue: state
+                    initialValue: resp
                             .recurrenteEstandarDbLocal?.comoMejoraEntorno
                             .toString() ??
                         'N/A',
@@ -179,8 +211,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         '¿En qué piensa invertir este nuevo préstamo? Explique',
                     readOnly: true,
-                    initialValue: state
-                            .recurrenteEstandarDbLocal?.motivoPrestamo
+                    initialValue: resp.recurrenteEstandarDbLocal?.motivoPrestamo
                             .toString() ??
                         'N/A',
                   ),
@@ -189,7 +220,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
                     readOnly: true,
-                    initialValue: state.recurrenteEstandarDbLocal?.comoFortalece
+                    initialValue: resp.recurrenteEstandarDbLocal?.comoFortalece
                             .toString() ??
                         'N/A',
                   ),
@@ -197,7 +228,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   CommentaryWidget(
                     title: 'A futuro ¿Cuál seria su siguiente paso?*',
                     readOnly: true,
-                    initialValue: state.recurrenteEstandarDbLocal?.siguientePaso
+                    initialValue: resp.recurrenteEstandarDbLocal?.siguientePaso
                             .toString() ??
                         'N/A',
                   ),
@@ -206,14 +237,14 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     title:
                         'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
                     readOnly: true,
-                    initialValue: state
+                    initialValue: resp
                             .recurrenteEstandarDbLocal?.personaAutoSuficiente
                             .toString() ??
                         'N/A',
                   ),
                   const Gap(20),
                   ButtonActionsWidget(
-                    disabled: state.status == Status.inProgress ||
+                    disabled: resp.status == Status.inProgress ||
                         response.status == Status.inProgress,
                     onPreviousPressed: () {
                       context.pop();
@@ -224,56 +255,54 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                           .sendOfflineAnswers(
                               recurrentEstandarModel: RecurrenteEstandarModel(
                             database:
-                                state.recurrenteEstandarDbLocal?.database ?? '',
-                            otrosIngresos: state
-                                    .recurrenteEstandarDbLocal?.otrosIngresos ??
-                                false,
-                            otrosIngresosDescripcion: state
+                                resp.recurrenteEstandarDbLocal?.database ?? '',
+                            otrosIngresos:
+                                resp.recurrenteEstandarDbLocal?.otrosIngresos ??
+                                    false,
+                            otrosIngresosDescripcion: resp
                                     .recurrenteEstandarDbLocal
                                     ?.otrosIngresosDescripcion ??
                                 '',
-                            personasCargo: state
-                                    .recurrenteEstandarDbLocal?.personasCargo ??
-                                0,
+                            personasCargo:
+                                resp.recurrenteEstandarDbLocal?.personasCargo ??
+                                    0,
                             numeroHijos:
-                                state.recurrenteEstandarDbLocal?.numeroHijos ??
+                                resp.recurrenteEstandarDbLocal?.numeroHijos ??
                                     0,
                             edadHijos:
-                                state.recurrenteEstandarDbLocal?.edadHijos ??
-                                    '',
-                            tipoEstudioHijos: state.recurrenteEstandarDbLocal
+                                resp.recurrenteEstandarDbLocal?.edadHijos ?? '',
+                            tipoEstudioHijos: resp.recurrenteEstandarDbLocal
                                     ?.tipoEstudioHijos ??
                                 '',
-                            apoyanNegocio: state
-                                    .recurrenteEstandarDbLocal?.apoyanNegocio ??
-                                false,
-                            cuantosApoyan: state
-                                    .recurrenteEstandarDbLocal?.cuantosApoyan ??
-                                '',
-                            objSolicitudRecurrenteId: state
+                            apoyanNegocio:
+                                resp.recurrenteEstandarDbLocal?.apoyanNegocio ??
+                                    false,
+                            cuantosApoyan:
+                                resp.recurrenteEstandarDbLocal?.cuantosApoyan ??
+                                    '',
+                            objSolicitudRecurrenteId: resp
                                     .recurrenteEstandarDbLocal
                                     ?.objSolicitudRecurrenteId ??
                                 0,
-                            coincideRespuesta: state.recurrenteEstandarDbLocal
+                            coincideRespuesta: resp.recurrenteEstandarDbLocal
                                     ?.coincideRespuesta ??
                                 false,
-                            explicacionInversion: state
-                                    .recurrenteEstandarDbLocal
+                            explicacionInversion: resp.recurrenteEstandarDbLocal
                                     ?.explicacionInversion ??
                                 '',
-                            comoMejoraEntorno: state.recurrenteEstandarDbLocal
+                            comoMejoraEntorno: resp.recurrenteEstandarDbLocal
                                     ?.comoMejoraEntorno ??
                                 '',
-                            motivoPrestamo: state.recurrenteEstandarDbLocal
+                            motivoPrestamo: resp.recurrenteEstandarDbLocal
                                     ?.motivoPrestamo ??
                                 '',
-                            comoFortalece: state
-                                    .recurrenteEstandarDbLocal?.comoFortalece ??
-                                '',
-                            siguientePaso: state
-                                    .recurrenteEstandarDbLocal?.siguientePaso ??
-                                '',
-                            personaAutoSuficiente: state
+                            comoFortalece:
+                                resp.recurrenteEstandarDbLocal?.comoFortalece ??
+                                    '',
+                            siguientePaso:
+                                resp.recurrenteEstandarDbLocal?.siguientePaso ??
+                                    '',
+                            personaAutoSuficiente: resp
                                     .recurrenteEstandarDbLocal
                                     ?.personaAutoSuficiente ??
                                 '',

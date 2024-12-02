@@ -92,4 +92,21 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
+
+  Future<void> sendOfflineAnswers(
+      {required AguaSaneamientoModel aguaSaneamientoModel}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.aguaYSaneamientoAnswer(
+        aguaSaneamientoModel: aguaSaneamientoModel,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
 }
