@@ -171,6 +171,7 @@ class SolicitudesPendientesLocalDbCubit
         status: Status.done,
         imageModel: solicitud,
       ));
+      log('Imagen 1: ${solicitud?.imagen1 ?? 'NO PATH'} ');
       return solicitud;
     } catch (e) {
       _logger.e(e);

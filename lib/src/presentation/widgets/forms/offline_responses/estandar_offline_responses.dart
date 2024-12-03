@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
@@ -19,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 
 class EstandarOfflineForm extends StatefulWidget {
   final String typeProduct;
@@ -65,44 +63,43 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                 ),
               );
             }
-            if (state.status == Status.done) {
-              final dir = await getApplicationDocumentsDirectory();
-              final file = File('${dir.path}/imagen1.jpg');
+            // if (state.status == Status.done) {
+            // final dir = await getApplicationDocumentsDirectory();
+            final file = File(resp.imageModel?.imagen1 ?? 'NO PATH');
 
-              // Verifica que el archivo exista antes de enviarlo
-              if (!file.existsSync()) {
-                log('El archivo no existe en la ruta proporcionada.');
-                return;
-              } else {
-                log('Si existe ${file.path}');
-              }
-
-              if (!context.mounted) return;
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    imagen1: '${dir.path}/imagen1.jpg',
-                    imagen2: '${dir.path}/imagen1.jpg',
-                    imagen3: '${dir.path}/imagen1.jpg',
-                    fotoCedula: '${dir.path}/imagen1.jpg',
-                    fotoFirma: '${dir.path}/imagen1.jpg',
-                    solicitudId: int.tryParse(
-                            context.read<KivaRouteCubit>().state.solicitudId) ??
-                        0,
-                  );
-              await customPopUp(
-                context: context,
-                dismissOnTouchOutside: false,
-                size: size,
-                title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: 'Las respuestas se han enviado Exitosamente',
-                dialogType: DialogType.success,
-                buttonAcept: true,
-                textButtonAcept: 'Ok',
-                colorButtonAcept: AppColors.getPrimaryColor(),
-                onPressedAccept: () {
-                  context.pushReplacement('/');
-                },
-              );
+            // Verifica que el archivo exista antes de enviarlo
+            if (!file.existsSync()) {
+              log('El archivo no existe en la ruta proporcionada. Solicitud: ${widget.solicitudId}');
+              log(resp.imageModel?.imagen1 ?? 'No Path');
+              return;
+            } else {
+              log('Si existe ${file.path}');
             }
+
+            if (!context.mounted) return;
+            context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                  imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
+                  imagen2: resp.imageModel?.imagen2 ?? 'NO PATH',
+                  imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
+                  fotoCedula: resp.imageModel?.imagen4 ?? 'NO PATH',
+                  fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
+                  solicitudId: widget.solicitudId,
+                );
+            await customPopUp(
+              context: context,
+              dismissOnTouchOutside: false,
+              size: size,
+              title: 'Formulario Kiva Enviado exitosamente!!',
+              subtitle: 'Las respuestas se han enviado Exitosamente',
+              dialogType: DialogType.success,
+              buttonAcept: true,
+              textButtonAcept: 'Ok',
+              colorButtonAcept: AppColors.getPrimaryColor(),
+              onPressedAccept: () {
+                context.pushReplacement('/');
+              },
+            );
+            // }
           },
           builder: (context, response) {
             return SingleChildScrollView(

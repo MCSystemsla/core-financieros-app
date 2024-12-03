@@ -41,7 +41,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       fotoCedula: state.fotoCedula!,
       solicitudId: solicitudId,
       formularioKiva: 'ScrKivaCreditoEstandarRecurrente',
-      database: 'MC_CH',
+      database: LocalStorage().database,
     );
   }
 
