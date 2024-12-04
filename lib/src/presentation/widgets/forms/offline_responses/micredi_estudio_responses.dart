@@ -440,6 +440,7 @@ class _MiCrediEstudioRecurrenteFormState
                 children: [
                   CommentaryWidget(
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                    readOnly: true,
                     initialValue:
                         (state.recurrenteMiCrediEstudioDbLocal?.tieneTrabajo ??
                                 false)
@@ -449,6 +450,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Cual?',
+                    readOnly: true,
                     initialValue: state.recurrenteMiCrediEstudioDbLocal
                             ?.trabajoNegocioDescripcion ??
                         'N/A',
@@ -456,6 +458,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Tiempo de la actividad (meses o años)',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.tiempoActividad
                             .toString() ??
@@ -464,6 +467,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Tiene otros ingresos?',
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMiCrediEstudioDbLocal?.otrosIngresos ??
                                 false
@@ -473,6 +477,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Cuáles?',
+                    readOnly: true,
                     initialValue: state.recurrenteMiCrediEstudioDbLocal
                             ?.otrosIngresosDescripcion ??
                         '',
@@ -480,6 +485,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.personasCargo
                             .toString() ??
@@ -488,6 +494,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Número de hijos:*',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.numeroHijos
                             .toString() ??
@@ -496,6 +503,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Que edades tienen sus hijos? ',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.edadHijos
                             .toString() ??
@@ -504,6 +512,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Qué tipo de estudios reciben sus hijos?',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.tipoEstudioHijos
                             .toString() ??
@@ -512,6 +521,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Carrera:',
+                    readOnly: true,
                     initialValue: state.recurrenteMiCrediEstudioDbLocal?.carrera
                             .toString() ??
                         'N/A',
@@ -519,6 +529,7 @@ class _MiCrediEstudioRecurrenteFormState
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Años de la carrera:',
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMiCrediEstudioDbLocal?.tiempoCarrera
                             .toString() ??
@@ -531,6 +542,7 @@ class _MiCrediEstudioRecurrenteFormState
                             .toString() ??
                         'N/A',
                     title: 'Universidad a la que pertenece',
+                    readOnly: true,
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -540,10 +552,12 @@ class _MiCrediEstudioRecurrenteFormState
                         'N/A',
                     title:
                         '¿Quién o quiénes le estarían apoyando en esta nueva etapa?*',
+                    readOnly: true,
                   ),
                   CommentaryWidget(
                     title:
                         '¿Coincide la respuesta del cliente con el formato anterior?',
+                    readOnly: true,
                     initialValue: state.recurrenteMiCrediEstudioDbLocal
                                 ?.coincideRespuesta ??
                             false
@@ -557,6 +571,7 @@ class _MiCrediEstudioRecurrenteFormState
                     initialValue: state.recurrenteMiCrediEstudioDbLocal
                             ?.explicacionInversion ??
                         'N/A',
+                    readOnly: true,
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -565,6 +580,7 @@ class _MiCrediEstudioRecurrenteFormState
                     initialValue: state.recurrenteMiCrediEstudioDbLocal
                             ?.comoAyudoProfesionalmente ??
                         'N/A',
+                    readOnly: true,
                   ),
                   CommentaryWidget(
                     initialValue:
@@ -572,17 +588,20 @@ class _MiCrediEstudioRecurrenteFormState
                             'N/A',
                     title:
                         '¿En qué piensa invertir este nuevo préstamo de MiCrediestudio?* Explique',
+                    readOnly: true,
                   ),
                   const Gap(20),
                   CommentaryWidget(
                     initialValue:
                         state.recurrenteMiCrediEstudioDbLocal?.motivoPrestamo ??
                             'N/A',
+                    readOnly: true,
                     title:
                         '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
                   ),
                   const Gap(20),
                   const CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
                   ),
@@ -592,15 +611,11 @@ class _MiCrediEstudioRecurrenteFormState
                             ?.explicacionAlcanzaraMeta ??
                         'N/A',
                     title: 'Explica la meta?',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      return null;
-                    },
+                    readOnly: true,
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMiCrediEstudioDbLocal?.siguientePaso ??
                             '',

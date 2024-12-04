@@ -85,6 +85,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state
                             .mejoraViviendaDbLocal?.trabajoNegocioDescripcion ??
                         'N/A',
@@ -92,6 +93,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.mejoraViviendaDbLocal?.tiempoActividad
                             .toString() ??
                         '0',
@@ -99,6 +101,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene otros ingresos?¿Cuales?*',
                     initialValue:
                         state.mejoraViviendaDbLocal?.otrosIngresos ?? false
@@ -106,6 +109,7 @@ class _ViviendaNuevaOfflineResponseState
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.otrosIngresosDescripcion ??
                             'N/A',
@@ -113,6 +117,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.entorno_familiar.person_origin'.tr(),
                     initialValue:
                         state.mejoraViviendaDbLocal?.objOrigenCatalogoValorId ??
@@ -120,6 +125,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Su comunidad es:',
                     initialValue:
                         state.mejoraViviendaDbLocal?.objTipoComunidadId ??
@@ -127,6 +133,7 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.necesidadesComunidad ??
                             'N/A',
@@ -134,12 +141,14 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.personasCargo ?? 'N/A',
                     title: 'Número de personas a cargo:*',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.numeroHijos.toString() ??
                             'N/A',
@@ -148,35 +157,41 @@ class _ViviendaNuevaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.edadHijos ?? 'N/A',
                     title: '¿Que edades tienen sus hijos?',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.tipoEstudioHijos ?? 'N/A',
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.mejora_de_vivienda.question1'.tr(),
                     initialValue:
                         state.mejoraViviendaDbLocal?.motivoPrestamo ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.mejora_de_vivienda.question2'.tr(),
                     initialValue:
                         state.mejoraViviendaDbLocal?.comoAyudara ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Cuáles son sus planes para los próximos años?',
                     initialValue:
                         state.mejoraViviendaDbLocal?.planesFuturo ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mejoraViviendaDbLocal?.otrosDatosCliente ?? 'N/A',
                     title: 'Otros datos relevantes e interesantes del cliente',
@@ -305,6 +320,7 @@ class _RecurrenteViviendaOfflineResponseState
                 children: [
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.tieneTrabajo ??
                                 false
@@ -314,6 +330,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cual?',
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.trabajoNegocioDescripcion ??
@@ -321,6 +338,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state
                             .recurrenteMejoraViviendaDbLocal?.tiempoActividad
                             .toString() ??
@@ -329,6 +347,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.otrosIngresos ??
                                 false
@@ -338,6 +357,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales Ingresos son?',
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.otrosIngresosDescripcion ??
@@ -345,6 +365,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Su comunidad es:',
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.objTipoComunidadId ??
@@ -352,6 +373,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.necesidadesComunidad ??
                         'N/A',
@@ -359,6 +381,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.personasCargo ??
                             'N/A',
@@ -367,6 +390,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.trabajoNegocioDescripcion ??
                         'N/A',
@@ -375,6 +399,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.edadHijos ??
                             'N/A',
@@ -382,6 +407,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.tipoEstudioHijos ??
                         'N/A',
@@ -389,6 +415,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                                 ?.coincideRespuesta ??
                             false
@@ -399,6 +426,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.explicacionInversion ??
                         'N/A',
@@ -407,6 +435,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cómo era su vivienda anteriormente y describa como está ahora?',
                     initialValue: state.recurrenteMejoraViviendaDbLocal
@@ -415,6 +444,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.motivoPrestamo ??
                             'N/A',
@@ -423,6 +453,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteMejoraViviendaDbLocal
                             ?.mejoraSeguridadFamilia ??
                         'N/A',
@@ -431,6 +462,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.quienApoya ??
                             'N/A',
@@ -439,6 +471,7 @@ class _RecurrenteViviendaOfflineResponseState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteMejoraViviendaDbLocal?.siguienteMeta ??
                             'N/A',

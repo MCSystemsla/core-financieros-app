@@ -296,6 +296,7 @@ class _RecurrentSign extends StatelessWidget {
                                       ..imagen4 =
                                           imageProvider.fotoCedula?.path ??
                                               'No Path',
+                                    size,
                                   )
                                 : context
                                     .read<RecurrenteEstandartCubit>()
@@ -319,7 +320,7 @@ class _RecurrentSign extends StatelessWidget {
   }
 
   saveOfflineResponses(BuildContext context, RecurrenteEstandartState state,
-      ImageModel imageModel) async {
+      ImageModel imageModel, Size size) async {
     if (!context.mounted) return;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -346,6 +347,13 @@ class _RecurrentSign extends StatelessWidget {
             ..siguientePaso = state.siguientePaso
             ..personasCargo = state.personasCargo,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
     context.pushReplacement('/');
   }
 }

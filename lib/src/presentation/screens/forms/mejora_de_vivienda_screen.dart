@@ -343,6 +343,14 @@ class RecurrentSign extends StatelessWidget {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..viviendaAntesDespues = state.viviendaAntesDespues,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 

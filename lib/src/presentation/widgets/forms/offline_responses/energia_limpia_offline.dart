@@ -76,6 +76,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                 children: [
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                     initialValue:
                         state.energiaLimpiaDbLocal?.tieneTrabajo ?? false
@@ -83,6 +84,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cual',
                     initialValue:
                         state.energiaLimpiaDbLocal?.tieneTrabajo ?? false
@@ -91,6 +93,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Tiempo de la actividad:*',
                     initialValue: state.energiaLimpiaDbLocal?.tiempoActividad
                             .toString() ??
@@ -98,6 +101,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene otros ingresos?¿Cuales?*',
                     initialValue:
                         state.energiaLimpiaDbLocal?.otrosIngresos ?? false
@@ -105,18 +109,21 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales Otros Ingresos?',
                     initialValue:
                         state.energiaLimpiaDbLocal?.otrosIngresosDescripcion ??
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Su comunidad es:',
                     initialValue:
                         state.energiaLimpiaDbLocal?.objTipoComunidadId ?? 'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Usted tiene problemas de energía eléctrica en su comunidad?',
                     initialValue:
@@ -127,6 +134,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Numero de persona a cargo',
                     initialValue:
                         state.energiaLimpiaDbLocal?.tieneProblemasEnergia ??
@@ -136,6 +144,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de hijos:*',
                     initialValue:
                         state.energiaLimpiaDbLocal?.numeroHijos.toString() ??
@@ -143,17 +152,20 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué edades tienen sus hijos?',
                     initialValue:
                         state.energiaLimpiaDbLocal?.edadHijos ?? 'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                     initialValue:
                         state.energiaLimpiaDbLocal?.tipoEstudioHijos ?? 'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Por qué y para qué solicitó el préstamo? Explique.*',
                     initialValue:
@@ -161,12 +173,14 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Cuáles son sus planes para los próximos años?',
                     initialValue:
                         state.energiaLimpiaDbLocal?.planesFuturo ?? 'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Otros datos relevantes e interesantes del cliente',
                     initialValue:
                         state.energiaLimpiaDbLocal?.otrosDatosCliente ?? 'N/A',
@@ -311,6 +325,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                 children: [
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                     initialValue:
                         state.recurrenteEnergiaLimpiaDbLocal?.tieneTrabajo ??
@@ -319,6 +334,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cual?',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
                             ?.trabajoNegocioDescripcion ??
@@ -326,6 +342,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Tiempo de la actividad:',
                     initialValue: state
                             .recurrenteEnergiaLimpiaDbLocal?.tiempoActividad
@@ -334,6 +351,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Tiene otros ingresos?¿Cuales?*',
                     initialValue:
                         state.recurrenteEnergiaLimpiaDbLocal?.otrosIngresos ??
@@ -342,6 +360,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Ingrese los otros ingresos',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
                             ?.otrosIngresosDescripcion ??
@@ -349,6 +368,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Su comunidad es:',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
                             ?.objTipoComunidadId ??
@@ -356,6 +376,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Usted tiene problemas de energía eléctrica en su comunidad?',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
@@ -366,6 +387,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Numero de persona a cargo',
                     initialValue:
                         state.recurrenteEnergiaLimpiaDbLocal?.personasCargo ??
@@ -373,6 +395,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de hijos:*',
                     initialValue: state
                             .recurrenteEnergiaLimpiaDbLocal?.numeroHijos
@@ -381,6 +404,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué edades tienen sus hijos?',
                     initialValue:
                         state.recurrenteEnergiaLimpiaDbLocal?.edadHijos ??
@@ -388,15 +412,18 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                     initialValue: state
                             .recurrenteEnergiaLimpiaDbLocal?.tipoEstudioHijos ??
                         'N/A',
                   ),
                   const CommentaryWidget(
+                      readOnly: true,
                       title:
                           '¿Coincide la respuesta del cliente con el formato anterior?'),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
@@ -405,6 +432,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cómo era su situación antes de adquirir esta solución energética y cómo es ahora ?',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
@@ -412,6 +440,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                         'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿En qué piensa invertir este nuevo crédito de energía limpia?* Explique',
                     initialValue:
@@ -420,6 +449,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cómo cree usted que este nuevo préstamo vaya a mejorar su situación y la de su familia?*',
                     initialValue: state.recurrenteEnergiaLimpiaDbLocal
@@ -428,6 +458,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Quién o quiénes le estarían apoyando en esta nueva inversión?*',
                     initialValue:
@@ -436,6 +467,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
                     initialValue:

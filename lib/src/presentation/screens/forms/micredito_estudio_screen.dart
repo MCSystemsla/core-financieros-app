@@ -313,6 +313,14 @@ class _RecurrentSigntature extends StatelessWidget {
                 ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
                 ..universidad = state.universidad,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -681,6 +689,14 @@ class _SignUserSignature extends StatelessWidget {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..universidad = state.universidad,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -791,6 +807,13 @@ class _EntornoSocialEstudioWidgetState
                     title: 'Tiempo de la actividad (meses o años)'.tr(),
                     textEditingController: tiempoActividad,
                     textInputType: TextInputType.number,
+                    validator: (value) {
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
+                      }
+                      return null;
+                    },
                   ),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -863,6 +886,10 @@ class _EntornoSocialEstudioWidgetState
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
                       }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
+                      }
                       return null;
                     },
                   ),
@@ -873,6 +900,10 @@ class _EntornoSocialEstudioWidgetState
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
+                      }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
                       }
                       return null;
                     },

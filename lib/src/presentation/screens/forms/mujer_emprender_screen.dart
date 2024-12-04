@@ -254,7 +254,7 @@ class _RecurrentSignSignature extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            isConnected
+                            !isConnected
                                 ? saveOnLocalDB(context, state)
                                 : context
                                     .read<RecurrenteMujerEmprendeCubit>()
@@ -301,6 +301,14 @@ class _RecurrentSignSignature extends StatelessWidget {
             ..siguientePaso = state.siguientePaso
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -491,5 +499,13 @@ class _SignSignature extends StatelessWidget {
             ..quienApoya = state.quienApoya
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }

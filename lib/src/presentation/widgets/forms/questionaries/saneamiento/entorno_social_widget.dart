@@ -110,6 +110,10 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         if (value == null || value.isEmpty) {
                           return 'input.input_validator'.tr();
                         }
+                        final numero = int.tryParse(value);
+                        if (numero == null || numero < 0) {
+                          return 'Valor no valido'.tr();
+                        }
                         return null;
                       },
                       textEditingController: tiempoActividad,
@@ -179,6 +183,10 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         if (value == null || value.isEmpty) {
                           return 'input.input_validator'.tr();
                         }
+                        final numero = int.tryParse(value);
+                        if (numero == null || numero < 0) {
+                          return 'Valor no valido'.tr();
+                        }
                         return null;
                       },
                     ),
@@ -187,6 +195,13 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       title: 'Numero de Hijos',
                       textEditingController: numeroHijos,
                       textInputType: TextInputType.number,
+                      validator: (value) {
+                        final numero = int.tryParse(value);
+                        if (numero == null || numero < 0) {
+                          return 'Valor no valido'.tr();
+                        }
+                        return null;
+                      },
                     ),
                     const Gap(10),
                     CommentaryWidget(
@@ -336,9 +351,14 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de personas a cargo:*',
                 textEditingController: personasCargo,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
                   }
                   return null;
                 },
@@ -380,9 +400,14 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 textEditingController: tiempoActividad,
                 title: 'Tiempo de la actividad (meses o años):*',
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
                   }
                   return null;
                 },
@@ -425,9 +450,14 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de hijos:*',
                 textEditingController: numeroHijos,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
                   }
                   return null;
                 },
