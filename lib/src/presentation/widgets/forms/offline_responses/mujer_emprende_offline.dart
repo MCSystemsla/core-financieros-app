@@ -73,6 +73,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                 children: [
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mujerEmprendeDbLocal?.otrosIngresos ?? false
                             ? 'input.yes'.tr()
@@ -80,12 +81,14 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     title: '¿Tiene otros ingresos?¿Cuales?*',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales',
                     initialValue:
                         state.mujerEmprendeDbLocal?.otrosIngresosDescripcion ??
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mujerEmprendeDbLocal?.tieneTrabajo ?? false
                             ? 'input.yes'.tr()
@@ -93,6 +96,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     title: 'Tiene Trabajo?',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales',
                     initialValue:
                         state.mujerEmprendeDbLocal?.trabajoNegocioDescripcion ??
@@ -100,39 +104,46 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.entorno_familiar.person_origin'.tr(),
                     initialValue:
                         state.mujerEmprendeDbLocal?.objOrigenCatalogoValorId ??
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de personas a cargo:*',
                     initialValue:
                         state.mujerEmprendeDbLocal?.personasCargo.toString() ??
                             '0',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Que edades tienen sus hijos?',
                     initialValue: state.mujerEmprendeDbLocal?.edadHijos ?? '0',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de hijos:*',
                     initialValue:
                         state.mujerEmprendeDbLocal?.numeroHijos.toString() ??
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.mujerEmprendeDbLocal?.tipoEstudioHijos ?? 'N/A',
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuéntenos, ¿Qué la motivó a emprender su negocio?*',
                     initialValue:
                         state.mujerEmprendeDbLocal?.motivoEmprender ?? 'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         'Coméntenos, ¿ Cómo conoció el proyecto de Mujer Emprende en MiCrédito?',
                     initialValue:
@@ -140,17 +151,20 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué la impulsó a optar a este tipo de crédito?*',
                     initialValue:
                         state.mujerEmprendeDbLocal?.impulsoOptar ?? 'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Para qué solicitó este préstamo?* Explique',
                     initialValue:
                         state.mujerEmprendeDbLocal?.motivoPrestamo ?? 'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Quién o quiénes le estarían apoyando en su emprendimiento?*',
                     initialValue:
@@ -158,6 +172,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿De qué manera este financiamiento va impactar en su negocio ?*',
                     initialValue:
@@ -166,6 +181,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cómo cree usted que este crédito va a mejorar su calidad de vida?*',
                     initialValue:
@@ -174,6 +190,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                   ),
                   const Gap(20),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Otros datos relevantes e interesantes del cliente',
                     initialValue:
                         state.mujerEmprendeDbLocal?.otrosDatosCliente ?? 'N/A',

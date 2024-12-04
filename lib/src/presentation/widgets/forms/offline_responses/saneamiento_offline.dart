@@ -75,6 +75,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                     initialValue:
                         state.saneamientoDbLocal?.tieneTrabajo ?? false
@@ -82,6 +83,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cual?',
                     initialValue:
                         state.saneamientoDbLocal?.trabajoNegocioDescripcion ??
@@ -89,6 +91,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Tiempo de la actividad (meses o años)',
                     initialValue:
                         state.saneamientoDbLocal?.tiempoActividad.toString() ??
@@ -96,6 +99,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene otros ingresos?¿Cuales?*',
                     initialValue:
                         state.saneamientoDbLocal?.otrosIngresos ?? false
@@ -103,6 +107,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales?',
                     initialValue:
                         state.saneamientoDbLocal?.otrosIngresosDescripcion ??
@@ -110,37 +115,44 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                      readOnly: true,
                       title: 'forms.entorno_familiar.person_origin'.tr()),
                   const Gap(10),
                   CommentaryWidget(
+                      readOnly: true,
                       title: 'Número de personas a cargo:*',
                       initialValue:
                           state.saneamientoDbLocal?.personasCargo ?? ''),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Numero de Hijos',
                     initialValue:
                         state.saneamientoDbLocal?.numeroHijos.toString() ?? '0',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                      readOnly: true,
                       title: 'forms.entorno_familiar.childs_age'.tr(),
                       initialValue:
                           state.saneamientoDbLocal?.edadHijos ?? 'N/A'),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.saneamientoDbLocal?.tipoEstudioHijos ?? 'N/A',
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                   ),
                   const Gap(15),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.develpment_and_description.aboutCredit'.tr(),
                     initialValue:
                         state.saneamientoDbLocal?.motivoPrestamo ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Porqué considera importante mejorar las condiciones higiénicas en su familia?*'
                             .tr(),
@@ -150,6 +162,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.saneamientoDbLocal?.cumpliriaPropuesta ?? false
                             ? 'input.yes'.tr()
@@ -159,6 +172,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Porque?',
                     initialValue: state.saneamientoDbLocal
                             ?.explicacionCumpliriaPropuesta ??
@@ -166,18 +180,21 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Para que solicitó este préstamo? Explique'.tr(),
                     initialValue:
                         state.saneamientoDbLocal?.motivoPrestamo ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'forms.impacto_social_kiva.how_perform'.tr(),
                     initialValue:
                         state.saneamientoDbLocal?.mejoraCalidadVida ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cuál sería el siguiente proyecto para enriquecer su calidad de vida ?*'
                             .tr(),
@@ -187,6 +204,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cuáles son sus metas para los próximos años?*'.tr(),
                     initialValue:
@@ -194,6 +212,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Otros datos relevantes e interesantes del cliente:'
                         .tr(),
                     initialValue:
@@ -350,6 +369,7 @@ class _RecurrenteSaneamientoOfflineState
                 children: [
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de personas a cargo:*',
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.personasCargo ??
@@ -357,6 +377,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.tieneTrabajo ??
@@ -365,12 +386,14 @@ class _RecurrenteSaneamientoOfflineState
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cual?',
                     initialValue: state.recurrenteSaneamientoDbLocal
                             ?.trabajoNegocioDescripcion ??
                         'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state
                             .recurrenteSaneamientoDbLocal?.tiempoActividad
                             .toString() ??
@@ -379,6 +402,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.otrosIngresos ??
                                 false
@@ -387,6 +411,7 @@ class _RecurrenteSaneamientoOfflineState
                     title: '¿Tiene otros ingresos?¿Cuales?*',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Cuales?',
                     initialValue: state.recurrenteSaneamientoDbLocal
                             ?.otrosIngresosDescripcion ??
@@ -394,6 +419,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Número de hijos:*',
                     initialValue: state
                             .recurrenteSaneamientoDbLocal?.numeroHijos
@@ -402,18 +428,21 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Que edades tienen sus hijos?',
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.edadHijos ?? 'N/A',
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Qué tipo de estudios reciben sus hijos?',
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.tipoEstudioHijos ??
                             'N/A',
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.coincideRespuesta ??
                                 false
@@ -424,6 +453,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     initialValue: state.recurrenteSaneamientoDbLocal
                             ?.explicacionInversion ??
                         'N/A',
@@ -432,6 +462,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿De qué manera le ayudó este préstamo Kiva a mejorar sus condiciones en la familia?*',
                     initialValue: state.recurrenteSaneamientoDbLocal
@@ -440,6 +471,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿En qué piensa invertir este nuevo préstamo de agua y saneamiento?*'
                             .tr(),
@@ -449,6 +481,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Cómo cree usted que este nuevo préstamo mejore sus condiciones de vida y entorno familiar?*'
                             .tr(),
@@ -458,6 +491,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         '¿Quién o quienes le estarían apoyando en esta inversión?*'
                             .tr(),
@@ -466,6 +500,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title:
                         'Una vez finalizado el pago de este préstamo: ¿Cuál sería su siguiente paso?*'
                             .tr(),
@@ -475,6 +510,7 @@ class _RecurrenteSaneamientoOfflineState
                   ),
                   const Gap(10),
                   CommentaryWidget(
+                    readOnly: true,
                     title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
                     initialValue:
                         state.recurrenteSaneamientoDbLocal?.tieneTrabajo ??
@@ -483,6 +519,7 @@ class _RecurrenteSaneamientoOfflineState
                             : 'input.no'.tr(),
                   ),
                   CommentaryWidget(
+                    readOnly: true,
                     title: 'Por que?',
                     initialValue: state.recurrenteSaneamientoDbLocal
                             ?.trabajoNegocioDescripcion ??

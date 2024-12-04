@@ -345,6 +345,14 @@ class _RecurrentSign extends StatelessWidget {
             ..tieneTrabajo = state.tieneTrabajo
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -541,6 +549,14 @@ class _EstandarSignState extends State<EstandarSign> {
             ..publicitarNegocio = state.publicitarNegocio
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -1029,6 +1045,13 @@ class _SaneamientoSign extends StatelessWidget {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
     context.pushReplacement('/');
   }
 }
@@ -1222,5 +1245,13 @@ class SignQuestionaryWidget extends StatelessWidget {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }

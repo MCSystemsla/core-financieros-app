@@ -173,6 +173,10 @@ class _MujerEmprendeEntornoSocialWidgetState
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
                       }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
+                      }
                       return null;
                     },
                   ),
@@ -187,6 +191,10 @@ class _MujerEmprendeEntornoSocialWidgetState
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
+                      }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
                       }
                       return null;
                     },
@@ -444,6 +452,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
                   }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
+                  }
                   return null;
                 },
               ),
@@ -455,6 +467,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
                   }
                   return null;
                 },

@@ -102,6 +102,10 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
                       }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
+                      }
                       return null;
                     },
                   ),
@@ -113,6 +117,10 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
+                      }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
                       }
                       return null;
                     },
@@ -277,6 +285,10 @@ class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
                   }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
+                  }
                   return null;
                 },
               ),
@@ -288,6 +300,10 @@ class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
                   }
                   return null;
                 },

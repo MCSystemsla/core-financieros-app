@@ -604,6 +604,14 @@ class _RecurrentSignQuestionary extends StatelessWidget {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
 
@@ -793,5 +801,13 @@ class _SignQuestionary extends StatelessWidget {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }
