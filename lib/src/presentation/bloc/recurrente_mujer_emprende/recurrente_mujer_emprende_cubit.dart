@@ -50,6 +50,23 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
     }
   }
 
+  Future<void> sendOfflineAnswers(
+      {required RecurrenteMujerEmprendeModel recurrenteMujerEmprende}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, message) = await repository.recurrenteMujerEmprendeAnswer(
+        recurrenteMujerEmprendeModel: recurrenteMujerEmprende,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: message));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,

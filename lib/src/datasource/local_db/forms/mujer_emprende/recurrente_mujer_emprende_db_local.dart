@@ -24,4 +24,6 @@ class RecurrenteMujerEmprendeDbLocal {
   String? siguientePaso;
   bool? alcanzaraMeta;
   String? explicacionAlcanzaraMeta;
+  bool? tieneTrabajo;
+  String? tieneTrabajoDescripcion;
 }

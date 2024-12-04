@@ -1,8 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -261,6 +263,298 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                                   '',
                               otrosDatosCliente: state.mujerEmprendeDbLocal
                                       ?.otrosDatosCliente ??
+                                  '',
+                            ),
+                          );
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class RecurrenteMujerEmprendeOffline extends StatefulWidget {
+  final int solicitudId;
+  const RecurrenteMujerEmprendeOffline({
+    super.key,
+    required this.solicitudId,
+  });
+
+  @override
+  State<RecurrenteMujerEmprendeOffline> createState() =>
+      _RecurrenteMujerEmprendeOfflineState();
+}
+
+class _RecurrenteMujerEmprendeOfflineState
+    extends State<RecurrenteMujerEmprendeOffline> {
+  @override
+  void initState() {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getRecurrentMujerEmprende(widget.solicitudId);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SolicitudesPendientesLocalDbCubit,
+        SolicitudesPendientesLocalDbState>(
+      builder: (context, state) {
+        return BlocConsumer<RecurrenteMujerEmprendeCubit,
+            RecurrenteMujerEmprendeState>(
+          listener: (context, state) async {
+            if (state.status == Status.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                  content: Text(state.errorMsg),
+                ),
+              );
+            }
+            if (state.status == Status.done) {
+              await customPopUp(
+                context: context,
+                dismissOnTouchOutside: false,
+                size: MediaQuery.sizeOf(context),
+                title: 'Formulario Kiva Enviado exitosamente!!',
+                subtitle: 'Las respuestas se han enviado Exitosamente',
+                dialogType: DialogType.success,
+                buttonAcept: true,
+                textButtonAcept: 'Ok',
+                colorButtonAcept: AppColors.getPrimaryColor(),
+                onPressedAccept: () {
+                  context.pushReplacement('/');
+                },
+              );
+            }
+          },
+          builder: (context, response) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(10),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.otrosIngresos ?? false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                    title: '¿Tiene otros ingresos?¿Cuales?*',
+                  ),
+                  CommentaryWidget(
+                    title: 'Cuales?',
+                    initialValue: state.recurrenteMujerEmprende
+                            ?.otrosIngresosDescripcion ??
+                        'N/A',
+                  ),
+                  CommentaryWidget(
+                    title: '¿Tiene Trabajo? Cual?',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.tieneTrabajo ?? false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                  ),
+                  CommentaryWidget(
+                    title: 'Cuales?',
+                    initialValue: state
+                            .recurrenteMujerEmprende?.tieneTrabajoDescripcion ??
+                        'N/A',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Número de personas a cargo:*',
+                    initialValue: state.recurrenteMujerEmprende?.personasCargo
+                            .toString() ??
+                        '0',
+                    textInputType: TextInputType.number,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'Número de hijos:*',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.numeroHijos.toString() ??
+                            '0',
+                    textInputType: TextInputType.number,
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Que edades tienen sus hijos?',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.edadHijos ?? 'N/A',
+                  ),
+                  CommentaryWidget(
+                    title: '¿Qué tipo de estudios reciben sus hijos?',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.edadHijos ?? 'N/A',
+                  ),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.coincideRespuesta ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                    title:
+                        '¿Coincide la respuesta del cliente con el formato anterior?',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.explicacionInversion ??
+                            'N/A',
+                    title:
+                        '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿De qué manera le ayudó este préstamo Kiva?*',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.comoAyudo ?? 'N/A',
+                  ),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.motivoPrestamo ?? 'N/A',
+                    title:
+                        '¿En qué piensa invertir este nuevo préstamo de Mujer Emprende?* Explique',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.apoyanNegocio ?? false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                    title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    initialValue:
+                        state.recurrenteMujerEmprende?.cuantosApoyan ?? 'N/A',
+                    title: 'De ser positivo, favor responder cuántas personas'
+                        .tr(),
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                      initialValue:
+                          state.recurrenteMujerEmprende?.mejoraraEntorno ??
+                                  false
+                              ? 'input.yes'.tr()
+                              : 'input.no'.tr(),
+                      title:
+                          '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?'),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: '¿Porqué?*',
+                    initialValue: state.recurrenteMujerEmprende
+                            ?.mejoraraEntornoExplicacion ??
+                        'N/A',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    title: 'A futuro ¿Cuál sería su siguiente paso?',
+                    initialValue:
+                        state.recurrenteMujerEmprende?.siguientePaso ?? 'N/A',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                      initialValue:
+                          state.recurrenteMujerEmprende?.alcanzaraMeta ?? false
+                              ? 'input.yes'.tr()
+                              : 'input.no'.tr(),
+                      title:
+                          '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta?'),
+                  CommentaryWidget(
+                    title: '¿Por qué?*',
+                    initialValue: state.recurrenteMujerEmprende
+                            ?.explicacionAlcanzaraMeta ??
+                        'N/A',
+                  ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    disabled: state.status == Status.inProgress ||
+                        response.status == Status.inProgress,
+                    onPreviousPressed: () {
+                      context.pop();
+                    },
+                    onNextPressed: () {
+                      context
+                          .read<RecurrenteMujerEmprendeCubit>()
+                          .sendOfflineAnswers(
+                            recurrenteMujerEmprende:
+                                RecurrenteMujerEmprendeModel(
+                              database:
+                                  state.recurrenteMujerEmprende?.database ?? '',
+                              otrosIngresos: state
+                                      .recurrenteMujerEmprende?.otrosIngresos ??
+                                  false,
+                              otrosIngresosDescripcion: state
+                                      .recurrenteMujerEmprende
+                                      ?.otrosIngresosDescripcion ??
+                                  '',
+                              personasCargo: state
+                                      .recurrenteMujerEmprende?.personasCargo ??
+                                  0,
+                              numeroHijos:
+                                  state.recurrenteMujerEmprende?.numeroHijos ??
+                                      0,
+                              edadHijos:
+                                  state.recurrenteMujerEmprende?.edadHijos ??
+                                      '',
+                              tipoEstudioHijos: state.recurrenteMujerEmprende
+                                      ?.tipoEstudioHijos ??
+                                  '',
+                              motivoPrestamo: state.recurrenteMujerEmprende
+                                      ?.motivoPrestamo ??
+                                  '',
+                              objSolicitudRecurrenteId: state
+                                      .recurrenteMujerEmprende
+                                      ?.objSolicitudRecurrenteId ??
+                                  0,
+                              coincideRespuesta: state.recurrenteMujerEmprende
+                                      ?.coincideRespuesta ??
+                                  false,
+                              explicacionInversion: state
+                                      .recurrenteMujerEmprende
+                                      ?.explicacionInversion ??
+                                  '',
+                              comoAyudo:
+                                  state.recurrenteMujerEmprende?.comoAyudo ??
+                                      '',
+                              apoyanNegocio: state
+                                      .recurrenteMujerEmprende?.apoyanNegocio ??
+                                  false,
+                              cuantosApoyan: state
+                                      .recurrenteMujerEmprende?.cuantosApoyan ??
+                                  '',
+                              mejoraraEntorno: state.recurrenteMujerEmprende
+                                      ?.mejoraraEntorno ??
+                                  false,
+                              mejoraraEntornoExplicacion: state
+                                      .recurrenteMujerEmprende
+                                      ?.mejoraraEntornoExplicacion ??
+                                  '',
+                              siguientePaso: state
+                                      .recurrenteMujerEmprende?.siguientePaso ??
+                                  '',
+                              alcanzaraMeta: state
+                                      .recurrenteMujerEmprende?.alcanzaraMeta ??
+                                  false,
+                              explicacionAlcanzaraMeta: state
+                                      .recurrenteMujerEmprende
+                                      ?.explicacionAlcanzaraMeta ??
+                                  '',
+                              tieneTrabajo:
+                                  state.recurrenteMujerEmprende?.tieneTrabajo ??
+                                      false,
+                              tieneTrabajoDescripcion: state
+                                      .recurrenteMujerEmprende
+                                      ?.tieneTrabajoDescripcion ??
                                   '',
                             ),
                           );

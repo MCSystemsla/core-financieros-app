@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_sani
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar_confirmation/recurrente_estandar_confirmation_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/energia_limpia_offline.dart';
@@ -72,6 +73,9 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => MujerEmprendeCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => RecurrenteMujerEmprendeCubit(respository),
         ),
         BlocProvider(
           create: (ctx) => UploadUserFileCubit(respository),
@@ -136,7 +140,9 @@ class _CurrentForm extends StatelessWidget {
       'MUJER EMPRENDE NUEVO' => MujerEmprendeOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'MUJER EMPRENDE RECURRENTE' => const Text('Mujer Emprende recurrente'),
+      'MUJER EMPRENDE RECURRENTE' => RecurrenteMujerEmprendeOffline(
+          solicitudId: int.tryParse(solicitudId) ?? 0,
+        ),
       _ => const SizedBox(),
     };
   }
