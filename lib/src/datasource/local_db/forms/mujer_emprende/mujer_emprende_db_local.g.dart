@@ -98,9 +98,19 @@ const MujerEmprendeDbLocalSchema = CollectionSchema(
       name: r'quienApoya',
       type: IsarType.string,
     ),
-    r'tipoEstudioHijos': PropertySchema(
+    r'tieneTrabajo': PropertySchema(
       id: 16,
+      name: r'tieneTrabajo',
+      type: IsarType.bool,
+    ),
+    r'tipoEstudioHijos': PropertySchema(
+      id: 17,
       name: r'tipoEstudioHijos',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 18,
+      name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
   },
@@ -202,6 +212,12 @@ int _mujerEmprendeDbLocalEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.trabajoNegocioDescripcion;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -227,7 +243,9 @@ void _mujerEmprendeDbLocalSerialize(
   writer.writeString(offsets[13], object.otrosIngresosDescripcion);
   writer.writeLong(offsets[14], object.personasCargo);
   writer.writeString(offsets[15], object.quienApoya);
-  writer.writeString(offsets[16], object.tipoEstudioHijos);
+  writer.writeBool(offsets[16], object.tieneTrabajo);
+  writer.writeString(offsets[17], object.tipoEstudioHijos);
+  writer.writeString(offsets[18], object.trabajoNegocioDescripcion);
 }
 
 MujerEmprendeDbLocal _mujerEmprendeDbLocalDeserialize(
@@ -254,7 +272,9 @@ MujerEmprendeDbLocal _mujerEmprendeDbLocalDeserialize(
   object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[13]);
   object.personasCargo = reader.readLongOrNull(offsets[14]);
   object.quienApoya = reader.readStringOrNull(offsets[15]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[16]);
+  object.tieneTrabajo = reader.readBoolOrNull(offsets[16]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[17]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[18]);
   return object;
 }
 
@@ -298,6 +318,10 @@ P _mujerEmprendeDbLocalDeserializeProp<P>(
     case 15:
       return (reader.readStringOrNull(offset)) as P;
     case 16:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 17:
+      return (reader.readStringOrNull(offset)) as P;
+    case 18:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2586,6 +2610,34 @@ extension MujerEmprendeDbLocalQueryFilter on QueryBuilder<MujerEmprendeDbLocal,
   }
 
   QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> tieneTrabajoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tieneTrabajo',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> tieneTrabajoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tieneTrabajo',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> tieneTrabajoEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tieneTrabajo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
       QAfterFilterCondition> tipoEstudioHijosIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2736,6 +2788,164 @@ extension MujerEmprendeDbLocalQueryFilter on QueryBuilder<MujerEmprendeDbLocal,
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'tipoEstudioHijos',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'trabajoNegocioDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'trabajoNegocioDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'trabajoNegocioDescripcion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+          QAfterFilterCondition>
+      trabajoNegocioDescripcionContains(String value,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'trabajoNegocioDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+          QAfterFilterCondition>
+      trabajoNegocioDescripcionMatches(String pattern,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'trabajoNegocioDescripcion',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trabajoNegocioDescripcion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal,
+      QAfterFilterCondition> trabajoNegocioDescripcionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'trabajoNegocioDescripcion',
         value: '',
       ));
     });
@@ -2975,6 +3185,20 @@ extension MujerEmprendeDbLocalQuerySortBy
   }
 
   QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      sortByTieneTrabajo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tieneTrabajo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      sortByTieneTrabajoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tieneTrabajo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
       sortByTipoEstudioHijos() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tipoEstudioHijos', Sort.asc);
@@ -2985,6 +3209,20 @@ extension MujerEmprendeDbLocalQuerySortBy
       sortByTipoEstudioHijosDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tipoEstudioHijos', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      sortByTrabajoNegocioDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      sortByTrabajoNegocioDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trabajoNegocioDescripcion', Sort.desc);
     });
   }
 }
@@ -3230,6 +3468,20 @@ extension MujerEmprendeDbLocalQuerySortThenBy
   }
 
   QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      thenByTieneTrabajo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tieneTrabajo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      thenByTieneTrabajoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tieneTrabajo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
       thenByTipoEstudioHijos() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tipoEstudioHijos', Sort.asc);
@@ -3240,6 +3492,20 @@ extension MujerEmprendeDbLocalQuerySortThenBy
       thenByTipoEstudioHijosDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tipoEstudioHijos', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      thenByTrabajoNegocioDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QAfterSortBy>
+      thenByTrabajoNegocioDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trabajoNegocioDescripcion', Sort.desc);
     });
   }
 }
@@ -3367,9 +3633,24 @@ extension MujerEmprendeDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QDistinct>
+      distinctByTieneTrabajo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tieneTrabajo');
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QDistinct>
       distinctByTipoEstudioHijos({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'tipoEstudioHijos',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, MujerEmprendeDbLocal, QDistinct>
+      distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'trabajoNegocioDescripcion',
           caseSensitive: caseSensitive);
     });
   }
@@ -3495,10 +3776,24 @@ extension MujerEmprendeDbLocalQueryProperty on QueryBuilder<
     });
   }
 
+  QueryBuilder<MujerEmprendeDbLocal, bool?, QQueryOperations>
+      tieneTrabajoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tieneTrabajo');
+    });
+  }
+
   QueryBuilder<MujerEmprendeDbLocal, String?, QQueryOperations>
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<MujerEmprendeDbLocal, String?, QQueryOperations>
+      trabajoNegocioDescripcionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'trabajoNegocioDescripcion');
     });
   }
 }

@@ -40,6 +40,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
+// import 'package:path/path.dart' as path; // Para manejar nombres de archivo
 
 class SaneamientoScreen extends StatefulWidget {
   final String typeProduct;
@@ -555,9 +556,13 @@ class _SaneamientoContentState extends State<SaneamientoContent>
     with AutomaticKeepAliveClientMixin {
   final ImagePicker picker = ImagePicker();
   XFile? selectedImage;
+  String? selectedImage1Path;
   XFile? selectedImage2;
+  String? selectedImage2Path;
   XFile? selectedImage3;
+  String? selectedImage3Path;
   XFile? selectedImage4;
+  String? selectedImage4Path;
 
   @override
   Widget build(BuildContext context) {
@@ -607,11 +612,20 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
+                      // final directory =
+                      //     await getApplicationDocumentsDirectory();
+
+                      // // Crear un nombre único para la imagen
+                      // final String uniqueName =
+                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                      // // Construir la ruta completa
+                      // final savedPath = path.join(photo.path, uniqueName);
+
+                      // // Copiar el archivo desde el temporal al directorio deseado
+                      // await File(photo.path).copy(savedPath);
                       selectedImage = photo;
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final savedPath = '${directory.path}/imagen1.jpg';
-                      await File(photo.path).copy(savedPath);
+                      // selectedImage1Path = savedPath;
 
                       setState(() {});
                     }
@@ -634,11 +648,20 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
+                      // final directory =
+                      //     await getApplicationDocumentsDirectory();
+
+                      // // Crear un nombre único para la imagen
+                      // final String uniqueName =
+                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                      // // Construir la ruta completa
+                      // final savedPath = path.join(directory.path, uniqueName);
+
+                      // // Copiar el archivo desde el temporal al directorio deseado
+                      // await File(photo.path).copy(savedPath);
                       selectedImage2 = photo;
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final savedPath = '${directory.path}/imagen2.jpg';
-                      await File(photo.path).copy(savedPath);
+                      // selectedImage2Path = savedPath;
                       setState(() {});
                     }
                   },
@@ -660,11 +683,18 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
+                      // final directory =
+                      //     await getApplicationDocumentsDirectory();
+                      // // Crear un nombre único para la imagen
+                      // final String uniqueName =
+                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                      // // Construir la ruta completa
+                      // final savedPath = path.join(directory.path, uniqueName);
+                      // await File(photo.path).copy(savedPath);
+
                       selectedImage3 = photo;
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final savedPath = '${directory.path}/imagen3.jpg';
-                      await File(photo.path).copy(savedPath);
+                      // selectedImage3Path = savedPath;
                       setState(() {});
                     }
                   },
@@ -686,11 +716,20 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
+                      // final directory =
+                      //     await getApplicationDocumentsDirectory();
+
+                      // // Crear un nombre único para la imagen
+                      // final String uniqueName =
+                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                      // // Construir la ruta completa
+                      // final savedPath = path.join(directory.path, uniqueName);
+
+                      // // Copiar el archivo desde el temporal al directorio deseado
+                      // await File(photo.path).copy(savedPath);
                       selectedImage4 = photo;
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final savedPath = '${directory.path}/imagen4.jpg';
-                      await File(photo.path).copy(savedPath);
+                      // selectedImage4Path = savedPath;
                       setState(() {});
                     }
                   },

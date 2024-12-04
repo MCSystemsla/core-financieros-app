@@ -16,6 +16,8 @@ class RecurrenteEstandarModel {
   final String comoFortalece;
   final String siguientePaso;
   final String personaAutoSuficiente;
+  final bool tieneTrabajo;
+  final String trabajoNegocioDescripcion;
 
   RecurrenteEstandarModel({
     required this.database,
@@ -35,25 +37,33 @@ class RecurrenteEstandarModel {
     required this.comoFortalece,
     required this.siguientePaso,
     required this.personaAutoSuficiente,
+    required this.tieneTrabajo,
+    required this.trabajoNegocioDescripcion,
   });
 
   Map<String, dynamic> toJson() => {
         'database': database,
         'otrosIngresos': otrosIngresos,
-        'otrosIngresosDescripcion': otrosIngresosDescripcion,
+        'otrosIngresosDescripcion':
+            otrosIngresosDescripcion.isEmpty ? null : otrosIngresosDescripcion,
         'personasCargo': personasCargo,
         'numeroHijos': numeroHijos,
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
         'apoyanNegocio': apoyanNegocio,
-        'cuantosApoyan': cuantosApoyan,
+        'cuantosApoyan': cuantosApoyan.isEmpty ? null : cuantosApoyan,
         'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
-        'explicacionInversion': explicacionInversion,
+        'explicacionInversion':
+            explicacionInversion.isEmpty ? null : explicacionInversion,
         'comoMejoraEntorno': comoMejoraEntorno,
         'motivoPrestamo': motivoPrestamo,
         'comoFortalece': comoFortalece,
         'siguientePaso': siguientePaso,
         'personaAutoSuficiente': personaAutoSuficiente,
+        'tieneTrabajo': tieneTrabajo,
+        'trabajoNegocioDescripcion': trabajoNegocioDescripcion.isEmpty
+            ? null
+            : trabajoNegocioDescripcion,
       };
 }

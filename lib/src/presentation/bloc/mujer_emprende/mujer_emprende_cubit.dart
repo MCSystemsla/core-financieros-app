@@ -33,6 +33,8 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
           comoImpactariaNegocio: state.comoImpactariaNegocio,
           comoMejoraCalidadVida: state.comoMejoraCalidadVida,
           otrosDatosCliente: state.otrosDatosCliente,
+          tieneTrabajo: state.tieneTrabajo,
+          trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
         ),
       );
       if (!isOk) {
@@ -80,6 +82,8 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
     String? comoMejoraCalidadVida,
     String? otrosDatosCliente,
     int? objSolicitudNuevamenorId,
+    bool? tieneTrabajo,
+    String? trabajoNegocioDescripcion,
   }) {
     emit(
       state.copyWith(
@@ -99,6 +103,8 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
         comoMejoraCalidadVida: comoMejoraCalidadVida,
         otrosDatosCliente: otrosDatosCliente,
         objSolicitudNuevamenorId: objSolicitudNuevamenorId,
+        tieneTrabajo: tieneTrabajo,
+        trabajoNegocioDescripcion: trabajoNegocioDescripcion,
       ),
     );
   }

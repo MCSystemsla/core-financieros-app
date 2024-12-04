@@ -27,4 +27,6 @@ class RecurrenteEstandarDbLocal {
   String? imagen3;
   String? imagen4;
   String? imagenFirma;
+  bool? tieneTrabajo;
+  String? trabajoDescripcion;
 }

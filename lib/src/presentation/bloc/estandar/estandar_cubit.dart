@@ -33,6 +33,8 @@ class EstandarCubit extends Cubit<EstandarState> {
           comoMejoraVida: state.comoMejoraVida,
           planesFuturo: state.planesFuturo,
           otrosDatosCliente: state.otrosDatosCliente,
+          tieneTrabajo: state.tieneTrabajo,
+          trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
         ),
       );
       if (!isOK) {
@@ -80,6 +82,8 @@ class EstandarCubit extends Cubit<EstandarState> {
     String? comoMejoraVida,
     String? planesFuturo,
     String? otrosDatosCliente,
+    bool? tieneTrabajo,
+    String? trabajoNegocioDescripcion,
   }) {
     emit(
       state.copyWith(
@@ -101,6 +105,8 @@ class EstandarCubit extends Cubit<EstandarState> {
         comoMejoraVida: comoMejoraVida,
         planesFuturo: planesFuturo,
         otrosDatosCliente: otrosDatosCliente,
+        tieneTrabajo: tieneTrabajo,
+        trabajoNegocioDescripcion: trabajoNegocioDescripcion,
       ),
     );
   }

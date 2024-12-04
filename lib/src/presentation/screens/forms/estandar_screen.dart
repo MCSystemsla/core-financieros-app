@@ -263,15 +263,24 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
                                 ? saveOfflineResponses(
                                     context,
                                     state,
                                     ImageModel()
-                                      ..imagenFirma =
-                                          imageProvider.imagen1?.path ??
-                                              'No Path'
+                                      ..imagenFirma = file.path
                                       ..imagen1 = imageProvider.imagen1?.path ??
                                           'No Path'
                                       ..imagen2 = imageProvider.imagen2?.path ??

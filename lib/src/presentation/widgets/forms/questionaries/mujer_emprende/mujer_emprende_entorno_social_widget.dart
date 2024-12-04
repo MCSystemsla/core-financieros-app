@@ -38,6 +38,8 @@ class _MujerEmprendeEntornoSocialWidgetState
   String? otrosIngresosItem;
   String? originItem;
   String? academicLevelItem;
+  String? tieneTrabajo;
+  final trabajoNegocioDescripcion = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -94,6 +96,39 @@ class _MujerEmprendeEntornoSocialWidgetState
                     CommentaryWidget(
                       title: 'Cuales',
                       textEditingController: otrosIngresosDescripcion,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                  WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+
+                        return null;
+                      },
+                      title: '¿Tiene Trabajo? Cual?'.tr(),
+                      items: ['input.yes'.tr(), 'input.no'.tr()],
+                      onChanged: (item) {
+                        if (item == null) return;
+                        tieneTrabajo = item;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                  if (tieneTrabajo == 'input.yes'.tr())
+                    CommentaryWidget(
+                      title: 'Cuales?',
+                      textEditingController: trabajoNegocioDescripcion,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'input.input_validator'.tr();
@@ -207,6 +242,9 @@ class _MujerEmprendeEntornoSocialWidgetState
                               edadHijos: question2.text.trim(),
                               numeroHijos: int.tryParse(question3.text.trim()),
                               tipoEstudioHijos: academicLevelItem,
+                              tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                              trabajoNegocioDescripcion:
+                                  trabajoNegocioDescripcion.text.trim(),
                             );
                         context.read<ResponseCubit>().addResponses(
                           responses: [
@@ -227,6 +265,17 @@ class _MujerEmprendeEntornoSocialWidgetState
                                   'forms.entorno_familiar.person_origin'.tr(),
                               response: originItem ?? 'N/A',
                             ),
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: '¿Tiene Trabajo? Cual?'.tr(),
+                              response: tieneTrabajo!,
+                            ),
+                            if (tieneTrabajo == 'input.yes'.tr())
+                              Response(
+                                index: widget.pageController.page?.toInt() ?? 0,
+                                question: 'Cuales?'.tr(),
+                                response: trabajoNegocioDescripcion.text.trim(),
+                              ),
                             Response(
                               index: widget.pageController.page?.toInt() ?? 0,
                               question: 'Número de personas a cargo:*'.tr(),
@@ -294,6 +343,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  String? tieneTrabajo;
+  final trabajoNegocioDescripcion = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -344,6 +395,39 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   title: 'Cuales?',
                   textEditingController: otrosIngresosDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+
+                    return null;
+                  },
+                  title: '¿Tiene Trabajo? Cual?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tieneTrabajo = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              if (tieneTrabajo == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Cuales?',
+                  textEditingController: trabajoNegocioDescripcion,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'input.input_validator'.tr();
@@ -417,6 +501,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                          tieneTrabajoDescripcion:
+                              trabajoNegocioDescripcion.text.trim(),
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),

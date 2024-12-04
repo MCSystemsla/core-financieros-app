@@ -85,6 +85,19 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                         state.mujerEmprendeDbLocal?.otrosIngresosDescripcion ??
                             'N/A',
                   ),
+                  CommentaryWidget(
+                    initialValue:
+                        state.mujerEmprendeDbLocal?.tieneTrabajo ?? false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                    title: 'Tiene Trabajo?',
+                  ),
+                  CommentaryWidget(
+                    title: 'Cuales',
+                    initialValue:
+                        state.mujerEmprendeDbLocal?.trabajoNegocioDescripcion ??
+                            'N/A',
+                  ),
                   const Gap(20),
                   CommentaryWidget(
                     title: 'forms.entorno_familiar.person_origin'.tr(),
@@ -175,6 +188,13 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     onNextPressed: () {
                       context.read<MujerEmprendeCubit>().sendOfflineAnswers(
                             mujerEmprendeModel: MujerEmprendeModel(
+                              tieneTrabajo:
+                                  state.mujerEmprendeDbLocal?.tieneTrabajo ??
+                                      false,
+                              trabajoNegocioDescripcion: state
+                                      .mujerEmprendeDbLocal
+                                      ?.trabajoNegocioDescripcion ??
+                                  '',
                               database:
                                   state.mujerEmprendeDbLocal?.database ?? '',
                               objSolicitudNuevamenorId: state
