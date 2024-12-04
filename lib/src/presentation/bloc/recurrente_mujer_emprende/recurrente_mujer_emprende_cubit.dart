@@ -36,6 +36,8 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
           siguientePaso: state.siguientePaso,
           alcanzaraMeta: state.alcanzaraMeta,
           explicacionAlcanzaraMeta: state.explicacionAlcanzaraMeta,
+          tieneTrabajo: state.tieneTrabajo,
+          tieneTrabajoDescripcion: state.tieneTrabajoDescripcion,
         ),
       );
       if (!isOk) {
@@ -67,6 +69,8 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    bool? tieneTrabajo,
+    String? tieneTrabajoDescripcion,
   }) {
     emit(
       state.copyWith(
@@ -88,6 +92,8 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
         siguientePaso: siguientePaso,
         alcanzaraMeta: alcanzaraMeta,
         explicacionAlcanzaraMeta: explicacionAlcanzaraMeta,
+        tieneTrabajo: state.tieneTrabajo,
+        tieneTrabajoDescripcion: state.tieneTrabajoDescripcion,
       ),
     );
   }

@@ -21,6 +21,8 @@ class MujerEmprendeModel {
   final String comoImpactariaNegocio;
   final String comoMejoraCalidadVida;
   final String otrosDatosCliente;
+  final bool tieneTrabajo;
+  final String trabajoNegocioDescripcion;
 
   MujerEmprendeModel({
     required this.database,
@@ -40,6 +42,8 @@ class MujerEmprendeModel {
     required this.comoImpactariaNegocio,
     required this.comoMejoraCalidadVida,
     required this.otrosDatosCliente,
+    required this.tieneTrabajo,
+    required this.trabajoNegocioDescripcion,
   });
 
   Map<String, dynamic> toJson() => {
@@ -60,5 +64,7 @@ class MujerEmprendeModel {
         'comoImpactariaNegocio': comoImpactariaNegocio,
         'comoMejoraCalidadVida': comoMejoraCalidadVida,
         'otrosDatosCliente': otrosDatosCliente,
+        'tieneTrabajo ': tieneTrabajo,
+        'trabajoNegocioDescripcion': tieneTrabajo,
       };
 }

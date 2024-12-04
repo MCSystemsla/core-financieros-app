@@ -33,6 +33,8 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
         comoFortalece: state.comoFortalece,
         siguientePaso: state.siguientePaso,
         personaAutoSuficiente: state.personaAutoSuficiente,
+        tieneTrabajo: state.tieneTrabajo,
+        trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
       ));
       if (!isOk) {
         emit(state.copyWith(status: Status.error, erroMsg: message));
@@ -77,6 +79,8 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
     String? comoFortalece,
     String? siguientePaso,
     String? personaAutoSuficiente,
+    bool? tieneTrabajo,
+    String? trabajoDescripcion,
   }) {
     emit(state.copyWith(
       database: LocalStorage().database,
@@ -96,6 +100,8 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
       comoFortalece: comoFortalece,
       siguientePaso: siguientePaso,
       personaAutoSuficiente: personaAutoSuficiente,
+      tieneTrabajo: state.tieneTrabajo,
+      trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
     ));
   }
 }

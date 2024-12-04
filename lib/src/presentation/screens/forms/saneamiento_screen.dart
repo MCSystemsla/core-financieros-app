@@ -40,7 +40,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
-import 'package:path/path.dart' as path; // Para manejar nombres de archivo
+// import 'package:path/path.dart' as path; // Para manejar nombres de archivo
 
 class SaneamientoScreen extends StatefulWidget {
   final String typeProduct;

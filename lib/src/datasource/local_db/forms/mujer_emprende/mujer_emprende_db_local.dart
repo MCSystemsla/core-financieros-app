@@ -22,4 +22,6 @@ class MujerEmprendeDbLocal {
   String? comoImpactariaNegocio;
   String? comoMejoraCalidadVida;
   String? otrosDatosCliente;
+  bool? tieneTrabajo;
+  String? trabajoNegocioDescripcion;
 }

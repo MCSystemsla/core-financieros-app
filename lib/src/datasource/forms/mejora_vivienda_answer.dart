@@ -47,7 +47,7 @@ class MejoraViviendaAnswer {
   });
 
   Map<String, dynamic> toJson() => {
-        'solicitudNuevamenorId': solicitudNuevamenorId,
+        'objSolicitudNuevamenorId': solicitudNuevamenorId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
         'database': database,

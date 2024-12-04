@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -29,6 +30,8 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
     with AutomaticKeepAliveClientMixin {
   String? otrosIngresos;
   final cualesOtrosIngrsos = TextEditingController();
+  String? tieneTrabajo;
+  final tieneTrabajoDescripcion = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -80,6 +83,39 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                     return null;
                   },
                 ),
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+
+                    return null;
+                  },
+                  title: '¿Tiene Trabajo? Cual?'.tr(),
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tieneTrabajo = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+              if (tieneTrabajo == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Cuales?',
+                  textEditingController: tieneTrabajoDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -96,6 +132,9 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               cualesOtrosIngrsos.text.trim(),
+                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                          trabajoNegocioDescripcion:
+                              tieneTrabajoDescripcion.text.trim(),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
@@ -146,6 +185,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final formKey = GlobalKey<FormState>();
   String? otrosIngresos;
   final cualesOtrosIngrsos = TextEditingController();
+  String? tieneTrabajo;
+  final tieneTrabajoDescripcion = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +233,39 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 return null;
               },
             ),
+          WhiteCard(
+            padding: const EdgeInsets.all(5),
+            child: JLuxDropdown(
+              isContainIcon: true,
+              validator: (value) {
+                if (value == null) return 'input.input_validator'.tr();
+
+                return null;
+              },
+              title: '¿Tiene Trabajo? Cual?'.tr(),
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                if (item == null) return;
+                tieneTrabajo = item;
+                setState(() {});
+              },
+              toStringItem: (item) {
+                return item;
+              },
+              hintText: 'input.select_option'.tr(),
+            ),
+          ),
+          if (tieneTrabajo == 'input.yes'.tr())
+            CommentaryWidget(
+              title: 'Cuales?',
+              textEditingController: tieneTrabajoDescripcion,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'input.input_validator'.tr();
+                }
+                return null;
+              },
+            ),
           const Gap(20),
           ButtonActionsWidget(
             onPreviousPressed: () {
@@ -204,7 +278,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
             },
             onNextPressed: () {
               if (formKey.currentState?.validate() ?? false) {
-                context.read<EstandarCubit>().saveAnswers(
+                context.read<RecurrenteEstandartCubit>().saveAnswers(
+                      tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                      trabajoDescripcion: tieneTrabajoDescripcion.text.trim(),
                       otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                       otrosIngresosDescripcion: cualesOtrosIngrsos.text.trim(),
                     );

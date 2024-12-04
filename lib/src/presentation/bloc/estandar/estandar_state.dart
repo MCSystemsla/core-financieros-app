@@ -21,6 +21,8 @@ class EstandarState extends Equatable {
   final String comoMejoraVida;
   final String planesFuturo;
   final String otrosDatosCliente;
+  final bool tieneTrabajo;
+  final String trabajoNegocioDescripcion;
   final String errorMsg;
   const EstandarState({
     this.status = Status.notStarted,
@@ -43,6 +45,8 @@ class EstandarState extends Equatable {
     this.planesFuturo = '',
     this.otrosDatosCliente = '',
     this.errorMsg = '',
+    this.tieneTrabajo = false,
+    this.trabajoNegocioDescripcion = '',
   });
 
   @override
@@ -66,7 +70,9 @@ class EstandarState extends Equatable {
         comoMejoraVida,
         planesFuturo,
         otrosDatosCliente,
-        errorMsg
+        errorMsg,
+        tieneTrabajo,
+        trabajoNegocioDescripcion
       ];
 
   EstandarState copyWith({
@@ -89,6 +95,8 @@ class EstandarState extends Equatable {
     String? comoMejoraVida,
     String? planesFuturo,
     String? otrosDatosCliente,
+    bool? tieneTrabajo,
+    String? trabajoNegocioDescripcion,
     String? errorMsg,
   }) {
     return EstandarState(
@@ -114,6 +122,9 @@ class EstandarState extends Equatable {
       comoMejoraVida: comoMejoraVida ?? this.comoMejoraVida,
       planesFuturo: planesFuturo ?? this.planesFuturo,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
+      tieneTrabajo: tieneTrabajo ?? this.tieneTrabajo,
+      trabajoNegocioDescripcion:
+          trabajoNegocioDescripcion ?? this.trabajoNegocioDescripcion,
       errorMsg: errorMsg ?? this.errorMsg,
     );
   }

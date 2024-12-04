@@ -251,6 +251,13 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                           .read<RecurrenteEstandartCubit>()
                           .sendOfflineAnswers(
                               recurrentEstandarModel: RecurrenteEstandarModel(
+                            tieneTrabajo:
+                                resp.recurrenteEstandarDbLocal?.tieneTrabajo ??
+                                    false,
+                            trabajoNegocioDescripcion: resp
+                                    .recurrenteEstandarDbLocal
+                                    ?.trabajoDescripcion ??
+                                '',
                             database:
                                 resp.recurrenteEstandarDbLocal?.database ?? '',
                             otrosIngresos:
@@ -517,14 +524,19 @@ class _EstandarFormState extends State<EstandarForm> {
                   ),
                   const Gap(20),
                   ButtonActionsWidget(
-                    // disabled: state.status == Status.inProgress ||
-                    // response.status == Status.inProgress,
+                    disabled: state.status == Status.inProgress ||
+                        response.status == Status.inProgress,
                     onPreviousPressed: () {
                       context.pop();
                     },
                     onNextPressed: () {
                       context.read<EstandarCubit>().sendOffilneAnswers(
                             estandarModel: EstandarModel(
+                              tieneTrabajo:
+                                  state.estandarDbLocal?.tieneTrabajo ?? false,
+                              trabajoNegocioDescripcion: state.estandarDbLocal
+                                      ?.trabajoNegocioDescripcion ??
+                                  '',
                               objSolicitudNuevamenorId: state.estandarDbLocal
                                       ?.objSolicitudNuevamenorId ??
                                   0,
