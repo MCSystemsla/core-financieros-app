@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -32,6 +33,9 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getEnergiaLimpia(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
     super.initState();
   }
 
@@ -42,17 +46,26 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
         return BlocConsumer<EnergiaLimpiaCubit, EnergiaLimpiaState>(
-          listener: (context, state) async {
+          listener: (context, status) async {
             if (state.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(state.errorMsg),
+                  content: Text(status.errorMsg),
                 ),
               );
             }
-            if (state.status == Status.done) {
+            if (status.status == Status.done) {
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
+
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -295,17 +308,26 @@ class _RecurrenteEnergiaLimpiaOfflineState
       builder: (context, state) {
         return BlocConsumer<RecurrenteEnergiaLimpiaCubit,
             RecurrenteEnergiaLimpiaState>(
-          listener: (context, state) async {
+          listener: (context, status) async {
             if (state.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(state.errorMsg),
+                  content: Text(status.errorMsg),
                 ),
               );
             }
-            if (state.status == Status.done) {
+            if (status.status == Status.done) {
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
+
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
