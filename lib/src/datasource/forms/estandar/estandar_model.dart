@@ -48,7 +48,7 @@ class EstandarModel {
         'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
-        'objOrigenCatalogoValorId': objOrigenCatalogoValorId,
+        'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'personasCargo': personasCargo,
         'numeroHijos': numeroHijos,
         'edadHijos': edadHijos,
