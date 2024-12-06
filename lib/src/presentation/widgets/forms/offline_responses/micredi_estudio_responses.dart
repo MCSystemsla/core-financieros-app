@@ -422,7 +422,7 @@ class _MiCrediEstudioRecurrenteFormState
         return BlocConsumer<RecurrenteMicrediEstudioCubit,
             RecurrenteMicrediEstudioState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,

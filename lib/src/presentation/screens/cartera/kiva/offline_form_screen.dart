@@ -3,9 +3,11 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
+import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -48,14 +50,30 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
           return switch (state.status) {
             Status.inProgress =>
               const Center(child: CircularProgressIndicator()),
-            Status.done => ListView.separated(
-                itemCount: state.solicitudes.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const KivaFormSpacing();
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return _RequestWidget(solicitud: state.solicitudes[index]);
-                },
+            Status.done => SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(15),
+                      child: SearchBarCustom(
+                        onItemSelected: (value) {},
+                        onPressed: () {},
+                      ),
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.solicitudes.length,
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const KivaFormSpacing();
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return _RequestWidget(
+                            solicitud: state.solicitudes[index]);
+                      },
+                    ),
+                  ],
+                ),
               ),
             Status.error => const Text('Error inesperado'),
             _ => const SizedBox(),

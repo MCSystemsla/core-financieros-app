@@ -48,7 +48,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
       builder: (context, state) {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
@@ -352,7 +352,7 @@ class _RecurrenteSaneamientoOfflineState
       builder: (context, state) {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,

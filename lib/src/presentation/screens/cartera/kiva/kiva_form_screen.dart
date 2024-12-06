@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/departamentos/departam
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
+import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -149,6 +150,14 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.all(15),
+              child: SearchBarCustom(
+                onItemSelected: (value) {},
+                onPressed: () {},
+              ),
+            ),
+            const Gap(10),
             BlocConsumer<SolicitudesPendientesLocalDbCubit,
                 SolicitudesPendientesLocalDbState>(
               listener: (context, state) {

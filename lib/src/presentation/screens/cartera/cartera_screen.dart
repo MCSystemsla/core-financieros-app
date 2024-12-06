@@ -38,18 +38,18 @@ class CarteraScreen extends StatelessWidget {
                     ),
               ),
             ),
-            _Card(
-              onTap: () => context.push('/credito'),
-              title: 'cartera.credit'.tr(),
-              subtitle: 'cartera.credit_title'.tr(),
-              firstColor: AppColors.getSecondaryColor(),
-              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.credit_card,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
+            // _Card(
+            //   onTap: () => context.push('/credito'),
+            //   title: 'cartera.credit'.tr(),
+            //   subtitle: 'cartera.credit_title'.tr(),
+            //   firstColor: AppColors.getSecondaryColor(),
+            //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+            //   icon: const Icon(
+            //     Icons.credit_card,
+            //     color: AppColors.white,
+            //     size: 35,
+            //   ),
+            // ),
             _Card(
               onTap: () async {
                 if (!context.mounted) return;
@@ -80,18 +80,18 @@ class CarteraScreen extends StatelessWidget {
                 size: 35,
               ),
             ),
-            _Card(
-              onTap: () {},
-              title: 'Proximamente',
-              subtitle: 'Proximamente',
-              firstColor: AppColors.blueIndigo,
-              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.question_mark_outlined,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
+            // _Card(
+            //   onTap: () {},
+            //   title: 'Proximamente',
+            //   subtitle: 'Proximamente',
+            //   firstColor: AppColors.blueIndigo,
+            //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+            //   icon: const Icon(
+            //     Icons.question_mark_outlined,
+            //     color: AppColors.white,
+            //     size: 35,
+            //   ),
+            // ),
           ],
         ),
       ),
