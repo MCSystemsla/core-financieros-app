@@ -298,6 +298,9 @@ class _RecurrenteEnergiaLimpiaOfflineState
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getEnergiaLimpiaRecurrente(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
     super.initState();
   }
 
