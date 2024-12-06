@@ -23,46 +23,46 @@ class HomeItemsWidget extends StatelessWidget {
         color: AppColors.primaryColorWithOpacity(),
         onTap: () => context.push('/cartera'),
       ),
-      HomeItemCard(
-        title: 'home.item1'.tr(),
-        subtitle: 'Descripcion'.tr(),
-        icon: const Icon(
-          Icons.account_balance,
-          color: AppColors.white,
-        ),
-        color: AppColors.purple,
-        onTap: () => context.push('/tesoreria'),
-      ),
-      HomeItemCard(
-        title: 'home.item2'.tr(),
-        subtitle: 'Descripcion'.tr(),
-        icon: const Icon(
-          Icons.savings,
-          color: AppColors.white,
-        ),
-        color: AppColors.cian,
-        onTap: () => context.push('/ahorro'),
-      ),
-      HomeItemCard(
-        title: 'home.item3'.tr(),
-        subtitle: 'Descripcion'.tr(),
-        icon: const Icon(
-          Icons.calculate_rounded,
-          color: AppColors.white,
-        ),
-        color: AppColors.getFourthgColorWithOpacity(),
-        onTap: () => context.push('/pla'),
-      ),
-      HomeItemCard(
-        title: 'home.item4'.tr(),
-        subtitle: 'Descripcion'.tr(),
-        icon: const Icon(
-          Icons.assignment,
-          color: AppColors.white,
-        ),
-        color: AppColors.blueIndigo,
-        onTap: () => context.push('/requerimiento'),
-      ),
+      // HomeItemCard(
+      //   title: 'home.item1'.tr(),
+      //   subtitle: 'Descripcion'.tr(),
+      //   icon: const Icon(
+      //     Icons.account_balance,
+      //     color: AppColors.white,
+      //   ),
+      //   color: AppColors.purple,
+      //   onTap: () => context.push('/tesoreria'),
+      // ),
+      // HomeItemCard(
+      //   title: 'home.item2'.tr(),
+      //   subtitle: 'Descripcion'.tr(),
+      //   icon: const Icon(
+      //     Icons.savings,
+      //     color: AppColors.white,
+      //   ),
+      //   color: AppColors.cian,
+      //   onTap: () => context.push('/ahorro'),
+      // ),
+      // HomeItemCard(
+      //   title: 'home.item3'.tr(),
+      //   subtitle: 'Descripcion'.tr(),
+      //   icon: const Icon(
+      //     Icons.calculate_rounded,
+      //     color: AppColors.white,
+      //   ),
+      //   color: AppColors.getFourthgColorWithOpacity(),
+      //   onTap: () => context.push('/pla'),
+      // ),
+      // HomeItemCard(
+      //   title: 'home.item4'.tr(),
+      //   subtitle: 'Descripcion'.tr(),
+      //   icon: const Icon(
+      //     Icons.assignment,
+      //     color: AppColors.white,
+      //   ),
+      //   color: AppColors.blueIndigo,
+      //   onTap: () => context.push('/requerimiento'),
+      // ),
     ];
 
     return SingleChildScrollView(

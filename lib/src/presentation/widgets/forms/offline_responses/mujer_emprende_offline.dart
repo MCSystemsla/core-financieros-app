@@ -46,7 +46,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
       builder: (context, state) {
         return BlocConsumer<MujerEmprendeCubit, MujerEmprendeState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
@@ -326,7 +326,7 @@ class _RecurrenteMujerEmprendeOfflineState
         return BlocConsumer<RecurrenteMujerEmprendeCubit,
             RecurrenteMujerEmprendeState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,

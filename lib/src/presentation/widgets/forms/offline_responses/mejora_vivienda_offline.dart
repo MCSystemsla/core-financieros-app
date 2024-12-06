@@ -49,7 +49,7 @@ class _ViviendaNuevaOfflineResponseState
       builder: (context, state) {
         return BlocConsumer<MejoraViviendaCubit, MejoraViviendaState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
@@ -302,7 +302,7 @@ class _RecurrenteViviendaOfflineResponseState
         return BlocConsumer<RecurrenteMejoraViviendaCubit,
             RecurrenteMejoraViviendaState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,

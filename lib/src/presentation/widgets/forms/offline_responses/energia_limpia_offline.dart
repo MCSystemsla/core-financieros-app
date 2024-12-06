@@ -47,7 +47,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
       builder: (context, state) {
         return BlocConsumer<EnergiaLimpiaCubit, EnergiaLimpiaState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
@@ -312,7 +312,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
         return BlocConsumer<RecurrenteEnergiaLimpiaCubit,
             RecurrenteEnergiaLimpiaState>(
           listener: (context, status) async {
-            if (state.status == Status.error) {
+            if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
