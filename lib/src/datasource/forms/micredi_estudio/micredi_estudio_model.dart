@@ -65,7 +65,7 @@ class MiCrediEstudioModel {
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
-        'objOrigenCatalogoValorId': objOrigenCatalogoValorId,
+        'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'personasCargo': personasCargo,
         'numeroHijos': numeroHijos,
         'edadHijos': edadHijos,
@@ -74,8 +74,8 @@ class MiCrediEstudioModel {
         'tiempoCarrera': tiempoCarrera,
         'universidad': universidad,
         'motivoCarrera': motivoCarrera,
-        'relizandoProfesionalmente': relizandoProfesionalmente,
-        'explicacionRelizandoProfesionalmente':
+        'realizandoProfesionalmente': relizandoProfesionalmente,
+        'explicacionRealizandoProfesionalmente':
             explicacionRelizandoProfesionalmente,
         'quienApoya': quienApoya,
         'ocupacionPadres': ocupacionPadres,

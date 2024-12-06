@@ -38,6 +38,7 @@ class _EnergiaLimpiaEntornoFamiliarState
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   final personasCargo = TextEditingController();
+  final problemasEnergiaDescripcion = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -145,6 +146,17 @@ class _EnergiaLimpiaEntornoFamiliarState
                       hintText: 'input.select_option'.tr(),
                     ),
                   ),
+                  if (tieneProblemasEnergia == 'input.yes'.tr())
+                    CommentaryWidget(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                      textEditingController: problemasEnergiaDescripcion,
+                      title: 'Explique cual es el problema',
+                    ),
                   const Gap(20),
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
@@ -225,6 +237,8 @@ class _EnergiaLimpiaEntornoFamiliarState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<EnergiaLimpiaCubit>().saveAnswers2(
+                              problemasEnergiaDescripcion:
+                                  problemasEnergiaDescripcion.text.trim(),
                               edadHijos: edadHijos.text.trim(),
                               numeroHijos: int.parse(numeroHijos.text.trim()),
                               objOrigenCatalogoValorId:

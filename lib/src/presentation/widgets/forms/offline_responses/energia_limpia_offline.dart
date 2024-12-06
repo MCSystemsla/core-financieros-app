@@ -195,6 +195,10 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                     onNextPressed: () {
                       context.read<EnergiaLimpiaCubit>().sendOfflineAnswers(
                             energiaLimpia: EnergiaLimpiaModel(
+                              problemasEnergiaDescripcion: state
+                                      .energiaLimpiaDbLocal
+                                      ?.problemasEnergiaDescripcion ??
+                                  '',
                               database:
                                   state.energiaLimpiaDbLocal?.database ?? '',
                               solicitudNuevamenorId: state.energiaLimpiaDbLocal

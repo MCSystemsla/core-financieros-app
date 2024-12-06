@@ -296,77 +296,32 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   ),
                 ),
               const Gap(20),
-              WhiteCard(
-                marginTop: 15,
-                padding: const EdgeInsets.all(10),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title:
-                      '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?'
-                          .tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    mejoraraEntorno = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) => item,
-                  hintText: 'input.select_option'.tr(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
+              CommentaryWidget(
+                title: 'Explique Como mejorara el entorno*',
+                textEditingController: mejoraEntornoExplicacion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
-              const Gap(20),
-              if (mejoraraEntorno == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: '¿Porqué?*',
-                  textEditingController: mejoraEntornoExplicacion,
-                ),
               const Gap(20),
               CommentaryWidget(
                 title: 'A futuro ¿Cuál sería su siguiente paso?',
                 textEditingController: siguientePaso,
               ),
               const Gap(20),
-              WhiteCard(
-                marginTop: 15,
-                padding: const EdgeInsets.all(10),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title:
-                      '¿Cree usted que una vez finalizado el pago de este préstamo de Mujer Emprende alcanzó su meta?'
-                          .tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    alcanzaraMeta = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) => item,
-                  hintText: 'input.select_option'.tr(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
+              CommentaryWidget(
+                title: 'Explique como alcanzara la meta?*',
+                textEditingController: alcanzaraMetaExplicacion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
-              if (alcanzaraMeta == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: '¿Por qué?*',
-                  textEditingController: alcanzaraMetaExplicacion,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -383,11 +338,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           apoyanNegocio: apoyanNegocio == 'input.yes'.tr(),
                           cuantosApoyan: cuantosApoyan,
                           motivoPrestamo: motivoPrestamo.text.trim(),
-                          mejoraraEntorno: mejoraraEntorno == 'input.yes'.tr(),
                           mejoraraEntornoExplicacion:
                               mejoraEntornoExplicacion.text.trim(),
                           siguientePaso: siguientePaso.text.trim(),
-                          alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
                           explicacionAlcanzaraMeta:
                               alcanzaraMetaExplicacion.text.trim(),
                           objSolicitudRecurrenteId: int.parse(
@@ -421,16 +374,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           ),
                         Response(
                           index: widget.pageController.page?.toInt() ?? 0,
-                          question:
-                              '¿Considera usted que este nuevo préstamo fortalezca su negocio, mejore sus condiciones de vida y entorno familiar?',
-                          response: mejoraraEntorno ?? 'N/A',
+                          question: 'Explique Como mejorara el entorno*',
+                          response: mejoraEntornoExplicacion.text.trim(),
                         ),
-                        if (mejoraraEntorno == 'input.yes'.tr())
-                          Response(
-                            index: widget.pageController.page?.toInt() ?? 0,
-                            question: '¿Porqué?*',
-                            response: mejoraEntornoExplicacion.text.trim(),
-                          ),
                         Response(
                           index: widget.pageController.page?.toInt() ?? 0,
                           question: 'A futuro ¿Cuál sería su siguiente paso?',

@@ -73,33 +73,38 @@ const EnergiaLimpiaDbLocalSchema = CollectionSchema(
       name: r'planesFuturo',
       type: IsarType.string,
     ),
-    r'solicitudNuevamenorId': PropertySchema(
+    r'problemasEnergiaDescripcion': PropertySchema(
       id: 11,
+      name: r'problemasEnergiaDescripcion',
+      type: IsarType.string,
+    ),
+    r'solicitudNuevamenorId': PropertySchema(
+      id: 12,
       name: r'solicitudNuevamenorId',
       type: IsarType.long,
     ),
     r'tiempoActividad': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'tiempoActividad',
       type: IsarType.long,
     ),
     r'tieneProblemasEnergia': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'tieneProblemasEnergia',
       type: IsarType.bool,
     ),
     r'tieneTrabajo': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'tieneTrabajo',
       type: IsarType.bool,
     ),
     r'tipoEstudioHijos': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
     r'trabajoNegocioDescripcion': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -179,6 +184,12 @@ int _energiaLimpiaDbLocalEstimateSize(
     }
   }
   {
+    final value = object.problemasEnergiaDescripcion;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.tipoEstudioHijos;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -210,12 +221,13 @@ void _energiaLimpiaDbLocalSerialize(
   writer.writeString(offsets[8], object.otrosIngresosDescripcion);
   writer.writeString(offsets[9], object.personasCargo);
   writer.writeString(offsets[10], object.planesFuturo);
-  writer.writeLong(offsets[11], object.solicitudNuevamenorId);
-  writer.writeLong(offsets[12], object.tiempoActividad);
-  writer.writeBool(offsets[13], object.tieneProblemasEnergia);
-  writer.writeBool(offsets[14], object.tieneTrabajo);
-  writer.writeString(offsets[15], object.tipoEstudioHijos);
-  writer.writeString(offsets[16], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[11], object.problemasEnergiaDescripcion);
+  writer.writeLong(offsets[12], object.solicitudNuevamenorId);
+  writer.writeLong(offsets[13], object.tiempoActividad);
+  writer.writeBool(offsets[14], object.tieneProblemasEnergia);
+  writer.writeBool(offsets[15], object.tieneTrabajo);
+  writer.writeString(offsets[16], object.tipoEstudioHijos);
+  writer.writeString(offsets[17], object.trabajoNegocioDescripcion);
 }
 
 EnergiaLimpiaDbLocal _energiaLimpiaDbLocalDeserialize(
@@ -237,12 +249,13 @@ EnergiaLimpiaDbLocal _energiaLimpiaDbLocalDeserialize(
   object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[8]);
   object.personasCargo = reader.readStringOrNull(offsets[9]);
   object.planesFuturo = reader.readStringOrNull(offsets[10]);
-  object.solicitudNuevamenorId = reader.readLongOrNull(offsets[11]);
-  object.tiempoActividad = reader.readLongOrNull(offsets[12]);
-  object.tieneProblemasEnergia = reader.readBoolOrNull(offsets[13]);
-  object.tieneTrabajo = reader.readBoolOrNull(offsets[14]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[15]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[16]);
+  object.problemasEnergiaDescripcion = reader.readStringOrNull(offsets[11]);
+  object.solicitudNuevamenorId = reader.readLongOrNull(offsets[12]);
+  object.tiempoActividad = reader.readLongOrNull(offsets[13]);
+  object.tieneProblemasEnergia = reader.readBoolOrNull(offsets[14]);
+  object.tieneTrabajo = reader.readBoolOrNull(offsets[15]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[16]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[17]);
   return object;
 }
 
@@ -276,16 +289,18 @@ P _energiaLimpiaDbLocalDeserializeProp<P>(
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
       return (reader.readLongOrNull(offset)) as P;
     case 13:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 14:
       return (reader.readBoolOrNull(offset)) as P;
     case 15:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 16:
+      return (reader.readStringOrNull(offset)) as P;
+    case 17:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1956,6 +1971,164 @@ extension EnergiaLimpiaDbLocalQueryFilter on QueryBuilder<EnergiaLimpiaDbLocal,
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'problemasEnergiaDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'problemasEnergiaDescripcion',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'problemasEnergiaDescripcion',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      problemasEnergiaDescripcionContains(String value,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'problemasEnergiaDescripcion',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      problemasEnergiaDescripcionMatches(String pattern,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'problemasEnergiaDescripcion',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'problemasEnergiaDescripcion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> problemasEnergiaDescripcionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'problemasEnergiaDescripcion',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
       QAfterFilterCondition> solicitudNuevamenorIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2637,6 +2810,20 @@ extension EnergiaLimpiaDbLocalQuerySortBy
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      sortByProblemasEnergiaDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'problemasEnergiaDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      sortByProblemasEnergiaDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'problemasEnergiaDescripcion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
       sortBySolicitudNuevamenorId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudNuevamenorId', Sort.asc);
@@ -2892,6 +3079,20 @@ extension EnergiaLimpiaDbLocalQuerySortThenBy
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      thenByProblemasEnergiaDescripcion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'problemasEnergiaDescripcion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      thenByProblemasEnergiaDescripcionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'problemasEnergiaDescripcion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
       thenBySolicitudNuevamenorId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudNuevamenorId', Sort.asc);
@@ -3062,6 +3263,14 @@ extension EnergiaLimpiaDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QDistinct>
+      distinctByProblemasEnergiaDescripcion({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'problemasEnergiaDescripcion',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QDistinct>
       distinctBySolicitudNuevamenorId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'solicitudNuevamenorId');
@@ -3188,6 +3397,13 @@ extension EnergiaLimpiaDbLocalQueryProperty on QueryBuilder<
       planesFuturoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'planesFuturo');
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, String?, QQueryOperations>
+      problemasEnergiaDescripcionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'problemasEnergiaDescripcion');
     });
   }
 

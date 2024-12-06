@@ -21,6 +21,7 @@ class EnergiaLimpiaModel {
   final String motivoPrestamo;
   final String planesFuturo;
   final String otrosDatosCliente;
+  final String problemasEnergiaDescripcion;
 
   EnergiaLimpiaModel({
     required this.database,
@@ -40,6 +41,7 @@ class EnergiaLimpiaModel {
     required this.motivoPrestamo,
     required this.planesFuturo,
     required this.otrosDatosCliente,
+    required this.problemasEnergiaDescripcion,
   });
 
   Map<String, dynamic> toJson() => {
@@ -50,7 +52,7 @@ class EnergiaLimpiaModel {
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
-        'objOrigenCatalogoValorId': objOrigenCatalogoValorId,
+        'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'objTipoComunidadId': objTipoComunidadId,
         'tieneProblemasEnergia': tieneProblemasEnergia,
         'personasCargo': personasCargo,
@@ -60,5 +62,6 @@ class EnergiaLimpiaModel {
         'motivoPrestamo': motivoPrestamo,
         'planesFuturo': planesFuturo,
         'otrosDatosCliente': otrosDatosCliente,
+        'problemasEnergiaDescripcion': problemasEnergiaDescripcion,
       };
 }

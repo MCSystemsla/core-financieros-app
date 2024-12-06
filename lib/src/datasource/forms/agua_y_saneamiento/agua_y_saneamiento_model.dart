@@ -58,7 +58,7 @@ class AguaSaneamientoModel {
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
-        'objOrigenCatalogoValorId': objOrigenCatalogoValorId,
+        'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'personasCargo': personasCargo,
         'numeroHijos': numeroHijos,
         'edadHijos': edadHijos,
