@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agu
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -32,6 +33,10 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getSaneamientoNueva(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
+
     super.initState();
   }
 
@@ -42,17 +47,25 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
-          listener: (context, state) async {
+          listener: (context, status) async {
             if (state.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(state.errorMsg),
+                  content: Text(status.errorMsg),
                 ),
               );
             }
-            if (state.status == Status.done) {
+            if (status.status == Status.done) {
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -325,6 +338,9 @@ class _RecurrenteSaneamientoOfflineState
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getSaneamientoRecurrente(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
     super.initState();
   }
 
@@ -335,17 +351,25 @@ class _RecurrenteSaneamientoOfflineState
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
-          listener: (context, state) async {
+          listener: (context, status) async {
             if (state.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(state.errorMsg),
+                  content: Text(status.errorMsg),
                 ),
               );
             }
-            if (state.status == Status.done) {
+            if (status.status == Status.done) {
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
