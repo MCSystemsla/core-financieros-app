@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -44,9 +45,8 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocConsumer<SolicitudesPendientesLocalDbCubit,
+    return BlocBuilder<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
-      listener: (context, state) {},
       builder: (context, resp) {
         return BlocConsumer<RecurrenteEstandartCubit, RecurrenteEstandartState>(
           listener: (context, state) async {
@@ -60,27 +60,17 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
               );
             }
             if (state.status == Status.done) {
-              // final dir = await getApplicationDocumentsDirectory();
-              // final file = File(resp.imageModel?.imagen1 ?? 'NO PATH');
-
-              // // Verifica que el archivo exista antes de enviarlo
-              // if (!file.existsSync()) {
-              //   log('El archivo no existe en la ruta proporcionada. Solicitud: ${widget.solicitudId}');
-              //   log(resp.imageModel?.imagen1 ?? 'No Path');
-              //   return;
-              // } else {
-              //   log('Si existe ${file.path}');
-              // }
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: resp.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: resp.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
 
               if (!context.mounted) return;
-              // context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-              //       imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
-              //       imagen2: resp.imageModel?.imagen2 ?? 'NO PATH',
-              //       imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
-              //       fotoCedula: resp.imageModel?.imagen4 ?? 'NO PATH',
-              //       fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
-              //       solicitudId: widget.solicitudId,
-              //     );
+
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -111,12 +101,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   const Gap(20),
                   CommentaryWidget(
                     title: '¿Cuales?*',
-                    initialValue: resp.recurrenteEstandarDbLocal!
-                            .otrosIngresosDescripcion!.isEmpty
-                        ? 'N/A'
-                        : resp.recurrenteEstandarDbLocal!
-                                .otrosIngresosDescripcion ??
-                            'N/A',
+                    initialValue: resp.recurrenteEstandarDbLocal
+                            ?.otrosIngresosDescripcion ??
+                        'N/A',
                     readOnly: true,
                   ),
                   const Gap(20),
@@ -334,23 +321,43 @@ class EstandarForm extends StatefulWidget {
 
 class _EstandarFormState extends State<EstandarForm> {
   @override
+  void initState() {
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getEstandar(widget.solicitudId);
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getImagesModel(widget.solicitudId);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+
     return BlocBuilder<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
         return BlocConsumer<EstandarCubit, EstandarState>(
-          listener: (context, state) async {
-            if (state.status == Status.error) {
+          listener: (context, stateEstandar) async {
+            if (stateEstandar.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(state.errorMsg),
+                  content: Text(stateEstandar.errorMsg),
                 ),
               );
             }
-            if (state.status == Status.done) {
+            if (stateEstandar.status == Status.done) {
+              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
+                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
+                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    solicitudId: widget.solicitudId,
+                  );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

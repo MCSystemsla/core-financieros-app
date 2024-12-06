@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -7,6 +8,7 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/estan
 import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/mejora_vivienda_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/recurrente_saneamiento_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/saneamiento_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
@@ -366,6 +368,7 @@ class EstandarSign extends StatefulWidget {
 class _EstandarSignState extends State<EstandarSign> {
   @override
   Widget build(BuildContext context) {
+    final imageProvider = context.read<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected =
@@ -505,10 +508,40 @@ class _EstandarSignState extends State<EstandarSign> {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
                             FocusScope.of(context).unfocus();
+                            final signatureImage =
+                                await controller.toPngBytes();
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveOfflineResponses(context, state)
+                                ? saveOfflineResponses(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context.read<EstandarCubit>().sendAnswers();
                             context.pop();
                           },
@@ -527,7 +560,14 @@ class _EstandarSignState extends State<EstandarSign> {
     );
   }
 
-  saveOfflineResponses(BuildContext context, EstandarState state) {
+  saveOfflineResponses(
+    BuildContext context,
+    EstandarState state,
+    ImageModel imageModel,
+  ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context.read<SolicitudesPendientesLocalDbCubit>().saveEstandarForm(
           estandarDBLocal: EstandarDbLocal()
             ..apoyanNegocio = state.apoyanNegocio
@@ -628,20 +668,23 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
-                      // final directory =
-                      //     await getApplicationDocumentsDirectory();
+                      final appDir = await getApplicationDocumentsDirectory();
+                      final customDir = Directory('${appDir.path}/MyImages');
 
-                      // // Crear un nombre único para la imagen
-                      // final String uniqueName =
-                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+                      // Crea el directorio si no existe
+                      if (!await customDir.exists()) {
+                        await customDir.create(recursive: true);
+                        log('Directorio creado: ${customDir.path}');
+                      }
+                      // Define la ruta de la imagen en el directorio
+                      final localPath =
+                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                      // // Construir la ruta completa
-                      // final savedPath = path.join(photo.path, uniqueName);
-
-                      // // Copiar el archivo desde el temporal al directorio deseado
-                      // await File(photo.path).copy(savedPath);
+                      // Copia la imagen seleccionada al directorio
+                      final imageFile = File(photo.path);
+                      await imageFile.copy(localPath);
                       selectedImage = photo;
-                      // selectedImage1Path = savedPath;
+                      selectedImage1Path = localPath;
 
                       setState(() {});
                     }
@@ -664,20 +707,23 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
-                      // final directory =
-                      //     await getApplicationDocumentsDirectory();
+                      final appDir = await getApplicationDocumentsDirectory();
+                      final customDir = Directory('${appDir.path}/MyImages');
 
-                      // // Crear un nombre único para la imagen
-                      // final String uniqueName =
-                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+                      // Crea el directorio si no existe
+                      if (!await customDir.exists()) {
+                        await customDir.create(recursive: true);
+                        log('Directorio creado: ${customDir.path}');
+                      }
+                      // Define la ruta de la imagen en el directorio
+                      final localPath =
+                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                      // // Construir la ruta completa
-                      // final savedPath = path.join(directory.path, uniqueName);
-
-                      // // Copiar el archivo desde el temporal al directorio deseado
-                      // await File(photo.path).copy(savedPath);
+                      // Copia la imagen seleccionada al directorio
+                      final imageFile = File(photo.path);
+                      await imageFile.copy(localPath);
                       selectedImage2 = photo;
-                      // selectedImage2Path = savedPath;
+                      selectedImage2Path = localPath;
                       setState(() {});
                     }
                   },
@@ -699,18 +745,24 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
-                      // final directory =
-                      //     await getApplicationDocumentsDirectory();
-                      // // Crear un nombre único para la imagen
-                      // final String uniqueName =
-                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+                      final appDir = await getApplicationDocumentsDirectory();
+                      final customDir = Directory('${appDir.path}/MyImages');
 
-                      // // Construir la ruta completa
-                      // final savedPath = path.join(directory.path, uniqueName);
-                      // await File(photo.path).copy(savedPath);
+                      // Crea el directorio si no existe
+                      if (!await customDir.exists()) {
+                        await customDir.create(recursive: true);
+                        log('Directorio creado: ${customDir.path}');
+                      }
+                      // Define la ruta de la imagen en el directorio
+                      final localPath =
+                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                      // Copia la imagen seleccionada al directorio
+                      final imageFile = File(photo.path);
+                      await imageFile.copy(localPath);
 
                       selectedImage3 = photo;
-                      // selectedImage3Path = savedPath;
+                      selectedImage3Path = localPath;
                       setState(() {});
                     }
                   },
@@ -732,20 +784,23 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                     .then(
                   (XFile? photo) async {
                     if (photo != null) {
-                      // final directory =
-                      //     await getApplicationDocumentsDirectory();
+                      final appDir = await getApplicationDocumentsDirectory();
+                      final customDir = Directory('${appDir.path}/MyImages');
 
-                      // // Crear un nombre único para la imagen
-                      // final String uniqueName =
-                      //     'image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+                      // Crea el directorio si no existe
+                      if (!await customDir.exists()) {
+                        await customDir.create(recursive: true);
+                        log('Directorio creado: ${customDir.path}');
+                      }
+                      // Define la ruta de la imagen en el directorio
+                      final localPath =
+                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                      // // Construir la ruta completa
-                      // final savedPath = path.join(directory.path, uniqueName);
-
-                      // // Copiar el archivo desde el temporal al directorio deseado
-                      // await File(photo.path).copy(savedPath);
+                      // Copia la imagen seleccionada al directorio
+                      final imageFile = File(photo.path);
+                      await imageFile.copy(localPath);
                       selectedImage4 = photo;
-                      // selectedImage4Path = savedPath;
+                      selectedImage4Path = localPath;
                       setState(() {});
                     }
                   },
@@ -780,10 +835,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 }
                 if (context.mounted) {
                   context.read<UploadUserFileCubit>().saveImages(
-                        imagen1: File(selectedImage!.path),
-                        imagen2: File(selectedImage2!.path),
-                        imagen3: File(selectedImage3!.path),
-                        fotoCedula: File(selectedImage4!.path),
+                        imagen1: File(selectedImage1Path!),
+                        imagen2: File(selectedImage2Path!),
+                        imagen3: File(selectedImage3Path!),
+                        fotoCedula: File(selectedImage4Path!),
                       );
                   widget.controller.nextPage(
                     duration: const Duration(
