@@ -15,6 +15,7 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
     try {
       final (isOk, message) = await repository.energiaLimpia(
         energiaLimpiaModel: EnergiaLimpiaModel(
+          problemasEnergiaDescripcion: state.problemasEnergiaDescripcion,
           database: state.database,
           solicitudNuevamenorId: state.solicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,
@@ -87,6 +88,7 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
+    String? problemasEnergiaDescripcion,
   }) {
     emit(
       state.copyWith(
@@ -97,6 +99,7 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
         numeroHijos: numeroHijos,
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
+        problemasEnergiaDescripcion: problemasEnergiaDescripcion,
       ),
     );
   }

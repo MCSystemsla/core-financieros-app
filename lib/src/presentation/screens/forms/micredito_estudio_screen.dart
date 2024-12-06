@@ -1520,41 +1520,16 @@ class _RecurrentFormImpactoSocialState
                     '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',
               ),
               const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
-                  title:
-                      '¿Cree usted que una vez finalizado el pago de este préstamo de MiCréditoEstudio alcanzó su meta académica? ¿Por qué?',
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    alcanzaraMeta = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
+              CommentaryWidget(
+                textEditingController: explicacionAlcanzaraMeta,
+                title: 'Explica la meta?',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
-              const Gap(20),
-              if (alcanzaraMeta == 'input.yes'.tr())
-                CommentaryWidget(
-                  textEditingController: explicacionAlcanzaraMeta,
-                  title: 'Explica la meta?',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
               const Gap(20),
               CommentaryWidget(
                 textEditingController: siguentePaso,
@@ -1574,7 +1549,6 @@ class _RecurrentFormImpactoSocialState
                     context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
                           motivoPrestamo: motivoPrestamo.text.trim(),
                           comoAyudaCrecer: comoAyudaCrecer.text.trim(),
-                          alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
                           explicacionAlcanzaraMeta:
                               explicacionAlcanzaraMeta.text.trim(),
                           siguientePaso: siguentePaso.text.trim(),

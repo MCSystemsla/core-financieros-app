@@ -3,8 +3,6 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -262,27 +260,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 },
               ),
               const Gap(10),
-              WhiteCard(
-                marginTop: 15,
-                padding: const EdgeInsets.all(10),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    alcanzaraMeta = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) => item,
-                  hintText: 'input.select_option'.tr(),
-                ),
+              CommentaryWidget(
+                title: 'Explique Como Alcanzara la meta?',
+                textEditingController: explicacionAlcanzaraMeta,
               ),
-              if (alcanzaraMeta == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: 'Por que?',
-                  textEditingController: explicacionAlcanzaraMeta,
-                ),
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -301,7 +282,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               comoMejoraCondicionesEntorno.text.trim(),
                           quienApoya: quienApoya.text.trim(),
                           siguientePaso: siguientePaso.text.trim(),
-                          alcanzaraMeta: alcanzaraMeta == 'input.yes'.tr(),
                           explicacionAlcanzaraMeta:
                               explicacionAlcanzaraMeta.text.trim(),
                           objSolicitudRecurrenteId: int.parse(

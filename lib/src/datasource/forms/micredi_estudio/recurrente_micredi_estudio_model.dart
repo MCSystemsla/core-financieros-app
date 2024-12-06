@@ -71,7 +71,6 @@ class RecurrenteMiCrediEstudioModel {
         'explicacionInversion': explicacionInversion,
         'comoAyudoProfesionalmente': comoAyudoProfesionalmente,
         'siguientePaso': siguientePaso,
-        'alcanzaraMeta': alcanzaraMeta,
         'explicacionAlcanzaraMeta': explicacionAlcanzaraMeta,
       };
 }

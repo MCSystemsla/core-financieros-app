@@ -21,6 +21,7 @@ class EnergiaLimpiaState extends Equatable {
   final String planesFuturo;
   final String otrosDatosCliente;
   final String errorMsg;
+  final String problemasEnergiaDescripcion;
 
   const EnergiaLimpiaState({
     this.database = 'MC_CH',
@@ -42,6 +43,7 @@ class EnergiaLimpiaState extends Equatable {
     this.otrosDatosCliente = '',
     this.status = Status.notStarted,
     this.errorMsg = '',
+    this.problemasEnergiaDescripcion = '',
   });
 
   @override
@@ -65,6 +67,7 @@ class EnergiaLimpiaState extends Equatable {
         otrosDatosCliente,
         status,
         errorMsg,
+        problemasEnergiaDescripcion,
       ];
 
   EnergiaLimpiaState copyWith({
@@ -87,6 +90,7 @@ class EnergiaLimpiaState extends Equatable {
     String? planesFuturo,
     String? otrosDatosCliente,
     String? errorMsg,
+    String? problemasEnergiaDescripcion,
   }) {
     return EnergiaLimpiaState(
       status: status ?? this.status,
@@ -113,6 +117,8 @@ class EnergiaLimpiaState extends Equatable {
       planesFuturo: planesFuturo ?? this.planesFuturo,
       otrosDatosCliente: otrosDatosCliente ?? this.otrosDatosCliente,
       errorMsg: errorMsg ?? this.errorMsg,
+      problemasEnergiaDescripcion:
+          problemasEnergiaDescripcion ?? this.problemasEnergiaDescripcion,
     );
   }
 }

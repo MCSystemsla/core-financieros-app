@@ -22,4 +22,5 @@ class EnergiaLimpiaDbLocal {
   String? motivoPrestamo;
   String? planesFuturo;
   String? otrosDatosCliente;
+  String? problemasEnergiaDescripcion;
 }

@@ -55,7 +55,7 @@ class MejoraViviendaAnswer {
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
-        'objOrigenCatalogoValorId': objOrigenCatalogoValorId,
+        'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'objTipoComunidadId': objTipoComunidadId,
         'necesidadesComunidad': necesidadesComunidad,
         'personasCargo': personasCargo,

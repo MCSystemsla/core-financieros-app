@@ -64,6 +64,12 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica>
                   CommentaryWidget(
                     title: 'Carrera:',
                     textEditingController: carrera,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -74,6 +80,12 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica>
                   CommentaryWidget(
                     title: 'Años de la carrera:',
                     textEditingController: tiempoCarreras,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
                   ),
                   const Gap(20),
                   CommentaryWidget(
