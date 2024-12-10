@@ -75,7 +75,7 @@ class RecurrenteMicrediEstudioCubit
     int? tiempoActividad,
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
-    String? personasCargo,
+    int? personasCargo,
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,

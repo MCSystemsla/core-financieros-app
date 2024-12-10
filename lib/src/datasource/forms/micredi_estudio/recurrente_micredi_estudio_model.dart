@@ -5,7 +5,7 @@ class RecurrenteMiCrediEstudioModel {
   final int tiempoActividad;
   final bool otrosIngresos;
   final String otrosIngresosDescripcion;
-  final String personasCargo;
+  final int personasCargo;
   final int numeroHijos;
   final String edadHijos;
   final String tipoEstudioHijos;

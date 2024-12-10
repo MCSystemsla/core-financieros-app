@@ -37,10 +37,9 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => SolicitudesPendientesCubit(
-            SolicitudesPendientesRepositoryImpl(),
-          )..getSolicitudesPendientes(),
-        ),
+            create: (ctx) => SolicitudesPendientesCubit(
+                  SolicitudesPendientesRepositoryImpl(),
+                )..getSolicitudesPendientes()),
         BlocProvider(
           lazy: false,
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
@@ -62,16 +61,17 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             final comunidadesProvider = context.read<ComunidadesCubit>();
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
-            final departments =
-                context.read<DepartamentosCubit>().state.departamentos;
-            final departmentsList = departments.map(
-              (e) {
-                return DepartamentosDbLocal()
-                  ..nombre = e.nombre
-                  ..valor = e.valor;
-              },
-            ).toList();
+
             if (state.status == Status.done) {
+              final departments =
+                  context.read<DepartamentosCubit>().state.departamentos;
+              final departmentsList = departments.map(
+                (e) {
+                  return DepartamentosDbLocal()
+                    ..nombre = e.nombre
+                    ..valor = e.valor;
+                },
+              ).toList();
               solicitudesProvider.saveComunidades(
                   comunidades: comunidadesProvider.state.comunidades.map(
                 (e) {
@@ -132,13 +132,30 @@ class _KIvaFormContent extends StatefulWidget {
 }
 
 class _KIvaFormContentState extends State<_KIvaFormContent> {
+  late List<Solicitud> _filteredSolicitudes;
+
   @override
   void initState() {
     super.initState();
+    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
     solicitudesProvider.getComunidades();
     solicitudesProvider.getDepartamentos();
+  }
+
+  void _filterSolicitudes(String query) {
+    setState(() {
+      if (query.trim().isEmpty) {
+        _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+
+        return;
+      }
+      _filteredSolicitudes = widget.solicitudesPendienteResponse
+          .where((solicitud) =>
+              solicitud.nombre.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -153,8 +170,13 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
             Container(
               margin: const EdgeInsets.all(15),
               child: SearchBarCustom(
-                onItemSelected: (value) {},
-                onPressed: () {},
+                onItemSelected: (value) {
+                  if (value == null) return;
+                  _filterSolicitudes(value);
+                },
+                onPressed: () {
+                  _filterSolicitudes('');
+                },
               ),
             ),
             const Gap(10),
@@ -182,12 +204,12 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.solicitudesPendienteResponse.length,
+              itemCount: _filteredSolicitudes.length,
               separatorBuilder: (BuildContext context, int index) =>
                   const KivaFormSpacing(),
               itemBuilder: (BuildContext context, int index) {
                 return _RequestWidget(
-                  solicitud: widget.solicitudesPendienteResponse[index],
+                  solicitud: _filteredSolicitudes[index],
                 );
               },
             ),
