@@ -100,8 +100,8 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
       comoFortalece: comoFortalece,
       siguientePaso: siguientePaso,
       personaAutoSuficiente: personaAutoSuficiente,
-      tieneTrabajo: state.tieneTrabajo,
-      trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
+      tieneTrabajo: tieneTrabajo,
+      trabajoNegocioDescripcion: trabajoDescripcion,
     ));
   }
 }

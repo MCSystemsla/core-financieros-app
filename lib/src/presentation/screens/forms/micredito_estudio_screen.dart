@@ -1188,7 +1188,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),
-                          personasCargo: personasCargo.text.trim(),
+                          personasCargo:
+                              int.tryParse(personasCargo.text.trim()),
                           numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           edadHijos: edadHijos.text.trim(),
                           tipoEstudioHijos: tipoEstudioHijos,

@@ -19,10 +19,28 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
       final data =
           await solicitudesPendientesRepository.getSolicitudesPendientes();
       emit(state.copyWith(
-          solicitudesPendienteResponse: data.solicitudes, status: Status.done));
+          solicitudesPendienteResponse: data.solicitudes,
+          filteredSolicitudes: data.solicitudes,
+          status: Status.done));
     } catch (e) {
       log(e.toString());
       emit(state.copyWith(status: Status.error));
     }
+  }
+
+  void filterSolicitudes(String query) {
+    final solicitudes = state.solicitudesPendienteResponse;
+
+    if (query.isEmpty) {
+      emit(state.copyWith(filteredSolicitudes: solicitudes));
+      return;
+    }
+
+    final filtered = solicitudes.where((solicitud) {
+      return solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
+          solicitud.numero.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    emit(state.copyWith(filteredSolicitudes: filtered));
   }
 }

@@ -9,7 +9,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
   final int tiempoActividad;
   final bool otrosIngresos;
   final String otrosIngresosDescripcion;
-  final String personasCargo;
+  final int personasCargo;
   final int numeroHijos;
   final String edadHijos;
   final String tipoEstudioHijos;
@@ -35,7 +35,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     this.tiempoActividad = 0,
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
-    this.personasCargo = '',
+    this.personasCargo = 0,
     this.numeroHijos = 0,
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
@@ -92,7 +92,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     int? tiempoActividad,
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
-    String? personasCargo,
+    int? personasCargo,
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,

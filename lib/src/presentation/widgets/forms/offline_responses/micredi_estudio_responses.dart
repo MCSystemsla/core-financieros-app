@@ -683,7 +683,7 @@ class _MiCrediEstudioRecurrenteFormState
                               personasCargo: state
                                       .recurrenteMiCrediEstudioDbLocal
                                       ?.personasCargo ??
-                                  '',
+                                  0,
                               numeroHijos: state.recurrenteMiCrediEstudioDbLocal
                                       ?.numeroHijos ??
                                   0,
