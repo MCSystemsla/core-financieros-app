@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
@@ -138,6 +140,36 @@ class _DescripcionYDesarrolloWidgetState
                                 explicacionCumpliriaPropuesta:
                                     explicacionCumpliriaPropuesta.text.trim(),
                               );
+                          context.read<ResponseCubit>().addResponses(
+                            responses: [
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    'forms.develpment_and_description.aboutCredit'
+                                        .tr(),
+                                response: question1Controller.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    '¿Porqué considera importante mejorar las condiciones higiénicas en su familia?*',
+                                response: question2Controller.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    '¿Cree usted que con este crédito va poder cumplir el proyecto que se ha propuesto? ¿Por qué?',
+                                response: cumpliriaPropuesta ?? 'N/A',
+                              ),
+                              if (cumpliriaPropuesta == 'input.yes'.tr())
+                                Response(
+                                  index: widget.controller.page?.toInt() ?? 0,
+                                  question: 'Porque?',
+                                  response:
+                                      explicacionCumpliriaPropuesta.text.trim(),
+                                ),
+                            ],
+                          );
                           widget.controller.nextPage(
                             duration: const Duration(
                               milliseconds: 350,
@@ -239,7 +271,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   textEditingController: explicacionInversion,
                   validator: (value) {
-                    if (value == null) {
+                    if (value == null || value.isEmpty) {
                       return 'input.input_validator'.tr();
                     }
                     return null;
@@ -279,6 +311,29 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           comoAyudoCondiciones:
                               comoAyudoCondiciones.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: coincideRespuesta ?? 'N/A',
+                        ),
+                        if (coincideRespuesta == 'input.no'.tr())
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question:
+                                '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                            response: explicacionInversion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿De qué manera le ayudó este préstamo Kiva a mejorar sus condiciones en la familia?*',
+                          response: comoAyudoCondiciones.text.trim(),
+                        ),
+                      ],
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,

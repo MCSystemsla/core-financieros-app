@@ -85,6 +85,12 @@ class _EnergiaLimpiaCreditoAnteriorState
               ),
               if (coincideRespuesta == 'input.no'.tr())
                 CommentaryWidget(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title:
                       '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                   textEditingController: explicacionInversion,

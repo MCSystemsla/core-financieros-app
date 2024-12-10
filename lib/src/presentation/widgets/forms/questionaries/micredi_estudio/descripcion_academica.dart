@@ -80,6 +80,7 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica>
                   CommentaryWidget(
                     title: 'Años de la carrera:',
                     textEditingController: tiempoCarreras,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -294,11 +295,24 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Carrera:',
                 textEditingController: carrera,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
               const Gap(20),
               CommentaryWidget(
                 title: 'Años de la carrera:',
                 textEditingController: tiempoCarrera,
+                textInputType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
               const Gap(20),
               CommentaryWidget(

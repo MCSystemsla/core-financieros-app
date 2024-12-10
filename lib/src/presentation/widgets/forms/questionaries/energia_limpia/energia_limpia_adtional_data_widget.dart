@@ -315,6 +315,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   title: 'Ingrese los otros ingresos',
                   textEditingController: otrosIngresosDescripcion,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                 ),
               const Gap(20),
               ButtonActionsWidget(

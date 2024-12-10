@@ -274,6 +274,65 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                                     '¿Tiene algún trabajo o negocio? ¿Cuál?',
                                 response: tieneTrabajo ?? 'N/A',
                               ),
+                              if (tieneTrabajo == 'input.yes'.tr())
+                                Response(
+                                  index: widget.controller.page?.toInt() ?? 0,
+                                  question: 'Cual?',
+                                  response:
+                                      trabajoNegocioDescripcion.text.trim(),
+                                ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    'Tiempo de la actividad (meses o años)',
+                                response: tiempoActividad.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question: '¿Tiene otros ingresos?¿Cuales?*',
+                                response: otrosIngresos ?? 'N/A',
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question: '¿Tiene otros ingresos?¿Cuales?*',
+                                response: otrosIngresos ?? 'N/A',
+                              ),
+                              if (otrosIngresos == 'input.yes'.tr())
+                                Response(
+                                  index: widget.controller.page?.toInt() ?? 0,
+                                  question: 'Cuales?',
+                                  response:
+                                      otrosIngresosDescripcion.text.trim(),
+                                ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    'forms.entorno_familiar.person_origin'.tr(),
+                                response: personOrigin ?? 'N/A',
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question: 'Número de personas a cargo:*'.tr(),
+                                response: personasCargo.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question: 'Numero de Hijos'.tr(),
+                                response: numeroHijos.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    'forms.entorno_familiar.childs_age'.tr(),
+                                response: question2Controller.text.trim(),
+                              ),
+                              Response(
+                                index: widget.controller.page?.toInt() ?? 0,
+                                question:
+                                    '¿Qué tipo de estudios reciben sus hijos?'
+                                        .tr(),
+                                response: tipoEstudioHijos ?? 'N/A',
+                              ),
                             ],
                           );
 
@@ -509,6 +568,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteAguaYSaneamientoCubit>().saveAnswers(
+                          tipoEstudioHijos: tipoEstudioHijos,
                           personasCargo: personasCargo.text.trim(),
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                           trabajoNegocioDescripcion:
@@ -520,6 +580,62 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               otrosIngresosDescripcion.text.trim(),
                           edadHijos: edadHijos.text.trim(),
                         );
+                    context.read<ResponseCubit>().addResponses(
+                      responses: [
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: 'Número de personas a cargo:*',
+                          response: personasCargo.text.trim(),
+                        ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                          response: tieneTrabajo ?? 'N/A',
+                        ),
+                        if (tieneTrabajo == 'input.yes'.tr())
+                          Response(
+                            index: widget.controller.page?.toInt() ?? 0,
+                            question: 'Cual?',
+                            response: trabajoNegocioDescripcion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: 'Tiempo de la actividad (meses o años):*',
+                          response: tiempoActividad.text.trim(),
+                        ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: '¿Tiene otros ingresos?¿Cuales?*',
+                          response: otrosIngresos ?? 'N/A',
+                        ),
+                        if (otrosIngresos == 'input.yes'.tr())
+                          Response(
+                            index: widget.controller.page?.toInt() ?? 0,
+                            question: 'Cuales?',
+                            response: otrosIngresosDescripcion.text.trim(),
+                          ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: '¿Que edades tienen sus hijos?',
+                          response: edadHijos.text.trim(),
+                        ),
+                        Response(
+                          index: widget.controller.page?.toInt() ?? 0,
+                          question: '¿Qué tipo de estudios reciben sus hijos?',
+                          response: tipoEstudioHijos ?? 'N/A',
+                        ),
+                      ],
+                    );
                     widget.controller.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
