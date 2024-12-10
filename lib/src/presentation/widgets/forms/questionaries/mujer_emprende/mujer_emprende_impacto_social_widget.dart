@@ -263,6 +263,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 child: JLuxDropdown(
                   isContainIcon: true,
                   title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;

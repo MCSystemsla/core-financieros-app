@@ -1083,6 +1083,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Tiempo de la actividad (meses o años)',
                 textEditingController: tiempoActividad,
+                textInputType: TextInputType.number,
               ),
               const Gap(20),
               WhiteCard(
@@ -1109,6 +1110,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
               ),
               if (otrosIngresos == 'input.yes'.tr())
                 CommentaryWidget(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title: '¿Cuáles?',
                   textEditingController: otrosIngresosDescripcion,
                 ),
@@ -1126,6 +1133,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de hijos:*',
                 textEditingController: numeroHijos,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
@@ -1516,6 +1524,12 @@ class _RecurrentFormImpactoSocialState
               ),
               const Gap(20),
               CommentaryWidget(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
                 textEditingController: comoAyudaCrecer,
                 title:
                     '¿Cómo cree usted que este nuevo préstamo le ayude en su crecimiento profesional?*',

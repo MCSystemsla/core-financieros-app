@@ -200,6 +200,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 marginTop: 15,
                 padding: const EdgeInsets.all(10),
                 child: JLuxDropdown(
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
                   isContainIcon: true,
                   title:
                       '¿Coincide la respuesta del cliente con el formato anterior?'
@@ -211,7 +215,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     setState(() {});
                   },
                   toStringItem: (item) => item,
-                  hintText: 'input.select_department'.tr(),
+                  hintText: 'input.select_option'.tr(),
                 ),
               ),
               const Gap(20),

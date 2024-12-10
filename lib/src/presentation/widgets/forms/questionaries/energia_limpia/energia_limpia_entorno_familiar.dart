@@ -368,6 +368,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   return WhiteCard(
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+                        return null;
+                      },
                       isContainIcon: true,
                       isLoading: state.status == Status.inProgress,
                       title: 'Su comunidad es:'.tr(),
