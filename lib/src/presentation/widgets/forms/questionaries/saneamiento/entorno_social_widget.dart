@@ -6,7 +6,6 @@ import 'package:core_financiero_app/src/presentation/bloc/response_cubit/respons
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -143,6 +142,12 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                     ),
                     if (otrosIngresos == 'input.yes'.tr())
                       CommentaryWidget(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
                         title: 'Cuales?',
                         textEditingController: otrosIngresosDescripcion,
                       ),
@@ -258,7 +263,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                                 otrosIngresos:
                                     otrosIngresos == 'input.yes'.tr(),
                                 otrosIngresosDescripcion:
-                                    otrosIngresosController.text.trim(),
+                                    otrosIngresosDescripcion.text.trim(),
                                 objOrigenCatalogoValorId: personOrigin,
                                 personasCargo: personasCargo.text.trim(),
                                 edadHijos: question2Controller.text.trim(),

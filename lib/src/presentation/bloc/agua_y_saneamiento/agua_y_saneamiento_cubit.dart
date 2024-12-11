@@ -51,6 +51,8 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
         metasProximas: metasProximas,
         otrosDatosCliente: otrosDatosCliente,
         solicitudNuevamenorId: solicitudNuevamenorId,
+        tieneTrabajo: tieneTrabajo,
+        trabajoNegocioDescripcion: trabajoNegocioDescripcion,
       ),
     );
   }

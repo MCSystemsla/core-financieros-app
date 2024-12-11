@@ -11,7 +11,7 @@ class MicrediEstudioState extends Equatable {
   final bool otrosIngresos;
   final String otrosIngresosDescripcion;
   final String objOrigenCatalogoValorId;
-  final String personasCargo;
+  final int personasCargo;
   final int numeroHijos;
   final String edadHijos;
   final String tipoEstudioHijos;
@@ -42,7 +42,7 @@ class MicrediEstudioState extends Equatable {
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
     this.objOrigenCatalogoValorId = '',
-    this.personasCargo = '',
+    this.personasCargo = 0,
     this.numeroHijos = 0,
     this.edadHijos = '',
     this.tipoEstudioHijos = '',
@@ -107,7 +107,7 @@ class MicrediEstudioState extends Equatable {
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
     String? objOrigenCatalogoValorId,
-    String? personasCargo,
+    int? personasCargo,
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,

@@ -46,7 +46,7 @@ class EnergiaLimpiaModel {
 
   Map<String, dynamic> toJson() => {
         'database': database,
-        'solicitudNuevamenorId': solicitudNuevamenorId,
+        'objSolicitudNuevamenorId': solicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,

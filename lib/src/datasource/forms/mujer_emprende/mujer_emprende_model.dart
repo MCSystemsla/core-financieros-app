@@ -23,6 +23,7 @@ class MujerEmprendeModel {
   final String otrosDatosCliente;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
+  final int tiempoActividad;
 
   MujerEmprendeModel({
     required this.database,
@@ -44,6 +45,7 @@ class MujerEmprendeModel {
     required this.otrosDatosCliente,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
+    required this.tiempoActividad,
   });
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +68,6 @@ class MujerEmprendeModel {
         'otrosDatosCliente': otrosDatosCliente,
         'tieneTrabajo ': tieneTrabajo,
         'trabajoNegocioDescripcion': tieneTrabajo,
+        'tiempoActividad': tiempoActividad,
       };
 }

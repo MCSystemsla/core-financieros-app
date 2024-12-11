@@ -13,7 +13,7 @@ class MiCrediEstudioDbLocal {
   bool? otrosIngresos;
   String? otrosIngresosDescripcion;
   String? objOrigenCatalogoValorId;
-  String? personasCargo;
+  int? personasCargo;
   int? numeroHijos;
   String? edadHijos;
   String? tipoEstudioHijos;

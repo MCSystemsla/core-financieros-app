@@ -220,6 +220,9 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     onNextPressed: () {
                       context.read<MujerEmprendeCubit>().sendOfflineAnswers(
                             mujerEmprendeModel: MujerEmprendeModel(
+                              tiempoActividad:
+                                  state.mujerEmprendeDbLocal?.tiempoActividad ??
+                                      0,
                               tieneTrabajo:
                                   state.mujerEmprendeDbLocal?.tieneTrabajo ??
                                       false,

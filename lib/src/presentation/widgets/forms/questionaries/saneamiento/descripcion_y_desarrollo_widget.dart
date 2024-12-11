@@ -115,6 +115,12 @@ class _DescripcionYDesarrolloWidgetState
                     const Gap(10),
                     if (cumpliriaPropuesta == 'input.yes'.tr())
                       CommentaryWidget(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
                         title: 'Porque?',
                         textEditingController: explicacionCumpliriaPropuesta,
                       ),

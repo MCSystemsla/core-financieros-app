@@ -116,7 +116,8 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica>
                       hintText: 'input.select_option'.tr(),
                     ),
                   ),
-                  if (relizandoProfesionalmente == 'input.yes'.tr())
+                  if (relizandoProfesionalmente == 'input.yes'.tr() ||
+                      relizandoProfesionalmente == 'input.no'.tr())
                     CommentaryWidget(
                       title: 'Por que?',
                       textEditingController:

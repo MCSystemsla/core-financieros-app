@@ -24,4 +24,5 @@ class MujerEmprendeDbLocal {
   String? otrosDatosCliente;
   bool? tieneTrabajo;
   String? trabajoNegocioDescripcion;
+  int? tiempoActividad;
 }

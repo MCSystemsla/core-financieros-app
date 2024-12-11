@@ -82,7 +82,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
     bool? otrosIngresos,
     String? otrosIngresosDescripcion,
     String? objOrigenCatalogoValorId,
-    String? personasCargo,
+    int? personasCargo,
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
