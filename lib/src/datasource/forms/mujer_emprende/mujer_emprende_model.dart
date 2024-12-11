@@ -66,8 +66,8 @@ class MujerEmprendeModel {
         'comoImpactariaNegocio': comoImpactariaNegocio,
         'comoMejoraCalidadVida': comoMejoraCalidadVida,
         'otrosDatosCliente': otrosDatosCliente,
-        'tieneTrabajo ': tieneTrabajo,
-        'trabajoNegocioDescripcion': tieneTrabajo,
+        'tieneTrabajo': tieneTrabajo,
+        'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,
       };
 }

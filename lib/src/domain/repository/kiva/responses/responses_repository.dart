@@ -391,6 +391,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       // Agregar encabezados (si es necesario)
       request.headers.addAll({
         'Accept': 'application/json', // Indica que se espera una respuesta JSON
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
       });
       // Enviar la solicitud
       var response = await request.send();
@@ -502,6 +503,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.headers.addAll({
         'Accept': 'application/json', // Indica que se espera una respuesta JSON
         'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
       });
       // Enviar la solicitud
       var response = await request.send();
