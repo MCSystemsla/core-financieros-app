@@ -78,6 +78,10 @@ class _MejoraViviendaEntornoSocialState
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
+                      validator: (value) {
+                        if (value == null) 'input.input_validator'.tr();
+                        return null;
+                      },
                       isContainIcon: true,
                       title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                       items: ['input.yes'.tr(), 'input.no'.tr()],
@@ -149,6 +153,12 @@ class _MejoraViviendaEntornoSocialState
                     CommentaryWidget(
                       textEditingController: otrosIngresosController,
                       title: 'Describe tus otros Ingresos',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
                     ),
                   const Gap(20),
                   BlocBuilder<SolicitudesPendientesLocalDbCubit,
@@ -187,6 +197,13 @@ class _MejoraViviendaEntornoSocialState
                       return WhiteCard(
                         padding: const EdgeInsets.all(5),
                         child: JLuxDropdown(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'input.input_validator'.tr();
+                            }
+
+                            return null;
+                          },
                           isContainIcon: true,
                           isLoading: state.status == Status.inProgress,
                           title: 'Su comunidad es:'.tr(),

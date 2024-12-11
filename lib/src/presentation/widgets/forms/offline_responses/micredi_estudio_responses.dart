@@ -143,7 +143,8 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                     title: 'Número de personas a cargo:*'.tr(),
                     readOnly: true,
                     initialValue:
-                        state.miCrediEstudioDbLocal?.personasCargo ?? 'N/A',
+                        state.miCrediEstudioDbLocal?.personasCargo.toString() ??
+                            'N/A',
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -320,7 +321,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                                   '',
                               personasCargo:
                                   state.miCrediEstudioDbLocal?.personasCargo ??
-                                      '',
+                                      0,
                               numeroHijos:
                                   state.miCrediEstudioDbLocal?.numeroHijos ?? 0,
                               edadHijos:

@@ -354,7 +354,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                         if (tieneTrabajo == 'input.yes'.tr())
                           Response(
                             question: 'Cual?',
-                            response: otrosIngresosDescripcion.text.trim(),
+                            response: trabajoNegocioDescripcion.text.trim(),
                             index: 1,
                           ),
                         Response(

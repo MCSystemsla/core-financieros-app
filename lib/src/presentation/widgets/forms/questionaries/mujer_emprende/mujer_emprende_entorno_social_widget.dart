@@ -40,6 +40,7 @@ class _MujerEmprendeEntornoSocialWidgetState
   String? academicLevelItem;
   String? tieneTrabajo;
   final trabajoNegocioDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -181,6 +182,11 @@ class _MujerEmprendeEntornoSocialWidgetState
                     },
                   ),
                   CommentaryWidget(
+                    title: 'Tiempo Actividad',
+                    textInputType: TextInputType.number,
+                    textEditingController: tiempoActividad,
+                  ),
+                  CommentaryWidget(
                     title: '¿Que edades tienen sus hijos?',
                     textEditingController: question2,
                   ),
@@ -240,6 +246,8 @@ class _MujerEmprendeEntornoSocialWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MujerEmprendeCubit>().saveAnswers(
+                              tiempoActividad:
+                                  int.tryParse(tiempoActividad.text.trim()),
                               otrosIngresos:
                                   otrosIngresosItem == 'input.yes'.tr(),
                               otrosIngresosDescripcion:

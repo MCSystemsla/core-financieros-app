@@ -106,7 +106,7 @@ const MiCrediEstudioDbLocalSchema = CollectionSchema(
     r'personasCargo': PropertySchema(
       id: 17,
       name: r'personasCargo',
-      type: IsarType.string,
+      type: IsarType.long,
     ),
     r'planFuturo': PropertySchema(
       id: 18,
@@ -253,12 +253,6 @@ int _miCrediEstudioDbLocalEstimateSize(
     }
   }
   {
-    final value = object.personasCargo;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
     final value = object.planFuturo;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -314,7 +308,7 @@ void _miCrediEstudioDbLocalSerialize(
   writer.writeString(offsets[14], object.otrosDatosCliente);
   writer.writeBool(offsets[15], object.otrosIngresos);
   writer.writeString(offsets[16], object.otrosIngresosDescripcion);
-  writer.writeString(offsets[17], object.personasCargo);
+  writer.writeLong(offsets[17], object.personasCargo);
   writer.writeString(offsets[18], object.planFuturo);
   writer.writeString(offsets[19], object.quienApoya);
   writer.writeBool(offsets[20], object.relizandoProfesionalmente);
@@ -352,7 +346,7 @@ MiCrediEstudioDbLocal _miCrediEstudioDbLocalDeserialize(
   object.otrosDatosCliente = reader.readStringOrNull(offsets[14]);
   object.otrosIngresos = reader.readBoolOrNull(offsets[15]);
   object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[16]);
-  object.personasCargo = reader.readStringOrNull(offsets[17]);
+  object.personasCargo = reader.readLongOrNull(offsets[17]);
   object.planFuturo = reader.readStringOrNull(offsets[18]);
   object.quienApoya = reader.readStringOrNull(offsets[19]);
   object.relizandoProfesionalmente = reader.readBoolOrNull(offsets[20]);
@@ -407,7 +401,7 @@ P _miCrediEstudioDbLocalDeserializeProp<P>(
     case 16:
       return (reader.readStringOrNull(offset)) as P;
     case 17:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 18:
       return (reader.readStringOrNull(offset)) as P;
     case 19:
@@ -2841,58 +2835,49 @@ extension MiCrediEstudioDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-      QAfterFilterCondition> personasCargoEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+      QAfterFilterCondition> personasCargoEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'personasCargo',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
       QAfterFilterCondition> personasCargoGreaterThan(
-    String? value, {
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'personasCargo',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
       QAfterFilterCondition> personasCargoLessThan(
-    String? value, {
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'personasCargo',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
       QAfterFilterCondition> personasCargoBetween(
-    String? lower,
-    String? upper, {
+    int? lower,
+    int? upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2901,79 +2886,6 @@ extension MiCrediEstudioDbLocalQueryFilter on QueryBuilder<
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-      QAfterFilterCondition> personasCargoStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'personasCargo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-      QAfterFilterCondition> personasCargoEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'personasCargo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-          QAfterFilterCondition>
-      personasCargoContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'personasCargo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-          QAfterFilterCondition>
-      personasCargoMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'personasCargo',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-      QAfterFilterCondition> personasCargoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'personasCargo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
-      QAfterFilterCondition> personasCargoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'personasCargo',
-        value: '',
       ));
     });
   }
@@ -4881,10 +4793,9 @@ extension MiCrediEstudioDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QDistinct>
-      distinctByPersonasCargo({bool caseSensitive = true}) {
+      distinctByPersonasCargo() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'personasCargo',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'personasCargo');
     });
   }
 
@@ -5081,7 +4992,7 @@ extension MiCrediEstudioDbLocalQueryProperty on QueryBuilder<
     });
   }
 
-  QueryBuilder<MiCrediEstudioDbLocal, String?, QQueryOperations>
+  QueryBuilder<MiCrediEstudioDbLocal, int?, QQueryOperations>
       personasCargoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'personasCargo');

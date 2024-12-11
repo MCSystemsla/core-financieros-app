@@ -882,6 +882,7 @@ class _EntornoSocialEstudioWidgetState
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*'.tr(),
                     textEditingController: personasCargo,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -897,6 +898,7 @@ class _EntornoSocialEstudioWidgetState
                   CommentaryWidget(
                     title: 'Número de hijos:*'.tr(),
                     textEditingController: numeroHijos,
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
@@ -912,12 +914,6 @@ class _EntornoSocialEstudioWidgetState
                   CommentaryWidget(
                     title: 'forms.entorno_familiar.childs_age'.tr(),
                     textEditingController: edadHijos,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      return null;
-                    },
                   ),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -971,7 +967,8 @@ class _EntornoSocialEstudioWidgetState
                                   otrosIngresosDescripcion.text.trim(),
                               objOrigenCatalogoValorId:
                                   objOrigenCatalogoValorId,
-                              personasCargo: personasCargo.text.trim(),
+                              personasCargo:
+                                  int.tryParse(personasCargo.text.trim()),
                               numeroHijos:
                                   int.tryParse(numeroHijos.text.trim()),
                               edadHijos: edadHijos.text.trim(),
