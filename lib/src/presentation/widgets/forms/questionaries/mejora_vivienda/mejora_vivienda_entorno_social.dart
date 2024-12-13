@@ -1,5 +1,5 @@
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -174,65 +174,55 @@ class _MejoraViviendaEntornoSocialState
                       },
                     ),
                   const Gap(20),
-                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                      SolicitudesPendientesLocalDbState>(
-                    builder: (context, state) {
-                      return WhiteCard(
-                        marginTop: 15,
-                        padding: const EdgeInsets.all(10),
-                        child: JLuxDropdown(
-                          isContainIcon: true,
-                          validator: (value) {
-                            if (value == null) {
-                              return 'input.input_validator'.tr();
-                            }
+                  WhiteCard(
+                    marginTop: 15,
+                    padding: const EdgeInsets.all(10),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) {
+                          return 'input.input_validator'.tr();
+                        }
 
-                            return null;
-                          },
-                          isLoading: state.status == Status.inProgress,
-                          title: 'forms.entorno_familiar.person_origin'.tr(),
-                          items: state.departamentos,
-                          onChanged: (item) {
-                            if (item == null) return;
-                            question4 = item.valor;
-                            setState(() {});
-                          },
-                          toStringItem: (item) => item.nombre ?? '',
-                          hintText: 'input.select_department'.tr(),
-                        ),
-                      );
-                    },
+                        return null;
+                      },
+                      // isLoading: state.status == Status.inProgress,
+                      title: 'forms.entorno_familiar.person_origin'.tr(),
+                      items: Origin.originCatalogosValores,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        question4 = item.valor;
+                        setState(() {});
+                      },
+                      toStringItem: (item) => item.nombre,
+                      hintText: 'input.select_department'.tr(),
+                    ),
                   ),
                   const Gap(20),
-                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                      SolicitudesPendientesLocalDbState>(
-                    builder: (context, state) {
-                      return WhiteCard(
-                        padding: const EdgeInsets.all(5),
-                        child: JLuxDropdown(
-                          validator: (value) {
-                            if (value == null) {
-                              return 'input.input_validator'.tr();
-                            }
+                  WhiteCard(
+                    padding: const EdgeInsets.all(5),
+                    child: JLuxDropdown(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'input.input_validator'.tr();
+                        }
 
-                            return null;
-                          },
-                          isContainIcon: true,
-                          isLoading: state.status == Status.inProgress,
-                          title: 'Su comunidad es:'.tr(),
-                          items: state.comunidades,
-                          onChanged: (item) {
-                            if (item == null) return;
-                            question5 = item.valor;
-                            setState(() {});
-                          },
-                          toStringItem: (item) {
-                            return item.nombre ?? '';
-                          },
-                          hintText: 'input.select_option'.tr(),
-                        ),
-                      );
-                    },
+                        return null;
+                      },
+                      isContainIcon: true,
+                      // isLoading: state.status == Status.inProgress,
+                      title: 'Su comunidad es:'.tr(),
+                      items: Origin.comunidades,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        question5 = item.valor;
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item.nombre;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
                   ),
                   const Gap(20),
                   CommentaryWidget(
@@ -559,35 +549,31 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   },
                 ),
               const Gap(20),
-              BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                  SolicitudesPendientesLocalDbState>(
-                builder: (context, state) {
-                  return WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      isLoading: state.status == Status.inProgress,
-                      // validator: (value) {
-                      //   if (value == null) {
-                      //     return 'input.input_validator'.tr();
-                      //   }
 
-                      //   return null;
-                      // },
-                      title: 'Su comunidad es:'.tr(),
-                      items: state.comunidades,
-                      onChanged: (item) {
-                        if (item == null) return;
-                        question5 = item.valor;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item.nombre ?? '';
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
-                  );
-                },
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  // isLoading: state.status == Status.inProgress,
+                  // validator: (value) {
+                  //   if (value == null) {
+                  //     return 'input.input_validator'.tr();
+                  //   }
+
+                  //   return null;
+                  // },
+                  title: 'Su comunidad es:'.tr(),
+                  items: Origin.comunidades,
+                  onChanged: (item) {
+                    if (item == null) return;
+                    question5 = item.valor;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.nombre;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
               const Gap(20),
               CommentaryWidget(
