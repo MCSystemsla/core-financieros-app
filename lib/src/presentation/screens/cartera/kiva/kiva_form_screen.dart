@@ -62,48 +62,48 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
 
-            // if (state.status == Status.done) {
-            final departments =
-                context.read<DepartamentosCubit>().state.departamentos;
-            final departmentsList = departments.map(
-              (e) {
-                return DepartamentosDbLocal()
-                  ..nombre = e.nombre
-                  ..valor = e.valor;
-              },
-            ).toList();
-            await solicitudesProvider.saveComunidades(
-                comunidades: comunidadesProvider.state.comunidades.map(
-              (e) {
-                return ComunidadesLocalDb()
-                  ..nombre = e.nombre
-                  ..valor = e.valor;
-              },
-            ).toList());
-            await solicitudesProvider.saveDepartaments(
-                departaments: departmentsList);
-            await solicitudesProvider.saveSolicitudesPendientes(
-              solicitudes: state.solicitudesPendienteResponse.map(
+            if (state.status == Status.done) {
+              final departments =
+                  context.read<DepartamentosCubit>().state.departamentos;
+              final departmentsList = departments.map(
                 (e) {
-                  return SolicitudesPendientes()
-                    ..estado = e.estado
-                    ..fecha = e.fecha
-                    ..moneda = e.moneda
-                    ..numero = e.numero
-                    ..producto = e.producto
-                    ..solicitudId = e.id
-                    ..sucursal = LocalStorage().database
+                  return DepartamentosDbLocal()
                     ..nombre = e.nombre
-                    ..monto = double.tryParse(e.monto.toString()) ?? 0.00
-                    ..tipoSolicitud = e.tipoSolicitud
-                    ..idAsesor = int.tryParse(
-                      LocalStorage().userId,
-                    )
-                    ..motivoAnterior = e.motivoAnterior;
+                    ..valor = e.valor;
                 },
-              ).toList(),
-            );
-            // }
+              ).toList();
+              await solicitudesProvider.saveComunidades(
+                  comunidades: comunidadesProvider.state.comunidades.map(
+                (e) {
+                  return ComunidadesLocalDb()
+                    ..nombre = e.nombre
+                    ..valor = e.valor;
+                },
+              ).toList());
+              await solicitudesProvider.saveDepartaments(
+                  departaments: departmentsList);
+              await solicitudesProvider.saveSolicitudesPendientes(
+                solicitudes: state.solicitudesPendienteResponse.map(
+                  (e) {
+                    return SolicitudesPendientes()
+                      ..estado = e.estado
+                      ..fecha = e.fecha
+                      ..moneda = e.moneda
+                      ..numero = e.numero
+                      ..producto = e.producto
+                      ..solicitudId = e.id
+                      ..sucursal = LocalStorage().database
+                      ..nombre = e.nombre
+                      ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+                      ..tipoSolicitud = e.tipoSolicitud
+                      ..idAsesor = int.tryParse(
+                        LocalStorage().userId,
+                      )
+                      ..motivoAnterior = e.motivoAnterior;
+                  },
+                ).toList(),
+              );
+            }
           },
           builder: (context, state) {
             return switch (state.status) {
@@ -176,20 +176,8 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
               ),
             ),
             const Gap(10),
-            BlocConsumer<SolicitudesPendientesLocalDbCubit,
+            BlocBuilder<SolicitudesPendientesLocalDbCubit,
                 SolicitudesPendientesLocalDbState>(
-              listener: (context, state) {
-                if (state.status == Status.done) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                      content: Text(
-                          'Solicitudes Guardadas Localmente exitosamente!!'),
-                    ),
-                  );
-                }
-              },
               builder: (context, state) {
                 return switch (state.status) {
                   Status.inProgress => const LinearProgressIndicator(),

@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/uploa
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,12 +36,14 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getRecurrentEstandar(widget.solicitudId);
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getImagesModel(widget.solicitudId);
+    initFunctions();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    await solicitudesProvider.getRecurrentEstandar(widget.solicitudId);
   }
 
   @override
@@ -91,219 +94,238 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
             }
           },
           builder: (context, response) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CommentaryWidget(
-                    title: '¿Tiene otros ingresos?¿Cuales?*',
-                    initialValue: resp.recurrenteEstandarDbLocal?.otrosIngresos
-                        .toString(),
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Cuales?*',
-                    initialValue: resp.recurrenteEstandarDbLocal
-                            ?.otrosIngresosDescripcion ??
-                        'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de personas a cargo:*',
-                    readOnly: true,
-                    textInputType: TextInputType.number,
-                    initialValue: resp.recurrenteEstandarDbLocal?.personasCargo
-                            .toString() ??
-                        '0',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de hijos:*',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.numeroHijos
-                            .toString() ??
-                        '0',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Que edades tienen sus hijos?',
-                    readOnly: true,
-                    initialValue:
-                        resp.recurrenteEstandarDbLocal?.edadHijos.toString() ??
+            return switch (resp.status) {
+              Status.inProgress => const LoadingWidget(),
+              Status.done => SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CommentaryWidget(
+                        title: '¿Tiene otros ingresos?¿Cuales?*',
+                        initialValue: resp
+                            .recurrenteEstandarDbLocal?.otrosIngresos
+                            .toString(),
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Cuales?*',
+                        initialValue: resp.recurrenteEstandarDbLocal
+                                ?.otrosIngresosDescripcion ??
                             'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Qué tipo de estudios reciben sus hijos?',
-                    readOnly: true,
-                    initialValue: resp
-                            .recurrenteEstandarDbLocal?.tipoEstudioHijos
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Coincide la respuesta del cliente con el formato anterior?',
-                    readOnly: true,
-                    initialValue: resp
-                            .recurrenteEstandarDbLocal?.coincideRespuesta
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-                    readOnly: true,
-                    initialValue: resp
-                            .recurrenteEstandarDbLocal?.explicacionInversion
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Hay alguien que le apoye en su negocio?',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.apoyanNegocio
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'De ser positivo, favor responder cuántas personas',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.cuantosApoyan
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
-                    readOnly: true,
-                    initialValue: resp
-                            .recurrenteEstandarDbLocal?.comoMejoraEntorno
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿En qué piensa invertir este nuevo préstamo? Explique',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.motivoPrestamo
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.comoFortalece
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'A futuro ¿Cuál seria su siguiente paso?*',
-                    readOnly: true,
-                    initialValue: resp.recurrenteEstandarDbLocal?.siguientePaso
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
-                    readOnly: true,
-                    initialValue: resp
-                            .recurrenteEstandarDbLocal?.personaAutoSuficiente
-                            .toString() ??
-                        'N/A',
-                  ),
-                  const Gap(20),
-                  ButtonActionsWidget(
-                    disabled: resp.status == Status.inProgress ||
-                        response.status == Status.inProgress,
-                    onPreviousPressed: () {
-                      context.pop();
-                    },
-                    onNextPressed: () {
-                      context
-                          .read<RecurrenteEstandartCubit>()
-                          .sendOfflineAnswers(
-                              recurrentEstandarModel: RecurrenteEstandarModel(
-                            tieneTrabajo:
-                                resp.recurrenteEstandarDbLocal?.tieneTrabajo ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Número de personas a cargo:*',
+                        readOnly: true,
+                        textInputType: TextInputType.number,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.personasCargo
+                                .toString() ??
+                            '0',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Número de hijos:*',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.numeroHijos
+                                .toString() ??
+                            '0',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Que edades tienen sus hijos?',
+                        readOnly: true,
+                        initialValue: resp.recurrenteEstandarDbLocal?.edadHijos
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Qué tipo de estudios reciben sus hijos?',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.tipoEstudioHijos
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Coincide la respuesta del cliente con el formato anterior?',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.coincideRespuesta
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.explicacionInversion
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Hay alguien que le apoye en su negocio?',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.apoyanNegocio
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            'De ser positivo, favor responder cuántas personas',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.cuantosApoyan
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.comoMejoraEntorno
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿En qué piensa invertir este nuevo préstamo? Explique',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.motivoPrestamo
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.comoFortalece
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'A futuro ¿Cuál seria su siguiente paso?*',
+                        readOnly: true,
+                        initialValue: resp
+                                .recurrenteEstandarDbLocal?.siguientePaso
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
+                        readOnly: true,
+                        initialValue: resp.recurrenteEstandarDbLocal
+                                ?.personaAutoSuficiente
+                                .toString() ??
+                            'N/A',
+                      ),
+                      const Gap(20),
+                      ButtonActionsWidget(
+                        disabled: resp.status == Status.inProgress ||
+                            response.status == Status.inProgress,
+                        onPreviousPressed: () {
+                          context.pop();
+                        },
+                        onNextPressed: () {
+                          context
+                              .read<RecurrenteEstandartCubit>()
+                              .sendOfflineAnswers(
+                                  recurrentEstandarModel:
+                                      RecurrenteEstandarModel(
+                                tieneTrabajo: resp.recurrenteEstandarDbLocal
+                                        ?.tieneTrabajo ??
                                     false,
-                            trabajoNegocioDescripcion: resp
-                                    .recurrenteEstandarDbLocal
-                                    ?.trabajoDescripcion ??
-                                '',
-                            database:
-                                resp.recurrenteEstandarDbLocal?.database ?? '',
-                            otrosIngresos:
-                                resp.recurrenteEstandarDbLocal?.otrosIngresos ??
+                                trabajoNegocioDescripcion: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.trabajoDescripcion ??
+                                    '',
+                                database:
+                                    resp.recurrenteEstandarDbLocal?.database ??
+                                        '',
+                                otrosIngresos: resp.recurrenteEstandarDbLocal
+                                        ?.otrosIngresos ??
                                     false,
-                            otrosIngresosDescripcion: resp
-                                    .recurrenteEstandarDbLocal
-                                    ?.otrosIngresosDescripcion ??
-                                '',
-                            personasCargo:
-                                resp.recurrenteEstandarDbLocal?.personasCargo ??
+                                otrosIngresosDescripcion: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.otrosIngresosDescripcion ??
+                                    '',
+                                personasCargo: resp.recurrenteEstandarDbLocal
+                                        ?.personasCargo ??
                                     0,
-                            numeroHijos:
-                                resp.recurrenteEstandarDbLocal?.numeroHijos ??
+                                numeroHijos: resp.recurrenteEstandarDbLocal
+                                        ?.numeroHijos ??
                                     0,
-                            edadHijos:
-                                resp.recurrenteEstandarDbLocal?.edadHijos ?? '',
-                            tipoEstudioHijos: resp.recurrenteEstandarDbLocal
-                                    ?.tipoEstudioHijos ??
-                                '',
-                            apoyanNegocio:
-                                resp.recurrenteEstandarDbLocal?.apoyanNegocio ??
+                                edadHijos:
+                                    resp.recurrenteEstandarDbLocal?.edadHijos ??
+                                        '',
+                                tipoEstudioHijos: resp.recurrenteEstandarDbLocal
+                                        ?.tipoEstudioHijos ??
+                                    '',
+                                apoyanNegocio: resp.recurrenteEstandarDbLocal
+                                        ?.apoyanNegocio ??
                                     false,
-                            cuantosApoyan:
-                                resp.recurrenteEstandarDbLocal?.cuantosApoyan ??
+                                cuantosApoyan: resp.recurrenteEstandarDbLocal
+                                        ?.cuantosApoyan ??
                                     '',
-                            objSolicitudRecurrenteId: resp
-                                    .recurrenteEstandarDbLocal
-                                    ?.objSolicitudRecurrenteId ??
-                                0,
-                            coincideRespuesta: resp.recurrenteEstandarDbLocal
-                                    ?.coincideRespuesta ??
-                                false,
-                            explicacionInversion: resp.recurrenteEstandarDbLocal
-                                    ?.explicacionInversion ??
-                                '',
-                            comoMejoraEntorno: resp.recurrenteEstandarDbLocal
-                                    ?.comoMejoraEntorno ??
-                                '',
-                            motivoPrestamo: resp.recurrenteEstandarDbLocal
-                                    ?.motivoPrestamo ??
-                                '',
-                            comoFortalece:
-                                resp.recurrenteEstandarDbLocal?.comoFortalece ??
+                                objSolicitudRecurrenteId: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.objSolicitudRecurrenteId ??
+                                    0,
+                                coincideRespuesta: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.coincideRespuesta ??
+                                    false,
+                                explicacionInversion: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.explicacionInversion ??
                                     '',
-                            siguientePaso:
-                                resp.recurrenteEstandarDbLocal?.siguientePaso ??
+                                comoMejoraEntorno: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.comoMejoraEntorno ??
                                     '',
-                            personaAutoSuficiente: resp
-                                    .recurrenteEstandarDbLocal
-                                    ?.personaAutoSuficiente ??
-                                '',
-                          ));
-                    },
-                    previousTitle: 'Salir',
-                    nextTitle: 'Enviar',
+                                motivoPrestamo: resp.recurrenteEstandarDbLocal
+                                        ?.motivoPrestamo ??
+                                    '',
+                                comoFortalece: resp.recurrenteEstandarDbLocal
+                                        ?.comoFortalece ??
+                                    '',
+                                siguientePaso: resp.recurrenteEstandarDbLocal
+                                        ?.siguientePaso ??
+                                    '',
+                                personaAutoSuficiente: resp
+                                        .recurrenteEstandarDbLocal
+                                        ?.personaAutoSuficiente ??
+                                    '',
+                              ));
+                        },
+                        previousTitle: 'Salir',
+                        nextTitle: 'Enviar',
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
+                ),
+              _ => const Text('wwww')
+            };
           },
         );
       },
@@ -325,13 +347,15 @@ class EstandarForm extends StatefulWidget {
 class _EstandarFormState extends State<EstandarForm> {
   @override
   void initState() {
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getEstandar(widget.solicitudId);
-    context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getImagesModel(widget.solicitudId);
+    initFunctions();
     super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    await solicitudesProvider.getEstandar(widget.solicitudId);
   }
 
   @override
@@ -380,221 +404,244 @@ class _EstandarFormState extends State<EstandarForm> {
             }
           },
           builder: (context, response) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Tiene otros ingresos?¿Cuales?*',
-                    initialValue: state.estandarDbLocal?.otrosIngresos ?? false
-                        ? 'input.yes'.tr()
-                        : 'input.no'.tr(),
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Cuales?',
-                    initialValue:
-                        state.estandarDbLocal?.otrosIngresosDescripcion ??
+            return switch (state.status) {
+              Status.inProgress => const LoadingWidget(),
+              Status.done => SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Tiene otros ingresos?¿Cuales?*',
+                        initialValue:
+                            state.estandarDbLocal?.otrosIngresos ?? false
+                                ? 'input.yes'.tr()
+                                : 'input.no'.tr(),
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Cuales?',
+                        initialValue:
+                            state.estandarDbLocal?.otrosIngresosDescripcion ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'forms.entorno_familiar.person_origin'.tr(),
+                        initialValue:
+                            state.estandarDbLocal?.objOrigenCatalogoValorId ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Número de personas a cargo:*',
+                        initialValue:
+                            state.estandarDbLocal?.personasCargo.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Número de hijos:*',
+                        initialValue:
+                            state.estandarDbLocal?.numeroHijos.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Que edades tienen sus hijos?',
+                        initialValue:
+                            state.estandarDbLocal?.edadHijos.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Qué tipo de estudios reciben sus hijos?',
+                        initialValue: state.estandarDbLocal?.tipoEstudioHijos
+                                .toString() ??
                             'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'forms.entorno_familiar.person_origin'.tr(),
-                    initialValue:
-                        state.estandarDbLocal?.objOrigenCatalogoValorId ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Qué tipo de estudios reciben sus hijos?',
+                        initialValue: state.estandarDbLocal?.tipoEstudioHijos
+                                .toString() ??
                             'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de personas a cargo:*',
-                    initialValue:
-                        state.estandarDbLocal?.personasCargo.toString() ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Cuenténos cómo inició su negocio?*',
+                        initialValue:
+                            state.estandarDbLocal?.inicioNegocio.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
+                        initialValue:
+                            state.estandarDbLocal?.inicioNegocio.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
+                        initialValue:
+                            state.estandarDbLocal?.apoyanNegocio.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: 'Favor responder cuántas personas',
+                        initialValue:
+                            state.estandarDbLocal?.cuantosApoyan.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
+                        initialValue: state.estandarDbLocal?.publicitarNegocio
+                                .toString() ??
                             'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de hijos:*',
-                    initialValue:
-                        state.estandarDbLocal?.numeroHijos.toString() ?? 'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Que edades tienen sus hijos?',
-                    initialValue:
-                        state.estandarDbLocal?.edadHijos.toString() ?? 'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Qué tipo de estudios reciben sus hijos?',
-                    initialValue:
-                        state.estandarDbLocal?.tipoEstudioHijos.toString() ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Cómo mira su negocio en los proximos años?*',
+                        initialValue: state
+                                .estandarDbLocal?.negocioProximosAnios
+                                .toString() ??
                             'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Qué tipo de estudios reciben sus hijos?',
-                    initialValue:
-                        state.estandarDbLocal?.tipoEstudioHijos.toString() ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title: '¿Para qué solicitó el préstamo? Explique',
+                        initialValue:
+                            state.estandarDbLocal?.motivoPrestamo.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Cuáles son sus planes personales para los proximos 5 años?*',
+                        initialValue:
+                            state.estandarDbLocal?.planesFuturo.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
+                        initialValue:
+                            state.estandarDbLocal?.comoMejoraVida.toString() ??
+                                'N/A',
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        title:
+                            'Otros datos relevantes e interesantes del cliente',
+                        initialValue: state.estandarDbLocal?.otrosDatosCliente
+                                .toString() ??
                             'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Cuenténos cómo inició su negocio?*',
-                    initialValue:
-                        state.estandarDbLocal?.inicioNegocio.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
-                    initialValue:
-                        state.estandarDbLocal?.inicioNegocio.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Hay alguien que le apoye en su negocio? de ser positivo,?',
-                    initialValue:
-                        state.estandarDbLocal?.apoyanNegocio.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Favor responder cuántas personas',
-                    initialValue:
-                        state.estandarDbLocal?.cuantosApoyan.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿En qué tipo de lugares le gustaría dar a conocer su producto? ¿Por qué?*',
-                    initialValue:
-                        state.estandarDbLocal?.publicitarNegocio.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Cómo mira su negocio en los proximos años?*',
-                    initialValue: state.estandarDbLocal?.negocioProximosAnios
-                            .toString() ??
-                        'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Para qué solicitó el préstamo? Explique',
-                    initialValue:
-                        state.estandarDbLocal?.motivoPrestamo.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Cuáles son sus planes personales para los proximos 5 años?*',
-                    initialValue:
-                        state.estandarDbLocal?.planesFuturo.toString() ?? 'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title:
-                        '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
-                    initialValue:
-                        state.estandarDbLocal?.comoMejoraVida.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Otros datos relevantes e interesantes del cliente',
-                    initialValue:
-                        state.estandarDbLocal?.otrosDatosCliente.toString() ??
-                            'N/A',
-                    readOnly: true,
-                  ),
-                  const Gap(20),
-                  ButtonActionsWidget(
-                    disabled: state.status == Status.inProgress ||
-                        response.status == Status.inProgress,
-                    onPreviousPressed: () {
-                      context.pop();
-                    },
-                    onNextPressed: () {
-                      context.read<EstandarCubit>().sendOffilneAnswers(
-                            estandarModel: EstandarModel(
-                              tieneTrabajo:
-                                  state.estandarDbLocal?.tieneTrabajo ?? false,
-                              trabajoNegocioDescripcion: state.estandarDbLocal
-                                      ?.trabajoNegocioDescripcion ??
-                                  '',
-                              objSolicitudNuevamenorId: state.estandarDbLocal
-                                      ?.objSolicitudNuevamenorId ??
-                                  0,
-                              database: state.estandarDbLocal?.database ?? '',
-                              otrosIngresos:
-                                  state.estandarDbLocal?.otrosIngresos ?? false,
-                              otrosIngresosDescripcion: state.estandarDbLocal
-                                      ?.otrosIngresosDescripcion ??
-                                  '',
-                              objOrigenCatalogoValorId: state.estandarDbLocal
-                                      ?.objOrigenCatalogoValorId ??
-                                  '',
-                              personasCargo:
-                                  state.estandarDbLocal?.personasCargo ?? 0,
-                              numeroHijos:
-                                  state.estandarDbLocal?.numeroHijos ?? 0,
-                              edadHijos: state.estandarDbLocal?.edadHijos ?? '',
-                              tipoEstudioHijos:
-                                  state.estandarDbLocal?.tipoEstudioHijos ?? '',
-                              inicioNegocio:
-                                  state.estandarDbLocal?.inicioNegocio ??
-                                      DateTime.now(),
-                              apoyanNegocio:
-                                  state.estandarDbLocal?.apoyanNegocio ?? false,
-                              cuantosApoyan:
-                                  state.estandarDbLocal?.cuantosApoyan ?? '',
-                              publicitarNegocio:
-                                  state.estandarDbLocal?.publicitarNegocio ??
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      ButtonActionsWidget(
+                        disabled: state.status == Status.inProgress ||
+                            response.status == Status.inProgress,
+                        onPreviousPressed: () {
+                          context.pop();
+                        },
+                        onNextPressed: () {
+                          context.read<EstandarCubit>().sendOffilneAnswers(
+                                estandarModel: EstandarModel(
+                                  tieneTrabajo:
+                                      state.estandarDbLocal?.tieneTrabajo ??
+                                          false,
+                                  trabajoNegocioDescripcion: state
+                                          .estandarDbLocal
+                                          ?.trabajoNegocioDescripcion ??
                                       '',
-                              negocioProximosAnios:
-                                  state.estandarDbLocal?.negocioProximosAnios ??
+                                  objSolicitudNuevamenorId: state
+                                          .estandarDbLocal
+                                          ?.objSolicitudNuevamenorId ??
+                                      0,
+                                  database:
+                                      state.estandarDbLocal?.database ?? '',
+                                  otrosIngresos:
+                                      state.estandarDbLocal?.otrosIngresos ??
+                                          false,
+                                  otrosIngresosDescripcion: state
+                                          .estandarDbLocal
+                                          ?.otrosIngresosDescripcion ??
                                       '',
-                              motivoPrestamo:
-                                  state.estandarDbLocal?.motivoPrestamo ?? '',
-                              comoMejoraVida:
-                                  state.estandarDbLocal?.comoMejoraVida ?? '',
-                              planesFuturo:
-                                  state.estandarDbLocal?.planesFuturo ?? '',
-                              otrosDatosCliente:
-                                  state.estandarDbLocal?.otrosDatosCliente ??
+                                  objOrigenCatalogoValorId: state
+                                          .estandarDbLocal
+                                          ?.objOrigenCatalogoValorId ??
                                       '',
-                            ),
-                          );
-                    },
-                    previousTitle: 'Salir',
-                    nextTitle: 'Enviar',
+                                  personasCargo:
+                                      state.estandarDbLocal?.personasCargo ?? 0,
+                                  numeroHijos:
+                                      state.estandarDbLocal?.numeroHijos ?? 0,
+                                  edadHijos:
+                                      state.estandarDbLocal?.edadHijos ?? '',
+                                  tipoEstudioHijos:
+                                      state.estandarDbLocal?.tipoEstudioHijos ??
+                                          '',
+                                  inicioNegocio:
+                                      state.estandarDbLocal?.inicioNegocio ??
+                                          DateTime.now(),
+                                  apoyanNegocio:
+                                      state.estandarDbLocal?.apoyanNegocio ??
+                                          false,
+                                  cuantosApoyan:
+                                      state.estandarDbLocal?.cuantosApoyan ??
+                                          '',
+                                  publicitarNegocio: state
+                                          .estandarDbLocal?.publicitarNegocio ??
+                                      '',
+                                  negocioProximosAnios: state.estandarDbLocal
+                                          ?.negocioProximosAnios ??
+                                      '',
+                                  motivoPrestamo:
+                                      state.estandarDbLocal?.motivoPrestamo ??
+                                          '',
+                                  comoMejoraVida:
+                                      state.estandarDbLocal?.comoMejoraVida ??
+                                          '',
+                                  planesFuturo:
+                                      state.estandarDbLocal?.planesFuturo ?? '',
+                                  otrosDatosCliente: state
+                                          .estandarDbLocal?.otrosDatosCliente ??
+                                      '',
+                                ),
+                              );
+                        },
+                        previousTitle: 'Salir',
+                        nextTitle: 'Enviar',
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
+                ),
+              _ => const SizedBox(),
+            };
           },
         );
       },

@@ -69,7 +69,7 @@ class RecurrenteMujerEmprendeModel {
         'mejoraraEntornoExplicacion': mejoraraEntornoExplicacion,
         'siguientePaso': siguientePaso,
         'alcanzaraMeta': alcanzaraMeta,
-        'explicacionAlcanzaraMeta': explicacionAlcanzaraMeta,
+        'alcanzaraMetaExplicacion': explicacionAlcanzaraMeta,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion ': tieneTrabajoDescripcion,
       };
