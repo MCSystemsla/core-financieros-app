@@ -510,6 +510,10 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -716,6 +720,10 @@ class _SignQuestionary extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,

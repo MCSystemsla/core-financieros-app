@@ -220,6 +220,10 @@ class _RecurrentSign extends StatelessWidget {
                                     .state
                                     .solicitudId,
                               ),
+                              formularioKiva: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .currentRoute,
                             );
                       }
                       await customPopUp(

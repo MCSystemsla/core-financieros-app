@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -66,6 +67,8 @@ class _ViviendaNuevaOfflineResponseState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,
@@ -319,6 +322,8 @@ class _RecurrenteViviendaOfflineResponseState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,

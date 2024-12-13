@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
@@ -64,6 +65,8 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               await customPopUp(
@@ -329,6 +332,8 @@ class _RecurrenteEnergiaLimpiaOfflineState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               await customPopUp(

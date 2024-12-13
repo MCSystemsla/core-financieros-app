@@ -14,7 +14,12 @@ class KivaRouteState extends Equatable {
   });
 
   @override
-  List<Object> get props => [currentRoute, solicitudId, nombre, motivoAnterior];
+  List<Object> get props => [
+        currentRoute,
+        solicitudId,
+        nombre,
+        motivoAnterior,
+      ];
 
   KivaRouteState copyWith({
     String? currentRoute,

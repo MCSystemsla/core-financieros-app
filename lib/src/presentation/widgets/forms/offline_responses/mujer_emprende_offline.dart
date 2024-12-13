@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -63,6 +64,8 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               await customPopUp(
@@ -346,6 +349,8 @@ class _RecurrenteMujerEmprendeOfflineState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               await customPopUp(

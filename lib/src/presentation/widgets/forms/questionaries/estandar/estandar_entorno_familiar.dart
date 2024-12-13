@@ -36,6 +36,18 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   String? tipoEstudioHijos;
+  @override
+  void initState() {
+    initFunctions();
+    super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -38,6 +38,18 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
   final numeroHijos = TextEditingController();
   final otrosIngresosDescripcion = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    initFunctions();
+    super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
+  }
 
   @override
   Widget build(BuildContext context) {

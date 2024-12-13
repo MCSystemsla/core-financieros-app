@@ -299,7 +299,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     // final dio = Dio();
 
     const url =
-        'https://core-financiero-backend-n8un.onrender.com/kiva/subir-imagenes';
+        'https://core-financiero-backend-3.onrender.com/kiva/subir-imagenes';
     // Crea la solicitud Multipart
     //   final formData = FormData.fromMap({
     //     'solicitudId': '3925',
@@ -346,10 +346,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     // } catch (e) {
     //   _logger.e(e);
     //   return false;
+    final currentProduct = setCurrentProdut(product: formularioKiva);
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = 'ScrKivaCreditoEstandarRecurrente';
+      request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
 
       // Agregar imágenes
@@ -395,17 +396,38 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       });
       // Enviar la solicitud
       var response = await request.send();
-      // if (response.statusCode == 201) {
-      //   print(
-      //       '¡Éxito! Respuesta del servidor: ${await http.Response.fromStream(response)}');
-      //   return true;
-      // }
+
+      var responseBody = await http.Response.fromStream(response);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+      } else {
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+      }
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
     }
+  }
+
+  String setCurrentProdut({required String product}) {
+    return switch (product) {
+      'VIVIENDA NUEVA' => 'ScrKivaMejoraVivienda',
+      'VIVIENDA REPRESTAMO' => 'ScrKivaMejoraViviendaRecurrente',
+      'ESTANDAR NUEVO' => 'ScrKivaCreditoEstandar',
+      'ESTANDAR RECURRENTE' => 'ScrKivaCreditoEstandarRecurrente',
+      'MICREDIESTUDIO NUEVO' => 'ScrKivaMiCrediEstudio',
+      'MICREDIESTUDIO RECURRENTE' => 'ScrKivaMiCrediEstudioRecurrente',
+      'MUJER EMPRENDE NUEVO' => 'ScrKivaMujerEmprende',
+      'MUJER EMPRENDE RECURRENTE' => 'ScrKivaMujerEmprendeRecurrente',
+      'AGUA Y SANEAMIENTO NUEVO' => 'ScrKivaAguaSaneamiento',
+      'AGUA Y SANEAMIENTO RECURRENTE' => 'ScrKivaAguaSaneamientoRecurrente',
+      'ASER NUEVO' => 'ScrKivaEnergiaLimpia',
+      'ASER RECURRENTE' => 'ScrKivaEnergiaLimpiaRecurrente',
+      _ => 'NO PRODUCT',
+    };
   }
 
   @override
@@ -455,12 +477,14 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
   }) async {
+    final currentProduct = setCurrentProdut(product: formularioKiva);
+
     const url =
         'https://core-financiero-backend-n8un.onrender.com/kiva/subir-imagenes';
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = 'ScrKivaCreditoEstandarRecurrente';
+      request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
 
       // Agregar imágenes

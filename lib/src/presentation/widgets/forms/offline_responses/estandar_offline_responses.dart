@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
@@ -33,13 +34,13 @@ class EstandarOfflineForm extends StatefulWidget {
 class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   @override
   void initState() {
+    super.initState();
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getRecurrentEstandar(widget.solicitudId);
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getImagesModel(widget.solicitudId);
-    super.initState();
   }
 
   @override
@@ -67,6 +68,8 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     fotoCedula: resp.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               if (!context.mounted) return;
@@ -357,6 +360,8 @@ class _EstandarFormState extends State<EstandarForm> {
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,

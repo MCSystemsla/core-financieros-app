@@ -57,53 +57,53 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
         ),
         body: BlocConsumer<SolicitudesPendientesCubit,
             SolicitudesPendientesState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             final comunidadesProvider = context.read<ComunidadesCubit>();
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
 
-            if (state.status == Status.done) {
-              final departments =
-                  context.read<DepartamentosCubit>().state.departamentos;
-              final departmentsList = departments.map(
+            // if (state.status == Status.done) {
+            final departments =
+                context.read<DepartamentosCubit>().state.departamentos;
+            final departmentsList = departments.map(
+              (e) {
+                return DepartamentosDbLocal()
+                  ..nombre = e.nombre
+                  ..valor = e.valor;
+              },
+            ).toList();
+            await solicitudesProvider.saveComunidades(
+                comunidades: comunidadesProvider.state.comunidades.map(
+              (e) {
+                return ComunidadesLocalDb()
+                  ..nombre = e.nombre
+                  ..valor = e.valor;
+              },
+            ).toList());
+            await solicitudesProvider.saveDepartaments(
+                departaments: departmentsList);
+            await solicitudesProvider.saveSolicitudesPendientes(
+              solicitudes: state.solicitudesPendienteResponse.map(
                 (e) {
-                  return DepartamentosDbLocal()
+                  return SolicitudesPendientes()
+                    ..estado = e.estado
+                    ..fecha = e.fecha
+                    ..moneda = e.moneda
+                    ..numero = e.numero
+                    ..producto = e.producto
+                    ..solicitudId = e.id
+                    ..sucursal = LocalStorage().database
                     ..nombre = e.nombre
-                    ..valor = e.valor;
+                    ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+                    ..tipoSolicitud = e.tipoSolicitud
+                    ..idAsesor = int.tryParse(
+                      LocalStorage().userId,
+                    )
+                    ..motivoAnterior = e.motivoAnterior;
                 },
-              ).toList();
-              solicitudesProvider.saveComunidades(
-                  comunidades: comunidadesProvider.state.comunidades.map(
-                (e) {
-                  return ComunidadesLocalDb()
-                    ..nombre = e.nombre
-                    ..valor = e.valor;
-                },
-              ).toList());
-              solicitudesProvider.saveDepartaments(
-                  departaments: departmentsList);
-              solicitudesProvider.saveSolicitudesPendientes(
-                solicitudes: state.solicitudesPendienteResponse.map(
-                  (e) {
-                    return SolicitudesPendientes()
-                      ..estado = e.estado
-                      ..fecha = e.fecha
-                      ..moneda = e.moneda
-                      ..numero = e.numero
-                      ..producto = e.producto
-                      ..solicitudId = e.id
-                      ..sucursal = LocalStorage().database
-                      ..nombre = e.nombre
-                      ..monto = double.tryParse(e.monto.toString()) ?? 0.00
-                      ..tipoSolicitud = e.tipoSolicitud
-                      ..idAsesor = int.tryParse(
-                        LocalStorage().userId,
-                      )
-                      ..motivoAnterior = e.motivoAnterior;
-                  },
-                ).toList(),
-              );
-            }
+              ).toList(),
+            );
+            // }
           },
           builder: (context, state) {
             return switch (state.status) {
@@ -138,10 +138,6 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
   void initState() {
     super.initState();
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-    final solicitudesProvider =
-        context.read<SolicitudesPendientesLocalDbCubit>();
-    solicitudesProvider.getComunidades();
-    solicitudesProvider.getDepartamentos();
   }
 
   void _filterSolicitudes(String query) {

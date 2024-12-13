@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
@@ -65,6 +66,8 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,
@@ -369,6 +372,8 @@ class _RecurrenteSaneamientoOfflineState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    formularioKiva:
+                        context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,
