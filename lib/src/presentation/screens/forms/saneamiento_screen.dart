@@ -253,6 +253,10 @@ class _RecurrentSign extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -465,6 +469,10 @@ class _EstandarSignState extends State<EstandarSign> {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -1008,6 +1016,10 @@ class _SaneamientoSign extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -1213,6 +1225,10 @@ class SignQuestionaryWidget extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,

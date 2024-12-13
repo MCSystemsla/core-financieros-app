@@ -32,6 +32,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
   Future<void> uploadUserFiles({
     required File fotoFirma,
     required int solicitudId,
+    required String formularioKiva,
   }) async {
     await repository.uploadUserFiles(
       imagen1: state.imagen1!,
@@ -40,7 +41,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       fotoFirma: fotoFirma,
       fotoCedula: state.fotoCedula!,
       solicitudId: solicitudId,
-      formularioKiva: 'ScrKivaCreditoEstandarRecurrente',
+      formularioKiva: formularioKiva,
       database: LocalStorage().database,
     );
   }
@@ -52,6 +53,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String fotoCedula,
     required String fotoFirma,
     required int solicitudId,
+    required String formularioKiva,
   }) async {
     await repository.uploadUserFilesOffline(
       imagen1: imagen1,
@@ -60,7 +62,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       fotoFirma: fotoFirma,
       fotoCedula: fotoCedula,
       solicitudId: solicitudId,
-      formularioKiva: 'ScrKivaCreditoEstandarRecurrente',
+      formularioKiva: formularioKiva,
       database: LocalStorage().database,
     );
   }

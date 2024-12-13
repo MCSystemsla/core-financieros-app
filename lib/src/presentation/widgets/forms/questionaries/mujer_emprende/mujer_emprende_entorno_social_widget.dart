@@ -42,6 +42,18 @@ class _MujerEmprendeEntornoSocialWidgetState
   final trabajoNegocioDescripcion = TextEditingController();
   final tiempoActividad = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    initFunctions();
+    super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
+  }
 
   @override
   Widget build(BuildContext context) {

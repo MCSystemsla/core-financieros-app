@@ -240,6 +240,10 @@ class RecurrentSign extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,

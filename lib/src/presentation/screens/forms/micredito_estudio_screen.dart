@@ -217,6 +217,10 @@ class _RecurrentSigntature extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -592,6 +596,10 @@ class _SignUserSignature extends StatelessWidget {
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
+                            formularioKiva: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .currentRoute,
                           );
                       await customPopUp(
                         context: context,
@@ -736,6 +744,18 @@ class _EntornoSocialEstudioWidgetState
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    initFunctions();
+    super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
+  }
 
   @override
   Widget build(BuildContext context) {

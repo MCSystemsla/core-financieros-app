@@ -57,7 +57,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
         ),
         body: BlocConsumer<SolicitudesPendientesCubit,
             SolicitudesPendientesState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             final comunidadesProvider = context.read<ComunidadesCubit>();
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
@@ -72,7 +72,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                     ..valor = e.valor;
                 },
               ).toList();
-              solicitudesProvider.saveComunidades(
+              await solicitudesProvider.saveComunidades(
                   comunidades: comunidadesProvider.state.comunidades.map(
                 (e) {
                   return ComunidadesLocalDb()
@@ -80,9 +80,9 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                     ..valor = e.valor;
                 },
               ).toList());
-              solicitudesProvider.saveDepartaments(
+              await solicitudesProvider.saveDepartaments(
                   departaments: departmentsList);
-              solicitudesProvider.saveSolicitudesPendientes(
+              await solicitudesProvider.saveSolicitudesPendientes(
                 solicitudes: state.solicitudesPendienteResponse.map(
                   (e) {
                     return SolicitudesPendientes()
@@ -138,10 +138,6 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
   void initState() {
     super.initState();
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-    final solicitudesProvider =
-        context.read<SolicitudesPendientesLocalDbCubit>();
-    solicitudesProvider.getComunidades();
-    solicitudesProvider.getDepartamentos();
   }
 
   void _filterSolicitudes(String query) {
@@ -180,20 +176,8 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
               ),
             ),
             const Gap(10),
-            BlocConsumer<SolicitudesPendientesLocalDbCubit,
+            BlocBuilder<SolicitudesPendientesLocalDbCubit,
                 SolicitudesPendientesLocalDbState>(
-              listener: (context, state) {
-                if (state.status == Status.done) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                      content: Text(
-                          'Solicitudes Guardadas Localmente exitosamente!!'),
-                    ),
-                  );
-                }
-              },
               builder: (context, state) {
                 return switch (state.status) {
                   Status.inProgress => const LinearProgressIndicator(),

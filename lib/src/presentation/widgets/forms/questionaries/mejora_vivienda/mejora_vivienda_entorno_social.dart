@@ -48,6 +48,19 @@ class _MejoraViviendaEntornoSocialState
     extends State<MejoraViviendaEntornoSocial>
     with AutomaticKeepAliveClientMixin {
   @override
+  void initState() {
+    initFunctions();
+    super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return switch (widget.isRecurrentForm) {
