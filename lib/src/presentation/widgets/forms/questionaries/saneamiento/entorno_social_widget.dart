@@ -1,6 +1,6 @@
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -164,32 +164,27 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         textEditingController: otrosIngresosDescripcion,
                       ),
                     const Gap(10),
-                    BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                        SolicitudesPendientesLocalDbState>(
-                      builder: (context, state) {
-                        return WhiteCard(
-                          marginTop: 15,
-                          padding: const EdgeInsets.all(10),
-                          child: JLuxDropdown(
-                            isContainIcon: true,
-                            isLoading: state.status == Status.inProgress,
-                            title: 'forms.entorno_familiar.person_origin'.tr(),
-                            validator: (value) {
-                              if (value == null) {
-                                return 'input.input_validator'.tr();
-                              }
-                              return null;
-                            },
-                            items: state.departamentos,
-                            onChanged: (item) {
-                              if (item == null) return;
-                              personOrigin = item.valor;
-                            },
-                            toStringItem: (item) => item.nombre ?? '',
-                            hintText: 'input.select_department'.tr(),
-                          ),
-                        );
-                      },
+                    WhiteCard(
+                      marginTop: 15,
+                      padding: const EdgeInsets.all(10),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        // isLoading: state.status == Status.inProgress,
+                        title: 'forms.entorno_familiar.person_origin'.tr(),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        items: Origin.originCatalogosValores,
+                        onChanged: (item) {
+                          if (item == null) return;
+                          personOrigin = item.valor;
+                        },
+                        toStringItem: (item) => item.nombre,
+                        hintText: 'input.select_department'.tr(),
+                      ),
                     ),
                     const Gap(10),
                     CommentaryWidget(

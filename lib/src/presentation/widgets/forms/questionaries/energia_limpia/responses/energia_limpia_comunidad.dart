@@ -1,7 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -63,27 +62,22 @@ class _EnergiaLimpiaComunidadState extends State<EnergiaLimpiaComunidad> {
           if (onEditAnswer)
             Column(
               children: [
-                BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                    SolicitudesPendientesLocalDbState>(
-                  builder: (context, state) {
-                    return WhiteCard(
-                      marginTop: 15,
-                      padding: const EdgeInsets.all(10),
-                      child: JLuxDropdown(
-                        isContainIcon: false,
-                        isLoading: state.status == Status.inProgress,
-                        title: 'Que comunidad Pertenece'.tr(),
-                        items: state.comunidades,
-                        onChanged: (item) {
-                          if (item == null) return;
-                          comunidadItem = item.valor;
-                          setState(() {});
-                        },
-                        toStringItem: (item) => item.nombre ?? '',
-                        hintText: 'input.select_department'.tr(),
-                      ),
-                    );
-                  },
+                WhiteCard(
+                  marginTop: 15,
+                  padding: const EdgeInsets.all(10),
+                  child: JLuxDropdown(
+                    isContainIcon: false,
+                    // isLoading: state.status == Status.inProgress,
+                    title: 'Que comunidad Pertenece'.tr(),
+                    items: Origin.comunidades,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      comunidadItem = item.valor;
+                      setState(() {});
+                    },
+                    toStringItem: (item) => item.nombre,
+                    hintText: 'input.select_department'.tr(),
+                  ),
                 ),
                 const Gap(20),
                 CustomElevatedButton(

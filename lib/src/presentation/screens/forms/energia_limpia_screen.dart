@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
@@ -365,27 +366,22 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
           if (onEditAnswer)
             Column(
               children: [
-                BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                    SolicitudesPendientesLocalDbState>(
-                  builder: (context, state) {
-                    return WhiteCard(
-                      marginTop: 15,
-                      padding: const EdgeInsets.all(10),
-                      child: JLuxDropdown(
-                        isContainIcon: false,
-                        isLoading: state.status == Status.inProgress,
-                        title: 'forms.entorno_familiar.person_origin'.tr(),
-                        items: state.departamentos,
-                        onChanged: (item) {
-                          if (item == null) return;
-                          originItem = item.valor;
-                          setState(() {});
-                        },
-                        toStringItem: (item) => item.nombre ?? '',
-                        hintText: 'input.select_department'.tr(),
-                      ),
-                    );
-                  },
+                WhiteCard(
+                  marginTop: 15,
+                  padding: const EdgeInsets.all(10),
+                  child: JLuxDropdown(
+                    isContainIcon: false,
+                    // isLoading: state.status == Status.inProgress,
+                    title: 'forms.entorno_familiar.person_origin'.tr(),
+                    items: Origin.originCatalogosValores,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      originItem = item.valor;
+                      setState(() {});
+                    },
+                    toStringItem: (item) => item.nombre,
+                    hintText: 'input.select_department'.tr(),
+                  ),
                 ),
                 const Gap(20),
                 CustomElevatedButton(

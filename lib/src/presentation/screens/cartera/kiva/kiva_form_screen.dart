@@ -1,6 +1,4 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/local_db/comunidades/comunidades_db_local.dart';
-import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -58,30 +56,10 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
         body: BlocConsumer<SolicitudesPendientesCubit,
             SolicitudesPendientesState>(
           listener: (context, state) async {
-            final comunidadesProvider = context.read<ComunidadesCubit>();
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
 
             if (state.status == Status.done) {
-              final departments =
-                  context.read<DepartamentosCubit>().state.departamentos;
-              final departmentsList = departments.map(
-                (e) {
-                  return DepartamentosDbLocal()
-                    ..nombre = e.nombre
-                    ..valor = e.valor;
-                },
-              ).toList();
-              await solicitudesProvider.saveComunidades(
-                  comunidades: comunidadesProvider.state.comunidades.map(
-                (e) {
-                  return ComunidadesLocalDb()
-                    ..nombre = e.nombre
-                    ..valor = e.valor;
-                },
-              ).toList());
-              await solicitudesProvider.saveDepartaments(
-                  departaments: departmentsList);
               await solicitudesProvider.saveSolicitudesPendientes(
                 solicitudes: state.solicitudesPendienteResponse.map(
                   (e) {
