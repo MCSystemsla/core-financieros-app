@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -408,6 +409,7 @@ class _RecurrentSignQuestionary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected =
@@ -553,8 +555,39 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveEnergiaLimpiaAnswers(context, state)
+                                ? saveEnergiaLimpiaAnswers(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<RecurrenteEnergiaLimpiaCubit>()
                                     .sendAnswers();
@@ -575,10 +608,12 @@ class _RecurrentSignQuestionary extends StatelessWidget {
     );
   }
 
-  saveEnergiaLimpiaAnswers(
-    BuildContext context,
-    RecurrenteEnergiaLimpiaState state,
-  ) {
+  saveEnergiaLimpiaAnswers(BuildContext context,
+      RecurrenteEnergiaLimpiaState state, ImageModel imageModel) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
+
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrenteEnergiaLimpia(
@@ -622,6 +657,7 @@ class _SignQuestionary extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
@@ -761,9 +797,40 @@ class _SignQuestionary extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveEnergiaLocalDB(context, state)
+                                ? saveEnergiaLocalDB(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<EnergiaLimpiaCubit>()
                                     .sendAnswers();
@@ -784,7 +851,11 @@ class _SignQuestionary extends StatelessWidget {
     );
   }
 
-  void saveEnergiaLocalDB(BuildContext context, EnergiaLimpiaState state) {
+  void saveEnergiaLocalDB(
+      BuildContext context, EnergiaLimpiaState state, ImageModel imageModel) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
           energiaLimpiaDBLocal: EnergiaLimpiaDbLocal()
             ..database = LocalStorage().database

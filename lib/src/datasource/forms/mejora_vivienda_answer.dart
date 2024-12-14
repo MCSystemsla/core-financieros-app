@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 String mejoraViviendaAnswerToJson(MejoraViviendaAnswer data) =>
     json.encode(data.toJson());
 
@@ -50,7 +52,7 @@ class MejoraViviendaAnswer {
         'objSolicitudNuevamenorId': solicitudNuevamenorId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
-        'database': database,
+        'database': LocalStorage().database,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,

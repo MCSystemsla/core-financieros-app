@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 class RecurrenteEstandarModel {
   final String database;
   final bool otrosIngresos;
@@ -42,7 +44,7 @@ class RecurrenteEstandarModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'database': database,
+        'database': LocalStorage().database,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion':
             otrosIngresosDescripcion.isEmpty ? null : otrosIngresosDescripcion,

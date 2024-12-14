@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -16,7 +17,7 @@ class EnergiaLimpiaCubit extends Cubit<EnergiaLimpiaState> {
       final (isOk, message) = await repository.energiaLimpia(
         energiaLimpiaModel: EnergiaLimpiaModel(
           problemasEnergiaDescripcion: state.problemasEnergiaDescripcion,
-          database: state.database,
+          database: LocalStorage().database,
           solicitudNuevamenorId: state.solicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,

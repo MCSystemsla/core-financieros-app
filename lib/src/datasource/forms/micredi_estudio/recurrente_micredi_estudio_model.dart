@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 class RecurrenteMiCrediEstudioModel {
   final String database;
   final bool tieneTrabajo;
@@ -50,7 +52,7 @@ class RecurrenteMiCrediEstudioModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'database': database,
+        'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,

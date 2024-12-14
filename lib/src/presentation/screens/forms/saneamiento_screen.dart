@@ -156,6 +156,7 @@ class _RecurrentSign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected =
@@ -299,9 +300,40 @@ class _RecurrentSign extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveAnswersOnLocalDB(context, state)
+                                ? saveAnswersOnLocalDB(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<RecurrenteAguaYSaneamientoCubit>()
                                     .sendAnswers();
@@ -325,7 +357,11 @@ class _RecurrentSign extends StatelessWidget {
   void saveAnswersOnLocalDB(
     BuildContext context,
     RecurrenteAguaYSaneamientoState state,
+    ImageModel imageModel,
   ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrentSaneamientoForm(
@@ -922,6 +958,7 @@ class _SaneamientoSign extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
@@ -1062,9 +1099,40 @@ class _SaneamientoSign extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveAnswersOnLocalDB(context, state)
+                                ? saveAnswersOnLocalDB(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<AguaYSaneamientoCubit>()
                                     .sendAnswers();
@@ -1085,7 +1153,14 @@ class _SaneamientoSign extends StatelessWidget {
     );
   }
 
-  void saveAnswersOnLocalDB(BuildContext context, AguaYSaneamientoState state) {
+  void saveAnswersOnLocalDB(
+    BuildContext context,
+    AguaYSaneamientoState state,
+    ImageModel imageModel,
+  ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context.read<SolicitudesPendientesLocalDbCubit>().saveSaneamientoForm(
           saneamientoDbLocal: SaneamientoDbLocal()
             ..cumpliriaPropuesta = state.cumpliriaPropuesta
@@ -1132,6 +1207,7 @@ class SignQuestionaryWidget extends StatelessWidget {
     final controller = SignatureController();
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
 
     return Column(
       children: [
@@ -1271,9 +1347,40 @@ class SignQuestionaryWidget extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveMejoraViviendaForm(context, state)
+                                ? saveMejoraViviendaForm(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<MejoraViviendaCubit>()
                                     .sendAnswers();
@@ -1294,7 +1401,11 @@ class SignQuestionaryWidget extends StatelessWidget {
     );
   }
 
-  saveMejoraViviendaForm(BuildContext context, MejoraViviendaState state) {
+  saveMejoraViviendaForm(
+      BuildContext context, MejoraViviendaState state, ImageModel imageModel) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMejoraViviendaForm(
           mejoraViviendaDBLocal: MejoraViviendaDbLocal()
             ..comoAyudara = state.comoAyudara

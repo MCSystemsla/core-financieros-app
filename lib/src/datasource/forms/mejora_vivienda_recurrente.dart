@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 String mejoraViviendaRecurrenteToJson(MejoraViviendaRecurrente data) =>
     json.encode(data.toJson());
 
@@ -54,7 +56,7 @@ class MejoraViviendaRecurrente {
         'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
-        'database': database,
+        'database': LocalStorage().database,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,
         'otrosIngresos': otrosIngresos,
