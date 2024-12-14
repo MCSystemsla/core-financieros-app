@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/micredi_estudio_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/recurrente_micredi_estudio_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -121,6 +122,7 @@ class _RecurrentSigntature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected =
@@ -264,9 +266,40 @@ class _RecurrentSigntature extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveFormAnswers(context, state)
+                                ? saveFormAnswers(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<RecurrenteMicrediEstudioCubit>()
                                     .sendAnswers();
@@ -288,7 +321,13 @@ class _RecurrentSigntature extends StatelessWidget {
   }
 
   void saveFormAnswers(
-      BuildContext context, RecurrenteMicrediEstudioState state) {
+    BuildContext context,
+    RecurrenteMicrediEstudioState state,
+    ImageModel imageModel,
+  ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrentMiCrediEstudioForm(
@@ -501,6 +540,7 @@ class _SignUserSignature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected =
@@ -643,9 +683,40 @@ class _SignUserSignature extends StatelessWidget {
                           textButtonAcept: 'Aceptar',
                           textButtonCancel: 'Cancelar',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
+                          onPressedAccept: () async {
+                            final directory =
+                                await getApplicationDocumentsDirectory();
+                            final filePath = '${directory.path}/signature.png';
+
+                            final signatureImage =
+                                await controller.toPngBytes();
+
+                            // Guarda la imagen en el archivo
+                            final file = File(filePath);
+                            await file.writeAsBytes(signatureImage!);
+                            if (!context.mounted) return;
                             !isConnected
-                                ? saveOnLocalDB(context, state)
+                                ? saveOnLocalDB(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = file.path
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<MicrediEstudioCubit>()
                                     .sendAnswers();
@@ -666,7 +737,14 @@ class _SignUserSignature extends StatelessWidget {
     );
   }
 
-  void saveOnLocalDB(BuildContext context, MicrediEstudioState state) {
+  void saveOnLocalDB(
+    BuildContext context,
+    MicrediEstudioState state,
+    ImageModel imageModel,
+  ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMiCrediEstudioForm(
           miCrediEstudioModelDbLocal: MiCrediEstudioDbLocal()
             ..aspiraLaboralmente = state.aspiraLaboralmente

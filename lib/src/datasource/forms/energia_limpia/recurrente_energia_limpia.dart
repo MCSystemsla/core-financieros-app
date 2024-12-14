@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 String recurrenteEnergiaLimpiaModelToJson(RecurrenteEnergiaLimpiaModel data) =>
     json.encode(data.toJson());
 
@@ -49,7 +51,7 @@ class RecurrenteEnergiaLimpiaModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'database': database,
+        'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,

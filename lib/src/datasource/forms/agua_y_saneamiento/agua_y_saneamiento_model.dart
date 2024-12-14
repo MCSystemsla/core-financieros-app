@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 String aguaSaneamientoModelToJson(AguaSaneamientoModel data) =>
     json.encode(data.toJson());
 
@@ -51,7 +53,7 @@ class AguaSaneamientoModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'database': database,
+        'database': LocalStorage().database,
         'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
