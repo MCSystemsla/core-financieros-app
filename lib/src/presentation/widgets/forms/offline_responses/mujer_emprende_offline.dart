@@ -70,6 +70,12 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
+              context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .removeWhenFormIsUpload(
+                    widget.solicitudId,
+                    context.read<KivaRouteCubit>().state.currentRoute,
+                  );
 
               await customPopUp(
                 context: context,
@@ -343,7 +349,7 @@ class _RecurrenteMujerEmprendeOfflineState
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getMujerEmprende(widget.solicitudId);
+    await solicitudesProvider.getRecurrentMujerEmprende(widget.solicitudId);
     await solicitudesProvider.getImagesModel(widget.solicitudId);
   }
 
@@ -374,6 +380,12 @@ class _RecurrenteMujerEmprendeOfflineState
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
+                  );
+              context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .removeWhenFormIsUpload(
+                    widget.solicitudId,
+                    context.read<KivaRouteCubit>().state.currentRoute,
                   );
 
               await customPopUp(

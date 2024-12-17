@@ -724,4 +724,135 @@ class SolicitudesPendientesLocalDbCubit
       _logger.e(e);
     }
   }
+
+  Future<void> removeWhenFormIsUpload(
+      int solicitudId, String tipoProducto) async {
+    try {
+      switch (tipoProducto) {
+        case 'ESTANDAR NUEVO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.estandarDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ESTANDAR RECURRENTE':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteEstandarDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'MICREDIESTUDIO NUEVO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.miCrediEstudioDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'MICREDIESTUDIO RECURRENTE':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteMiCrediEstudioDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'VIVIENDA NUEVA':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.mejoraViviendaDbLocals
+                  .filter()
+                  .solicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'VIVIENDA REPRESTAMO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteMejoraViviendaDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'AGUA Y SANEAMIENTO NUEVO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.saneamientoDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'AGUA Y SANEAMIENTO RECURRENTE':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteSaneamientoDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ASER NUEVO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.energiaLimpiaDbLocals
+                  .filter()
+                  .solicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ASER RECURRENTE':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteEnergiaLimpiaDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'MUJER EMPRENDE NUEVO':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.mujerEmprendeDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'MUJER EMPRENDE RECURRENTE':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteMujerEmprendeDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        default:
+      }
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
 }

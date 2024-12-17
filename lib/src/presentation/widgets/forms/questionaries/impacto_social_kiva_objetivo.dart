@@ -269,12 +269,13 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteMejoraViviendaCubit>().saveAnswers3(
-                          motivoPrestamo: question1.text.trim(),
-                          explicacionInversion: question1.text.trim(),
-                          mejoraSeguridadFamilia: question2.text.trim(),
-                          quienApoya: question3.text.trim(),
-                          siguienteMeta: question4.text.trim(),
-                        );
+                        motivoPrestamo: question1.text.trim(),
+                        explicacionInversion: question1.text.trim(),
+                        mejoraSeguridadFamilia: question2.text.trim(),
+                        quienApoya: question3.text.trim(),
+                        siguienteMeta: question4.text.trim(),
+                        objSolicitudRecurrenteId: int.tryParse(
+                            context.read<KivaRouteCubit>().state.solicitudId));
                     context.read<ResponseCubit>().addResponses(
                       responses: [
                         Response(

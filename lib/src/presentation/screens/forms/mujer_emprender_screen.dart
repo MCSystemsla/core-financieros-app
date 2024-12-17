@@ -343,6 +343,8 @@ class _RecurrentSignSignature extends StatelessWidget {
             ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
             ..personasCargo = state.personasCargo
             ..siguientePaso = state.siguientePaso
+            ..tieneTrabajo = state.tieneTrabajo
+            ..tieneTrabajoDescripcion = state.tieneTrabajoDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     ScaffoldMessenger.of(context).showSnackBar(
