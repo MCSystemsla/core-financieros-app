@@ -385,6 +385,7 @@ class _RecurrentSign extends StatelessWidget {
             ..siguientePaso = state.siguientePaso
             ..tiempoActividad = state.tiempoActividad
             ..tieneTrabajo = state.tieneTrabajo
+            ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     ScaffoldMessenger.of(context).showSnackBar(

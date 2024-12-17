@@ -92,7 +92,7 @@ class _MejoraViviendaEntornoSocialState
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
                       validator: (value) {
-                        if (value == null) 'input.input_validator'.tr();
+                        if (value == null) return 'input.input_validator'.tr();
                         return null;
                       },
                       isContainIcon: true,
@@ -474,6 +474,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   isContainIcon: true,
                   title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
                   items: ['input.yes'.tr(), 'input.no'.tr()],
+                  validator: (value) {
+                    if (value == null) return 'input.input_validator'.tr();
+                    return null;
+                  },
                   onChanged: (item) {
                     if (item == null) return;
                     question1 = item;
@@ -488,6 +492,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
               const Gap(20),
               if (question1 == 'input.yes'.tr())
                 CommentaryWidget(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
                   title: 'Cual?',
                   textEditingController: cualesOtroTrabajoController,
                 ),

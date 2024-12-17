@@ -71,6 +71,12 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
+              context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .removeWhenFormIsUpload(
+                    widget.solicitudId,
+                    context.read<KivaRouteCubit>().state.currentRoute,
+                  );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -376,18 +382,19 @@ class _RecurrenteSaneamientoOfflineState
     return BlocBuilder<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
-        return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
-          listener: (context, status) async {
-            if (status.status == Status.error) {
+        return BlocConsumer<RecurrenteAguaYSaneamientoCubit,
+            RecurrenteAguaYSaneamientoState>(
+          listener: (context, resp) async {
+            if (resp.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   showCloseIcon: true,
-                  content: Text(status.errorMsg),
+                  content: Text(resp.errorMsg),
                 ),
               );
             }
-            if (status.status == Status.done) {
+            if (resp.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
@@ -397,6 +404,12 @@ class _RecurrenteSaneamientoOfflineState
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
+                  );
+              context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .removeWhenFormIsUpload(
+                    widget.solicitudId,
+                    context.read<KivaRouteCubit>().state.currentRoute,
                   );
               await customPopUp(
                 context: context,
