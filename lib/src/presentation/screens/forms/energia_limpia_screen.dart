@@ -1,5 +1,5 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -557,21 +557,39 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                           onPressedAccept: () async {
                             final directory =
                                 await getApplicationDocumentsDirectory();
-                            final filePath = '${directory.path}/signature.png';
+                            final customDir =
+                                Directory('${directory.path}/MySignatures');
 
+                            // Crea el directorio si no existe
+                            if (!await customDir.exists()) {
+                              await customDir.create(recursive: true);
+                              log('Directorio creado: ${customDir.path}');
+                            }
+
+                            // Define la ruta de la imagen directamente en el directorio
+                            final localPath =
+                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                            // Genera la imagen de la firma
                             final signatureImage =
                                 await controller.toPngBytes();
 
-                            // Guarda la imagen en el archivo
-                            final file = File(filePath);
-                            await file.writeAsBytes(signatureImage!);
+                            if (signatureImage != null) {
+                              // Guarda la imagen directamente en el directorio
+                              final file = File(localPath);
+                              await file.writeAsBytes(signatureImage);
+                              log('Firma guardada en: $localPath');
+                            } else {
+                              log('No se pudo generar la imagen de la firma.');
+                              return;
+                            }
                             if (!context.mounted) return;
                             !isConnected
                                 ? saveEnergiaLimpiaAnswers(
                                     context,
                                     state,
                                     ImageModel()
-                                      ..imagenFirma = file.path
+                                      ..imagenFirma = localPath
                                       ..imagen1 = imageProvider.imagen1?.path ??
                                           'No Path'
                                       ..imagen2 = imageProvider.imagen2?.path ??
@@ -800,21 +818,39 @@ class _SignQuestionary extends StatelessWidget {
                           onPressedAccept: () async {
                             final directory =
                                 await getApplicationDocumentsDirectory();
-                            final filePath = '${directory.path}/signature.png';
+                            final customDir =
+                                Directory('${directory.path}/MySignatures');
 
+                            // Crea el directorio si no existe
+                            if (!await customDir.exists()) {
+                              await customDir.create(recursive: true);
+                              log('Directorio creado: ${customDir.path}');
+                            }
+
+                            // Define la ruta de la imagen directamente en el directorio
+                            final localPath =
+                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                            // Genera la imagen de la firma
                             final signatureImage =
                                 await controller.toPngBytes();
 
-                            // Guarda la imagen en el archivo
-                            final file = File(filePath);
-                            await file.writeAsBytes(signatureImage!);
+                            if (signatureImage != null) {
+                              // Guarda la imagen directamente en el directorio
+                              final file = File(localPath);
+                              await file.writeAsBytes(signatureImage);
+                              log('Firma guardada en: $localPath');
+                            } else {
+                              log('No se pudo generar la imagen de la firma.');
+                              return;
+                            }
                             if (!context.mounted) return;
                             !isConnected
                                 ? saveEnergiaLocalDB(
                                     context,
                                     state,
                                     ImageModel()
-                                      ..imagenFirma = file.path
+                                      ..imagenFirma = localPath
                                       ..imagen1 = imageProvider.imagen1?.path ??
                                           'No Path'
                                       ..imagen2 = imageProvider.imagen2?.path ??
