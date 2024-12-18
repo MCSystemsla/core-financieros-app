@@ -32,6 +32,7 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
   final cualesOtrosIngrsos = TextEditingController();
   String? tieneTrabajo;
   final tieneTrabajoDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -116,6 +117,22 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                     return null;
                   },
                 ),
+              CommentaryWidget(
+                textEditingController: tiempoActividad,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
+                  }
+
+                  return null;
+                },
+                title: 'Tiempo de la actividad:* (MESES)',
+                textInputType: TextInputType.number,
+              ),
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -129,6 +146,8 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<EstandarCubit>().saveAnswers(
+                          tiempoActividad:
+                              int.tryParse(tiempoActividad.text.trim()),
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               cualesOtrosIngrsos.text.trim(),
@@ -187,6 +206,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final cualesOtrosIngrsos = TextEditingController();
   String? tieneTrabajo;
   final tieneTrabajoDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -266,6 +286,22 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 return null;
               },
             ),
+          CommentaryWidget(
+            textEditingController: tiempoActividad,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'input.input_validator'.tr();
+              }
+              final numero = int.tryParse(value);
+              if (numero == null || numero < 0) {
+                return 'Valor no valido'.tr();
+              }
+
+              return null;
+            },
+            title: 'Tiempo de la actividad:* (MESES)',
+            textInputType: TextInputType.number,
+          ),
           const Gap(20),
           ButtonActionsWidget(
             onPreviousPressed: () {
@@ -279,6 +315,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
             onNextPressed: () {
               if (formKey.currentState?.validate() ?? false) {
                 context.read<RecurrenteEstandartCubit>().saveAnswers(
+                      tiempoActividad:
+                          int.tryParse(tiempoActividad.text.trim()),
                       tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                       trabajoDescripcion: tieneTrabajoDescripcion.text.trim(),
                       otrosIngresos: otrosIngresos == 'input.yes'.tr(),

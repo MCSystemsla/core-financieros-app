@@ -118,7 +118,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                       const Gap(10),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Tiempo de la actividad (meses o años)',
+                        title: 'Tiempo de la actividad (MESES)',
                         initialValue: state.saneamientoDbLocal?.tiempoActividad
                                 .toString() ??
                             '0',

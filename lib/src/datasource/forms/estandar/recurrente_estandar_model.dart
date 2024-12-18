@@ -20,6 +20,7 @@ class RecurrenteEstandarModel {
   final String personaAutoSuficiente;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
+  final int tiempoActividad;
 
   RecurrenteEstandarModel({
     required this.database,
@@ -41,6 +42,7 @@ class RecurrenteEstandarModel {
     required this.personaAutoSuficiente,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
+    required this.tiempoActividad,
   });
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +66,7 @@ class RecurrenteEstandarModel {
         'siguientePaso': siguientePaso,
         'personaAutoSuficiente': personaAutoSuficiente,
         'tieneTrabajo': tieneTrabajo,
+        'tiempoActividad': tiempoActividad,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion.isEmpty
             ? null
             : trabajoNegocioDescripcion,

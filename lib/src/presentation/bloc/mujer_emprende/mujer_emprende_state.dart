@@ -26,8 +26,8 @@ class MujerEmprendeState extends Equatable {
   final int tiempoActividad;
   const MujerEmprendeState({
     this.status = Status.notStarted,
-    this.database = 'MC_CH',
-    this.objSolicitudNuevamenorId = 262,
+    this.database = '',
+    this.objSolicitudNuevamenorId = 0,
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
     this.objOrigenCatalogoValorId = '',

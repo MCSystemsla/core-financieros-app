@@ -15,6 +15,7 @@ class EstandarCubit extends Cubit<EstandarState> {
     try {
       final (isOK, message) = await repository.estandar(
         estandarModel: EstandarModel(
+          tiempoActividad: state.tiempoActividad,
           database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           otrosIngresos: state.otrosIngresos,
@@ -84,6 +85,7 @@ class EstandarCubit extends Cubit<EstandarState> {
     String? otrosDatosCliente,
     bool? tieneTrabajo,
     String? trabajoNegocioDescripcion,
+    int? tiempoActividad,
   }) {
     emit(
       state.copyWith(
@@ -107,6 +109,7 @@ class EstandarCubit extends Cubit<EstandarState> {
         otrosDatosCliente: otrosDatosCliente,
         tieneTrabajo: tieneTrabajo,
         trabajoNegocioDescripcion: trabajoNegocioDescripcion,
+        tiempoActividad: tiempoActividad,
       ),
     );
   }

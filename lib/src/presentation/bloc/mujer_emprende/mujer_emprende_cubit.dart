@@ -97,7 +97,7 @@ class MujerEmprendeCubit extends Cubit<MujerEmprendeState> {
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
         motivoEmprender: motivoEmprender,
-        conocioMujerEmprende: state.conocioMujerEmprende,
+        conocioMujerEmprende: conocioMujerEmprende,
         impulsoOptar: impulsoOptar,
         motivoPrestamo: motivoPrestamo,
         quienApoya: quienApoya,

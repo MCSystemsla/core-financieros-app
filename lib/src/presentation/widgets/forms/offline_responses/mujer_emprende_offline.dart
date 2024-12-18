@@ -566,6 +566,9 @@ class _RecurrenteMujerEmprendeOfflineState
                               .sendOfflineAnswers(
                                 recurrenteMujerEmprende:
                                     RecurrenteMujerEmprendeModel(
+                                  tiempoActividad: state.recurrenteMujerEmprende
+                                          ?.tiempoActividad ??
+                                      0,
                                   database:
                                       state.recurrenteMujerEmprende?.database ??
                                           '',

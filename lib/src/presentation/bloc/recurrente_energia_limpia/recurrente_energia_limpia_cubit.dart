@@ -17,6 +17,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
     try {
       final (isOk, message) = await _repository.recurrenteREnergiaLimpiaAnswer(
         energiaLimpiaModel: RecurrenteEnergiaLimpiaModel(
+          problemasEnergiaDescripcion: state.problemasEnergiaDescripcion,
           database: LocalStorage().database,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
@@ -91,6 +92,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
+    String? problemasEnergiaDescripcion,
   }) {
     emit(
       state.copyWith(
@@ -100,6 +102,7 @@ class RecurrenteEnergiaLimpiaCubit extends Cubit<RecurrenteEnergiaLimpiaState> {
         numeroHijos: numeroHijos,
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
+        problemasEnergiaDescripcion: problemasEnergiaDescripcion,
       ),
     );
   }

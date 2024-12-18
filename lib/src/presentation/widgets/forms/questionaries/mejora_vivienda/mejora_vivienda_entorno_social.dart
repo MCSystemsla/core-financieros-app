@@ -565,13 +565,13 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 child: JLuxDropdown(
                   isContainIcon: true,
                   // isLoading: state.status == Status.inProgress,
-                  // validator: (value) {
-                  //   if (value == null) {
-                  //     return 'input.input_validator'.tr();
-                  //   }
+                  validator: (value) {
+                    if (value == null) {
+                      return 'input.input_validator'.tr();
+                    }
 
-                  //   return null;
-                  // },
+                    return null;
+                  },
                   title: 'Su comunidad es:'.tr(),
                   items: Origin.comunidades,
                   onChanged: (item) {
