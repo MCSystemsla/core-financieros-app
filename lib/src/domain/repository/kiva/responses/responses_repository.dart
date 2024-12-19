@@ -295,56 +295,8 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
   }) async {
-    // try {
-    // final dio = Dio();
-
     const url = 'https://vps-4267502-x.dattaweb.com/kiva/subir-imagenes';
-    // Crea la solicitud Multipart
-    //   final formData = FormData.fromMap({
-    //     'solicitudId': '3925',
-    //     'formularioKiva': 'ScrKivaCreditoEstandarRecurrente',
-    //     'database': 'MC_CH',
-    //     'fotoCliente1': await MultipartFile.fromFile(
-    //       imagen1.path,
-    //       filename: 'fotoCliente1.jpg',
-    //     ),
-    //     'fotoCliente2': await MultipartFile.fromFile(
-    //       imagen2.path,
-    //       filename: 'fotoCliente2.jpg',
-    //     ),
-    //     'fotoCliente3': await MultipartFile.fromFile(
-    //       fotoCedula.path,
-    //       filename: 'fotoCliente3.jpg',
-    //     ),
-    //     'fotoFirmaDigital': await MultipartFile.fromFile(
-    //       fotoFirma.path,
-    //       filename: 'fotoFirmaDigital.jpg',
-    //     ),
-    //     'fotoCedula': await MultipartFile.fromFile(
-    //       fotoCedula.path,
-    //       filename: 'fotoCedula.jpg',
-    //     ),
-    //   });
-    //   final resp = await dio.post(
-    //     url,
-    //     data: formData,
-    //     options: Options(contentType: 'multipart/form-data', headers: {
-    //       'Authorization':
-    //           'Bearer ${LocalStorage().jwt}', // Reemplaza con el token real
-    //     }),
-    //   );
-    //   _logger.i(formData);
-    //   _logger.i(resp);
-    //   return true;
-    // } on DioException catch (e) {
-    //   // Imprimir más detalles en caso de error
-    //   _logger.e('Código de error: ${e.response?.statusCode}');
-    //   _logger.e('Datos del error: ${e.response?.data}');
-    //   _logger.e('Detalles adicionales: ${e.error}');
-    //   return false;
-    // } catch (e) {
-    //   _logger.e(e);
-    //   return false;
+
     final currentProduct = setCurrentProdut(product: formularioKiva);
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -352,12 +304,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
 
-      // Agregar imágenes
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
         imagen1.path,
-        filename:
-            imagen1.path, // Asegúrate de que el nombre del archivo sea correcto
+        filename: imagen1.path,
         contentType: MediaType('image', 'jpeg'),
       ));
 
@@ -388,12 +338,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         filename: fotoCedula.path,
         contentType: MediaType('image', 'jpeg'),
       ));
-      // Agregar encabezados (si es necesario)
       request.headers.addAll({
-        'Accept': 'application/json', // Indica que se espera una respuesta JSON
+        'Accept': 'application/json',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       });
-      // Enviar la solicitud
       var response = await request.send();
 
       var responseBody = await http.Response.fromStream(response);
@@ -485,12 +433,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
 
-      // Agregar imágenes
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
         imagen1,
-        filename:
-            imagen1, // Asegúrate de que el nombre del archivo sea correcto
+        filename: imagen1,
         contentType: MediaType('image', 'jpg'),
       ));
 
@@ -521,13 +467,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         filename: fotoCedula,
         contentType: MediaType('image', 'jpg'),
       ));
-      // Agregar encabezados (si es necesario)
       request.headers.addAll({
-        'Accept': 'application/json', // Indica que se espera una respuesta JSON
+        'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       });
-      // Enviar la solicitud
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -536,11 +480,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}');
       }
-      // if (response.statusCode == 201) {
-      //   print(
-      //       '¡Éxito! Respuesta del servidor: ${await http.Response.fromStream(response)}');
-      //   return true;
-      // }
+
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
     } catch (e) {

@@ -1,4 +1,4 @@
-package com.example.core_financiero_app
+package com.mcsystem.core_financiero_app
 
 import io.flutter.embedding.android.FlutterActivity
 
