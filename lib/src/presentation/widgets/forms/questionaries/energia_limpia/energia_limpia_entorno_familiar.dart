@@ -343,7 +343,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final tieneProblemasDescription = TextEditingController();
+  final tieneProblemasDescriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -419,7 +419,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               if (tieneProblemasEnergia == 'input.yes'.tr())
                 CommentaryWidget(
                   title: 'Porque?',
-                  textEditingController: tieneProblemasDescription,
+                  textEditingController: tieneProblemasDescriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'input.input_validator'.tr();
@@ -497,7 +497,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer2(
                           problemasEnergiaDescripcion:
-                              tieneProblemasDescription.text.trim(),
+                              tieneProblemasDescriptionController.text.trim(),
                           edadHijos: edadHijos.text.trim(),
                           numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           objTipoComunidadId: objTipoComunidadId,

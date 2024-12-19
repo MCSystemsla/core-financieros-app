@@ -655,6 +655,7 @@ class _RecurrentSignQuestionary extends StatelessWidget {
             ..tieneProblemasEnergia = state.tieneProblemasEnergia
             ..tieneTrabajo = state.tieneTrabajo
             ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
     ScaffoldMessenger.of(context).showSnackBar(
@@ -910,6 +911,7 @@ class _SignQuestionary extends StatelessWidget {
             ..tieneProblemasEnergia = state.tieneProblemasEnergia
             ..tieneTrabajo = state.tieneTrabajo
             ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
     ScaffoldMessenger.of(context).showSnackBar(

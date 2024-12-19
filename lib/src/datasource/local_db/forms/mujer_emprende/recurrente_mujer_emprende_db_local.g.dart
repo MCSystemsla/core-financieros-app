@@ -108,18 +108,23 @@ const RecurrenteMujerEmprendeDbLocalSchema = CollectionSchema(
       name: r'siguientePaso',
       type: IsarType.string,
     ),
-    r'tieneTrabajo': PropertySchema(
+    r'tiempoActividad': PropertySchema(
       id: 18,
+      name: r'tiempoActividad',
+      type: IsarType.long,
+    ),
+    r'tieneTrabajo': PropertySchema(
+      id: 19,
       name: r'tieneTrabajo',
       type: IsarType.bool,
     ),
     r'tieneTrabajoDescripcion': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'tieneTrabajoDescripcion',
       type: IsarType.string,
     ),
     r'tipoEstudioHijos': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     )
@@ -243,9 +248,10 @@ void _recurrenteMujerEmprendeDbLocalSerialize(
   writer.writeString(offsets[15], object.otrosIngresosDescripcion);
   writer.writeLong(offsets[16], object.personasCargo);
   writer.writeString(offsets[17], object.siguientePaso);
-  writer.writeBool(offsets[18], object.tieneTrabajo);
-  writer.writeString(offsets[19], object.tieneTrabajoDescripcion);
-  writer.writeString(offsets[20], object.tipoEstudioHijos);
+  writer.writeLong(offsets[18], object.tiempoActividad);
+  writer.writeBool(offsets[19], object.tieneTrabajo);
+  writer.writeString(offsets[20], object.tieneTrabajoDescripcion);
+  writer.writeString(offsets[21], object.tipoEstudioHijos);
 }
 
 RecurrenteMujerEmprendeDbLocal _recurrenteMujerEmprendeDbLocalDeserialize(
@@ -274,9 +280,10 @@ RecurrenteMujerEmprendeDbLocal _recurrenteMujerEmprendeDbLocalDeserialize(
   object.otrosIngresosDescripcion = reader.readStringOrNull(offsets[15]);
   object.personasCargo = reader.readLongOrNull(offsets[16]);
   object.siguientePaso = reader.readStringOrNull(offsets[17]);
-  object.tieneTrabajo = reader.readBoolOrNull(offsets[18]);
-  object.tieneTrabajoDescripcion = reader.readStringOrNull(offsets[19]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[20]);
+  object.tiempoActividad = reader.readLongOrNull(offsets[18]);
+  object.tieneTrabajo = reader.readBoolOrNull(offsets[19]);
+  object.tieneTrabajoDescripcion = reader.readStringOrNull(offsets[20]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[21]);
   return object;
 }
 
@@ -324,10 +331,12 @@ P _recurrenteMujerEmprendeDbLocalDeserializeProp<P>(
     case 17:
       return (reader.readStringOrNull(offset)) as P;
     case 18:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 19:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 20:
+      return (reader.readStringOrNull(offset)) as P;
+    case 21:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2420,6 +2429,80 @@ extension RecurrenteMujerEmprendeDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterFilterCondition> tiempoActividadBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tiempoActividad',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
       QAfterFilterCondition> tieneTrabajoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3027,6 +3110,20 @@ extension RecurrenteMujerEmprendeDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterSortBy> sortByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterSortBy> sortByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
       QAfterSortBy> sortByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -3340,6 +3437,20 @@ extension RecurrenteMujerEmprendeDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterSortBy> thenByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QAfterSortBy> thenByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
       QAfterSortBy> thenByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -3521,6 +3632,13 @@ extension RecurrenteMujerEmprendeDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
+      QDistinct> distinctByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tiempoActividad');
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, RecurrenteMujerEmprendeDbLocal,
       QDistinct> distinctByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'tieneTrabajo');
@@ -3679,6 +3797,13 @@ extension RecurrenteMujerEmprendeDbLocalQueryProperty on QueryBuilder<
       siguientePasoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'siguientePaso');
+    });
+  }
+
+  QueryBuilder<RecurrenteMujerEmprendeDbLocal, int?, QQueryOperations>
+      tiempoActividadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tiempoActividad');
     });
   }
 
