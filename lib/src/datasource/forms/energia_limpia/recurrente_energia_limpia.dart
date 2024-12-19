@@ -26,6 +26,7 @@ class RecurrenteEnergiaLimpiaModel {
   final String comoMejoraSituacion;
   final String quienApoya;
   final String siguienteMeta;
+  final String problemasEnergiaDescripcion;
 
   RecurrenteEnergiaLimpiaModel({
     required this.database,
@@ -48,6 +49,7 @@ class RecurrenteEnergiaLimpiaModel {
     required this.comoMejoraSituacion,
     required this.quienApoya,
     required this.siguienteMeta,
+    required this.problemasEnergiaDescripcion,
   });
 
   Map<String, dynamic> toJson() => {
@@ -71,5 +73,6 @@ class RecurrenteEnergiaLimpiaModel {
         'comoMejoraSituacion': comoMejoraSituacion,
         'quienApoya': quienApoya,
         'siguienteMeta': siguienteMeta,
+        'problemasEnergiaDescripcion': problemasEnergiaDescripcion,
       };
 }

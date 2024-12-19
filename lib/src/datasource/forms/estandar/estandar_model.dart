@@ -21,6 +21,7 @@ class EstandarModel {
   final String otrosDatosCliente;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
+  final int tiempoActividad;
 
   EstandarModel({
     required this.database,
@@ -43,6 +44,7 @@ class EstandarModel {
     required this.otrosDatosCliente,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
+    required this.tiempoActividad,
   });
 
   Map<String, dynamic> toJson() => {
@@ -67,5 +69,6 @@ class EstandarModel {
         'otrosDatosCliente': otrosDatosCliente,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
+        'tiempoActividad': tiempoActividad,
       };
 }

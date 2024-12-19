@@ -27,6 +27,7 @@ class RecurrenteMujerEmprendeModel {
   final String explicacionAlcanzaraMeta;
   final bool tieneTrabajo;
   final String tieneTrabajoDescripcion;
+  final int tiempoActividad;
 
   RecurrenteMujerEmprendeModel({
     required this.database,
@@ -50,6 +51,7 @@ class RecurrenteMujerEmprendeModel {
     required this.explicacionAlcanzaraMeta,
     required this.tieneTrabajo,
     required this.tieneTrabajoDescripcion,
+    required this.tiempoActividad,
   });
 
   Map<String, dynamic> toJson() => {
@@ -73,6 +75,7 @@ class RecurrenteMujerEmprendeModel {
         'alcanzaraMeta': alcanzaraMeta,
         'alcanzaraMetaExplicacion': explicacionAlcanzaraMeta,
         'tieneTrabajo': tieneTrabajo,
-        'trabajoNegocioDescripcion ': tieneTrabajoDescripcion,
+        'trabajoNegocioDescripcion': tieneTrabajoDescripcion,
+        'tiempoActividad': tiempoActividad,
       };
 }

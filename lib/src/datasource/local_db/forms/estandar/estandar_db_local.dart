@@ -30,4 +30,5 @@ class EstandarDbLocal {
   String? imagenFirma;
   bool? tieneTrabajo;
   String? trabajoNegocioDescripcion;
+  int? tiempoActividad;
 }

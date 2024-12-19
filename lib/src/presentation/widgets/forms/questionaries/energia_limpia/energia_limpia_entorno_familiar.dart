@@ -111,6 +111,10 @@ class _EnergiaLimpiaEntornoFamiliarState
                       isContainIcon: true,
                       // isLoading: state.status == Status.inProgress,
                       title: 'Su comunidad es:'.tr(),
+                      validator: (value) {
+                        if (value == null) return 'input.input_validator'.tr();
+                        return null;
+                      },
                       items: Origin.comunidades,
                       onChanged: (item) {
                         if (item == null) return;
@@ -339,6 +343,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final numeroHijos = TextEditingController();
   final edadHijos = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final tieneProblemasDescriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -411,6 +416,17 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   hintText: 'input.select_option'.tr(),
                 ),
               ),
+              if (tieneProblemasEnergia == 'input.yes'.tr())
+                CommentaryWidget(
+                  title: 'Porque?',
+                  textEditingController: tieneProblemasDescriptionController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'input.input_validator'.tr();
+                    }
+                    return null;
+                  },
+                ),
               const Gap(20),
               CommentaryWidget(
                 title: 'Numero de persona a cargo',
@@ -480,6 +496,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer2(
+                          problemasEnergiaDescripcion:
+                              tieneProblemasDescriptionController.text.trim(),
                           edadHijos: edadHijos.text.trim(),
                           numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           objTipoComunidadId: objTipoComunidadId,

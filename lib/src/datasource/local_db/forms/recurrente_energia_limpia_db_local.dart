@@ -25,4 +25,5 @@ class RecurrenteEnergiaLimpiaDbLocal {
   String? comoMejoraSituacion;
   String? quienApoya;
   String? siguienteMeta;
+  String? problemasEnergiaDescripcion;
 }

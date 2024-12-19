@@ -554,11 +554,16 @@ class _RecurrenteEnergiaLimpiaOfflineState
                               .sendOfflineAnswers(
                                 recurrenteEnergiaLimpia:
                                     RecurrenteEnergiaLimpiaModel(
-                                  database:
-                                      state.energiaLimpiaDbLocal?.database ??
-                                          '',
+                                  problemasEnergiaDescripcion: state
+                                          .recurrenteEnergiaLimpiaDbLocal
+                                          ?.problemasEnergiaDescripcion ??
+                                      '',
+                                  database: state.recurrenteEnergiaLimpiaDbLocal
+                                          ?.database ??
+                                      '',
                                   tieneTrabajo: state
-                                          .energiaLimpiaDbLocal?.tieneTrabajo ??
+                                          .recurrenteEnergiaLimpiaDbLocal
+                                          ?.tieneTrabajo ??
                                       false,
                                   trabajoNegocioDescripcion: state
                                           .recurrenteEnergiaLimpiaDbLocal

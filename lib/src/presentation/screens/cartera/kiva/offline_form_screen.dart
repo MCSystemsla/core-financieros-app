@@ -32,17 +32,8 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
       appBar: AppBar(
         title: const Text('Solicitudes en Tramite (Offline)'),
       ),
-      body: BlocConsumer<SolicitudesPendientesLocalDbCubit,
+      body: BlocBuilder<SolicitudesPendientesLocalDbCubit,
           SolicitudesPendientesLocalDbState>(
-        listener: (context, state) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              behavior: SnackBarBehavior.floating,
-              showCloseIcon: true,
-              content: Text('Te encuentras en Modo Offline'),
-            ),
-          );
-        },
         builder: (context, state) {
           return switch (state.status) {
             Status.inProgress =>

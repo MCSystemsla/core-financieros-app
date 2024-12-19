@@ -127,18 +127,23 @@ const EstandarDbLocalSchema = CollectionSchema(
       name: r'publicitarNegocio',
       type: IsarType.string,
     ),
-    r'tieneTrabajo': PropertySchema(
+    r'tiempoActividad': PropertySchema(
       id: 22,
+      name: r'tiempoActividad',
+      type: IsarType.long,
+    ),
+    r'tieneTrabajo': PropertySchema(
+      id: 23,
       name: r'tieneTrabajo',
       type: IsarType.bool,
     ),
     r'tipoEstudioHijos': PropertySchema(
-      id: 23,
+      id: 24,
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
     r'trabajoNegocioDescripcion': PropertySchema(
-      id: 24,
+      id: 25,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -302,9 +307,10 @@ void _estandarDbLocalSerialize(
   writer.writeLong(offsets[19], object.personasCargo);
   writer.writeString(offsets[20], object.planesFuturo);
   writer.writeString(offsets[21], object.publicitarNegocio);
-  writer.writeBool(offsets[22], object.tieneTrabajo);
-  writer.writeString(offsets[23], object.tipoEstudioHijos);
-  writer.writeString(offsets[24], object.trabajoNegocioDescripcion);
+  writer.writeLong(offsets[22], object.tiempoActividad);
+  writer.writeBool(offsets[23], object.tieneTrabajo);
+  writer.writeString(offsets[24], object.tipoEstudioHijos);
+  writer.writeString(offsets[25], object.trabajoNegocioDescripcion);
 }
 
 EstandarDbLocal _estandarDbLocalDeserialize(
@@ -337,9 +343,10 @@ EstandarDbLocal _estandarDbLocalDeserialize(
   object.personasCargo = reader.readLongOrNull(offsets[19]);
   object.planesFuturo = reader.readStringOrNull(offsets[20]);
   object.publicitarNegocio = reader.readStringOrNull(offsets[21]);
-  object.tieneTrabajo = reader.readBoolOrNull(offsets[22]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[23]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[24]);
+  object.tiempoActividad = reader.readLongOrNull(offsets[22]);
+  object.tieneTrabajo = reader.readBoolOrNull(offsets[23]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[24]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[25]);
   return object;
 }
 
@@ -395,10 +402,12 @@ P _estandarDbLocalDeserializeProp<P>(
     case 21:
       return (reader.readStringOrNull(offset)) as P;
     case 22:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 23:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 24:
+      return (reader.readStringOrNull(offset)) as P;
+    case 25:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3377,6 +3386,80 @@ extension EstandarDbLocalQueryFilter
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tiempoActividadBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tiempoActividad',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
       tieneTrabajoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4028,6 +4111,20 @@ extension EstandarDbLocalQuerySortBy
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      sortByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      sortByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
       sortByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -4389,6 +4486,20 @@ extension EstandarDbLocalQuerySortThenBy
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      thenByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      thenByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
       thenByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -4596,6 +4707,13 @@ extension EstandarDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QDistinct>
+      distinctByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tiempoActividad');
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QDistinct>
       distinctByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'tieneTrabajo');
@@ -4771,6 +4889,13 @@ extension EstandarDbLocalQueryProperty
       publicitarNegocioProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'publicitarNegocio');
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, int?, QQueryOperations>
+      tiempoActividadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tiempoActividad');
     });
   }
 

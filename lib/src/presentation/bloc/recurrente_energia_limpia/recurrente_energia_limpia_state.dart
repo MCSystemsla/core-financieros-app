@@ -24,8 +24,9 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
   final String quienApoya;
   final String siguienteMeta;
   final String errorMsg;
+  final String problemasEnergiaDescripcion;
   const RecurrenteEnergiaLimpiaState({
-    this.database = 'MC_CH',
+    this.database = '',
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
     this.tiempoActividad = 0,
@@ -47,6 +48,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
     this.siguienteMeta = '',
     this.status = Status.notStarted,
     this.errorMsg = '',
+    this.problemasEnergiaDescripcion = '',
   });
 
   @override
@@ -73,6 +75,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
         siguienteMeta,
         status,
         errorMsg,
+        problemasEnergiaDescripcion
       ];
 
   RecurrenteEnergiaLimpiaState copyWith({
@@ -98,6 +101,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
     String? quienApoya,
     String? siguienteMeta,
     String? errorMsg,
+    String? problemasEnergiaDescripcion,
   }) {
     return RecurrenteEnergiaLimpiaState(
       status: status ?? this.status,
@@ -126,6 +130,8 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
       quienApoya: quienApoya ?? this.quienApoya,
       siguienteMeta: siguienteMeta ?? this.siguienteMeta,
       errorMsg: errorMsg ?? this.errorMsg,
+      problemasEnergiaDescripcion:
+          problemasEnergiaDescripcion ?? this.problemasEnergiaDescripcion,
     );
   }
 }

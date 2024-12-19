@@ -123,18 +123,23 @@ const RecurrenteEstandarDbLocalSchema = CollectionSchema(
       name: r'siguientePaso',
       type: IsarType.string,
     ),
-    r'tieneTrabajo': PropertySchema(
+    r'tiempoActividad': PropertySchema(
       id: 21,
+      name: r'tiempoActividad',
+      type: IsarType.long,
+    ),
+    r'tieneTrabajo': PropertySchema(
+      id: 22,
       name: r'tieneTrabajo',
       type: IsarType.bool,
     ),
     r'tipoEstudioHijos': PropertySchema(
-      id: 22,
+      id: 23,
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
     r'trabajoDescripcion': PropertySchema(
-      id: 23,
+      id: 24,
       name: r'trabajoDescripcion',
       type: IsarType.string,
     )
@@ -291,9 +296,10 @@ void _recurrenteEstandarDbLocalSerialize(
   writer.writeString(offsets[18], object.personaAutoSuficiente);
   writer.writeLong(offsets[19], object.personasCargo);
   writer.writeString(offsets[20], object.siguientePaso);
-  writer.writeBool(offsets[21], object.tieneTrabajo);
-  writer.writeString(offsets[22], object.tipoEstudioHijos);
-  writer.writeString(offsets[23], object.trabajoDescripcion);
+  writer.writeLong(offsets[21], object.tiempoActividad);
+  writer.writeBool(offsets[22], object.tieneTrabajo);
+  writer.writeString(offsets[23], object.tipoEstudioHijos);
+  writer.writeString(offsets[24], object.trabajoDescripcion);
 }
 
 RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
@@ -325,9 +331,10 @@ RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
   object.personaAutoSuficiente = reader.readStringOrNull(offsets[18]);
   object.personasCargo = reader.readLongOrNull(offsets[19]);
   object.siguientePaso = reader.readStringOrNull(offsets[20]);
-  object.tieneTrabajo = reader.readBoolOrNull(offsets[21]);
-  object.tipoEstudioHijos = reader.readStringOrNull(offsets[22]);
-  object.trabajoDescripcion = reader.readStringOrNull(offsets[23]);
+  object.tiempoActividad = reader.readLongOrNull(offsets[21]);
+  object.tieneTrabajo = reader.readBoolOrNull(offsets[22]);
+  object.tipoEstudioHijos = reader.readStringOrNull(offsets[23]);
+  object.trabajoDescripcion = reader.readStringOrNull(offsets[24]);
   return object;
 }
 
@@ -381,10 +388,12 @@ P _recurrenteEstandarDbLocalDeserializeProp<P>(
     case 20:
       return (reader.readStringOrNull(offset)) as P;
     case 21:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 22:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 23:
+      return (reader.readStringOrNull(offset)) as P;
+    case 24:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3194,6 +3203,80 @@ extension RecurrenteEstandarDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tiempoActividad',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tiempoActividad',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tiempoActividadBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tiempoActividad',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterFilterCondition> tieneTrabajoIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3837,6 +3920,20 @@ extension RecurrenteEstandarDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> sortByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -4190,6 +4287,20 @@ extension RecurrenteEstandarDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByTiempoActividadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tiempoActividad', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> thenByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'tieneTrabajo', Sort.asc);
@@ -4390,6 +4501,13 @@ extension RecurrenteEstandarDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByTiempoActividad() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tiempoActividad');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
       distinctByTieneTrabajo() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'tieneTrabajo');
@@ -4565,6 +4683,13 @@ extension RecurrenteEstandarDbLocalQueryProperty on QueryBuilder<
       siguientePasoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'siguientePaso');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, int?, QQueryOperations>
+      tiempoActividadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tiempoActividad');
     });
   }
 

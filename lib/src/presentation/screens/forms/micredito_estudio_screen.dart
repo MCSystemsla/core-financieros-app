@@ -900,10 +900,6 @@ class _EntornoSocialEstudioWidgetState
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                  CommentaryWidget(
-                    title: 'Profesión u Oficio:',
-                    textEditingController: question1Controller,
-                  ),
                   const Gap(10),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),

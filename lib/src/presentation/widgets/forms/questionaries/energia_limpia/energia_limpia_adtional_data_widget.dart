@@ -90,7 +90,7 @@ class _EnergiaLimpiaAditionalDataWidgetState
                     ),
                   const Gap(10),
                   CommentaryWidget(
-                    title: 'Tiempo de la actividad:*',
+                    title: 'Tiempo de la actividad:* (MESES)',
                     textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {

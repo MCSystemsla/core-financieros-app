@@ -189,9 +189,20 @@ class _MujerEmprendeEntornoSocialWidgetState
                     },
                   ),
                   CommentaryWidget(
-                    title: 'Tiempo Actividad',
-                    textInputType: TextInputType.number,
                     textEditingController: tiempoActividad,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      final numero = int.tryParse(value);
+                      if (numero == null || numero < 0) {
+                        return 'Valor no valido'.tr();
+                      }
+
+                      return null;
+                    },
+                    title: 'Tiempo de la actividad:* (MESES)',
+                    textInputType: TextInputType.number,
                   ),
                   CommentaryWidget(
                     title: '¿Que edades tienen sus hijos?',
@@ -368,6 +379,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final formKey = GlobalKey<FormState>();
   String? tieneTrabajo;
   final trabajoNegocioDescripcion = TextEditingController();
+  final tiempoActividad = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -460,6 +472,22 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 ),
               const Gap(20),
               CommentaryWidget(
+                textEditingController: tiempoActividad,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0) {
+                    return 'Valor no valido'.tr();
+                  }
+
+                  return null;
+                },
+                title: 'Tiempo de la actividad:* (MESES)',
+                textInputType: TextInputType.number,
+              ),
+              CommentaryWidget(
                 title: 'Número de personas a cargo:*',
                 textEditingController: personasCargo,
                 textInputType: TextInputType.number,
@@ -532,6 +560,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          tiempoActividad:
+                              int.tryParse(tiempoActividad.text.trim()),
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                           tieneTrabajoDescripcion:
                               trabajoNegocioDescripcion.text.trim(),

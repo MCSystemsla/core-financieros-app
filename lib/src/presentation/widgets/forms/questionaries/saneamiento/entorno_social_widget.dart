@@ -115,7 +115,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       ),
                     const Gap(10),
                     CommentaryWidget(
-                      title: 'Tiempo de la actividad (meses o años)',
+                      title: 'Tiempo de la actividad (MESES)',
                       textInputType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -264,6 +264,8 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       onNextPressed: () {
                         if (formKey.currentState?.validate() ?? false) {
                           context.read<AguaYSaneamientoCubit>().saveAnswers(
+                                numeroHijos:
+                                    int.tryParse(numeroHijos.text.trim()),
                                 tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                                 trabajoNegocioDescripcion:
                                     trabajoNegocioDescripcion.text.trim(),
@@ -580,6 +582,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteAguaYSaneamientoCubit>().saveAnswers(
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           tipoEstudioHijos: tipoEstudioHijos,
                           personasCargo: personasCargo.text.trim(),
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),

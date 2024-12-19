@@ -23,6 +23,7 @@ class RecurrenteEstandartState extends Equatable {
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
   final String erroMsg;
+  final int tiempoActividad;
   const RecurrenteEstandartState({
     this.database = '',
     this.otrosIngresos = false,
@@ -45,6 +46,7 @@ class RecurrenteEstandartState extends Equatable {
     this.erroMsg = '',
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
+    this.tiempoActividad = 0,
   });
 
   @override
@@ -69,7 +71,8 @@ class RecurrenteEstandartState extends Equatable {
         status,
         erroMsg,
         tieneTrabajo,
-        trabajoNegocioDescripcion
+        trabajoNegocioDescripcion,
+        tiempoActividad
       ];
 
   RecurrenteEstandartState copyWith({
@@ -94,6 +97,7 @@ class RecurrenteEstandartState extends Equatable {
     bool? tieneTrabajo,
     String? trabajoNegocioDescripcion,
     String? erroMsg,
+    int? tiempoActividad,
   }) {
     return RecurrenteEstandartState(
       status: status ?? this.status,
@@ -121,6 +125,7 @@ class RecurrenteEstandartState extends Equatable {
       trabajoNegocioDescripcion:
           trabajoNegocioDescripcion ?? this.trabajoNegocioDescripcion,
       erroMsg: erroMsg ?? this.erroMsg,
+      tiempoActividad: tiempoActividad ?? this.tiempoActividad,
     );
   }
 }

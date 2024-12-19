@@ -25,6 +25,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
   final bool tieneTrabajo;
   final String tieneTrabajoDescripcion;
   final String errorMsg;
+  final int tiempoActividad;
   const RecurrenteMujerEmprendeState({
     this.status = Status.notStarted,
     this.database = 'MC_CH',
@@ -49,6 +50,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     this.errorMsg = '',
     this.tieneTrabajo = false,
     this.tieneTrabajoDescripcion = '',
+    this.tiempoActividad = 0,
   });
 
   @override
@@ -75,7 +77,8 @@ class RecurrenteMujerEmprendeState extends Equatable {
         explicacionAlcanzaraMeta,
         errorMsg,
         tieneTrabajo,
-        tieneTrabajoDescripcion
+        tieneTrabajoDescripcion,
+        tiempoActividad,
       ];
 
   RecurrenteMujerEmprendeState copyWith({
@@ -102,6 +105,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     bool? tieneTrabajo,
     String? tieneTrabajoDescripcion,
     String? errorMsg,
+    int? tiempoActividad,
   }) {
     return RecurrenteMujerEmprendeState(
       status: status ?? this.status,
@@ -132,6 +136,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
       tieneTrabajoDescripcion:
           tieneTrabajoDescripcion ?? this.tieneTrabajoDescripcion,
       errorMsg: errorMsg ?? this.errorMsg,
+      tiempoActividad: tiempoActividad ?? this.tiempoActividad,
     );
   }
 }
