@@ -1,6 +1,6 @@
 # CORE FINANCIERO APP
 
-_El presente repositorio almacena el código frontend del proyecto JLUX Renovable, la cual, es una aplicación móvil multiplataforma con la cual se usa para el core fianciero  dado por la empresa **MC SYSTEM** la cual la aplicacion consta para usos financieros._
+_El presente repositorio almacena el código frontend del proyecto MICREDITO, la cual, es una aplicación móvil multiplataforma con la cual se usa para el core fianciero  dado por la empresa **MC SYSTEM** la cual la aplicacion consta para usos financieros._
 
 ## Comenzando 🚀
 
