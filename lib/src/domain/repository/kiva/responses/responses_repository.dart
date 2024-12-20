@@ -340,7 +340,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         filename: fotoCedula.path,
         contentType: MediaType('image', 'jpeg'),
       ));
-      // Agregar encabezados (si es necesario)
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -430,18 +429,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
     const url = 'https://$apiUrl/kiva/subir-imagenes';
+
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
       request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
 
-      // Agregar imágenes
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
         imagen1,
-        filename:
-            imagen1, // Asegúrate de que el nombre del archivo sea correcto
+        filename: imagen1,
         contentType: MediaType('image', 'jpg'),
       ));
 
@@ -472,13 +470,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         filename: fotoCedula,
         contentType: MediaType('image', 'jpg'),
       ));
-      // Agregar encabezados (si es necesario)
       request.headers.addAll({
-        'Accept': 'application/json', // Indica que se espera una respuesta JSON
+        'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       });
-      // Enviar la solicitud
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -487,11 +483,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}');
       }
-      // if (response.statusCode == 201) {
-      //   print(
-      //       '¡Éxito! Respuesta del servidor: ${await http.Response.fromStream(response)}');
-      //   return true;
-      // }
+
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
     } catch (e) {

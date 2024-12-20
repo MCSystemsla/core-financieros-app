@@ -936,12 +936,12 @@ class _EntornoSocialEstudioWidgetState
                     ),
                   const Gap(20),
                   CommentaryWidget(
-                    title: 'Tiempo de la actividad (meses o años)'.tr(),
+                    title: 'Tiempo de la actividad (MESES)'.tr(),
                     textEditingController: tiempoActividad,
                     textInputType: TextInputType.number,
                     validator: (value) {
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
                       return null;
@@ -1015,7 +1015,7 @@ class _EntornoSocialEstudioWidgetState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
                       return null;
@@ -1031,7 +1031,7 @@ class _EntornoSocialEstudioWidgetState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
                       return null;
