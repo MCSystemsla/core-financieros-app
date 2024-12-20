@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -134,6 +135,10 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
 
   @override
   Widget build(BuildContext context) {
+    if (_filteredSolicitudes.isEmpty) {
+      return const _OnSolocitudesEmpty();
+    }
+
     return RefreshIndicator(
       onRefresh: () async {
         context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
@@ -178,6 +183,33 @@ class _KIvaFormContentState extends State<_KIvaFormContent> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _OnSolocitudesEmpty extends StatelessWidget {
+  const _OnSolocitudesEmpty();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.wallet_giftcard,
+          size: 100,
+          color: AppColors.getPrimaryColor(),
+        ),
+        const Gap(10),
+        Center(
+          child: Text(
+            'No hay solicitudes pendientes',
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontSize: 16,
+                ),
+          ),
+        ),
+      ],
     );
   }
 }

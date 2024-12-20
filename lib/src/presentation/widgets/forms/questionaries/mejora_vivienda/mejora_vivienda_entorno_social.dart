@@ -129,13 +129,13 @@ class _MejoraViviendaEntornoSocialState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
 
                       return null;
                     },
-                    title: 'Tiempo de la actividad:*',
+                    title: 'Tiempo de la actividad:* (MESES)',
                     textInputType: TextInputType.number,
                   ),
                   const Gap(20),
@@ -239,7 +239,7 @@ class _MejoraViviendaEntornoSocialState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
                       return null;
@@ -255,7 +255,7 @@ class _MejoraViviendaEntornoSocialState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
 

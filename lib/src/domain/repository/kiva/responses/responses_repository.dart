@@ -295,7 +295,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
   }) async {
-    const url = 'https://vps-4267502-x.dattaweb.com/kiva/subir-imagenes';
+    const apiUrl = String.fromEnvironment('apiUrl');
+
+    const url = 'https://$apiUrl/kiva/subir-imagenes';
 
     final currentProduct = setCurrentProdut(product: formularioKiva);
     try {
@@ -425,8 +427,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String database,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const url = 'https://$apiUrl/kiva/subir-imagenes';
 
-    const url = 'https://vps-4267502-x.dattaweb.com/kiva/subir-imagenes';
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();

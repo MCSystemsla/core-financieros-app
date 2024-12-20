@@ -394,7 +394,7 @@ class SolicitudesPendientesLocalDbCubit
   }
 
   Future<List<int?>> getItemsRecurrents({required String typeProduct}) async {
-    emit(state.copyWith(status: Status.inProgress));
+    // emit(state.copyWith(status: Status.inProgress));
     try {
       switch (typeProduct) {
         case 'MICREDIESTUDIO RECURRENTE':
@@ -458,6 +458,8 @@ class SolicitudesPendientesLocalDbCubit
               .objSolicitudNuevamenorIdProperty()
               .findAll();
       }
+      // emit(state.copyWith(status: Status.done));
+
       return [];
     } catch (e) {
       _logger.e(e);
