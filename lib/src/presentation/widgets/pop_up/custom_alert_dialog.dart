@@ -6,6 +6,8 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends OdsDialog {
+  @override
+  // ignore: overridden_fields
   final String title;
   const CustomAlertDialog({
     super.key,
