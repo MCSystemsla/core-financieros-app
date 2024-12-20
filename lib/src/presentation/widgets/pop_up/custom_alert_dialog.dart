@@ -6,12 +6,14 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends OdsDialog {
-  CustomAlertDialog({
+  final String title;
+  const CustomAlertDialog({
     super.key,
     this.onDone,
     required this.context,
+    required this.title,
   }) : super(
-          title: 'Formulario Kiva Enviado Exitosamente'.tr(),
+          title: title,
         );
 
   final VoidCallback? onDone;
@@ -21,8 +23,8 @@ class CustomAlertDialog extends OdsDialog {
   List<CustomElevatedButton>? actions(BuildContext context) {
     return [
       CustomElevatedButton(
-        text: 'buttons.cancel'.tr(),
-        color: AppColors.red,
+        text: 'Ok'.tr(),
+        color: AppColors.getPrimaryColor(),
         onPressed: onDone,
       ),
     ];
@@ -32,7 +34,7 @@ class CustomAlertDialog extends OdsDialog {
   Future showDialog(
     BuildContext context, {
     AnimType animType = AnimType.scale,
-    DialogType dialogType = DialogType.success,
+    DialogType dialogType = DialogType.warning,
     Widget? customHeader,
   }) {
     return super.showDialog(

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -130,6 +131,29 @@ class _RequestWidget extends StatefulWidget {
 }
 
 class _RequestWidgetState extends State<_RequestWidget> {
+  int? numSolicitud;
+  bool isMatching = false;
+  @override
+  void initState() {
+    _getNumSolicitud();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _getNumSolicitud() async {
+    final result = await context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .getItemsRecurrents(typeProduct: widget.solicitud.producto ?? '');
+    setState(() {
+      isMatching = result
+          .contains(int.tryParse(widget.solicitud.solicitudId ?? '') ?? 0);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -143,6 +167,16 @@ class _RequestWidgetState extends State<_RequestWidget> {
               motivoAnterior: widget.solicitud.motivoAnterior ??
                   'Motivo Anterior no registrado',
             );
+        if (isMatching) {
+          CustomAlertDialog(
+            context: context,
+            title: 'Este Formulario ya a sido creado.',
+            onDone: () {
+              context.pop();
+            },
+          ).showDialog(context);
+          return;
+        }
         await context.push('/online', extra: widget.solicitud.producto);
       },
       subtitle: Text(
@@ -162,8 +196,11 @@ class _RequestWidgetState extends State<_RequestWidget> {
           Text(widget.solicitud.estado ?? 'N/A'),
         ],
       ),
-      leading: const CircleAvatar(
-        child: Icon(Icons.wallet),
+      leading: CircleAvatar(
+        backgroundColor: isMatching ? Colors.yellow : Colors.green,
+        child: const Icon(
+          Icons.wallet,
+        ),
       ),
     );
   }
