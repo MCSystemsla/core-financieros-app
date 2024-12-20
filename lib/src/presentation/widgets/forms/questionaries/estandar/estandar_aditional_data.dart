@@ -213,142 +213,145 @@ class _RecurrentFormState extends State<_RecurrentForm>
     super.build(context);
     return Form(
       key: formKey,
-      child: Column(
-        children: [
-          const MiCreditoProgress(
-            steps: 4,
-            currentStep: 2,
-          ),
-          const Gap(20),
-          WhiteCard(
-            padding: const EdgeInsets.all(5),
-            child: JLuxDropdown(
-              isContainIcon: true,
-              validator: (value) {
-                if (value == null) return 'input.input_validator'.tr();
-
-                return null;
-              },
-              title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-              items: ['input.yes'.tr(), 'input.no'.tr()],
-              onChanged: (item) {
-                if (item == null) return;
-                otrosIngresos = item;
-                setState(() {});
-              },
-              toStringItem: (item) {
-                return item;
-              },
-              hintText: 'input.select_option'.tr(),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const MiCreditoProgress(
+              steps: 4,
+              currentStep: 2,
             ),
-          ),
-          if (otrosIngresos == 'input.yes'.tr())
+            const Gap(20),
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  otrosIngresos = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            if (otrosIngresos == 'input.yes'.tr())
+              CommentaryWidget(
+                title: 'Cuales?',
+                textEditingController: cualesOtrosIngrsos,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+            WhiteCard(
+              padding: const EdgeInsets.all(5),
+              child: JLuxDropdown(
+                isContainIcon: true,
+                validator: (value) {
+                  if (value == null) return 'input.input_validator'.tr();
+
+                  return null;
+                },
+                title: '¿Tiene Trabajo? Cual?'.tr(),
+                items: ['input.yes'.tr(), 'input.no'.tr()],
+                onChanged: (item) {
+                  if (item == null) return;
+                  tieneTrabajo = item;
+                  setState(() {});
+                },
+                toStringItem: (item) {
+                  return item;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            if (tieneTrabajo == 'input.yes'.tr())
+              CommentaryWidget(
+                title: 'Cuales?',
+                textEditingController: tieneTrabajoDescripcion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
             CommentaryWidget(
-              title: 'Cuales?',
-              textEditingController: cualesOtrosIngrsos,
+              textEditingController: tiempoActividad,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'input.input_validator'.tr();
                 }
-                return null;
-              },
-            ),
-          WhiteCard(
-            padding: const EdgeInsets.all(5),
-            child: JLuxDropdown(
-              isContainIcon: true,
-              validator: (value) {
-                if (value == null) return 'input.input_validator'.tr();
-
-                return null;
-              },
-              title: '¿Tiene Trabajo? Cual?'.tr(),
-              items: ['input.yes'.tr(), 'input.no'.tr()],
-              onChanged: (item) {
-                if (item == null) return;
-                tieneTrabajo = item;
-                setState(() {});
-              },
-              toStringItem: (item) {
-                return item;
-              },
-              hintText: 'input.select_option'.tr(),
-            ),
-          ),
-          if (tieneTrabajo == 'input.yes'.tr())
-            CommentaryWidget(
-              title: 'Cuales?',
-              textEditingController: tieneTrabajoDescripcion,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'input.input_validator'.tr();
+                final numero = int.tryParse(value);
+                if (numero == null || numero < 0) {
+                  return 'Valor no valido'.tr();
                 }
+
                 return null;
               },
+              title: 'Tiempo de la actividad:* (MESES)',
+              textInputType: TextInputType.number,
             ),
-          CommentaryWidget(
-            textEditingController: tiempoActividad,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'input.input_validator'.tr();
-              }
-              final numero = int.tryParse(value);
-              if (numero == null || numero < 0) {
-                return 'Valor no valido'.tr();
-              }
-
-              return null;
-            },
-            title: 'Tiempo de la actividad:* (MESES)',
-            textInputType: TextInputType.number,
-          ),
-          const Gap(20),
-          ButtonActionsWidget(
-            onPreviousPressed: () {
-              widget.pageController.previousPage(
-                duration: const Duration(
-                  milliseconds: 350,
-                ),
-                curve: Curves.easeIn,
-              );
-            },
-            onNextPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                context.read<RecurrenteEstandartCubit>().saveAnswers(
-                      tiempoActividad:
-                          int.tryParse(tiempoActividad.text.trim()),
-                      tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                      trabajoDescripcion: tieneTrabajoDescripcion.text.trim(),
-                      otrosIngresos: otrosIngresos == 'input.yes'.tr(),
-                      otrosIngresosDescripcion: cualesOtrosIngrsos.text.trim(),
-                    );
-                context.read<ResponseCubit>().addResponses(
-                  responses: [
-                    Response(
-                      index: widget.pageController.page?.toInt() ?? 0,
-                      question: '¿Tiene otros ingresos?¿Cuales?*',
-                      response: otrosIngresos ?? 'N/A',
-                    ),
-                    if (otrosIngresos == 'input.yes'.tr())
-                      Response(
-                        index: widget.pageController.page?.toInt() ?? 0,
-                        question: 'Cuales?',
-                        response: otrosIngresos ?? 'N/A',
-                      ),
-                  ],
-                );
-                widget.pageController.nextPage(
+            const Gap(20),
+            ButtonActionsWidget(
+              onPreviousPressed: () {
+                widget.pageController.previousPage(
                   duration: const Duration(
                     milliseconds: 350,
                   ),
                   curve: Curves.easeIn,
                 );
-              }
-            },
-            previousTitle: 'button.previous'.tr(),
-            nextTitle: 'button.next'.tr(),
-          ),
-        ],
+              },
+              onNextPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  context.read<RecurrenteEstandartCubit>().saveAnswers(
+                        tiempoActividad:
+                            int.tryParse(tiempoActividad.text.trim()),
+                        tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
+                        trabajoDescripcion: tieneTrabajoDescripcion.text.trim(),
+                        otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                        otrosIngresosDescripcion:
+                            cualesOtrosIngrsos.text.trim(),
+                      );
+                  context.read<ResponseCubit>().addResponses(
+                    responses: [
+                      Response(
+                        index: widget.pageController.page?.toInt() ?? 0,
+                        question: '¿Tiene otros ingresos?¿Cuales?*',
+                        response: otrosIngresos ?? 'N/A',
+                      ),
+                      if (otrosIngresos == 'input.yes'.tr())
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question: 'Cuales?',
+                          response: otrosIngresos ?? 'N/A',
+                        ),
+                    ],
+                  );
+                  widget.pageController.nextPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                }
+              },
+              previousTitle: 'button.previous'.tr(),
+              nextTitle: 'button.next'.tr(),
+            ),
+          ],
+        ),
       ),
     );
   }

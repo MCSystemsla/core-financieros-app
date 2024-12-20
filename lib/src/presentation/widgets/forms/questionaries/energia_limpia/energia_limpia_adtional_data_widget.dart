@@ -97,7 +97,7 @@ class _EnergiaLimpiaAditionalDataWidgetState
                         return 'input.input_validator'.tr();
                       }
                       final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
+                      if (numero == null || numero < 0 || numero >= 255) {
                         return 'Valor no valido'.tr();
                       }
                       return null;
