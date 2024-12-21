@@ -296,8 +296,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String database,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
 
-    const url = 'https://$apiUrl/kiva/subir-imagenes';
+    const url = '$protocol://$apiUrl/kiva/subir-imagenes';
 
     final currentProduct = setCurrentProdut(product: formularioKiva);
     try {
@@ -428,7 +429,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
-    const url = 'https://$apiUrl/kiva/subir-imagenes';
+    const protocol = String.fromEnvironment('protocol');
+
+    const url = '$protocol://$apiUrl/kiva/subir-imagenes';
 
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
