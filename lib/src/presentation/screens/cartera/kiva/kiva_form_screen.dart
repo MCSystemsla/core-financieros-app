@@ -110,13 +110,24 @@ class _KIvaFormContent extends StatefulWidget {
   State<_KIvaFormContent> createState() => _KIvaFormContentState();
 }
 
-class _KIvaFormContentState extends State<_KIvaFormContent> {
+class _KIvaFormContentState extends State<_KIvaFormContent>
+    with WidgetsBindingObserver {
   late List<Solicitud> _filteredSolicitudes;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (!mounted) return;
+      context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+    super.initState();
   }
 
   void _filterSolicitudes(String query) {

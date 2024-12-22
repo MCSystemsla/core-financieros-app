@@ -98,7 +98,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CommentaryWidget(
                         readOnly: true,
@@ -432,7 +432,7 @@ class _RecurrenteSaneamientoOfflineState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(10),
                       CommentaryWidget(

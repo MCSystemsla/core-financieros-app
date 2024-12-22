@@ -99,6 +99,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(20),
                       CommentaryWidget(
@@ -508,7 +509,7 @@ class _MiCrediEstudioRecurrenteFormState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CommentaryWidget(
                         title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
