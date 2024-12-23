@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -59,6 +60,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
+            final departamentos = context.read<DepartamentosCubit>();
 
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(
@@ -79,6 +81,17 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                         LocalStorage().userId,
                       )
                       ..motivoAnterior = e.motivoAnterior;
+                  },
+                ).toList(),
+              );
+            }
+            if (state.status == Status.done) {
+              await solicitudesProvider.saveDepartaments(
+                departaments: departamentos.state.departamentos.map(
+                  (e) {
+                    return DepartamentosDbLocal()
+                      ..nombre = e.nombre
+                      ..valor = e.valor;
                   },
                 ).toList(),
               );
@@ -125,9 +138,16 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+    initFunctions();
     super.initState();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
   }
 
   void _filterSolicitudes(String query) {

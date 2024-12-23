@@ -465,7 +465,7 @@ class _RecurrenteSaneamientoOfflineState
                                 .recurrenteSaneamientoDbLocal?.tiempoActividad
                                 .toString() ??
                             '0',
-                        title: 'Tiempo de la actividad (meses o años):*',
+                        title: 'Tiempo de la actividad (MESES):*',
                       ),
                       const Gap(10),
                       CommentaryWidget(
