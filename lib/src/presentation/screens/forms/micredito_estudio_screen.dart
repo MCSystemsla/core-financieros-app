@@ -1250,6 +1250,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Número de personas a cargo:*',
                 textEditingController: personasCargo,
+                textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'input.input_validator'.tr();
