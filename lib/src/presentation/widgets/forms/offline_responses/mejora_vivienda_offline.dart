@@ -100,6 +100,7 @@ class _ViviendaNuevaOfflineResponseState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(20),
                       CommentaryWidget(
@@ -374,7 +375,7 @@ class _RecurrenteViviendaOfflineResponseState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(20),
                       CommentaryWidget(

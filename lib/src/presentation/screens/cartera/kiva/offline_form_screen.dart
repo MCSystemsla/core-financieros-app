@@ -70,6 +70,14 @@ class _KivaOfflineContentState extends State<KivaOfflineContent> {
   void initState() {
     super.initState();
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+    initFunctions();
+  }
+
+  initFunctions() async {
+    final solicitudesProvider =
+        context.read<SolicitudesPendientesLocalDbCubit>();
+    await solicitudesProvider.getComunidades();
+    await solicitudesProvider.getDepartamentos();
   }
 
   void _filterSolicitudes(String query) {
