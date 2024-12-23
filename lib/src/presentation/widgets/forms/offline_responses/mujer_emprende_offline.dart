@@ -98,7 +98,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(10),
                       CommentaryWidget(
@@ -409,7 +409,7 @@ class _RecurrenteMujerEmprendeOfflineState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(10),
                       CommentaryWidget(

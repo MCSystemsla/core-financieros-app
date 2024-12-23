@@ -1,5 +1,5 @@
-import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -77,28 +77,33 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                         ),
                   ),
                   const Gap(10),
-                  WhiteCard(
-                    marginTop: 15,
-                    padding: const EdgeInsets.all(10),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                      // isLoading: state.status == Status.inProgress,
-                      title: 'forms.entorno_familiar.person_origin'.tr(),
-                      items: Origin.originCatalogosValores,
-                      onChanged: (item) {
-                        if (item == null) return;
-                        objOrigenCatalogoValorId = item.valor;
-                        setState(() {});
-                      },
-                      toStringItem: (item) => item.nombre,
-                      hintText: 'input.select_department'.tr(),
-                    ),
+                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                      SolicitudesPendientesLocalDbState>(
+                    builder: (context, state) {
+                      return WhiteCard(
+                        marginTop: 15,
+                        padding: const EdgeInsets.all(10),
+                        child: JLuxDropdown(
+                          isContainIcon: true,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
+                          },
+                          isLoading: state.status == Status.inProgress,
+                          title: 'forms.entorno_familiar.person_origin'.tr(),
+                          items: state.departamentos,
+                          onChanged: (item) {
+                            if (item == null) return;
+                            objOrigenCatalogoValorId = item.valor;
+                            setState(() {});
+                          },
+                          toStringItem: (item) => item.nombre ?? '',
+                          hintText: 'input.select_department'.tr(),
+                        ),
+                      );
+                    },
                   ),
                   const Gap(20),
                   CommentaryWidget(

@@ -99,7 +99,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(20),
                       CommentaryWidget(
@@ -388,7 +388,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
               Status.inProgress => const LoadingWidget(),
               Status.done => SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Gap(20),
                       CommentaryWidget(
