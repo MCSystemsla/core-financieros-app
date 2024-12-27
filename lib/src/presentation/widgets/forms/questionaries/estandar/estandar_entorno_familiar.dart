@@ -38,15 +38,12 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
   String? tipoEstudioHijos;
   @override
   void initState() {
-    initFunctions();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final solicitudesProvider =
+          context.read<SolicitudesPendientesLocalDbCubit>();
+      await solicitudesProvider.getDepartamentos();
+    });
     super.initState();
-  }
-
-  initFunctions() async {
-    final solicitudesProvider =
-        context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getComunidades();
-    await solicitudesProvider.getDepartamentos();
   }
 
   @override
