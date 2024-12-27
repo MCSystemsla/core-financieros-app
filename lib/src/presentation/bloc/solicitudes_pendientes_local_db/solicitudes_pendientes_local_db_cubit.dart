@@ -97,24 +97,24 @@ class SolicitudesPendientesLocalDbCubit
   }
 
   Future<void> getDepartamentos() async {
-    emit(state.copyWith(status: Status.inProgress));
+    // emit(state.copyWith(status: Status.inProgress));
     try {
       final departamentos =
           await state.isar!.departamentosDbLocals.where().findAll();
-      emit(state.copyWith(status: Status.done, departamentos: departamentos));
+      emit(state.copyWith(departamentos: departamentos));
       _logger.i(departamentos.length);
     } catch (e) {
       _logger.e(e);
-      emit(state.copyWith(status: Status.error));
+      // emit(state.copyWith(status: Status.error));
     }
   }
 
   Future<void> getComunidades() async {
-    emit(state.copyWith(status: Status.inProgress));
+    // emit(state.copyWith(status: Status.inProgress));
     try {
       final comunidades =
           await state.isar!.comunidadesLocalDbs.where().findAll();
-      emit(state.copyWith(status: Status.done, comunidades: comunidades));
+      emit(state.copyWith(comunidades: comunidades));
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -682,24 +682,24 @@ class SolicitudesPendientesLocalDbCubit
   Future<void> saveDepartaments({
     required List<DepartamentosDbLocal> departaments,
   }) async {
+    // emit(state.copyWith(status: Status.inProgress));
     try {
       await state.isar!.writeTxn(
         () {
           return state.isar!.departamentosDbLocals.clear();
         },
       );
-    } catch (e) {
-      _logger.e(e);
-    }
-    try {
+
       final resp = await state.isar!.writeTxn(
         () {
           return state.isar!.departamentosDbLocals.putAll(departaments);
         },
       );
+      // emit(state.copyWith(status: Status.done));
       _logger.i(resp);
     } catch (e) {
       _logger.e(e);
+      emit(state.copyWith(status: Status.error));
     }
   }
 

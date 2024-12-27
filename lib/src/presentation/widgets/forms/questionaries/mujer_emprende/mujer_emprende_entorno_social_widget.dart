@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -44,15 +43,12 @@ class _MujerEmprendeEntornoSocialWidgetState
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    initFunctions();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final solicitudesProvider =
+          context.read<SolicitudesPendientesLocalDbCubit>();
+      await solicitudesProvider.getDepartamentos();
+    });
     super.initState();
-  }
-
-  initFunctions() async {
-    final solicitudesProvider =
-        context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getComunidades();
-    await solicitudesProvider.getDepartamentos();
   }
 
   @override
@@ -164,7 +160,7 @@ class _MujerEmprendeEntornoSocialWidgetState
                             return null;
                           },
                           isContainIcon: true,
-                          isLoading: state.status == Status.inProgress,
+                          // isLoading: state.status == Status.inProgress,
                           title: 'forms.entorno_familiar.person_origin'.tr(),
                           items: state.departamentos,
                           onChanged: (item) {
