@@ -42,13 +42,13 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                 )..getSolicitudesPendientes()),
         BlocProvider(
           lazy: false,
-          create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
-            ..getDepartamentos(),
+          create: (ctx) =>
+              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
         ),
         BlocProvider(
           lazy: false,
-          create: (ctx) =>
-              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
+          create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
+            ..getDepartamentos(),
         ),
       ],
       child: Scaffold(
@@ -60,8 +60,6 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
-            final departamentos = context.read<DepartamentosCubit>();
-
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(
                 solicitudes: state.solicitudesPendienteResponse.map(
@@ -81,17 +79,6 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                         LocalStorage().userId,
                       )
                       ..motivoAnterior = e.motivoAnterior;
-                  },
-                ).toList(),
-              );
-            }
-            if (state.status == Status.done) {
-              await solicitudesProvider.saveDepartaments(
-                departaments: departamentos.state.departamentos.map(
-                  (e) {
-                    return DepartamentosDbLocal()
-                      ..nombre = e.nombre
-                      ..valor = e.valor;
                   },
                 ).toList(),
               );
@@ -138,16 +125,21 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-    initFunctions();
-    super.initState();
-  }
-
-  initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getComunidades();
-    await solicitudesProvider.getDepartamentos();
+    final departamentos = context.read<DepartamentosCubit>();
+    final departamentosList = departamentos.state.departamentos;
+    final departamentosDbList = departamentosList.map((e) {
+      return DepartamentosDbLocal()
+        ..nombre = e.nombre
+        ..valor = e.valor;
+    }).toList();
+    solicitudesProvider.saveDepartaments(
+      departaments: departamentosDbList,
+    );
+
+    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+    super.initState();
   }
 
   void _filterSolicitudes(String query) {
