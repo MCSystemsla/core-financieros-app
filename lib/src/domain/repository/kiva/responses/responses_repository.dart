@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/migrantes_ecomicos.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
@@ -80,6 +81,8 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
   });
+  Future<(bool, String)> migrantesEconomicos(
+      {required MigrantesEconomicos migrantesEconmicos});
 }
 
 class ResponsesRepositoryImpl extends ResponsesRepository {
@@ -376,6 +379,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       'AGUA Y SANEAMIENTO RECURRENTE' => 'ScrKivaAguaSaneamientoRecurrente',
       'ASER NUEVO' => 'ScrKivaEnergiaLimpia',
       'ASER RECURRENTE' => 'ScrKivaEnergiaLimpiaRecurrente',
+      'ESTANDAR COLONES NUEVO MAYOR A MIL' => 'ScrKivaMigrantesEconomicos',
+      'ESTANDAR COLONES NUEVO MENOR A MIL' => 'ScrKivaMigrantesEconomicos',
+      'ESTANDAR COLONES RECURRENTE MAYOR A MIL' =>
+        'ScrKivaMigrantesEconomicosRecurrente',
+      'ESTANDAR COLONES RECURRENTE MENOR A MIL' =>
+        'ScrKivaMigrantesEconomicosRecurrente',
       _ => 'NO PRODUCT',
     };
   }
@@ -489,6 +498,23 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> migrantesEconomicos({
+    required MigrantesEconomicos migrantesEconmicos,
+  }) async {
+    final endpoint = MigrantesEconomicosEndpoint(
+      migrantesEconomicos: migrantesEconmicos,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());

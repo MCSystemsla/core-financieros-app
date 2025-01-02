@@ -42,9 +42,14 @@ final router = GoRouter(
           builder: (context, state) => const SeguimientoScreen(),
         ),
         GoRoute(
-          path: 'form/migrantes-economicos',
-          builder: (context, state) => const MigrantesEconomicosScreen(),
-        ),
+            path: 'form/migrantes-economicos',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MigrantesEconomicosScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/micredito-estudio',
             builder: (context, state) {
@@ -120,6 +125,12 @@ final router = GoRouter(
             tipoProducto == 'MUJER EMPRENDE RECURRENTE') {
           return '/online/form/mujer-emprende';
         }
+        if (tipoProducto == 'ESTANDAR COLONES NUEVO MAYOR A MIL' ||
+            tipoProducto == 'ESTANDAR COLONES RECURRENTE MAYOR A MIL' ||
+            tipoProducto == 'ESTANDAR COLONES NUEVO MENOR A MIL' ||
+            tipoProducto == 'ESTANDAR COLONES RECURRENTE MENOR A MIL') {
+          return '/online/form/migrantes-economicos';
+        }
         return null;
       },
     ),
@@ -150,9 +161,14 @@ final router = GoRouter(
           builder: (context, state) => const SeguimientoScreen(),
         ),
         GoRoute(
-          path: 'form/migrantes-economicos',
-          builder: (context, state) => const MigrantesEconomicosScreen(),
-        ),
+            path: 'form/migrantes-economicos',
+            builder: (context, state) {
+              final typeProduct =
+                  context.read<KivaRouteCubit>().state.currentRoute;
+              return MigrantesEconomicosScreen(
+                typeProduct: typeProduct,
+              );
+            }),
         GoRoute(
             path: 'form/micredito-estudio',
             builder: (context, state) {
