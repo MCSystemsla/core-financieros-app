@@ -2,11 +2,9 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
-import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
@@ -40,11 +38,6 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             create: (ctx) => SolicitudesPendientesCubit(
                   SolicitudesPendientesRepositoryImpl(),
                 )..getSolicitudesPendientes()),
-        BlocProvider(
-          lazy: false,
-          create: (ctx) =>
-              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
-        ),
         BlocProvider(
           lazy: false,
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())

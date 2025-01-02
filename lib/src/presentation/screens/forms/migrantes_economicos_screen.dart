@@ -1,28 +1,50 @@
-import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/migrantes_economicos/migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_entorno_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_about_family.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_desarrollo_negocio.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_signature.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/primer_prestamo_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 class MigrantesEconomicosScreen extends StatelessWidget {
-  const MigrantesEconomicosScreen({super.key});
+  final String typeProduct;
+  const MigrantesEconomicosScreen({super.key, required this.typeProduct});
 
   @override
   Widget build(BuildContext context) {
+    final isRecurrentForm =
+        typeProduct == 'ESTANDAR COLONES RECURRENTE MAYOR A MIL' ||
+            typeProduct == 'ESTANDAR COLONES RECURRENTE MENOR A MIL';
+
     final pageController = PageController();
 
-    return BlocProvider(
-      create: (ctx) => ResponseCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => ResponseCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => MigrantesEconomicosCubit(ResponsesRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(ResponsesRepositoryImpl()),
+        ),
+      ],
       child: PopScope(
         canPop: false,
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('forms.migrantes_economicos.title'.tr()),
+            title: Text(
+                '${'forms.migrantes_economicos.title'.tr()} ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'
+                    .tr()),
           ),
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
@@ -34,236 +56,26 @@ class MigrantesEconomicosScreen extends StatelessWidget {
               PrimerPrestamoWidget(
                 controller: pageController,
               ),
-              _ImpactoSocialMigranteEconomico(
+              MigrantesEconomicosEntornoSocial(
+                controller: pageController,
+              ),
+              MigrantesEconomicosAboutFamily(
+                controller: pageController,
+              ),
+              MigrantesEconomicosDesarrolloDeNegocio(
+                controller: pageController,
+              ),
+              ImpactoSocialMigranteEconomico(
                 controller: pageController,
               ),
               FormResponses(
                 controller: pageController,
               ),
-              const SignQuestionaryWidget(),
+              const MigrantesFormSignature(),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-class PrimerPrestamoWidget extends StatefulWidget {
-  final PageController controller;
-  const PrimerPrestamoWidget({super.key, required this.controller});
-
-  @override
-  State<PrimerPrestamoWidget> createState() => _PrimerPrestamoWidgetState();
-}
-
-class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
-    with AutomaticKeepAliveClientMixin {
-  final question1Controller = TextEditingController();
-  final question2Controller = TextEditingController();
-  final question3Controller = TextEditingController();
-  final question4Controller = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 3,
-              currentStep: 1,
-            ),
-            const Gap(20),
-            Text(
-              'forms.migrantes_economicos.primer_prestamo.title'.tr(),
-              textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  'forms.migrantes_economicos.primer_prestamo.question1'.tr(),
-              textEditingController: question1Controller,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title:
-                  'forms.migrantes_economicos.primer_prestamo.question2'.tr(),
-              textEditingController: question2Controller,
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<ResponseCubit>().addResponses(
-                  responses: [
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.primer_prestamo.question1'
-                              .tr(),
-                      response: question1Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.primer_prestamo.question2'
-                              .tr(),
-                      response: question2Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                  ],
-                );
-                widget.controller.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.next'.tr(),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class _ImpactoSocialMigranteEconomico extends StatefulWidget {
-  final PageController controller;
-  const _ImpactoSocialMigranteEconomico({required this.controller});
-
-  @override
-  State<_ImpactoSocialMigranteEconomico> createState() =>
-      _ImpactoSocialMigranteEconomicoState();
-}
-
-class _ImpactoSocialMigranteEconomicoState
-    extends State<_ImpactoSocialMigranteEconomico>
-    with AutomaticKeepAliveClientMixin {
-  final question1Controller = TextEditingController();
-  final question2Controller = TextEditingController();
-  final question3Controller = TextEditingController();
-  final question4Controller = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MiCreditoProgress(
-              steps: 3,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            Text(
-              'forms.mejora_de_vivienda.impacto_social.title'.tr(),
-              textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'forms.migrantes_economicos.impacto_social.question1'.tr(),
-              textEditingController: question1Controller,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'forms.migrantes_economicos.impacto_social.question2'.tr(),
-              textEditingController: question2Controller,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'forms.migrantes_economicos.impacto_social.question3'.tr(),
-              textEditingController: question3Controller,
-            ),
-            const Gap(20),
-            CommentaryWidget(
-              title: 'forms.migrantes_economicos.impacto_social.question4'.tr(),
-              textEditingController: question4Controller,
-            ),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                context.read<ResponseCubit>().addResponses(
-                  responses: [
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.impacto_social.question1'
-                              .tr(),
-                      response: question1Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.impacto_social.question2'
-                              .tr(),
-                      response: question2Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.impacto_social.question3'
-                              .tr(),
-                      response: question3Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                    Response(
-                      question:
-                          'forms.migrantes_economicos.impacto_social.question4'
-                              .tr(),
-                      response: question4Controller.text.trim(),
-                      index: widget.controller.page?.toInt() ?? 0,
-                    ),
-                  ],
-                );
-                widget.controller.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.signed'.tr(),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
 }
