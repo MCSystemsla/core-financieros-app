@@ -854,7 +854,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             const Gap(15),
             UploadImageWidget(
               selectedImage: selectedImage4,
-              title: '3-  ${'Agregar foto de cedula'.tr()}',
+              title: '4-  ${'Agregar foto de cedula'.tr()}',
               onPressed: () async {
                 await picker
                     .pickImage(

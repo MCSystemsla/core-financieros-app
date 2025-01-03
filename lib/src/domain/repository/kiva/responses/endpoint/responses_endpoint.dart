@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurre
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/migrantes_ecomicos.dart';
+import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/recurrente_migrante_economico.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 
@@ -281,6 +282,25 @@ class MigrantesEconomicosEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => migrantesEconomicos.toJson();
+}
+
+class MigrantesEconomicosEndpointRecurrente extends Endpoint {
+  final MigrantesEconomicosRecurrente migrantesEconomicosRecurrente;
+  MigrantesEconomicosEndpointRecurrente(
+      {required this.migrantesEconomicosRecurrente});
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/crear-migrantes-economicos-recurrente';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => migrantesEconomicosRecurrente.toJson();
 }
 
 class FileEndpoint extends Endpoint {
