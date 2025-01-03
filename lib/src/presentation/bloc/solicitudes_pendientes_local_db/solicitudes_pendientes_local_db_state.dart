@@ -21,6 +21,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final MujerEmprendeDbLocal? mujerEmprendeDbLocal;
   final ImageModel? imageModel;
   final RecurrenteMujerEmprendeDbLocal? recurrenteMujerEmprende;
+  final MigranteEconomicoDbLocal? migranteEconomicoDbLocal;
   const SolicitudesPendientesLocalDbState({
     this.status = Status.notStarted,
     this.isar,
@@ -41,6 +42,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.mujerEmprendeDbLocal,
     this.imageModel,
     this.recurrenteMujerEmprende,
+    this.migranteEconomicoDbLocal,
   });
 
   @override
@@ -71,6 +73,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     MujerEmprendeDbLocal? mujerEmprendeDbLocal,
     ImageModel? imageModel,
     RecurrenteMujerEmprendeDbLocal? recurrenteMujerEmprende,
+    MigranteEconomicoDbLocal? migranteEconomicoDbLocal,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -100,6 +103,8 @@ class SolicitudesPendientesLocalDbState extends Equatable {
       imageModel: imageModel ?? this.imageModel,
       recurrenteMujerEmprende:
           recurrenteMujerEmprende ?? this.recurrenteMujerEmprende,
+      migranteEconomicoDbLocal:
+          migranteEconomicoDbLocal ?? this.migranteEconomicoDbLocal,
     );
   }
 }
