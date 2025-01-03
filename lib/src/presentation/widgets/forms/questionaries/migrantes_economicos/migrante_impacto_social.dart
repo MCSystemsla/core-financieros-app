@@ -101,17 +101,16 @@ class _ImpactoSocialMigranteEconomicoState
                       hintText: 'input.select_option'.tr(),
                     ),
                   ),
-                  if (ayudaMejorarCondiciones == 'input.yes'.tr())
-                    CommentaryWidget(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                      title: 'Porque?'.tr(),
-                      textEditingController: ayudaMejorarCondicionesExplicacion,
-                    ),
+                  CommentaryWidget(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'input.input_validator'.tr();
+                      }
+                      return null;
+                    },
+                    title: 'Porque?'.tr(),
+                    textEditingController: ayudaMejorarCondicionesExplicacion,
+                  ),
                   CommentaryWidget(
                     textEditingController: propositosProximos,
                     title: '¿Cuáles son sus propósitos para los próximos años?',

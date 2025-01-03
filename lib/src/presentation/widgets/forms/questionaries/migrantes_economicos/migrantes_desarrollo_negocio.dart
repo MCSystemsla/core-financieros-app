@@ -84,17 +84,16 @@ class _MigrantesEconomicosDesarrolloDeNegocioState
                   hintText: 'input.select_option'.tr(),
                 ),
               ),
-              if (fortalecerIngresos == 'input.yes'.tr())
-                CommentaryWidget(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                  textEditingController: fortalecerIngresosExplicacion,
-                  title: '¿Porqué?',
-                ),
+              CommentaryWidget(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                textEditingController: fortalecerIngresosExplicacion,
+                title: '¿Porqué?',
+              ),
               CommentaryWidget(
                 textEditingController: metasFuturo,
                 title: '¿Cuáles son las metas a futuro que tiene?',

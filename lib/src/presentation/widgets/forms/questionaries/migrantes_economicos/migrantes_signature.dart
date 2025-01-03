@@ -5,6 +5,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/migrante_economico/migrante_economico_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/migrante_economico/recurrente_migrante_economico_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -310,7 +311,7 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
-    // final imageProvider = context.watch<UploadUserFileCubit>().state;
+    final imageProvider = context.watch<UploadUserFileCubit>().state;
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     return Column(
@@ -482,28 +483,27 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
                             }
                             if (!context.mounted) return;
                             !isConnected
-                                ? null
-                                // ? saveEnergiaLocalDB(
-                                //     context,
-                                //     state,
-                                //     ImageModel()
-                                //       ..imagenFirma = localPath
-                                //       ..imagen1 = imageProvider.imagen1?.path ??
-                                //           'No Path'
-                                //       ..imagen2 = imageProvider.imagen2?.path ??
-                                //           'No Path'
-                                //       ..imagen3 = imageProvider.imagen3?.path ??
-                                //           'No Path'
-                                //       ..solicitudId = int.tryParse(
-                                //         context
-                                //             .read<KivaRouteCubit>()
-                                //             .state
-                                //             .solicitudId,
-                                //       )
-                                //       ..imagen4 =
-                                //           imageProvider.fotoCedula?.path ??
-                                //               'No Path',
-                                //   )
+                                ? saveAnswersOnLocalDB(
+                                    context,
+                                    state,
+                                    ImageModel()
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1?.path ??
+                                          'No Path'
+                                      ..imagen2 = imageProvider.imagen2?.path ??
+                                          'No Path'
+                                      ..imagen3 = imageProvider.imagen3?.path ??
+                                          'No Path'
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      )
+                                      ..imagen4 =
+                                          imageProvider.fotoCedula?.path ??
+                                              'No Path',
+                                  )
                                 : context
                                     .read<RecurrenteMigrantesEconomicosCubit>()
                                     .sendAnswers();
@@ -523,5 +523,51 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void saveAnswersOnLocalDB(
+    BuildContext context,
+    RecurrenteMigrantesEconomicosState state,
+    ImageModel imageModel,
+  ) {
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
+    context
+        .read<SolicitudesPendientesLocalDbCubit>()
+        .saveRecurrentMigranteEconomico(
+          recurrenteMigranteEconomicoDbLocal:
+              RecurrenteMigranteEconomicoDbLocal()
+                ..database = LocalStorage().database
+                ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+                ..tieneTrabajo = state.tieneTrabajo
+                ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+                ..tiempoActividad = state.tiempoActividad
+                ..numeroHijos = state.numeroHijos
+                ..edadHijos = state.edadHijos
+                ..tipoEstudioHijos = state.tipoEstudioHijos
+                ..otrosIngresos = state.otrosIngresos
+                ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+                ..personasCargo = state.personasCargo
+                ..motivoPrestamo = state.motivoPrestamo
+                ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
+                ..coincideRespuesta = state.coincideRespuesta
+                ..explicacionInversion = state.explicacionInversion
+                ..apoyanNegocio = state.apoyanNegocio
+                ..quienApoya = state.quienApoya
+                ..cuantosApoyan = state.cuantosApoyan
+                ..mejoraCondiciones = state.mejoraCondiciones
+                ..explicacionMejoraCondiciones =
+                    state.explicacionMejoraCondiciones
+                ..siguienteMeta = state.siguienteMeta,
+        );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Formulario Kiva Guardado Exitosamente'),
+      ),
+    );
+    context.pushReplacement('/');
   }
 }

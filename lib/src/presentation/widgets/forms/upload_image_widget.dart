@@ -75,6 +75,7 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
     );
   }
 
+  // ignore: unused_element
   void _showSelectImageDialog(
       BuildContext context, Function(XFile) onSelected) {
     showDialog(

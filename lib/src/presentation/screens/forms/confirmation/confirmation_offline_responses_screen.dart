@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/migrantes_ecomicos.dart';
+import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/recurrente_migrante_economico.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
@@ -27,6 +26,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/offline_respo
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/estandar_offline_responses.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/mejora_vivienda_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/micredi_estudio_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/migrantes_economicos_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/mujer_emprende_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/saneamiento_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -36,6 +36,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../bloc/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
 
 class ConfirmationOfflineResponsesScreen extends StatelessWidget {
   final String typeProduct;
@@ -99,6 +101,9 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => MigrantesEconomicosCubit(respository),
+        ),
+        BlocProvider(
+          create: (ctx) => RecurrenteMigrantesEconomicosCubit(respository),
         ),
       ],
       child: Scaffold(
@@ -169,21 +174,33 @@ class _CurrentForm extends StatelessWidget {
       'ESTANDAR COLONES NUEVO MENOR A MIL' => MigranteEconomicoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
+      'ESTANDAR COLONES RECURRENTE MAYOR A MIL' =>
+        RecurrenteMigranteEconomicoOffline(
+          solicitudId: int.tryParse(solicitudId) ?? 0,
+        ),
+      'ESTANDAR COLONES RECURRENTE MENOR A MIL' =>
+        RecurrenteMigranteEconomicoOffline(
+          solicitudId: int.tryParse(solicitudId) ?? 0,
+        ),
       _ => const SizedBox(),
     };
   }
 }
 
-class MigranteEconomicoOffline extends StatefulWidget {
+class RecurrenteMigranteEconomicoOffline extends StatefulWidget {
   final int solicitudId;
-  const MigranteEconomicoOffline({super.key, required this.solicitudId});
+  const RecurrenteMigranteEconomicoOffline({
+    super.key,
+    required this.solicitudId,
+  });
 
   @override
-  State<MigranteEconomicoOffline> createState() =>
-      _MigranteEconomicoOfflineState();
+  State<RecurrenteMigranteEconomicoOffline> createState() =>
+      _RecurrenteMigranteEconomicoOfflineState();
 }
 
-class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
+class _RecurrenteMigranteEconomicoOfflineState
+    extends State<RecurrenteMigranteEconomicoOffline> {
   @override
   void initState() {
     initFunctions();
@@ -193,7 +210,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getMigranteEconomico(widget.solicitudId);
+    await solicitudesProvider.getRecurrentMigranteEconomico(widget.solicitudId);
     await solicitudesProvider.getImagesModel(widget.solicitudId);
   }
 
@@ -202,7 +219,8 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
     return BlocBuilder<SolicitudesPendientesLocalDbCubit,
         SolicitudesPendientesLocalDbState>(
       builder: (context, state) {
-        return BlocConsumer<MigrantesEconomicosCubit, MigrantesEconomicosState>(
+        return BlocConsumer<RecurrenteMigrantesEconomicosCubit,
+            RecurrenteMigrantesEconomicosState>(
           listener: (context, status) async {
             if (status.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -254,216 +272,240 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.tieneTrabajo ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
                       const Gap(20),
-                      if (state.migranteEconomicoDbLocal?.tieneTrabajo ?? false)
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                    ?.tieneTrabajo ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
+                        readOnly: true,
+                      ),
+                      if (state.recurrenteMigranteEconomicoDbLocal
+                              ?.tieneTrabajo ??
+                          false)
                         CommentaryWidget(
                           title: 'Cual',
-                          initialValue: state.migranteEconomicoDbLocal
+                          initialValue: state.recurrenteMigranteEconomicoDbLocal
                                   ?.trabajoNegocioDescripcion ??
-                              'N/A',
+                              '',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
+                          },
+                          readOnly: true,
                         ),
                       const Gap(10),
                       CommentaryWidget(
                         title: 'Tiempo de la actividad:* (MESES)',
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.tiempoActividad
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.tiempoActividad
                                 ?.toString() ??
-                            '0',
+                            '',
+                        textInputType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          final numero = int.tryParse(value);
+                          if (numero == null || numero < 0 || numero >= 255) {
+                            return 'Valor no valido'.tr();
+                          }
+                          return null;
+                        },
+                        readOnly: true,
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.otrosIngresos ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: '¿Tiene otros ingresos?¿Cuales?*',
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                    ?.otrosIngresos ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                        title: '¿Tiene otros ingresos?',
+                        readOnly: true,
                       ),
-                      if (state.migranteEconomicoDbLocal?.otrosIngresos ??
+                      if (state.recurrenteMigranteEconomicoDbLocal
+                              ?.otrosIngresos ??
                           false)
                         CommentaryWidget(
                           title: 'Cuales Otros Ingresos?',
-                          initialValue: state.migranteEconomicoDbLocal
+                          initialValue: state.recurrenteMigranteEconomicoDbLocal
                                   ?.otrosIngresosDescripcion ??
                               'N/A',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
+                          },
+                          readOnly: true,
                         ),
                       const Gap(20),
                       CommentaryWidget(
                         title: 'Número de personas a cargo:*',
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.personasCargo
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.personasCargo
                                 ?.toString() ??
                             '0',
                         textInputType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          final numero = int.tryParse(value);
+                          if (numero == null || numero < 0 || numero >= 255) {
+                            return 'Valor no valido'.tr();
+                          }
+                          return null;
+                        },
+                        readOnly: true,
                       ),
-                      const Gap(20),
                       CommentaryWidget(
-                        title: 'forms.entorno_familiar.person_origin'.tr(),
-                        initialValue: state.migranteEconomicoDbLocal
-                                ?.objOrigenUbicacionGeograficaId ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Qué le motivó a dejar su país natal?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.motivoDejarPais ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Cuál es su situación migratoria en éste país?',
-                        initialValue: state.migranteEconomicoDbLocal
-                                ?.situacionMigratoria ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿En su país de origen a qué se dedicaba?',
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.dedicabaPaisOrigen ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Con quién vive en este país?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.vivePaisActual ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
+                        textInputType: TextInputType.number,
                         title: 'Número de hijos:*',
                         initialValue: state
-                                .migranteEconomicoDbLocal?.numeroHijos
+                                .recurrenteMigranteEconomicoDbLocal?.numeroHijos
                                 ?.toString() ??
                             '0',
+                        readOnly: true,
                       ),
                       const Gap(20),
                       CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.edadHijos ??
+                            '0',
                         title: '¿Qué edades tienen sus hijos?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.edadHijos ?? 'N/A',
+                        readOnly: true,
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: '¿Qué tipo de estudios reciben sus hijos?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.tipoEstudioHijos ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Envía remesas a su país de origen?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.enviaRemesas ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      if (state.migranteEconomicoDbLocal?.enviaRemesas ?? false)
-                        CommentaryWidget(
-                          title: '¿Por qué lo hace?',
-                          initialValue: state.migranteEconomicoDbLocal
-                                  ?.enviaRemesasExplicacion ??
-                              'N/A',
-                        ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.quienApoya ?? 'N/A',
-                        title:
-                            '¿Quién o quiénes le apoyan para salir adelante?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title:
-                            '¿Le gustaría fortalecer su negocio o ingresos económicos?'
-                                .tr(),
-                        initialValue: state.migranteEconomicoDbLocal
-                                    ?.fortalecerIngresos ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                      ),
-                      const Gap(20),
-                      if (state.migranteEconomicoDbLocal?.fortalecerIngresos ??
-                          false)
-                        CommentaryWidget(
-                          title: '¿Porqué?',
-                          initialValue: state.migranteEconomicoDbLocal
-                                  ?.fortalecerIngresosExplicacion ??
-                              'N/A',
-                        ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Cuáles son las metas a futuro que tiene?',
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.metasFuturo ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: '¿Para qué solicitó el crédito?'.tr(),
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.motivoPrestamo ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title:
-                            '¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida?'
-                                .tr(),
-                        initialValue: state.migranteEconomicoDbLocal
-                                    ?.ayudaMejorarCondiciones ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                      ),
-                      if (state.migranteEconomicoDbLocal
-                              ?.ayudaMejorarCondiciones ??
-                          false)
-                        CommentaryWidget(
-                          title: '¿Por qué?'.tr(),
-                          initialValue: state.migranteEconomicoDbLocal
-                                  ?.ayudaMejorarCondicionesExplicacion ??
-                              'N/A',
-                        ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title:
-                            '¿Cuáles son sus propósitos para los próximos años?'
-                                .tr(),
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.propositosProximos ??
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.tipoEstudioHijos ??
                             'N/A',
+                        title: '¿Qué tipo de estudios reciben sus hijos?',
+                        readOnly: true,
                       ),
-                      const Gap(20),
                       CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                    ?.coincideRespuesta ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
                         title:
-                            '¿Piensa regresar a su país natal algún día?'.tr(),
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.piensaRegresar ??
-                                'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title:
-                            'Otros datos relevantes e interesantes del cliente'
+                            '¿Coincide la respuesta del cliente con el formato anterior?'
                                 .tr(),
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.otrosDatosCliente ??
-                                'N/A',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                      ),
+                      if (state.recurrenteMigranteEconomicoDbLocal
+                              ?.coincideRespuesta ??
+                          false == false)
+                        CommentaryWidget(
+                          initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.explicacionInversion ??
+                              'N/A',
+                          title:
+                              'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
+                          },
+                          readOnly: true,
+                        ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                    ?.apoyanNegocio ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                        title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                        readOnly: true,
+                      ),
+                      const Gap(20),
+                      if (state.recurrenteMigranteEconomicoDbLocal
+                              ?.apoyanNegocio ??
+                          false)
+                        CommentaryWidget(
+                          initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.cuantosApoyan ??
+                              '0',
+                          title:
+                              'De ser positivo, favor responder cuántas personas.',
+                          readOnly: true,
+                        ),
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.motivoPrestamo ??
+                            'N/A',
+                        readOnly: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        title: '¿Para qué solicitó este nuevo crédito?',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.quienApoya ??
+                            'N/A',
+                        readOnly: true,
+                        title:
+                            '¿Hay alguien que le esté apoyando en este nuevo préstamo?',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                    ?.mejoraCondiciones ??
+                                false
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                        title:
+                            '¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida?',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        hintText: '',
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.explicacionMejoraCondiciones ??
+                            'N/A',
+                        readOnly: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        title: '¿Por qué?',
+                      ),
+                      const Gap(20),
+                      CommentaryWidget(
+                        initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                ?.siguienteMeta ??
+                            'N/A',
+                        readOnly: true,
+                        title:
+                            'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
                       ),
                       const Gap(20),
                       ButtonActionsWidget(
@@ -474,107 +516,89 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                         },
                         onNextPressed: () {
                           context
-                              .read<MigrantesEconomicosCubit>()
+                              .read<RecurrenteMigrantesEconomicosCubit>()
                               .sendOfflineAnswers(
-                                migrantesEconomicos: MigrantesEconomicos(
-                                  database: LocalStorage().database,
-                                  objSolicitudNuevamenorId: int.tryParse(context
-                                          .read<KivaRouteCubit>()
-                                          .state
-                                          .solicitudId) ??
-                                      0,
-                                  tieneTrabajo: state.migranteEconomicoDbLocal
+                                recurrenteMigranteEcomico:
+                                    MigrantesEconomicosRecurrente(
+                                  database: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.database ??
+                                      '',
+                                  tieneTrabajo: state
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.tieneTrabajo ??
                                       false,
                                   trabajoNegocioDescripcion: state
-                                          .migranteEconomicoDbLocal
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.trabajoNegocioDescripcion ??
                                       '',
                                   tiempoActividad: state
-                                          .migranteEconomicoDbLocal
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.tiempoActividad ??
                                       0,
-                                  otrosIngresos: state.migranteEconomicoDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state.migranteEconomicoDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  objOrigenUbicacionGeograficaId: state
-                                          .migranteEconomicoDbLocal
-                                          ?.objOrigenUbicacionGeograficaId ??
-                                      '',
-                                  motivoDejarPais: state
-                                          .migranteEconomicoDbLocal
-                                          ?.motivoDejarPais ??
-                                      '',
-                                  situacionMigratoria: state
-                                          .migranteEconomicoDbLocal
-                                          ?.situacionMigratoria ??
-                                      '',
-                                  dedicabaPaisOrigen: state
-                                          .migranteEconomicoDbLocal
-                                          ?.dedicabaPaisOrigen ??
-                                      '',
-                                  vivePaisActual: state.migranteEconomicoDbLocal
-                                          ?.vivePaisActual ??
-                                      '',
-                                  numeroHijos: state.migranteEconomicoDbLocal
+                                  numeroHijos: state
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.numeroHijos ??
                                       0,
-                                  edadHijos: state.migranteEconomicoDbLocal
+                                  edadHijos: state
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.edadHijos ??
                                       '',
                                   tipoEstudioHijos: state
-                                          .migranteEconomicoDbLocal
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.tipoEstudioHijos ??
                                       '',
-                                  enviaRemesas: state.migranteEconomicoDbLocal
-                                          ?.enviaRemesas ??
+                                  otrosIngresos: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.otrosIngresos ??
                                       false,
-                                  enviaRemesasExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.enviaRemesasExplicacion ??
+                                  otrosIngresosDescripcion: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.otrosIngresosDescripcion ??
                                       '',
-                                  quienApoya: state.migranteEconomicoDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  fortalecerIngresos: state
-                                          .migranteEconomicoDbLocal
-                                          ?.fortalecerIngresos ??
-                                      false,
-                                  fortalecerIngresosExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.fortalecerIngresosExplicacion ??
-                                      '',
-                                  metasFuturo: state.migranteEconomicoDbLocal
-                                          ?.metasFuturo ??
-                                      '',
-                                  motivoPrestamo: state.migranteEconomicoDbLocal
+                                  personasCargo: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.personasCargo ??
+                                      0,
+                                  motivoPrestamo: state
+                                          .recurrenteMigranteEconomicoDbLocal
                                           ?.motivoPrestamo ??
                                       '',
-                                  ayudaMejorarCondiciones: state
-                                          .migranteEconomicoDbLocal
-                                          ?.ayudaMejorarCondiciones ??
+                                  objSolicitudRecurrenteId: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.objSolicitudRecurrenteId ??
+                                      0,
+                                  coincideRespuesta: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.coincideRespuesta ??
                                       false,
-                                  ayudaMejorarCondicionesExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.ayudaMejorarCondicionesExplicacion ??
+                                  explicacionInversion: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.explicacionInversion ??
                                       '',
-                                  propositosProximos: state
-                                          .migranteEconomicoDbLocal
-                                          ?.propositosProximos ??
+                                  apoyanNegocio: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.apoyanNegocio ??
+                                      false,
+                                  quienApoya: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.quienApoya ??
                                       '',
-                                  piensaRegresar: state.migranteEconomicoDbLocal
-                                          ?.piensaRegresar ??
+                                  cuantosApoyan: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.cuantosApoyan ??
                                       '',
-                                  otrosDatosCliente: state
-                                          .migranteEconomicoDbLocal
-                                          ?.otrosDatosCliente ??
+                                  mejoraCondiciones: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.mejoraCondiciones ??
+                                      false,
+                                  explicacionMejoraCondiciones: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.explicacionMejoraCondiciones ??
+                                      '',
+                                  siguienteMeta: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.siguienteMeta ??
                                       '',
                                 ),
                               );
