@@ -51,6 +51,27 @@ class RecurrenteMigrantesEconomicosCubit
     }
   }
 
+  Future<void> sendOfflineAnswers({
+    required MigrantesEconomicosRecurrente recurrenteMigranteEcomico,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, msg) = await _repository.migrantesEconomicosRecurrente(
+        migrantesEconmicos: recurrenteMigranteEcomico,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        errorMsg: e.toString(),
+      ));
+    }
+  }
+
   void saveAnswers({
     String? database,
     bool? tieneTrabajo,

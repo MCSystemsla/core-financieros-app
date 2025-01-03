@@ -10,6 +10,8 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_viviend
 import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/recurrente_mejora_vivienda_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/micredi_estudio_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/recurrente_micredi_estudio_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/migrante_economico/migrante_economico_db_local.dart';
+import 'package:core_financiero_app/src/datasource/local_db/forms/migrante_economico/recurrente_migrante_economico_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/mujer_emprende_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/recurrente_mujer_emprende_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
@@ -52,6 +54,8 @@ class SolicitudesPendientesLocalDbCubit
           DepartamentosDbLocalSchema,
           ComunidadesLocalDbSchema,
           ImageModelSchema,
+          MigranteEconomicoDbLocalSchema,
+          RecurrenteMigranteEconomicoDbLocalSchema,
         ],
         directory: dir.path,
       );
@@ -135,6 +139,49 @@ class SolicitudesPendientesLocalDbCubit
         recurrenteEstandarDbLocal: estandar,
       ));
       return estandar;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<RecurrenteMigranteEconomicoDbLocal?> getRecurrentMigranteEconomico(
+      int solicitudRecurrenteId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudRecurrenteId.toString()}');
+      final migranteEconomico = await state
+          .isar!.recurrenteMigranteEconomicoDbLocals
+          .filter()
+          .objSolicitudRecurrenteIdEqualTo(solicitudRecurrenteId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        recurrenteMigranteEconomicoDbLocal: migranteEconomico,
+      ));
+      return migranteEconomico;
+    } catch (e) {
+      _logger.e(e);
+      emit(state.copyWith(status: Status.error));
+      return null;
+    }
+  }
+
+  Future<MigranteEconomicoDbLocal?> getMigranteEconomico(
+      int solicitudId) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      log('Solicitud id: ${solicitudId.toString()}');
+      final migranteEconomico = await state.isar!.migranteEconomicoDbLocals
+          .filter()
+          .objSolicitudNuevamenorIdEqualTo(solicitudId)
+          .findFirst();
+      emit(state.copyWith(
+        status: Status.done,
+        migranteEconomicoDbLocal: migranteEconomico,
+      ));
+      return migranteEconomico;
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
@@ -457,6 +504,26 @@ class SolicitudesPendientesLocalDbCubit
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
+        case 'ESTANDAR COLONES NUEVO MAYOR A MIL':
+          return await state.isar!.migranteEconomicoDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+        case 'ESTANDAR COLONES NUEVO MENOR A MIL':
+          return await state.isar!.migranteEconomicoDbLocals
+              .where()
+              .objSolicitudNuevamenorIdProperty()
+              .findAll();
+        case 'ESTANDAR COLONES RECURRENTE MAYOR A MIL':
+          return await state.isar!.recurrenteMigranteEconomicoDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
+        case 'ESTANDAR COLONES RECURRENTE MENOR A MIL':
+          return await state.isar!.recurrenteMigranteEconomicoDbLocals
+              .where()
+              .objSolicitudRecurrenteIdProperty()
+              .findAll();
       }
       // emit(state.copyWith(status: Status.done));
 
@@ -568,6 +635,22 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<void> saveMigranteEconomicoForm({
+    required MigranteEconomicoDbLocal migranteEconomicoDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.migranteEconomicoDbLocals
+              .put(migranteEconomicoDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
   Future<void> saveRecurrenteMejoraViviendaForm({
     required RecurrenteMejoraViviendaDbLocal recurrenteMejoraViviendaDBLocal,
   }) async {
@@ -671,6 +754,23 @@ class SolicitudesPendientesLocalDbCubit
         () {
           return state.isar!.recurrenteSaneamientoDbLocals
               .put(recurrenteSaneamientoDbLocal);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> saveRecurrentMigranteEconomico({
+    required RecurrenteMigranteEconomicoDbLocal
+        recurrenteMigranteEconomicoDbLocal,
+  }) async {
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.recurrenteMigranteEconomicoDbLocals
+              .put(recurrenteMigranteEconomicoDbLocal);
         },
       );
       _logger.i(resp);
@@ -845,6 +945,46 @@ class SolicitudesPendientesLocalDbCubit
           await state.isar!.writeTxn(
             () async {
               return state.isar!.recurrenteMujerEmprendeDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ESTANDAR COLONES NUEVO MAYOR A MIL':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.migranteEconomicoDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ESTANDAR COLONES NUEVO MENOR A MIL':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.migranteEconomicoDbLocals
+                  .filter()
+                  .objSolicitudNuevamenorIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ESTANDAR COLONES RECURRENTE MAYOR A MIL':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteMigranteEconomicoDbLocals
+                  .filter()
+                  .objSolicitudRecurrenteIdEqualTo(solicitudId)
+                  .deleteAll();
+            },
+          );
+          break;
+        case 'ESTANDAR COLONES RECURRENTE MENOR A MIL':
+          await state.isar!.writeTxn(
+            () async {
+              return state.isar!.recurrenteMigranteEconomicoDbLocals
                   .filter()
                   .objSolicitudRecurrenteIdEqualTo(solicitudId)
                   .deleteAll();

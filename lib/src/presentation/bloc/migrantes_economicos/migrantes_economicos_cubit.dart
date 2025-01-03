@@ -58,6 +58,23 @@ class MigrantesEconomicosCubit extends Cubit<MigrantesEconomicosState> {
     }
   }
 
+  void sendOfflineAnswers(
+      {required MigrantesEconomicos migrantesEconomicos}) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isok, msg) = await _responsesRepository.migrantesEconomicos(
+        migrantesEconmicos: migrantesEconomicos,
+      );
+      if (!isok) {
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
+  }
+
   void saveAnswers({
     int? objSolicitudNuevamenorId,
     bool? tieneTrabajo,

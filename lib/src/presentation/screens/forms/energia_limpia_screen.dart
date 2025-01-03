@@ -28,21 +28,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_impacto_social.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_coincide_respuesta.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_comunidad.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_explicacion_invertido.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_motivo_invertir.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_nuevo_prestamo.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_numero_personas.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_otros_ingresos_description.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_quien_apoya.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_situacion_antes_y_ahora.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiempo_actividades_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tiene_problema_energia.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_limpia_tipo_estudio.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_tiene_trabajo_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/responses/energia_trabajo_descripcion_cual_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -140,86 +125,6 @@ class EnergiaLimpiaScreen extends StatelessWidget {
                   : const _SignQuestionary(),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FormResponses extends StatelessWidget {
-  final PageController controller;
-  const _FormResponses({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'input.form_response'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const Gap(10),
-            const EnergiaTieneTrabajoWidget(),
-            const Gap(10),
-            const EnergiaTrabajoDescripcionCualWidget(),
-            const Gap(10),
-            const EnergiaLimpiaTiempoDeActividadWidget(),
-            const Gap(10),
-            const EnergiaLimpiaOtrosIngresos(),
-            const Gap(10),
-            const EnergiaLimpiaOtrosIngresosDescription(),
-            const Gap(10),
-            // const EnergiaLimpiaOrigen(),
-            const Gap(10),
-            const EnergiaLimpiaComunidad(),
-            const Gap(10),
-            const EnergiaLimpiaTieneProblemaEnergia(),
-            const Gap(10),
-            const EnergiaLimpiaNumeroPersonas(),
-            const Gap(10),
-            const EnergiaLimpiaTipoEstudio(),
-            const Gap(10),
-            const EnergiaLimpiaCoincideRespuesta(),
-            const Gap(10),
-            const EnergiaLimpiaExplicacionInverido(),
-            const Gap(10),
-            const EnergiaLimpiaSituacionAntesyAhora(),
-            const Gap(10),
-            const EnergiaLimpiaMotivoInvertir(),
-            const Gap(10),
-            const EnergiaLimpiaNuevoPrestamo(),
-            const Gap(10),
-            const EnergiaLimpiaQuienApoyan(),
-            const Gap(10),
-            const EnergiaLimpiaUnavezFinalzado(),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                controller.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                controller.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
-                  curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.signed'.tr(),
-            ),
-          ],
         ),
       ),
     );
