@@ -12,9 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../bloc/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
+
 class MigrantesEconomicosEntornoSocial extends StatefulWidget {
+  final bool isRecurrentForm;
   final PageController controller;
-  const MigrantesEconomicosEntornoSocial({super.key, required this.controller});
+  const MigrantesEconomicosEntornoSocial(
+      {super.key, required this.controller, required this.isRecurrentForm});
 
   @override
   State<MigrantesEconomicosEntornoSocial> createState() =>
@@ -39,6 +43,172 @@ class _MigrantesEconomicosEntornoSocialState
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    return switch (widget.isRecurrentForm) {
+      true => _RecurrentForm(
+          controller: widget.controller,
+        ),
+      false => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MiCreditoProgress(
+                    steps: 3,
+                    currentStep: 2,
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Descripción del entorno familiar.'.tr(),
+                    textAlign: TextAlign.justify,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
+                      SolicitudesPendientesLocalDbState>(
+                    builder: (context, state) {
+                      return WhiteCard(
+                        marginTop: 15,
+                        padding: const EdgeInsets.all(10),
+                        child: JLuxDropdown(
+                          isContainIcon: true,
+                          // isLoading: state.status == Status.inProgress,
+                          title: 'forms.entorno_familiar.person_origin'.tr(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'input.input_validator'.tr();
+                            }
+                            return null;
+                          },
+                          items: state.departamentos,
+                          onChanged: (item) {
+                            if (item == null) return;
+                            objOrigenCatalogoValorId = item.valor;
+                            setState(() {});
+                          },
+                          toStringItem: (item) => item.nombre ?? '',
+                          hintText: 'input.select_department'.tr(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: motivoDejarPais,
+                    title: '¿Qué le motivó a dejar su país natal?',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: situacionMigratoria,
+                    title: '¿Cuál es su situación migratoria en éste país?',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: dedicabaPaisOrigen,
+                    title: '¿En su país de origen a qué se dedicaba?',
+                  ),
+                  const Gap(20),
+                  CommentaryWidget(
+                    textEditingController: vivePaisActual,
+                    title: '¿Con quién vive en este país?',
+                  ),
+                  const Gap(20),
+                  ButtonActionsWidget(
+                    onPreviousPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onNextPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        context.read<MigrantesEconomicosCubit>().saveAnswers(
+                              objOrigenUbicacionGeograficaId:
+                                  objOrigenCatalogoValorId,
+                              motivoDejarPais: motivoDejarPais.text.trim(),
+                              situacionMigratoria:
+                                  situacionMigratoria.text.trim(),
+                              dedicabaPaisOrigen:
+                                  dedicabaPaisOrigen.text.trim(),
+                              vivePaisActual: vivePaisActual.text.trim(),
+                            );
+                        context.read<ResponseCubit>().addResponses(
+                          responses: [
+                            Response(
+                              question:
+                                  'forms.entorno_familiar.person_origin'.tr(),
+                              response: objOrigenCatalogoValorId ?? '',
+                              index: widget.controller.page?.toInt() ?? 0,
+                            ),
+                            Response(
+                              question: '¿Qué le motivó a dejar su país natal?',
+                              response: motivoDejarPais.text.trim(),
+                              index: widget.controller.page?.toInt() ?? 0,
+                            ),
+                            Response(
+                              question:
+                                  '¿Cuál es su situación migratoria en éste país?',
+                              response: situacionMigratoria.text.trim(),
+                              index: widget.controller.page?.toInt() ?? 0,
+                            ),
+                            Response(
+                              question:
+                                  '¿En su país de origen a qué se dedicaba?',
+                              response: dedicabaPaisOrigen.text.trim(),
+                              index: widget.controller.page?.toInt() ?? 0,
+                            ),
+                            Response(
+                              question: '¿Con quién vive en este país?',
+                              response: vivePaisActual.text.trim(),
+                              index: widget.controller.page?.toInt() ?? 0,
+                            ),
+                          ],
+                        );
+                        widget.controller.nextPage(
+                          duration: const Duration(
+                            milliseconds: 350,
+                          ),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    previousTitle: 'button.previous'.tr(),
+                    nextTitle: 'button.next'.tr(),
+                  ),
+                  const Gap(20),
+                ],
+              ),
+            ),
+          ),
+        ),
+    };
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _RecurrentForm extends StatefulWidget {
+  final PageController controller;
+  const _RecurrentForm({required this.controller});
+
+  @override
+  State<_RecurrentForm> createState() => _RecurrentFormState();
+}
+
+class _RecurrentFormState extends State<_RecurrentForm> {
+  final formKey = GlobalKey<FormState>();
+  final numeroHijos = TextEditingController();
+  final edadHijos = TextEditingController();
+  String? tipoEstudioHijos;
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -60,53 +230,51 @@ class _MigrantesEconomicosEntornoSocialState
                       fontWeight: FontWeight.w500,
                     ),
               ),
-              BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                  SolicitudesPendientesLocalDbState>(
-                builder: (context, state) {
-                  return WhiteCard(
-                    marginTop: 15,
-                    padding: const EdgeInsets.all(10),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      // isLoading: state.status == Status.inProgress,
-                      title: 'forms.entorno_familiar.person_origin'.tr(),
-                      validator: (value) {
-                        if (value == null) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                      items: state.departamentos,
-                      onChanged: (item) {
-                        if (item == null) return;
-                        objOrigenCatalogoValorId = item.valor;
-                        setState(() {});
-                      },
-                      toStringItem: (item) => item.nombre ?? '',
-                      hintText: 'input.select_department'.tr(),
-                    ),
-                  );
+              const Gap(20),
+              CommentaryWidget(
+                textInputType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  final numero = int.tryParse(value);
+                  if (numero == null || numero < 0 || numero >= 255) {
+                    return 'Valor no valido'.tr();
+                  }
+                  return null;
                 },
+                textEditingController: numeroHijos,
+                title: 'Número de hijos:*',
               ),
               const Gap(20),
               CommentaryWidget(
-                textEditingController: motivoDejarPais,
-                title: '¿Qué le motivó a dejar su país natal?',
+                textEditingController: edadHijos,
+                title: '¿Que edades tienen sus hijos?',
               ),
               const Gap(20),
-              CommentaryWidget(
-                textEditingController: situacionMigratoria,
-                title: '¿Cuál es su situación migratoria en éste país?',
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: dedicabaPaisOrigen,
-                title: '¿En su país de origen a qué se dedicaba?',
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: vivePaisActual,
-                title: '¿Con quién vive en este país?',
+              WhiteCard(
+                padding: const EdgeInsets.all(5),
+                child: JLuxDropdown(
+                  isContainIcon: true,
+                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                  items: const [
+                    'Ninguno',
+                    'Preescolar',
+                    'Primaria',
+                    'Secundaria',
+                    'Técnico',
+                    'Universitario'
+                  ],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tipoEstudioHijos = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
               const Gap(20),
               ButtonActionsWidget(
@@ -120,40 +288,28 @@ class _MigrantesEconomicosEntornoSocialState
                 },
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
-                    context.read<MigrantesEconomicosCubit>().saveAnswers(
-                          objOrigenUbicacionGeograficaId:
-                              objOrigenCatalogoValorId,
-                          motivoDejarPais: motivoDejarPais.text.trim(),
-                          situacionMigratoria: situacionMigratoria.text.trim(),
-                          dedicabaPaisOrigen: dedicabaPaisOrigen.text.trim(),
-                          vivePaisActual: vivePaisActual.text.trim(),
+                    context
+                        .read<RecurrenteMigrantesEconomicosCubit>()
+                        .saveAnswers(
+                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
+                          edadHijos: edadHijos.text.trim(),
+                          tipoEstudioHijos: tipoEstudioHijos,
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
                         Response(
-                          question: 'forms.entorno_familiar.person_origin'.tr(),
-                          response: objOrigenCatalogoValorId ?? '',
+                          question: 'Número de hijos:*',
+                          response: numeroHijos.text.trim(),
                           index: widget.controller.page?.toInt() ?? 0,
                         ),
                         Response(
-                          question: '¿Qué le motivó a dejar su país natal?',
-                          response: motivoDejarPais.text.trim(),
+                          question: '¿Que edades tienen sus hijos?',
+                          response: edadHijos.text.trim(),
                           index: widget.controller.page?.toInt() ?? 0,
                         ),
                         Response(
-                          question:
-                              '¿Cuál es su situación migratoria en éste país?',
-                          response: situacionMigratoria.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
-                        Response(
-                          question: '¿En su país de origen a qué se dedicaba?',
-                          response: dedicabaPaisOrigen.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
-                        Response(
-                          question: '¿Con quién vive en este país?',
-                          response: vivePaisActual.text.trim(),
+                          question: '¿Qué tipo de estudios reciben sus hijos?',
+                          response: tipoEstudioHijos ?? 'N/A',
                           index: widget.controller.page?.toInt() ?? 0,
                         ),
                       ],
@@ -176,7 +332,4 @@ class _MigrantesEconomicosEntornoSocialState
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
