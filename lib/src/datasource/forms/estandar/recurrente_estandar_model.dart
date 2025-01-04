@@ -56,7 +56,7 @@ class RecurrenteEstandarModel {
         'tipoEstudioHijos': tipoEstudioHijos,
         'apoyanNegocio': apoyanNegocio,
         'cuantosApoyan': cuantosApoyan.isEmpty ? null : cuantosApoyan,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion':
             explicacionInversion.isEmpty ? null : explicacionInversion,

@@ -54,7 +54,7 @@ class AguaSaneamientoModel {
 
   Map<String, dynamic> toJson() => {
         'database': LocalStorage().database,
-        'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
+        'objSolicitudId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,

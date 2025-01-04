@@ -63,7 +63,7 @@ class MigrantesEconomicosRecurrente {
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'personasCargo': personasCargo,
         'motivoPrestamo': motivoPrestamo,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'apoyanNegocio': apoyanNegocio,

@@ -68,7 +68,7 @@ class RecurrenteMiCrediEstudioModel {
         'quienApoya': quienApoya,
         'motivoPrestamo': motivoPrestamo,
         'comoAyudaCrecer': comoAyudaCrecer,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'comoAyudoProfesionalmente': comoAyudoProfesionalmente,

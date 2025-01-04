@@ -52,7 +52,7 @@ class MujerEmprendeModel {
 
   Map<String, dynamic> toJson() => {
         'database': LocalStorage().database,
-        'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
+        'objSolicitudId': objSolicitudNuevamenorId,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,

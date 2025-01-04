@@ -49,7 +49,7 @@ class MejoraViviendaAnswer {
   });
 
   Map<String, dynamic> toJson() => {
-        'objSolicitudNuevamenorId': solicitudNuevamenorId,
+        'objSolicitudId': solicitudNuevamenorId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
         'database': LocalStorage().database,

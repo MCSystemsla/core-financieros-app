@@ -66,7 +66,7 @@ class RecurrenteEnergiaLimpiaModel {
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
         'motivoPrestamo': motivoPrestamo,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'situacionAntesAhora': situacionAntesAhora,

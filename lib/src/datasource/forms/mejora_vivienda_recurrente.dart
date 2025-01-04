@@ -53,7 +53,7 @@ class MejoraViviendaRecurrente {
   });
 
   Map<String, dynamic> toJson() => {
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
         'database': LocalStorage().database,

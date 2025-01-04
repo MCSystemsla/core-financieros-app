@@ -65,7 +65,7 @@ class RecurrenteAguaSaneamientoModel {
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
         'otrosDatosCliente': otrosDatosCliente,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'comoAyudoCondiciones': comoAyudoCondiciones,
