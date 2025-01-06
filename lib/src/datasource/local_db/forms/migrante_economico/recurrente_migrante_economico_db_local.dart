@@ -25,4 +25,5 @@ class RecurrenteMigranteEconomicoDbLocal {
   bool? mejoraCondiciones;
   String? explicacionMejoraCondiciones;
   String? siguienteMeta;
+  String? tipoSolicitud;
 }

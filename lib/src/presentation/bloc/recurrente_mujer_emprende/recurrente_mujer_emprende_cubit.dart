@@ -17,6 +17,7 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
     try {
       final (isOk, message) = await repository.recurrenteMujerEmprendeAnswer(
         recurrenteMujerEmprendeModel: RecurrenteMujerEmprendeModel(
+          tipoSolicitud: state.tipoSolicitud,
           tiempoActividad: state.tiempoActividad,
           database: LocalStorage().database,
           otrosIngresos: state.otrosIngresos,
@@ -90,6 +91,7 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
     bool? tieneTrabajo,
     String? tieneTrabajoDescripcion,
     int? tiempoActividad,
+    String? tipoSolicitud,
   }) {
     emit(
       state.copyWith(
@@ -114,6 +116,7 @@ class RecurrenteMujerEmprendeCubit extends Cubit<RecurrenteMujerEmprendeState> {
         tieneTrabajo: tieneTrabajo,
         tieneTrabajoDescripcion: tieneTrabajoDescripcion,
         tiempoActividad: tiempoActividad,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }

@@ -118,8 +118,13 @@ const SaneamientoDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 20,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 21,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -229,6 +234,12 @@ int _saneamientoDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -263,7 +274,8 @@ void _saneamientoDbLocalSerialize(
   writer.writeLong(offsets[17], object.tiempoActividad);
   writer.writeBool(offsets[18], object.tieneTrabajo);
   writer.writeString(offsets[19], object.tipoEstudioHijos);
-  writer.writeString(offsets[20], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[20], object.tipoSolicitud);
+  writer.writeString(offsets[21], object.trabajoNegocioDescripcion);
 }
 
 SaneamientoDbLocal _saneamientoDbLocalDeserialize(
@@ -294,7 +306,8 @@ SaneamientoDbLocal _saneamientoDbLocalDeserialize(
   object.tiempoActividad = reader.readLongOrNull(offsets[17]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[18]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[19]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[20]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[20]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[21]);
   return object;
 }
 
@@ -346,6 +359,8 @@ P _saneamientoDbLocalDeserializeProp<P>(
     case 19:
       return (reader.readStringOrNull(offset)) as P;
     case 20:
+      return (reader.readStringOrNull(offset)) as P;
+    case 21:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2977,6 +2992,160 @@ extension SaneamientoDbLocalQueryFilter
   }
 
   QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterFilterCondition>
       trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3422,6 +3591,20 @@ extension SaneamientoDbLocalQuerySortBy
   }
 
   QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
+      sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
+      sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
       sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3733,6 +3916,20 @@ extension SaneamientoDbLocalQuerySortThenBy
   }
 
   QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
+      thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
+      thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QAfterSortBy>
       thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3902,6 +4099,14 @@ extension SaneamientoDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, SaneamientoDbLocal, QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoNegocioDescripcion',
@@ -4055,6 +4260,13 @@ extension SaneamientoDbLocalQueryProperty
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<SaneamientoDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

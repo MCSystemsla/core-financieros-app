@@ -6,6 +6,7 @@ String mejoraViviendaAnswerToJson(MejoraViviendaAnswer data) =>
     json.encode(data.toJson());
 
 class MejoraViviendaAnswer {
+  String tipoSolicitud;
   int solicitudNuevamenorId;
   String username;
   bool tieneTrabajo;
@@ -27,6 +28,7 @@ class MejoraViviendaAnswer {
   String otrosDatosCliente;
 
   MejoraViviendaAnswer({
+    required this.tipoSolicitud,
     required this.solicitudNuevamenorId,
     required this.username,
     required this.tieneTrabajo,
@@ -49,6 +51,7 @@ class MejoraViviendaAnswer {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'objSolicitudId': solicitudNuevamenorId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,

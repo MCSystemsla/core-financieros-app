@@ -6,6 +6,7 @@ String aguaSaneamientoModelToJson(AguaSaneamientoModel data) =>
     json.encode(data.toJson());
 
 class AguaSaneamientoModel {
+  final String tipoSolicitud;
   final String database;
   final int objSolicitudNuevamenorId;
   final bool tieneTrabajo;
@@ -29,6 +30,7 @@ class AguaSaneamientoModel {
   final String otrosDatosCliente;
 
   AguaSaneamientoModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.objSolicitudNuevamenorId,
     required this.tieneTrabajo,
@@ -53,6 +55,7 @@ class AguaSaneamientoModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'objSolicitudId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,

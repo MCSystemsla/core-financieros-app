@@ -142,8 +142,13 @@ const EstandarDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 25,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 26,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -271,6 +276,12 @@ int _estandarDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -310,7 +321,8 @@ void _estandarDbLocalSerialize(
   writer.writeLong(offsets[22], object.tiempoActividad);
   writer.writeBool(offsets[23], object.tieneTrabajo);
   writer.writeString(offsets[24], object.tipoEstudioHijos);
-  writer.writeString(offsets[25], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[25], object.tipoSolicitud);
+  writer.writeString(offsets[26], object.trabajoNegocioDescripcion);
 }
 
 EstandarDbLocal _estandarDbLocalDeserialize(
@@ -346,7 +358,8 @@ EstandarDbLocal _estandarDbLocalDeserialize(
   object.tiempoActividad = reader.readLongOrNull(offsets[22]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[23]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[24]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[25]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[25]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[26]);
   return object;
 }
 
@@ -408,6 +421,8 @@ P _estandarDbLocalDeserializeProp<P>(
     case 24:
       return (reader.readStringOrNull(offset)) as P;
     case 25:
+      return (reader.readStringOrNull(offset)) as P;
+    case 26:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3642,6 +3657,160 @@ extension EstandarDbLocalQueryFilter
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
+      tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterFilterCondition>
       trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4153,6 +4322,20 @@ extension EstandarDbLocalQuerySortBy
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
       sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -4528,6 +4711,20 @@ extension EstandarDbLocalQuerySortThenBy
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
+      thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QAfterSortBy>
       thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -4729,6 +4926,14 @@ extension EstandarDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<EstandarDbLocal, EstandarDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, EstandarDbLocal, QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoNegocioDescripcion',
@@ -4910,6 +5115,13 @@ extension EstandarDbLocalQueryProperty
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<EstandarDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

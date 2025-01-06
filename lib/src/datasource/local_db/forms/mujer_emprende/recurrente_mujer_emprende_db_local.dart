@@ -27,4 +27,5 @@ class RecurrenteMujerEmprendeDbLocal {
   bool? tieneTrabajo;
   String? tieneTrabajoDescripcion;
   int? tiempoActividad;
+  String? tipoSolicitud;
 }

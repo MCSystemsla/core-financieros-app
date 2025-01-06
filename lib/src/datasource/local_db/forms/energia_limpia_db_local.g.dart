@@ -103,8 +103,13 @@ const EnergiaLimpiaDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 17,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 18,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -196,6 +201,12 @@ int _energiaLimpiaDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -227,7 +238,8 @@ void _energiaLimpiaDbLocalSerialize(
   writer.writeBool(offsets[14], object.tieneProblemasEnergia);
   writer.writeBool(offsets[15], object.tieneTrabajo);
   writer.writeString(offsets[16], object.tipoEstudioHijos);
-  writer.writeString(offsets[17], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[17], object.tipoSolicitud);
+  writer.writeString(offsets[18], object.trabajoNegocioDescripcion);
 }
 
 EnergiaLimpiaDbLocal _energiaLimpiaDbLocalDeserialize(
@@ -255,7 +267,8 @@ EnergiaLimpiaDbLocal _energiaLimpiaDbLocalDeserialize(
   object.tieneProblemasEnergia = reader.readBoolOrNull(offsets[14]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[15]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[16]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[17]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[17]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[18]);
   return object;
 }
 
@@ -301,6 +314,8 @@ P _energiaLimpiaDbLocalDeserializeProp<P>(
     case 16:
       return (reader.readStringOrNull(offset)) as P;
     case 17:
+      return (reader.readStringOrNull(offset)) as P;
+    case 18:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2489,6 +2504,162 @@ extension EnergiaLimpiaDbLocalQueryFilter on QueryBuilder<EnergiaLimpiaDbLocal,
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal,
       QAfterFilterCondition> trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2894,6 +3065,20 @@ extension EnergiaLimpiaDbLocalQuerySortBy
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
       sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3163,6 +3348,20 @@ extension EnergiaLimpiaDbLocalQuerySortThenBy
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
+      thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QAfterSortBy>
       thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3307,6 +3506,14 @@ extension EnergiaLimpiaDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, EnergiaLimpiaDbLocal, QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoNegocioDescripcion',
@@ -3439,6 +3646,13 @@ extension EnergiaLimpiaDbLocalQueryProperty on QueryBuilder<
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<EnergiaLimpiaDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

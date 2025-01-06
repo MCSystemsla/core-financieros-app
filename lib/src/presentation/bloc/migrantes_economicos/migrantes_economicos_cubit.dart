@@ -17,6 +17,7 @@ class MigrantesEconomicosCubit extends Cubit<MigrantesEconomicosState> {
     try {
       final (isok, msg) = await _responsesRepository.migrantesEconomicos(
         migrantesEconmicos: MigrantesEconomicos(
+          tipoSolicitud: state.tipoSolicitud,
           database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,
@@ -103,6 +104,7 @@ class MigrantesEconomicosCubit extends Cubit<MigrantesEconomicosState> {
     String? propositosProximos,
     String? piensaRegresar,
     String? otrosDatosCliente,
+    String? tipoSolicitud,
   }) {
     emit(state.copyWith(
       objSolicitudNuevamenorId: objSolicitudNuevamenorId,
@@ -132,6 +134,7 @@ class MigrantesEconomicosCubit extends Cubit<MigrantesEconomicosState> {
       propositosProximos: propositosProximos,
       piensaRegresar: piensaRegresar,
       otrosDatosCliente: otrosDatosCliente,
+      tipoSolicitud: tipoSolicitud,
     ));
   }
 }

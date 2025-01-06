@@ -28,4 +28,5 @@ class RecurrenteMiCrediEstudioDbLocal {
   String? siguientePaso;
   bool? alcanzaraMeta;
   String? explicacionAlcanzaraMeta;
+  String? tipoSolicitud;
 }

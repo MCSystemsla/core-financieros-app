@@ -2,6 +2,7 @@
 part of 'mejora_vivienda_cubit.dart';
 
 class MejoraViviendaState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final int solicitudNuevamenorId;
   final String username;
@@ -24,6 +25,7 @@ class MejoraViviendaState extends Equatable {
   final String otrosDatosCliente;
   final String errorMsg;
   const MejoraViviendaState({
+    this.tipoSolicitud = '',
     this.solicitudNuevamenorId = 0,
     this.username = '',
     this.tieneTrabajo = false,
@@ -49,6 +51,7 @@ class MejoraViviendaState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         solicitudNuevamenorId,
         username,
@@ -73,6 +76,7 @@ class MejoraViviendaState extends Equatable {
       ];
 
   MejoraViviendaState copyWith({
+    String? tipoSolicitud,
     Status? status,
     int? solicitudNuevamenorId,
     String? username,
@@ -96,6 +100,7 @@ class MejoraViviendaState extends Equatable {
     String? errorMsg,
   }) {
     return MejoraViviendaState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       solicitudNuevamenorId:
           solicitudNuevamenorId ?? this.solicitudNuevamenorId,

@@ -2,6 +2,7 @@
 part of 'estandar_cubit.dart';
 
 class EstandarState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final int objSolicitudNuevamenorId;
@@ -26,6 +27,7 @@ class EstandarState extends Equatable {
   final int tiempoActividad;
   final String errorMsg;
   const EstandarState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
     this.database = '',
     this.objSolicitudNuevamenorId = 0,
@@ -53,6 +55,7 @@ class EstandarState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         database,
         objSolicitudNuevamenorId,
@@ -79,6 +82,7 @@ class EstandarState extends Equatable {
       ];
 
   EstandarState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     int? objSolicitudNuevamenorId,
@@ -100,10 +104,11 @@ class EstandarState extends Equatable {
     String? otrosDatosCliente,
     bool? tieneTrabajo,
     String? trabajoNegocioDescripcion,
-    String? errorMsg,
     int? tiempoActividad,
+    String? errorMsg,
   }) {
     return EstandarState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       objSolicitudNuevamenorId:
@@ -129,8 +134,8 @@ class EstandarState extends Equatable {
       tieneTrabajo: tieneTrabajo ?? this.tieneTrabajo,
       trabajoNegocioDescripcion:
           trabajoNegocioDescripcion ?? this.trabajoNegocioDescripcion,
-      errorMsg: errorMsg ?? this.errorMsg,
       tiempoActividad: tiempoActividad ?? this.tiempoActividad,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 }

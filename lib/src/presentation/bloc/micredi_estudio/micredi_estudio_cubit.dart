@@ -16,6 +16,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
     try {
       final (isOk, message) = await repository.miCrediEstudioAnswer(
         miCrediEstudioModel: MiCrediEstudioModel(
+          tipoSolitud: state.tipoSolicitud,
           database: LocalStorage().database,
           objSolicitudNuevamenorId: state.objSolicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,
@@ -101,6 +102,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
     String? planFuturo,
     String? aspiraLaboralmente,
     String? otrosDatosCliente,
+    String? tipoSolicitud,
   }) {
     emit(
       state.copyWith(
@@ -131,6 +133,7 @@ class MicrediEstudioCubit extends Cubit<MicrediEstudioState> {
         aspiraLaboralmente: aspiraLaboralmente,
         otrosDatosCliente: otrosDatosCliente,
         objSolicitudNuevamenorId: objSolicitudNuevamenorId,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }

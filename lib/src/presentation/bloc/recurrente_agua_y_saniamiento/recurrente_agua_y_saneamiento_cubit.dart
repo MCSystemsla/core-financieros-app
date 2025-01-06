@@ -36,6 +36,7 @@ class RecurrenteAguaYSaneamientoCubit
     String? siguientePaso,
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
+    String? tipoSolicitud,
   }) {
     emit(
       state.copyWith(
@@ -59,6 +60,7 @@ class RecurrenteAguaYSaneamientoCubit
         siguientePaso: siguientePaso,
         alcanzaraMeta: alcanzaraMeta,
         explicacionAlcanzaraMeta: explicacionAlcanzaraMeta,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }
@@ -68,6 +70,7 @@ class RecurrenteAguaYSaneamientoCubit
     try {
       final (isOk, message) = await repository.recurrenteAguaYSaneamientoAnswer(
         recurrenteAguaSaneamientoModel: RecurrenteAguaSaneamientoModel(
+          tipoSolicitud: state.tipoSolicitud,
           database: LocalStorage().database,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,

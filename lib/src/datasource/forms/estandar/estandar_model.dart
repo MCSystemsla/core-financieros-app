@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class EstandarModel {
+  final String tipoSolicitud;
   final String database;
   final int objSolicitudNuevamenorId;
   final bool otrosIngresos;
@@ -24,6 +25,7 @@ class EstandarModel {
   final int tiempoActividad;
 
   EstandarModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.objSolicitudNuevamenorId,
     required this.otrosIngresos,
@@ -48,6 +50,7 @@ class EstandarModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'objSolicitudId': objSolicitudNuevamenorId,
         'otrosIngresos': otrosIngresos,

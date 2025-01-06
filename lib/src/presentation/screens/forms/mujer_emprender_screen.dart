@@ -344,6 +344,7 @@ class _RecurrentSignSignature extends StatelessWidget {
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrenteMujerEmprendeForm(
           recurrenteMujerEmprendeDbLocal: RecurrenteMujerEmprendeDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..alcanzaraMeta = state.alcanzaraMeta
             ..apoyanNegocio = state.apoyanNegocio
             ..coincideRespuesta = state.coincideRespuesta
@@ -607,6 +608,7 @@ class _SignSignature extends StatelessWidget {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMujerEmprendeForm(
           mujerEmprendeDbLocal: MujerEmprendeDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..comoImpactariaNegocio = state.comoImpactariaNegocio
             ..comoMejoraCalidadVida = state.comoMejoraCalidadVida
             ..conocioMujerEmprende = state.conocioMujerEmprende

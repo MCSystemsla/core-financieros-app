@@ -239,13 +239,16 @@ class _ViviendaNuevaOfflineResponseState
                               .read<MejoraViviendaCubit>()
                               .sendOfflineAnswers(
                                 mejoravivienda: MejoraViviendaAnswer(
+                                    tipoSolicitud: state.mejoraViviendaDbLocal
+                                            ?.tipoSolicitud ??
+                                        '',
                                     otrosDatosCliente: state
                                             .mejoraViviendaDbLocal
                                             ?.otrosDatosCliente ??
                                         '',
-                                    planesFuturo:
-                                        state.mejoraViviendaDbLocal?.planesFuturo ??
-                                            '',
+                                    planesFuturo: state.mejoraViviendaDbLocal
+                                            ?.planesFuturo ??
+                                        '',
                                     comoAyudara:
                                         state.mejoraViviendaDbLocal?.comoAyudara ??
                                             '',
@@ -259,11 +262,8 @@ class _ViviendaNuevaOfflineResponseState
                                     edadHijos:
                                         state.mejoraViviendaDbLocal?.edadHijos ??
                                             '',
-                                    numeroHijos:
-                                        state.mejoraViviendaDbLocal?.numeroHijos ??
-                                            0,
-                                    personasCargo:
-                                        state.mejoraViviendaDbLocal?.personasCargo ?? '',
+                                    numeroHijos: state.mejoraViviendaDbLocal?.numeroHijos ?? 0,
+                                    personasCargo: state.mejoraViviendaDbLocal?.personasCargo ?? '',
                                     necesidadesComunidad: state.mejoraViviendaDbLocal?.necesidadesComunidad ?? '',
                                     objTipoComunidadId: state.mejoraViviendaDbLocal?.objTipoComunidadId ?? '',
                                     objOrigenCatalogoValorId: state.mejoraViviendaDbLocal?.objOrigenCatalogoValorId ?? '',
@@ -550,6 +550,10 @@ class _RecurrenteViviendaOfflineResponseState
                               .sendOfflineAnswers(
                                 recurrentemejoravivienda:
                                     MejoraViviendaRecurrente(
+                                  tipoSolicitud: state
+                                          .recurrenteMejoraViviendaDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   objSolicitudRecurrenteId: state
                                           .recurrenteMejoraViviendaDbLocal
                                           ?.objSolicitudRecurrenteId ??

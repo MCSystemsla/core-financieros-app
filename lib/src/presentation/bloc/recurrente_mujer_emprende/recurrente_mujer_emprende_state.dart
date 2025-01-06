@@ -2,6 +2,7 @@
 part of 'recurrente_mujer_emprende_cubit.dart';
 
 class RecurrenteMujerEmprendeState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final bool otrosIngresos;
@@ -27,8 +28,9 @@ class RecurrenteMujerEmprendeState extends Equatable {
   final String errorMsg;
   final int tiempoActividad;
   const RecurrenteMujerEmprendeState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
-    this.database = 'MC_CH',
+    this.database = '',
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
     this.personasCargo = 0,
@@ -55,6 +57,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         database,
         otrosIngresos,
@@ -82,6 +85,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
       ];
 
   RecurrenteMujerEmprendeState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     bool? otrosIngresos,
@@ -108,6 +112,7 @@ class RecurrenteMujerEmprendeState extends Equatable {
     int? tiempoActividad,
   }) {
     return RecurrenteMujerEmprendeState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       otrosIngresos: otrosIngresos ?? this.otrosIngresos,

@@ -24,4 +24,5 @@ class MejoraViviendaDbLocal {
   String? comoAyudara;
   String? planesFuturo;
   String? otrosDatosCliente;
+  String? tipoSolicitud;
 }

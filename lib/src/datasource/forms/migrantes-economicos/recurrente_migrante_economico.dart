@@ -7,6 +7,7 @@ String migrantesEconomicosRecurrenteToJson(
     json.encode(data.toJson());
 
 class MigrantesEconomicosRecurrente {
+  final String tipoSolicitud;
   final String database;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
@@ -29,6 +30,7 @@ class MigrantesEconomicosRecurrente {
   final String siguienteMeta;
 
   MigrantesEconomicosRecurrente({
+    required this.tipoSolicitud,
     required this.database,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
@@ -52,6 +54,7 @@ class MigrantesEconomicosRecurrente {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,

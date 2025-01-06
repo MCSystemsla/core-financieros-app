@@ -2,6 +2,7 @@
 part of 'recurrente_micredi_estudio_cubit.dart';
 
 class RecurrenteMicrediEstudioState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final bool tieneTrabajo;
@@ -28,6 +29,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
   final String explicacionAlcanzaraMeta;
   final String errorMsg;
   const RecurrenteMicrediEstudioState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
     this.database = 'MC_CH',
     this.tieneTrabajo = false,
@@ -57,6 +59,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         database,
         tieneTrabajo,
@@ -85,6 +88,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
       ];
 
   RecurrenteMicrediEstudioState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     bool? tieneTrabajo,
@@ -112,6 +116,7 @@ class RecurrenteMicrediEstudioState extends Equatable {
     String? errorMsg,
   }) {
     return RecurrenteMicrediEstudioState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       tieneTrabajo: tieneTrabajo ?? this.tieneTrabajo,

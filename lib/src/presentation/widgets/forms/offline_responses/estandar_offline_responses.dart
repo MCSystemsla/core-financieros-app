@@ -257,6 +257,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                               .sendOfflineAnswers(
                                   recurrentEstandarModel:
                                       RecurrenteEstandarModel(
+                                tipoSolicitud: resp.recurrenteEstandarDbLocal
+                                        ?.tipoSolicitud ??
+                                    '',
                                 tiempoActividad: resp.recurrenteEstandarDbLocal
                                         ?.tiempoActividad ??
                                     0,
@@ -586,6 +589,9 @@ class _EstandarFormState extends State<EstandarForm> {
                         onNextPressed: () {
                           context.read<EstandarCubit>().sendOffilneAnswers(
                                 estandarModel: EstandarModel(
+                                  tipoSolicitud:
+                                      state.estandarDbLocal?.tipoSolicitud ??
+                                          '',
                                   tiempoActividad:
                                       state.estandarDbLocal?.tiempoActividad ??
                                           0,

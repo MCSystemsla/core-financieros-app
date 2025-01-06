@@ -16,6 +16,7 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
     try {
       final (isOk, message) = await repository.recurrenteEstandar(
           recurrenteEstandarModel: RecurrenteEstandarModel(
+        tipoSolicitud: state.tipoSolitud,
         tiempoActividad: state.tiempoActividad,
         database: state.database,
         otrosIngresos: state.otrosIngresos,
@@ -83,6 +84,7 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
     bool? tieneTrabajo,
     String? trabajoDescripcion,
     int? tiempoActividad,
+    String? tipoSolitud,
   }) {
     emit(state.copyWith(
       database: LocalStorage().database,
@@ -105,6 +107,7 @@ class RecurrenteEstandartCubit extends Cubit<RecurrenteEstandartState> {
       tieneTrabajo: tieneTrabajo,
       trabajoNegocioDescripcion: trabajoDescripcion,
       tiempoActividad: tiempoActividad,
+      tipoSolitud: tipoSolitud,
     ));
   }
 }

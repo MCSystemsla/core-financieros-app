@@ -13,6 +13,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
     required String solicitudId,
     required String nombre,
     required String motivoAnterior,
+    required String tipoSolicitud,
   }) {
     emit(state.copyWith(
       currentRoute: route,

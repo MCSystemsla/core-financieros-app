@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
@@ -265,6 +266,10 @@ class _MujerEmprendeEntornoSocialWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MujerEmprendeCubit>().saveAnswers(
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
                               tiempoActividad:
                                   int.tryParse(tiempoActividad.text.trim()),
                               otrosIngresos:
@@ -561,6 +566,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteMujerEmprendeCubit>().saveAnswers(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           tiempoActividad:
                               int.tryParse(tiempoActividad.text.trim()),
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),

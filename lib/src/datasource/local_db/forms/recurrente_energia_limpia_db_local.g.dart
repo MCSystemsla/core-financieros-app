@@ -118,8 +118,13 @@ const RecurrenteEnergiaLimpiaDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 20,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 21,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     )
@@ -223,6 +228,12 @@ int _recurrenteEnergiaLimpiaDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -257,7 +268,8 @@ void _recurrenteEnergiaLimpiaDbLocalSerialize(
   writer.writeBool(offsets[17], object.tieneProblemasEnergia);
   writer.writeBool(offsets[18], object.tieneTrabajo);
   writer.writeString(offsets[19], object.tipoEstudioHijos);
-  writer.writeString(offsets[20], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[20], object.tipoSolicitud);
+  writer.writeString(offsets[21], object.trabajoNegocioDescripcion);
 }
 
 RecurrenteEnergiaLimpiaDbLocal _recurrenteEnergiaLimpiaDbLocalDeserialize(
@@ -288,7 +300,8 @@ RecurrenteEnergiaLimpiaDbLocal _recurrenteEnergiaLimpiaDbLocalDeserialize(
   object.tieneProblemasEnergia = reader.readBoolOrNull(offsets[17]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[18]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[19]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[20]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[20]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[21]);
   return object;
 }
 
@@ -340,6 +353,8 @@ P _recurrenteEnergiaLimpiaDbLocalDeserializeProp<P>(
     case 19:
       return (reader.readStringOrNull(offset)) as P;
     case 20:
+      return (reader.readStringOrNull(offset)) as P;
+    case 21:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2870,6 +2885,162 @@ extension RecurrenteEnergiaLimpiaDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
       QAfterFilterCondition> trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3321,6 +3492,20 @@ extension RecurrenteEnergiaLimpiaDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterSortBy> sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterSortBy> sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
       QAfterSortBy> sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3634,6 +3819,20 @@ extension RecurrenteEnergiaLimpiaDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterSortBy> thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QAfterSortBy> thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
       QAfterSortBy> thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -3803,6 +4002,14 @@ extension RecurrenteEnergiaLimpiaDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
+      QDistinct> distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, RecurrenteEnergiaLimpiaDbLocal,
           QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3960,6 +4167,13 @@ extension RecurrenteEnergiaLimpiaDbLocalQueryProperty on QueryBuilder<
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<RecurrenteEnergiaLimpiaDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

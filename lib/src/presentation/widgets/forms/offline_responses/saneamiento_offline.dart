@@ -263,6 +263,9 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                               .read<AguaYSaneamientoCubit>()
                               .sendOfflineAnswers(
                                 aguaSaneamientoModel: AguaSaneamientoModel(
+                                  tipoSolicitud:
+                                      state.saneamientoDbLocal?.tipoSolicitud ??
+                                          '',
                                   database:
                                       state.saneamientoDbLocal?.database ?? '',
                                   objSolicitudNuevamenorId: state
@@ -607,6 +610,10 @@ class _RecurrenteSaneamientoOfflineState
                               .sendOfflineAnswers(
                                 recurrenteAguaSaniamientoModel:
                                     RecurrenteAguaSaneamientoModel(
+                                  tipoSolicitud: state
+                                          .recurrenteSaneamientoDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   database: state.recurrenteSaneamientoDbLocal
                                           ?.database ??
                                       '',

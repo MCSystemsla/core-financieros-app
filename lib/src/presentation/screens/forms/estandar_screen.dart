@@ -352,6 +352,7 @@ class _RecurrentSign extends StatelessWidget {
     context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
           recurrenteEstandarModel: RecurrenteEstandarDbLocal()
             ..apoyanNegocio = state.apoyanNegocio
+            ..tipoSolicitud = state.tipoSolitud
             ..coincideRespuesta = state.coincideRespuesta
             ..comoFortalece = state.comoFortalece
             ..comoMejoraEntorno = state.comoMejoraEntorno

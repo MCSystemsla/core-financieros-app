@@ -7,6 +7,7 @@ String recurrenteAguaSaneamientoModelToJson(
     json.encode(data.toJson());
 
 class RecurrenteAguaSaneamientoModel {
+  final String tipoSolicitud;
   final String database;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
@@ -31,6 +32,7 @@ class RecurrenteAguaSaneamientoModel {
 
   RecurrenteAguaSaneamientoModel({
     required this.database,
+    required this.tipoSolicitud,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
     required this.tiempoActividad,
@@ -75,5 +77,6 @@ class RecurrenteAguaSaneamientoModel {
         'siguientePaso': siguientePaso,
         'alcanzaraMeta': alcanzaraMeta,
         'explicacionAlcanzaraMeta': explicacionAlcanzaraMeta,
+        'tipoSolicitud': tipoSolicitud,
       };
 }

@@ -143,13 +143,18 @@ const MiCrediEstudioDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 25,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 26,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     ),
     r'universidad': PropertySchema(
-      id: 26,
+      id: 27,
       name: r'universidad',
       type: IsarType.string,
     )
@@ -271,6 +276,12 @@ int _miCrediEstudioDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -316,8 +327,9 @@ void _miCrediEstudioDbLocalSerialize(
   writer.writeLong(offsets[22], object.tiempoCarrera);
   writer.writeBool(offsets[23], object.tieneTrabajo);
   writer.writeString(offsets[24], object.tipoEstudioHijos);
-  writer.writeString(offsets[25], object.trabajoNegocioDescripcion);
-  writer.writeString(offsets[26], object.universidad);
+  writer.writeString(offsets[25], object.tipoSolicitud);
+  writer.writeString(offsets[26], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[27], object.universidad);
 }
 
 MiCrediEstudioDbLocal _miCrediEstudioDbLocalDeserialize(
@@ -354,8 +366,9 @@ MiCrediEstudioDbLocal _miCrediEstudioDbLocalDeserialize(
   object.tiempoCarrera = reader.readLongOrNull(offsets[22]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[23]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[24]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[25]);
-  object.universidad = reader.readStringOrNull(offsets[26]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[25]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[26]);
+  object.universidad = reader.readStringOrNull(offsets[27]);
   return object;
 }
 
@@ -419,6 +432,8 @@ P _miCrediEstudioDbLocalDeserializeProp<P>(
     case 25:
       return (reader.readStringOrNull(offset)) as P;
     case 26:
+      return (reader.readStringOrNull(offset)) as P;
+    case 27:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3563,6 +3578,162 @@ extension MiCrediEstudioDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal,
       QAfterFilterCondition> trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4237,6 +4408,20 @@ extension MiCrediEstudioDbLocalQuerySortBy
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
+      sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
+      sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
       sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -4633,6 +4818,20 @@ extension MiCrediEstudioDbLocalQuerySortThenBy
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
+      thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
+      thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QAfterSortBy>
       thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -4850,6 +5049,14 @@ extension MiCrediEstudioDbLocalQueryWhereDistinct
   }
 
   QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, MiCrediEstudioDbLocal, QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoNegocioDescripcion',
@@ -5045,6 +5252,13 @@ extension MiCrediEstudioDbLocalQueryProperty on QueryBuilder<
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<MiCrediEstudioDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

@@ -26,4 +26,5 @@ class RecurrenteMejoraViviendaDbLocal {
   String? mejoraSeguridadFamilia;
   String? quienApoya;
   String? siguienteMeta;
+  String? tipoSolicitud;
 }

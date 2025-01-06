@@ -6,6 +6,7 @@ String recurrenteMujerEmprendeModelToJson(RecurrenteMujerEmprendeModel data) =>
     json.encode(data.toJson());
 
 class RecurrenteMujerEmprendeModel {
+  final String tipoSolicitud;
   final String database;
   final bool otrosIngresos;
   final String otrosIngresosDescripcion;
@@ -30,6 +31,7 @@ class RecurrenteMujerEmprendeModel {
   final int tiempoActividad;
 
   RecurrenteMujerEmprendeModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.otrosIngresos,
     required this.otrosIngresosDescripcion,
@@ -55,6 +57,7 @@ class RecurrenteMujerEmprendeModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,

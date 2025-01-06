@@ -138,8 +138,13 @@ const RecurrenteEstandarDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 24,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoDescripcion': PropertySchema(
+      id: 25,
       name: r'trabajoDescripcion',
       type: IsarType.string,
     )
@@ -261,6 +266,12 @@ int _recurrenteEstandarDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -299,7 +310,8 @@ void _recurrenteEstandarDbLocalSerialize(
   writer.writeLong(offsets[21], object.tiempoActividad);
   writer.writeBool(offsets[22], object.tieneTrabajo);
   writer.writeString(offsets[23], object.tipoEstudioHijos);
-  writer.writeString(offsets[24], object.trabajoDescripcion);
+  writer.writeString(offsets[24], object.tipoSolicitud);
+  writer.writeString(offsets[25], object.trabajoDescripcion);
 }
 
 RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
@@ -334,7 +346,8 @@ RecurrenteEstandarDbLocal _recurrenteEstandarDbLocalDeserialize(
   object.tiempoActividad = reader.readLongOrNull(offsets[21]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[22]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[23]);
-  object.trabajoDescripcion = reader.readStringOrNull(offsets[24]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[24]);
+  object.trabajoDescripcion = reader.readStringOrNull(offsets[25]);
   return object;
 }
 
@@ -394,6 +407,8 @@ P _recurrenteEstandarDbLocalDeserializeProp<P>(
     case 23:
       return (reader.readStringOrNull(offset)) as P;
     case 24:
+      return (reader.readStringOrNull(offset)) as P;
+    case 25:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3461,6 +3476,162 @@ extension RecurrenteEstandarDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterFilterCondition> trabajoDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3962,6 +4133,20 @@ extension RecurrenteEstandarDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> sortByTrabajoDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoDescripcion', Sort.asc);
@@ -4329,6 +4514,20 @@ extension RecurrenteEstandarDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
+      QAfterSortBy> thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal,
       QAfterSortBy> thenByTrabajoDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoDescripcion', Sort.asc);
@@ -4523,6 +4722,14 @@ extension RecurrenteEstandarDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, RecurrenteEstandarDbLocal, QDistinct>
       distinctByTrabajoDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoDescripcion',
@@ -4704,6 +4911,13 @@ extension RecurrenteEstandarDbLocalQueryProperty on QueryBuilder<
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<RecurrenteEstandarDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

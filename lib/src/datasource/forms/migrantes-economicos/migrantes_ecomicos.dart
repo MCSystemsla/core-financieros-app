@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
-MigrantesEconomicos migrantesEconomicosFromJson(String str) =>
-    MigrantesEconomicos.fromJson(json.decode(str));
-
 String migrantesEconomicosToJson(MigrantesEconomicos data) =>
     json.encode(data.toJson());
 
 class MigrantesEconomicos {
+  final String tipoSolicitud;
   final String database;
   final int objSolicitudNuevamenorId;
   final bool tieneTrabajo;
@@ -39,6 +37,7 @@ class MigrantesEconomicos {
   final String otrosDatosCliente;
 
   MigrantesEconomicos({
+    required this.tipoSolicitud,
     required this.database,
     required this.objSolicitudNuevamenorId,
     required this.tieneTrabajo,
@@ -69,40 +68,8 @@ class MigrantesEconomicos {
     required this.otrosDatosCliente,
   });
 
-  factory MigrantesEconomicos.fromJson(Map<String, dynamic> json) =>
-      MigrantesEconomicos(
-        database: json['database'],
-        objSolicitudNuevamenorId: json['objSolicitudNuevamenorId'],
-        tieneTrabajo: json['tieneTrabajo'],
-        trabajoNegocioDescripcion: json['trabajoNegocioDescripcion'],
-        tiempoActividad: json['tiempoActividad'],
-        otrosIngresos: json['otrosIngresos'],
-        otrosIngresosDescripcion: json['otrosIngresosDescripcion'],
-        personasCargo: json['personasCargo'],
-        objOrigenUbicacionGeograficaId: json['objOrigenUbicacionGeograficaId'],
-        motivoDejarPais: json['motivoDejarPais'],
-        situacionMigratoria: json['situacionMigratoria'],
-        dedicabaPaisOrigen: json['dedicabaPaisOrigen'],
-        vivePaisActual: json['vivePaisActual'],
-        numeroHijos: json['numeroHijos'],
-        edadHijos: json['edadHijos'],
-        tipoEstudioHijos: json['tipoEstudioHijos'],
-        enviaRemesas: json['enviaRemesas'],
-        enviaRemesasExplicacion: json['enviaRemesasExplicacion'],
-        quienApoya: json['quienApoya'],
-        fortalecerIngresos: json['fortalecerIngresos'],
-        fortalecerIngresosExplicacion: json['fortalecerIngresosExplicacion'],
-        metasFuturo: json['metasFuturo'],
-        motivoPrestamo: json['motivoPrestamo'],
-        ayudaMejorarCondiciones: json['ayudaMejorarCondiciones'],
-        ayudaMejorarCondicionesExplicacion:
-            json['ayudaMejorarCondicionesExplicacion'],
-        propositosProximos: json['propositosProximos'],
-        piensaRegresar: json['piensaRegresar'],
-        otrosDatosCliente: json['otrosDatosCliente'],
-      );
-
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'objSolicitudId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,

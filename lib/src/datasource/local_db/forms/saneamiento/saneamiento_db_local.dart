@@ -6,6 +6,7 @@ part 'saneamiento_db_local.g.dart';
 class SaneamientoDbLocal {
   Id id = Isar.autoIncrement;
   String? database;
+  String? tipoSolicitud;
   int? objSolicitudNuevamenorId;
   bool? tieneTrabajo;
   String? trabajoNegocioDescripcion;

@@ -241,6 +241,9 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                         onNextPressed: () {
                           context.read<MujerEmprendeCubit>().sendOfflineAnswers(
                                 mujerEmprendeModel: MujerEmprendeModel(
+                                  tipoSolicitud: state.mujerEmprendeDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   tiempoActividad: state.mujerEmprendeDbLocal
                                           ?.tiempoActividad ??
                                       0,
@@ -566,6 +569,9 @@ class _RecurrenteMujerEmprendeOfflineState
                               .sendOfflineAnswers(
                                 recurrenteMujerEmprende:
                                     RecurrenteMujerEmprendeModel(
+                                  tipoSolicitud: state.recurrenteMujerEmprende
+                                          ?.tipoSolicitud ??
+                                      '',
                                   tiempoActividad: state.recurrenteMujerEmprende
                                           ?.tiempoActividad ??
                                       0,

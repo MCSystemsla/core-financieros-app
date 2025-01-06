@@ -25,4 +25,5 @@ class MujerEmprendeDbLocal {
   bool? tieneTrabajo;
   String? trabajoNegocioDescripcion;
   int? tiempoActividad;
+  String? tipoSolicitud;
 }

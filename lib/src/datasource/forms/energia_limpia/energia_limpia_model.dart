@@ -6,6 +6,7 @@ String energiaLimpiaModelToJson(EnergiaLimpiaModel data) =>
     json.encode(data.toJson());
 
 class EnergiaLimpiaModel {
+  final String tipoSolicitud;
   final String database;
   final int solicitudNuevamenorId;
   final bool tieneTrabajo;
@@ -26,6 +27,7 @@ class EnergiaLimpiaModel {
   final String problemasEnergiaDescripcion;
 
   EnergiaLimpiaModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.solicitudNuevamenorId,
     required this.tieneTrabajo,
@@ -47,6 +49,7 @@ class EnergiaLimpiaModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'objSolicitudId': solicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
