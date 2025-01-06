@@ -320,6 +320,9 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                               .read<MigrantesEconomicosCubit>()
                               .sendOfflineAnswers(
                                 migrantesEconomicos: MigrantesEconomicos(
+                                  tipoSolicitud: state.migranteEconomicoDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   database: LocalStorage().database,
                                   objSolicitudNuevamenorId: int.tryParse(context
                                           .read<KivaRouteCubit>()

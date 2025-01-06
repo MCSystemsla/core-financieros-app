@@ -2,6 +2,7 @@
 part of 'recurrente_migrantes_economicos_cubit.dart';
 
 class RecurrenteMigrantesEconomicosState extends Equatable {
+  final String tipoSoliictud;
   final Status status;
   final String errorMsg;
   final String database;
@@ -25,6 +26,7 @@ class RecurrenteMigrantesEconomicosState extends Equatable {
   final String explicacionMejoraCondiciones;
   final String siguienteMeta;
   const RecurrenteMigrantesEconomicosState({
+    this.tipoSoliictud = '',
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.database = '',
@@ -51,6 +53,7 @@ class RecurrenteMigrantesEconomicosState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSoliictud,
         status,
         errorMsg,
         database,
@@ -76,6 +79,7 @@ class RecurrenteMigrantesEconomicosState extends Equatable {
       ];
 
   RecurrenteMigrantesEconomicosState copyWith({
+    String? tipoSoliictud,
     Status? status,
     String? errorMsg,
     String? database,
@@ -100,6 +104,7 @@ class RecurrenteMigrantesEconomicosState extends Equatable {
     String? siguienteMeta,
   }) {
     return RecurrenteMigrantesEconomicosState(
+      tipoSoliictud: tipoSoliictud ?? this.tipoSoliictud,
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
       database: database ?? this.database,

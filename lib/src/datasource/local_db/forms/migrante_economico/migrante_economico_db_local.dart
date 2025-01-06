@@ -33,4 +33,5 @@ class MigranteEconomicoDbLocal {
   String? propositosProximos;
   String? piensaRegresar;
   String? otrosDatosCliente;
+  String? tipoSolicitud;
 }

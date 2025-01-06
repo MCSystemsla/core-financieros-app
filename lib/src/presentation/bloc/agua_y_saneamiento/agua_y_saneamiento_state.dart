@@ -2,6 +2,7 @@
 part of 'agua_y_saneamiento_cubit.dart';
 
 class AguaYSaneamientoState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final int solicitudNuevamenorId;
@@ -27,6 +28,7 @@ class AguaYSaneamientoState extends Equatable {
   final String errorMsg;
 
   const AguaYSaneamientoState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
     this.database = 'MC_CH',
     this.solicitudNuevamenorId = 0,
@@ -77,9 +79,11 @@ class AguaYSaneamientoState extends Equatable {
         metasProximas,
         otrosDatosCliente,
         errorMsg,
+        tipoSolicitud
       ];
 
   AguaYSaneamientoState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     int? solicitudNuevamenorId,
@@ -105,6 +109,7 @@ class AguaYSaneamientoState extends Equatable {
     String? errorMsg,
   }) {
     return AguaYSaneamientoState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       solicitudNuevamenorId:

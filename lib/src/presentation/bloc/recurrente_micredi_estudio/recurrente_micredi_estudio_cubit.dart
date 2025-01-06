@@ -18,6 +18,7 @@ class RecurrenteMicrediEstudioCubit
     try {
       final (isOk, message) = await repository.recurrenteMiCrediEstudioAnswer(
         recurrenteMiCrediEstudioModel: RecurrenteMiCrediEstudioModel(
+          tipoSolicitud: state.tipoSolicitud,
           database: LocalStorage().database,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
@@ -92,6 +93,7 @@ class RecurrenteMicrediEstudioCubit
     bool? alcanzaraMeta,
     String? explicacionAlcanzaraMeta,
     int? objSolicitudRecurrenteId,
+    String? tipoSolicitud,
   }) {
     emit(
       state.copyWith(
@@ -117,6 +119,7 @@ class RecurrenteMicrediEstudioCubit
         alcanzaraMeta: alcanzaraMeta,
         explicacionAlcanzaraMeta: explicacionAlcanzaraMeta,
         objSolicitudRecurrenteId: objSolicitudRecurrenteId,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class RecurrenteMiCrediEstudioModel {
+  final String tipoSolicitud;
   final String database;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
@@ -26,6 +27,7 @@ class RecurrenteMiCrediEstudioModel {
   final String explicacionAlcanzaraMeta;
 
   RecurrenteMiCrediEstudioModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
@@ -52,6 +54,7 @@ class RecurrenteMiCrediEstudioModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
@@ -68,7 +71,7 @@ class RecurrenteMiCrediEstudioModel {
         'quienApoya': quienApoya,
         'motivoPrestamo': motivoPrestamo,
         'comoAyudaCrecer': comoAyudaCrecer,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'comoAyudoProfesionalmente': comoAyudoProfesionalmente,

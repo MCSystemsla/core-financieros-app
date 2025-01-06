@@ -2,6 +2,7 @@
 part of 'energia_limpia_cubit.dart';
 
 class EnergiaLimpiaState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final int solicitudNuevamenorId;
@@ -24,7 +25,8 @@ class EnergiaLimpiaState extends Equatable {
   final String problemasEnergiaDescripcion;
 
   const EnergiaLimpiaState({
-    this.database = 'MC_CH',
+    this.tipoSolicitud = '',
+    this.database = '',
     this.solicitudNuevamenorId = 0,
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
@@ -48,6 +50,7 @@ class EnergiaLimpiaState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         database,
         solicitudNuevamenorId,
         tieneTrabajo,
@@ -71,6 +74,7 @@ class EnergiaLimpiaState extends Equatable {
       ];
 
   EnergiaLimpiaState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     int? solicitudNuevamenorId,
@@ -93,6 +97,7 @@ class EnergiaLimpiaState extends Equatable {
     String? problemasEnergiaDescripcion,
   }) {
     return EnergiaLimpiaState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       solicitudNuevamenorId:

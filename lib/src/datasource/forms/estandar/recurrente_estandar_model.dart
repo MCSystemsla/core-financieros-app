@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class RecurrenteEstandarModel {
+  final String tipoSolicitud;
   final String database;
   final bool otrosIngresos;
   final String otrosIngresosDescripcion;
@@ -23,6 +24,7 @@ class RecurrenteEstandarModel {
   final int tiempoActividad;
 
   RecurrenteEstandarModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.otrosIngresos,
     required this.otrosIngresosDescripcion,
@@ -46,6 +48,7 @@ class RecurrenteEstandarModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion':
@@ -56,7 +59,7 @@ class RecurrenteEstandarModel {
         'tipoEstudioHijos': tipoEstudioHijos,
         'apoyanNegocio': apoyanNegocio,
         'cuantosApoyan': cuantosApoyan.isEmpty ? null : cuantosApoyan,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion':
             explicacionInversion.isEmpty ? null : explicacionInversion,

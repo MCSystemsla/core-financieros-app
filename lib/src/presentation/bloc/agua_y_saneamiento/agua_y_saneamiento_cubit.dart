@@ -30,6 +30,7 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
     String? siguienteProyectoCalidadVida,
     String? metasProximas,
     String? otrosDatosCliente,
+    String? tipoSolicitud,
   }) {
     emit(
       state.copyWith(
@@ -53,6 +54,7 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
         solicitudNuevamenorId: solicitudNuevamenorId,
         tieneTrabajo: tieneTrabajo,
         trabajoNegocioDescripcion: trabajoNegocioDescripcion,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }
@@ -62,6 +64,7 @@ class AguaYSaneamientoCubit extends Cubit<AguaYSaneamientoState> {
     try {
       final (isOk, message) = await repository.aguaYSaneamientoAnswer(
         aguaSaneamientoModel: AguaSaneamientoModel(
+          tipoSolicitud: state.tipoSolicitud,
           database: state.database,
           objSolicitudNuevamenorId: state.solicitudNuevamenorId,
           tieneTrabajo: state.tieneTrabajo,

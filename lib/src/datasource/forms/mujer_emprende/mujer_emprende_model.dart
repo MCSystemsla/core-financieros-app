@@ -6,6 +6,7 @@ String mujerEmprendeModelToJson(MujerEmprendeModel data) =>
     json.encode(data.toJson());
 
 class MujerEmprendeModel {
+  final String tipoSolicitud;
   final String database;
   final int objSolicitudNuevamenorId;
   final bool otrosIngresos;
@@ -28,6 +29,7 @@ class MujerEmprendeModel {
   final int tiempoActividad;
 
   MujerEmprendeModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.objSolicitudNuevamenorId,
     required this.otrosIngresos,
@@ -51,8 +53,9 @@ class MujerEmprendeModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
-        'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
+        'objSolicitudId': objSolicitudNuevamenorId,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,

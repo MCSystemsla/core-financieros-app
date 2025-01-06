@@ -2,6 +2,7 @@
 part of 'recurrente_mejora_vivienda_cubit.dart';
 
 class RecurrenteMejoraViviendaState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final int objSolicitudRecurrenteId;
   final String username;
@@ -26,11 +27,12 @@ class RecurrenteMejoraViviendaState extends Equatable {
   final String siguienteMeta;
   final String errorMsg;
   const RecurrenteMejoraViviendaState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
     this.objSolicitudRecurrenteId = 0,
     this.username = '',
     this.tieneTrabajo = false,
-    this.database = 'MC_CH',
+    this.database = '',
     this.trabajoNegocioDescripcion = '',
     this.tiempoActividad = 0,
     this.otrosIngresos = false,
@@ -53,6 +55,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         objSolicitudRecurrenteId,
         username,
@@ -79,6 +82,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
       ];
 
   RecurrenteMejoraViviendaState copyWith({
+    String? tipoSolicitud,
     Status? status,
     int? objSolicitudRecurrenteId,
     String? username,
@@ -104,6 +108,7 @@ class RecurrenteMejoraViviendaState extends Equatable {
     String? errorMsg,
   }) {
     return RecurrenteMejoraViviendaState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       objSolicitudRecurrenteId:
           objSolicitudRecurrenteId ?? this.objSolicitudRecurrenteId,

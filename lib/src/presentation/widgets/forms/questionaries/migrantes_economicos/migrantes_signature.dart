@@ -259,6 +259,7 @@ class MigrantesFormSignature extends StatelessWidget {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMigranteEconomicoForm(
           migranteEconomicoDbLocal: MigranteEconomicoDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..database = LocalStorage().database
             ..objSolicitudNuevamenorId = state.objSolicitudNuevamenorId
             ..tieneTrabajo = state.tieneTrabajo
@@ -538,6 +539,7 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
         .saveRecurrentMigranteEconomico(
           recurrenteMigranteEconomicoDbLocal:
               RecurrenteMigranteEconomicoDbLocal()
+                ..tipoSolicitud = state.tipoSoliictud
                 ..database = LocalStorage().database
                 ..objSolicitudRecurrenteId = state.objSolicitudRecurrenteId
                 ..tieneTrabajo = state.tieneTrabajo

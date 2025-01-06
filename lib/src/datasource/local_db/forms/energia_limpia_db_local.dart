@@ -23,4 +23,5 @@ class EnergiaLimpiaDbLocal {
   String? planesFuturo;
   String? otrosDatosCliente;
   String? problemasEnergiaDescripcion;
+  String? tipoSolicitud;
 }

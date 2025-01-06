@@ -385,6 +385,7 @@ class _RecurrentSign extends StatelessWidget {
         .saveRecurrentSaneamientoForm(
           recurrenteSaneamientoDbLocal: RecurrenteSaneamientoDbLocal()
             ..alcanzaraMeta = state.alcanzaraMeta
+            ..tipoSolicitud = state.tipoSolicitud
             ..coincideRespuesta = state.coincideRespuesta
             ..comoAyudoCondiciones = state.comoAyudoCondiciones
             ..comoMejoraCondicionesEntorno = state.comoMejoraCondicionesEntorno
@@ -652,6 +653,7 @@ class _EstandarSignState extends State<EstandarSign> {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveEstandarForm(
           estandarDBLocal: EstandarDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..apoyanNegocio = state.apoyanNegocio
             ..cuantosApoyan = state.cuantosApoyan
             ..comoMejoraVida = state.comoMejoraVida
@@ -1219,6 +1221,7 @@ class _SaneamientoSign extends StatelessWidget {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveSaneamientoForm(
           saneamientoDbLocal: SaneamientoDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..cumpliriaPropuesta = state.cumpliriaPropuesta
             ..database = state.database
             ..edadHijos = state.edadHijos
@@ -1482,6 +1485,7 @@ class SignQuestionaryWidget extends StatelessWidget {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMejoraViviendaForm(
           mejoraViviendaDBLocal: MejoraViviendaDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..comoAyudara = state.comoAyudara
             ..database = LocalStorage().database
             ..edadHijos = state.edadHijos

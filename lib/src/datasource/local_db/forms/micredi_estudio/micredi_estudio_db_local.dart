@@ -32,4 +32,5 @@ class MiCrediEstudioDbLocal {
   String? planFuturo;
   String? aspiraLaboralmente;
   String? otrosDatosCliente;
+  String? tipoSolicitud;
 }

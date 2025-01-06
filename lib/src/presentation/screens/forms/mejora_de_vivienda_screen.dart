@@ -380,6 +380,7 @@ class RecurrentSign extends StatelessWidget {
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrenteMejoraViviendaForm(
           recurrenteMejoraViviendaDBLocal: RecurrenteMejoraViviendaDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..coincideRespuesta = state.coincideRespuesta
             ..database = LocalStorage().database
             ..edadHijos = state.edadHijos

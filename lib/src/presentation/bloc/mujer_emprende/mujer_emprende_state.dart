@@ -2,6 +2,7 @@
 part of 'mujer_emprende_cubit.dart';
 
 class MujerEmprendeState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final int objSolicitudNuevamenorId;
@@ -25,6 +26,7 @@ class MujerEmprendeState extends Equatable {
   final String trabajoNegocioDescripcion;
   final int tiempoActividad;
   const MujerEmprendeState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
     this.database = '',
     this.objSolicitudNuevamenorId = 0,
@@ -51,6 +53,7 @@ class MujerEmprendeState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         database,
         objSolicitudNuevamenorId,
@@ -76,6 +79,7 @@ class MujerEmprendeState extends Equatable {
       ];
 
   MujerEmprendeState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     int? objSolicitudNuevamenorId,
@@ -100,6 +104,7 @@ class MujerEmprendeState extends Equatable {
     int? tiempoActividad,
   }) {
     return MujerEmprendeState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       objSolicitudNuevamenorId:

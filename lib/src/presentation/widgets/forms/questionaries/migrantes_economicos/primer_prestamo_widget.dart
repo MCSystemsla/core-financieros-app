@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/migrantes_economicos/migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -165,6 +166,10 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MigrantesEconomicosCubit>().saveAnswers(
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
                               tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                               trabajoNegocioDescripcion:
                                   trabajoNegocioDescripcion.text.trim(),
@@ -384,6 +389,10 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                     context
                         .read<RecurrenteMigrantesEconomicosCubit>()
                         .saveAnswers(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                           trabajoNegocioDescripcion:
                               trabajoNegocioDescripcion.text.trim(),

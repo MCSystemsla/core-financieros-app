@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -278,6 +279,10 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                                 objOrigenCatalogoValorId: personOrigin,
                                 personasCargo: personasCargo.text.trim(),
                                 edadHijos: question2Controller.text.trim(),
+                                tipoSolicitud: context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .tipoSolicitud,
                                 tipoEstudioHijos: tipoEstudioHijos,
                                 tiempoActividad:
                                     int.tryParse(tiempoActividad.text.trim()),
@@ -583,6 +588,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteAguaYSaneamientoCubit>().saveAnswers(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           tipoEstudioHijos: tipoEstudioHijos,
                           personasCargo: personasCargo.text.trim(),

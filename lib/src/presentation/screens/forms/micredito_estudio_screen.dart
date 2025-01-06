@@ -351,6 +351,7 @@ class _RecurrentSigntature extends StatelessWidget {
         .saveRecurrentMiCrediEstudioForm(
           recurrenteMiCrediEstudioModelDbLocal:
               RecurrenteMiCrediEstudioDbLocal()
+                ..tipoSolicitud = state.tipoSolicitud
                 ..alcanzaraMeta = state.alcanzaraMeta
                 ..carrera = state.carrera
                 ..coincideRespuesta = state.coincideRespuesta
@@ -783,6 +784,7 @@ class _SignUserSignature extends StatelessWidget {
         );
     context.read<SolicitudesPendientesLocalDbCubit>().saveMiCrediEstudioForm(
           miCrediEstudioModelDbLocal: MiCrediEstudioDbLocal()
+            ..tipoSolicitud = state.tipoSolicitud
             ..aspiraLaboralmente = state.aspiraLaboralmente
             ..carrera = state.carrera
             ..comoAyudaCrecer = state.comoAyudaCrecer
@@ -1084,6 +1086,10 @@ class _EntornoSocialEstudioWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MicrediEstudioCubit>().saveAnswers(
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
                               tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                               trabajoNegocioDescripcion:
                                   trabajoNegocioDescripcion.text.trim(),
@@ -1314,6 +1320,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                           trabajoNegocioDescripcion:
                               trabajoNegocioDescripcion.text.trim(),

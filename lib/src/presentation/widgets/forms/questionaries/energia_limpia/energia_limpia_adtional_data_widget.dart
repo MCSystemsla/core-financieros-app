@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -151,6 +152,10 @@ class _EnergiaLimpiaAditionalDataWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<EnergiaLimpiaCubit>().saveAnswer1(
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
                               otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                               otrosIngresosDescripcion:
                                   otrosIngresosDescripcion.text.trim(),
@@ -335,6 +340,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<RecurrenteEnergiaLimpiaCubit>().saveAnswer1(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),

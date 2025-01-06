@@ -2,6 +2,7 @@
 part of 'recurrente_estandart_cubit.dart';
 
 class RecurrenteEstandartState extends Equatable {
+  final String tipoSolitud;
   final Status status;
   final String database;
   final bool otrosIngresos;
@@ -25,6 +26,7 @@ class RecurrenteEstandartState extends Equatable {
   final String erroMsg;
   final int tiempoActividad;
   const RecurrenteEstandartState({
+    this.tipoSolitud = '',
     this.database = '',
     this.otrosIngresos = false,
     this.otrosIngresosDescripcion = '',
@@ -51,6 +53,7 @@ class RecurrenteEstandartState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolitud,
         database,
         otrosIngresos,
         otrosIngresosDescripcion,
@@ -76,6 +79,7 @@ class RecurrenteEstandartState extends Equatable {
       ];
 
   RecurrenteEstandartState copyWith({
+    String? tipoSolitud,
     Status? status,
     String? database,
     bool? otrosIngresos,
@@ -100,6 +104,7 @@ class RecurrenteEstandartState extends Equatable {
     int? tiempoActividad,
   }) {
     return RecurrenteEstandartState(
+      tipoSolitud: tipoSolitud ?? this.tipoSolitud,
       status: status ?? this.status,
       database: database ?? this.database,
       otrosIngresos: otrosIngresos ?? this.otrosIngresos,

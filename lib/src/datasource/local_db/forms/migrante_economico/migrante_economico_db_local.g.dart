@@ -148,13 +148,18 @@ const MigranteEconomicoDbLocalSchema = CollectionSchema(
       name: r'tipoEstudioHijos',
       type: IsarType.string,
     ),
-    r'trabajoNegocioDescripcion': PropertySchema(
+    r'tipoSolicitud': PropertySchema(
       id: 26,
+      name: r'tipoSolicitud',
+      type: IsarType.string,
+    ),
+    r'trabajoNegocioDescripcion': PropertySchema(
+      id: 27,
       name: r'trabajoNegocioDescripcion',
       type: IsarType.string,
     ),
     r'vivePaisActual': PropertySchema(
-      id: 27,
+      id: 28,
       name: r'vivePaisActual',
       type: IsarType.string,
     )
@@ -282,6 +287,12 @@ int _migranteEconomicoDbLocalEstimateSize(
     }
   }
   {
+    final value = object.tipoSolicitud;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.trabajoNegocioDescripcion;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -328,8 +339,9 @@ void _migranteEconomicoDbLocalSerialize(
   writer.writeLong(offsets[23], object.tiempoActividad);
   writer.writeBool(offsets[24], object.tieneTrabajo);
   writer.writeString(offsets[25], object.tipoEstudioHijos);
-  writer.writeString(offsets[26], object.trabajoNegocioDescripcion);
-  writer.writeString(offsets[27], object.vivePaisActual);
+  writer.writeString(offsets[26], object.tipoSolicitud);
+  writer.writeString(offsets[27], object.trabajoNegocioDescripcion);
+  writer.writeString(offsets[28], object.vivePaisActual);
 }
 
 MigranteEconomicoDbLocal _migranteEconomicoDbLocalDeserialize(
@@ -367,8 +379,9 @@ MigranteEconomicoDbLocal _migranteEconomicoDbLocalDeserialize(
   object.tiempoActividad = reader.readLongOrNull(offsets[23]);
   object.tieneTrabajo = reader.readBoolOrNull(offsets[24]);
   object.tipoEstudioHijos = reader.readStringOrNull(offsets[25]);
-  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[26]);
-  object.vivePaisActual = reader.readStringOrNull(offsets[27]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[26]);
+  object.trabajoNegocioDescripcion = reader.readStringOrNull(offsets[27]);
+  object.vivePaisActual = reader.readStringOrNull(offsets[28]);
   return object;
 }
 
@@ -434,6 +447,8 @@ P _migranteEconomicoDbLocalDeserializeProp<P>(
     case 26:
       return (reader.readStringOrNull(offset)) as P;
     case 27:
+      return (reader.readStringOrNull(offset)) as P;
+    case 28:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3692,6 +3707,162 @@ extension MigranteEconomicoDbLocalQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tipoSolicitud',
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'tipoSolicitud',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'tipoSolicitud',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+          QAfterFilterCondition>
+      tipoSolicitudMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'tipoSolicitud',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
+      QAfterFilterCondition> tipoSolicitudIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tipoSolicitud',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal,
       QAfterFilterCondition> trabajoNegocioDescripcionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4379,6 +4550,20 @@ extension MigranteEconomicoDbLocalQuerySortBy on QueryBuilder<
   }
 
   QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
+      sortByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
+      sortByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
       sortByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -4788,6 +4973,20 @@ extension MigranteEconomicoDbLocalQuerySortThenBy on QueryBuilder<
   }
 
   QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
+      thenByTipoSolicitud() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
+      thenByTipoSolicitudDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tipoSolicitud', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QAfterSortBy>
       thenByTrabajoNegocioDescripcion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trabajoNegocioDescripcion', Sort.asc);
@@ -5015,6 +5214,14 @@ extension MigranteEconomicoDbLocalQueryWhereDistinct on QueryBuilder<
   }
 
   QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QDistinct>
+      distinctByTipoSolicitud({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tipoSolicitud',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, MigranteEconomicoDbLocal, QDistinct>
       distinctByTrabajoNegocioDescripcion({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trabajoNegocioDescripcion',
@@ -5218,6 +5425,13 @@ extension MigranteEconomicoDbLocalQueryProperty on QueryBuilder<
       tipoEstudioHijosProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tipoEstudioHijos');
+    });
+  }
+
+  QueryBuilder<MigranteEconomicoDbLocal, String?, QQueryOperations>
+      tipoSolicitudProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tipoSolicitud');
     });
   }
 

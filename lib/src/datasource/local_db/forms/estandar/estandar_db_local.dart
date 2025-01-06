@@ -31,4 +31,5 @@ class EstandarDbLocal {
   bool? tieneTrabajo;
   String? trabajoNegocioDescripcion;
   int? tiempoActividad;
+  String? tipoSolicitud;
 }

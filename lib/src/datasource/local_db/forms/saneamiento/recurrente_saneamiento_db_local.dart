@@ -26,4 +26,5 @@ class RecurrenteSaneamientoDbLocal {
   String? siguientePaso;
   bool? alcanzaraMeta;
   String? explicacionAlcanzaraMeta;
+  String? tipoSolicitud;
 }

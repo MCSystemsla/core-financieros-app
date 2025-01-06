@@ -542,6 +542,7 @@ class _RecurrentSignQuestionary extends StatelessWidget {
         .saveRecurrenteEnergiaLimpia(
           recurrenteEnergiaLimpiaDBLocal: RecurrenteEnergiaLimpiaDbLocal()
             ..coincideRespuesta = state.coincideRespuesta
+            ..tipoSolicitud = state.tipoSolicitud
             ..comoMejoraSituacion = state.comoMejoraSituacion
             ..database = LocalStorage().database
             ..edadHijos = state.edadHijos
@@ -801,6 +802,7 @@ class _SignQuestionary extends StatelessWidget {
     context.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
           energiaLimpiaDBLocal: EnergiaLimpiaDbLocal()
             ..database = LocalStorage().database
+            ..tipoSolicitud = state.tipoSolicitud
             ..edadHijos = state.edadHijos
             ..motivoPrestamo = state.motivoPrestamo
             ..numeroHijos = state.numeroHijos

@@ -6,6 +6,7 @@ String mejoraViviendaRecurrenteToJson(MejoraViviendaRecurrente data) =>
     json.encode(data.toJson());
 
 class MejoraViviendaRecurrente {
+  final String tipoSolicitud;
   final int objSolicitudRecurrenteId;
   final String username;
   final bool tieneTrabajo;
@@ -29,6 +30,7 @@ class MejoraViviendaRecurrente {
   final String siguienteMeta;
 
   MejoraViviendaRecurrente({
+    required this.tipoSolicitud,
     required this.objSolicitudRecurrenteId,
     required this.username,
     required this.tieneTrabajo,
@@ -53,7 +55,8 @@ class MejoraViviendaRecurrente {
   });
 
   Map<String, dynamic> toJson() => {
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'tipoSolicitud': tipoSolicitud,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'username': username,
         'tieneTrabajo': tieneTrabajo,
         'database': LocalStorage().database,

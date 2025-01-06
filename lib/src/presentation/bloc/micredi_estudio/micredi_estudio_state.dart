@@ -2,6 +2,7 @@
 part of 'micredi_estudio_cubit.dart';
 
 class MicrediEstudioState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final int objSolicitudNuevamenorId;
@@ -33,8 +34,9 @@ class MicrediEstudioState extends Equatable {
   final String errorMsg;
 
   const MicrediEstudioState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
-    this.database = 'MC_CH',
+    this.database = '',
     this.objSolicitudNuevamenorId = 0,
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
@@ -66,6 +68,7 @@ class MicrediEstudioState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         database,
         objSolicitudNuevamenorId,
@@ -98,6 +101,7 @@ class MicrediEstudioState extends Equatable {
       ];
 
   MicrediEstudioState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     int? objSolicitudNuevamenorId,
@@ -129,6 +133,7 @@ class MicrediEstudioState extends Equatable {
     String? errorMsg,
   }) {
     return MicrediEstudioState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       objSolicitudNuevamenorId:

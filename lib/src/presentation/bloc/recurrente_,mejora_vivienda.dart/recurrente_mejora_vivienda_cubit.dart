@@ -19,6 +19,7 @@ class RecurrenteMejoraViviendaCubit
       emit(state.copyWith(status: Status.inProgress));
       final (isOk, message) = await repository.mejoraViviendaRecurrenteAnswer(
         mejoraViviendaRecurrente: MejoraViviendaRecurrente(
+          tipoSolicitud: state.tipoSolicitud,
           database: LocalStorage().database,
           objSolicitudRecurrenteId: state.objSolicitudRecurrenteId,
           username: state.username,
@@ -81,6 +82,7 @@ class RecurrenteMejoraViviendaCubit
     int? numeroHijos,
     String? edadHijos,
     String? tipoEstudioHijos,
+    String? tipoSolicitud,
   }) async {
     emit(
       state.copyWith(
@@ -95,6 +97,7 @@ class RecurrenteMejoraViviendaCubit
         numeroHijos: numeroHijos,
         edadHijos: edadHijos,
         tipoEstudioHijos: tipoEstudioHijos,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }

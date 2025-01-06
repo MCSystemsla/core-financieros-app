@@ -320,6 +320,9 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                               .read<MicrediEstudioCubit>()
                               .sendOfflineAnswers(
                                 miCrediEstudioModel: MiCrediEstudioModel(
+                                  tipoSolitud: state.miCrediEstudioDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   database:
                                       state.miCrediEstudioDbLocal?.database ??
                                           '',
@@ -708,6 +711,10 @@ class _MiCrediEstudioRecurrenteFormState
                               .sendOfflineAnswers(
                                 recurrenteMicrediEstudioModel:
                                     RecurrenteMiCrediEstudioModel(
+                                  tipoSolicitud: state
+                                          .recurrenteMiCrediEstudioDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   database: state
                                           .recurrenteMiCrediEstudioDbLocal
                                           ?.database ??

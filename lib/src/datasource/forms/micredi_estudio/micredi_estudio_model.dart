@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class MiCrediEstudioModel {
+  final String tipoSolitud;
   final String database;
   final int objSolicitudNuevamenorId;
   final bool tieneTrabajo;
@@ -30,6 +31,7 @@ class MiCrediEstudioModel {
   final String otrosDatosCliente;
 
   MiCrediEstudioModel({
+    required this.tipoSolitud,
     required this.database,
     required this.objSolicitudNuevamenorId,
     required this.tieneTrabajo,
@@ -60,8 +62,9 @@ class MiCrediEstudioModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolitud,
         'database': LocalStorage().database,
-        'objSolicitudNuevamenorId': objSolicitudNuevamenorId,
+        'objSolicitudId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
         'tiempoActividad': tiempoActividad,

@@ -2,6 +2,7 @@
 part of 'recurrente_agua_y_saneamiento_cubit.dart';
 
 class RecurrenteAguaYSaneamientoState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final bool tieneTrabajo;
@@ -26,10 +27,11 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
   final String explicacionAlcanzaraMeta;
   final String errorMsg;
   const RecurrenteAguaYSaneamientoState({
+    this.tipoSolicitud = '',
     this.status = Status.notStarted,
-    this.objSolicitudRecurrenteId = 262,
+    this.objSolicitudRecurrenteId = 0,
     this.tieneTrabajo = false,
-    this.database = 'MC_CH',
+    this.database = '',
     this.trabajoNegocioDescripcion = '',
     this.tiempoActividad = 0,
     this.otrosIngresos = false,
@@ -53,6 +55,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         status,
         objSolicitudRecurrenteId,
         tieneTrabajo,
@@ -79,6 +82,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
       ];
 
   RecurrenteAguaYSaneamientoState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     bool? tieneTrabajo,
@@ -104,6 +108,7 @@ class RecurrenteAguaYSaneamientoState extends Equatable {
     String? errorMsg,
   }) {
     return RecurrenteAguaYSaneamientoState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       tieneTrabajo: tieneTrabajo ?? this.tieneTrabajo,

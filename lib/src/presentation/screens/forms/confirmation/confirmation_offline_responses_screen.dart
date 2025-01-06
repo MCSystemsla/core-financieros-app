@@ -520,6 +520,10 @@ class _RecurrenteMigranteEconomicoOfflineState
                               .sendOfflineAnswers(
                                 recurrenteMigranteEcomico:
                                     MigrantesEconomicosRecurrente(
+                                  tipoSolicitud: state
+                                          .recurrenteMigranteEconomicoDbLocal
+                                          ?.tipoSolicitud ??
+                                      '',
                                   database: state
                                           .recurrenteMigranteEconomicoDbLocal
                                           ?.database ??

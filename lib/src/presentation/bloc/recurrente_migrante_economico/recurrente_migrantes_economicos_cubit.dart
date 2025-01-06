@@ -16,6 +16,7 @@ class RecurrenteMigrantesEconomicosCubit
     try {
       final (isOk, msg) = await _repository.migrantesEconomicosRecurrente(
         migrantesEconmicos: MigrantesEconomicosRecurrente(
+          tipoSolicitud: state.tipoSoliictud,
           database: state.database,
           tieneTrabajo: state.tieneTrabajo,
           trabajoNegocioDescripcion: state.trabajoNegocioDescripcion,
@@ -93,6 +94,7 @@ class RecurrenteMigrantesEconomicosCubit
     bool? mejoraCondiciones,
     String? explicacionMejoraCondiciones,
     String? siguienteMeta,
+    String? tipoSolicitud,
   }) {
     emit(state.copyWith(
       database: database,
@@ -115,6 +117,7 @@ class RecurrenteMigrantesEconomicosCubit
       mejoraCondiciones: mejoraCondiciones,
       explicacionMejoraCondiciones: explicacionMejoraCondiciones,
       siguienteMeta: siguienteMeta,
+      tipoSoliictud: tipoSolicitud,
     ));
   }
 }

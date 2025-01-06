@@ -6,6 +6,7 @@ String recurrenteEnergiaLimpiaModelToJson(RecurrenteEnergiaLimpiaModel data) =>
     json.encode(data.toJson());
 
 class RecurrenteEnergiaLimpiaModel {
+  final String tipoSolicitud;
   final String database;
   final bool tieneTrabajo;
   final String trabajoNegocioDescripcion;
@@ -29,6 +30,7 @@ class RecurrenteEnergiaLimpiaModel {
   final String problemasEnergiaDescripcion;
 
   RecurrenteEnergiaLimpiaModel({
+    required this.tipoSolicitud,
     required this.database,
     required this.tieneTrabajo,
     required this.trabajoNegocioDescripcion,
@@ -53,6 +55,7 @@ class RecurrenteEnergiaLimpiaModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
@@ -66,7 +69,7 @@ class RecurrenteEnergiaLimpiaModel {
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
         'motivoPrestamo': motivoPrestamo,
-        'objSolicitudRecurrenteId': objSolicitudRecurrenteId,
+        'objSolicitudId': objSolicitudRecurrenteId,
         'coincideRespuesta': coincideRespuesta,
         'explicacionInversion': explicacionInversion,
         'situacionAntesAhora': situacionAntesAhora,

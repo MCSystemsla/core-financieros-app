@@ -30,4 +30,5 @@ class RecurrenteEstandarDbLocal {
   bool? tieneTrabajo;
   String? trabajoDescripcion;
   int? tiempoActividad;
+  String? tipoSolicitud;
 }

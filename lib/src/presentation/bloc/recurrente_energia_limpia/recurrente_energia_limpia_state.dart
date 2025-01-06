@@ -2,6 +2,7 @@
 part of 'recurrente_energia_limpia_cubit.dart';
 
 class RecurrenteEnergiaLimpiaState extends Equatable {
+  final String tipoSolicitud;
   final Status status;
   final String database;
   final bool tieneTrabajo;
@@ -26,6 +27,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
   final String errorMsg;
   final String problemasEnergiaDescripcion;
   const RecurrenteEnergiaLimpiaState({
+    this.tipoSolicitud = '',
     this.database = '',
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',
@@ -53,6 +55,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
         database,
         tieneTrabajo,
         trabajoNegocioDescripcion,
@@ -79,6 +82,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
       ];
 
   RecurrenteEnergiaLimpiaState copyWith({
+    String? tipoSolicitud,
     Status? status,
     String? database,
     bool? tieneTrabajo,
@@ -104,6 +108,7 @@ class RecurrenteEnergiaLimpiaState extends Equatable {
     String? problemasEnergiaDescripcion,
   }) {
     return RecurrenteEnergiaLimpiaState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       status: status ?? this.status,
       database: database ?? this.database,
       tieneTrabajo: tieneTrabajo ?? this.tieneTrabajo,

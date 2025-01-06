@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -146,6 +147,10 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<EstandarCubit>().saveAnswers(
+                          tipoSolicitud: context
+                              .read<KivaRouteCubit>()
+                              .state
+                              .tipoSolicitud,
                           tiempoActividad:
                               int.tryParse(tiempoActividad.text.trim()),
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
@@ -316,6 +321,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
               onNextPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   context.read<RecurrenteEstandartCubit>().saveAnswers(
+                        tipoSolitud:
+                            context.read<KivaRouteCubit>().state.tipoSolicitud,
                         tiempoActividad:
                             int.tryParse(tiempoActividad.text.trim()),
                         tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
