@@ -23,6 +23,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
   final RecurrenteMujerEmprendeDbLocal? recurrenteMujerEmprende;
   final MigranteEconomicoDbLocal? migranteEconomicoDbLocal;
   final RecurrenteMigranteEconomicoDbLocal? recurrenteMigranteEconomicoDbLocal;
+  final List<String> actions;
   const SolicitudesPendientesLocalDbState({
     this.recurrenteMigranteEconomicoDbLocal,
     this.status = Status.notStarted,
@@ -45,15 +46,12 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     this.imageModel,
     this.recurrenteMujerEmprende,
     this.migranteEconomicoDbLocal,
+    this.actions = const [],
   });
 
   @override
-  List<Object> get props => [
-        status,
-        solicitudes,
-        departamentos,
-        comunidades,
-      ];
+  List<Object> get props =>
+      [status, solicitudes, departamentos, comunidades, actions];
 
   SolicitudesPendientesLocalDbState copyWith({
     Isar? isar,
@@ -77,6 +75,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
     RecurrenteMujerEmprendeDbLocal? recurrenteMujerEmprende,
     MigranteEconomicoDbLocal? migranteEconomicoDbLocal,
     RecurrenteMigranteEconomicoDbLocal? recurrenteMigranteEconomicoDbLocal,
+    List<String>? actions,
   }) {
     return SolicitudesPendientesLocalDbState(
       isar: isar ?? this.isar,
@@ -110,6 +109,7 @@ class SolicitudesPendientesLocalDbState extends Equatable {
           migranteEconomicoDbLocal ?? this.migranteEconomicoDbLocal,
       recurrenteMigranteEconomicoDbLocal: recurrenteMigranteEconomicoDbLocal ??
           this.recurrenteMigranteEconomicoDbLocal,
+      actions: actions ?? this.actions,
     );
   }
 }

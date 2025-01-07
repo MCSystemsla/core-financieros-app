@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class BranchTeamEndpoint extends Endpoint {
   final String accessCode;
@@ -48,5 +49,27 @@ class LoginEndpoint extends Endpoint {
         'username': userName,
         'password': password,
         'database': dbName
+      };
+}
+
+class ActionsEndpoint extends Endpoint {
+  final String database;
+  ActionsEndpoint({required this.database});
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/auth/acciones-de-usuario';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => {};
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': database,
       };
 }

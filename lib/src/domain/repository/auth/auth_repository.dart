@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
+import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
   Future<Map<String, dynamic>> login({
@@ -11,11 +12,13 @@ abstract class AuthRepository {
     required String dbName,
   });
   Future<BranchTeamResponse> getBranchTeam({required String accessCode});
+  Future<List<dynamic>> getActions({required String database});
 }
 
 class AuthRepositoryImpl extends AuthRepository {
   final _api = global<APIRepository>();
-  // final _logger = Logger();
+
+  final _logger = Logger();
   @override
   Future<Map<String, dynamic>> login({
     required String userName,
@@ -41,5 +44,19 @@ class AuthRepositoryImpl extends AuthRepository {
     final resp = await _api.request(endpoint: endpoint);
     final data = BranchTeamResponse.fromJson(resp);
     return data;
+  }
+
+  @override
+  Future<List<dynamic>> getActions({required String database}) async {
+    final endpoint = ActionsEndpoint(database: database);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = await resp['data'] as List<dynamic>;
+      _logger.i(data);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      throw AppException.toAppException(e.toString());
+    }
   }
 }
