@@ -16,7 +16,7 @@ class HomeItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final localDbProvider = context.watch<SolicitudesPendientesLocalDbCubit>();
     List<HomeItemCard> homeItemData = [
-      if (localDbProvider.state.actions.contains('MODCARTERA'))
+      if (localDbProvider.state.actions.contains('MENUCARTERA'))
         HomeItemCard(
           title: 'home.item5'.tr(),
           subtitle: 'Descripcion'.tr(),
