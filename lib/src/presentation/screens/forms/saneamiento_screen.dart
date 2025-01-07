@@ -250,6 +250,10 @@ class _RecurrentSign extends StatelessWidget {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
@@ -521,6 +525,10 @@ class _EstandarSignState extends State<EstandarSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
@@ -1089,6 +1097,10 @@ class _SaneamientoSign extends StatelessWidget {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
@@ -1356,6 +1368,10 @@ class SignQuestionaryWidget extends StatelessWidget {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,

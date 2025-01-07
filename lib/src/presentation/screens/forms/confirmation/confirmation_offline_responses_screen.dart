@@ -239,6 +239,8 @@ class _RecurrenteMigranteEconomicoOfflineState
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
+                    tipoSolicitud:
+                        context.read<KivaRouteCubit>().state.tipoSolicitud,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );

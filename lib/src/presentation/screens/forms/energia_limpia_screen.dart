@@ -409,6 +409,10 @@ class _RecurrentSignQuestionary extends StatelessWidget {
 
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
@@ -673,6 +677,10 @@ class _SignQuestionary extends StatelessWidget {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
                             fotoFirma: file,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
