@@ -214,6 +214,10 @@ class _RecurrentSign extends StatelessWidget {
                       if (!context.mounted) return;
                       if (isConnected) {
                         context.read<UploadUserFileCubit>().uploadUserFiles(
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
                               fotoFirma: file,
                               solicitudId: int.parse(
                                 context

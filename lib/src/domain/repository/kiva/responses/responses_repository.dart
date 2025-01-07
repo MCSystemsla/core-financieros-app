@@ -71,6 +71,7 @@ abstract class ResponsesRepository {
     required int solicitudId,
     required String formularioKiva,
     required String database,
+    required String tipoSolicitud,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -81,6 +82,7 @@ abstract class ResponsesRepository {
     required int solicitudId,
     required String formularioKiva,
     required String database,
+    required String tipoSolicitud,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -302,6 +304,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required int solicitudId,
     required String formularioKiva,
     required String database,
+    required String tipoSolicitud,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -314,6 +317,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['solicitudId'] = solicitudId.toString();
       request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
+      request.fields['tipoSolicitud'] = tipoSolicitud;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
@@ -440,6 +444,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required int solicitudId,
     required String formularioKiva,
     required String database,
+    required String tipoSolicitud,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
@@ -452,6 +457,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['solicitudId'] = solicitudId.toString();
       request.fields['formularioKiva'] = currentProduct;
       request.fields['database'] = LocalStorage().database;
+      request.fields['tipoSolicitud'] = tipoSolicitud;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
