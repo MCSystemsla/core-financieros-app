@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/local_db/actions/actions_model_db.dart';
 import 'package:core_financiero_app/src/datasource/local_db/comunidades/comunidades_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
@@ -56,6 +57,7 @@ class SolicitudesPendientesLocalDbCubit
           ImageModelSchema,
           MigranteEconomicoDbLocalSchema,
           RecurrenteMigranteEconomicoDbLocalSchema,
+          ActionsModelDbSchema,
         ],
         directory: dir.path,
       );
@@ -825,6 +827,44 @@ class SolicitudesPendientesLocalDbCubit
     } catch (e) {
       _logger.e(e);
     }
+  }
+
+  Future<void> saveActions({
+    required List<ActionsModelDb> actions,
+  }) async {
+    try {
+      await state.isar!.writeTxn(
+        () {
+          return state.isar!.actionsModelDbs.clear();
+        },
+      );
+    } catch (e) {
+      _logger.e(e);
+    }
+    try {
+      final resp = await state.isar!.writeTxn(
+        () {
+          return state.isar!.actionsModelDbs.putAll(actions);
+        },
+      );
+      _logger.i(resp);
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> getActionsAsList() async {
+    final actions = await state.isar!.actionsModelDbs.where().findAll();
+    if (state.isar == null) {
+      _logger.e('Isar instance is null');
+      return;
+    }
+    if (actions.isEmpty) return;
+
+    final List<String> actionStrings =
+        actions.map((e) => e.action ?? 'N/A').toList();
+    emit(state.copyWith(actions: actionStrings));
+    _logger.i(actionStrings.toString());
   }
 
   Future<void> removeWhenFormIsUpload(

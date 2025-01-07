@@ -20,6 +20,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
       solicitudId: solicitudId,
       nombre: nombre,
       motivoAnterior: motivoAnterior,
+      tipoSolicitud: tipoSolicitud,
     ));
     log('Solicitud ${state.solicitudId} - Route ${state.currentRoute}');
   }
