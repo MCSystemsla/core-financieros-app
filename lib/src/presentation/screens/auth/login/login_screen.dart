@@ -1,9 +1,7 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/datasource/local_db/actions/actions_model_db.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -78,7 +76,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final localDbProvider = context.read<SolicitudesPendientesLocalDbCubit>();
     return Form(
       key: _formKey,
       child: Column(
@@ -163,14 +160,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 );
               }
               if (state.status == Status.done) {
-                final actions = state.actions.map(
-                  (e) {
-                    final actions = ActionsModelDb();
-                    actions.action = e;
-                    return actions;
-                  },
-                ).toList();
-                await localDbProvider.saveActions(actions: actions);
                 if (!context.mounted) return;
                 context.pushReplacement('/');
                 ScaffoldMessenger.of(context).showSnackBar(

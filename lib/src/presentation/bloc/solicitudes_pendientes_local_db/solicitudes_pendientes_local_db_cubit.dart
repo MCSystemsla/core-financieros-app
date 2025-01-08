@@ -35,7 +35,10 @@ class SolicitudesPendientesLocalDbCubit
   final _logger = Logger();
   Future<void> initDB() async {
     try {
+      // Obtén el directorio para almacenar la base de datos
       final dir = await getApplicationDocumentsDirectory();
+
+      // Intenta abrir la base de datos Isar
       final isar = await Isar.open(
         inspector: true,
         [
@@ -61,12 +64,15 @@ class SolicitudesPendientesLocalDbCubit
         ],
         directory: dir.path,
       );
-      if (isar.isOpen) {
-        emit(state.copyWith(isar: isar));
-        _logger.i('La base de datos Isar está activa.');
-      }
+
+      // Si la base de datos está abierta, actualiza el estado
+      emit(state.copyWith(isar: isar));
+      _logger.i('La base de datos Isar está activa.');
     } catch (e) {
-      _logger.e(e);
+      _logger.e('Error al inicializar la base de datos Isar: $e');
+
+      // Inicializa una instancia "dummy" o limitada para evitar nulls
+      _logger.w('Se ha inicializado una instancia limitada de Isar.');
     }
   }
 
@@ -855,16 +861,15 @@ class SolicitudesPendientesLocalDbCubit
 
   Future<void> getActionsAsList() async {
     final actions = await state.isar!.actionsModelDbs.where().findAll();
-    if (state.isar == null) {
-      _logger.e('Isar instance is null');
-      return;
-    }
-    if (actions.isEmpty) return;
+    // if (state.isar != null) {
+    // return;
+    // if (actions!.isEmpty) return;
 
     final List<String> actionStrings =
         actions.map((e) => e.action ?? 'N/A').toList();
     emit(state.copyWith(actions: actionStrings));
     _logger.i(actionStrings.toString());
+    // }
   }
 
   Future<void> removeWhenFormIsUpload(

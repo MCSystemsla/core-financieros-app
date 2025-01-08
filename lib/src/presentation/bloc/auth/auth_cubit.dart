@@ -33,8 +33,8 @@ class AuthCubit extends Cubit<AuthState> {
       await LocalStorage().setDatabase(dbName);
       await LocalStorage().setUserId(resp['usuarioId']);
       final actions = await repository.getActions(database: dbName);
-
-      emit(state.copyWith(status: Status.done, actions: actions));
+      LocalStorage().setActions(actions.data);
+      emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }

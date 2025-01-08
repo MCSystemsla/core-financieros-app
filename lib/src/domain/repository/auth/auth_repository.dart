@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
@@ -12,7 +13,7 @@ abstract class AuthRepository {
     required String dbName,
   });
   Future<BranchTeamResponse> getBranchTeam({required String accessCode});
-  Future<List<dynamic>> getActions({required String database});
+  Future<ActionsResponse> getActions({required String database});
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -47,13 +48,14 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<List<dynamic>> getActions({required String database}) async {
+  Future<ActionsResponse> getActions({required String database}) async {
     final endpoint = ActionsEndpoint(database: database);
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = await resp['data'] as List<dynamic>;
+      final actions = ActionsResponse.fromJson(resp);
       _logger.i(data);
-      return data;
+      return actions;
     } catch (e) {
       _logger.e(e);
       throw AppException.toAppException(e.toString());

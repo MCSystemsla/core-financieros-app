@@ -1,10 +1,9 @@
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeItemsWidget extends StatelessWidget {
@@ -14,9 +13,9 @@ class HomeItemsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localDbProvider = context.watch<SolicitudesPendientesLocalDbCubit>();
+    final actions = LocalStorage().currentActions;
     List<HomeItemCard> homeItemData = [
-      if (localDbProvider.state.actions.contains('MENUCARTERA'))
+      if (actions.contains('MENUCARTERA'))
         HomeItemCard(
           title: 'home.item5'.tr(),
           subtitle: 'Descripcion'.tr(),

@@ -11,6 +11,10 @@ class LocalStorage {
     return prefs.getString('lang') ?? 'es';
   }
 
+  List<String> get currentActions {
+    return prefs.getStringList('actions') ?? [];
+  }
+
   String get jwt {
     return prefs.getString('jwt') ?? '';
   }
@@ -45,5 +49,9 @@ class LocalStorage {
 
   Future<void> setUserId(String value) async {
     await prefs.setString('userId', value);
+  }
+
+  Future<void> setActions(List<String> actions) async {
+    await prefs.setStringList('actions', actions);
   }
 }
