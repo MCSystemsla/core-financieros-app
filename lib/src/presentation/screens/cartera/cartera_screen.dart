@@ -70,12 +70,12 @@ class CarteraScreen extends StatelessWidget {
             ),
             _Card(
               onTap: () {},
-              title: 'Proximamente',
-              subtitle: 'Proximamente',
+              title: 'Solicitudes',
+              subtitle: 'Modulo Solicitudes de Credito',
               firstColor: AppColors.blueIndigo,
               secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
               icon: const Icon(
-                Icons.question_mark_outlined,
+                Icons.description,
                 color: AppColors.white,
                 size: 35,
               ),
