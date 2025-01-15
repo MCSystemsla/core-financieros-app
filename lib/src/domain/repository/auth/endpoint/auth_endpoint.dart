@@ -73,3 +73,13 @@ class ActionsEndpoint extends Endpoint {
         'database': database,
       };
 }
+
+class LogoImageEndpoint extends Endpoint {
+  LogoImageEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-logo';
+}
