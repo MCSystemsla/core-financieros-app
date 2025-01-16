@@ -79,6 +79,6 @@ class RecurrenteMujerEmprendeModel {
         'alcanzaraMetaExplicacion': explicacionAlcanzaraMeta,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': tieneTrabajoDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
       };
 }
