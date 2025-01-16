@@ -57,7 +57,7 @@ class MejoraViviendaAnswer {
         'tieneTrabajo': tieneTrabajo,
         'database': LocalStorage().database,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,

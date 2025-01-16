@@ -59,7 +59,7 @@ class RecurrenteEnergiaLimpiaModel {
         'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'objTipoComunidadId': objTipoComunidadId,

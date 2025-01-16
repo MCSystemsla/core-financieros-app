@@ -14,6 +14,7 @@ abstract class AuthRepository {
   });
   Future<BranchTeamResponse> getBranchTeam({required String accessCode});
   Future<ActionsResponse> getActions({required String database});
+  Future<String> getLogo();
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -56,6 +57,19 @@ class AuthRepositoryImpl extends AuthRepository {
       final actions = ActionsResponse.fromJson(resp);
       _logger.i(data);
       return actions;
+    } catch (e) {
+      _logger.e(e);
+      throw AppException.toAppException(e.toString());
+    }
+  }
+
+  @override
+  Future<String> getLogo() async {
+    final endpoint = LogoImageEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final logoUrl = resp['Valor'] as String;
+      return logoUrl;
     } catch (e) {
       _logger.e(e);
       throw AppException.toAppException(e.toString());

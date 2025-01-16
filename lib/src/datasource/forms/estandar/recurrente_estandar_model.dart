@@ -69,7 +69,7 @@ class RecurrenteEstandarModel {
         'siguientePaso': siguientePaso,
         'personaAutoSuficiente': personaAutoSuficiente,
         'tieneTrabajo': tieneTrabajo,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion.isEmpty
             ? null
             : trabajoNegocioDescripcion,

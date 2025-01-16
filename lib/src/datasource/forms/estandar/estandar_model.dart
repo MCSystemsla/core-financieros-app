@@ -72,6 +72,6 @@ class EstandarModel {
         'otrosDatosCliente': otrosDatosCliente,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
       };
 }

@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
@@ -127,6 +128,9 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
               // ),
               FormResponses(
                 controller: pageController,
+              ),
+              AsesorSignatureWidget(
+                pageController: pageController,
               ),
               isRecurrentForm ?? false
                   ? const RecurrentSign()
@@ -242,7 +246,7 @@ class RecurrentSign extends StatelessWidget {
                                 .read<KivaRouteCubit>()
                                 .state
                                 .tipoSolicitud,
-                            fotoFirma: file,
+                            fotoFirma: file.path,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
@@ -339,22 +343,16 @@ class RecurrentSign extends StatelessWidget {
                                     state,
                                     ImageModel()
                                       ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1?.path ??
-                                          'No Path'
-                                      ..imagen2 = imageProvider.imagen2?.path ??
-                                          'No Path'
-                                      ..imagen3 = imageProvider.imagen3?.path ??
-                                          'No Path'
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
                                       )
-                                      ..imagen4 =
-                                          imageProvider.fotoCedula?.path ??
-                                              'No Path',
-                                  )
+                                      ..imagen4 = imageProvider.fotoCedula)
                                 : context
                                     .read<RecurrenteMejoraViviendaCubit>()
                                     .sendAnswers();
