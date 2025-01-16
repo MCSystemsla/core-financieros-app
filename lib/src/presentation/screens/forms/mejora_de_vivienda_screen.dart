@@ -242,7 +242,7 @@ class RecurrentSign extends StatelessWidget {
                                 .read<KivaRouteCubit>()
                                 .state
                                 .tipoSolicitud,
-                            fotoFirma: file,
+                            fotoFirma: file.path,
                             solicitudId: int.parse(
                               context.read<KivaRouteCubit>().state.solicitudId,
                             ),
@@ -339,22 +339,16 @@ class RecurrentSign extends StatelessWidget {
                                     state,
                                     ImageModel()
                                       ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1?.path ??
-                                          'No Path'
-                                      ..imagen2 = imageProvider.imagen2?.path ??
-                                          'No Path'
-                                      ..imagen3 = imageProvider.imagen3?.path ??
-                                          'No Path'
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
                                       )
-                                      ..imagen4 =
-                                          imageProvider.fotoCedula?.path ??
-                                              'No Path',
-                                  )
+                                      ..imagen4 = imageProvider.fotoCedula)
                                 : context
                                     .read<RecurrenteMejoraViviendaCubit>()
                                     .sendAnswers();
