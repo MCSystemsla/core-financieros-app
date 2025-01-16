@@ -72,6 +72,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
                     fotoCedula: resp.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagenAsesor: resp.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -398,6 +399,7 @@ class _EstandarFormState extends State<EstandarForm> {
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -63,15 +61,16 @@ abstract class ResponsesRepository {
     required RecurrenteEstandarModel recurrenteEstandarModel,
   });
   Future<(bool, String)> uploadUserFiles({
-    required File imagen1,
-    required File imagen2,
-    required File imagen3,
-    required File fotoFirma,
-    required File fotoCedula,
+    required String imagen1,
+    required String imagen2,
+    required String imagen3,
+    required String fotoFirma,
+    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String fotoAsesorFirma,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -83,6 +82,7 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String imagenAsesor,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -296,15 +296,16 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
   @override
   Future<(bool, String)> uploadUserFiles({
-    required File imagen1,
-    required File imagen2,
-    required File imagen3,
-    required File fotoFirma,
-    required File fotoCedula,
+    required String imagen1,
+    required String imagen2,
+    required String imagen3,
+    required String fotoFirma,
+    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String fotoAsesorFirma,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -321,37 +322,43 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
-        imagen1.path,
-        filename: imagen1.path,
+        imagen1,
+        filename: imagen1,
         contentType: MediaType('image', 'jpeg'),
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente2',
-        imagen2.path,
-        filename: imagen2.path,
+        imagen2,
+        filename: imagen2,
         contentType: MediaType('image', 'jpeg'),
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente3',
-        imagen3.path,
-        filename: imagen3.path,
+        imagen3,
+        filename: imagen3,
         contentType: MediaType('image', 'jpeg'),
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoFirmaDigital',
-        fotoFirma.path,
-        filename: fotoFirma.path,
+        fotoFirma,
+        filename: fotoFirma,
         contentType: MediaType('image', 'png'),
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCedula',
-        fotoCedula.path,
-        filename: fotoCedula.path,
+        fotoCedula,
+        filename: fotoCedula,
         contentType: MediaType('image', 'jpeg'),
+      ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoFirmaDigitalAsesor',
+        fotoAsesorFirma,
+        filename: fotoAsesorFirma,
+        contentType: MediaType('image', 'png'),
       ));
       request.headers.addAll({
         'Accept': 'application/json',
@@ -445,6 +452,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String imagenAsesor,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
@@ -492,6 +500,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         fotoCedula,
         filename: fotoCedula,
         contentType: MediaType('image', 'jpg'),
+      ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoFirmaDigitalAsesor',
+        imagenAsesor,
+        filename: imagenAsesor,
+        contentType: MediaType('image', 'png'),
       ));
       request.headers.addAll({
         'Accept': 'application/json',

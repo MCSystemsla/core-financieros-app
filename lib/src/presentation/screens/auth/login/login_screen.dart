@@ -1,7 +1,7 @@
-import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -24,29 +24,42 @@ class LoginScreen extends StatelessWidget {
             ..getBranchTeam(accessCode: '2wydJKIvNuO41hCZ7Y6'),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+        BlocProvider(
+          create: (ctx) => LogoCubit(AuthRepositoryImpl())..getLogo(),
+        ),
       ],
-      child: const Scaffold(
+      child: Scaffold(
         body: PopScope(
           canPop: false,
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ChangeLangWidget(
+                  const ChangeLangWidget(
                     child: LoginScreen(),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Center(
-                      child: Image(
-                        image: AssetImage(ImageAsset.logo),
-                      ),
-                    ),
+                  BlocBuilder<LogoCubit, LogoState>(
+                    builder: (context, state) {
+                      if (state is OnLogoSuccess) {
+                        return Image(
+                            height: 200,
+                            image: NetworkImage(
+                              state.imgUrl,
+                            ));
+                      }
+                      if (state is OnLogoLoading) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (state is OnLogoError) {
+                        return const Text('error');
+                      }
+                      return const SizedBox();
+                    },
                   ),
                   // const Gap(10),
-                  Expanded(
+                  const Expanded(
                     flex: 5,
                     child: LoginFormWidget(),
                   ),

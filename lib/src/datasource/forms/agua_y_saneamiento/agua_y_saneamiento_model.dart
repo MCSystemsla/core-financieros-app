@@ -60,7 +60,7 @@ class AguaSaneamientoModel {
         'objSolicitudId': objSolicitudNuevamenorId,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
         'otrosIngresos': otrosIngresos,
         'otrosIngresosDescripcion': otrosIngresosDescripcion,
         'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,

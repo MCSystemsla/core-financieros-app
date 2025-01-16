@@ -58,7 +58,7 @@ class MigrantesEconomicosRecurrente {
         'database': LocalStorage().database,
         'tieneTrabajo': tieneTrabajo,
         'trabajoNegocioDescripcion': trabajoNegocioDescripcion,
-        'tiempoActividad': tiempoActividad,
+        'tiempoActividadMeses': tiempoActividad,
         'numeroHijos': numeroHijos,
         'edadHijos': edadHijos,
         'tipoEstudioHijos': tipoEstudioHijos,
