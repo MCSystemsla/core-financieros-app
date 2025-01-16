@@ -238,6 +238,7 @@ class _RecurrenteMigranteEconomicoOfflineState
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,

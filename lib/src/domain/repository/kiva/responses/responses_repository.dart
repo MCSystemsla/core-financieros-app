@@ -82,6 +82,7 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String imagenAsesor,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -451,6 +452,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
+    required String imagenAsesor,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
@@ -498,6 +500,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         fotoCedula,
         filename: fotoCedula,
         contentType: MediaType('image', 'jpg'),
+      ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'fotoFirmaDigitalAsesor',
+        imagenAsesor,
+        filename: imagenAsesor,
+        contentType: MediaType('image', 'png'),
       ));
       request.headers.addAll({
         'Accept': 'application/json',

@@ -55,6 +55,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required int solicitudId,
     required String formularioKiva,
     required String tipoSolicitud,
+    required String imagenAsesor,
   }) async {
     await repository.uploadUserFilesOffline(
       imagen1: imagen1,
@@ -66,6 +67,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       formularioKiva: formularioKiva,
       database: LocalStorage().database,
       tipoSolicitud: tipoSolicitud,
+      imagenAsesor: imagenAsesor,
     );
   }
 

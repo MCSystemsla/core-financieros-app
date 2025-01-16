@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/presentation/bloc/response_cubit/respons
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_adtional_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
@@ -120,6 +121,10 @@ class EnergiaLimpiaScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
+              AsesorSignatureWidget(
+                pageController: pageController,
+              ),
+
               isRecurrentForm
                   ? const _RecurrentSignQuestionary()
                   : const _SignQuestionary(),
