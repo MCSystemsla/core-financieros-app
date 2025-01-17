@@ -69,7 +69,7 @@ class CarteraScreen extends StatelessWidget {
               ),
             ),
             _Card(
-              onTap: () {},
+              onTap: () => context.push('/solicitudes'),
               title: 'Solicitudes',
               subtitle: 'Modulo Solicitudes de Credito',
               firstColor: AppColors.blueIndigo,
