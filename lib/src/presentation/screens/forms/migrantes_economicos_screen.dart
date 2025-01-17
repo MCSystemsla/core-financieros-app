@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/migrantes_economicos/m
 import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_about_family.dart';
@@ -87,6 +88,7 @@ class MigrantesEconomicosScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
+              AsesorSignatureWidget(pageController: pageController),
               isRecurrentForm
                   ? const RecurrenteMigrantesFormSignature()
                   : const MigrantesFormSignature(),
