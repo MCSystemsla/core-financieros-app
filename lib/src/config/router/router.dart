@@ -179,6 +179,15 @@ final router = GoRouter(
       ],
     ),
     GoRoute(
+      path: '/solicitudes',
+      builder: (context, state) => const SelectSolicitudScreen(),
+      routes: [
+        // GoRoute(
+        //   path: '/nueva-menor',
+        // ),
+      ],
+    ),
+    GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
