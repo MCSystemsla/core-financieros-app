@@ -300,17 +300,17 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                 ),
               ),
               const Gap(20),
-              if (mejoraCondiciones == 'input.yes'.tr())
-                CommentaryWidget(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                  textEditingController: explicacionMejoraCondiciones,
-                  title: '¿Por qué?',
-                ),
+              // if (mejoraCondiciones == 'input.yes'.tr())
+              CommentaryWidget(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                textEditingController: explicacionMejoraCondiciones,
+                title: '¿Por qué?',
+              ),
               const Gap(20),
               CommentaryWidget(
                 textEditingController: siguienteMeta,
