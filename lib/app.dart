@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
+import 'src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
 class App extends StatelessWidget {
@@ -42,6 +44,12 @@ class App extends StatelessWidget {
         BlocProvider(
           lazy: false,
           create: (ctx) => SolicitudesPendientesLocalDbCubit()..initDB(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (ctx) => SolicitudNuevaMenorCubit(
+            SolicitudCreditoRepositoryImpl(),
+          ),
         ),
       ],
       child: BlocConsumer<LangCubit, LangState>(
