@@ -1,51 +1,53 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+
 String solicitudNuevaMenorToJson(SolicitudNuevaMenor data) =>
     json.encode(data.toJson());
 
 class SolicitudNuevaMenor {
-  final int objOrigenSolicitudId;
+  final String objOrigenSolicitudId;
   final String nombre1;
   final String nombre2;
   final String apellido1;
   final String apellido2;
   final String cedula;
-  final int objPaisEmisorCedula;
-  final DateTime fechaEmisionCedula;
-  final DateTime fechaVencimientoCedula;
-  final DateTime fechaNacimiento;
+  final String objPaisEmisorCedula;
+  final String fechaEmisionCedula;
+  final String fechaVencimientoCedula;
+  final String fechaNacimiento;
   final String telefono;
   final String celular;
   final String direccionCasa;
   final String barrioCasa;
-  final int objMunicipioCasaId;
-  final int objDepartamentoCasaId;
-  final int objPaisCasaId;
+  final String objMunicipioCasaId;
+  final String objDepartamentoCasaId;
+  final String objPaisCasaId;
   final String profesion;
   final String ocupacion;
   final String nacionalidad;
-  final int objCondicionCasaId;
+  final String objCondicionCasaId;
   final int anosResidirCasa;
   final String email;
   final int monto;
-  final int objMonedaId;
-  final int objPropositoId;
-  final int objFrecuenciaId;
+  final String objMonedaId;
+  final String objPropositoId;
+  final String objFrecuenciaId;
   final int cuota;
-  final int objActividadId;
-  final int objActividadId1;
-  final int objActividadId2;
-  final int objSectorId;
+  final String objActividadId;
+  final String objActividadId1;
+  final String objActividadId2;
+  final String objSectorId;
   final String nombreNegocio;
-  final int tiempoFuncionamientoNegocio;
+  final String tiempoFuncionamientoNegocio;
   final String direccionNegocio;
   final String barrioNegocio;
-  final int objMunicipioNegocioId;
-  final int objCondicionNegocioId;
+  final String objMunicipioNegocioId;
+  final String objCondicionNegocioId;
   final String horarioTrabajo;
   final String horarioVisita;
   final int personasACargo;
-  final int objEstadoCivilId;
+  final String objEstadoCivilId;
   final String nombreConyugue;
   final bool trabajaConyugue;
   final String trabajoConyugue;
@@ -53,26 +55,54 @@ class SolicitudNuevaMenor {
   final String telefonoTrabajoConyugue;
   final String beneficiarioSeguro;
   final String cedulaBeneficiarioSeguro;
-  final int objParentescoBeneficiarioSeguroId;
+  final String objParentescoBeneficiarioSeguroId;
   final String beneficiarioSeguro1;
   final String cedulaBeneficiarioSeguro1;
-  final int objParentescoBeneficiarioSeguroId1;
-  final int objEstadoSolicitudId;
-  final int objOficialCreditoId;
-  final int objProductoId;
+  final String objParentescoBeneficiarioSeguroId1;
+  final String objEstadoSolicitudId;
+  final String objOficialCreditoId;
+  final String objProductoId;
   final String observacion;
   final String sucursal;
   final String ubicacionLongitud;
   final String ubicacionLatitud;
   final String ubicacionGradosLongitud;
   final String ubicacionGradosLatitud;
-  final int objEscolaridadId;
+  final String objEscolaridadId;
   final int cantidadHijos;
   final String nombrePublico;
-  final int objSexoId;
-  final int objPaisNacimientoId;
+  final String objSexoId;
+  final String objPaisNacimientoId;
   final String nacionalidadConyugue;
   final String database;
+  final String ubicacion;
+  final bool espeps;
+  final String nombreDeEntidadPeps;
+  final String paisPeps;
+  final String periodoPeps;
+  final String cargoOficialPeps;
+  final bool tieneFamiliarPeps;
+  final String nombreFamiliarPeps2;
+  final String parentescoFamiliarPeps2;
+  final String cargoFamiliarPeps2;
+  final String nombreEntidadPeps2;
+  final String periodoPeps2;
+  final String paisPeps2;
+  final String objRubroActividad;
+  final String objActividadPredominante;
+  final bool esFamiliarEmpleado;
+  final String nombreFamiliar;
+  final String cedulaFamiliar;
+  final String objTipoDocumentoId;
+  final String objRubroActividad2;
+  final String objRubroActividad3;
+  final String objRubroActividadPredominante;
+  final int tipoPersona;
+  final String objTipoPersonaId;
+  final String telefonoBeneficiario;
+  final String telefonoBeneficiarioSeguro1;
+  final int plazoSolicitud;
+  final String fechaPrimerPagoSolicitud;
 
   SolicitudNuevaMenor({
     required this.objOrigenSolicitudId,
@@ -144,19 +174,47 @@ class SolicitudNuevaMenor {
     required this.objPaisNacimientoId,
     required this.nacionalidadConyugue,
     required this.database,
+    required this.ubicacion,
+    required this.espeps,
+    required this.nombreDeEntidadPeps,
+    required this.paisPeps,
+    required this.periodoPeps,
+    required this.cargoOficialPeps,
+    required this.tieneFamiliarPeps,
+    required this.nombreFamiliarPeps2,
+    required this.parentescoFamiliarPeps2,
+    required this.cargoFamiliarPeps2,
+    required this.nombreEntidadPeps2,
+    required this.periodoPeps2,
+    required this.paisPeps2,
+    required this.objRubroActividad,
+    required this.objActividadPredominante,
+    required this.esFamiliarEmpleado,
+    required this.nombreFamiliar,
+    required this.cedulaFamiliar,
+    required this.objTipoDocumentoId,
+    required this.objRubroActividad2,
+    required this.objRubroActividad3,
+    required this.objRubroActividadPredominante,
+    required this.tipoPersona,
+    required this.objTipoPersonaId,
+    required this.telefonoBeneficiario,
+    required this.telefonoBeneficiarioSeguro1,
+    required this.plazoSolicitud,
+    required this.fechaPrimerPagoSolicitud,
   });
 
   Map<String, dynamic> toJson() => {
-        'objOrigenSolicitudID': objOrigenSolicitudId,
+        'objOrigenSolicitudID': 'CEL',
         'Nombre1': nombre1,
         'Nombre2': nombre2,
         'Apellido1': apellido1,
         'Apellido2': apellido2,
         'Cedula': cedula,
         'ObjPaisEmisorCedula': objPaisEmisorCedula,
-        'FechaEmisionCedula': fechaEmisionCedula.toIso8601String(),
-        'FechaVencimientoCedula': fechaVencimientoCedula.toIso8601String(),
-        'FechaNacimiento': fechaNacimiento.toIso8601String(),
+        'FechaEmisionCedula': fechaEmisionCedula,
+        'FechaVencimientoCedula': fechaVencimientoCedula,
+        'FechaNacimiento': fechaNacimiento,
         'Telefono': telefono,
         'Celular': celular,
         'DireccionCasa': direccionCasa,
@@ -216,6 +274,34 @@ class SolicitudNuevaMenor {
         'objSexoID': objSexoId,
         'objPaisNacimientoID': objPaisNacimientoId,
         'NacionalidadConyugue': nacionalidadConyugue,
-        'database': database,
+        'database': LocalStorage().database,
+        'Ubicacion': ubicacion,
+        'ESPEPS': espeps,
+        'NombreDeEntidadPeps': nombreDeEntidadPeps,
+        'PaisPeps': paisPeps,
+        'PeriodoPeps': periodoPeps,
+        'CargoOficialPeps': cargoOficialPeps,
+        'TieneFamiliarPeps': tieneFamiliarPeps,
+        'NombreFamiliarPeps2': nombreFamiliarPeps2,
+        'ParentescoFamiliarPeps2': parentescoFamiliarPeps2,
+        'CargoFamiliarPeps2': cargoFamiliarPeps2,
+        'NombreEntidadPeps2': nombreEntidadPeps2,
+        'PeriodoPeps2': periodoPeps2,
+        'PaisPeps2': paisPeps2,
+        'objRubroActividad': objRubroActividad,
+        'objActividadPredominante': objActividadPredominante,
+        'EsFamiliarEmpleado': esFamiliarEmpleado,
+        'nombreFamiliar': nombreFamiliar,
+        'cedulaFamiliar': cedulaFamiliar,
+        'objTipoDocumentoID': objTipoDocumentoId,
+        'objRubroActividad2': objRubroActividad2,
+        'objRubroActividad3': objRubroActividad3,
+        'objRubroActividadPredominante': objRubroActividadPredominante,
+        'tipoPersona': tipoPersona,
+        'objTipoPersonaID': objTipoPersonaId,
+        'TelefonoBeneficiario': telefonoBeneficiario,
+        'TelefonoBeneficiarioSeguro1': telefonoBeneficiarioSeguro1,
+        'PlazoSolicitud': plazoSolicitud,
+        'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud,
       };
 }
