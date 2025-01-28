@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 late GetIt global;
 final getIt = GetIt.instance;
 
-void setUpGlobalLocator() async {
+Future<void> setUpGlobalLocator() async {
   global = GetIt.I;
 
   global.registerLazySingleton(() => Logger());

@@ -12,12 +12,8 @@ final class SolicitudCatalogoInitial extends SolicitudCatalogoState {}
 final class SolicitudCatalogoLoading extends SolicitudCatalogoState {}
 
 final class SolicitudCatalogoSuccess extends SolicitudCatalogoState {
-  final CatalogoValor data;
-
-  const SolicitudCatalogoSuccess({required this.data});
-
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [];
 }
 
 final class SolicitudCatalogoError extends SolicitudCatalogoState {

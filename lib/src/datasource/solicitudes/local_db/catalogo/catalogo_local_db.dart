@@ -1,7 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class CatalogoParentesco {
+class CatalogoLocalDb {
   @Id(assignable: true) // Campo ID para asignación manual o automática.
   int id = 0;
 
@@ -9,7 +9,7 @@ class CatalogoParentesco {
   String nombre;
   String type;
 
-  CatalogoParentesco({
+  CatalogoLocalDb({
     required this.valor,
     required this.nombre,
     required this.type,

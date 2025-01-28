@@ -96,15 +96,6 @@ class NuevaMenorActividadWidget extends StatelessWidget {
             title: 'Rubro Actividad Predominante',
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Tipo Persona',
-            hintText: 'Selecciona Tipo Persona',
-            isValid: null,
-          ),
           CatalogoValorDropdownWidget(
             initialValue: '',
             codigo: 'TIPOSPERSONACREDITO',
@@ -112,15 +103,6 @@ class NuevaMenorActividadWidget extends StatelessWidget {
             title: 'Tipo Persona',
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Tipo Persona ID',
-            hintText: 'Selecciona Tipo Persona ID',
-            isValid: null,
-          ),
           CatalogoValorDropdownWidget(
             initialValue: '',
             codigo: 'TIPOSPERSONACREDITO',
