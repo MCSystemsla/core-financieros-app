@@ -168,7 +168,7 @@ class RecurrentSign extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),

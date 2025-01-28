@@ -1,10 +1,15 @@
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_beneficiario_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_business_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_espeps_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_monto_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_working_data_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_,menor_data_client_widget.dart';
 
@@ -48,6 +53,72 @@ class CrearSolicitudScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CatalogoValorDropdownWidget extends StatefulWidget {
+  final String hintText;
+  final String title;
+  final ItemCallback<Catalogo> onChanged;
+  final String codigo;
+  final String initialValue;
+  const CatalogoValorDropdownWidget({
+    super.key,
+    required this.initialValue,
+    required this.codigo,
+    required this.onChanged,
+    required this.title,
+    this.hintText = 'Selecciona una opción',
+  });
+
+  @override
+  State<CatalogoValorDropdownWidget> createState() =>
+      _CatalogoValorDropdownWidgetState();
+}
+
+class _CatalogoValorDropdownWidgetState
+    extends State<CatalogoValorDropdownWidget> {
+  late String value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.initialValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (ctx) => SolicitudCatalogoCubit(SolicitudCreditoRepositoryImpl())
+        ..getCatalogoByCodigo(codigo: widget.codigo),
+      child: BlocBuilder<SolicitudCatalogoCubit, SolicitudCatalogoState>(
+        builder: (context, state) {
+          if (state is SolicitudCatalogoSuccess) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: JLuxDropdown(
+                dropdownColor: Colors.white,
+                isContainIcon: true,
+                // isLoading: state.status == Status.inProgress,
+                // validator: (value) {
+                //   if (value == null) return 'auth.errors.branchTeam'.tr();
+
+                //   return null;
+                // },
+                title: widget.title,
+                items: state.data.data,
+                onChanged: widget.onChanged,
+                toStringItem: (item) {
+                  return item.nombre;
+                },
+                hintText: widget.hintText,
+              ),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }

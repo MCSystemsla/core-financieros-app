@@ -180,7 +180,7 @@ class _RecurrentSign extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
@@ -451,7 +451,7 @@ class _EstandarSignState extends State<EstandarSign> {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
@@ -1018,7 +1018,7 @@ class _SaneamientoSign extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
@@ -1284,7 +1284,7 @@ class SignQuestionaryWidget extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),

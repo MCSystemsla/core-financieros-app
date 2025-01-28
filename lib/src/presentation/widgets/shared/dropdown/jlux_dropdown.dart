@@ -30,6 +30,7 @@ class JLuxDropdown<T> extends StatelessWidget {
     this.isEnabled = true,
     this.isLoading = false,
     this.isContainIcon = true,
+    this.dropdownColor = Colors.transparent,
   });
   final String title;
   final String hintText;
@@ -42,6 +43,7 @@ class JLuxDropdown<T> extends StatelessWidget {
   final bool isContainIcon;
 
   final List<T> items;
+  final Color dropdownColor;
 
   @override
   Widget build(BuildContext context) {
@@ -65,101 +67,104 @@ class JLuxDropdown<T> extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
               )
-            : DropdownButtonFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                value: initialValue,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                  color: !enabled ? AppColors.grey : null,
-                ),
-                selectedItemBuilder: items.isNotEmpty
-                    ? (context) {
-                        return items.map((item) {
-                          return Container(
-                            alignment: Alignment.centerLeft,
-                            constraints: BoxConstraints(
-                                minWidth: 100,
-                                maxWidth:
-                                    MediaQuery.sizeOf(context).width * 0.7),
-                            child: FittedBox(
-                              child: Text(
-                                toStringItem(item),
-                                maxLines: 2,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList();
-                      }
-                    : null,
-                items: [
-                  for (var item in items)
-                    DropdownMenuItem<T>(
-                      value: item,
-                      child: FittedBox(
-                          child: Text(
-                        toStringItem(item),
-                        style: TextStyle(
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        maxLines: 2,
-                      )),
-                    ),
-                ],
-                onChanged: enabled ? onChanged : null,
-                validator: validator,
-                disabledHint: Text(
-                  hintText,
+            : Container(
+                color: dropdownColor,
+                child: DropdownButtonFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: initialValue,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: AppColors.grey,
+                    fontSize: 13,
+                    color: !enabled ? dropdownColor : null,
                   ),
+                  selectedItemBuilder: items.isNotEmpty
+                      ? (context) {
+                          return items.map((item) {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              constraints: BoxConstraints(
+                                  minWidth: 100,
+                                  maxWidth:
+                                      MediaQuery.sizeOf(context).width * 0.7),
+                              child: FittedBox(
+                                child: Text(
+                                  toStringItem(item),
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                    color: AppColors.grey,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList();
+                        }
+                      : null,
+                  items: [
+                    for (var item in items)
+                      DropdownMenuItem<T>(
+                        value: item,
+                        child: FittedBox(
+                            child: Text(
+                          toStringItem(item),
+                          style: TextStyle(
+                            color: AppColors.getPrimaryColor(),
+                          ),
+                          maxLines: 2,
+                        )),
+                      ),
+                  ],
+                  onChanged: enabled ? onChanged : null,
+                  validator: validator,
+                  disabledHint: Text(
+                    hintText,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    fillColor: AppColors.white,
+                    // contentPadding:
+                    //     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    hintText: hintText,
+                    hintStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                  // decoration: StyleTextField.inputDecoration(
+                  //   fillColor: enabled
+                  //       ? AppColors.white
+                  //       : AppColors.borderSide.withOpacity(0.2),
+                  //   hintText: hintText,
+                  //   context: context,
+                  //   borderColor: AppColors.darkGrey.withOpacity(.3),
+                  //   contentPadding:
+                  //       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  // ).copyWith(
+                  //   enabled: enabled,
+                  //   hintStyle: context.getBodyMedium(
+                  //     TextStyle(
+                  //       fontWeight: FontWeight.w600,
+                  //       fontSize: 14,
+                  //       color: AppColors.textGrey,
+                  //     ),
+                  //   ),
+                  // ),
+                  iconSize: 30,
+                  iconEnabledColor: AppColors.grey,
+                  icon: isContainIcon
+                      ? const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                        )
+                      : const SizedBox(),
                 ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  fillColor: AppColors.white,
-                  // contentPadding:
-                  //     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  hintText: hintText,
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: AppColors.grey,
-                  ),
-                ),
-                // decoration: StyleTextField.inputDecoration(
-                //   fillColor: enabled
-                //       ? AppColors.white
-                //       : AppColors.borderSide.withOpacity(0.2),
-                //   hintText: hintText,
-                //   context: context,
-                //   borderColor: AppColors.darkGrey.withOpacity(.3),
-                //   contentPadding:
-                //       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                // ).copyWith(
-                //   enabled: enabled,
-                //   hintStyle: context.getBodyMedium(
-                //     TextStyle(
-                //       fontWeight: FontWeight.w600,
-                //       fontSize: 14,
-                //       color: AppColors.textGrey,
-                //     ),
-                //   ),
-                // ),
-                iconSize: 30,
-                iconEnabledColor: AppColors.grey,
-                icon: isContainIcon
-                    ? const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                      )
-                    : const SizedBox(),
               ),
       ],
     );

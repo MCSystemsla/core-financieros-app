@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:logger/logger.dart';
@@ -8,6 +9,7 @@ abstract class SolicitudesCreditoRepository {
   Future<(bool, String)> createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   });
+  Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -28,6 +30,20 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getCatalogoByCodigo({required String codigo}) async {
+    final endpoint = CatalogoSolicitudEndpoint(codigo: codigo);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = CatalogoValor.fromJson(resp);
+      _logger.i(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

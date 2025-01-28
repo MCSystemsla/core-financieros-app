@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -20,24 +21,18 @@ class NuevaMenorActividadWidget extends StatelessWidget {
       child: Column(
         children: [
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'RUBROACTIVIDAD',
+            onChanged: (item) {},
             title: 'Rubro Actividad',
-            hintText: 'Ingresa Rubro Actividad',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ACTIVIDADECONOMICA',
+            onChanged: (item) {},
             title: 'Actividad Predominante',
-            hintText: 'Ingresa Actividad Predominante',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -80,34 +75,25 @@ class NuevaMenorActividadWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'RUBROACTIVIDAD',
+            onChanged: (item) {},
             title: 'Rubro Actividad 2',
-            hintText: 'Ingresa Rubro Actividad 2',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'RUBROACTIVIDAD',
+            onChanged: (item) {},
             title: 'Rubro Actividad 3',
-            hintText: 'Ingresa Rubro Actividad 3',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ACTIVIDADECONOMICA',
+            onChanged: (item) {},
             title: 'Rubro Actividad Predominante',
-            hintText: 'Ingresa Rubro Actividad Predominante',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -119,6 +105,12 @@ class NuevaMenorActividadWidget extends StatelessWidget {
             hintText: 'Selecciona Tipo Persona',
             isValid: null,
           ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'TIPOSPERSONACREDITO',
+            onChanged: (item) {},
+            title: 'Tipo Persona',
+          ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
@@ -128,6 +120,12 @@ class NuevaMenorActividadWidget extends StatelessWidget {
             title: 'Tipo Persona ID',
             hintText: 'Selecciona Tipo Persona ID',
             isValid: null,
+          ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'TIPOSPERSONACREDITO',
+            onChanged: (item) {},
+            title: 'Tipo Persona ID',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
