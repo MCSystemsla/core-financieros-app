@@ -14,7 +14,7 @@ abstract class AppColors {
   static Color blueIndigo = const Color(0xff3F51B5).withOpacity(0.7);
   static Color purple = const Color(0xff9C27B0).withOpacity(0.7);
   static Color cian = const Color(0xff00BCD4).withOpacity(0.7);
-  static Color grey = const Color(0xff808080);
+  static const grey = Color(0xff808080);
   static Color greyWithOpacityV4 = const Color(0xff808080).withOpacity(.4);
   // static const Color _terciaryColor = Color(0xffFF5722);
   static Color whiteWithOpacity14 = white.withOpacity(0.14);

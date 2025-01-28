@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -40,23 +41,20 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'PARENTESCO',
+            onChanged: (item) {},
             title: 'Parentesco Beneficiario Seguro',
-            hintText: 'Selecciona Parentesco Beneficiario Seguro',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.person,
+              Icons.credit_card,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'Beneficiario Seguro 1',
-            hintText: 'Ingresa Beneficiario Seguro 1',
+            hintText: 'Ingresa  Beneficiario Seguro 1',
             isValid: null,
           ),
           const Gap(20),
@@ -70,24 +68,18 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'PARENTESCO',
+            onChanged: (item) {},
             title: 'Parentesco Beneficiario Seguro 1',
-            hintText: 'Selecciona Parentesco Beneficiario Seguro 1',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.assignment,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ESTADOSOLICITUDCREDITO',
+            onChanged: (item) {},
             title: 'Estado Solicitud',
-            hintText: 'Selecciona Estado Solicitud',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(

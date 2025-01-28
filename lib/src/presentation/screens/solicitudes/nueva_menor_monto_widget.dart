@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -30,34 +31,25 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.monetization_on,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'MONEDA',
+            onChanged: (item) {},
             title: 'Moneda',
-            hintText: 'Selecciona Moneda',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'DESTINOCREDITO',
+            onChanged: (item) {},
             title: 'Proposito',
-            hintText: 'Selecciona Proposito',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.repeat,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'FRECUENCIAPAGO',
+            onChanged: (item) {},
             title: 'Frecuencia',
-            hintText: 'Selecciona Frecuencia',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -70,44 +62,32 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ACTIVIDADECONOMICA',
+            onChanged: (item) {},
             title: 'Actividad',
-            hintText: 'Selecciona Actividad',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ACTIVIDADECONOMICA',
+            onChanged: (item) {},
             title: 'Actividad 1',
-            hintText: 'Selecciona Actividad 1',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ACTIVIDADECONOMICA',
+            onChanged: (item) {},
             title: 'Actividad 2',
-            hintText: 'Selecciona Actividad 2',
-            isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.apartment,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'SECTORECONOMICO',
+            onChanged: (item) {},
             title: 'Sector',
-            hintText: 'Selecciona Sector',
-            isValid: null,
           ),
           const Gap(20),
           Container(

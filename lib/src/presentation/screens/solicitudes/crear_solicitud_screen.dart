@@ -1,8 +1,12 @@
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_beneficiario_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_business_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_espeps_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_monto_widget.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_working_data_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -48,6 +52,63 @@ class CrearSolicitudScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CatalogoValorDropdownWidget extends StatefulWidget {
+  final String hintText;
+  final String title;
+  final ItemCallback<CatalogoLocalDb> onChanged;
+  final String codigo;
+  final String initialValue;
+  const CatalogoValorDropdownWidget({
+    super.key,
+    required this.initialValue,
+    required this.codigo,
+    required this.onChanged,
+    required this.title,
+    this.hintText = 'Selecciona una opción',
+  });
+
+  @override
+  State<CatalogoValorDropdownWidget> createState() =>
+      _CatalogoValorDropdownWidgetState();
+}
+
+class _CatalogoValorDropdownWidgetState
+    extends State<CatalogoValorDropdownWidget> {
+  late String value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.initialValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: JLuxDropdown(
+        dropdownColor: Colors.white,
+        isContainIcon: true,
+        // isLoading: state.status == Status.inProgress,
+        // validator: (value) {
+        //   if (value == null) return 'auth.errors.branchTeam'.tr();
+
+        //   return null;
+        // },
+        title: widget.title,
+        items: localDbProvider.findParentescosByNombre(type: widget.codigo),
+        onChanged: widget.onChanged,
+        toStringItem: (item) {
+          return item.nombre;
+        },
+        hintText: widget.hintText,
       ),
     );
   }

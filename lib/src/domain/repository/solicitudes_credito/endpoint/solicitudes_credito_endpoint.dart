@@ -18,3 +18,24 @@ class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => solicitudNuevaMenor.toJson();
 }
+
+class CatalogoSolicitudEndpoint extends Endpoint {
+  final String codigo;
+  CatalogoSolicitudEndpoint({required this.codigo});
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-catalogo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        // if (queryParams != null) ...queryParams!,
+        'database': LocalStorage().database,
+        'codigo': codigo,
+      };
+}
