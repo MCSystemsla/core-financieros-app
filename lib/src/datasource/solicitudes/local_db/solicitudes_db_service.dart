@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parentesco.dart';
 
@@ -13,7 +11,6 @@ class ObjectBoxService {
 
   static Future<ObjectBoxService> init() async {
     final store = await openStore(); // Inicializa el Store.
-    log(store.toString());
     return ObjectBoxService._create(store);
   }
 

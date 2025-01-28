@@ -18,6 +18,7 @@ class CrearSolicitudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final objectBox = getIt<ObjectBoxService>();
     final pageController = PageController();
     return Scaffold(
       body: Column(
