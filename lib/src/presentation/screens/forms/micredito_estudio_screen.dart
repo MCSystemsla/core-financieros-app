@@ -146,7 +146,7 @@ class _RecurrentSigntature extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
@@ -582,7 +582,7 @@ class _SignUserSignature extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),

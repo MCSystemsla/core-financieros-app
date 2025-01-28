@@ -8,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.configurePrefs();
   // await FirebaseService().initializeApp();
-  setUpGlobalLocator();
+  await setUpGlobalLocator();
   var delegate = await LocalizationDelegate.create(
     fallbackLocale: 'es',
     supportedLocales: ['es', 'en'],

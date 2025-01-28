@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -16,6 +17,7 @@ class NuevaMenorDataClientWidget extends StatefulWidget {
 
 class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     with AutomaticKeepAliveClientMixin {
+  String? initialValue;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -24,7 +26,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     final apellido1Controller = TextEditingController();
     final apellido2Controller = TextEditingController();
     final cedulaController = TextEditingController();
-    final objPaisEmisorCedulaController = TextEditingController();
     final fechaEmisionCedulaController = TextEditingController();
     final fechaVencimientoCedulaController = TextEditingController();
     final fechaNacimientoController = TextEditingController();
@@ -96,15 +97,15 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textEditingController: apellido2Controller,
           ),
           const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
             title: 'ObjPaisEmisorCedula',
-            hintText: 'Ingresa ObjPaisEmisorCedula',
-            isValid: null,
-            textEditingController: objPaisEmisorCedulaController,
+            initialValue: initialValue ?? '',
+            codigo: 'TIPOVIVIENDA',
+            onChanged: (item) {
+              if (item == null) return;
+              initialValue = item.valor;
+              setState(() {});
+            },
           ),
           const Gap(30),
           OutlineTextfieldWidget(

@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -30,14 +31,11 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.school,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ESCOLARIDAD',
+            onChanged: (item) {},
             title: 'Escolaridad',
-            hintText: 'Ingresa Escolaridad',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -60,14 +58,11 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.transgender,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'SEXO',
+            onChanged: (item) {},
             title: 'Sexo',
-            hintText: 'Selecciona Sexo',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -170,14 +165,11 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'PARENTESCO',
+            onChanged: (item) {},
             title: 'Parentesco Familiar PEPs 2',
-            hintText: 'Ingresa Parentesco Familiar PEPs 2',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(

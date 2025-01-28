@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -70,15 +71,22 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business_center,
-              color: AppColors.getPrimaryColor(),
-            ),
+          // OutlineTextfieldWidget(
+          //   icon: Icon(
+          //     Icons.business_center,
+          //     color: AppColors.getPrimaryColor(),
+          //   ),
+          //   title: 'Condicion Negocio',
+          //   hintText: 'Selecciona Condicion Negocio',
+          //   isValid: null,
+          // ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'TIPOVIVIENDA',
+            onChanged: (item) {},
             title: 'Condicion Negocio',
-            hintText: 'Selecciona Condicion Negocio',
-            isValid: null,
           ),
+
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
@@ -119,6 +127,13 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
             hintText: 'Selecciona Estado Civil',
             isValid: null,
           ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ESTADOCIVIL',
+            onChanged: (item) {},
+            title: 'Estado Civil',
+          ),
+
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(

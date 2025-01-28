@@ -90,7 +90,7 @@ class CommentaryWidget extends StatelessWidget {
                       counter: const Offstage(),
                       hintText: hintText,
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -103,7 +103,7 @@ class CommentaryWidget extends StatelessWidget {
                   : InputDecoration(
                       hintText: hintText,
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: AppColors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,

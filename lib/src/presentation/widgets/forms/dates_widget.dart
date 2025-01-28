@@ -34,7 +34,7 @@ class _DatesWidgetState extends State<DatesWidget> {
               width: size.width * .4,
               child: Text(
                 widget.title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.grey,
                   fontWeight: FontWeight.w400,
                 ),

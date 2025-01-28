@@ -339,7 +339,7 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
@@ -604,7 +604,7 @@ class _SignQuestionary extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   'forms.firmar.title'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.bold,
                   ),
