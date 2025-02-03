@@ -27,36 +27,8 @@ class _NuevaMenorWorkingDataWidgetState
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.work,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Profesion',
-            hintText: 'Ingresa Profesion',
-            isValid: null,
-          ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Ocupacion',
-            hintText: 'Ingresa Ocupacion',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nacionalidad',
-            hintText: 'Ingresa Nacionalidad',
-            isValid: null,
-          ),
-          const Gap(20),
+
           // OutlineTextfieldWidget(
           //   icon: Icon(
           //     Icons.home,
@@ -86,16 +58,49 @@ class _NuevaMenorWorkingDataWidgetState
             hintText: 'Ingresa Años Residir Casa',
             isValid: null,
           ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.email,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Email',
-            hintText: 'Ingresa Email',
-            isValid: null,
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Pais Emisor',
+            title: 'Pais Emisor',
+            onChanged: (item) {
+              if (item == null) return;
+              // paisEmisor = item.valor;
+              // departamentoEmisor = null;
+              // localDbProvider.getNacionalidadesDep(valor: item.valor);
+
+              setState(() {});
+            },
+            codigo: 'PAIS',
+            // initialValue: paisEmisor ?? '',
           ),
+          // if (paisEmisor != null) ...[
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            // where: paisEmisor ?? '',
+            hintText: 'Selecciona Departamento Emisor',
+            title: 'Departamento Emisor',
+            onChanged: (item) {
+              if (item == null) return;
+              // departamentoEmisor = item.valor;
+              setState(() {});
+            },
+            codigo: 'DEP',
+            // initialValue: departamentoEmisor?.valor ?? '',
+          ),
+          // ],
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Municipio Emisor',
+            title: 'Municipio Emisor',
+            onChanged: (item) {
+              if (item == null) return;
+              // paisEmisor = item.valor;
+              setState(() {});
+            },
+            codigo: 'MUN',
+            // initialValue: paisEmisor ?? '',
+          ),
+
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),

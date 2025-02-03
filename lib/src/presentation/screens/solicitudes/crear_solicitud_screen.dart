@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_m
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_working_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_,menor_data_client_widget.dart';
@@ -52,6 +53,92 @@ class CrearSolicitudScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ItemNacionalidad extends Equatable {
+  final int id;
+  final String valor;
+  final String nombre;
+  final String relacion;
+
+  const ItemNacionalidad(
+      {required this.id,
+      required this.valor,
+      required this.nombre,
+      required this.relacion});
+  @override
+  List<Object?> get props => [
+        id,
+        valor,
+        nombre,
+        relacion,
+      ];
+}
+
+class CatalogoValorNacionalidad extends StatefulWidget {
+  final String hintText;
+  final String title;
+  final ItemCallback<ItemNacionalidad> onChanged;
+  final String codigo;
+  final String? where;
+  final ItemNacionalidad? initialValue;
+  const CatalogoValorNacionalidad({
+    super.key,
+    required this.hintText,
+    required this.title,
+    required this.onChanged,
+    required this.codigo,
+    this.where,
+    this.initialValue,
+  });
+
+  @override
+  State<CatalogoValorNacionalidad> createState() =>
+      _CatalogoValorNacionalidadState();
+}
+
+class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
+  late String value;
+  late String whereClause;
+
+  @override
+  void initState() {
+    // value = widget.initialValue;
+    whereClause = widget.where ?? '';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    final items = localDbProvider.getNacionalidadPaises(
+        codigo: widget.codigo, whereClause: widget.where ?? '');
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: JLuxDropdown(
+        dropdownColor: Colors.white,
+        isContainIcon: true,
+        initialValue: widget.initialValue,
+        // isLoading: state.status == Status.inProgress,
+        // validator: (value) {
+        //   if (value == null) return 'auth.errors.branchTeam'.tr();
+
+        //   return null;
+        // },
+        title: widget.title,
+        items: items,
+        onChanged: (item) {
+          if (item == null) return;
+          widget.onChanged(item);
+        },
+        toStringItem: (item) {
+          return item.nombre;
+        },
+        hintText: widget.hintText,
       ),
     );
   }
@@ -104,6 +191,59 @@ class _CatalogoValorDropdownWidgetState
         // },
         title: widget.title,
         items: localDbProvider.findParentescosByNombre(type: widget.codigo),
+        onChanged: widget.onChanged,
+        toStringItem: (item) {
+          return item.nombre;
+        },
+        hintText: widget.hintText,
+      ),
+    );
+  }
+}
+
+class CatalogoValorDepartamentos extends StatefulWidget {
+  final String hintText;
+  final String title;
+  final ItemCallback<ItemNacionalidad> onChanged;
+  final String codigo;
+  final String where;
+  const CatalogoValorDepartamentos({
+    super.key,
+    required this.hintText,
+    required this.title,
+    required this.onChanged,
+    required this.codigo,
+    required this.where,
+  });
+
+  @override
+  State<CatalogoValorDepartamentos> createState() =>
+      _CatalogoValorDepartamentosState();
+}
+
+class _CatalogoValorDepartamentosState
+    extends State<CatalogoValorDepartamentos> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: JLuxDropdown(
+        dropdownColor: Colors.white,
+        isContainIcon: true,
+        // isLoading: state.status == Status.inProgress,
+        // validator: (value) {
+        //   if (value == null) return 'auth.errors.branchTeam'.tr();
+
+        //   return null;
+        // },
+        title: widget.title,
+        items: localDbProvider.getNacionalidadesDep(valor: widget.where),
         onChanged: widget.onChanged,
         toStringItem: (item) {
           return item.nombre;

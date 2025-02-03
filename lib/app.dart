@@ -1,8 +1,11 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,12 @@ class App extends StatelessWidget {
     var localizationDelegate = LocalizedApp.of(context).delegate;
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (ctx) => SolicitudCatalogoCubit(
+            SolicitudCreditoRepositoryImpl(),
+            global<ObjectBoxService>(),
+          ),
+        ),
         BlocProvider(
           create: (context) => LangCubit(
               currentLang: Locale(

@@ -39,3 +39,24 @@ class CatalogoSolicitudEndpoint extends Endpoint {
         'codigo': codigo,
       };
 }
+
+class NacionalidadEndpoint extends Endpoint {
+  final String codigo;
+  NacionalidadEndpoint({required this.codigo});
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-catalogo-ubicacion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        // if (queryParams != null) ...queryParams!,
+        'database': LocalStorage().database,
+        'codigo': codigo,
+      };
+}
