@@ -181,6 +181,7 @@ class _CatalogoValorDropdownWidgetState
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: JLuxDropdown(
+        hintText: widget.hintText,
         dropdownColor: Colors.white,
         isContainIcon: true,
         // isLoading: state.status == Status.inProgress,
@@ -195,7 +196,6 @@ class _CatalogoValorDropdownWidgetState
         toStringItem: (item) {
           return item.nombre;
         },
-        hintText: widget.hintText,
       ),
     );
   }
