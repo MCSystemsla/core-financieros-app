@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 
 class ObjectBoxService {
@@ -13,12 +14,14 @@ class ObjectBoxService {
   late final Box<CatalogoNacionalidadPaisDb> catalogoNacionalidadPaisBox;
   late final Box<CatalogoNacionalidadDepDb> catalogoNacionalidadDepBox;
   late final Box<CatalogoNacionalidadMunDb> catalogoNacionalidadMunBox;
+  late final Box<DepartmentsLocalDb> departmentsBox;
 
   ObjectBoxService._create(this._store) {
     catalogoBox = _store.box<CatalogoLocalDb>();
     catalogoNacionalidadPaisBox = _store.box<CatalogoNacionalidadPaisDb>();
     catalogoNacionalidadDepBox = _store.box<CatalogoNacionalidadDepDb>();
     catalogoNacionalidadMunBox = _store.box<CatalogoNacionalidadMunDb>();
+    departmentsBox = _store.box<DepartmentsLocalDb>();
   }
 
   static Future<ObjectBoxService> init() async {

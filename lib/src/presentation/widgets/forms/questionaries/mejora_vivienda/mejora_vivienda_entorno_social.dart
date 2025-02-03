@@ -1,6 +1,7 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
@@ -68,6 +69,11 @@ class _MejoraViviendaEntornoSocialState
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    final items = localDbProvider.departmentsBox.getAll();
+    final departmentos =
+        items.map((e) => Item(name: e.nombre, value: e.valor)).toList();
+
     super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
@@ -180,34 +186,29 @@ class _MejoraViviendaEntornoSocialState
                       },
                     ),
                   const Gap(20),
-                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                      SolicitudesPendientesLocalDbState>(
-                    builder: (context, state) {
-                      return WhiteCard(
-                        marginTop: 15,
-                        padding: const EdgeInsets.all(10),
-                        child: JLuxDropdown(
-                          isContainIcon: true,
-                          validator: (value) {
-                            if (value == null) {
-                              return 'input.input_validator'.tr();
-                            }
+                  WhiteCard(
+                    marginTop: 15,
+                    padding: const EdgeInsets.all(10),
+                    child: JLuxDropdown(
+                      isContainIcon: true,
+                      validator: (value) {
+                        if (value == null) {
+                          return 'input.input_validator'.tr();
+                        }
 
-                            return null;
-                          },
-                          isLoading: state.status == Status.inProgress,
-                          title: 'forms.entorno_familiar.person_origin'.tr(),
-                          items: state.departamentos,
-                          onChanged: (item) {
-                            if (item == null) return;
-                            question4 = item.valor;
-                            setState(() {});
-                          },
-                          toStringItem: (item) => item.nombre ?? '',
-                          hintText: 'input.select_department'.tr(),
-                        ),
-                      );
-                    },
+                        return null;
+                      },
+                      // isLoading: state.status == Status.inProgress,
+                      title: 'forms.entorno_familiar.person_origin'.tr(),
+                      items: departmentos,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        question4 = item.value;
+                        setState(() {});
+                      },
+                      toStringItem: (item) => item.name,
+                      hintText: 'input.select_department'.tr(),
+                    ),
                   ),
                   const Gap(20),
                   WhiteCard(

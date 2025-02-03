@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,7 +15,9 @@ part 'solicitud_catalogo_state.dart';
 class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
   final SolicitudesCreditoRepository _repository;
   final ObjectBoxService _objectBoxService;
-  SolicitudCatalogoCubit(this._repository, this._objectBoxService)
+  final DepartamentoRepository departamentoRepository;
+  SolicitudCatalogoCubit(
+      this._repository, this._objectBoxService, this.departamentoRepository)
       : super(SolicitudCatalogoInitial());
 
   Future<void> getCatalogoByCodigo(
@@ -21,6 +25,25 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     try {
       final data = await _repository.getCatalogoByCodigo(codigo: codigo);
       if (isConnected) await _saveToDatabase(codigo: codigo, items: data.data);
+    } catch (e) {
+      emit(SolicitudCatalogoError(error: e.toString()));
+    }
+  }
+
+  Future<void> getAndSaveDepartamentos() async {
+    try {
+      final data = await departamentoRepository.getDepartamentos();
+      final query = _objectBoxService.departmentsBox.query().build();
+      query.remove();
+      for (var item in data.departamentos) {
+        _objectBoxService.departmentsBox.put(
+          DepartmentsLocalDb(
+            valor: item.valor,
+            nombre: item.nombre,
+          ),
+        );
+      }
+      log(' Guardados los departamentos en la base de datos local');
     } catch (e) {
       emit(SolicitudCatalogoError(error: e.toString()));
     }
@@ -34,6 +57,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
     try {
       emit(SolicitudCatalogoLoading());
+      await getAndSaveDepartamentos();
 
       await getCatalogoByCodigo(
         codigo: 'PARENTESCO',
