@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -16,15 +17,19 @@ class SelectSolicitudScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
 
-    return BlocProvider(
-      lazy: false,
-      create: (ctx) => SolicitudCatalogoCubit(
-        SolicitudCreditoRepositoryImpl(),
-        localDbProvider,
-      )..saveAllCatalogos(
-          isConnected:
-              context.read<InternetConnectionCubit>().state.isConnected,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: false,
+          create: (ctx) => CatologoNacionalidadCubit(
+            SolicitudCreditoRepositoryImpl(),
+            localDbProvider,
+          )..saveAllCatalogos(
+              isConnected:
+                  context.read<InternetConnectionCubit>().state.isConnected,
+            ),
         ),
+      ],
       child: Scaffold(
         appBar: AppBar(),
         body: BlocBuilder<SolicitudCatalogoCubit, SolicitudCatalogoState>(

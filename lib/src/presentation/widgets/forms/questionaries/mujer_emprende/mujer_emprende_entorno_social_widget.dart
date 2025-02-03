@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/mujer_emprende/mujer_emprende_cubit.dart';
@@ -54,6 +56,11 @@ class _MujerEmprendeEntornoSocialWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    final items = localDbProvider.departmentsBox.getAll();
+    final departmentos =
+        items.map((e) => Item(name: e.nombre, value: e.valor)).toList();
+
     super.build(context);
     return switch (widget.isRecurrentForm) {
       true => _RecurrentForm(
@@ -147,33 +154,28 @@ class _MujerEmprendeEntornoSocialWidgetState
                       },
                     ),
                   const Gap(20),
-                  BlocBuilder<SolicitudesPendientesLocalDbCubit,
-                      SolicitudesPendientesLocalDbState>(
-                    builder: (context, state) {
-                      return WhiteCard(
-                        marginTop: 15,
-                        padding: const EdgeInsets.all(10),
-                        child: JLuxDropdown(
-                          validator: (value) {
-                            if (value == null) {
-                              return 'input.input_validator'.tr();
-                            }
-                            return null;
-                          },
-                          isContainIcon: true,
-                          // isLoading: state.status == Status.inProgress,
-                          title: 'forms.entorno_familiar.person_origin'.tr(),
-                          items: state.departamentos,
-                          onChanged: (item) {
-                            if (item == null) return;
-                            originItem = item.valor;
-                            setState(() {});
-                          },
-                          toStringItem: (item) => item.nombre ?? '',
-                          hintText: 'input.select_department'.tr(),
-                        ),
-                      );
-                    },
+                  WhiteCard(
+                    marginTop: 15,
+                    padding: const EdgeInsets.all(10),
+                    child: JLuxDropdown(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'input.input_validator'.tr();
+                        }
+                        return null;
+                      },
+                      isContainIcon: true,
+                      // isLoading: state.status == Status.inProgress,
+                      title: 'forms.entorno_familiar.person_origin'.tr(),
+                      items: departmentos,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        originItem = item.value;
+                        setState(() {});
+                      },
+                      toStringItem: (item) => item.name,
+                      hintText: 'input.select_department'.tr(),
+                    ),
                   ),
                   CommentaryWidget(
                     title: 'Número de personas a cargo:*',
