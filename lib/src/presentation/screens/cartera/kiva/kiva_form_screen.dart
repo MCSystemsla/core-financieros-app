@@ -1,6 +1,5 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
@@ -118,19 +117,6 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    final solicitudesProvider =
-        context.read<SolicitudesPendientesLocalDbCubit>();
-    final departamentos = context.read<DepartamentosCubit>();
-    final departamentosList = departamentos.state.departamentos;
-    final departamentosDbList = departamentosList.map((e) {
-      return DepartamentosDbLocal()
-        ..nombre = e.nombre
-        ..valor = e.valor;
-    }).toList();
-    solicitudesProvider.saveDepartaments(
-      departaments: departamentosDbList,
-    );
-
     _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
     super.initState();
   }

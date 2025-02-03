@@ -15,7 +15,11 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
+import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
+import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
+import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_parentesco.dart';
+import 'src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -77,6 +81,117 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(6, 2126428871591254813),
+      name: 'CatalogoNacionalidadPaisDb',
+      lastPropertyId: const obx_int.IdUid(4, 1701118563552989107),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 7726514716927943230),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5808878039317347797),
+            name: 'valor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 7799313136864647636),
+            name: 'nombre',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1701118563552989107),
+            name: 'relacion',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(7, 2550414786981976944),
+      name: 'CatalogoNacionalidadDepDb',
+      lastPropertyId: const obx_int.IdUid(5, 936079696749496987),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4246643046609101892),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5953865467489566204),
+            name: 'valor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 1325340432138234989),
+            name: 'nombre',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 936079696749496987),
+            name: 'relacion',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(8, 4267729037762237719),
+      name: 'CatalogoNacionalidadMunDb',
+      lastPropertyId: const obx_int.IdUid(4, 837362608749151407),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1248632489542377108),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 7365104954132122876),
+            name: 'valor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 6046505276671942156),
+            name: 'nombre',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 837362608749151407),
+            name: 'relacion',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(9, 7850167120603932692),
+      name: 'DepartmentsLocalDb',
+      lastPropertyId: const obx_int.IdUid(3, 3087268751290875161),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 2888865021694932345),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 638831871054662975),
+            name: 'valor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 3087268751290875161),
+            name: 'nombre',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -115,7 +230,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(5, 1884745770876461125),
+      lastEntityId: const obx_int.IdUid(9, 7850167120603932692),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -136,7 +251,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         1933263533513327159,
         9149075065927782478,
         4231670949194548259,
-        8381761593523512187
+        8381761593523512187,
+        7187538665278236547
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -213,6 +329,163 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    CatalogoNacionalidadPaisDb:
+        obx_int.EntityDefinition<CatalogoNacionalidadPaisDb>(
+            model: _entities[2],
+            toOneRelations: (CatalogoNacionalidadPaisDb object) => [],
+            toManyRelations: (CatalogoNacionalidadPaisDb object) => {},
+            getId: (CatalogoNacionalidadPaisDb object) => object.id,
+            setId: (CatalogoNacionalidadPaisDb object, int id) {
+              object.id = id;
+            },
+            objectToFB: (CatalogoNacionalidadPaisDb object, fb.Builder fbb) {
+              final valorOffset = fbb.writeString(object.valor);
+              final nombreOffset = fbb.writeString(object.nombre);
+              final relacionOffset = object.relacion == null
+                  ? null
+                  : fbb.writeString(object.relacion!);
+              fbb.startTable(5);
+              fbb.addInt64(0, object.id);
+              fbb.addOffset(1, valorOffset);
+              fbb.addOffset(2, nombreOffset);
+              fbb.addOffset(3, relacionOffset);
+              fbb.finish(fbb.endTable());
+              return object.id;
+            },
+            objectFromFB: (obx.Store store, ByteData fbData) {
+              final buffer = fb.BufferContext(fbData);
+              final rootOffset = buffer.derefObject(0);
+              final valorParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, '');
+              final nombreParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+              final relacionParam =
+                  const fb.StringReader(asciiOptimization: true)
+                      .vTableGetNullable(buffer, rootOffset, 10);
+              final object = CatalogoNacionalidadPaisDb(
+                  valor: valorParam,
+                  nombre: nombreParam,
+                  relacion: relacionParam)
+                ..id =
+                    const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+              return object;
+            }),
+    CatalogoNacionalidadDepDb:
+        obx_int.EntityDefinition<CatalogoNacionalidadDepDb>(
+            model: _entities[3],
+            toOneRelations: (CatalogoNacionalidadDepDb object) => [],
+            toManyRelations: (CatalogoNacionalidadDepDb object) => {},
+            getId: (CatalogoNacionalidadDepDb object) => object.id,
+            setId: (CatalogoNacionalidadDepDb object, int id) {
+              object.id = id;
+            },
+            objectToFB: (CatalogoNacionalidadDepDb object, fb.Builder fbb) {
+              final valorOffset = fbb.writeString(object.valor);
+              final nombreOffset = fbb.writeString(object.nombre);
+              final relacionOffset = object.relacion == null
+                  ? null
+                  : fbb.writeString(object.relacion!);
+              fbb.startTable(6);
+              fbb.addInt64(0, object.id);
+              fbb.addOffset(1, valorOffset);
+              fbb.addOffset(2, nombreOffset);
+              fbb.addOffset(4, relacionOffset);
+              fbb.finish(fbb.endTable());
+              return object.id;
+            },
+            objectFromFB: (obx.Store store, ByteData fbData) {
+              final buffer = fb.BufferContext(fbData);
+              final rootOffset = buffer.derefObject(0);
+              final valorParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, '');
+              final nombreParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+              final relacionParam =
+                  const fb.StringReader(asciiOptimization: true)
+                      .vTableGetNullable(buffer, rootOffset, 12);
+              final object = CatalogoNacionalidadDepDb(
+                  valor: valorParam,
+                  nombre: nombreParam,
+                  relacion: relacionParam)
+                ..id =
+                    const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+              return object;
+            }),
+    CatalogoNacionalidadMunDb:
+        obx_int.EntityDefinition<CatalogoNacionalidadMunDb>(
+            model: _entities[4],
+            toOneRelations: (CatalogoNacionalidadMunDb object) => [],
+            toManyRelations: (CatalogoNacionalidadMunDb object) => {},
+            getId: (CatalogoNacionalidadMunDb object) => object.id,
+            setId: (CatalogoNacionalidadMunDb object, int id) {
+              object.id = id;
+            },
+            objectToFB: (CatalogoNacionalidadMunDb object, fb.Builder fbb) {
+              final valorOffset = fbb.writeString(object.valor);
+              final nombreOffset = fbb.writeString(object.nombre);
+              final relacionOffset = object.relacion == null
+                  ? null
+                  : fbb.writeString(object.relacion!);
+              fbb.startTable(5);
+              fbb.addInt64(0, object.id);
+              fbb.addOffset(1, valorOffset);
+              fbb.addOffset(2, nombreOffset);
+              fbb.addOffset(3, relacionOffset);
+              fbb.finish(fbb.endTable());
+              return object.id;
+            },
+            objectFromFB: (obx.Store store, ByteData fbData) {
+              final buffer = fb.BufferContext(fbData);
+              final rootOffset = buffer.derefObject(0);
+              final valorParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, '');
+              final nombreParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+              final relacionParam =
+                  const fb.StringReader(asciiOptimization: true)
+                      .vTableGetNullable(buffer, rootOffset, 10);
+              final object = CatalogoNacionalidadMunDb(
+                  valor: valorParam,
+                  nombre: nombreParam,
+                  relacion: relacionParam)
+                ..id =
+                    const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+              return object;
+            }),
+    DepartmentsLocalDb: obx_int.EntityDefinition<DepartmentsLocalDb>(
+        model: _entities[5],
+        toOneRelations: (DepartmentsLocalDb object) => [],
+        toManyRelations: (DepartmentsLocalDb object) => {},
+        getId: (DepartmentsLocalDb object) => object.id,
+        setId: (DepartmentsLocalDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DepartmentsLocalDb object, fb.Builder fbb) {
+          final valorOffset = fbb.writeString(object.valor);
+          final nombreOffset = fbb.writeString(object.nombre);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, valorOffset);
+          fbb.addOffset(2, nombreOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final valorParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final nombreParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final object = DepartmentsLocalDb(
+              valor: valorParam, nombre: nombreParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -255,4 +528,76 @@ class CatalogoLocalDb_ {
   /// See [CatalogoLocalDb.type].
   static final type =
       obx.QueryStringProperty<CatalogoLocalDb>(_entities[1].properties[3]);
+}
+
+/// [CatalogoNacionalidadPaisDb] entity fields to define ObjectBox queries.
+class CatalogoNacionalidadPaisDb_ {
+  /// See [CatalogoNacionalidadPaisDb.id].
+  static final id = obx.QueryIntegerProperty<CatalogoNacionalidadPaisDb>(
+      _entities[2].properties[0]);
+
+  /// See [CatalogoNacionalidadPaisDb.valor].
+  static final valor = obx.QueryStringProperty<CatalogoNacionalidadPaisDb>(
+      _entities[2].properties[1]);
+
+  /// See [CatalogoNacionalidadPaisDb.nombre].
+  static final nombre = obx.QueryStringProperty<CatalogoNacionalidadPaisDb>(
+      _entities[2].properties[2]);
+
+  /// See [CatalogoNacionalidadPaisDb.relacion].
+  static final relacion = obx.QueryStringProperty<CatalogoNacionalidadPaisDb>(
+      _entities[2].properties[3]);
+}
+
+/// [CatalogoNacionalidadDepDb] entity fields to define ObjectBox queries.
+class CatalogoNacionalidadDepDb_ {
+  /// See [CatalogoNacionalidadDepDb.id].
+  static final id = obx.QueryIntegerProperty<CatalogoNacionalidadDepDb>(
+      _entities[3].properties[0]);
+
+  /// See [CatalogoNacionalidadDepDb.valor].
+  static final valor = obx.QueryStringProperty<CatalogoNacionalidadDepDb>(
+      _entities[3].properties[1]);
+
+  /// See [CatalogoNacionalidadDepDb.nombre].
+  static final nombre = obx.QueryStringProperty<CatalogoNacionalidadDepDb>(
+      _entities[3].properties[2]);
+
+  /// See [CatalogoNacionalidadDepDb.relacion].
+  static final relacion = obx.QueryStringProperty<CatalogoNacionalidadDepDb>(
+      _entities[3].properties[3]);
+}
+
+/// [CatalogoNacionalidadMunDb] entity fields to define ObjectBox queries.
+class CatalogoNacionalidadMunDb_ {
+  /// See [CatalogoNacionalidadMunDb.id].
+  static final id = obx.QueryIntegerProperty<CatalogoNacionalidadMunDb>(
+      _entities[4].properties[0]);
+
+  /// See [CatalogoNacionalidadMunDb.valor].
+  static final valor = obx.QueryStringProperty<CatalogoNacionalidadMunDb>(
+      _entities[4].properties[1]);
+
+  /// See [CatalogoNacionalidadMunDb.nombre].
+  static final nombre = obx.QueryStringProperty<CatalogoNacionalidadMunDb>(
+      _entities[4].properties[2]);
+
+  /// See [CatalogoNacionalidadMunDb.relacion].
+  static final relacion = obx.QueryStringProperty<CatalogoNacionalidadMunDb>(
+      _entities[4].properties[3]);
+}
+
+/// [DepartmentsLocalDb] entity fields to define ObjectBox queries.
+class DepartmentsLocalDb_ {
+  /// See [DepartmentsLocalDb.id].
+  static final id =
+      obx.QueryIntegerProperty<DepartmentsLocalDb>(_entities[5].properties[0]);
+
+  /// See [DepartmentsLocalDb.valor].
+  static final valor =
+      obx.QueryStringProperty<DepartmentsLocalDb>(_entities[5].properties[1]);
+
+  /// See [DepartmentsLocalDb.nombre].
+  static final nombre =
+      obx.QueryStringProperty<DepartmentsLocalDb>(_entities[5].properties[2]);
 }

@@ -1,4 +1,6 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -18,9 +20,13 @@ class NuevaMenorDataClientWidget extends StatefulWidget {
 class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     with AutomaticKeepAliveClientMixin {
   String? initialValue;
+  String? paisEmisor;
+  String? departamentoEmisor;
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final localDbProvider = global<ObjectBoxService>();
+
     final nombre1Controller = TextEditingController();
     final nombre2Controller = TextEditingController();
     final apellido1Controller = TextEditingController();
@@ -95,17 +101,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: apellido2Controller,
-          ),
-          const Gap(30),
-          CatalogoValorDropdownWidget(
-            title: 'ObjPaisEmisorCedula',
-            initialValue: initialValue ?? '',
-            codigo: 'TIPOVIVIENDA',
-            onChanged: (item) {
-              if (item == null) return;
-              initialValue = item.valor;
-              setState(() {});
-            },
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -185,37 +180,56 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textEditingController: barrioCasaController,
           ),
           const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_city,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'objMunicipioCasaId',
-            hintText: 'Ingresa objMunicipioCasaId',
-            isValid: null,
-            textEditingController: barrioCasaController,
-          ),
-          const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_city,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'objPaisCasaId',
+          CatalogoValorNacionalidad(
             hintText: 'Ingresa objPaisCasaId',
-            isValid: null,
-            textEditingController: barrioCasaController,
+            title: 'objPaisCasaId',
+            onChanged: (item) {
+              if (item == null) return;
+              paisEmisor = item.valor;
+              departamentoEmisor = null;
+              localDbProvider.getNacionalidadesDep(valor: item.valor);
+
+              setState(() {});
+            },
+            codigo: 'PAIS',
+            // initialValue: paisEmisor ?? '',
           ),
-          const Gap(30),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.location_city,
+              Icons.work,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'objDepartamentoCasaId',
-            hintText: 'Ingresa objDepartamentoCasaId',
+            title: 'Profesion',
+            hintText: 'Ingresa Profesion',
             isValid: null,
-            textEditingController: barrioCasaController,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.business,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Ocupacion',
+            hintText: 'Ingresa Ocupacion',
+            isValid: null,
+          ),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.email,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Email',
+            hintText: 'Ingresa Email',
+            isValid: null,
+          ),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.flag,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Nacionalidad',
+            hintText: 'Ingresa Nacionalidad',
+            isValid: null,
           ),
           const Gap(20),
           Container(
@@ -232,6 +246,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
               },
             ),
           ),
+          const Gap(20),
           const Gap(10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
