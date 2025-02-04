@@ -5,14 +5,22 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchDropdownWidget extends StatelessWidget {
-  const SearchDropdownWidget({super.key});
+  final String codigo;
+  final String title;
+  final bool isRequired;
+
+  const SearchDropdownWidget({
+    super.key,
+    required this.codigo,
+    required this.title,
+    this.isRequired = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
-    final items = localDbProvider
-        .findParentescosByNombre(type: 'RUBROACTIVIDAD')
-        .map((e) {
+    final items =
+        localDbProvider.findParentescosByNombre(type: codigo).map((e) {
       return Item(
         value: e.valor,
         name: e.nombre,
@@ -25,7 +33,7 @@ class SearchDropdownWidget extends StatelessWidget {
           showSearchBox: true,
           searchFieldProps: TextFieldProps(
             decoration: InputDecoration(
-              labelText: 'Buscar país',
+              labelText: 'Buscar',
               border: OutlineInputBorder(),
             ),
           ),
@@ -33,7 +41,8 @@ class SearchDropdownWidget extends StatelessWidget {
         items: items,
         itemAsString: (Item? item) => item?.name ?? 'N/A',
         onChanged: print,
-        selectedItem: const Item(name: 'Seleccionar', value: null),
+        selectedItem:
+            Item(name: '$title ${isRequired ? '*' : ''}', value: null),
       ),
     );
   }

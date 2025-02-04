@@ -71,22 +71,12 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          // OutlineTextfieldWidget(
-          //   icon: Icon(
-          //     Icons.business_center,
-          //     color: AppColors.getPrimaryColor(),
-          //   ),
-          //   title: 'Condicion Negocio',
-          //   hintText: 'Selecciona Condicion Negocio',
-          //   isValid: null,
-          // ),
           CatalogoValorDropdownWidget(
             initialValue: '',
             codigo: 'TIPOVIVIENDA',
             onChanged: (item) {},
             title: 'Condicion Negocio',
           ),
-
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
@@ -118,22 +108,12 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Estado Civil',
-            hintText: 'Selecciona Estado Civil',
-            isValid: null,
-          ),
           CatalogoValorDropdownWidget(
             initialValue: '',
             codigo: 'ESTADOCIVIL',
             onChanged: (item) {},
             title: 'Estado Civil',
           ),
-
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(

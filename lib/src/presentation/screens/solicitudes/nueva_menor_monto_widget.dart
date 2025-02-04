@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -38,10 +39,8 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Moneda',
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
+          const SearchDropdownWidget(
             codigo: 'DESTINOCREDITO',
-            onChanged: (item) {},
             title: 'Proposito',
           ),
           const Gap(20),
@@ -62,10 +61,8 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
+          const SearchDropdownWidget(
             codigo: 'ACTIVIDADECONOMICA',
-            onChanged: (item) {},
             title: 'Actividad',
           ),
           const Gap(20),
@@ -76,17 +73,13 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Actividad 1',
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
+          const SearchDropdownWidget(
             codigo: 'ACTIVIDADECONOMICA',
-            onChanged: (item) {},
             title: 'Actividad 2',
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
+          const SearchDropdownWidget(
             codigo: 'SECTORECONOMICO',
-            onChanged: (item) {},
             title: 'Sector',
           ),
           const Gap(20),

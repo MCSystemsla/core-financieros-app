@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -54,6 +53,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Cedula',
             isValid: null,
             textEditingController: cedulaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -66,6 +66,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Nombre1',
             isValid: null,
             textEditingController: nombre1Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -78,6 +79,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: nombre2Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -90,6 +92,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: apellido1Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -102,6 +105,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: apellido2Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -124,6 +128,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa FechaVencimientoCedula',
             isValid: null,
             textEditingController: fechaVencimientoCedulaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -135,6 +140,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa FechaNacimiento',
             isValid: null,
             textEditingController: fechaNacimientoController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -146,6 +152,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Telefono',
             isValid: null,
             textEditingController: telefonoController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -168,6 +175,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa DireccionCasa',
             isValid: null,
             textEditingController: direccionCasaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -179,6 +187,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa BarrioCasa',
             isValid: null,
             textEditingController: barrioCasaController,
+            isRequired: true,
           ),
           const Gap(30),
           CatalogoValorNacionalidad(
