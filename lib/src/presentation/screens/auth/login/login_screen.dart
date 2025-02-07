@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,46 +30,52 @@ class LoginScreen extends StatelessWidget {
           create: (ctx) => LogoCubit(AuthRepositoryImpl())..getLogo(),
         ),
       ],
-      child: Scaffold(
-        body: PopScope(
-          canPop: false,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ChangeLangWidget(
-                    child: LoginScreen(),
+      child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+        builder: (context, state) {
+          if (!state.isCorrectNetwork) return const _VpnNoFound();
+
+          return Scaffold(
+            body: PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ChangeLangWidget(
+                        child: LoginScreen(),
+                      ),
+                      BlocBuilder<LogoCubit, LogoState>(
+                        builder: (context, state) {
+                          if (state is OnLogoSuccess) {
+                            return Image(
+                                height: 200,
+                                image: NetworkImage(
+                                  state.imgUrl,
+                                ));
+                          }
+                          if (state is OnLogoLoading) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (state is OnLogoError) {
+                            return const Text('error');
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                      // const Gap(10),
+                      const Expanded(
+                        flex: 5,
+                        child: LoginFormWidget(),
+                      ),
+                    ],
                   ),
-                  BlocBuilder<LogoCubit, LogoState>(
-                    builder: (context, state) {
-                      if (state is OnLogoSuccess) {
-                        return Image(
-                            height: 200,
-                            image: NetworkImage(
-                              state.imgUrl,
-                            ));
-                      }
-                      if (state is OnLogoLoading) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (state is OnLogoError) {
-                        return const Text('error');
-                      }
-                      return const SizedBox();
-                    },
-                  ),
-                  // const Gap(10),
-                  const Expanded(
-                    flex: 5,
-                    child: LoginFormWidget(),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -203,6 +211,33 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           )
         ],
       ),
+    );
+  }
+}
+
+class _VpnNoFound extends StatelessWidget {
+  const _VpnNoFound();
+
+  @override
+  Widget build(BuildContext context) {
+    final ip = context.watch<InternetConnectionCubit>().state.currentIp;
+    return Scaffold(
+      body: Center(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/images/vpn_lottie.json', width: 250),
+          const Gap(20),
+          Text(
+            'No estas en el rango de la VPN',
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontSize: 17,
+                ),
+          ),
+          Text(ip),
+        ],
+      )),
     );
   }
 }

@@ -124,8 +124,7 @@ class _RecurrentSign extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.read<InternetConnectionCubit>().state;
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     return Column(
       children: [
@@ -216,7 +215,8 @@ class _RecurrentSign extends StatelessWidget {
                     }
                     if (state.status == Status.done) {
                       if (!context.mounted) return;
-                      if (isConnected) {
+                      if (isConnected.isConnected &&
+                          isConnected.isCorrectNetwork) {
                         context.read<UploadUserFileCubit>().uploadUserFiles(
                               tipoSolicitud: context
                                   .read<KivaRouteCubit>()
@@ -306,7 +306,8 @@ class _RecurrentSign extends StatelessWidget {
                               return;
                             }
                             if (!context.mounted) return;
-                            !isConnected
+                            !isConnected.isConnected ||
+                                    !isConnected.isCorrectNetwork
                                 ? saveOfflineResponses(
                                     context,
                                     state,
@@ -315,6 +316,7 @@ class _RecurrentSign extends StatelessWidget {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
+                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -323,6 +325,9 @@ class _RecurrentSign extends StatelessWidget {
                                       )
                                       ..imagen4 = imageProvider.fotoCedula,
                                     size,
+                                    !isConnected.isCorrectNetwork
+                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                        : 'Formulario Kiva Guardado Exitosamente!!',
                                   )
                                 : context
                                     .read<RecurrenteEstandartCubit>()
@@ -346,7 +351,7 @@ class _RecurrentSign extends StatelessWidget {
   }
 
   saveOfflineResponses(BuildContext context, RecurrenteEstandartState state,
-      ImageModel imageModel, Size size) async {
+      ImageModel imageModel, Size size, String msgDialog) async {
     if (!context.mounted) return;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -375,10 +380,10 @@ class _RecurrentSign extends StatelessWidget {
             ..personasCargo = state.personasCargo,
         );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
-        content: Text('Formulario Kiva Guardado Exitosamente'),
+        content: Text(msgDialog),
       ),
     );
     context.pushReplacement('/');
