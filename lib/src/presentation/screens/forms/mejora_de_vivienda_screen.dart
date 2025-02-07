@@ -143,8 +143,20 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
   }
 }
 
-class RecurrentSign extends StatelessWidget {
+class RecurrentSign extends StatefulWidget {
   const RecurrentSign({super.key});
+
+  @override
+  State<RecurrentSign> createState() => _RecurrentSignState();
+}
+
+class _RecurrentSignState extends State<RecurrentSign> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

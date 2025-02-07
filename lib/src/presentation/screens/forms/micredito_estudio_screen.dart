@@ -123,8 +123,20 @@ class MiCreditoEstudioScreen extends StatelessWidget {
   }
 }
 
-class _RecurrentSigntature extends StatelessWidget {
+class _RecurrentSigntature extends StatefulWidget {
   const _RecurrentSigntature();
+
+  @override
+  State<_RecurrentSigntature> createState() => _RecurrentSigntatureState();
+}
+
+class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -564,8 +576,20 @@ class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior>
   bool get wantKeepAlive => true;
 }
 
-class _SignUserSignature extends StatelessWidget {
+class _SignUserSignature extends StatefulWidget {
   const _SignUserSignature();
+
+  @override
+  State<_SignUserSignature> createState() => _SignUserSignatureState();
+}
+
+class _SignUserSignatureState extends State<_SignUserSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

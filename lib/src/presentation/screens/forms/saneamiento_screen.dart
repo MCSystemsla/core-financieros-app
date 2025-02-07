@@ -155,8 +155,20 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   }
 }
 
-class _RecurrentSign extends StatelessWidget {
+class _RecurrentSign extends StatefulWidget {
   const _RecurrentSign();
+
+  @override
+  State<_RecurrentSign> createState() => _RecurrentSignState();
+}
+
+class _RecurrentSignState extends State<_RecurrentSign> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -434,6 +446,13 @@ class EstandarSign extends StatefulWidget {
 }
 
 class _EstandarSignState extends State<EstandarSign> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final imageProvider = context.read<UploadUserFileCubit>().state;
@@ -1003,8 +1022,20 @@ class ButtonActionsWidget extends StatelessWidget {
   }
 }
 
-class _SaneamientoSign extends StatelessWidget {
+class _SaneamientoSign extends StatefulWidget {
   const _SaneamientoSign();
+
+  @override
+  State<_SaneamientoSign> createState() => _SaneamientoSignState();
+}
+
+class _SaneamientoSignState extends State<_SaneamientoSign> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1273,8 +1304,20 @@ class _SaneamientoSign extends StatelessWidget {
   }
 }
 
-class SignQuestionaryWidget extends StatelessWidget {
+class SignQuestionaryWidget extends StatefulWidget {
   const SignQuestionaryWidget({super.key});
+
+  @override
+  State<SignQuestionaryWidget> createState() => _SignQuestionaryWidgetState();
+}
+
+class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

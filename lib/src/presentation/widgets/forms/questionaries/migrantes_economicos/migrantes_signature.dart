@@ -27,10 +27,22 @@ import 'package:signature/signature.dart';
 
 import '../../../../bloc/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
 
-class MigrantesFormSignature extends StatelessWidget {
+class MigrantesFormSignature extends StatefulWidget {
   const MigrantesFormSignature({
     super.key,
   });
+
+  @override
+  State<MigrantesFormSignature> createState() => _MigrantesFormSignatureState();
+}
+
+class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -307,10 +319,24 @@ class MigrantesFormSignature extends StatelessWidget {
   }
 }
 
-class RecurrenteMigrantesFormSignature extends StatelessWidget {
+class RecurrenteMigrantesFormSignature extends StatefulWidget {
   const RecurrenteMigrantesFormSignature({
     super.key,
   });
+
+  @override
+  State<RecurrenteMigrantesFormSignature> createState() =>
+      _RecurrenteMigrantesFormSignatureState();
+}
+
+class _RecurrenteMigrantesFormSignatureState
+    extends State<RecurrenteMigrantesFormSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

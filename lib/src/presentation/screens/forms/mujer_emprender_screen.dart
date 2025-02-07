@@ -115,8 +115,21 @@ class MujerEmprenderScreen extends StatelessWidget {
   }
 }
 
-class _RecurrentSignSignature extends StatelessWidget {
+class _RecurrentSignSignature extends StatefulWidget {
   const _RecurrentSignSignature();
+
+  @override
+  State<_RecurrentSignSignature> createState() =>
+      _RecurrentSignSignatureState();
+}
+
+class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -386,8 +399,20 @@ class _RecurrentSignSignature extends StatelessWidget {
   }
 }
 
-class _SignSignature extends StatelessWidget {
+class _SignSignature extends StatefulWidget {
   const _SignSignature();
+
+  @override
+  State<_SignSignature> createState() => _SignSignatureState();
+}
+
+class _SignSignatureState extends State<_SignSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -117,8 +117,20 @@ class EstandarScreen extends StatelessWidget {
   }
 }
 
-class _RecurrentSign extends StatelessWidget {
+class _RecurrentSign extends StatefulWidget {
   const _RecurrentSign();
+
+  @override
+  State<_RecurrentSign> createState() => _RecurrentSignState();
+}
+
+class _RecurrentSignState extends State<_RecurrentSign> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
