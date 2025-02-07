@@ -314,16 +314,28 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
   }
 }
 
-class _RecurrentSignQuestionary extends StatelessWidget {
+class _RecurrentSignQuestionary extends StatefulWidget {
   const _RecurrentSignQuestionary();
+
+  @override
+  State<_RecurrentSignQuestionary> createState() =>
+      _RecurrentSignQuestionaryState();
+}
+
+class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.watch<InternetConnectionCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -498,7 +510,8 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                               return;
                             }
                             if (!context.mounted) return;
-                            !isConnected
+                            !isConnected.isConnected ||
+                                    !isConnected.isCorrectNetwork
                                 ? saveEnergiaLimpiaAnswers(
                                     context,
                                     state,
@@ -514,6 +527,9 @@ class _RecurrentSignQuestionary extends StatelessWidget {
                                             .solicitudId,
                                       )
                                       ..imagen4 = imageProvider.fotoCedula,
+                                    !isConnected.isCorrectNetwork
+                                        ? 'Se ha perdido conexion a VPN, Se ha guardado de Manera Local'
+                                        : 'Formulario Kiva Guardado Exitosamente!!',
                                   )
                                 : context
                                     .read<RecurrenteEnergiaLimpiaCubit>()
@@ -535,8 +551,12 @@ class _RecurrentSignQuestionary extends StatelessWidget {
     );
   }
 
-  saveEnergiaLimpiaAnswers(BuildContext context,
-      RecurrenteEnergiaLimpiaState state, ImageModel imageModel) {
+  saveEnergiaLimpiaAnswers(
+    BuildContext context,
+    RecurrenteEnergiaLimpiaState state,
+    ImageModel imageModel,
+    String msgDialog,
+  ) {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -569,26 +589,37 @@ class _RecurrentSignQuestionary extends StatelessWidget {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
-        content: Text('Formulario Kiva Guardado Exitosamente'),
+        content: Text(msgDialog),
       ),
     );
     context.pushReplacement('/');
   }
 }
 
-class _SignQuestionary extends StatelessWidget {
+class _SignQuestionary extends StatefulWidget {
   const _SignQuestionary();
+
+  @override
+  State<_SignQuestionary> createState() => _SignQuestionaryState();
+}
+
+class _SignQuestionaryState extends State<_SignQuestionary> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.watch<InternetConnectionCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -760,7 +791,8 @@ class _SignQuestionary extends StatelessWidget {
                               return;
                             }
                             if (!context.mounted) return;
-                            !isConnected
+                            !isConnected.isConnected ||
+                                    !isConnected.isCorrectNetwork
                                 ? saveEnergiaLocalDB(
                                     context,
                                     state,
@@ -769,13 +801,18 @@ class _SignQuestionary extends StatelessWidget {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
+                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
                                       )
-                                      ..imagen4 = imageProvider.fotoCedula)
+                                      ..imagen4 = imageProvider.fotoCedula,
+                                    !isConnected.isCorrectNetwork
+                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                        : 'Formulario Kiva Guardado Exitosamente!!',
+                                  )
                                 : context
                                     .read<EnergiaLimpiaCubit>()
                                     .sendAnswers();
@@ -797,7 +834,11 @@ class _SignQuestionary extends StatelessWidget {
   }
 
   void saveEnergiaLocalDB(
-      BuildContext context, EnergiaLimpiaState state, ImageModel imageModel) {
+    BuildContext context,
+    EnergiaLimpiaState state,
+    ImageModel imageModel,
+    String msgDialog,
+  ) {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -824,10 +865,10 @@ class _SignQuestionary extends StatelessWidget {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
-        content: Text('Formulario Kiva Guardado Exitosamente'),
+        content: Text(msgDialog),
       ),
     );
     context.pushReplacement('/');

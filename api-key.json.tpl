@@ -1,4 +1,5 @@
 {
     "apiUrl": "URL DEL SERVIDOR",
-    "protocol": "PROTOCOLO A USAR HTTP o HTTPS"
+    "protocol": "PROTOCOLO A USAR HTTP o HTTPS",
+    "isProdMode": false
 }

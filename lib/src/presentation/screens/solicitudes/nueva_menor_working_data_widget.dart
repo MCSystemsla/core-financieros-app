@@ -28,16 +28,6 @@ class _NuevaMenorWorkingDataWidgetState
       child: Column(
         children: [
           const Gap(20),
-
-          // OutlineTextfieldWidget(
-          //   icon: Icon(
-          //     Icons.home,
-          //     color: AppColors.getPrimaryColor(),
-          //   ),
-          //   title: 'Condicion Casa',
-          //   hintText: 'Ingresa Condicion Casa',
-          //   isValid: null,
-          // ),
           CatalogoValorDropdownWidget(
             title: 'Condicion Casa',
             initialValue: initialValue ?? '',
@@ -98,9 +88,7 @@ class _NuevaMenorWorkingDataWidgetState
               setState(() {});
             },
             codigo: 'MUN',
-            // initialValue: paisEmisor ?? '',
           ),
-
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
