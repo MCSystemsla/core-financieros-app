@@ -20,9 +20,9 @@ class HomeScreen extends StatelessWidget {
           ? FloatingActionButton.extended(
               label: const Row(
                 children: [
-                  Icon(Icons.document_scanner_outlined),
+                  Icon(Icons.update_rounded),
                   Gap(5),
-                  Text('Descargar Catalogos'),
+                  Text('Sincronizar'),
                 ],
               ),
               onPressed: () => {
