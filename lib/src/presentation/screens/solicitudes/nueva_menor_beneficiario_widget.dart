@@ -74,23 +74,7 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
             onChanged: (item) {},
             title: 'Parentesco Beneficiario Seguro 1',
           ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ESTADOSOLICITUDCREDITO',
-            onChanged: (item) {},
-            title: 'Estado Solicitud',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person_outline,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Oficial Credito',
-            hintText: 'Selecciona Oficial Credito',
-            isValid: null,
-          ),
+
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
@@ -111,16 +95,16 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
             hintText: 'Ingresa Observacion',
             isValid: null,
           ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_city,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Sucursal',
-            hintText: 'Selecciona Sucursal',
-            isValid: null,
-          ),
+          // const Gap(20),
+          // OutlineTextfieldWidget(
+          //   icon: Icon(
+          //     Icons.location_city,
+          //     color: AppColors.getPrimaryColor(),
+          //   ),
+          //   title: 'Sucursal',
+          //   hintText: 'Selecciona Sucursal',
+          //   isValid: null,
+          // ),
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),

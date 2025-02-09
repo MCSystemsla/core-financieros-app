@@ -1,11 +1,14 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorDataClientWidget extends StatefulWidget {
@@ -22,8 +25,30 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
   String? initialValue;
   String? paisEmisor;
   String? departamentoEmisor;
+  late DateTime _selectedDate;
+  @override
+  void initState() {
+    _selectedDate = DateTime.now();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<void> selectDate(BuildContext context) async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _selectedDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101),
+        locale:
+            Locale(context.read<LangCubit>().state.currentLang.languageCode),
+      );
+      if (picked != null && picked != _selectedDate) {
+        _selectedDate = picked;
+        setState(() {});
+      }
+    }
+
     super.build(context);
     final localDbProvider = global<ObjectBoxService>();
 
@@ -53,6 +78,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Cedula',
             isValid: null,
             textEditingController: cedulaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -65,6 +91,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Nombre1',
             isValid: null,
             textEditingController: nombre1Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -77,6 +104,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: nombre2Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -89,6 +117,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: apellido1Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -101,15 +130,18 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             textCapitalization: TextCapitalization.words,
             isValid: null,
             textEditingController: apellido2Controller,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
+            onTap: () => selectDate(context),
+            readOnly: true,
             icon: Icon(
               Icons.calendar_today,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'FechaEmisionCedula',
-            hintText: 'Ingresa FechaEmisionCedula',
+            hintText: _selectedDate.selectorFormat(),
             isValid: null,
             textEditingController: fechaEmisionCedulaController,
           ),
@@ -123,6 +155,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa FechaVencimientoCedula',
             isValid: null,
             textEditingController: fechaVencimientoCedulaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -134,6 +167,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa FechaNacimiento',
             isValid: null,
             textEditingController: fechaNacimientoController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -145,6 +179,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Telefono',
             isValid: null,
             textEditingController: telefonoController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -167,6 +202,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa DireccionCasa',
             isValid: null,
             textEditingController: direccionCasaController,
+            isRequired: true,
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -178,6 +214,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa BarrioCasa',
             isValid: null,
             textEditingController: barrioCasaController,
+            isRequired: true,
           ),
           const Gap(30),
           CatalogoValorNacionalidad(

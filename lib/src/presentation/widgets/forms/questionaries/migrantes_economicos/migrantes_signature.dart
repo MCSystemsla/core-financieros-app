@@ -27,18 +27,29 @@ import 'package:signature/signature.dart';
 
 import '../../../../bloc/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
 
-class MigrantesFormSignature extends StatelessWidget {
+class MigrantesFormSignature extends StatefulWidget {
   const MigrantesFormSignature({
     super.key,
   });
+
+  @override
+  State<MigrantesFormSignature> createState() => _MigrantesFormSignatureState();
+}
+
+class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.read<InternetConnectionCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -211,7 +222,8 @@ class MigrantesFormSignature extends StatelessWidget {
                               return;
                             }
                             if (!context.mounted) return;
-                            !isConnected
+                            !isConnected.isConnected ||
+                                    !isConnected.isCorrectNetwork
                                 ? saveAnswersOnLocalDB(
                                     context,
                                     state,
@@ -220,13 +232,18 @@ class MigrantesFormSignature extends StatelessWidget {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
+                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
                                       )
-                                      ..imagen4 = imageProvider.fotoCedula)
+                                      ..imagen4 = imageProvider.fotoCedula,
+                                    !isConnected.isCorrectNetwork
+                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                        : 'Formulario Kiva Guardado Exitosamente!!',
+                                  )
                                 : context
                                     .read<MigrantesEconomicosCubit>()
                                     .sendMigrantesEconomicos();
@@ -251,6 +268,7 @@ class MigrantesFormSignature extends StatelessWidget {
     BuildContext context,
     MigrantesEconomicosState state,
     ImageModel imageModel,
+    String msgDialog,
   ) {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -291,28 +309,41 @@ class MigrantesFormSignature extends StatelessWidget {
             ..otrosDatosCliente = state.otrosDatosCliente,
         );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
-        content: Text('Formulario Kiva Guardado Exitosamente'),
+        content: Text(msgDialog),
       ),
     );
     context.pushReplacement('/');
   }
 }
 
-class RecurrenteMigrantesFormSignature extends StatelessWidget {
+class RecurrenteMigrantesFormSignature extends StatefulWidget {
   const RecurrenteMigrantesFormSignature({
     super.key,
   });
+
+  @override
+  State<RecurrenteMigrantesFormSignature> createState() =>
+      _RecurrenteMigrantesFormSignatureState();
+}
+
+class _RecurrenteMigrantesFormSignatureState
+    extends State<RecurrenteMigrantesFormSignature> {
+  @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.read<InternetConnectionCubit>().state;
     return Column(
       children: [
         const MiCreditoProgress(
@@ -485,7 +516,8 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
                               return;
                             }
                             if (!context.mounted) return;
-                            !isConnected
+                            !isConnected.isConnected ||
+                                    !isConnected.isCorrectNetwork
                                 ? saveAnswersOnLocalDB(
                                     context,
                                     state,
@@ -494,13 +526,18 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
+                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
                                       )
-                                      ..imagen4 = imageProvider.fotoCedula)
+                                      ..imagen4 = imageProvider.fotoCedula,
+                                    !isConnected.isCorrectNetwork
+                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                        : 'Formulario Kiva Guardado Exitosamente!!',
+                                  )
                                 : context
                                     .read<RecurrenteMigrantesEconomicosCubit>()
                                     .sendAnswers();
@@ -526,6 +563,7 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
     BuildContext context,
     RecurrenteMigrantesEconomicosState state,
     ImageModel imageModel,
+    String msgDialog,
   ) {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -560,10 +598,10 @@ class RecurrenteMigrantesFormSignature extends StatelessWidget {
                 ..siguienteMeta = state.siguienteMeta,
         );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
-        content: Text('Formulario Kiva Guardado Exitosamente'),
+        content: Text(msgDialog),
       ),
     );
     context.pushReplacement('/');

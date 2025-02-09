@@ -18,11 +18,11 @@ class DownsloadingCatalogosWidget extends StatelessWidget {
           return switch (state) {
             SolicitudCatalogoLoading() => const DownloadCatalogoLoading(
                 lottieAsset: 'assets/images/save_catalogos.json',
-                text: 'Guardando catalogos...',
+                text: 'Sincronizando...',
               ),
             SolicitudCatalogoSuccess() => const DownloadCatalogoLoading(
                 lottieAsset: 'assets/images/success2_catalogo.json',
-                text: 'Catalogos guardados con exito.',
+                text: 'Sincronización completada con éxito.',
                 repeat: false,
                 isSucess: true,
               ),

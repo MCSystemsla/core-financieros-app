@@ -150,6 +150,7 @@ class CatalogoValorDropdownWidget extends StatefulWidget {
   final ItemCallback<CatalogoLocalDb> onChanged;
   final String codigo;
   final String initialValue;
+  final bool? isRequired;
   const CatalogoValorDropdownWidget({
     super.key,
     required this.initialValue,
@@ -157,6 +158,7 @@ class CatalogoValorDropdownWidget extends StatefulWidget {
     required this.onChanged,
     required this.title,
     this.hintText = 'Selecciona una opción',
+    this.isRequired = false,
   });
 
   @override
@@ -181,6 +183,7 @@ class _CatalogoValorDropdownWidgetState
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: JLuxDropdown(
+        hintText: widget.hintText,
         dropdownColor: Colors.white,
         isContainIcon: true,
         // isLoading: state.status == Status.inProgress,
@@ -189,13 +192,12 @@ class _CatalogoValorDropdownWidgetState
 
         //   return null;
         // },
-        title: widget.title,
+        title: '${widget.title} ${widget.isRequired! ? '*' : ''}',
         items: localDbProvider.findParentescosByNombre(type: widget.codigo),
         onChanged: widget.onChanged,
         toStringItem: (item) {
           return item.nombre;
         },
-        hintText: widget.hintText,
       ),
     );
   }

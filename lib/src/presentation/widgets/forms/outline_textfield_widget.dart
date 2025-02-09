@@ -19,6 +19,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final bool? readOnly;
   final bool? isValid; // Cambiado a `bool?` para manejar nulo
   final Icon? icon;
+  final bool isRequired;
+  final VoidCallback? onTap;
   const OutlineTextfieldWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -33,6 +35,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.readOnly = false,
     this.isValid,
     this.icon, // Permitir nulo como estado inicial
+    this.isRequired = false,
+    this.onTap,
   }) : haveCounter = false;
   const OutlineTextfieldWidget.withCounter({
     super.key,
@@ -48,6 +52,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.readOnly = false,
     this.isValid,
     this.icon,
+    this.isRequired = false,
+    this.onTap,
   }) : haveCounter = true;
 
   @override
@@ -59,7 +65,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
         children: [
           const Gap(5),
           Text(
-            title,
+            '$title ${isRequired ? '*' : ''}',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -84,6 +90,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    onTap: onTap,
                     keyboardType: textInputType,
                     controller: textEditingController,
                     validator: validator,
