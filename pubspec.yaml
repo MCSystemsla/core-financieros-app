@@ -32,32 +32,32 @@ dependencies:
     sdk: flutter
   flutter:
     sdk: flutter
-  pagination:
-    path: packages/pagination
+  # pagination:
+  #   path: packages/pagination
 
   # UI
   cupertino_icons: ^1.0.8
   dismissible_page: ^1.0.2
-  flutter_svg: ^2.0.16
-  smooth_page_indicator: ^1.2.0+3
+  flutter_svg: ^2.0.17
+  smooth_page_indicator: ^1.2.0
   gap: ^3.0.1
   google_fonts: ^6.2.1
   signature: ^5.5.0
-  awesome_dialog: ^3.1.0
+  awesome_dialog: ^3.2.1
   dropdown_search: ^5.0.6
   lottie: ^3.1.3
 
 
    # Logic
-  go_router: ^14.6.2
-  bloc: ^8.1.4
-  flutter_bloc: ^8.1.6
+  go_router: ^14.8.0
+  bloc: ^9.0.0
+  flutter_bloc: ^9.0.0
   equatable: ^2.0.7
-  http: ^1.2.2
+  http: ^1.3.0
   logger: ^2.5.0
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.1
   shared_preferences: ^2.3.2
-  get_it: ^7.7.0
+  get_it: ^8.0.3
   http_parser: ^4.0.2
   path_provider: ^2.1.4
   image_picker: ^1.1.2
