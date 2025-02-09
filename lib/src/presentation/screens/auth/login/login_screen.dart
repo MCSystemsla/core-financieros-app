@@ -35,7 +35,9 @@ class LoginScreen extends StatelessWidget {
       ],
       child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
         builder: (context, state) {
-          if (!state.isCorrectNetwork) return const _VpnNoFound();
+          if (!state.isCorrectNetwork) {
+            return const VpnNoFound(routeIsVpnConnected: '/login');
+          }
 
           return Scaffold(
             body: PopScope(
@@ -218,8 +220,34 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   }
 }
 
-class _VpnNoFound extends StatelessWidget {
-  const _VpnNoFound();
+class VpnNoFound extends StatefulWidget {
+  final String routeIsVpnConnected;
+  const VpnNoFound({super.key, required this.routeIsVpnConnected});
+
+  @override
+  State<VpnNoFound> createState() => _VpnNoFoundState();
+}
+
+class _VpnNoFoundState extends State<VpnNoFound> with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (!mounted) return;
+      final internetProvider = context.read<InternetConnectionCubit>();
+      internetProvider.getInternetStatusConnection();
+      if (internetProvider.state.isCorrectNetwork) {
+        context.pushReplacement(widget.routeIsVpnConnected);
+      }
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

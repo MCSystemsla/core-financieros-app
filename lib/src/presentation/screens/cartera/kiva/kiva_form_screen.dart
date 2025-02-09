@@ -1,13 +1,14 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
-import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -30,18 +31,26 @@ class KivaFormScreen extends StatefulWidget {
 
 class _KivaFormScreenState extends State<KivaFormScreen> {
   @override
+  void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isCorrectNetwork =
+        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
+    if (!isCorrectNetwork) {
+      return const VpnNoFound(
+        routeIsVpnConnected: '/cartera/formulario-kiva',
+      );
+    }
     return MultiBlocProvider(
       providers: [
         BlocProvider(
             create: (ctx) => SolicitudesPendientesCubit(
                   SolicitudesPendientesRepositoryImpl(),
                 )..getSolicitudesPendientes()),
-        BlocProvider(
-          lazy: false,
-          create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
-            ..getDepartamentos(),
-        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -231,6 +240,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
   bool isMatching = false;
   @override
   void initState() {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
     super.initState();
   }
@@ -247,12 +257,27 @@ class _RequestWidgetState extends State<_RequestWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isNetworkConnected =
+        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
     // bool isMatching = numSolicitud == int.tryParse(widget.solicitud.id);
 
     return ListTile(
       title: Text(
           '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
+        context.read<InternetConnectionCubit>().getInternetStatusConnection();
+
+        if (!isNetworkConnected) {
+          CustomAlertDialog(
+            context: context,
+            title: 'No estas en el Rango de la VPN',
+            onDone: () {
+              context.pop();
+            },
+          ).showDialog(context);
+          return;
+        }
+
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               tipoSolicitud: widget.solicitud.tipoSolicitud,
               route: widget.solicitud.producto,
