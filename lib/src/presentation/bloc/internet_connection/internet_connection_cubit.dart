@@ -41,15 +41,4 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       emit(state.copyWith(isConnected: false, isCorrectNetwork: false));
     }
   }
-
-  // Future<void> getInternetStatusConnection() async {
-  //   final connectivityResult = await (Connectivity().checkConnectivity());
-  //   bool isConnected = false;
-
-  //   if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-  //     isConnected = await InternetConnectionChecker().hasConnection;
-  //   }
-
-  //   emit(state.copyWith(isConnected: isConnected));
-  // }
 }
