@@ -106,7 +106,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -124,7 +123,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       );
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -142,7 +140,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -160,7 +157,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -178,7 +174,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -196,7 +191,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -214,7 +208,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -232,7 +225,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -250,7 +242,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -268,7 +259,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) return (false, resp['message'] as String);
-      _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -283,7 +273,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       final endpoint = KivaMotivoAnteriorEndpoint(numero: numero);
       final resp = await _api.request(endpoint: endpoint);
-      _logger.i(resp);
       if (resp['MotivoAnterior'] == null) {
         return 'Este Usuario no tiene un prestamo anterior.';
       }
