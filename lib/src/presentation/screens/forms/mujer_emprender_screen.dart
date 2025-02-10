@@ -387,13 +387,12 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
             ..tieneTrabajoDescripcion = state.tieneTrabajoDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }
@@ -661,13 +660,12 @@ class _SignSignatureState extends State<_SignSignature> {
             ..quienApoya = state.quienApoya
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }

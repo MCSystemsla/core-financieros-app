@@ -307,13 +307,12 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
             ..piensaRegresar = state.piensaRegresar
             ..otrosDatosCliente = state.otrosDatosCliente,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }
@@ -594,13 +593,12 @@ class _RecurrenteMigrantesFormSignatureState
                     state.explicacionMejoraCondiciones
                 ..siguienteMeta = state.siguienteMeta,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }

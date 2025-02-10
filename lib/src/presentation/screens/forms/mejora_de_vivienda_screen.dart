@@ -424,13 +424,12 @@ class _RecurrentSignState extends State<RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..viviendaAntesDespues = state.viviendaAntesDespues,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }

@@ -426,13 +426,12 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }
@@ -701,13 +700,12 @@ class _EstandarSignState extends State<EstandarSign> {
             ..publicitarNegocio = state.publicitarNegocio
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }
@@ -1288,13 +1286,12 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }
@@ -1564,13 +1561,12 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 }

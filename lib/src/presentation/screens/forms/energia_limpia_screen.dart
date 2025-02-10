@@ -589,13 +589,12 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 
@@ -868,13 +867,12 @@ class _SignQuestionaryState extends State<_SignQuestionary>
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
+
+    CustomAlertDialog(
+      context: context,
+      title: msgDialog,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.info);
     context.pushReplacement('/');
   }
 
