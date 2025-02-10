@@ -1,7 +1,9 @@
+import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +16,7 @@ class HomeItemsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actions = LocalStorage().currentActions;
+
     List<HomeItemCard> homeItemData = [
       if (actions.contains('MENUCARTERA'))
         HomeItemCard(
@@ -24,7 +27,20 @@ class HomeItemsWidget extends StatelessWidget {
             color: AppColors.white,
           ),
           color: AppColors.primaryColorWithOpacity(),
-          onTap: () => context.push('/cartera'),
+          onTap: () async {
+            final shouldSync = CatalogoSync.needToSync();
+            if (!context.mounted) return;
+            if (shouldSync) {
+              CustomAlertDialog(
+                onDone: () => context.pop(),
+                context: context,
+                title: 'Necesitas Sincronizar para avanzar',
+              ).showDialog(context);
+              return;
+            }
+
+            context.push('/cartera');
+          },
         ),
       // HomeItemCard(
       //   title: 'home.item1'.tr(),

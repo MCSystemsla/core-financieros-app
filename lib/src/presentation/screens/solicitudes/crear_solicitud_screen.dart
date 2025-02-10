@@ -11,7 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_m
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_,menor_data_client_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
 
 class CrearSolicitudScreen extends StatelessWidget {
   const CrearSolicitudScreen({super.key});

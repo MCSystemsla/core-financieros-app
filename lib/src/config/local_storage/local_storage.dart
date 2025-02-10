@@ -31,6 +31,10 @@ class LocalStorage {
     return prefs.getString('token') ?? '';
   }
 
+  int get lastUpdate {
+    return prefs.getInt('lastUpdate') ?? 0;
+  }
+
   Future<void> setLanguage(String value) async {
     await prefs.setString('lang', value);
   }
@@ -53,5 +57,9 @@ class LocalStorage {
 
   Future<void> setActions(List<String> actions) async {
     await prefs.setStringList('actions', actions);
+  }
+
+  Future<void> setLastUpdate(int lastUpdate) async {
+    await prefs.setInt('lastUpdate', lastUpdate);
   }
 }

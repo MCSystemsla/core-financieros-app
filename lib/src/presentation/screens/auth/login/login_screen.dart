@@ -269,7 +269,7 @@ class _VpnNoFoundState extends State<VpnNoFound> with WidgetsBindingObserver {
             padding: const EdgeInsets.all(30),
             child: CustomElevatedButton(
               onPressed: () async => await openApp(),
-              text: 'Abrir App:',
+              text: 'Abrir App',
               color: AppColors.getPrimaryColor(),
             ),
           )
