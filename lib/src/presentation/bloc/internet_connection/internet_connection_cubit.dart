@@ -6,9 +6,16 @@ import 'package:network_info_plus/network_info_plus.dart';
 
 part 'internet_connection_state.dart';
 
+/// Cubit para gestionar el estado de la conexión a Internet.
+
 class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   InternetConnectionCubit() : super(InternetConnectionInitial());
 
+  /// Verifica el estado de la conexión a Internet.
+  ///
+  /// - En modo desarrollo (`isProdMode == false`), simula una conexión válida.
+  /// - En producción (`isProdMode == true`), revisa si hay acceso a Internet y que este en modo Produccion,
+  ///   el tipo de conectividad y si la red es válida.
   Future<void> getInternetStatusConnection() async {
     const isInProdMode = bool.fromEnvironment('isProdMode');
     if (!isInProdMode) {
@@ -19,31 +26,38 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
           isCorrectNetwork: true,
         ),
       );
-      return;
     }
+
     final isConnected = await InternetConnectionChecker().hasConnection;
     final connectivityResult = await Connectivity().checkConnectivity();
     final info = NetworkInfo();
 
-    if (isConnected) {
+    if (isConnected && isInProdMode) {
       if (_isValidPhoneConnection(connections: connectivityResult)) {
         final wifiIp = await info.getWifiIP();
 
-        if (wifiIp != null && (_isValidNetwork(wifiIp: wifiIp))) {
-          emit(state.copyWith(
-              isConnected: true, isCorrectNetwork: true, currentIp: wifiIp));
-        } else {
-          emit(state.copyWith(
-              isConnected: true, isCorrectNetwork: false, currentIp: wifiIp));
-        }
+        emit(state.copyWith(
+          isConnected: true,
+          isCorrectNetwork: wifiIp != null && _isValidNetwork(wifiIp: wifiIp),
+          currentIp: wifiIp ?? 'Unknown IP',
+        ));
         return;
       }
     }
 
+    // Si no hay conexión o es una red inválida, actualiza el estado
     if (connectivityResult.contains(ConnectivityResult.none)) {
       emit(state.copyWith(isConnected: false, isCorrectNetwork: false));
     }
   }
+
+  /// Verifica si una dirección IP pertenece a una red válida.
+  ///
+  /// Se considera válida si la IP comienza con:
+  /// - `172.17.5.`
+  /// - `10.212.134.`
+  /// - `172.16`
+  ///
 
   bool _isValidNetwork({String? wifiIp}) {
     if (wifiIp == null) return false;
