@@ -645,7 +645,7 @@ class _RecurrenteViviendaOfflineResponseState
                               );
                         },
                         previousTitle: 'Salir'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

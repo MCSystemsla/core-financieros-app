@@ -340,7 +340,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -702,7 +702,7 @@ class _RecurrenteSaneamientoOfflineState
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

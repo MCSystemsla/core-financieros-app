@@ -296,7 +296,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -651,7 +651,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

@@ -317,7 +317,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -653,7 +653,7 @@ class _RecurrenteMujerEmprendeOfflineState
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
