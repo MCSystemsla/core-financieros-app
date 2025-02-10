@@ -2,17 +2,18 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_business_data_widget.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_espeps_widget.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_monto_widget.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_working_data_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
+
+import '../../widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
+import '../../widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
+import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
+import '../../widgets/solicitudes/nueva_menor/nueva_menor_monto_widget.dart';
+import '../../widgets/solicitudes/nueva_menor/nueva_menor_working_data_widget.dart';
 
 class CrearSolicitudScreen extends StatelessWidget {
   const CrearSolicitudScreen({super.key});

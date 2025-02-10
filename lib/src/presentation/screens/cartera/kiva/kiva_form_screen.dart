@@ -145,8 +145,11 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
         return;
       }
       _filteredSolicitudes = widget.solicitudesPendienteResponse
-          .where((solicitud) =>
-              solicitud.nombre.toLowerCase().contains(query.toLowerCase()))
+          .where(
+            (solicitud) =>
+                solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
+                solicitud.producto.toLowerCase().contains(query.toLowerCase()),
+          )
           .toList();
     });
   }
