@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     final shouldSync = CatalogoSync.needToSync();
-    if (shouldSync) {
+    if (shouldSync && isConnected) {
       return const DownsloadingCatalogosWidget();
     }
     return Scaffold(
