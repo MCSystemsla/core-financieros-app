@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
@@ -111,6 +112,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         codigo: 'ACTIVIDADECONOMICA',
         isConnected: isConnected,
       );
+      LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } catch (e) {
       log(e.toString());

@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,24 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-class DownsloadingCatalogosWidget extends StatelessWidget {
+class DownsloadingCatalogosWidget extends StatefulWidget {
   const DownsloadingCatalogosWidget({super.key});
+
+  @override
+  State<DownsloadingCatalogosWidget> createState() =>
+      _DownsloadingCatalogosWidgetState();
+}
+
+class _DownsloadingCatalogosWidgetState
+    extends State<DownsloadingCatalogosWidget> {
+  @override
+  void initState() {
+    context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+          isConnected:
+              context.read<InternetConnectionCubit>().state.isConnected,
+        );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +93,8 @@ class DownloadCatalogoLoading extends StatelessWidget {
                 color: AppColors.getPrimaryColor(),
                 text: 'OK',
                 onPressed: () {
-                  context.pop();
+                  if (context.canPop()) return context.pop();
+                  context.push('/');
                 },
               ),
             )
