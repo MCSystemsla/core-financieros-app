@@ -322,7 +322,8 @@ class _RecurrentSignQuestionary extends StatefulWidget {
       _RecurrentSignQuestionaryState();
 }
 
-class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
+class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -332,6 +333,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
@@ -597,6 +599,9 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
     );
     context.pushReplacement('/');
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _SignQuestionary extends StatefulWidget {
@@ -606,7 +611,8 @@ class _SignQuestionary extends StatefulWidget {
   State<_SignQuestionary> createState() => _SignQuestionaryState();
 }
 
-class _SignQuestionaryState extends State<_SignQuestionary> {
+class _SignQuestionaryState extends State<_SignQuestionary>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -616,6 +622,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
@@ -873,4 +880,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
     );
     context.pushReplacement('/');
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
