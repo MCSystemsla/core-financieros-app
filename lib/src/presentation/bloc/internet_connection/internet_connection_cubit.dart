@@ -19,27 +19,26 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
           isCorrectNetwork: true,
         ),
       );
-      return;
     }
+
     final isConnected = await InternetConnectionChecker().hasConnection;
     final connectivityResult = await Connectivity().checkConnectivity();
     final info = NetworkInfo();
 
-    if (isConnected) {
+    if (isConnected && isInProdMode) {
       if (_isValidPhoneConnection(connections: connectivityResult)) {
         final wifiIp = await info.getWifiIP();
 
-        if (wifiIp != null && (_isValidNetwork(wifiIp: wifiIp))) {
-          emit(state.copyWith(
-              isConnected: true, isCorrectNetwork: true, currentIp: wifiIp));
-        } else {
-          emit(state.copyWith(
-              isConnected: true, isCorrectNetwork: false, currentIp: wifiIp));
-        }
+        emit(state.copyWith(
+          isConnected: true,
+          isCorrectNetwork: wifiIp != null && _isValidNetwork(wifiIp: wifiIp),
+          currentIp: wifiIp ?? 'Unknown IP',
+        ));
         return;
       }
     }
 
+    // Si no hay conexión o es una red inválida, actualiza el estado
     if (connectivityResult.contains(ConnectivityResult.none)) {
       emit(state.copyWith(isConnected: false, isCorrectNetwork: false));
     }
