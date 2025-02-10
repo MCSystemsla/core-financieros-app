@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -34,11 +35,11 @@ class _DownsloadingCatalogosWidgetState
         builder: (context, state) {
           return switch (state) {
             SolicitudCatalogoLoading() => const DownloadCatalogoLoading(
-                lottieAsset: 'assets/images/save_catalogos.json',
+                lottieAsset: ImageAsset.downloadCatalogoLoading,
                 text: 'Sincronizando...',
               ),
             SolicitudCatalogoSuccess() => const DownloadCatalogoLoading(
-                lottieAsset: 'assets/images/success2_catalogo.json',
+                lottieAsset: ImageAsset.downloadCatalogosSuccess,
                 text: 'Sincronización completada con éxito.',
                 repeat: false,
                 isSucess: true,

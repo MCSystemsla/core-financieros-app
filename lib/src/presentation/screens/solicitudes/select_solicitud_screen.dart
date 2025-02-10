@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
@@ -61,7 +62,7 @@ class SelectSolicitudScreen extends StatelessWidget {
                       onPressed: () {
                         context.push('/solicitudes/solicitud-credito');
                       },
-                      svgPath: 'assets/images/credit3.svg',
+                      svgPath: ImageAsset.nuevaMenorBg,
                       title: 'Nueva Menor',
                     ),
                   ),
@@ -69,7 +70,7 @@ class SelectSolicitudScreen extends StatelessWidget {
                   Expanded(
                     child: SolicitudCard(
                       onPressed: () {},
-                      svgPath: 'assets/images/credit4.svg',
+                      svgPath: ImageAsset.nuevaMenorBg2,
                       title: 'Asalariado',
                     ),
                   ),
@@ -82,14 +83,14 @@ class SelectSolicitudScreen extends StatelessWidget {
                   Gap(10),
                   Expanded(
                     child: SolicitudCard(
-                      svgPath: 'assets/images/credit2.svg',
+                      svgPath: ImageAsset.nuevaMenorBg3,
                       title: 'Represtamo',
                     ),
                   ),
                   Gap(10),
                   Expanded(
                     child: SolicitudCard(
-                      svgPath: 'assets/images/credit2.svg',
+                      svgPath: ImageAsset.nuevaMenorBg3,
                       title: '',
                     ),
                   ),

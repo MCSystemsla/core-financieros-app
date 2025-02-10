@@ -53,9 +53,8 @@ class AuthRepositoryImpl extends AuthRepository {
     final endpoint = ActionsEndpoint(database: database);
     try {
       final resp = await _api.request(endpoint: endpoint);
-      final data = await resp['data'] as List<dynamic>;
+      await resp['data'] as List<dynamic>;
       final actions = ActionsResponse.fromJson(resp);
-      _logger.i(data);
       return actions;
     } catch (e) {
       _logger.e(e);

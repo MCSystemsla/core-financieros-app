@@ -114,7 +114,6 @@ class SolicitudesPendientesLocalDbCubit
       final departamentos =
           await state.isar!.departamentosDbLocals.where().findAll();
       emit(state.copyWith(departamentos: departamentos));
-      _logger.i(departamentos.length);
     } catch (e) {
       _logger.e(e);
       // emit(state.copyWith(status: Status.error));

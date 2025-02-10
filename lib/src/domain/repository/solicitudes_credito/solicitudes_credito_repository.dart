@@ -43,7 +43,6 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = CatalogoValor.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       _logger.e(e);
@@ -59,7 +58,6 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = CatalogoNacionalidad.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       _logger.e(e);

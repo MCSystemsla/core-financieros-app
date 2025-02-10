@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/nueva_menor_beneficiario_widget.dart';
@@ -276,7 +277,7 @@ class _Navbar extends StatelessWidget {
           child: const Image(
             fit: BoxFit.cover,
             image: AssetImage(
-              'assets/images/cartera_banner.jpg',
+              ImageAsset.carteraBg2,
             ),
           ),
         ),
