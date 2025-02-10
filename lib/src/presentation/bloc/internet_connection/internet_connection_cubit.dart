@@ -10,6 +10,17 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   InternetConnectionCubit() : super(InternetConnectionInitial());
 
   Future<void> getInternetStatusConnection() async {
+    const isInProdMode = bool.fromEnvironment('isProdMode');
+    if (!isInProdMode) {
+      emit(
+        state.copyWith(
+          currentIp: 'DEVMODE',
+          isConnected: true,
+          isCorrectNetwork: true,
+        ),
+      );
+      return;
+    }
     final isConnected = await InternetConnectionChecker().hasConnection;
     final connectivityResult = await Connectivity().checkConnectivity();
     final info = NetworkInfo();
@@ -38,8 +49,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
     if (wifiIp == null) return false;
     return wifiIp.startsWith('172.17.5.') ||
         wifiIp.startsWith('10.212.134.') ||
-        wifiIp.startsWith('172.16') ||
-        wifiIp.startsWith('10.');
+        wifiIp.startsWith('172.16');
   }
 
   bool _isValidPhoneConnection({

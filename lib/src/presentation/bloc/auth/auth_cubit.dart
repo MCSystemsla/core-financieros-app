@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -36,6 +37,8 @@ class AuthCubit extends Cubit<AuthState> {
       final actions = await repository.getActions(database: dbName);
       LocalStorage().setActions(actions.data);
       emit(state.copyWith(status: Status.done));
+    } on AppException catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
