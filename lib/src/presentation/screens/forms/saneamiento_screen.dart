@@ -28,6 +28,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -246,13 +247,11 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -528,13 +527,11 @@ class _EstandarSignState extends State<EstandarSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -1112,13 +1109,11 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -1395,13 +1390,11 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();

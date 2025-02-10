@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/screens/auth/login/login_sc
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -89,7 +90,13 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             return switch (state.status) {
               Status.inProgress =>
                 const Center(child: CircularProgressIndicator()),
-              Status.error => const Text('Error'),
+              Status.error => OnErrorWidget(
+                  onPressed: () {
+                    context
+                        .read<SolicitudesPendientesCubit>()
+                        .getSolicitudesPendientes();
+                  },
+                ),
               Status.done => _KIvaFormContent(
                   solicitudesPendienteResponse:
                       state.solicitudesPendienteResponse,

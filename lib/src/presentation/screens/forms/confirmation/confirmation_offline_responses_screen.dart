@@ -29,6 +29,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/offline_respo
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/migrantes_economicos_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/mujer_emprende_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/saneamiento_offline.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -223,13 +224,11 @@ class _RecurrenteMigranteEconomicoOfflineState
             RecurrenteMigrantesEconomicosState>(
           listener: (context, status) async {
             if (status.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(status.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: status.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(

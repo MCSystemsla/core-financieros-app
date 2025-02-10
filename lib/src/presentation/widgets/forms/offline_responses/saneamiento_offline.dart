@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -52,13 +53,11 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
           listener: (context, status) async {
             if (status.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(status.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: status.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
@@ -392,13 +391,11 @@ class _RecurrenteSaneamientoOfflineState
             RecurrenteAguaYSaneamientoState>(
           listener: (context, resp) async {
             if (resp.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(resp.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: resp.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (resp.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
