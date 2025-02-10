@@ -32,6 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
       await LocalStorage().setJWT(resp['accessToken']);
       await LocalStorage().setDatabase(dbName);
       await LocalStorage().setUserId(resp['usuarioId']);
+      await LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       final actions = await repository.getActions(database: dbName);
       LocalStorage().setActions(actions.data);
       emit(state.copyWith(status: Status.done));
