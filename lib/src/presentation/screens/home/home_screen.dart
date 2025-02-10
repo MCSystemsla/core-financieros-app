@@ -13,14 +13,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.read<InternetConnectionCubit>().state;
     final shouldSync = CatalogoSync.needToSync();
-    if (shouldSync && isConnected) {
+    if (shouldSync && isConnected.isConnected && isConnected.isCorrectNetwork) {
       return const DownsloadingCatalogosWidget();
     }
     return Scaffold(
-      floatingActionButton: isConnected
+      floatingActionButton: isConnected.isConnected &&
+              isConnected.isCorrectNetwork
           ? FloatingActionButton.extended(
               label: const Row(
                 children: [
