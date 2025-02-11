@@ -252,30 +252,33 @@ class _VpnNoFoundState extends State<VpnNoFound> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset(ImageAsset.vpnBg, width: 250),
-          const Gap(20),
-          Text(
-            'No estas en el rango de la VPN',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontSize: 17,
-                ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30),
-            child: CustomElevatedButton(
-              onPressed: () async => await openApp(),
-              text: 'Abrir App',
-              color: AppColors.getPrimaryColor(),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Center(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(ImageAsset.vpnBg, width: 250),
+            const Gap(20),
+            Text(
+              'No estas en el rango de la VPN',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontSize: 17,
+                  ),
             ),
-          )
-        ],
-      )),
+            Padding(
+              padding: const EdgeInsets.all(30),
+              child: CustomElevatedButton(
+                onPressed: () async => await openApp(),
+                text: 'Abrir App',
+                color: AppColors.getPrimaryColor(),
+              ),
+            )
+          ],
+        )),
+      ),
     );
   }
 }

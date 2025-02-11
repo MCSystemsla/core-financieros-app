@@ -1315,7 +1315,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
-    final isConnected = context.read<InternetConnectionCubit>().state;
+    final isConnected = context.watch<InternetConnectionCubit>().state;
     final imageProvider = context.watch<UploadUserFileCubit>().state;
 
     return Column(
@@ -1561,12 +1561,10 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-
-    CustomAlertDialog(
+    return CustomAlertDialog(
       context: context,
       title: msgDialog,
-      onDone: () => context.pop(),
+      onDone: () => context.pushReplacement('/'),
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }

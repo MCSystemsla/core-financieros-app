@@ -323,8 +323,7 @@ class _RecurrentSignQuestionary extends StatefulWidget {
       _RecurrentSignQuestionaryState();
 }
 
-class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
-    with AutomaticKeepAliveClientMixin {
+class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -334,7 +333,6 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
@@ -553,7 +551,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
   }
 
   saveEnergiaLimpiaAnswers(
-    BuildContext context,
+    BuildContext ctx,
     RecurrenteEnergiaLimpiaState state,
     ImageModel imageModel,
     String msgDialog,
@@ -590,16 +588,12 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
 
-    CustomAlertDialog(
+    return CustomAlertDialog(
       context: context,
       title: msgDialog,
-      onDone: () => context.pop(),
+      onDone: () {},
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class _SignQuestionary extends StatefulWidget {
@@ -609,8 +603,7 @@ class _SignQuestionary extends StatefulWidget {
   State<_SignQuestionary> createState() => _SignQuestionaryState();
 }
 
-class _SignQuestionaryState extends State<_SignQuestionary>
-    with AutomaticKeepAliveClientMixin {
+class _SignQuestionaryState extends State<_SignQuestionary> {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -620,7 +613,6 @@ class _SignQuestionaryState extends State<_SignQuestionary>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
@@ -837,15 +829,16 @@ class _SignQuestionaryState extends State<_SignQuestionary>
   }
 
   void saveEnergiaLocalDB(
-    BuildContext context,
+    BuildContext ctx,
     EnergiaLimpiaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
-    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+    ctx.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
-    context.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
+
+    ctx.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
           energiaLimpiaDBLocal: EnergiaLimpiaDbLocal()
             ..database = LocalStorage().database
             ..tipoSolicitud = state.tipoSolicitud
@@ -873,9 +866,6 @@ class _SignQuestionaryState extends State<_SignQuestionary>
       title: msgDialog,
       onDone: () => context.pop(),
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
+    // context.pushReplacement('/');
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
