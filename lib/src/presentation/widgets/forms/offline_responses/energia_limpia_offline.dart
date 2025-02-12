@@ -61,6 +61,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
@@ -354,6 +355,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',

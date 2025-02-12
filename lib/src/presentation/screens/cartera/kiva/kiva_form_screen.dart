@@ -293,6 +293,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
               route: widget.solicitud.producto,
               solicitudId: widget.solicitud.id,
               nombre: widget.solicitud.nombre,
+              numero: widget.solicitud.numero,
               motivoAnterior: widget.solicitud.motivoAnterior ??
                   'Motivo Anterior no registrado',
             );

@@ -165,6 +165,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
               route: widget.solicitud.producto ?? 'N/A',
               solicitudId: widget.solicitud.solicitudId.toString(),
               nombre: widget.solicitud.nombre ?? 'N/A',
+              numero: widget.solicitud.numero ?? 'N/A',
               motivoAnterior: widget.solicitud.motivoAnterior ??
                   'Motivo Anterior no registrado',
             );

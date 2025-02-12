@@ -64,6 +64,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
             }
             if (state.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
@@ -389,6 +390,7 @@ class _EstandarFormState extends State<EstandarForm> {
             }
             if (stateEstandar.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',

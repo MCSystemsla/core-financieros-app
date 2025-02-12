@@ -60,6 +60,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
@@ -375,6 +376,7 @@ class _RecurrenteMujerEmprendeOfflineState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',

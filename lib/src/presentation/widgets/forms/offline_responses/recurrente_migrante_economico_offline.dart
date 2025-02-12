@@ -61,6 +61,7 @@ class _RecurrenteMigranteEconomicoOfflineState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',

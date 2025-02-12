@@ -265,6 +265,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -544,6 +545,7 @@ class _EstandarSignState extends State<EstandarSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -1126,6 +1128,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -1407,6 +1410,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state

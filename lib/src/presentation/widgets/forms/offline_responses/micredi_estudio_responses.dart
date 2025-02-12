@@ -62,6 +62,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
@@ -476,6 +477,7 @@ class _MiCrediEstudioRecurrenteFormState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',

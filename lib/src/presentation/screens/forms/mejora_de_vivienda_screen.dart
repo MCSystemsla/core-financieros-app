@@ -253,6 +253,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state

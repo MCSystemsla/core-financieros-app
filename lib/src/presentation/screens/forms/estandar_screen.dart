@@ -231,6 +231,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       if (isConnected.isConnected &&
                           isConnected.isCorrectNetwork) {
                         context.read<UploadUserFileCubit>().uploadUserFiles(
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
                               tipoSolicitud: context
                                   .read<KivaRouteCubit>()
                                   .state
