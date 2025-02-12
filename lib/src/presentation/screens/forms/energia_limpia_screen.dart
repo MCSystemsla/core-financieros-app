@@ -1,12 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
-import 'package:core_financiero_app/src/datasource/origin/origin.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
@@ -239,6 +240,10 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
   String? originItem;
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    final items = localDbProvider.departmentsBox.getAll();
+    final departmentos =
+        items.map((e) => Item(name: e.nombre, value: e.valor)).toList();
     final energiaLimpiaProvider =
         context.watch<RecurrenteEnergiaLimpiaCubit>().state;
     return WhiteCard(
@@ -286,13 +291,13 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
                     isContainIcon: false,
                     // isLoading: state.status == Status.inProgress,
                     title: 'forms.entorno_familiar.person_origin'.tr(),
-                    items: Origin.originCatalogosValores,
+                    items: departmentos,
                     onChanged: (item) {
                       if (item == null) return;
-                      originItem = item.valor;
+                      originItem = item.value;
                       setState(() {});
                     },
-                    toStringItem: (item) => item.nombre,
+                    toStringItem: (item) => item.name,
                     hintText: 'input.select_department'.tr(),
                   ),
                 ),

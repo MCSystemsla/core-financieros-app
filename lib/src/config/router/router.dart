@@ -213,9 +213,5 @@ final router = GoRouter(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
     ),
-    GoRoute(
-      path: '/credito',
-      builder: (context, state) => const CreditoScreen(),
-    )
   ],
 );
