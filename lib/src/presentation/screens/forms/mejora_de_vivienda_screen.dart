@@ -28,6 +28,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -349,7 +350,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveRecurrentForm(
+                                ? await saveRecurrentForm(
                                     context,
                                     state,
                                     ImageModel()
@@ -372,7 +373,6 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                 : context
                                     .read<RecurrenteMejoraViviendaCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -389,12 +389,14 @@ class _RecurrentSignState extends State<RecurrentSign> {
     );
   }
 
-  void saveRecurrentForm(
+  saveRecurrentForm(
     BuildContext context,
     RecurrenteMejoraViviendaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -425,12 +427,12 @@ class _RecurrentSignState extends State<RecurrentSign> {
             ..viviendaAntesDespues = state.viviendaAntesDespues,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 

@@ -27,6 +27,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/descripcion_academica.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -318,7 +319,7 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveFormAnswers(
+                                ? await saveFormAnswers(
                                     context,
                                     state,
                                     ImageModel()
@@ -341,7 +342,6 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                                 : context
                                     .read<RecurrenteMicrediEstudioCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -358,12 +358,14 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
     );
   }
 
-  void saveFormAnswers(
+  saveFormAnswers(
     BuildContext context,
     RecurrenteMicrediEstudioState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -398,12 +400,12 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                 ..universidad = state.universidad,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 
@@ -767,7 +769,7 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOnLocalDB(
+                                ? await saveOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -790,7 +792,6 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                                 : context
                                     .read<MicrediEstudioCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -807,12 +808,14 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
     );
   }
 
-  void saveOnLocalDB(
+  saveOnLocalDB(
     BuildContext context,
     MicrediEstudioState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -849,12 +852,12 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
             ..universidad = state.universidad,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 

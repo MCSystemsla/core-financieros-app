@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_impacto_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -311,7 +312,7 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOnLocalDB(
+                                ? await saveOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -334,7 +335,6 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                                 : context
                                     .read<RecurrenteMujerEmprendeCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -351,12 +351,14 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
     );
   }
 
-  void saveOnLocalDB(
+  saveOnLocalDB(
     BuildContext context,
     RecurrenteMujerEmprendeState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -388,12 +390,12 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 
@@ -590,7 +592,7 @@ class _SignSignatureState extends State<_SignSignature> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnwersLocalDb(
+                                ? await saveAnwersLocalDb(
                                     context,
                                     state,
                                     ImageModel()
@@ -613,7 +615,6 @@ class _SignSignatureState extends State<_SignSignature> {
                                 : context
                                     .read<MujerEmprendeCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -630,12 +631,14 @@ class _SignSignatureState extends State<_SignSignature> {
     );
   }
 
-  void saveAnwersLocalDb(
+  saveAnwersLocalDb(
     BuildContext context,
     MujerEmprendeState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -661,11 +664,11 @@ class _SignSignatureState extends State<_SignSignature> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }

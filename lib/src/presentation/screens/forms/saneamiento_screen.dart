@@ -29,6 +29,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -631,7 +632,7 @@ class _EstandarSignState extends State<EstandarSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOfflineResponses(
+                                ? await saveOfflineResponses(
                                     context,
                                     state,
                                     ImageModel()
@@ -652,7 +653,6 @@ class _EstandarSignState extends State<EstandarSign> {
                                         : 'Formulario Kiva Guardado Exitosamente!!',
                                   )
                                 : context.read<EstandarCubit>().sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -675,6 +675,8 @@ class _EstandarSignState extends State<EstandarSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -701,12 +703,12 @@ class _EstandarSignState extends State<EstandarSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 
@@ -1210,7 +1212,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -1233,7 +1235,6 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 : context
                                     .read<AguaYSaneamientoCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -1250,12 +1251,14 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     AguaYSaneamientoState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1287,12 +1290,12 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 
@@ -1490,7 +1493,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveMejoraViviendaForm(
+                                ? await saveMejoraViviendaForm(
                                     context,
                                     state,
                                     ImageModel()
@@ -1513,7 +1516,6 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                 : context
                                     .read<MejoraViviendaCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -1531,11 +1533,14 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   }
 
   saveMejoraViviendaForm(
-    BuildContext context,
+    BuildContext ctx,
     MejoraViviendaState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    if (!context.mounted) return;
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1561,10 +1566,12 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-    return CustomAlertDialog(
+
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pushReplacement('/'),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
   }
 }

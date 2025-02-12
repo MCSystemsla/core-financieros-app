@@ -30,6 +30,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -511,7 +512,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveEnergiaLimpiaAnswers(
+                                ? await saveEnergiaLimpiaAnswers(
                                     context,
                                     state,
                                     ImageModel()
@@ -533,7 +534,6 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                                 : context
                                     .read<RecurrenteEnergiaLimpiaCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -556,6 +556,8 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -588,10 +590,11 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
 
-    return CustomAlertDialog(
+    NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () {},
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
   }
 }
@@ -788,7 +791,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveEnergiaLocalDB(
+                                ? await saveEnergiaLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -811,7 +814,6 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                                 : context
                                     .read<EnergiaLimpiaCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -828,12 +830,14 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
     );
   }
 
-  void saveEnergiaLocalDB(
+  saveEnergiaLocalDB(
     BuildContext ctx,
     EnergiaLimpiaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     ctx.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -861,10 +865,11 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
     // context.pushReplacement('/');
   }

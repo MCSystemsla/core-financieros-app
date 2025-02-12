@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/bloc/migrantes_economicos/m
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -223,7 +224,7 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -246,7 +247,6 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                                 : context
                                     .read<MigrantesEconomicosCubit>()
                                     .sendMigrantesEconomicos();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -263,12 +263,14 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     MigrantesEconomicosState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -308,12 +310,12 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
             ..otrosDatosCliente = state.otrosDatosCliente,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 
@@ -514,7 +516,7 @@ class _RecurrenteMigrantesFormSignatureState
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -537,8 +539,6 @@ class _RecurrenteMigrantesFormSignatureState
                                 : context
                                     .read<RecurrenteMigrantesEconomicosCubit>()
                                     .sendAnswers();
-                            // context.read<EnergiaLimpiaCubit>().sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -555,12 +555,14 @@ class _RecurrenteMigrantesFormSignatureState
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     RecurrenteMigrantesEconomicosState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -594,11 +596,11 @@ class _RecurrenteMigrantesFormSignatureState
                 ..siguienteMeta = state.siguienteMeta,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }

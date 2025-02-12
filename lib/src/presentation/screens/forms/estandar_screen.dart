@@ -24,7 +24,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_impacto_social.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -321,7 +321,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOfflineResponses(
+                                ? await saveOfflineResponses(
                                     context,
                                     state,
                                     ImageModel()
@@ -345,8 +345,6 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 : context
                                     .read<RecurrenteEstandartCubit>()
                                     .sendAnswers();
-
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -363,9 +361,17 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     );
   }
 
-  saveOfflineResponses(BuildContext context, RecurrenteEstandartState state,
-      ImageModel imageModel, Size size, String msgDialog) async {
+  saveOfflineResponses(
+    BuildContext context,
+    RecurrenteEstandartState state,
+    ImageModel imageModel,
+    Size size,
+    String msgDialog,
+  ) async {
     if (!context.mounted) return;
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -393,11 +399,11 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..personasCargo = state.personasCargo,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
