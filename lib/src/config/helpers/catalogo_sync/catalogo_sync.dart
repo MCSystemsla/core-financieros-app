@@ -10,7 +10,7 @@ class CatalogoSync {
     final now = DateTime.now();
     final difference = now.difference(lastSyncDate);
 
-    return difference.inMinutes >= 2;
+    return difference.inHours >= 24;
   }
 
   static bool needToSync() {
