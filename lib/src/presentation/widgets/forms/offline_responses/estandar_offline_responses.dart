@@ -3,13 +3,14 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -55,16 +56,15 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
         return BlocConsumer<RecurrenteEstandartCubit, RecurrenteEstandartState>(
           listener: (context, state) async {
             if (state.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(state.erroMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: state.erroMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (state.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
@@ -382,16 +382,15 @@ class _EstandarFormState extends State<EstandarForm> {
         return BlocConsumer<EstandarCubit, EstandarState>(
           listener: (context, stateEstandar) async {
             if (stateEstandar.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(stateEstandar.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: stateEstandar.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (stateEstandar.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',

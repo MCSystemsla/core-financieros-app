@@ -4,12 +4,13 @@ import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pe
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -89,7 +90,13 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             return switch (state.status) {
               Status.inProgress =>
                 const Center(child: CircularProgressIndicator()),
-              Status.error => const Text('Error'),
+              Status.error => OnErrorWidget(
+                  onPressed: () {
+                    context
+                        .read<SolicitudesPendientesCubit>()
+                        .getSolicitudesPendientes();
+                  },
+                ),
               Status.done => _KIvaFormContent(
                   solicitudesPendienteResponse:
                       state.solicitudesPendienteResponse,
@@ -138,8 +145,11 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
         return;
       }
       _filteredSolicitudes = widget.solicitudesPendienteResponse
-          .where((solicitud) =>
-              solicitud.nombre.toLowerCase().contains(query.toLowerCase()))
+          .where(
+            (solicitud) =>
+                solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
+                solicitud.producto.toLowerCase().contains(query.toLowerCase()),
+          )
           .toList();
     });
   }
@@ -283,6 +293,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
               route: widget.solicitud.producto,
               solicitudId: widget.solicitud.id,
               nombre: widget.solicitud.nombre,
+              numero: widget.solicitud.numero,
               motivoAnterior: widget.solicitud.motivoAnterior ??
                   'Motivo Anterior no registrado',
             );

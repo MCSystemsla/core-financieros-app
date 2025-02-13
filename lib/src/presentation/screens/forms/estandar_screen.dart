@@ -8,13 +8,13 @@ import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -230,6 +231,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       if (isConnected.isConnected &&
                           isConnected.isCorrectNetwork) {
                         context.read<UploadUserFileCubit>().uploadUserFiles(
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
                               tipoSolicitud: context
                                   .read<KivaRouteCubit>()
                                   .state
@@ -320,7 +323,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOfflineResponses(
+                                ? await saveOfflineResponses(
                                     context,
                                     state,
                                     ImageModel()
@@ -344,8 +347,6 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 : context
                                     .read<RecurrenteEstandartCubit>()
                                     .sendAnswers();
-
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -362,9 +363,17 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     );
   }
 
-  saveOfflineResponses(BuildContext context, RecurrenteEstandartState state,
-      ImageModel imageModel, Size size, String msgDialog) async {
+  saveOfflineResponses(
+    BuildContext context,
+    RecurrenteEstandartState state,
+    ImageModel imageModel,
+    Size size,
+    String msgDialog,
+  ) async {
     if (!context.mounted) return;
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -391,13 +400,12 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..siguientePaso = state.siguientePaso
             ..personasCargo = state.personasCargo,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }

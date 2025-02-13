@@ -7,12 +7,14 @@ class KivaRouteState extends Equatable {
   final String nombre;
   final String motivoAnterior;
   final String tipoSolicitud;
+  final String numero;
   const KivaRouteState({
     this.currentRoute = '',
     this.solicitudId = '',
     this.nombre = '',
     this.motivoAnterior = '',
     this.tipoSolicitud = '',
+    this.numero = '',
   });
 
   @override
@@ -22,6 +24,7 @@ class KivaRouteState extends Equatable {
         nombre,
         motivoAnterior,
         tipoSolicitud,
+        numero,
       ];
 
   KivaRouteState copyWith({
@@ -30,6 +33,7 @@ class KivaRouteState extends Equatable {
     String? nombre,
     String? motivoAnterior,
     String? tipoSolicitud,
+    String? numero,
   }) {
     return KivaRouteState(
       currentRoute: currentRoute ?? this.currentRoute,
@@ -37,6 +41,7 @@ class KivaRouteState extends Equatable {
       nombre: nombre ?? this.nombre,
       motivoAnterior: motivoAnterior ?? this.motivoAnterior,
       tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
+      numero: numero ?? this.numero,
     );
   }
 }
