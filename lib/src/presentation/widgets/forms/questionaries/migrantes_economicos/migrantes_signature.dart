@@ -248,6 +248,8 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                                 : context
                                     .read<MigrantesEconomicosCubit>()
                                     .sendMigrantesEconomicos();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -541,6 +543,8 @@ class _RecurrenteMigrantesFormSignatureState
                                 : context
                                     .read<RecurrenteMigrantesEconomicosCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );

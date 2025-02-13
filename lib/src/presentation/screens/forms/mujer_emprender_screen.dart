@@ -336,6 +336,8 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                                 : context
                                     .read<RecurrenteMujerEmprendeCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -617,6 +619,8 @@ class _SignSignatureState extends State<_SignSignature> {
                                 : context
                                     .read<MujerEmprendeCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );

@@ -343,6 +343,8 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                                 : context
                                     .read<RecurrenteMicrediEstudioCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -794,6 +796,8 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                                 : context
                                     .read<MicrediEstudioCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );

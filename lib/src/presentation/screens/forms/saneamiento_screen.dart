@@ -375,6 +375,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 : context
                                     .read<RecurrenteAguaYSaneamientoCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -656,6 +658,8 @@ class _EstandarSignState extends State<EstandarSign> {
                                         : 'Formulario Kiva Guardado Exitosamente!!',
                                   )
                                 : context.read<EstandarCubit>().sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -1239,6 +1243,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 : context
                                     .read<AguaYSaneamientoCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -1521,6 +1527,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                 : context
                                     .read<MejoraViviendaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );

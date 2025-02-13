@@ -374,6 +374,8 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                 : context
                                     .read<RecurrenteMejoraViviendaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );

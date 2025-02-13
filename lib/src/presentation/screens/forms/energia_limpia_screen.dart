@@ -540,6 +540,8 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                                 : context
                                     .read<RecurrenteEnergiaLimpiaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -821,6 +823,8 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                                 : context
                                     .read<EnergiaLimpiaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
+                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
