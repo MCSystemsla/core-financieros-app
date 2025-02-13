@@ -334,8 +334,7 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -787,8 +786,7 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',

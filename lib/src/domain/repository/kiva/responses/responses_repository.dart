@@ -65,7 +65,6 @@ abstract class ResponsesRepository {
     required String imagen2,
     required String imagen3,
     required String fotoFirma,
-    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
@@ -78,7 +77,6 @@ abstract class ResponsesRepository {
     required String imagen2,
     required String imagen3,
     required String fotoFirma,
-    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
@@ -291,7 +289,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String imagen2,
     required String imagen3,
     required String fotoFirma,
-    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
@@ -341,12 +338,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         contentType: MediaType('image', 'png'),
       ));
 
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoCedula',
-        fotoCedula,
-        filename: fotoCedula,
-        contentType: MediaType('image', 'jpeg'),
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'fotoCedula',
+      //   fotoCedula,
+      //   filename: fotoCedula,
+      //   contentType: MediaType('image', 'jpeg'),
+      // ));
       request.files.add(await http.MultipartFile.fromPath(
         'fotoFirmaDigitalAsesor',
         fotoAsesorFirma,
@@ -440,7 +437,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String imagen2,
     required String imagen3,
     required String fotoFirma,
-    required String fotoCedula,
     required int solicitudId,
     required String formularioKiva,
     required String database,
@@ -490,12 +486,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         contentType: MediaType('image', 'png'),
       ));
 
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoCedula',
-        fotoCedula,
-        filename: fotoCedula,
-        contentType: MediaType('image', 'jpg'),
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'fotoCedula',
+      //   fotoCedula,
+      //   filename: fotoCedula,
+      //   contentType: MediaType('image', 'jpg'),
+      // ));
       request.files.add(await http.MultipartFile.fromPath(
         'fotoFirmaDigitalAsesor',
         imagenAsesor,
