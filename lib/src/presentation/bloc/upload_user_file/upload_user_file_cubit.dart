@@ -12,13 +12,11 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String imagen1,
     required String imagen2,
     required String imagen3,
-    required String fotoCedula,
   }) {
     emit(state.copyWith(
       imagen1: imagen1,
       imagen2: imagen2,
       imagen3: imagen3,
-      fotoCedula: fotoCedula,
     ));
   }
 
@@ -38,7 +36,6 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       imagen2: state.imagen2,
       imagen3: state.imagen3,
       fotoFirma: fotoFirma,
-      fotoCedula: state.fotoCedula,
       solicitudId: solicitudId,
       formularioKiva: formularioKiva,
       database: LocalStorage().database,
@@ -52,7 +49,6 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String imagen1,
     required String imagen2,
     required String imagen3,
-    required String fotoCedula,
     required String fotoFirma,
     required int solicitudId,
     required String formularioKiva,
@@ -65,7 +61,6 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       imagen2: imagen2,
       imagen3: imagen3,
       fotoFirma: fotoFirma,
-      fotoCedula: fotoCedula,
       solicitudId: solicitudId,
       formularioKiva: formularioKiva,
       database: LocalStorage().database,

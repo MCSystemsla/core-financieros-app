@@ -366,8 +366,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -651,8 +650,7 @@ class _EstandarSignState extends State<EstandarSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -888,44 +886,43 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 );
               },
             ),
-            const Gap(15),
-            UploadImageWidget(
-              selectedImage: selectedImage4,
-              title: '4-  ${'Agregar foto de cedula'.tr()}',
-              onPressed: () async {
-                await picker
-                    .pickImage(
-                  source: ImageSource.camera,
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
+            // UploadImageWidget(
+            //   selectedImage: selectedImage4,
+            //   title: '4-  ${'Agregar foto de cedula'.tr()}',
+            //   onPressed: () async {
+            //     await picker
+            //         .pickImage(
+            //       source: ImageSource.camera,
+            //       maxHeight: 600,
+            //       maxWidth: 600,
+            //       imageQuality: 85,
+            //     )
+            //         .then(
+            //       (XFile? photo) async {
+            //         if (photo != null) {
+            //           final appDir = await getApplicationDocumentsDirectory();
+            //           final customDir = Directory('${appDir.path}/MyImages');
 
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+            //           // Crea el directorio si no existe
+            //           if (!await customDir.exists()) {
+            //             await customDir.create(recursive: true);
+            //             log('Directorio creado: ${customDir.path}');
+            //           }
+            //           // Define la ruta de la imagen en el directorio
+            //           final localPath =
+            //               '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage4 = photo;
-                      selectedImage4Path = localPath;
-                      setState(() {});
-                    }
-                  },
-                );
-              },
-            ),
+            //           // Copia la imagen seleccionada al directorio
+            //           final imageFile = File(photo.path);
+            //           await imageFile.copy(localPath);
+            //           selectedImage4 = photo;
+            //           selectedImage4Path = localPath;
+            //           setState(() {});
+            //         }
+            //       },
+            //     );
+            //   },
+            // ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -934,8 +931,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               onNextPressed: () async {
                 if (selectedImage == null ||
                     selectedImage2 == null ||
-                    selectedImage3 == null ||
-                    selectedImage4 == null) {
+                    selectedImage3 == null) {
                   await customPopUp(
                     context: context,
                     dismissOnTouchOutside: false,
@@ -957,7 +953,6 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                         imagen1: selectedImage1Path!,
                         imagen2: selectedImage2Path!,
                         imagen3: selectedImage3Path!,
-                        fotoCedula: selectedImage4Path!,
                       );
                   widget.controller.nextPage(
                     duration: const Duration(
@@ -1234,8 +1229,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -1518,8 +1512,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
