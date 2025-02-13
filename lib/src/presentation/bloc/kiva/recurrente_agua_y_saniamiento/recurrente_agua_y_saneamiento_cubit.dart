@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'recurrente_agua_y_saneamiento_state.dart';

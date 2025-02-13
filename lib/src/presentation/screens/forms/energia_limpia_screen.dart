@@ -11,7 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';

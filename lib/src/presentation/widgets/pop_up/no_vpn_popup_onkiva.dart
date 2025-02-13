@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:dismissible_page/dismissible_page.dart';

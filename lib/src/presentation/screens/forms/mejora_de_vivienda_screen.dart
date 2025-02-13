@@ -10,7 +10,7 @@ import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';

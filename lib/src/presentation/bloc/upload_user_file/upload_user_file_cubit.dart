@@ -74,21 +74,4 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       numero: numero,
     );
   }
-
-  // void saveSignature({required Uint8List signatureImage}) async {
-  //   try {
-  //     final directory = await getApplicationDocumentsDirectory();
-  //     final filePath = '${directory.path}/signature.png';
-
-  //     // Guarda la imagen en el archivo
-  //     final file = File(filePath);
-  //     await file.writeAsBytes(signatureImage);
-
-  //     emit(state.copyWith(fotoFirma: file));
-  //     // Actualiza el estado con la ruta del archivo
-  //     log('Firma guardada en: $filePath');
-  //   } catch (e) {
-  //     log('Error al guardar la firma: $e');
-  //   }
-  // }
 }

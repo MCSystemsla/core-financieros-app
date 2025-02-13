@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/estandar/recurrente_estandar_db_local.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 

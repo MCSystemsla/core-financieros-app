@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'recurrente_estandart_state.dart';

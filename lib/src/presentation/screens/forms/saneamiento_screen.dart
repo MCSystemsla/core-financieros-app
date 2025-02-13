@@ -12,7 +12,7 @@ import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -352,7 +352,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -375,7 +375,6 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 : context
                                     .read<RecurrenteAguaYSaneamientoCubit>()
                                     .sendAnswers();
-                            context.pop();
                           },
                           onPressedCancel: () => context.pop(),
                         );
@@ -392,12 +391,14 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     RecurrenteAguaYSaneamientoState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -429,12 +430,12 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
 
-    CustomAlertDialog(
+    return NoVpnPopUpOnKiva(
       context: context,
-      title: msgDialog,
-      onDone: () => context.pop(),
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
-    context.pushReplacement('/');
   }
 }
 

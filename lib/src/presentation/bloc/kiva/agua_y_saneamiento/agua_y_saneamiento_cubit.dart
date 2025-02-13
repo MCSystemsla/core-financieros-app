@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'agua_y_saneamiento_state.dart';
