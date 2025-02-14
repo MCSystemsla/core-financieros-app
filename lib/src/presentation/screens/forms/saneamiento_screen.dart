@@ -775,38 +775,34 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage = photo;
-                      selectedImage1Path = localPath;
-
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage = photo;
+                selectedImage1Path = localPath;
+
+                setState(() {});
               },
             ),
             const Gap(20),
@@ -814,37 +810,33 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage2 = photo;
-                      selectedImage2Path = localPath;
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage2 = photo;
+                selectedImage2Path = localPath;
+                setState(() {});
               },
             ),
             const Gap(15),
@@ -852,38 +844,33 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage3,
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-
-                      selectedImage3 = photo;
-                      selectedImage3Path = localPath;
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage3 = photo;
+                selectedImage3Path = localPath;
+                setState(() {});
               },
             ),
             // UploadImageWidget(

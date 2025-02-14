@@ -8,11 +8,9 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -77,10 +75,6 @@ class EnergiaLimpiaScreen extends StatelessWidget {
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
-        ),
-        BlocProvider(
-          create: (ctx) =>
-              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
         ),
         BlocProvider(
           create: (ctx) => RecurrenteEnergiaLimpiaCubit(responseRepository),
