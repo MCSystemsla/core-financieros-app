@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -22,65 +21,118 @@ class NuevaMenorMontoWidget extends StatelessWidget {
       child: Column(
         children: [
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.attach_money,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Monto',
-            hintText: 'Ingresa Monto',
-            isValid: null,
-          ),
-          const Gap(20),
           CatalogoValorDropdownWidget(
+            title: 'Estado Civil',
             initialValue: '',
-            codigo: 'MONEDA',
+            codigo: 'ESTADOCIVIL',
             onChanged: (item) {},
-            title: 'Moneda',
           ),
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'DESTINOCREDITO',
-            title: 'Proposito',
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'FRECUENCIAPAGO',
+          CatalogoValorNacionalidad(
+            codigo: 'PAIS',
             onChanged: (item) {},
-            title: 'Frecuencia',
+            hintText: 'Ingresa Nacionalidad Conyuge',
+            title: 'Nacionalidad Conyuge',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.payment,
+              Icons.woman,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Cuota',
-            hintText: 'Ingresa Cuota',
+            title: 'Nombre Conyuge',
+            hintText: 'Ingresa nombre conyuge',
             isValid: null,
           ),
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'ACTIVIDADECONOMICA',
-            title: 'Actividad',
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.woman_2,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Trabaja Conyuge',
+            hintText: 'Trabaja Conyuge',
+            isValid: null,
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ACTIVIDADECONOMICA',
-            onChanged: (item) {},
-            title: 'Actividad 1',
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.woman_2,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Trabajo de Conyuge',
+            hintText: 'Ingresa el Trabajo de Conyuge',
+            isValid: null,
           ),
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'ACTIVIDADECONOMICA',
-            title: 'Actividad 2',
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.woman_2,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Direccion Trabajo Conyuge',
+            hintText: 'Ingresa el Trabajo de Conyuge',
+            isValid: null,
           ),
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'SECTORECONOMICO',
-            title: 'Sector',
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.phone,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Telefono Trabajo Conyuge',
+            hintText: 'Ingresa el Telefono de Conyuge',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.phone,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Cantidad Hijos',
+            hintText: 'Ingresa Cantida de Hijos',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.family_restroom,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Es familiar empleado',
+            hintText: 'Es familiar empleado',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.family_restroom,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Nombre familiar de empleado',
+            hintText: 'Ingresa el nombre de empleado',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.add_card_sharp,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Cedula familiar de empleado',
+            hintText: 'Ingresa la cedula de empleado',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.add_card_sharp,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Persona a cargo',
+            hintText: 'Ingresa la persona a cargo',
+            isValid: null,
           ),
           const Gap(20),
           Container(

@@ -26,15 +26,26 @@ class SearchDropdownWidget extends StatelessWidget {
         name: e.nombre,
       );
     }).toList();
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: DropdownSearch<Item>(
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
         popupProps: const PopupProps.menu(
           showSearchBox: true,
           searchFieldProps: TextFieldProps(
             decoration: InputDecoration(
               labelText: 'Buscar',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
             ),
           ),
         ),

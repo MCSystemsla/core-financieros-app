@@ -1,6 +1,4 @@
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -50,7 +48,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     }
 
     super.build(context);
-    final localDbProvider = global<ObjectBoxService>();
 
     final nombre1Controller = TextEditingController();
     final nombre2Controller = TextEditingController();
@@ -62,23 +59,16 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     final fechaNacimientoController = TextEditingController();
     final telefonoController = TextEditingController();
     final celularController = TextEditingController();
-    final direccionCasaController = TextEditingController();
-    final barrioCasaController = TextEditingController();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
           const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cedula',
-            hintText: 'Ingresa Cedula',
-            isValid: null,
-            textEditingController: cedulaController,
-            isRequired: true,
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'TIPOSPERSONACREDITO',
+            onChanged: (item) {},
+            title: 'Tipo de Persona',
           ),
           const Gap(30),
           OutlineTextfieldWidget(
@@ -134,6 +124,48 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
           ),
           const Gap(30),
           OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.person_2_rounded,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Nombre Publico',
+            textCapitalization: TextCapitalization.words,
+            hintText: 'Ingresa tu nombre publico',
+            isValid: null,
+            textEditingController: nombre1Controller,
+            isRequired: true,
+          ),
+          const Gap(30),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'TIPODOCUMENTOPERSONA',
+            onChanged: (item) {},
+            title: 'Tipo Documento',
+          ),
+          const Gap(30),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.credit_card,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Cedula',
+            hintText: 'Ingresa Cedula',
+            isValid: null,
+            textEditingController: cedulaController,
+            isRequired: true,
+          ),
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Pais Emisor',
+            title: 'Pais Emisor',
+            onChanged: (item) {
+              if (item == null) return;
+            },
+            codigo: 'PAIS',
+            // initialValue: paisEmisor ?? '',
+          ),
+          const Gap(30),
+          OutlineTextfieldWidget(
             onTap: () => selectDate(context),
             readOnly: true,
             icon: Icon(
@@ -172,6 +204,35 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
           const Gap(30),
           OutlineTextfieldWidget(
             icon: Icon(
+              Icons.flag,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Nacionalidad',
+            hintText: 'Ingresa FechaNacimiento',
+            isValid: null,
+            textEditingController: fechaNacimientoController,
+            isRequired: true,
+          ),
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Pais de Nacimiento',
+            title: 'Pais de Nacimiento',
+            onChanged: (item) {
+              if (item == null) return;
+            },
+            codigo: 'PAIS',
+            // initialValue: paisEmisor ?? '',
+          ),
+          const Gap(30),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'SEXO',
+            onChanged: (item) {},
+            title: 'Sexo',
+          ),
+          const Gap(30),
+          OutlineTextfieldWidget(
+            icon: Icon(
               Icons.phone,
               color: AppColors.getPrimaryColor(),
             ),
@@ -195,63 +256,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
           const Gap(30),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.home,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'DireccionCasa',
-            hintText: 'Ingresa DireccionCasa',
-            isValid: null,
-            textEditingController: direccionCasaController,
-            isRequired: true,
-          ),
-          const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.map,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'BarrioCasa',
-            hintText: 'Ingresa BarrioCasa',
-            isValid: null,
-            textEditingController: barrioCasaController,
-            isRequired: true,
-          ),
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Ingresa objPaisCasaId',
-            title: 'objPaisCasaId',
-            onChanged: (item) {
-              if (item == null) return;
-              paisEmisor = item.valor;
-              departamentoEmisor = null;
-              localDbProvider.getNacionalidadesDep(valor: item.valor);
-
-              setState(() {});
-            },
-            codigo: 'PAIS',
-            // initialValue: paisEmisor ?? '',
-          ),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.work,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Profesion',
-            hintText: 'Ingresa Profesion',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.business,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Ocupacion',
-            hintText: 'Ingresa Ocupacion',
-            isValid: null,
-          ),
-          OutlineTextfieldWidget(
-            icon: Icon(
               Icons.email,
               color: AppColors.getPrimaryColor(),
             ),
@@ -259,16 +263,14 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             hintText: 'Ingresa Email',
             isValid: null,
           ),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nacionalidad',
-            hintText: 'Ingresa Nacionalidad',
-            isValid: null,
+          const Gap(30),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'ESCOLARIDAD',
+            onChanged: (item) {},
+            title: 'Escolaridad',
           ),
-          const Gap(20),
+          const Gap(30),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             width: double.infinity,
@@ -284,7 +286,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             ),
           ),
           const Gap(20),
-          const Gap(10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(

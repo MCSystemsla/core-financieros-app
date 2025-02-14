@@ -1,8 +1,11 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -27,6 +30,46 @@ class _NuevaMenorWorkingDataWidgetState
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Pais de Casa',
+            title: 'Pais Domicilio',
+            onChanged: (item) {
+              if (item == null) return;
+            },
+            codigo: 'PAIS',
+            // initialValue: paisEmisor ?? '',
+          ),
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Departamento de Casa',
+            title: 'Departamento Domicilio',
+            onChanged: (item) {
+              if (item == null) return;
+            },
+            codigo: 'DEP',
+            // initialValue: paisEmisor ?? '',
+          ),
+          const Gap(30),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Municipio de Casa',
+            title: 'Municipio Domicilio',
+            onChanged: (item) {
+              if (item == null) return;
+            },
+            codigo: 'MUN',
+            // initialValue: paisEmisor ?? '',
+          ),
+          const Gap(30),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.calendar_today,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Barrio Casa',
+            hintText: 'Ingresa Barrio Casa',
+            isValid: null,
+          ),
           const Gap(20),
           CatalogoValorDropdownWidget(
             title: 'Condicion Casa',
@@ -48,47 +91,22 @@ class _NuevaMenorWorkingDataWidgetState
             hintText: 'Ingresa Años Residir Casa',
             isValid: null,
           ),
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Selecciona Pais Emisor',
-            title: 'Pais Emisor',
-            onChanged: (item) {
-              if (item == null) return;
-              // paisEmisor = item.valor;
-              // departamentoEmisor = null;
-              // localDbProvider.getNacionalidadesDep(valor: item.valor);
-
-              setState(() {});
-            },
-            codigo: 'PAIS',
-            // initialValue: paisEmisor ?? '',
+          const Gap(20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: JLuxDropdown(
+              dropdownColor: Colors.white,
+              isContainIcon: true,
+              title: 'Su comunidad es:',
+              items: Origin.comunidades,
+              onChanged: (item) {},
+              toStringItem: (item) {
+                return item.nombre;
+              },
+              hintText: 'input.select_option'.tr(),
+            ),
           ),
-          // if (paisEmisor != null) ...[
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            // where: paisEmisor ?? '',
-            hintText: 'Selecciona Departamento Emisor',
-            title: 'Departamento Emisor',
-            onChanged: (item) {
-              if (item == null) return;
-              // departamentoEmisor = item.valor;
-              setState(() {});
-            },
-            codigo: 'DEP',
-            // initialValue: departamentoEmisor?.valor ?? '',
-          ),
-          // ],
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Selecciona Municipio Emisor',
-            title: 'Municipio Emisor',
-            onChanged: (item) {
-              if (item == null) return;
-              // paisEmisor = item.valor;
-              setState(() {});
-            },
-            codigo: 'MUN',
-          ),
+          // * TODO: Agregar Geolocator para anadir Latitud y Longitud
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
