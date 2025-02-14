@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_estandar/recurrente_estandart_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';

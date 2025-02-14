@@ -11,23 +11,25 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/sa
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/motivo_prestamo/motivo_prestamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -246,13 +248,11 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -265,6 +265,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -351,7 +352,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -365,8 +366,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -374,6 +374,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 : context
                                     .read<RecurrenteAguaYSaneamientoCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -391,12 +392,14 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     RecurrenteAguaYSaneamientoState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -427,14 +430,13 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }
 
@@ -528,13 +530,11 @@ class _EstandarSignState extends State<EstandarSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -547,6 +547,7 @@ class _EstandarSignState extends State<EstandarSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -635,7 +636,7 @@ class _EstandarSignState extends State<EstandarSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveOfflineResponses(
+                                ? await saveOfflineResponses(
                                     context,
                                     state,
                                     ImageModel()
@@ -649,13 +650,13 @@ class _EstandarSignState extends State<EstandarSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
                                   )
                                 : context.read<EstandarCubit>().sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -679,6 +680,8 @@ class _EstandarSignState extends State<EstandarSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -704,14 +707,13 @@ class _EstandarSignState extends State<EstandarSign> {
             ..publicitarNegocio = state.publicitarNegocio
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }
 
@@ -773,38 +775,34 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage = photo;
-                      selectedImage1Path = localPath;
-
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage = photo;
+                selectedImage1Path = localPath;
+
+                setState(() {});
               },
             ),
             const Gap(20),
@@ -812,37 +810,33 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage2 = photo;
-                      selectedImage2Path = localPath;
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage2 = photo;
+                selectedImage2Path = localPath;
+                setState(() {});
               },
             ),
             const Gap(15),
@@ -850,78 +844,72 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage3,
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
-                await picker
-                    .pickImage(
+                if (!mounted) return;
+                final photo = await picker.pickImage(
                   source: ImageSource.camera,
                   maxHeight: 600,
                   maxWidth: 600,
                   imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
-
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-
-                      selectedImage3 = photo;
-                      selectedImage3Path = localPath;
-                      setState(() {});
-                    }
-                  },
                 );
+                if (!mounted || photo == null) return;
+                final appDir = await getApplicationDocumentsDirectory();
+                final customDir = Directory('${appDir.path}/MyImages');
+
+                // Crea el directorio si no existe
+                if (!await customDir.exists()) {
+                  await customDir.create(recursive: true);
+                  log('Directorio creado: ${customDir.path}');
+                }
+                // Define la ruta de la imagen en el directorio
+                final localPath =
+                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                // Copia la imagen seleccionada al directorio
+                final imageFile = File(photo.path);
+                await imageFile.copy(localPath);
+                if (!mounted) return;
+                selectedImage3 = photo;
+                selectedImage3Path = localPath;
+                setState(() {});
               },
             ),
-            const Gap(15),
-            UploadImageWidget(
-              selectedImage: selectedImage4,
-              title: '4-  ${'Agregar foto de cedula'.tr()}',
-              onPressed: () async {
-                await picker
-                    .pickImage(
-                  source: ImageSource.camera,
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  imageQuality: 85,
-                )
-                    .then(
-                  (XFile? photo) async {
-                    if (photo != null) {
-                      final appDir = await getApplicationDocumentsDirectory();
-                      final customDir = Directory('${appDir.path}/MyImages');
+            // UploadImageWidget(
+            //   selectedImage: selectedImage4,
+            //   title: '4-  ${'Agregar foto de cedula'.tr()}',
+            //   onPressed: () async {
+            //     await picker
+            //         .pickImage(
+            //       source: ImageSource.camera,
+            //       maxHeight: 600,
+            //       maxWidth: 600,
+            //       imageQuality: 85,
+            //     )
+            //         .then(
+            //       (XFile? photo) async {
+            //         if (photo != null) {
+            //           final appDir = await getApplicationDocumentsDirectory();
+            //           final customDir = Directory('${appDir.path}/MyImages');
 
-                      // Crea el directorio si no existe
-                      if (!await customDir.exists()) {
-                        await customDir.create(recursive: true);
-                        log('Directorio creado: ${customDir.path}');
-                      }
-                      // Define la ruta de la imagen en el directorio
-                      final localPath =
-                          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+            //           // Crea el directorio si no existe
+            //           if (!await customDir.exists()) {
+            //             await customDir.create(recursive: true);
+            //             log('Directorio creado: ${customDir.path}');
+            //           }
+            //           // Define la ruta de la imagen en el directorio
+            //           final localPath =
+            //               '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                      // Copia la imagen seleccionada al directorio
-                      final imageFile = File(photo.path);
-                      await imageFile.copy(localPath);
-                      selectedImage4 = photo;
-                      selectedImage4Path = localPath;
-                      setState(() {});
-                    }
-                  },
-                );
-              },
-            ),
+            //           // Copia la imagen seleccionada al directorio
+            //           final imageFile = File(photo.path);
+            //           await imageFile.copy(localPath);
+            //           selectedImage4 = photo;
+            //           selectedImage4Path = localPath;
+            //           setState(() {});
+            //         }
+            //       },
+            //     );
+            //   },
+            // ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -930,8 +918,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               onNextPressed: () async {
                 if (selectedImage == null ||
                     selectedImage2 == null ||
-                    selectedImage3 == null ||
-                    selectedImage4 == null) {
+                    selectedImage3 == null) {
                   await customPopUp(
                     context: context,
                     dismissOnTouchOutside: false,
@@ -953,7 +940,6 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                         imagen1: selectedImage1Path!,
                         imagen2: selectedImage2Path!,
                         imagen3: selectedImage3Path!,
-                        fotoCedula: selectedImage4Path!,
                       );
                   widget.controller.nextPage(
                     duration: const Duration(
@@ -1112,13 +1098,11 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -1131,6 +1115,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -1217,7 +1202,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveAnswersOnLocalDB(
+                                ? await saveAnswersOnLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -1231,8 +1216,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -1240,6 +1224,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 : context
                                     .read<AguaYSaneamientoCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -1257,12 +1242,14 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
     );
   }
 
-  void saveAnswersOnLocalDB(
+  saveAnswersOnLocalDB(
     BuildContext context,
     AguaYSaneamientoState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1293,14 +1280,13 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }
 
@@ -1323,7 +1309,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
-    final isConnected = context.read<InternetConnectionCubit>().state;
+    final isConnected = context.watch<InternetConnectionCubit>().state;
     final imageProvider = context.watch<UploadUserFileCubit>().state;
 
     return Column(
@@ -1395,13 +1381,11 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -1414,6 +1398,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -1500,7 +1485,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveMejoraViviendaForm(
+                                ? await saveMejoraViviendaForm(
                                     context,
                                     state,
                                     ImageModel()
@@ -1514,8 +1499,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -1523,6 +1507,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                 : context
                                     .read<MejoraViviendaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -1541,11 +1526,14 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   }
 
   saveMejoraViviendaForm(
-    BuildContext context,
+    BuildContext ctx,
     MejoraViviendaState state,
     ImageModel imageModel,
     String msgDialog,
-  ) {
+  ) async {
+    if (!context.mounted) return;
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1571,13 +1559,12 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }

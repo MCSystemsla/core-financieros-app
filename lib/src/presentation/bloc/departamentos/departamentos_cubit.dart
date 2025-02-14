@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/departamentos_response.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'departamentos_state.dart';

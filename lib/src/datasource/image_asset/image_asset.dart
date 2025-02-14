@@ -3,6 +3,7 @@ abstract class ImageAsset {
   static const String homeLangESUrl = 'assets/images/bandera_espanol.svg';
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
   static const String loader = 'assets/images/loader.gif';
+  static const String error = 'assets/images/error_lottie.json';
 
   // * Auth
 
