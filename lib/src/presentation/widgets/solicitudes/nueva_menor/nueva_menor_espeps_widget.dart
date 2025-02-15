@@ -23,80 +23,6 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Beneficiario Seguro',
-            hintText: 'Ingresa Beneficiario Seguro',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ESCOLARIDAD',
-            onChanged: (item) {},
-            title: 'Escolaridad',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.child_care,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cantidad de Hijos',
-            hintText: 'Ingresa Cantidad de Hijos',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nombre Público',
-            hintText: 'Ingresa Nombre Público',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'SEXO',
-            onChanged: (item) {},
-            title: 'Sexo',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'País de Nacimiento',
-            hintText: 'Selecciona País de Nacimiento',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nacionalidad del Cónyuge',
-            hintText: 'Ingresa Nacionalidad del Cónyuge',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_on,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Ubicación',
-            hintText: 'Ingresa Ubicación',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
               Icons.security,
               color: AppColors.getPrimaryColor(),
             ),
@@ -202,14 +128,11 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorNacionalidad(
             title: 'País PEPs 2',
             hintText: 'Selecciona País PEPs 2',
-            isValid: null,
+            onChanged: (item) {},
+            codigo: 'PAIS',
           ),
           const Gap(20),
           Container(

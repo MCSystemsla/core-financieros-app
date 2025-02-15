@@ -42,13 +42,13 @@ class CrearSolicitudScreen extends StatelessWidget {
                 NuevaMenorBusinessDataWidget(
                   pageController: pageController,
                 ),
-                NuevaMenorBeneficiarioWidget(
-                  pageController: pageController,
-                ),
                 NuevaMenorEsPepsWidget(
                   pageController: pageController,
                 ),
-                NuevaMenorActividadWidget(
+                NuevaMenorCreditoWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorBeneficiarioWidget(
                   pageController: pageController,
                 ),
               ],

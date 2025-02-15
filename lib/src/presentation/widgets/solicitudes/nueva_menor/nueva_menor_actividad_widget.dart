@@ -3,12 +3,11 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorActividadWidget extends StatelessWidget {
-  const NuevaMenorActividadWidget({
+class NuevaMenorBeneficiarioWidget extends StatelessWidget {
+  const NuevaMenorBeneficiarioWidget({
     super.key,
     required this.pageController,
   });
@@ -22,35 +21,13 @@ class NuevaMenorActividadWidget extends StatelessWidget {
       child: Column(
         children: [
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'RUBROACTIVIDAD',
-            title: 'Rubro Actividad',
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ACTIVIDADECONOMICA',
-            onChanged: (item) {},
-            title: 'Actividad Predominante',
-          ),
-          const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
               Icons.family_restroom,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Es Familiar Empleado',
-            hintText: 'Selecciona Es Familiar Empleado',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nombre Familiar',
-            hintText: 'Ingresa Nombre Familiar',
+            title: 'Beneficiario Seguro',
+            hintText: 'Ingresa Beneficiario Seguro',
             isValid: null,
           ),
           const Gap(20),
@@ -59,50 +36,45 @@ class NuevaMenorActividadWidget extends StatelessWidget {
               Icons.credit_card,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Cedula Familiar',
-            hintText: 'Ingresa Cedula Familiar',
+            title: 'Cedula Beneficiario Seguro',
+            hintText: 'Ingresa Cedula Beneficiario Seguro',
+            isValid: null,
+          ),
+          const Gap(20),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'PARENTESCO',
+            title: 'Parentesco Beneficiario Seguro',
+            hintText: 'Ingresa Parentesco Beneficiario Seguro',
+            onChanged: (item) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.security,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Beneficiario Seguro 1',
+            hintText: 'Ingresa Beneficiario Seguro 1',
             isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.document_scanner,
+              Icons.credit_card,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Tipo Documento ID',
-            hintText: 'Selecciona Tipo Documento ID',
+            title: 'Cedula Beneficiario Seguro 1',
+            hintText: 'Ingresa Cedula Beneficiario Seguro 1',
             isValid: null,
           ),
           const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'RUBROACTIVIDAD',
-            title: 'Rubro Actividad 2',
-          ),
-          const Gap(20),
-          const SearchDropdownWidget(
-            codigo: 'RUBROACTIVIDAD',
-            title: 'Rubro Actividad 3',
-          ),
-          const Gap(20),
           CatalogoValorDropdownWidget(
             initialValue: '',
-            codigo: 'ACTIVIDADECONOMICA',
+            codigo: 'PARENTESCO',
+            title: 'Parentesco Beneficiario Seguro 1',
+            hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
             onChanged: (item) {},
-            title: 'Rubro Actividad Predominante',
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'TIPOSPERSONACREDITO',
-            onChanged: (item) {},
-            title: 'Tipo Persona',
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'TIPOSPERSONACREDITO',
-            onChanged: (item) {},
-            title: 'Tipo Persona ID',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -120,28 +92,8 @@ class NuevaMenorActividadWidget extends StatelessWidget {
               Icons.phone,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Telefono Beneficiario Seguro 1',
-            hintText: 'Ingresa Telefono Beneficiario Seguro 1',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Plazo Solicitud',
-            hintText: 'Ingresa Plazo Solicitud',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Fecha Primer Pago Solicitud',
-            hintText: 'Ingresa Fecha Primer Pago Solicitud',
+            title: 'Telefono Beneficiario 1',
+            hintText: 'Ingresa Telefono Beneficiario 1',
             isValid: null,
           ),
           const Gap(20),

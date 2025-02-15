@@ -3,11 +3,12 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorBeneficiarioWidget extends StatelessWidget {
-  const NuevaMenorBeneficiarioWidget({
+class NuevaMenorCreditoWidget extends StatelessWidget {
+  const NuevaMenorCreditoWidget({
     super.key,
     required this.pageController,
   });
@@ -21,90 +22,81 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
       child: Column(
         children: [
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorDropdownWidget(
+            initialValue: '',
+            codigo: 'MONEDA',
+            onChanged: (item) {},
             title: 'Beneficiario Seguro',
             hintText: 'Ingresa Beneficiario Seguro',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.credit_card,
+              Icons.price_change,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Cedula Beneficiario Seguro',
-            hintText: 'Ingresa Cedula Beneficiario Seguro',
+            title: 'Monto',
+            hintText: 'Ingresa Monto',
             isValid: null,
+          ),
+          const Gap(20),
+          const SearchDropdownWidget(
+            codigo: 'DESTINOCREDITO',
+            title: 'Proposito',
+          ),
+          const Gap(20),
+          // TODO: AGREGAR ENDPOINT DE PRODUCTO
+          const SearchDropdownWidget(
+            codigo: 'DESTINOCREDITO',
+            title: 'PRODUCTO',
           ),
           const Gap(20),
           CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'PARENTESCO',
             onChanged: (item) {},
-            title: 'Parentesco Beneficiario Seguro',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Beneficiario Seguro 1',
-            hintText: 'Ingresa  Beneficiario Seguro 1',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cedula Beneficiario Seguro 1',
-            hintText: 'Ingresa Cedula Beneficiario Seguro 1',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
             initialValue: '',
-            codigo: 'PARENTESCO',
-            onChanged: (item) {},
-            title: 'Parentesco Beneficiario Seguro 1',
+            codigo: 'FRECUENCIAPAGO',
+            title: 'Frecuencia de Pago',
           ),
-
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.production_quantity_limits,
+              Icons.price_change,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Producto',
-            hintText: 'Selecciona Producto',
+            title: 'Plazo Solicitud',
+            hintText: 'Ingresa Plazo Solicitud',
             isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.comment,
+              Icons.payment,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Fecha de Primer Pago Solicitud',
+            hintText: 'Ingresa Fecha de Primer Pago Solicitud',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.payment,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Cuota',
+            hintText: 'Ingresa Cuota',
+            isValid: null,
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.remove_red_eye,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'Observacion',
             hintText: 'Ingresa Observacion',
             isValid: null,
           ),
-          // const Gap(20),
-          // OutlineTextfieldWidget(
-          //   icon: Icon(
-          //     Icons.location_city,
-          //     color: AppColors.getPrimaryColor(),
-          //   ),
-          //   title: 'Sucursal',
-          //   hintText: 'Selecciona Sucursal',
-          //   isValid: null,
-          // ),
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
