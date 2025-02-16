@@ -47,8 +47,8 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
           const Gap(20),
           // TODO: AGREGAR ENDPOINT DE PRODUCTO
           const SearchDropdownWidget(
-            codigo: 'DESTINOCREDITO',
-            title: 'PRODUCTO',
+            codigo: 'PRODUCTO',
+            title: 'Producto',
           ),
           const Gap(20),
           CatalogoValorDropdownWidget(

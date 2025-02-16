@@ -116,6 +116,10 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         codigo: 'TIPODOCUMENTOPERSONA',
         isConnected: isConnected,
       );
+      await getCatalogoByCodigo(
+        codigo: 'PRODUCTO',
+        isConnected: isConnected,
+      );
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } catch (e) {
@@ -326,6 +330,20 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
               valor: item.valor,
               nombre: item.nombre,
               type: 'TIPODOCUMENTOPERSONA',
+            ));
+          }
+          break;
+        case 'PRODUCTO':
+          final query = _objectBoxService.catalogoBox
+              .query(CatalogoLocalDb_.type.equals(codigo))
+              .build();
+
+          query.remove();
+          for (var item in items) {
+            _objectBoxService.catalogoBox.put(CatalogoLocalDb(
+              valor: item.valor,
+              nombre: item.nombre,
+              type: 'PRODUCTO',
             ));
           }
           break;
