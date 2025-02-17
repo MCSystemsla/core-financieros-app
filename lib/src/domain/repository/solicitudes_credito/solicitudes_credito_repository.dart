@@ -14,6 +14,7 @@ abstract class SolicitudesCreditoRepository {
   Future<CatalogoNacionalidad> getNacionalidadByCodigo({
     required String codigo,
   });
+  Future<CatalogoValor> getCatalogoProductos();
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -58,6 +59,19 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = CatalogoNacionalidad.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getCatalogoProductos() async {
+    final endpoint = ProductosEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = CatalogoValor.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

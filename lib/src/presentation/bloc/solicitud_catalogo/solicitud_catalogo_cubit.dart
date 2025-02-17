@@ -31,6 +31,23 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     }
   }
 
+  Future<void> getandSaveProductos() async {
+    final data = await _repository.getCatalogoProductos();
+
+    final query = _objectBoxService.catalogoBox
+        .query(CatalogoLocalDb_.type.equals('PRODUCTO'))
+        .build();
+
+    query.remove();
+    for (var item in data.data) {
+      _objectBoxService.catalogoBox.put(CatalogoLocalDb(
+        valor: item.valor,
+        nombre: item.nombre,
+        type: 'PRODUCTO',
+      ));
+    }
+  }
+
   Future<void> getAndSaveDepartamentos() async {
     try {
       final data = await departamentoRepository.getDepartamentos();
@@ -120,6 +137,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         codigo: 'PRODUCTO',
         isConnected: isConnected,
       );
+      await getandSaveProductos();
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } catch (e) {

@@ -60,3 +60,22 @@ class NacionalidadEndpoint extends Endpoint {
         'codigo': codigo,
       };
 }
+
+class ProductosEndpoint extends Endpoint {
+  ProductosEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-catalogo-productos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        // if (queryParams != null) ...queryParams!,
+        'database': LocalStorage().database,
+      };
+}
