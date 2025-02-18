@@ -24,6 +24,7 @@ abstract class ImageAsset {
   static const String nuevaMenorBg = 'assets/images/credit3.svg';
   static const String nuevaMenorBg2 = 'assets/images/credit4.svg';
   static const String nuevaMenorBg3 = 'assets/images/credit2.svg';
+  static const String nuevaAddDni = 'assets/images/add_dni.svg';
 
   // Download Catalogos
   static const String downloadCatalogoLoading =
