@@ -195,9 +195,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'FechaNacimiento',
-                  hintText: 'Ingresa Fecha Nacimiento',
+                  hintText:
+                      state.userCedulaResponse.fechaNacimiento.selectorFormat(),
                   isValid: null,
-                  textEditingController: fechaNacimientoController,
+                  // textEditingController: fechaNacimientoController,
                   isRequired: true,
                 ),
                 const Gap(30),
@@ -224,6 +225,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                 ),
                 const Gap(30),
                 CatalogoValorDropdownWidget(
+                  hintText: state.userCedulaResponse.sexo,
                   initialValue: '',
                   codigo: 'SEXO',
                   onChanged: (item) {},

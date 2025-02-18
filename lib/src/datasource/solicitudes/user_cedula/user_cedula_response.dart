@@ -12,8 +12,8 @@ class UserCedulaResponse {
   final DateTime fechaNacimiento;
   final String sexo;
   final String pais;
-  final String departamento;
-  final String municipio;
+  final String? departamento;
+  final String? municipio;
   final String direccion;
   final DateTime fechaEmision;
   final DateTime fechaExpira;
@@ -28,8 +28,8 @@ class UserCedulaResponse {
     required this.fechaNacimiento,
     required this.sexo,
     required this.pais,
-    required this.departamento,
-    required this.municipio,
+    this.departamento,
+    this.municipio,
     required this.direccion,
     required this.fechaEmision,
     required this.fechaExpira,

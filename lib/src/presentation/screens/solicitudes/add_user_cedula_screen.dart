@@ -81,15 +81,11 @@ class AddUserCedulaScreen extends StatelessWidget {
                   const Gap(20),
                   OutlineTextfieldWidget(
                     textEditingController: cedulaController,
-                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'input.input_validator'.tr();
                       }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0) {
-                        return 'Valor no valido'.tr();
-                      }
+
                       return null;
                     },
                     icon: Icon(
