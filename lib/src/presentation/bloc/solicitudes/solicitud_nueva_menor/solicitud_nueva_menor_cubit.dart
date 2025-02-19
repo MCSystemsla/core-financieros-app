@@ -13,6 +13,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
 
   Future<void> createSolicitudNuevaMenor() async {
     try {
+      emit(state.copyWith(status: Status.inProgress));
+      await Future.delayed(const Duration(seconds: 3));
       final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: SolicitudNuevaMenor(
         objOrigenSolicitudId: state.objOrigenSolicitudId,

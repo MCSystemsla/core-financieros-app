@@ -1,12 +1,16 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorMontoWidget extends StatelessWidget {
+class NuevaMenorMontoWidget extends StatefulWidget {
   const NuevaMenorMontoWidget({
     super.key,
     required this.pageController,
@@ -14,6 +18,23 @@ class NuevaMenorMontoWidget extends StatelessWidget {
 
   final PageController pageController;
 
+  @override
+  State<NuevaMenorMontoWidget> createState() => _NuevaMenorMontoWidgetState();
+}
+
+class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
+  String? estadoCivil;
+  String? nacionalidadConyuge;
+  String? nombreConyuge;
+  String? trabajaConyuge;
+  String? trabajoConyuge;
+  String? direccionTrabajoConyuge;
+  String? telefonoTrabajoConyuge;
+  String? cantidadHijos;
+  String? esFamiliarEmpleado;
+  String? nombreFamiliarEmpleado;
+  String? cedulaFamiliarEmpleado;
+  String? personasACargo;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -23,14 +44,19 @@ class NuevaMenorMontoWidget extends StatelessWidget {
           const Gap(20),
           CatalogoValorDropdownWidget(
             title: 'Estado Civil',
-            initialValue: '',
             codigo: 'ESTADOCIVIL',
-            onChanged: (item) {},
+            onChanged: (item) {
+              if (item == null) return;
+              estadoCivil = item.valor;
+            },
           ),
           const Gap(20),
           CatalogoValorNacionalidad(
             codigo: 'PAIS',
-            onChanged: (item) {},
+            onChanged: (item) {
+              if (item == null) return;
+              nacionalidadConyuge = item.valor;
+            },
             hintText: 'Ingresa Nacionalidad Conyuge',
             title: 'Nacionalidad Conyuge',
           ),
@@ -42,17 +68,28 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             ),
             title: 'Nombre Conyuge',
             hintText: 'Ingresa nombre conyuge',
+            onChange: (value) {
+              nombreConyuge = value;
+            },
             isValid: null,
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.woman_2,
-              color: AppColors.getPrimaryColor(),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: JLuxDropdown(
+              dropdownColor: Colors.white,
+              isContainIcon: true,
+              title: 'Trabaja su conyuge',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                if (item == null) return;
+                trabajaConyuge = item;
+              },
+              toStringItem: (item) {
+                return item;
+              },
+              hintText: 'input.select_option'.tr(),
             ),
-            title: 'Trabaja Conyuge',
-            hintText: 'Trabaja Conyuge',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -63,6 +100,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Trabajo de Conyuge',
             hintText: 'Ingresa el Trabajo de Conyuge',
             isValid: null,
+            onChange: (value) {
+              trabajoConyuge = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -73,6 +113,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Direccion Trabajo Conyuge',
             hintText: 'Ingresa el Trabajo de Conyuge',
             isValid: null,
+            onChange: (value) {
+              direccionTrabajoConyuge = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -83,6 +126,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Telefono Trabajo Conyuge',
             hintText: 'Ingresa el Telefono de Conyuge',
             isValid: null,
+            onChange: (value) {
+              telefonoTrabajoConyuge = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -93,16 +139,27 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Cantidad Hijos',
             hintText: 'Ingresa Cantida de Hijos',
             isValid: null,
+            onChange: (value) {
+              cantidadHijos = value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: JLuxDropdown(
+              dropdownColor: Colors.white,
+              isContainIcon: true,
+              title: 'Es familiar empleado',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                if (item == null) return;
+                esFamiliarEmpleado = item;
+              },
+              toStringItem: (item) {
+                return item;
+              },
+              hintText: 'input.select_option'.tr(),
             ),
-            title: 'Es familiar empleado',
-            hintText: 'Es familiar empleado',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -113,6 +170,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Nombre familiar de empleado',
             hintText: 'Ingresa el nombre de empleado',
             isValid: null,
+            onChange: (value) {
+              nombreFamiliarEmpleado = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -123,6 +183,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Cedula familiar de empleado',
             hintText: 'Ingresa la cedula de empleado',
             isValid: null,
+            onChange: (value) {
+              cedulaFamiliarEmpleado = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -133,6 +196,9 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             title: 'Persona a cargo',
             hintText: 'Ingresa la persona a cargo',
             isValid: null,
+            onChange: (value) {
+              personasACargo = value;
+            },
           ),
           const Gap(20),
           Container(
@@ -142,7 +208,22 @@ class NuevaMenorMontoWidget extends StatelessWidget {
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                pageController.nextPage(
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      objEstadoCivilId: estadoCivil,
+                      nacionalidadConyugue: nacionalidadConyuge,
+                      nombreConyugue: nombreConyuge,
+                      trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),
+                      trabajoConyugue: trabajoConyuge,
+                      direccionTrabajoConyugue: direccionTrabajoConyuge,
+                      telefonoTrabajoConyugue: telefonoTrabajoConyuge,
+                      cantidadHijos: int.tryParse(cantidadHijos ?? ''),
+                      esFamiliarEmpleado:
+                          esFamiliarEmpleado == 'input.yes'.tr(),
+                      nombreFamiliar: nombreFamiliarEmpleado,
+                      cedulaFamiliar: cedulaFamiliarEmpleado,
+                      personasACargo: int.tryParse(personasACargo ?? ''),
+                    );
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
@@ -154,7 +235,7 @@ class NuevaMenorMontoWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(
               onPressed: () {
-                pageController.previousPage(
+                widget.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );

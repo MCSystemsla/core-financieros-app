@@ -1,13 +1,16 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorCreditoWidget extends StatelessWidget {
+class NuevaMenorCreditoWidget extends StatefulWidget {
   const NuevaMenorCreditoWidget({
     super.key,
     required this.pageController,
@@ -16,16 +19,50 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
   final PageController pageController;
 
   @override
+  State<NuevaMenorCreditoWidget> createState() =>
+      _NuevaMenorCreditoWidgetState();
+}
+
+class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
+  String? beneficiarioSeguro;
+  String? monto;
+  String? proposito;
+  String? producto;
+  String? frecuenciaDePago;
+  String? plazoSolicitud;
+  String? cuota;
+  String? observacion;
+  DateTime? fechaPrimerPago;
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaPrimerPago,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaPrimerPago) {
+      fechaPrimerPago = picked;
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'MONEDA',
-            onChanged: (item) {},
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.person,
+              color: AppColors.getPrimaryColor(),
+            ),
+            onChange: (item) {
+              if (item == null) return;
+              beneficiarioSeguro = item;
+            },
             title: 'Beneficiario Seguro',
             hintText: 'Ingresa Beneficiario Seguro',
           ),
@@ -38,21 +75,34 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
             title: 'Monto',
             hintText: 'Ingresa Monto',
             isValid: null,
+            onChange: (value) {
+              monto = value;
+            },
           ),
           const Gap(20),
-          const SearchDropdownWidget(
+          SearchDropdownWidget(
             codigo: 'DESTINOCREDITO',
             title: 'Proposito',
+            onChanged: (item) {
+              if (item == null) return;
+              monto = item.value;
+            },
           ),
           const Gap(20),
-          const SearchDropdownWidget(
+          SearchDropdownWidget(
             codigo: 'PRODUCTO',
             title: 'Producto',
+            onChanged: (item) {
+              if (item == null) return;
+              producto = item.value;
+            },
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            onChanged: (item) {},
-            initialValue: '',
+          SearchDropdownWidget(
+            onChanged: (item) {
+              if (item == null) return;
+              frecuenciaDePago = item.value;
+            },
             codigo: 'FRECUENCIAPAGO',
             title: 'Frecuencia de Pago',
           ),
@@ -65,15 +115,21 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
             title: 'Plazo Solicitud',
             hintText: 'Ingresa Plazo Solicitud',
             isValid: null,
+            onChange: (value) {
+              plazoSolicitud = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            readOnly: true,
+            onTap: () => selectDate(context),
             icon: Icon(
               Icons.payment,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'Fecha de Primer Pago Solicitud',
-            hintText: 'Ingresa Fecha de Primer Pago Solicitud',
+            hintText: fechaPrimerPago?.selectorFormat() ??
+                'Ingresar fecha primer pago',
             isValid: null,
           ),
           const Gap(20),
@@ -85,6 +141,9 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
             title: 'Cuota',
             hintText: 'Ingresa Cuota',
             isValid: null,
+            onChange: (value) {
+              cuota = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -95,6 +154,9 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
             title: 'Observacion',
             hintText: 'Ingresa Observacion',
             isValid: null,
+            onChange: (value) {
+              observacion = value;
+            },
           ),
           const Gap(20),
           Container(
@@ -104,7 +166,19 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                pageController.nextPage(
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      beneficiarioSeguro1: beneficiarioSeguro,
+                      monto: int.tryParse(monto ?? ''),
+                      objPropositoId: proposito,
+                      objProductoId: producto,
+                      objFrecuenciaId: frecuenciaDePago,
+                      plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                      fechaPrimerPagoSolicitud:
+                          fechaPrimerPago?.toUtc().toIso8601String(),
+                      cuota: int.tryParse(cuota ?? ''),
+                      observacion: observacion,
+                    );
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
@@ -116,7 +190,7 @@ class NuevaMenorCreditoWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(
               onPressed: () {
-                pageController.previousPage(
+                widget.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );

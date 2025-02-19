@@ -26,6 +26,14 @@ class NuevaMenorWorkingDataWidget extends StatefulWidget {
 class _NuevaMenorWorkingDataWidgetState
     extends State<NuevaMenorWorkingDataWidget> {
   String? initialValue;
+  String? paisDomicilio;
+  String? departamentoDomicilio;
+  String? municipioDomicilio;
+  String? barrioCasa;
+  String? condicionCasa;
+  String? anosResidirCasa;
+  String? comunidad;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -38,6 +46,7 @@ class _NuevaMenorWorkingDataWidgetState
             title: 'Pais Domicilio',
             onChanged: (item) {
               if (item == null) return;
+              paisDomicilio = item.valor;
             },
             codigo: 'PAIS',
             // initialValue: paisEmisor ?? '',
@@ -48,6 +57,7 @@ class _NuevaMenorWorkingDataWidgetState
             title: 'Departamento Domicilio',
             onChanged: (item) {
               if (item == null) return;
+              departamentoDomicilio = item.valor;
             },
             codigo: 'DEP',
             // initialValue: paisEmisor ?? '',
@@ -58,6 +68,7 @@ class _NuevaMenorWorkingDataWidgetState
             title: 'Municipio Domicilio',
             onChanged: (item) {
               if (item == null) return;
+              municipioDomicilio = item.valor;
             },
             codigo: 'MUN',
             // initialValue: paisEmisor ?? '',
@@ -70,6 +81,9 @@ class _NuevaMenorWorkingDataWidgetState
             ),
             title: 'Barrio Casa',
             hintText: 'Ingresa Barrio Casa',
+            onChange: (value) {
+              barrioCasa = value;
+            },
             isValid: null,
           ),
           const Gap(20),
@@ -79,8 +93,7 @@ class _NuevaMenorWorkingDataWidgetState
             codigo: 'TIPOVIVIENDA',
             onChanged: (item) {
               if (item == null) return;
-              initialValue = item.valor;
-              setState(() {});
+              condicionCasa = item.valor;
             },
           ),
           const Gap(20),
@@ -92,6 +105,9 @@ class _NuevaMenorWorkingDataWidgetState
             title: 'Años Residir Casa',
             hintText: 'Ingresa Años Residir Casa',
             isValid: null,
+            onChange: (value) {
+              anosResidirCasa = value;
+            },
           ),
           const Gap(20),
           Container(
@@ -99,9 +115,12 @@ class _NuevaMenorWorkingDataWidgetState
             child: JLuxDropdown(
               dropdownColor: Colors.white,
               isContainIcon: true,
-              title: 'Su comunidad es:',
+              title: 'Ubicacion',
               items: Origin.comunidades,
-              onChanged: (item) {},
+              onChanged: (item) {
+                if (item == null) return;
+                comunidad = item.valor;
+              },
               toStringItem: (item) {
                 return item.nombre;
               },
@@ -117,13 +136,19 @@ class _NuevaMenorWorkingDataWidgetState
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                context
-                    .read<SolicitudNuevaMenorCubit>()
-                    .createSolicitudNuevaMenor();
-                // widget.controller.nextPage(
-                //   duration: const Duration(milliseconds: 300),
-                //   curve: Curves.easeIn,
-                // );
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      barrioCasa: barrioCasa,
+                      objPaisCasaId: paisDomicilio,
+                      objDepartamentoCasaId: departamentoDomicilio,
+                      objMunicipioCasaId: municipioDomicilio,
+                      objCondicionCasaId: condicionCasa,
+                      anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
+                      ubicacion: comunidad,
+                    );
+                widget.controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
               },
             ),
           ),
