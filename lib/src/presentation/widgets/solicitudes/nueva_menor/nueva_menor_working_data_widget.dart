@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -7,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorWorkingDataWidget extends StatefulWidget {
@@ -115,10 +117,13 @@ class _NuevaMenorWorkingDataWidgetState
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                widget.controller.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+                context
+                    .read<SolicitudNuevaMenorCubit>()
+                    .createSolicitudNuevaMenor();
+                // widget.controller.nextPage(
+                //   duration: const Duration(milliseconds: 300),
+                //   curve: Curves.easeIn,
+                // );
               },
             ),
           ),

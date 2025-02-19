@@ -95,7 +95,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String objRubroActividad2;
   final String objRubroActividad3;
   final String objRubroActividadPredominante;
-  final int tipoPersona;
+  final String tipoPersona;
   final String objTipoPersonaId;
   final String telefonoBeneficiario;
   final String telefonoBeneficiarioSeguro1;
@@ -105,8 +105,8 @@ class SolicitudNuevaMenorState extends Equatable {
     this.errorMsg = '',
     this.status = Status.notStarted,
     this.objOrigenSolicitudId = 'CEL',
-    this.nombre1 = 'Juan',
-    this.nombre2 = 'Carlos',
+    this.nombre1 = '',
+    this.nombre2 = '',
     this.apellido1 = 'Perez',
     this.apellido2 = 'Lopez',
     this.cedula = '123456789',
@@ -195,7 +195,7 @@ class SolicitudNuevaMenorState extends Equatable {
     this.objRubroActividad2 = 'TERRENGANAD',
     this.objRubroActividad3 = 'MAQEQUIGANAD',
     this.objRubroActividadPredominante = 'GANADVACREPRODUC',
-    this.tipoPersona = 1,
+    this.tipoPersona = '',
     this.objTipoPersonaId = 'PERSONAFISICA',
     this.telefonoBeneficiario = '123-456-7890',
     this.telefonoBeneficiarioSeguro1 = '987-654-3210',
@@ -400,7 +400,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? objRubroActividad2,
     String? objRubroActividad3,
     String? objRubroActividadPredominante,
-    int? tipoPersona,
+    String? tipoPersona,
     String? objTipoPersonaId,
     String? telefonoBeneficiario,
     String? telefonoBeneficiarioSeguro1,

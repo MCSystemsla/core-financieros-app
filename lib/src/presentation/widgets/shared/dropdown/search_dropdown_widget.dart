@@ -9,12 +9,14 @@ class SearchDropdownWidget extends StatelessWidget {
   final String codigo;
   final String title;
   final bool isRequired;
+  final ItemCallback<Item>? onChanged;
 
   const SearchDropdownWidget({
     super.key,
     required this.codigo,
     required this.title,
     this.isRequired = false,
+    this.onChanged,
   });
 
   @override
@@ -64,7 +66,7 @@ class SearchDropdownWidget extends StatelessWidget {
             ),
             items: items,
             itemAsString: (Item? item) => item?.name ?? 'N/A',
-            onChanged: print,
+            onChanged: onChanged,
             selectedItem:
                 Item(name: '$title ${isRequired ? '*' : ''}', value: null),
           ),
