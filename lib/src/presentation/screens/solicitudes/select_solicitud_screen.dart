@@ -4,11 +4,12 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SelectSolicitudScreen extends StatelessWidget {
   const SelectSolicitudScreen({super.key});
@@ -16,13 +17,14 @@ class SelectSolicitudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
+    final repository = SolicitudCreditoRepositoryImpl();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           lazy: false,
           create: (ctx) => CatologoNacionalidadCubit(
-            SolicitudCreditoRepositoryImpl(),
+            repository,
             localDbProvider,
           )..saveAllCatalogos(
               isConnected:
@@ -60,7 +62,8 @@ class SelectSolicitudScreen extends StatelessWidget {
                   Expanded(
                     child: SolicitudCard(
                       onPressed: () {
-                        context.push('/solicitudes/solicitud-credito');
+                        context
+                            .pushTransparentRoute(const AddUserCedulaScreen());
                       },
                       svgPath: ImageAsset.nuevaMenorBg,
                       title: 'Nueva Menor',

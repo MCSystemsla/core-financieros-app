@@ -42,13 +42,13 @@ class CrearSolicitudScreen extends StatelessWidget {
                 NuevaMenorBusinessDataWidget(
                   pageController: pageController,
                 ),
-                NuevaMenorBeneficiarioWidget(
-                  pageController: pageController,
-                ),
                 NuevaMenorEsPepsWidget(
                   pageController: pageController,
                 ),
-                NuevaMenorActividadWidget(
+                NuevaMenorCreditoWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorBeneficiarioWidget(
                   pageController: pageController,
                 ),
               ],
@@ -151,11 +151,11 @@ class CatalogoValorDropdownWidget extends StatefulWidget {
   final String title;
   final ItemCallback<CatalogoLocalDb> onChanged;
   final String codigo;
-  final String initialValue;
+  final String? initialValue;
   final bool? isRequired;
   const CatalogoValorDropdownWidget({
     super.key,
-    required this.initialValue,
+    this.initialValue,
     required this.codigo,
     required this.onChanged,
     required this.title,
@@ -175,7 +175,7 @@ class _CatalogoValorDropdownWidgetState
   @override
   void initState() {
     super.initState();
-    value = widget.initialValue;
+    // value = widget.initialValue;
   }
 
   @override

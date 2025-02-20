@@ -1,12 +1,15 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorBusinessDataWidget extends StatelessWidget {
+class NuevaMenorBusinessDataWidget extends StatefulWidget {
   const NuevaMenorBusinessDataWidget({
     super.key,
     required this.pageController,
@@ -14,6 +17,30 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
 
   final PageController pageController;
 
+  @override
+  State<NuevaMenorBusinessDataWidget> createState() =>
+      _NuevaMenorBusinessDataWidgetState();
+}
+
+class _NuevaMenorBusinessDataWidgetState
+    extends State<NuevaMenorBusinessDataWidget> {
+  String? profesion;
+  String? ocupacion;
+  String? nombreNegocio;
+  String? condicionNegocio;
+  String? funcionamientoNegocio;
+  String? actividadPredominante;
+  String? rubroActividad;
+  String? rubroActividad2;
+  String? rubroActividad3;
+  String? actividadEconomica2;
+  String? sectorEconomico;
+  String? sectorEconomico2;
+  String? horarioTrabajo;
+  String? horarioVisita;
+  String? municipioNegocio;
+  String? barrioNegocio;
+  String? direccionNegocio;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -23,58 +50,50 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
+              Icons.work,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Profesion',
+            hintText: 'Ingresa Profesion',
+            isValid: null,
+            onChange: (value) {
+              profesion = value;
+            },
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.person_sharp,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Ocupacion',
+            hintText: 'Ingresa Ocupacion',
+            isValid: null,
+            onChange: (value) {
+              ocupacion = value;
+            },
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
               Icons.business,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'Nombre Negocio',
             hintText: 'Ingresa Nombre Negocio',
             isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.timer,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Tiempo Funcionamiento Negocio',
-            hintText: 'Ingresa Tiempo Funcionamiento Negocio',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_on,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Direccion Negocio',
-            hintText: 'Ingresa Direccion Negocio',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_city,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Barrio Negocio',
-            hintText: 'Ingresa Barrio Negocio',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_city,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Municipio Negocio',
-            hintText: 'Selecciona Municipio Negocio',
-            isValid: null,
+            onChange: (value) {
+              nombreNegocio = value;
+            },
           ),
           const Gap(20),
           CatalogoValorDropdownWidget(
             initialValue: '',
             codigo: 'TIPOVIVIENDA',
-            onChanged: (item) {},
+            onChanged: (item) {
+              if (item == null) return;
+              condicionNegocio = item.valor;
+            },
             title: 'Condicion Negocio',
           ),
           const Gap(20),
@@ -83,56 +102,114 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
               Icons.access_time,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Horario Trabajo',
-            hintText: 'Ingresa Horario Trabajo',
+            title: 'Tiempo Funcionamiento de Negocio',
+            hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
             isValid: null,
+            onChange: (value) {
+              funcionamientoNegocio = value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.access_time,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Horario Visita',
-            hintText: 'Ingresa Horario Visita',
-            isValid: null,
+          SearchDropdownWidget(
+            codigo: 'ACTIVIDADECONOMICA',
+            title: 'Actividad Predominante',
+            onChanged: (item) {
+              if (item == null) return;
+              actividadPredominante = item.value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.people,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Personas a Cargo',
-            hintText: 'Ingresa Personas a Cargo',
-            isValid: null,
+          SearchDropdownWidget(
+            codigo: 'RUBROACTIVIDAD',
+            title: 'Rubro Actividad Predominante',
+            onChanged: (item) {
+              rubroActividad = item?.value;
+            },
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'RUBROACTIVIDAD',
+            title: 'Rubro Actividad 2',
+            onChanged: (item) {
+              if (item == null) return;
+              rubroActividad2 = item.value;
+            },
+          ),
+          // const Gap(20),
+          // const SearchDropdownWidget(
+          //   codigo: 'RUBROACTIVIDAD',
+          //   title: 'Rubro Actividad 2',
+          // ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'ACTIVIDADECONOMICA',
+            title: 'Actividad 2',
+            onChanged: (item) {
+              if (item == null) return;
+              actividadEconomica2 = item.value;
+            },
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'RUBROACTIVIDAD',
+            title: 'Rubro Actividad 3',
+            onChanged: (item) {
+              if (item == null) return;
+              rubroActividad3 = item.value;
+            },
           ),
           const Gap(20),
           CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ESTADOCIVIL',
-            onChanged: (item) {},
-            title: 'Estado Civil',
+            codigo: 'SECTORECONOMICO',
+            onChanged: (item) {
+              if (item == null) return;
+              sectorEconomico = item.valor;
+            },
+            title: 'Sector Economico',
+          ),
+          const Gap(20),
+          CatalogoValorDropdownWidget(
+            codigo: 'SECTORECONOMICO',
+            onChanged: (item) {
+              if (item == null) return;
+              sectorEconomico2 = item.valor;
+            },
+            title: 'Sector Economico 2',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.person,
+              Icons.watch_later_sharp,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Nombre Conyugue',
-            hintText: 'Ingresa Nombre Conyugue',
+            title: 'Horario de Trabajo',
+            hintText: 'Ingresa Horario de Trabajo',
             isValid: null,
+            onChange: (value) {
+              horarioTrabajo = value;
+            },
           ),
-          const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.work,
+              Icons.watch_later_sharp,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Trabaja Conyugue',
-            hintText: 'Ingresa Trabaja Conyugue',
+            title: 'Horario de Visita',
+            hintText: 'Ingresa Horario de Visita',
             isValid: null,
+            onChange: (value) {
+              horarioVisita = value;
+            },
+          ),
+          const Gap(20),
+          CatalogoValorNacionalidad(
+            hintText: 'Ingresa Municipio de Negocio',
+            title: 'Municipio de Negocio',
+            onChanged: (item) {
+              if (item == null) return;
+              municipioNegocio = item.valor;
+            },
+            codigo: 'MUN',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -140,29 +217,25 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
               Icons.business,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Trabajo Conyugue',
-            hintText: 'Ingresa Trabajo Conyugue',
+            title: 'Barrio de Negocio',
+            hintText: 'Ingresa Barrio de Negocio',
             isValid: null,
+            onChange: (value) {
+              barrioNegocio = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.location_on,
+              Icons.location_on_rounded,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Direccion Trabajo Conyugue',
-            hintText: 'Ingresa Direccion Trabajo Conyugue',
+            title: 'Direccion de Negocio',
+            hintText: 'Ingresa Direccion de Negocio',
             isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.phone,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Telefono Trabajo Conyugue',
-            hintText: 'Ingresa Telefono Trabajo Conyugue',
-            isValid: null,
+            onChange: (value) {
+              direccionNegocio = value;
+            },
           ),
           const Gap(20),
           Container(
@@ -172,7 +245,30 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                pageController.nextPage(
+                // pageController.nextPage(
+                //   duration: const Duration(milliseconds: 300),
+                //   curve: Curves.easeIn,
+                // );
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      profesion: profesion,
+                      ocupacion: ocupacion,
+                      nombreNegocio: nombreNegocio,
+                      objCondicionNegocioId: condicionNegocio,
+                      tiempoFuncionamientoNegocio: funcionamientoNegocio,
+                      objActividadPredominante: actividadPredominante,
+                      objRubroActividad: rubroActividad,
+                      objRubroActividad2: rubroActividad2,
+                      objRubroActividad3: rubroActividad3,
+                      objActividadId2: actividadEconomica2,
+                      objSectorId: sectorEconomico,
+                      // sectorEconomico: sectorEconomico2,
+                      horarioTrabajo: horarioTrabajo,
+                      horarioVisita: horarioVisita,
+                      objMunicipioNegocioId: municipioNegocio,
+                      barrioNegocio: barrioNegocio,
+                      direccionNegocio: direccionNegocio,
+                    );
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
@@ -184,7 +280,7 @@ class NuevaMenorBusinessDataWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(
               onPressed: () {
-                pageController.previousPage(
+                widget.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );

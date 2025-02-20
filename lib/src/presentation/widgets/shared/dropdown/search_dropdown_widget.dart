@@ -3,17 +3,20 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class SearchDropdownWidget extends StatelessWidget {
   final String codigo;
   final String title;
   final bool isRequired;
+  final ItemCallback<Item>? onChanged;
 
   const SearchDropdownWidget({
     super.key,
     required this.codigo,
     required this.title,
     this.isRequired = false,
+    this.onChanged,
   });
 
   @override
@@ -28,21 +31,46 @@ class SearchDropdownWidget extends StatelessWidget {
     }).toList();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: DropdownSearch<Item>(
-        popupProps: const PopupProps.menu(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            decoration: InputDecoration(
-              labelText: 'Buscar',
-              border: OutlineInputBorder(),
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Gap(5),
+          Text(
+            '$title ${isRequired ? '*' : ''}',
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
-        ),
-        items: items,
-        itemAsString: (Item? item) => item?.name ?? 'N/A',
-        onChanged: print,
-        selectedItem:
-            Item(name: '$title ${isRequired ? '*' : ''}', value: null),
+          const Gap(15),
+          DropdownSearch<Item>(
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            popupProps: const PopupProps.menu(
+              showSearchBox: true,
+              searchFieldProps: TextFieldProps(
+                decoration: InputDecoration(
+                  labelText: 'Buscar',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                ),
+              ),
+            ),
+            items: items,
+            itemAsString: (Item? item) => item?.name ?? 'N/A',
+            onChanged: onChanged,
+            selectedItem:
+                Item(name: '$title ${isRequired ? '*' : ''}', value: null),
+          ),
+        ],
       ),
     );
   }

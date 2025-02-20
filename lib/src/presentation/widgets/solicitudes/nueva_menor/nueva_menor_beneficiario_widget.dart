@@ -1,18 +1,51 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorBeneficiarioWidget extends StatelessWidget {
-  const NuevaMenorBeneficiarioWidget({
+class NuevaMenorCreditoWidget extends StatefulWidget {
+  const NuevaMenorCreditoWidget({
     super.key,
     required this.pageController,
   });
 
   final PageController pageController;
+
+  @override
+  State<NuevaMenorCreditoWidget> createState() =>
+      _NuevaMenorCreditoWidgetState();
+}
+
+class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
+  String? beneficiarioSeguro;
+  String? monto;
+  String? proposito;
+  String? producto;
+  String? frecuenciaDePago;
+  String? plazoSolicitud;
+  String? cuota;
+  String? observacion;
+  DateTime? fechaPrimerPago;
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaPrimerPago,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaPrimerPago) {
+      fechaPrimerPago = picked;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,85 +59,105 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
               Icons.person,
               color: AppColors.getPrimaryColor(),
             ),
+            onChange: (item) {
+              if (item == null) return;
+              beneficiarioSeguro = item;
+            },
             title: 'Beneficiario Seguro',
             hintText: 'Ingresa Beneficiario Seguro',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.credit_card,
+              Icons.price_change,
               color: AppColors.getPrimaryColor(),
             ),
-            title: 'Cedula Beneficiario Seguro',
-            hintText: 'Ingresa Cedula Beneficiario Seguro',
+            title: 'Monto',
+            hintText: 'Ingresa Monto',
             isValid: null,
+            onChange: (value) {
+              monto = value;
+            },
           ),
           const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'PARENTESCO',
-            onChanged: (item) {},
-            title: 'Parentesco Beneficiario Seguro',
+          SearchDropdownWidget(
+            codigo: 'DESTINOCREDITO',
+            title: 'Proposito',
+            onChanged: (item) {
+              if (item == null) return;
+              monto = item.value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Beneficiario Seguro 1',
-            hintText: 'Ingresa  Beneficiario Seguro 1',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cedula Beneficiario Seguro 1',
-            hintText: 'Ingresa Cedula Beneficiario Seguro 1',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'PARENTESCO',
-            onChanged: (item) {},
-            title: 'Parentesco Beneficiario Seguro 1',
-          ),
-
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.production_quantity_limits,
-              color: AppColors.getPrimaryColor(),
-            ),
+          SearchDropdownWidget(
+            codigo: 'PRODUCTO',
             title: 'Producto',
-            hintText: 'Selecciona Producto',
+            onChanged: (item) {
+              if (item == null) return;
+              producto = item.value;
+            },
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            onChanged: (item) {
+              if (item == null) return;
+              frecuenciaDePago = item.value;
+            },
+            codigo: 'FRECUENCIAPAGO',
+            title: 'Frecuencia de Pago',
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.price_change,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Plazo Solicitud',
+            hintText: 'Ingresa Plazo Solicitud',
+            isValid: null,
+            onChange: (value) {
+              plazoSolicitud = value;
+            },
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            readOnly: true,
+            onTap: () => selectDate(context),
+            icon: Icon(
+              Icons.payment,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Fecha de Primer Pago Solicitud',
+            hintText: fechaPrimerPago?.selectorFormat() ??
+                'Ingresar fecha primer pago',
             isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             icon: Icon(
-              Icons.comment,
+              Icons.payment,
+              color: AppColors.getPrimaryColor(),
+            ),
+            title: 'Cuota',
+            hintText: 'Ingresa Cuota',
+            isValid: null,
+            onChange: (value) {
+              cuota = value;
+            },
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            icon: Icon(
+              Icons.remove_red_eye,
               color: AppColors.getPrimaryColor(),
             ),
             title: 'Observacion',
             hintText: 'Ingresa Observacion',
             isValid: null,
+            onChange: (value) {
+              observacion = value;
+            },
           ),
-          // const Gap(20),
-          // OutlineTextfieldWidget(
-          //   icon: Icon(
-          //     Icons.location_city,
-          //     color: AppColors.getPrimaryColor(),
-          //   ),
-          //   title: 'Sucursal',
-          //   hintText: 'Selecciona Sucursal',
-          //   isValid: null,
-          // ),
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -113,7 +166,19 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                pageController.nextPage(
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      beneficiarioSeguro1: beneficiarioSeguro,
+                      monto: int.tryParse(monto ?? ''),
+                      objPropositoId: proposito,
+                      objProductoId: producto,
+                      objFrecuenciaId: frecuenciaDePago,
+                      plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                      fechaPrimerPagoSolicitud:
+                          fechaPrimerPago?.toUtc().toIso8601String(),
+                      cuota: int.tryParse(cuota ?? ''),
+                      observacion: observacion,
+                    );
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
@@ -125,7 +190,7 @@ class NuevaMenorBeneficiarioWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(
               onPressed: () {
-                pageController.previousPage(
+                widget.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );

@@ -3,6 +3,8 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:logger/logger.dart';
 
@@ -14,6 +16,8 @@ abstract class SolicitudesCreditoRepository {
   Future<CatalogoNacionalidad> getNacionalidadByCodigo({
     required String codigo,
   });
+  Future<CatalogoValor> getCatalogoProductos();
+  Future<UserCedulaResponse> getUserByCedula({required String cedula});
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -58,6 +62,36 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = CatalogoNacionalidad.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getCatalogoProductos() async {
+    final endpoint = ProductosEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = CatalogoValor.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserCedulaResponse> getUserByCedula({required String cedula}) async {
+    final endpoint = UserCedulaEndpoint(cedula: cedula);
+
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        throw AppException.toAppException(resp['message']['message']);
+      }
+      final data = UserCedulaResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

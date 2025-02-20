@@ -1,12 +1,16 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorEsPepsWidget extends StatelessWidget {
+class NuevaMenorEsPepsWidget extends StatefulWidget {
   const NuevaMenorEsPepsWidget({
     super.key,
     required this.pageController,
@@ -15,94 +19,45 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
   final PageController pageController;
 
   @override
+  State<NuevaMenorEsPepsWidget> createState() => _NuevaMenorEsPepsWidgetState();
+}
+
+class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
+  String? esPeps;
+  String? nombreEntidadPeps;
+  String? paisPeps;
+  String? periodoPeps;
+  String? cargoOficialPeps;
+  String? tieneFamiliarPeps;
+  String? nombreFamiliarPeps;
+  String? parentesco;
+  String? cargoParentesco;
+  String? nombreEntidadPeps2;
+  String? periodoPeps2;
+  String? paisPeps2;
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: JLuxDropdown(
+              dropdownColor: Colors.white,
+              isContainIcon: true,
+              title: 'Es Peps',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                if (item == null) return;
+                esPeps = item;
+              },
+              toStringItem: (item) {
+                return item;
+              },
+              hintText: 'input.select_option'.tr(),
             ),
-            title: 'Beneficiario Seguro',
-            hintText: 'Ingresa Beneficiario Seguro',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'ESCOLARIDAD',
-            onChanged: (item) {},
-            title: 'Escolaridad',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.child_care,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cantidad de Hijos',
-            hintText: 'Ingresa Cantidad de Hijos',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nombre Público',
-            hintText: 'Ingresa Nombre Público',
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'SEXO',
-            onChanged: (item) {},
-            title: 'Sexo',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'País de Nacimiento',
-            hintText: 'Selecciona País de Nacimiento',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Nacionalidad del Cónyuge',
-            hintText: 'Ingresa Nacionalidad del Cónyuge',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.location_on,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Ubicación',
-            hintText: 'Ingresa Ubicación',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.security,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Es PEPs',
-            hintText: 'Selecciona Es PEPs',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -113,26 +68,19 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Nombre de Entidad PEPs',
             hintText: 'Ingresa Nombre de Entidad PEPs',
             isValid: null,
+            onChange: (value) {
+              nombreEntidadPeps = value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorNacionalidad(
+            hintText: 'Selecciona Pais Peps',
             title: 'País PEPs',
-            hintText: 'Selecciona País PEPs',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Periodo PEPs',
-            hintText: 'Ingresa Periodo PEPs',
-            isValid: null,
+            onChanged: (item) {
+              if (item == null || !mounted) return;
+              paisPeps = item.valor;
+            },
+            codigo: 'PAIS',
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -143,16 +91,27 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Cargo Oficial PEPs',
             hintText: 'Ingresa Cargo Oficial PEPs',
             isValid: null,
+            onChange: (value) {
+              cargoOficialPeps = value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: JLuxDropdown(
+              dropdownColor: Colors.white,
+              isContainIcon: true,
+              title: 'Tiene Familiar PEPs',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                if (item == null) return;
+                tieneFamiliarPeps = item;
+              },
+              toStringItem: (item) {
+                return item;
+              },
+              hintText: 'input.select_option'.tr(),
             ),
-            title: 'Tiene Familiar PEPs',
-            hintText: 'Selecciona Tiene Familiar PEPs',
-            isValid: null,
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -163,12 +122,17 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Nombre Familiar PEPs 2',
             hintText: 'Ingresa Nombre Familiar PEPs 2',
             isValid: null,
+            onChange: (value) {
+              nombreFamiliarPeps = value;
+            },
           ),
           const Gap(20),
           CatalogoValorDropdownWidget(
-            initialValue: '',
             codigo: 'PARENTESCO',
-            onChanged: (item) {},
+            onChanged: (item) {
+              if (item == null) return;
+              parentesco = item.valor;
+            },
             title: 'Parentesco Familiar PEPs 2',
           ),
           const Gap(20),
@@ -180,6 +144,9 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Cargo Familiar PEPs 2',
             hintText: 'Ingresa Cargo Familiar PEPs 2',
             isValid: null,
+            onChange: (value) {
+              cargoParentesco = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -190,6 +157,9 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Nombre Entidad PEPs 2',
             hintText: 'Ingresa Nombre Entidad PEPs 2',
             isValid: null,
+            onChange: (value) {
+              nombreEntidadPeps2 = value;
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
@@ -200,16 +170,19 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             title: 'Periodo PEPs 2',
             hintText: 'Ingresa Periodo PEPs 2',
             isValid: null,
+            onChange: (value) {
+              periodoPeps2 = value;
+            },
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.flag,
-              color: AppColors.getPrimaryColor(),
-            ),
+          CatalogoValorNacionalidad(
             title: 'País PEPs 2',
             hintText: 'Selecciona País PEPs 2',
-            isValid: null,
+            onChanged: (item) {
+              if (item == null) return;
+              paisPeps2 = item.valor;
+            },
+            codigo: 'PAIS',
           ),
           const Gap(20),
           Container(
@@ -219,7 +192,21 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
               onPressed: () {
-                pageController.nextPage(
+                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      espeps: esPeps == 'input.yes'.tr(),
+                      nombreDeEntidadPeps: nombreEntidadPeps,
+                      paisPeps: paisPeps,
+                      periodoPeps: periodoPeps,
+                      cargoOficialPeps: cargoOficialPeps,
+                      tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                      nombreFamiliar: nombreFamiliarPeps,
+                      parentescoFamiliarPeps2: parentesco,
+                      cargoFamiliarPeps2: cargoParentesco,
+                      nombreFamiliarPeps2: nombreEntidadPeps2,
+                      periodoPeps2: periodoPeps2,
+                      paisPeps2: paisPeps2,
+                    );
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
@@ -231,7 +218,7 @@ class NuevaMenorEsPepsWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomOutLineButton(
               onPressed: () {
-                pageController.previousPage(
+                widget.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
