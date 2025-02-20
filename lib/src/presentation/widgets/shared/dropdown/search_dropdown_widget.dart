@@ -43,32 +43,46 @@ class SearchDropdownWidget extends StatelessWidget {
                 ),
           ),
           const Gap(15),
-          DropdownSearch<Item>(
-            dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
                 ),
-              ),
+              ],
             ),
-            popupProps: const PopupProps.menu(
-              showSearchBox: true,
-              searchFieldProps: TextFieldProps(
-                decoration: InputDecoration(
-                  labelText: 'Buscar',
+            child: DropdownSearch<Item>(
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
+              popupProps: const PopupProps.menu(
+                showSearchBox: true,
+                searchFieldProps: TextFieldProps(
+                  decoration: InputDecoration(
+                    labelText: 'Buscar',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
+              ),
+              items: items,
+              itemAsString: (Item? item) => item?.name ?? 'N/A',
+              onChanged: onChanged,
+              selectedItem:
+                  Item(name: '$title ${isRequired ? '*' : ''}', value: null),
             ),
-            items: items,
-            itemAsString: (Item? item) => item?.name ?? 'N/A',
-            onChanged: onChanged,
-            selectedItem:
-                Item(name: '$title ${isRequired ? '*' : ''}', value: null),
           ),
         ],
       ),
