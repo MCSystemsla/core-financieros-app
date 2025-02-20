@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -127,7 +128,6 @@ class _NuevaMenorWorkingDataWidgetState
               hintText: 'input.select_option'.tr(),
             ),
           ),
-          // * TODO: Agregar Geolocator para anadir Latitud y Longitud
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -135,7 +135,11 @@ class _NuevaMenorWorkingDataWidgetState
             child: CustomElevatedButton(
               text: 'Siguiente',
               color: AppColors.greenLatern.withOpacity(0.4),
-              onPressed: () {
+              onPressed: () async {
+                final geolocationService = GeolocationService(context: context);
+                final currentLocation =
+                    await geolocationService.getCurrentLocation();
+                if (!context.mounted) return;
                 context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                       barrioCasa: barrioCasa,
                       objPaisCasaId: paisDomicilio,
@@ -144,6 +148,8 @@ class _NuevaMenorWorkingDataWidgetState
                       objCondicionCasaId: condicionCasa,
                       anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
                       ubicacion: comunidad,
+                      ubicacionLatitud: currentLocation?.latitude.toString(),
+                      ubicacionLongitud: currentLocation?.longitude.toString(),
                     );
                 widget.controller.nextPage(
                   duration: const Duration(milliseconds: 300),
