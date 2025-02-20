@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +40,13 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
                   isUploadingForms: true,
                 ),
               ),
-            Status.error => Text(state.errorMsg),
+            Status.error => OnErrorWidget(
+                onPressed: () {
+                  context
+                      .read<SolicitudNuevaMenorCubit>()
+                      .createSolicitudNuevaMenor();
+                },
+              ),
             _ => const SizedBox(),
           },
         );
