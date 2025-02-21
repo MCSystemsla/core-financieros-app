@@ -33,152 +33,156 @@ class _NuevaMenorBeneficiarioWidgetState
   String? parentescoBeneficiarioSeguro1;
   String? telefonoBeneficiario;
   String? telefonoBeneficiario1;
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        children: [
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.family_restroom,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Beneficiario Seguro',
-            hintText: 'Ingresa Beneficiario Seguro',
-            isValid: null,
-            onChange: (value) {
-              beneficiarioSeguro = value;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cedula Beneficiario Seguro',
-            hintText: 'Ingresa Cedula Beneficiario Seguro',
-            isValid: null,
-            onChange: (value) {
-              cedulaBeneficiarioSeguro = value;
-            },
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'PARENTESCO',
-            title: 'Parentesco Beneficiario Seguro',
-            hintText: 'Ingresa Parentesco Beneficiario Seguro',
-            onChanged: (item) {
-              if (item == null) return;
-              parentesco = item.valor;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.security,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Beneficiario Seguro 1',
-            hintText: 'Ingresa Beneficiario Seguro 1',
-            isValid: null,
-            onChange: (value) {
-              beneficiarioSeguro1 = value;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.credit_card,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cedula Beneficiario Seguro 1',
-            hintText: 'Ingresa Cedula Beneficiario Seguro 1',
-            isValid: null,
-            onChange: (value) {
-              cedulaBeneficiarioSeguro1 = value;
-            },
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            initialValue: '',
-            codigo: 'PARENTESCO',
-            title: 'Parentesco Beneficiario Seguro 1',
-            hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
-            onChanged: (item) {
-              if (item == null) return;
-              parentescoBeneficiarioSeguro1 = item.valor;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.phone,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Telefono Beneficiario',
-            hintText: 'Ingresa Telefono Beneficiario',
-            isValid: null,
-            onChange: (value) {
-              telefonoBeneficiario = value;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.phone,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Telefono Beneficiario 1',
-            hintText: 'Ingresa Telefono Beneficiario 1',
-            isValid: null,
-            onChange: (value) {
-              telefonoBeneficiario1 = value;
-            },
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: CustomElevatedButton(
-              text: 'Enviar Solicitud',
-              color: AppColors.greenLatern.withOpacity(0.4),
-              onPressed: () {
-                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                      beneficiarioSeguro: beneficiarioSeguro,
-                      cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                      objParentescoBeneficiarioSeguroId: parentesco,
-                      beneficiarioSeguro1: beneficiarioSeguro1,
-                      cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
-                      objParentescoBeneficiarioSeguroId1:
-                          parentescoBeneficiarioSeguro1,
-                      telefonoBeneficiario: telefonoBeneficiario,
-                      telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
-                    );
-                context.pushTransparentRoute(const SendingFormWidget());
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.family_restroom,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Beneficiario Seguro',
+              hintText: 'Ingresa Beneficiario Seguro',
+              isValid: null,
+              onChange: (value) {
+                beneficiarioSeguro = value;
               },
             ),
-          ),
-          const Gap(10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomOutLineButton(
-              onPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.credit_card,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cedula Beneficiario Seguro',
+              hintText: 'Ingresa Cedula Beneficiario Seguro',
+              isValid: null,
+              onChange: (value) {
+                cedulaBeneficiarioSeguro = value;
               },
-              text: 'Atras',
-              textColor: AppColors.red,
-              color: AppColors.red,
             ),
-          ),
-          const Gap(20),
-        ],
+            const Gap(20),
+            CatalogoValorDropdownWidget(
+              initialValue: '',
+              codigo: 'PARENTESCO',
+              title: 'Parentesco Beneficiario Seguro',
+              hintText: 'Ingresa Parentesco Beneficiario Seguro',
+              onChanged: (item) {
+                if (item == null) return;
+                parentesco = item.valor;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.security,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Beneficiario Seguro 1',
+              hintText: 'Ingresa Beneficiario Seguro 1',
+              isValid: null,
+              onChange: (value) {
+                beneficiarioSeguro1 = value;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.credit_card,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cedula Beneficiario Seguro 1',
+              hintText: 'Ingresa Cedula Beneficiario Seguro 1',
+              isValid: null,
+              onChange: (value) {
+                cedulaBeneficiarioSeguro1 = value;
+              },
+            ),
+            const Gap(20),
+            CatalogoValorDropdownWidget(
+              codigo: 'PARENTESCO',
+              title: 'Parentesco Beneficiario Seguro 1',
+              hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
+              onChanged: (item) {
+                if (item == null) return;
+                parentescoBeneficiarioSeguro1 = item.valor;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.phone,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Telefono Beneficiario',
+              hintText: 'Ingresa Telefono Beneficiario',
+              isValid: null,
+              onChange: (value) {
+                telefonoBeneficiario = value;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.phone,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Telefono Beneficiario 1',
+              hintText: 'Ingresa Telefono Beneficiario 1',
+              isValid: null,
+              onChange: (value) {
+                telefonoBeneficiario1 = value;
+              },
+            ),
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: CustomElevatedButton(
+                text: 'Enviar Solicitud',
+                color: AppColors.greenLatern.withOpacity(0.4),
+                onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
+                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        beneficiarioSeguro: beneficiarioSeguro,
+                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                        objParentescoBeneficiarioSeguroId: parentesco,
+                        beneficiarioSeguro1: beneficiarioSeguro1,
+                        cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
+                        objParentescoBeneficiarioSeguroId1:
+                            parentescoBeneficiarioSeguro1,
+                        telefonoBeneficiario: telefonoBeneficiario,
+                        telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
+                      );
+                  context.pushTransparentRoute(const SendingFormWidget());
+                },
+              ),
+            ),
+            const Gap(10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutLineButton(
+                onPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+                text: 'Atras',
+                textColor: AppColors.red,
+                color: AppColors.red,
+              ),
+            ),
+            const Gap(20),
+          ],
+        ),
       ),
     );
   }

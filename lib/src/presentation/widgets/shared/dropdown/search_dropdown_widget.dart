@@ -9,14 +9,16 @@ class SearchDropdownWidget extends StatelessWidget {
   final String codigo;
   final String title;
   final bool isRequired;
-  final ItemCallback<Item>? onChanged;
+  final ItemCallback<Item> onChanged;
+  final ValidatorCallback<Item> validator;
 
   const SearchDropdownWidget({
     super.key,
     required this.codigo,
     required this.title,
     this.isRequired = false,
-    this.onChanged,
+    required this.onChanged,
+    this.validator,
   });
 
   @override
@@ -57,6 +59,7 @@ class SearchDropdownWidget extends StatelessWidget {
               ],
             ),
             child: DropdownSearch<Item>(
+              validator: validator,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                   fillColor: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -33,6 +34,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
   String? cuota;
   String? observacion;
   DateTime? fechaPrimerPago;
+  final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -51,157 +53,168 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        children: [
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.person,
-              color: AppColors.getPrimaryColor(),
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.person,
+                color: AppColors.getPrimaryColor(),
+              ),
+              onChange: (item) {
+                if (item == null) return;
+                beneficiarioSeguro = item;
+              },
+              validator: (value) => ClassValidator.validateRequired(value),
+              title: 'Beneficiario Seguro',
+              hintText: 'Ingresa Beneficiario Seguro',
             ),
-            onChange: (item) {
-              if (item == null) return;
-              beneficiarioSeguro = item;
-            },
-            title: 'Beneficiario Seguro',
-            hintText: 'Ingresa Beneficiario Seguro',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.price_change,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Monto',
-            hintText: 'Ingresa Monto',
-            isValid: null,
-            onChange: (value) {
-              monto = value;
-            },
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            codigo: 'DESTINOCREDITO',
-            title: 'Proposito',
-            onChanged: (item) {
-              if (item == null) return;
-              monto = item.value;
-            },
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            codigo: 'PRODUCTO',
-            title: 'Producto',
-            onChanged: (item) {
-              if (item == null) return;
-              producto = item.value;
-            },
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            onChanged: (item) {
-              if (item == null) return;
-              frecuenciaDePago = item.value;
-            },
-            codigo: 'FRECUENCIAPAGO',
-            title: 'Frecuencia de Pago',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.price_change,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Plazo Solicitud',
-            hintText: 'Ingresa Plazo Solicitud',
-            isValid: null,
-            onChange: (value) {
-              plazoSolicitud = value;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            onTap: () => selectDate(context),
-            icon: Icon(
-              Icons.payment,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Fecha de Primer Pago Solicitud',
-            hintText: fechaPrimerPago?.selectorFormat() ??
-                'Ingresar fecha primer pago',
-            isValid: null,
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.payment,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Cuota',
-            hintText: 'Ingresa Cuota',
-            isValid: null,
-            onChange: (value) {
-              cuota = value;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.remove_red_eye,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Observacion',
-            hintText: 'Ingresa Observacion',
-            isValid: null,
-            onChange: (value) {
-              observacion = value;
-            },
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: CustomElevatedButton(
-              text: 'Siguiente',
-              color: AppColors.greenLatern.withOpacity(0.4),
-              onPressed: () {
-                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                      beneficiarioSeguro1: beneficiarioSeguro,
-                      monto: int.tryParse(monto ?? ''),
-                      objPropositoId: proposito,
-                      objProductoId: producto,
-                      objFrecuenciaId: frecuenciaDePago,
-                      plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                      fechaPrimerPagoSolicitud:
-                          fechaPrimerPago?.toUtc().toIso8601String(),
-                      cuota: int.tryParse(cuota ?? ''),
-                      observacion: observacion,
-                    );
-                widget.pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.price_change,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Monto',
+              hintText: 'Ingresa Monto',
+              validator: (value) => ClassValidator.validateRequired(value),
+              isValid: null,
+              onChange: (value) {
+                monto = value;
               },
             ),
-          ),
-          const Gap(10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomOutLineButton(
-              onPressed: () {
-                widget.pageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+            const Gap(20),
+            SearchDropdownWidget(
+              codigo: 'DESTINOCREDITO',
+              title: 'Proposito',
+              onChanged: (item) {
+                if (item == null) return;
+                monto = item.value;
               },
-              text: 'Atras',
-              textColor: AppColors.red,
-              color: AppColors.red,
             ),
-          ),
-          const Gap(20),
-        ],
+            const Gap(20),
+            SearchDropdownWidget(
+              codigo: 'PRODUCTO',
+              title: 'Producto',
+              onChanged: (item) {
+                if (item == null) return;
+                producto = item.value;
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              onChanged: (item) {
+                if (item == null) return;
+                frecuenciaDePago = item.value;
+              },
+              codigo: 'FRECUENCIAPAGO',
+              title: 'Frecuencia de Pago',
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.price_change,
+                color: AppColors.getPrimaryColor(),
+              ),
+              validator: (value) => ClassValidator.validateRequired(value),
+              title: 'Plazo Solicitud',
+              hintText: 'Ingresa Plazo Solicitud',
+              isValid: null,
+              onChange: (value) {
+                plazoSolicitud = value;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaPrimerPago?.selectorFormat()),
+              readOnly: true,
+              onTap: () => selectDate(context),
+              icon: Icon(
+                Icons.payment,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Fecha de Primer Pago Solicitud',
+              hintText: fechaPrimerPago?.selectorFormat() ??
+                  'Ingresar fecha primer pago',
+              isValid: null,
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.payment,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cuota',
+              hintText: 'Ingresa Cuota',
+              isValid: null,
+              onChange: (value) {
+                cuota = value;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Observacion',
+              hintText: 'Ingresa Observacion',
+              isValid: null,
+              onChange: (value) {
+                observacion = value;
+              },
+            ),
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: CustomElevatedButton(
+                text: 'Siguiente',
+                color: AppColors.greenLatern.withOpacity(0.4),
+                onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
+                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        beneficiarioSeguro1: beneficiarioSeguro,
+                        monto: int.tryParse(monto ?? ''),
+                        objPropositoId: proposito,
+                        objProductoId: producto,
+                        objFrecuenciaId: frecuenciaDePago,
+                        plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                        fechaPrimerPagoSolicitud:
+                            fechaPrimerPago?.toUtc().toIso8601String(),
+                        cuota: int.tryParse(cuota ?? ''),
+                        observacion: observacion,
+                      );
+                  widget.pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+              ),
+            ),
+            const Gap(10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutLineButton(
+                onPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+                text: 'Atras',
+                textColor: AppColors.red,
+                color: AppColors.red,
+              ),
+            ),
+            const Gap(20),
+          ],
+        ),
       ),
     );
   }

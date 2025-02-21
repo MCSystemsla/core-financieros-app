@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
@@ -34,147 +35,163 @@ class _NuevaMenorWorkingDataWidgetState
   String? condicionCasa;
   String? anosResidirCasa;
   String? comunidad;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        children: [
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Selecciona Pais de Casa',
-            title: 'Pais Domicilio',
-            onChanged: (item) {
-              if (item == null) return;
-              paisDomicilio = item.valor;
-            },
-            codigo: 'PAIS',
-            // initialValue: paisEmisor ?? '',
-          ),
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Selecciona Departamento de Casa',
-            title: 'Departamento Domicilio',
-            onChanged: (item) {
-              if (item == null) return;
-              departamentoDomicilio = item.valor;
-            },
-            codigo: 'DEP',
-            // initialValue: paisEmisor ?? '',
-          ),
-          const Gap(30),
-          CatalogoValorNacionalidad(
-            hintText: 'Selecciona Municipio de Casa',
-            title: 'Municipio Domicilio',
-            onChanged: (item) {
-              if (item == null) return;
-              municipioDomicilio = item.valor;
-            },
-            codigo: 'MUN',
-            // initialValue: paisEmisor ?? '',
-          ),
-          const Gap(30),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Barrio Casa',
-            hintText: 'Ingresa Barrio Casa',
-            onChange: (value) {
-              barrioCasa = value;
-            },
-            isValid: null,
-          ),
-          const Gap(20),
-          CatalogoValorDropdownWidget(
-            title: 'Condicion Casa',
-            initialValue: initialValue ?? '',
-            codigo: 'TIPOVIVIENDA',
-            onChanged: (item) {
-              if (item == null) return;
-              condicionCasa = item.valor;
-            },
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppColors.getPrimaryColor(),
-            ),
-            title: 'Años Residir Casa',
-            hintText: 'Ingresa Años Residir Casa',
-            isValid: null,
-            onChange: (value) {
-              anosResidirCasa = value;
-            },
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: JLuxDropdown(
-              dropdownColor: Colors.white,
-              isContainIcon: true,
-              title: 'Ubicacion',
-              items: Origin.comunidades,
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Pais de Casa',
+              title: 'Pais Domicilio',
               onChanged: (item) {
                 if (item == null) return;
-                comunidad = item.valor;
+                paisDomicilio = item.valor;
               },
-              toStringItem: (item) {
-                return item.nombre;
-              },
-              hintText: 'input.select_option'.tr(),
+              codigo: 'PAIS',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              // initialValue: paisEmisor ?? '',
             ),
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: CustomElevatedButton(
-              text: 'Siguiente',
-              color: AppColors.greenLatern.withOpacity(0.4),
-              onPressed: () async {
-                final geolocationService = GeolocationService(context: context);
-                final currentLocation =
-                    await geolocationService.getCurrentLocation();
-                if (!context.mounted) return;
-                context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                      barrioCasa: barrioCasa,
-                      objPaisCasaId: paisDomicilio,
-                      objDepartamentoCasaId: departamentoDomicilio,
-                      objMunicipioCasaId: municipioDomicilio,
-                      objCondicionCasaId: condicionCasa,
-                      anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
-                      ubicacion: comunidad,
-                      ubicacionLatitud: currentLocation?.latitude.toString(),
-                      ubicacionLongitud: currentLocation?.longitude.toString(),
-                    );
-                widget.controller.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Departamento de Casa',
+              title: 'Departamento Domicilio',
+              onChanged: (item) {
+                if (item == null) return;
+                departamentoDomicilio = item.valor;
+              },
+              codigo: 'DEP',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+
+              // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Municipio de Casa',
+              title: 'Municipio Domicilio',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+
+              onChanged: (item) {
+                if (item == null) return;
+                municipioDomicilio = item.valor;
+              },
+              codigo: 'MUN',
+              // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Barrio Casa',
+              hintText: 'Ingresa Barrio Casa',
+              onChange: (value) {
+                barrioCasa = value;
+              },
+              isValid: null,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(20),
+            CatalogoValorDropdownWidget(
+              title: 'Condicion Casa',
+              // initialValue: initialValue ?? '',
+              codigo: 'TIPOVIVIENDA',
+              onChanged: (item) {
+                if (item == null) return;
+                condicionCasa = item.valor;
               },
             ),
-          ),
-          const Gap(10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomOutLineButton(
-              onPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Años Residir Casa',
+              hintText: 'Ingresa Años Residir Casa',
+              isValid: null,
+              onChange: (value) {
+                anosResidirCasa = value;
               },
-              text: 'Atras',
-              textColor: AppColors.red,
-              color: AppColors.red,
             ),
-          ),
-          const Gap(20),
-        ],
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: JLuxDropdown(
+                dropdownColor: Colors.white,
+                isContainIcon: true,
+                title: 'Ubicacion',
+                items: Origin.comunidades,
+                onChanged: (item) {
+                  if (item == null) return;
+                  comunidad = item.valor;
+                },
+                toStringItem: (item) {
+                  return item.nombre;
+                },
+                hintText: 'input.select_option'.tr(),
+              ),
+            ),
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: CustomElevatedButton(
+                text: 'Siguiente',
+                color: AppColors.greenLatern.withOpacity(0.4),
+                onPressed: () async {
+                  if (!formKey.currentState!.validate()) return;
+                  final geolocationService =
+                      GeolocationService(context: context);
+                  final currentLocation =
+                      await geolocationService.getCurrentLocation();
+                  if (!context.mounted) return;
+                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        barrioCasa: barrioCasa,
+                        objPaisCasaId: paisDomicilio,
+                        objDepartamentoCasaId: departamentoDomicilio,
+                        objMunicipioCasaId: municipioDomicilio,
+                        objCondicionCasaId: condicionCasa,
+                        anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
+                        ubicacion: comunidad,
+                        ubicacionLatitud: currentLocation?.latitude.toString(),
+                        ubicacionLongitud:
+                            currentLocation?.longitude.toString(),
+                      );
+                  widget.controller.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+              ),
+            ),
+            const Gap(10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutLineButton(
+                onPressed: () {
+                  widget.controller.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+                text: 'Atras',
+                textColor: AppColors.red,
+                color: AppColors.red,
+              ),
+            ),
+            const Gap(20),
+          ],
+        ),
       ),
     );
   }
