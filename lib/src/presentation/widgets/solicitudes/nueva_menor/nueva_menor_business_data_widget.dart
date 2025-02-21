@@ -26,6 +26,8 @@ class NuevaMenorBusinessDataWidget extends StatefulWidget {
 class _NuevaMenorBusinessDataWidgetState
     extends State<NuevaMenorBusinessDataWidget> {
   String? profesion;
+  String? actividad;
+  String? actividad1;
   String? ocupacion;
   String? nombreNegocio;
   String? condicionNegocio;
@@ -125,6 +127,28 @@ class _NuevaMenorBusinessDataWidgetState
               onChanged: (item) {
                 if (item == null) return;
                 actividadPredominante = item.value;
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'ACTIVIDADECONOMICA',
+              title: 'Actividad',
+              onChanged: (item) {
+                if (item == null) return;
+                actividad = item.value;
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'ACTIVIDADECONOMICA',
+              title: 'Actividad 1',
+              onChanged: (item) {
+                if (item == null) return;
+                actividad1 = item.value;
               },
             ),
             const Gap(20),
@@ -285,6 +309,8 @@ class _NuevaMenorBusinessDataWidgetState
                         objMunicipioNegocioId: municipioNegocio,
                         barrioNegocio: barrioNegocio,
                         direccionNegocio: direccionNegocio,
+                        objActividadId: actividad,
+                        objActividadId1: actividad1,
                       );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

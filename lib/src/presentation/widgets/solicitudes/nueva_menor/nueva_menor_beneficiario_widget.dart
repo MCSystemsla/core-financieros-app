@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -25,7 +26,7 @@ class NuevaMenorCreditoWidget extends StatefulWidget {
 }
 
 class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
-  String? beneficiarioSeguro;
+  String? moneda;
   String? monto;
   String? proposito;
   String? producto;
@@ -58,18 +59,16 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
         child: Column(
           children: [
             const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.person,
-                color: AppColors.getPrimaryColor(),
-              ),
-              onChange: (item) {
+            CatalogoValorDropdownWidget(
+              codigo: 'MONEDA',
+              onChanged: (item) {
                 if (item == null) return;
-                beneficiarioSeguro = item;
+                moneda = item.valor;
               },
-              validator: (value) => ClassValidator.validateRequired(value),
-              title: 'Beneficiario Seguro',
-              hintText: 'Ingresa Beneficiario Seguro',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              title: 'Moneda',
+              hintText: 'Ingresa Moneda',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
@@ -91,7 +90,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               title: 'Proposito',
               onChanged: (item) {
                 if (item == null) return;
-                monto = item.value;
+                proposito = item.value;
               },
             ),
             const Gap(20),
@@ -179,8 +178,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        beneficiarioSeguro1: beneficiarioSeguro,
-                        monto: int.tryParse(monto ?? ''),
+                        objMonedaId: moneda,
+                        monto: int.tryParse(monto!),
                         objPropositoId: proposito,
                         objProductoId: producto,
                         objFrecuenciaId: frecuenciaDePago,

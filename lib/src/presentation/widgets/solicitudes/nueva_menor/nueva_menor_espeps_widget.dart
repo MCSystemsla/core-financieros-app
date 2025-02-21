@@ -36,6 +36,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? nombreFamiliarPeps2;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -128,7 +129,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
               hintText: 'Ingresa Nombre Familiar PEPs 2',
               isValid: null,
               onChange: (value) {
-                nombreFamiliarPeps = value;
+                nombreFamiliarPeps2 = value;
               },
             ),
             const Gap(20),
@@ -164,6 +165,19 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
               isValid: null,
               onChange: (value) {
                 nombreEntidadPeps2 = value;
+              },
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Periodo PEPs',
+              hintText: 'Ingresa Periodo PEPs ',
+              isValid: null,
+              onChange: (value) {
+                periodoPeps = value;
               },
             ),
             const Gap(20),
@@ -209,9 +223,10 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                         nombreFamiliar: nombreFamiliarPeps,
                         parentescoFamiliarPeps2: parentesco,
                         cargoFamiliarPeps2: cargoParentesco,
-                        nombreFamiliarPeps2: nombreEntidadPeps2,
+                        nombreFamiliarPeps2: nombreFamiliarPeps2,
                         periodoPeps2: periodoPeps2,
                         paisPeps2: paisPeps2,
+                        nombreEntidadPeps2: nombreEntidadPeps2,
                       );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

@@ -35,6 +35,7 @@ class _NuevaMenorWorkingDataWidgetState
   String? condicionCasa;
   String? anosResidirCasa;
   String? comunidad;
+  String? direccionCasa;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -85,6 +86,20 @@ class _NuevaMenorWorkingDataWidgetState
               },
               codigo: 'MUN',
               // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.house,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Direccion Casa',
+              hintText: 'Ingresa Direccion Casa',
+              onChange: (value) {
+                direccionCasa = value;
+              },
+              isValid: null,
+              validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -166,6 +181,7 @@ class _NuevaMenorWorkingDataWidgetState
                         ubicacionLatitud: currentLocation?.latitude.toString(),
                         ubicacionLongitud:
                             currentLocation?.longitude.toString(),
+                        direccionCasa: direccionCasa,
                       );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
