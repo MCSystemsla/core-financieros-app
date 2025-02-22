@@ -30,7 +30,7 @@ def keystoreProperties = new Properties()
 
 android {
     namespace = "com.mcsystem.core_financiero_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = '25.1.8937393'
 
     compileOptions {

@@ -28,7 +28,7 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
           body: switch (state.status) {
             Status.inProgress => const DownloadCatalogoLoading(
                 lottieAsset: ImageAsset.nuevaMenorUploading,
-                text: 'Enviando Respuesta Nueva menor...',
+                text: 'Enviando solicitud a servidor...',
               ),
             Status.done => const Padding(
                 padding: EdgeInsets.all(10),

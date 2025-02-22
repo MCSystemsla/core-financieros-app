@@ -87,6 +87,7 @@ class CatalogoValorNacionalidad extends StatefulWidget {
   final String codigo;
   final String? where;
   final ItemNacionalidad? initialValue;
+  final ValidatorCallback validator;
   const CatalogoValorNacionalidad({
     super.key,
     required this.hintText,
@@ -95,6 +96,7 @@ class CatalogoValorNacionalidad extends StatefulWidget {
     required this.codigo,
     this.where,
     this.initialValue,
+    this.validator,
   });
 
   @override
@@ -125,6 +127,7 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
         dropdownColor: Colors.white,
         isContainIcon: true,
         initialValue: widget.initialValue,
+        validator: widget.validator,
         // isLoading: state.status == Status.inProgress,
         // validator: (value) {
         //   if (value == null) return 'auth.errors.branchTeam'.tr();
@@ -153,6 +156,7 @@ class CatalogoValorDropdownWidget extends StatefulWidget {
   final String codigo;
   final String? initialValue;
   final bool? isRequired;
+  final ValidatorCallback validator;
   const CatalogoValorDropdownWidget({
     super.key,
     this.initialValue,
@@ -161,6 +165,7 @@ class CatalogoValorDropdownWidget extends StatefulWidget {
     required this.title,
     this.hintText = 'Selecciona una opción',
     this.isRequired = false,
+    this.validator,
   });
 
   @override
@@ -188,6 +193,7 @@ class _CatalogoValorDropdownWidgetState
         hintText: widget.hintText,
         dropdownColor: Colors.white,
         isContainIcon: true,
+        validator: widget.validator,
         // isLoading: state.status == Status.inProgress,
         // validator: (value) {
         //   if (value == null) return 'auth.errors.branchTeam'.tr();

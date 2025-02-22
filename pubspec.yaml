@@ -67,6 +67,7 @@ dependencies:
   connectivity_plus: ^6.1.0
   external_app_launcher: ^4.0.1
   network_info_plus: ^6.1.3
+  geolocator: ^12.0.0
 
 
   # Intl
