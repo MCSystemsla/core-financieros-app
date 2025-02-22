@@ -58,6 +58,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                 onChanged: (item) {
                   if (item == null) return;
                   esPeps = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
@@ -114,6 +115,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                   onChanged: (item) {
                     if (item == null) return;
                     tieneFamiliarPeps = item;
+                    setState(() {});
                   },
                   toStringItem: (item) {
                     return item;

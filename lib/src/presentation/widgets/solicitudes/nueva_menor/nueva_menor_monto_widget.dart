@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,15 +47,16 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
         child: Column(
           children: [
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               title: 'Estado Civil',
               codigo: 'ESTADOCIVIL',
               onChanged: (item) {
                 if (item == null) return;
-                estadoCivil = item.valor;
+                estadoCivil = item.value;
+                setState(() {});
               },
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+                  ClassValidator.validateRequired(value?.value),
             ),
             if (estadoCivil == 'UNI' || estadoCivil == 'CAS') ...[
               const Gap(20),
@@ -164,6 +166,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
                 onChanged: (item) {
                   if (item == null) return;
                   esFamiliarEmpleado = item;
+                  setState(() {});
                 },
                 toStringItem: (item) {
                   return item;
