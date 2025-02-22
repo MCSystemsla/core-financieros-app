@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -31,10 +32,10 @@ class AddUserCedulaScreen extends StatelessWidget {
     }
 
     void showErrorDialog({required String errorMsg}) {
-      CustomAlertDialog(
+      AddUserCedulaDialog(
         context: context,
         title: errorMsg,
-        onDone: () => context.pop(),
+        onDone: () => context.pushReplacement('/solicitudes/solicitud-credito'),
       ).showDialog(context, dialogType: DialogType.error);
     }
 

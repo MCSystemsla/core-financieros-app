@@ -128,7 +128,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    initialValue: apellido1,
+                    initialValue: apellido1 ?? 'N/A',
                     icon: Icon(
                       Icons.badge,
                       color: AppColors.getPrimaryColor(),
@@ -420,11 +420,388 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
             ),
           );
         }
-        return const SizedBox();
+        return IsCedulaUserNotExistsForm(
+          controller: widget.controller,
+        );
       },
     );
   }
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class IsCedulaUserNotExistsForm extends StatefulWidget {
+  final PageController controller;
+  const IsCedulaUserNotExistsForm({super.key, required this.controller});
+
+  @override
+  State<IsCedulaUserNotExistsForm> createState() =>
+      _IsCedulaUserNotExistsFormState();
+}
+
+class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
+  String? initialValue;
+  String? departamentoEmisor;
+  DateTime? _selectedDate;
+
+  String? tipoPersonaCredito;
+  String? nombre1;
+  String? nombre2;
+  String? apellido1;
+  String? apellido2;
+  String? tipoDocumento;
+  String? paisEmisor;
+  String? paisNacimiento;
+  String? fechaVencimientoCedula;
+  String? sexo;
+  String? escolaridad;
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      _selectedDate = picked;
+      setState(() {});
+    }
+  }
+
+  final nombrePublicoController = TextEditingController();
+  final telefonoController = TextEditingController();
+  final celularController = TextEditingController();
+  final emailController = TextEditingController();
+  final nacionalidadController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const Gap(30),
+            SearchDropdownWidget(
+              // initialValue: '',
+              codigo: 'TIPOSPERSONACREDITO',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                tipoPersonaCredito = item.value;
+              },
+              title: 'Tipo de Persona',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.person,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Nombre1',
+              textCapitalization: TextCapitalization.words,
+              onChange: (value) {
+                nombre1 = value;
+                setState(() {});
+              },
+              hintText: 'Ingresa Nombre1',
+              isValid: null,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.person,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Nombre2',
+              hintText: 'Ingresa Nombre2',
+              textCapitalization: TextCapitalization.words,
+              isValid: null,
+              isRequired: true,
+              onChange: (value) {
+                nombre2 = value;
+                setState(() {});
+              },
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.badge,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Apellido1',
+              hintText: 'Ingresa Apellido1',
+              textCapitalization: TextCapitalization.words,
+              validator: (value) => ClassValidator.validateRequired(value),
+              isValid: null,
+              isRequired: true,
+              onChange: (value) {
+                apellido1 = value;
+                setState(() {});
+              },
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.badge,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Apellido2',
+              hintText: 'Ingresa Apellido2',
+              textCapitalization: TextCapitalization.words,
+              isValid: null,
+              isRequired: true,
+              onChange: (value) {
+                apellido2 = value;
+                setState(() {});
+              },
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.person_2_rounded,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Nombre Publico',
+              textCapitalization: TextCapitalization.words,
+              hintText: 'Ingresa tu nombre publico',
+              isValid: null,
+              textEditingController: nombrePublicoController,
+              isRequired: true,
+            ),
+            const Gap(30),
+            SearchDropdownWidget(
+              // initialValue: '',
+              codigo: 'TIPODOCUMENTOPERSONA',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                tipoDocumento = item.value;
+                setState(() {});
+              },
+              title: 'Tipo Documento',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.credit_card,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cedula',
+              hintText: 'Ingresa Cedula',
+              textInputType: TextInputType.number,
+              isValid: null,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Pais Emisor',
+              // hintText: state.userCedulaResponse.pais,
+              title: 'Pais Emisor',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                paisEmisor = item.valor;
+                setState(() {});
+              },
+              codigo: 'PAIS',
+              // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              // onTap: () => selectDate(context),
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Fecha Emision Cedula',
+              isRequired: true,
+
+              hintText: 'Fecha Emision Cedula',
+              isValid: null,
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              hintText: _selectedDate?.selectorFormat() ??
+                  'Ingrese Fecha Vencimiento',
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Fecha Vencimiento Cedula',
+              isValid: null,
+              isRequired: true,
+              onTap: () => selectDate(context),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.calendar_month,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'FechaNacimiento',
+              hintText: 'Ingresa Fecha Nacimiento',
+              isValid: null,
+              isRequired: true,
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.flag,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Nacionalidad',
+              hintText: 'Ingresa Nacionalidad',
+              isValid: null,
+              textEditingController: nacionalidadController,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Pais de Nacimiento',
+              title: 'Pais de Nacimiento',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                paisNacimiento = item.valor;
+              },
+              codigo: 'PAIS',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
+            CatalogoValorDropdownWidget(
+              hintText: sexo ?? 'Ingresar Genero',
+              isRequired: true,
+              codigo: 'SEXO',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                sexo = item.valor;
+              },
+              title: 'Sexo',
+              initialValue: sexo,
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.phone,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Telefono',
+              hintText: 'Ingresa Telefono',
+              textInputType: TextInputType.phone,
+              isValid: null,
+              textEditingController: telefonoController,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.phone_android,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Celular',
+              hintText: 'Ingresa Celular',
+              textInputType: TextInputType.phone,
+              isValid: null,
+              textEditingController: celularController,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              textEditingController: emailController,
+              icon: Icon(
+                Icons.email,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Email',
+              hintText: 'Ingresa Email',
+              textInputType: TextInputType.emailAddress,
+              isValid: null,
+              validator: (value) => ClassValidator.validateEmail(value),
+            ),
+            const Gap(30),
+            SearchDropdownWidget(
+              // initialValue: '',
+              codigo: 'ESCOLARIDAD',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                escolaridad = item.value;
+              },
+              title: 'Escolaridad',
+              isRequired: true,
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+            ),
+            const Gap(30),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: CustomElevatedButton(
+                text: 'Siguiente',
+                color: AppColors.greenLatern.withOpacity(0.4),
+                onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
+                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        nombre1: nombre1,
+                        nombre2: nombre2,
+                        apellido1: apellido1,
+                        apellido2: apellido2,
+                        tipoPersona: tipoPersonaCredito,
+                        objTipoPersonaId: tipoPersonaCredito,
+                        objTipoDocumentoId: tipoDocumento,
+                        // cedula: state.userCedulaResponse.cedula,
+                        nombrePublico: nombrePublicoController.text.trim(),
+                        objPaisEmisorCedula: paisEmisor,
+                        // fechaEmisionCedula: state
+                        //     .userCedulaResponse.fechaEmision
+                        //     .toIso8601String(),
+                        fechaVencimientoCedula:
+                            _selectedDate?.toUtc().toIso8601String(),
+                        // fechaNacimiento: state
+                        //     .userCedulaResponse.fechaNacimiento
+                        //     .toIso8601String(),
+                        nacionalidad: nacionalidadController.text.trim(),
+                        objPaisNacimientoId: paisNacimiento,
+                        // objSexoId: state.userCedulaResponse.sexo,
+                        telefono: telefonoController.text.trim(),
+                        celular: celularController.text.trim(),
+                        email: emailController.text.trim(),
+                        objEscolaridadId: escolaridad,
+                      );
+
+                  widget.controller.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+              ),
+            ),
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutLineButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                text: 'Cancelar',
+                textColor: AppColors.red,
+                color: AppColors.red,
+              ),
+            ),
+            const Gap(20),
+          ],
+        ),
+      ),
+    );
+  }
 }

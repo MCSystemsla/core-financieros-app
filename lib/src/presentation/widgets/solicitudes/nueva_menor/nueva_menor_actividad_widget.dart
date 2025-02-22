@@ -70,7 +70,6 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             CatalogoValorDropdownWidget(
-              initialValue: '',
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro',
               hintText: 'Ingresa Parentesco Beneficiario Seguro',

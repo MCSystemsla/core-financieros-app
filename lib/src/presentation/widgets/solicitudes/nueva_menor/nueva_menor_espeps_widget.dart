@@ -65,144 +65,149 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.business,
-                color: AppColors.getPrimaryColor(),
+            if (esPeps == 'input.yes'.tr()) ...[
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.business,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Nombre de Entidad PEPs',
+                hintText: 'Ingresa Nombre de Entidad PEPs',
+                isValid: null,
+                onChange: (value) {
+                  nombreEntidadPeps = value;
+                },
               ),
-              title: 'Nombre de Entidad PEPs',
-              hintText: 'Ingresa Nombre de Entidad PEPs',
-              isValid: null,
-              onChange: (value) {
-                nombreEntidadPeps = value;
-              },
-            ),
-            const Gap(20),
-            CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais Peps',
-              title: 'País PEPs',
-              onChanged: (item) {
-                if (item == null || !mounted) return;
-                paisPeps = item.valor;
-              },
-              codigo: 'PAIS',
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.work,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cargo Oficial PEPs',
-              hintText: 'Ingresa Cargo Oficial PEPs',
-              isValid: null,
-              onChange: (value) {
-                cargoOficialPeps = value;
-              },
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: JLuxDropdown(
-                dropdownColor: Colors.white,
-                isContainIcon: true,
-                title: 'Tiene Familiar PEPs',
-                items: ['input.yes'.tr(), 'input.no'.tr()],
+              const Gap(20),
+              CatalogoValorNacionalidad(
+                hintText: 'Selecciona Pais Peps',
+                title: 'País PEPs',
                 onChanged: (item) {
-                  if (item == null) return;
-                  tieneFamiliarPeps = item;
+                  if (item == null || !mounted) return;
+                  paisPeps = item.valor;
                 },
-                toStringItem: (item) {
-                  return item;
+                codigo: 'PAIS',
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.work,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Cargo Oficial PEPs',
+                hintText: 'Ingresa Cargo Oficial PEPs',
+                isValid: null,
+                onChange: (value) {
+                  cargoOficialPeps = value;
                 },
-                hintText: 'input.select_option'.tr(),
               ),
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.person,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Tiene Familiar PEPs',
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    tieneFamiliarPeps = item;
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-              title: 'Nombre Familiar PEPs 2',
-              hintText: 'Ingresa Nombre Familiar PEPs 2',
-              isValid: null,
-              onChange: (value) {
-                nombreFamiliarPeps2 = value;
-              },
-            ),
-            const Gap(20),
-            CatalogoValorDropdownWidget(
-              codigo: 'PARENTESCO',
-              onChanged: (item) {
-                if (item == null) return;
-                parentesco = item.valor;
-              },
-              title: 'Parentesco Familiar PEPs 2',
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.work,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cargo Familiar PEPs 2',
-              hintText: 'Ingresa Cargo Familiar PEPs 2',
-              isValid: null,
-              onChange: (value) {
-                cargoParentesco = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.business,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Nombre Entidad PEPs 2',
-              hintText: 'Ingresa Nombre Entidad PEPs 2',
-              isValid: null,
-              onChange: (value) {
-                nombreEntidadPeps2 = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.calendar_today,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Periodo PEPs',
-              hintText: 'Ingresa Periodo PEPs ',
-              isValid: null,
-              onChange: (value) {
-                periodoPeps = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.calendar_today,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Periodo PEPs 2',
-              hintText: 'Ingresa Periodo PEPs 2',
-              isValid: null,
-              onChange: (value) {
-                periodoPeps2 = value;
-              },
-            ),
-            const Gap(20),
-            CatalogoValorNacionalidad(
-              title: 'País PEPs 2',
-              hintText: 'Selecciona País PEPs 2',
-              onChanged: (item) {
-                if (item == null) return;
-                paisPeps2 = item.valor;
-              },
-              codigo: 'PAIS',
-            ),
+              if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Nombre Familiar PEPs 2',
+                  hintText: 'Ingresa Nombre Familiar PEPs 2',
+                  isValid: null,
+                  onChange: (value) {
+                    nombreFamiliarPeps2 = value;
+                  },
+                ),
+                const Gap(20),
+                CatalogoValorDropdownWidget(
+                  codigo: 'PARENTESCO',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    parentesco = item.valor;
+                  },
+                  title: 'Parentesco Familiar PEPs 2',
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  icon: Icon(
+                    Icons.work,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Cargo Familiar PEPs 2',
+                  hintText: 'Ingresa Cargo Familiar PEPs 2',
+                  isValid: null,
+                  onChange: (value) {
+                    cargoParentesco = value;
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  icon: Icon(
+                    Icons.business,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Nombre Entidad PEPs 2',
+                  hintText: 'Ingresa Nombre Entidad PEPs 2',
+                  isValid: null,
+                  onChange: (value) {
+                    nombreEntidadPeps2 = value;
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Periodo PEPs',
+                  hintText: 'Ingresa Periodo PEPs ',
+                  isValid: null,
+                  onChange: (value) {
+                    periodoPeps = value;
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Periodo PEPs 2',
+                  hintText: 'Ingresa Periodo PEPs 2',
+                  isValid: null,
+                  onChange: (value) {
+                    periodoPeps2 = value;
+                  },
+                ),
+                const Gap(20),
+                CatalogoValorNacionalidad(
+                  title: 'País PEPs 2',
+                  hintText: 'Selecciona País PEPs 2',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    paisPeps2 = item.valor;
+                  },
+                  codigo: 'PAIS',
+                ),
+              ],
+            ],
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -221,7 +226,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                         tieneFamiliarPeps:
                             tieneFamiliarPeps == 'input.yes'.tr(),
                         nombreFamiliar: nombreFamiliarPeps,
-                        parentescoFamiliarPeps2: parentesco,
+                        parentescoFamiliarPeps2: nombreFamiliarPeps,
                         cargoFamiliarPeps2: cargoParentesco,
                         nombreFamiliarPeps2: nombreFamiliarPeps2,
                         periodoPeps2: periodoPeps2,

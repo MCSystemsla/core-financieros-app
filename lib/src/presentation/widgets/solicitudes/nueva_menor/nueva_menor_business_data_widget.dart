@@ -39,12 +39,60 @@ class _NuevaMenorBusinessDataWidgetState
   String? actividadEconomica2;
   String? sectorEconomico;
   String? sectorEconomico2;
-  String? horarioTrabajo;
-  String? horarioVisita;
+  // String? horarioTrabajo;
+  // String? horarioVisita;
   String? municipioNegocio;
   String? barrioNegocio;
   String? direccionNegocio;
   final formKey = GlobalKey<FormState>();
+  TimeOfDay? horarioTrabajo;
+  TimeOfDay? horarioTrabajoEndtime;
+  TimeOfDay? horarioVisita;
+  TimeOfDay? horarioVisitaEndtime;
+
+  Future<TimeOfDay?> _selectTime(
+      BuildContext context, TimeOfDay? initialTime) async {
+    return await showTimePicker(
+      context: context,
+      initialTime: initialTime ?? TimeOfDay.now(),
+    );
+  }
+
+  void _pickTimeRange() async {
+    TimeOfDay? start = await _selectTime(context, horarioTrabajo);
+    if (start != null) {
+      if (!context.mounted || !mounted) return;
+      TimeOfDay? end = await _selectTime(context, horarioTrabajoEndtime);
+      if (end != null) {
+        setState(() {
+          horarioTrabajo = start;
+          horarioTrabajoEndtime = end;
+        });
+      }
+    }
+  }
+
+  void _pickHorarioVisita() async {
+    TimeOfDay? start = await _selectTime(context, horarioVisita);
+    if (start != null) {
+      if (!context.mounted || !mounted) return;
+      TimeOfDay? end = await _selectTime(context, horarioVisitaEndtime);
+      if (end != null) {
+        setState(() {
+          horarioVisita = start;
+          horarioVisitaEndtime = end;
+        });
+      }
+    }
+  }
+
+  String _formatTimeRange({TimeOfDay? startTime, TimeOfDay? endTime}) {
+    if (startTime == null || endTime == null) {
+      return 'Ingresa horario';
+    }
+    return '${startTime.format(context)} - ${endTime.format(context)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -224,19 +272,29 @@ class _NuevaMenorBusinessDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Horario de Trabajo',
-              hintText: 'Ingresa Horario de Trabajo',
+              readOnly: true,
+              onTap: () => _pickTimeRange(),
+              hintText: _formatTimeRange(
+                startTime: horarioTrabajo!,
+                endTime: horarioTrabajoEndtime!,
+              ),
               isValid: null,
               onChange: (value) {
                 horarioTrabajo = value;
               },
             ),
             OutlineTextfieldWidget(
+              readOnly: true,
+              onTap: () => _pickHorarioVisita(),
+              hintText: _formatTimeRange(
+                startTime: horarioVisita,
+                endTime: horarioVisitaEndtime,
+              ),
               icon: Icon(
                 Icons.watch_later_sharp,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Horario de Visita',
-              hintText: 'Ingresa Horario de Visita',
               isValid: null,
               onChange: (value) {
                 horarioVisita = value;
@@ -304,8 +362,10 @@ class _NuevaMenorBusinessDataWidgetState
                         objActividadId2: actividadEconomica2,
                         objSectorId: sectorEconomico,
                         // sectorEconomico: sectorEconomico2,
-                        horarioTrabajo: horarioTrabajo,
-                        horarioVisita: horarioVisita,
+                        horarioTrabajo:
+                            '${horarioTrabajo!.format(context)} - ${horarioTrabajoEndtime!.format(context)}',
+                        horarioVisita:
+                            '${horarioVisita!.format(context)} - ${horarioVisitaEndtime!.format(context)}',
                         objMunicipioNegocioId: municipioNegocio,
                         barrioNegocio: barrioNegocio,
                         direccionNegocio: direccionNegocio,

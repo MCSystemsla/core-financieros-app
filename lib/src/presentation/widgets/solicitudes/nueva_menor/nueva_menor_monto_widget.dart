@@ -56,99 +56,102 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
             ),
-            const Gap(20),
-            CatalogoValorNacionalidad(
-              codigo: 'PAIS',
-              onChanged: (item) {
-                if (item == null) return;
-                nacionalidadConyuge = item.valor;
-              },
-              hintText: 'Ingresa Nacionalidad Conyuge',
-              title: 'Nacionalidad Conyuge',
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.woman,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Nombre Conyuge',
-              hintText: 'Ingresa nombre conyuge',
-              onChange: (value) {
-                nombreConyuge = value;
-              },
-              isValid: null,
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: JLuxDropdown(
-                dropdownColor: Colors.white,
-                isContainIcon: true,
-                title: 'Trabaja su conyuge',
-                items: ['input.yes'.tr(), 'input.no'.tr()],
+            if (estadoCivil == 'UNI' || estadoCivil == 'CAS') ...[
+              const Gap(20),
+              CatalogoValorNacionalidad(
+                codigo: 'PAIS',
                 onChanged: (item) {
                   if (item == null) return;
-                  trabajaConyuge = item;
+                  nacionalidadConyuge = item.valor;
                 },
-                toStringItem: (item) {
-                  return item;
+                hintText: 'Ingresa Nacionalidad Conyuge',
+                title: 'Nacionalidad Conyuge',
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.woman,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Nombre Conyuge',
+                hintText: 'Ingresa nombre conyuge',
+                onChange: (value) {
+                  nombreConyuge = value;
                 },
-                hintText: 'input.select_option'.tr(),
+                isValid: null,
               ),
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.woman_2,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Trabaja su conyuge',
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    if (item == null) return;
+                    trabajaConyuge = item;
+                  },
+                  toStringItem: (item) {
+                    return item;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-              title: 'Trabajo de Conyuge',
-              hintText: 'Ingresa el Trabajo de Conyuge',
-              isValid: null,
-              onChange: (value) {
-                trabajoConyuge = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.woman_2,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.woman_2,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Trabajo de Conyuge',
+                hintText: 'Ingresa el Trabajo de Conyuge',
+                isValid: null,
+                onChange: (value) {
+                  trabajoConyuge = value;
+                },
               ),
-              title: 'Direccion Trabajo Conyuge',
-              hintText: 'Ingresa el Trabajo de Conyuge',
-              isValid: null,
-              onChange: (value) {
-                direccionTrabajoConyuge = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.phone,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.woman_2,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Direccion Trabajo Conyuge',
+                hintText: 'Ingresa el Trabajo de Conyuge',
+                isValid: null,
+                onChange: (value) {
+                  direccionTrabajoConyuge = value;
+                },
               ),
-              title: 'Telefono Trabajo Conyuge',
-              hintText: 'Ingresa el Telefono de Conyuge',
-              isValid: null,
-              onChange: (value) {
-                telefonoTrabajoConyuge = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.phone,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.phone,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Telefono Trabajo Conyuge',
+                hintText: 'Ingresa el Telefono de Conyuge',
+                isValid: null,
+                onChange: (value) {
+                  telefonoTrabajoConyuge = value;
+                },
               ),
-              title: 'Cantidad Hijos',
-              hintText: 'Ingresa Cantida de Hijos',
-              isValid: null,
-              onChange: (value) {
-                cantidadHijos = value;
-              },
-            ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.phone,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Cantidad Hijos',
+                hintText: 'Ingresa Cantida de Hijos',
+                isValid: null,
+                onChange: (value) {
+                  cantidadHijos = value;
+                },
+              ),
+            ],
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -168,32 +171,34 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.family_restroom,
-                color: AppColors.getPrimaryColor(),
+            if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.family_restroom,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Nombre familiar de empleado',
+                hintText: 'Ingresa el nombre de empleado',
+                isValid: null,
+                onChange: (value) {
+                  nombreFamiliarEmpleado = value;
+                },
               ),
-              title: 'Nombre familiar de empleado',
-              hintText: 'Ingresa el nombre de empleado',
-              isValid: null,
-              onChange: (value) {
-                nombreFamiliarEmpleado = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.add_card_sharp,
-                color: AppColors.getPrimaryColor(),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.add_card_sharp,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Cedula familiar de empleado',
+                hintText: 'Ingresa la cedula de empleado',
+                isValid: null,
+                onChange: (value) {
+                  cedulaFamiliarEmpleado = value;
+                },
               ),
-              title: 'Cedula familiar de empleado',
-              hintText: 'Ingresa la cedula de empleado',
-              isValid: null,
-              onChange: (value) {
-                cedulaFamiliarEmpleado = value;
-              },
-            ),
+            ],
             const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
