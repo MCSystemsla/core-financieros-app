@@ -1,5 +1,5 @@
+import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_items_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -13,10 +13,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final isConnected = context.read<InternetConnectionCubit>().state;
+    final shouldSync = CatalogoSync.needToSync();
+    if (shouldSync && isConnected.isConnected && isConnected.isCorrectNetwork) {
+      return const DownsloadingCatalogosWidget();
+    }
     return Scaffold(
-      floatingActionButton: isConnected
+      floatingActionButton: isConnected.isConnected &&
+              isConnected.isCorrectNetwork
           ? FloatingActionButton.extended(
               label: const Row(
                 children: [
@@ -28,9 +32,6 @@ class HomeScreen extends StatelessWidget {
               onPressed: () => {
                 context
                     .pushTransparentRoute(const DownsloadingCatalogosWidget()),
-                context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
-                      isConnected: isConnected,
-                    ),
               },
             )
           : const SizedBox(),

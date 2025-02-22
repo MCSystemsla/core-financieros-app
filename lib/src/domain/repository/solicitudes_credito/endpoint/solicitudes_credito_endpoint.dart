@@ -60,3 +60,42 @@ class NacionalidadEndpoint extends Endpoint {
         'codigo': codigo,
       };
 }
+
+class ProductosEndpoint extends Endpoint {
+  ProductosEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-catalogo-productos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        // if (queryParams != null) ...queryParams!,
+        'database': LocalStorage().database,
+      };
+}
+
+class UserCedulaEndpoint extends Endpoint {
+  final String cedula;
+  UserCedulaEndpoint({required this.cedula});
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-persona';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'cedula': cedula,
+      };
+}

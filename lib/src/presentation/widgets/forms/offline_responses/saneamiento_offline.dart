@@ -2,14 +2,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
-import 'package:core_financiero_app/src/presentation/bloc/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -52,22 +53,20 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
         return BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
           listener: (context, status) async {
             if (status.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(status.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: status.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
@@ -341,7 +340,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -392,22 +391,20 @@ class _RecurrenteSaneamientoOfflineState
             RecurrenteAguaYSaneamientoState>(
           listener: (context, resp) async {
             if (resp.status == Status.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  showCloseIcon: true,
-                  content: Text(resp.errorMsg),
-                ),
-              );
+              CustomAlertDialog(
+                context: context,
+                title: resp.errorMsg,
+                onDone: () => context.pop(),
+              ).showDialog(context, dialogType: DialogType.error);
             }
             if (resp.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoCedula: state.imageModel?.imagen4 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
                     imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
@@ -705,7 +702,7 @@ class _RecurrenteSaneamientoOfflineState
                               );
                         },
                         previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'button.next'.tr(),
+                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

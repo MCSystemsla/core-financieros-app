@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
@@ -27,6 +28,23 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       if (isConnected) await _saveToDatabase(codigo: codigo, items: data.data);
     } catch (e) {
       emit(SolicitudCatalogoError(error: e.toString()));
+    }
+  }
+
+  Future<void> getandSaveProductos() async {
+    final data = await _repository.getCatalogoProductos();
+
+    final query = _objectBoxService.catalogoBox
+        .query(CatalogoLocalDb_.type.equals('PRODUCTO'))
+        .build();
+
+    query.remove();
+    for (var item in data.data) {
+      _objectBoxService.catalogoBox.put(CatalogoLocalDb(
+        valor: item.valor,
+        nombre: item.nombre,
+        type: 'PRODUCTO',
+      ));
     }
   }
 
@@ -111,6 +129,16 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         codigo: 'ACTIVIDADECONOMICA',
         isConnected: isConnected,
       );
+      await getCatalogoByCodigo(
+        codigo: 'TIPODOCUMENTOPERSONA',
+        isConnected: isConnected,
+      );
+      await getCatalogoByCodigo(
+        codigo: 'PRODUCTO',
+        isConnected: isConnected,
+      );
+      await getandSaveProductos();
+      LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } catch (e) {
       log(e.toString());
@@ -306,6 +334,34 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
               valor: item.valor,
               nombre: item.nombre,
               type: 'ACTIVIDADECONOMICA',
+            ));
+          }
+          break;
+        case 'TIPODOCUMENTOPERSONA':
+          final query = _objectBoxService.catalogoBox
+              .query(CatalogoLocalDb_.type.equals(codigo))
+              .build();
+
+          query.remove();
+          for (var item in items) {
+            _objectBoxService.catalogoBox.put(CatalogoLocalDb(
+              valor: item.valor,
+              nombre: item.nombre,
+              type: 'TIPODOCUMENTOPERSONA',
+            ));
+          }
+          break;
+        case 'PRODUCTO':
+          final query = _objectBoxService.catalogoBox
+              .query(CatalogoLocalDb_.type.equals(codigo))
+              .build();
+
+          query.remove();
+          for (var item in items) {
+            _objectBoxService.catalogoBox.put(CatalogoLocalDb(
+              valor: item.valor,
+              nombre: item.nombre,
+              type: 'PRODUCTO',
             ));
           }
           break;

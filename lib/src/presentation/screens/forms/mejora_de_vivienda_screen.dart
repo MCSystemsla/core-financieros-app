@@ -7,18 +7,16 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/mejora_vivienda/recurrente_mejora_vivienda_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/mejora_vivienda/mejora_vivienda_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
@@ -27,6 +25,8 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -78,10 +78,6 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
         BlocProvider(
             create: (ctx) =>
                 RecurrenteMejoraViviendaCubit(ResponsesRepositoryImpl())),
-        BlocProvider(
-          create: (ctx) =>
-              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
-        ),
         BlocProvider(
           create: (ctx) => MotivoPrestamoCubit(ResponsesRepositoryImpl())
             ..getMotivoPrestamo(
@@ -234,13 +230,11 @@ class _RecurrentSignState extends State<RecurrentSign> {
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -253,6 +247,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -350,7 +345,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveRecurrentForm(
+                                ? await saveRecurrentForm(
                                     context,
                                     state,
                                     ImageModel()
@@ -364,8 +359,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -373,6 +367,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                 : context
                                     .read<RecurrenteMejoraViviendaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -390,12 +385,14 @@ class _RecurrentSignState extends State<RecurrentSign> {
     );
   }
 
-  void saveRecurrentForm(
+  saveRecurrentForm(
     BuildContext context,
     RecurrenteMejoraViviendaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -425,14 +422,13 @@ class _RecurrentSignState extends State<RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..viviendaAntesDespues = state.viviendaAntesDespues,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
+
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
   }
 }
 

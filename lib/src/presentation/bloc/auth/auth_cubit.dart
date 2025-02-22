@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'auth_state.dart';
@@ -32,9 +34,16 @@ class AuthCubit extends Cubit<AuthState> {
       await LocalStorage().setJWT(resp['accessToken']);
       await LocalStorage().setDatabase(dbName);
       await LocalStorage().setUserId(resp['usuarioId']);
+      final haveToSync = CatalogoSync.needToSync();
+      if (!haveToSync) {
+        await LocalStorage()
+            .setLastUpdate(DateTime.now().millisecondsSinceEpoch);
+      }
       final actions = await repository.getActions(database: dbName);
       LocalStorage().setActions(actions.data);
       emit(state.copyWith(status: Status.done));
+    } on AppException catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }

@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/offline_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -196,10 +196,6 @@ final router = GoRouter(
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
-      path: '/pla',
-      builder: (context, state) => const PLAScreen(),
-    ),
-    GoRoute(
       path: '/cartera',
       builder: (context, state) => const CarteraScreen(),
       routes: [
@@ -214,24 +210,8 @@ final router = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/ahorro',
-      builder: (context, state) => const AhorroScreen(),
-    ),
-    GoRoute(
-      path: '/tesoreria',
-      builder: (context, state) => const TesoreriaScreen(),
-    ),
-    GoRoute(
-      path: '/requerimiento',
-      builder: (context, state) => const RequerimientoScreen(),
-    ),
-    GoRoute(
       path: '/loading',
       builder: (context, state) => const LoadingScreen(),
     ),
-    GoRoute(
-      path: '/credito',
-      builder: (context, state) => const CreditoScreen(),
-    )
   ],
 );

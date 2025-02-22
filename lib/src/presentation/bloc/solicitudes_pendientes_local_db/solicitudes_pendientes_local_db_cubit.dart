@@ -20,7 +20,7 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/re
 import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/saneamiento_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 import 'package:logger/logger.dart';
@@ -114,7 +114,6 @@ class SolicitudesPendientesLocalDbCubit
       final departamentos =
           await state.isar!.departamentosDbLocals.where().findAll();
       emit(state.copyWith(departamentos: departamentos));
-      _logger.i(departamentos.length);
     } catch (e) {
       _logger.e(e);
       // emit(state.copyWith(status: Status.error));
