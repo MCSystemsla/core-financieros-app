@@ -2,7 +2,6 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -59,16 +58,16 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
         child: Column(
           children: [
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
-                moneda = item.valor;
+                moneda = item.value;
               },
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+                  ClassValidator.validateRequired(value?.value),
               title: 'Moneda',
-              hintText: 'Ingresa Moneda',
+              isRequired: true,
             ),
             const Gap(20),
             OutlineTextfieldWidget(

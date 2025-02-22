@@ -275,8 +275,8 @@ class _NuevaMenorBusinessDataWidgetState
               readOnly: true,
               onTap: () => _pickTimeRange(),
               hintText: _formatTimeRange(
-                startTime: horarioTrabajo!,
-                endTime: horarioTrabajoEndtime!,
+                startTime: horarioTrabajo,
+                endTime: horarioTrabajoEndtime,
               ),
               isValid: null,
               onChange: (value) {

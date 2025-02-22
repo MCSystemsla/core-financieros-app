@@ -456,6 +456,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
   String? fechaVencimientoCedula;
   String? sexo;
   String? escolaridad;
+  DateTime? fechaEmisionCedula;
+  DateTime? fechaNacimiento;
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -470,11 +472,40 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
     }
   }
 
+  Future<void> selectEmisionFecha(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaEmisionCedula,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaEmisionCedula) {
+      fechaEmisionCedula = picked;
+      setState(() {});
+    }
+  }
+
+  Future<void> selectFechaNacimiento(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaNacimiento,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaNacimiento) {
+      fechaNacimiento = picked;
+      setState(() {});
+    }
+  }
+
   final nombrePublicoController = TextEditingController();
   final telefonoController = TextEditingController();
   final celularController = TextEditingController();
   final emailController = TextEditingController();
   final nacionalidadController = TextEditingController();
+  final cedulaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -596,6 +627,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
               title: 'Cedula',
               hintText: 'Ingresa Cedula',
               textInputType: TextInputType.number,
+              textEditingController: cedulaController,
               isValid: null,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
@@ -615,15 +647,16 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              // onTap: () => selectDate(context),
+              onTap: () => selectEmisionFecha(context),
+              readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Fecha Emision Cedula',
               isRequired: true,
-
-              hintText: 'Fecha Emision Cedula',
+              hintText: fechaEmisionCedula?.selectorFormat() ??
+                  'Fecha Emision Cedula',
               isValid: null,
             ),
             const Gap(30),
@@ -637,6 +670,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
               title: 'Fecha Vencimiento Cedula',
               isValid: null,
               isRequired: true,
+              readOnly: true,
               onTap: () => selectDate(context),
             ),
             const Gap(30),
@@ -646,7 +680,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'FechaNacimiento',
-              hintText: 'Ingresa Fecha Nacimiento',
+              hintText: fechaNacimiento?.selectorFormat() ??
+                  'Ingresa Fecha Nacimiento',
+              readOnly: true,
+              onTap: () => selectFechaNacimiento(context),
               isValid: null,
               isRequired: true,
             ),
@@ -759,20 +796,18 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,
                         objTipoDocumentoId: tipoDocumento,
-                        // cedula: state.userCedulaResponse.cedula,
+                        cedula: cedulaController.text.trim(),
                         nombrePublico: nombrePublicoController.text.trim(),
                         objPaisEmisorCedula: paisEmisor,
-                        // fechaEmisionCedula: state
-                        //     .userCedulaResponse.fechaEmision
-                        //     .toIso8601String(),
+                        fechaEmisionCedula:
+                            fechaEmisionCedula?.toUtc().toIso8601String(),
                         fechaVencimientoCedula:
                             _selectedDate?.toUtc().toIso8601String(),
-                        // fechaNacimiento: state
-                        //     .userCedulaResponse.fechaNacimiento
-                        //     .toIso8601String(),
+                        fechaNacimiento:
+                            fechaNacimiento?.toUtc().toIso8601String(),
                         nacionalidad: nacionalidadController.text.trim(),
                         objPaisNacimientoId: paisNacimiento,
-                        // objSexoId: state.userCedulaResponse.sexo,
+                        objSexoId: sexo,
                         telefono: telefonoController.text.trim(),
                         celular: celularController.text.trim(),
                         email: emailController.text.trim(),
