@@ -3,6 +3,7 @@ abstract class ImageAsset {
   static const String homeLangESUrl = 'assets/images/bandera_espanol.svg';
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
   static const String loader = 'assets/images/loader.gif';
+  static const String error = 'assets/images/error_lottie.json';
 
   // * Auth
 
@@ -23,6 +24,11 @@ abstract class ImageAsset {
   static const String nuevaMenorBg = 'assets/images/credit3.svg';
   static const String nuevaMenorBg2 = 'assets/images/credit4.svg';
   static const String nuevaMenorBg3 = 'assets/images/credit2.svg';
+  static const String nuevaAddDni = 'assets/images/add_dni.svg';
+  static const String nuevaMenorSuccess =
+      'assets/images/nueva_menor_success.json';
+  static const String nuevaMenorUploading =
+      'assets/images/nueva_menor_uploading.json';
 
   // Download Catalogos
   static const String downloadCatalogoLoading =

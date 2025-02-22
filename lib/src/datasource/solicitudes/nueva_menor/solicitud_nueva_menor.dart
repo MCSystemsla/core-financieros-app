@@ -97,7 +97,7 @@ class SolicitudNuevaMenor {
   final String objRubroActividad2;
   final String objRubroActividad3;
   final String objRubroActividadPredominante;
-  final int tipoPersona;
+  final String tipoPersona;
   final String objTipoPersonaId;
   final String telefonoBeneficiario;
   final String telefonoBeneficiarioSeguro1;

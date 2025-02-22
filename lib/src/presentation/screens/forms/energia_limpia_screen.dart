@@ -1,26 +1,25 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/recurrente_energia_limpia_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
-import 'package:core_financiero_app/src/datasource/origin/origin.dart';
-import 'package:core_financiero_app/src/domain/repository/comunidad/comunidad_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comunidades/comunidades_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/departamentos/departamentos_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/energia_limpia/energia_limpia_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/motivo_prestamo/motivo_prestamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/motivo_prestamo/motivo_prestamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
@@ -29,6 +28,8 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -74,10 +75,6 @@ class EnergiaLimpiaScreen extends StatelessWidget {
         BlocProvider(
           create: (ctx) => DepartamentosCubit(DepartamentosRepositoryImpl())
             ..getDepartamentos(),
-        ),
-        BlocProvider(
-          create: (ctx) =>
-              ComunidadesCubit(ComunidadRepositoryImpl())..getComunidades(),
         ),
         BlocProvider(
           create: (ctx) => RecurrenteEnergiaLimpiaCubit(responseRepository),
@@ -237,6 +234,10 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
   String? originItem;
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+    final items = localDbProvider.departmentsBox.getAll();
+    final departmentos =
+        items.map((e) => Item(name: e.nombre, value: e.valor)).toList();
     final energiaLimpiaProvider =
         context.watch<RecurrenteEnergiaLimpiaCubit>().state;
     return WhiteCard(
@@ -284,13 +285,13 @@ class _EnergiaLimpiaOrigenState extends State<EnergiaLimpiaOrigen> {
                     isContainIcon: false,
                     // isLoading: state.status == Status.inProgress,
                     title: 'forms.entorno_familiar.person_origin'.tr(),
-                    items: Origin.originCatalogosValores,
+                    items: departmentos,
                     onChanged: (item) {
                       if (item == null) return;
-                      originItem = item.valor;
+                      originItem = item.value;
                       setState(() {});
                     },
-                    toStringItem: (item) => item.nombre,
+                    toStringItem: (item) => item.name,
                     hintText: 'input.select_department'.tr(),
                   ),
                 ),
@@ -322,8 +323,7 @@ class _RecurrentSignQuestionary extends StatefulWidget {
       _RecurrentSignQuestionaryState();
 }
 
-class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
-    with AutomaticKeepAliveClientMixin {
+class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -333,7 +333,6 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
@@ -408,13 +407,11 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -428,6 +425,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
 
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -514,7 +512,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveEnergiaLimpiaAnswers(
+                                ? await saveEnergiaLimpiaAnswers(
                                     context,
                                     state,
                                     ImageModel()
@@ -527,8 +525,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -536,6 +533,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
                                 : context
                                     .read<RecurrenteEnergiaLimpiaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -554,11 +552,13 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
   }
 
   saveEnergiaLimpiaAnswers(
-    BuildContext context,
+    BuildContext ctx,
     RecurrenteEnergiaLimpiaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -590,18 +590,14 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary>
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
-  }
 
-  @override
-  bool get wantKeepAlive => true;
+    NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
+  }
 }
 
 class _SignQuestionary extends StatefulWidget {
@@ -611,8 +607,7 @@ class _SignQuestionary extends StatefulWidget {
   State<_SignQuestionary> createState() => _SignQuestionaryState();
 }
 
-class _SignQuestionaryState extends State<_SignQuestionary>
-    with AutomaticKeepAliveClientMixin {
+class _SignQuestionaryState extends State<_SignQuestionary> {
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -622,7 +617,6 @@ class _SignQuestionaryState extends State<_SignQuestionary>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
@@ -696,13 +690,11 @@ class _SignQuestionaryState extends State<_SignQuestionary>
                   listener: (context, state) async {
                     final status = state.status;
                     if (status == Status.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          showCloseIcon: true,
-                          content: Text(state.errorMsg),
-                        ),
-                      );
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.error);
                     }
                     if (state.status == Status.done) {
                       final signatureImage = await controller.toPngBytes();
@@ -715,6 +707,7 @@ class _SignQuestionaryState extends State<_SignQuestionary>
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
                                 .state
@@ -800,7 +793,7 @@ class _SignQuestionaryState extends State<_SignQuestionary>
                             if (!context.mounted) return;
                             !isConnected.isConnected ||
                                     !isConnected.isCorrectNetwork
-                                ? saveEnergiaLocalDB(
+                                ? await saveEnergiaLocalDB(
                                     context,
                                     state,
                                     ImageModel()
@@ -814,8 +807,7 @@ class _SignQuestionaryState extends State<_SignQuestionary>
                                             .read<KivaRouteCubit>()
                                             .state
                                             .solicitudId,
-                                      )
-                                      ..imagen4 = imageProvider.fotoCedula,
+                                      ),
                                     !isConnected.isCorrectNetwork
                                         ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
                                         : 'Formulario Kiva Guardado Exitosamente!!',
@@ -823,6 +815,7 @@ class _SignQuestionaryState extends State<_SignQuestionary>
                                 : context
                                     .read<EnergiaLimpiaCubit>()
                                     .sendAnswers();
+                            if (!context.mounted) return;
                             context.pop();
                           },
                           onPressedCancel: () => context.pop(),
@@ -840,16 +833,19 @@ class _SignQuestionaryState extends State<_SignQuestionary>
     );
   }
 
-  void saveEnergiaLocalDB(
-    BuildContext context,
+  saveEnergiaLocalDB(
+    BuildContext ctx,
     EnergiaLimpiaState state,
     ImageModel imageModel,
     String msgDialog,
   ) {
-    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+    final isVpnConnected =
+        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    ctx.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
-    context.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
+
+    ctx.read<SolicitudesPendientesLocalDbCubit>().saveEnergiaLimpia(
           energiaLimpiaDBLocal: EnergiaLimpiaDbLocal()
             ..database = LocalStorage().database
             ..tipoSolicitud = state.tipoSolicitud
@@ -871,16 +867,13 @@ class _SignQuestionaryState extends State<_SignQuestionary>
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-        content: Text(msgDialog),
-      ),
-    );
-    context.pushReplacement('/');
-  }
 
-  @override
-  bool get wantKeepAlive => true;
+    return NoVpnPopUpOnKiva(
+      context: context,
+      info: msgDialog,
+      header: '',
+      isVpnConnected: isVpnConnected,
+    ).showDialog(context, dialogType: DialogType.info);
+    // context.pushReplacement('/');
+  }
 }

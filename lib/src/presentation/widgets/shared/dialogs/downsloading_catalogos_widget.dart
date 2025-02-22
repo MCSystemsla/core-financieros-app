@@ -58,12 +58,14 @@ class DownloadCatalogoLoading extends StatelessWidget {
   final String text;
   final bool? repeat;
   final bool? isSucess;
+  final bool isUploadingForms;
   const DownloadCatalogoLoading({
     super.key,
     required this.lottieAsset,
     required this.text,
     this.repeat = true,
     this.isSucess = false,
+    this.isUploadingForms = false,
   });
 
   @override
@@ -94,6 +96,9 @@ class DownloadCatalogoLoading extends StatelessWidget {
                 color: AppColors.getPrimaryColor(),
                 text: 'OK',
                 onPressed: () {
+                  if (isUploadingForms) {
+                    return context.pushReplacement('/');
+                  }
                   if (context.canPop()) return context.pop();
                   context.push('/');
                 },
