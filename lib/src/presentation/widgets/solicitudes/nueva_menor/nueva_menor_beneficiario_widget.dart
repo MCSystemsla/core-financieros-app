@@ -1,9 +1,10 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorCreditoWidget extends StatefulWidget {
   const NuevaMenorCreditoWidget({
@@ -35,6 +37,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
   String? cuota;
   String? observacion;
   DateTime? fechaPrimerPago;
+  DateTime? fechaDesembolso;
+  double? tasaInteres;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -50,8 +54,23 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
     }
   }
 
+  Future<void> selectFechaDesembolso(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaDesembolso,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaPrimerPago) {
+      fechaDesembolso = picked;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -59,16 +78,16 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
         child: Column(
           children: [
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
-                moneda = item.valor;
+                moneda = item.value;
               },
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+                  ClassValidator.validateRequired(value?.value),
               title: 'Moneda',
-              hintText: 'Ingresa Moneda',
+              isRequired: true,
             ),
             const Gap(20),
             OutlineTextfieldWidget(
@@ -78,11 +97,27 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               ),
               title: 'Monto',
               hintText: 'Ingresa Monto',
+              textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
                 monto = value;
               },
+            ),
+            OutlineTextfieldWidget(
+              initialValue: fechaDesembolso?.selectorFormat(),
+              readOnly: true,
+              icon: Icon(
+                Icons.price_change,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Fecha Desembolso',
+              hintText: fechaDesembolso?.selectorFormat() ??
+                  'Ingresar fecha desembolso',
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaPrimerPago?.selectorFormat()),
+              isValid: null,
+              onTap: () => selectFechaDesembolso(context),
             ),
             const Gap(20),
             SearchDropdownWidget(
@@ -100,6 +135,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               onChanged: (item) {
                 if (item == null) return;
                 producto = item.value;
+                tasaInteres = item.interes;
               },
             ),
             const Gap(20),
@@ -122,6 +158,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               validator: (value) => ClassValidator.validateRequired(value),
               title: 'Plazo Solicitud',
               hintText: 'Ingresa Plazo Solicitud',
+              textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
                 plazoSolicitud = value;
@@ -143,19 +180,23 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               isValid: null,
             ),
             const Gap(20),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.payment,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cuota',
-              hintText: 'Ingresa Cuota',
-              isValid: null,
-              onChange: (value) {
-                cuota = value;
-              },
-            ),
-            const Gap(20),
+            // OutlineTextfieldWidget(
+            //   readOnly: true,
+            //   icon: Icon(
+            //     Icons.payment,
+            //     color: AppColors.getPrimaryColor(),
+            //   ),
+            //   initialValue: calcularCuotaProvider
+            //       .state.montoPrincipalPrimeraCuota
+            //       .toString(),
+            //   title: 'Cuota',
+            //   hintText: 'Ingresa Cuota',
+            //   isValid: null,
+            //   onChange: (value) {
+            //     cuota = value;
+            //   },
+            // ),
+            // const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
                 Icons.remove_red_eye,
@@ -177,22 +218,40 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objMonedaId: moneda,
-                        monto: int.tryParse(monto!),
-                        objPropositoId: proposito,
-                        objProductoId: producto,
-                        objFrecuenciaId: frecuenciaDePago,
-                        plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                        fechaPrimerPagoSolicitud:
-                            fechaPrimerPago?.toUtc().toIso8601String(),
-                        cuota: int.tryParse(cuota ?? ''),
-                        observacion: observacion,
-                      );
-                  widget.pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
+                  calcularCuotaProvider.calcularCantidadCuotas(
+                    fechaDesembolso: fechaDesembolso!,
+                    fechaPrimeraCuota: fechaPrimerPago!,
+                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
+                    formadePago: frecuenciaDePago!,
+                    saldoPrincipal: double.parse(monto ?? ''),
+                    tasaInteresMensual: tasaInteres!,
                   );
+                  CuotaDataDialog(
+                    context: context,
+                    title:
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrincipalPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
+                    onDone: () {
+                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            objMonedaId: moneda,
+                            monto: int.tryParse(monto!),
+                            objPropositoId: proposito,
+                            objProductoId: producto,
+                            objFrecuenciaId: frecuenciaDePago,
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            fechaPrimerPagoSolicitud:
+                                fechaPrimerPago?.toUtc().toIso8601String(),
+                            cuota: calcularCuotaProvider
+                                .state.montoPrincipalPrimeraCuota
+                                .toInt(),
+                            observacion: observacion,
+                          );
+                      widget.pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                      context.pop();
+                    },
+                  ).showDialog(context);
                 },
               ),
             ),

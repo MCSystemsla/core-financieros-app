@@ -25,19 +25,25 @@ class CatalogoValor {
 class Catalogo {
   final String valor;
   final String nombre;
+  final double? interes;
 
   Catalogo({
     required this.valor,
     required this.nombre,
+    this.interes,
   });
 
   factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
         valor: json['valor'],
         nombre: json['nombre'],
+        interes: json.containsKey('interes')
+            ? (json['interes'] as num).toDouble()
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         'valor': valor,
         'nombre': nombre,
+        if (interes != null) 'interes': interes,
       };
 }

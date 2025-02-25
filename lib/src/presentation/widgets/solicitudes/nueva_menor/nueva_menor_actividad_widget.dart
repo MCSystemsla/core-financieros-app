@@ -121,6 +121,7 @@ class _NuevaMenorBeneficiarioWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Telefono Beneficiario',
+              textInputType: TextInputType.phone,
               hintText: 'Ingresa Telefono Beneficiario',
               isValid: null,
               onChange: (value) {
@@ -135,6 +136,7 @@ class _NuevaMenorBeneficiarioWidgetState
               ),
               title: 'Telefono Beneficiario 1',
               hintText: 'Ingresa Telefono Beneficiario 1',
+              textInputType: TextInputType.phone,
               isValid: null,
               onChange: (value) {
                 telefonoBeneficiario1 = value;

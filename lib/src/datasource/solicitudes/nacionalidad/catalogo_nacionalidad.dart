@@ -32,7 +32,7 @@ class Nacionalidad {
   Nacionalidad({
     required this.valor,
     required this.nombre,
-    required this.relacion,
+    this.relacion,
   });
 
   factory Nacionalidad.fromJson(Map<String, dynamic> json) => Nacionalidad(

@@ -202,7 +202,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     context.read<AuthCubit>().login(
-                          userName: username!.trim(),
+                          userName: username!.toUpperCase().trim(),
                           password: password!.trim(),
                           dbName: branchTeam!,
                         );
