@@ -102,7 +102,8 @@ class _NuevaMenorBusinessDataWidgetState
         child: Column(
           children: [
             const Gap(20),
-            OutlineTextfieldWidget(
+            OutlineTextfieldWidget.withCounter(
+              maxLength: 70,
               icon: Icon(
                 Icons.work,
                 color: AppColors.getPrimaryColor(),
@@ -327,7 +328,7 @@ class _NuevaMenorBusinessDataWidgetState
               },
             ),
             const Gap(20),
-            OutlineTextfieldWidget(
+            OutlineTextfieldWidget.withCounter(
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
                 Icons.location_on_rounded,

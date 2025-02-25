@@ -108,6 +108,7 @@ class _NuevaMenorWorkingDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Barrio Casa',
+              maxLength: 50,
               hintText: 'Ingresa Barrio Casa',
               onChange: (value) {
                 barrioCasa = value;

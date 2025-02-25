@@ -10,11 +10,16 @@ typedef ValidatorCallback<T> = String? Function(T? value)?;
 class Item<T> extends Equatable {
   final String name;
   final T value;
+  final double? interes;
 
-  const Item({required this.name, required this.value});
+  const Item({
+    required this.name,
+    required this.value,
+    this.interes,
+  });
 
   @override
-  List<Object?> get props => [name, value];
+  List<Object?> get props => [name, value, interes];
 }
 
 class JLuxDropdown<T> extends StatelessWidget {

@@ -8,10 +8,12 @@ class CatalogoLocalDb {
   String valor;
   String nombre;
   String type;
+  double? interes;
 
   CatalogoLocalDb({
     required this.valor,
     required this.nombre,
     required this.type,
+    this.interes,
   });
 }

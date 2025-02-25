@@ -91,7 +91,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         ClassValidator.validateRequired(value?.value),
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 40,
                     initialValue: nombre1,
                     icon: Icon(
                       Icons.person,
@@ -110,7 +111,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 40,
                     icon: Icon(
                       Icons.person,
                       color: AppColors.getPrimaryColor(),
@@ -127,7 +129,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 40,
                     initialValue: apellido1 ?? 'N/A',
                     icon: Icon(
                       Icons.badge,
@@ -146,7 +149,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 40,
                     initialValue: apellido2,
                     icon: Icon(
                       Icons.badge,
@@ -187,7 +191,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     title: 'Tipo Documento',
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 16,
                     readOnly: true,
                     initialValue: state.userCedulaResponse.cedula,
                     icon: Icon(
@@ -302,7 +307,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     initialValue: sexo,
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 50,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -317,7 +323,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 15,
                     icon: Icon(
                       Icons.phone_android,
                       color: AppColors.getPrimaryColor(),
@@ -333,6 +340,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    maxLength: 50,
                     textEditingController: emailController,
                     icon: Icon(
                       Icons.email,

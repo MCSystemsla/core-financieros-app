@@ -29,6 +29,7 @@ class SearchDropdownWidget extends StatelessWidget {
       return Item(
         value: e.valor,
         name: e.nombre,
+        interes: e.interes ?? 0,
       );
     }).toList();
     return Padding(

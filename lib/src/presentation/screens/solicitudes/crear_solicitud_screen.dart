@@ -6,9 +6,11 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
 
+import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
@@ -21,40 +23,46 @@ class CrearSolicitudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return Scaffold(
-      body: Column(
-        children: [
-          const _Navbar(),
-          Expanded(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: [
-                NuevaMenorDataClientWidget(
-                  controller: pageController,
-                ),
-                NuevaMenorWorkingDataWidget(
-                  controller: pageController,
-                ),
-                NuevaMenorMontoWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorBusinessDataWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorEsPepsWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorCreditoWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorBeneficiarioWidget(
-                  pageController: pageController,
-                ),
-              ],
+    return BlocProvider(
+      create: (ctx) => CalculoCuotaCubit(),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const _Navbar(),
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: [
+                  // NuevaMenorCreditoWidget(
+                  //   pageController: pageController,
+                  // ),
+                  NuevaMenorDataClientWidget(
+                    controller: pageController,
+                  ),
+                  NuevaMenorWorkingDataWidget(
+                    controller: pageController,
+                  ),
+                  NuevaMenorMontoWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorBusinessDataWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorEsPepsWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorCreditoWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorBeneficiarioWidget(
+                    pageController: pageController,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

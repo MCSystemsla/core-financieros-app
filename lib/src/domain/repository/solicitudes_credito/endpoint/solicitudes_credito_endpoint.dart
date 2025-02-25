@@ -27,7 +27,7 @@ class CatalogoSolicitudEndpoint extends Endpoint {
   Method get method => Method.get;
 
   @override
-  String get path => '/catalogo/obtener-catalogo';
+  String get path => '/catalogo/obtener-catalogo-activos';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

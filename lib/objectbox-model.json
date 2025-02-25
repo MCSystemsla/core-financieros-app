@@ -34,7 +34,7 @@
     },
     {
       "id": "5:1884745770876461125",
-      "lastPropertyId": "4:6807186367900511600",
+      "lastPropertyId": "5:180936357922445037",
       "name": "CatalogoLocalDb",
       "properties": [
         {
@@ -57,6 +57,11 @@
           "id": "4:6807186367900511600",
           "name": "type",
           "type": 9
+        },
+        {
+          "id": "5:180936357922445037",
+          "name": "interes",
+          "type": 8
         }
       ],
       "relations": []
