@@ -4,11 +4,14 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
 
+import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
@@ -21,40 +24,46 @@ class CrearSolicitudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return Scaffold(
-      body: Column(
-        children: [
-          const _Navbar(),
-          Expanded(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: [
-                NuevaMenorDataClientWidget(
-                  controller: pageController,
-                ),
-                NuevaMenorWorkingDataWidget(
-                  controller: pageController,
-                ),
-                NuevaMenorMontoWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorBusinessDataWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorEsPepsWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorCreditoWidget(
-                  pageController: pageController,
-                ),
-                NuevaMenorBeneficiarioWidget(
-                  pageController: pageController,
-                ),
-              ],
+    return BlocProvider(
+      create: (ctx) => CalculoCuotaCubit(),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const _Navbar(),
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: [
+                  // NuevaMenorCreditoWidget(
+                  //   pageController: pageController,
+                  // ),
+                  NuevaMenorDataClientWidget(
+                    controller: pageController,
+                  ),
+                  NuevaMenorWorkingDataWidget(
+                    controller: pageController,
+                  ),
+                  NuevaMenorMontoWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorBusinessDataWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorEsPepsWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorCreditoWidget(
+                    pageController: pageController,
+                  ),
+                  NuevaMenorBeneficiarioWidget(
+                    pageController: pageController,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -119,31 +128,71 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
     final items = localDbProvider.getNacionalidadPaises(
-        codigo: widget.codigo, whereClause: widget.where ?? '');
+      codigo: widget.codigo,
+      whereClause: whereClause,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: JLuxDropdown(
-        dropdownColor: Colors.white,
-        isContainIcon: true,
-        initialValue: widget.initialValue,
-        validator: widget.validator,
-        // isLoading: state.status == Status.inProgress,
-        // validator: (value) {
-        //   if (value == null) return 'auth.errors.branchTeam'.tr();
-
-        //   return null;
-        // },
-        title: widget.title,
-        items: items,
-        onChanged: (item) {
-          if (item == null) return;
-          widget.onChanged(item);
-        },
-        toStringItem: (item) {
-          return item.nombre;
-        },
-        hintText: widget.hintText,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Gap(5),
+          Text(
+            widget.title,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          const Gap(15),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: DropdownSearch<ItemNacionalidad>(
+              validator: widget.validator,
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              popupProps: const PopupProps.menu(
+                showSearchBox: true,
+                searchFieldProps: TextFieldProps(
+                  decoration: InputDecoration(
+                    labelText: 'Buscar',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
+              ),
+              items: items,
+              itemAsString: (ItemNacionalidad? item) => item?.nombre ?? 'N/A',
+              onChanged: widget.onChanged,
+              selectedItem: ItemNacionalidad(
+                nombre: widget.title,
+                valor: '',
+                relacion: '',
+                id: 0,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

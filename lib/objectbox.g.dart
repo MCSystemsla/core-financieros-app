@@ -56,7 +56,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 1884745770876461125),
       name: 'CatalogoLocalDb',
-      lastPropertyId: const obx_int.IdUid(4, 6807186367900511600),
+      lastPropertyId: const obx_int.IdUid(5, 180936357922445037),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -78,6 +78,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(4, 6807186367900511600),
             name: 'type',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 180936357922445037),
+            name: 'interes',
+            type: 8,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -307,11 +312,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final valorOffset = fbb.writeString(object.valor);
           final nombreOffset = fbb.writeString(object.nombre);
           final typeOffset = fbb.writeString(object.type);
-          fbb.startTable(5);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, valorOffset);
           fbb.addOffset(2, nombreOffset);
           fbb.addOffset(3, typeOffset);
+          fbb.addFloat64(4, object.interes);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -324,8 +330,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 8, '');
           final typeParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 10, '');
+          final interesParam = const fb.Float64Reader()
+              .vTableGetNullable(buffer, rootOffset, 12);
           final object = CatalogoLocalDb(
-              valor: valorParam, nombre: nombreParam, type: typeParam)
+              valor: valorParam,
+              nombre: nombreParam,
+              type: typeParam,
+              interes: interesParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -528,6 +539,10 @@ class CatalogoLocalDb_ {
   /// See [CatalogoLocalDb.type].
   static final type =
       obx.QueryStringProperty<CatalogoLocalDb>(_entities[1].properties[3]);
+
+  /// See [CatalogoLocalDb.interes].
+  static final interes =
+      obx.QueryDoubleProperty<CatalogoLocalDb>(_entities[1].properties[4]);
 }
 
 /// [CatalogoNacionalidadPaisDb] entity fields to define ObjectBox queries.

@@ -23,6 +23,7 @@ class CatologoNacionalidadCubit extends Cubit<CatologoNacionalidadState> {
   }) async {
     try {
       final data = await _repository.getNacionalidadByCodigo(codigo: codigo);
+
       if (isConnected) await _saveToDatabase(codigo: codigo, items: data.data);
     } catch (e) {
       emit(CatologoNacionalidadError());
@@ -77,7 +78,7 @@ class CatologoNacionalidadCubit extends Cubit<CatologoNacionalidadState> {
                 .put(CatalogoNacionalidadPaisDb(
               valor: item.valor,
               nombre: item.nombre,
-              relacion: item.relacion,
+              // relacion: item.relacion,
             ));
           }
           break;
@@ -92,6 +93,7 @@ class CatologoNacionalidadCubit extends Cubit<CatologoNacionalidadState> {
                 .put(CatalogoNacionalidadDepDb(
               valor: item.valor,
               nombre: item.nombre,
+              relacion: item.relacion,
             ));
           }
           break;

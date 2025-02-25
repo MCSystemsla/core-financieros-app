@@ -6,6 +6,7 @@ typedef ValidatorCallback<T> = String? Function(T? value)?;
 typedef OnChangeCallback<T> = Function(T? value)?;
 
 class OutlineTextfieldWidget extends StatelessWidget {
+  final int maxLength;
   final bool haveCounter;
   final String? hintText;
   final TextEditingController? textEditingController;
@@ -37,6 +38,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.icon, // Permitir nulo como estado inicial
     this.isRequired = false,
     this.onTap,
+    this.maxLength = 500,
   }) : haveCounter = false;
   const OutlineTextfieldWidget.withCounter({
     super.key,
@@ -53,6 +55,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.isValid,
     this.icon,
     this.isRequired = false,
+    this.maxLength = 500,
     this.onTap,
   }) : haveCounter = true;
 
@@ -95,7 +98,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
                     controller: textEditingController,
                     validator: validator,
                     initialValue: initialValue,
-                    maxLength: 500,
+                    maxLength: maxLength,
                     maxLines: null,
                     onChanged: onChange,
                     textCapitalization:

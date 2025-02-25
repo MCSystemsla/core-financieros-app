@@ -362,6 +362,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
               valor: item.valor,
               nombre: item.nombre,
               type: 'PRODUCTO',
+              interes: item.interes,
             ));
           }
           break;

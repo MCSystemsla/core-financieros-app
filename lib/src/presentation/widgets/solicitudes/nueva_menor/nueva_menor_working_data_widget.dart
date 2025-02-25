@@ -36,6 +36,8 @@ class _NuevaMenorWorkingDataWidgetState
   String? anosResidirCasa;
   String? comunidad;
   String? direccionCasa;
+  String? depWhereClause;
+  String? munWhereClause;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -53,40 +55,49 @@ class _NuevaMenorWorkingDataWidgetState
               onChanged: (item) {
                 if (item == null) return;
                 paisDomicilio = item.valor;
+                depWhereClause = item.valor;
+
+                setState(() {});
               },
               codigo: 'PAIS',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
               // initialValue: paisEmisor ?? '',
             ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              hintText: 'Selecciona Departamento de Casa',
-              title: 'Departamento Domicilio',
-              onChanged: (item) {
-                if (item == null) return;
-                departamentoDomicilio = item.valor;
-              },
-              codigo: 'DEP',
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+            if (paisDomicilio != null) ...[
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                hintText: 'Selecciona Departamento de Casa',
+                title: 'Departamento Domicilio',
+                onChanged: (item) {
+                  if (item == null) return;
+                  departamentoDomicilio = item.valor;
+                  munWhereClause = item.valor;
+                  setState(() {});
+                },
+                codigo: 'DEP',
+                where: depWhereClause,
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
+              ),
+            ],
+            if (munWhereClause != null) ...[
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                where: munWhereClause,
+                hintText: 'Selecciona Municipio de Casa',
+                title: 'Municipio Domicilio',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
 
-              // initialValue: paisEmisor ?? '',
-            ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              hintText: 'Selecciona Municipio de Casa',
-              title: 'Municipio Domicilio',
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
-
-              onChanged: (item) {
-                if (item == null) return;
-                municipioDomicilio = item.valor;
-              },
-              codigo: 'MUN',
-              // initialValue: paisEmisor ?? '',
-            ),
+                onChanged: (item) {
+                  if (item == null) return;
+                  municipioDomicilio = item.valor;
+                },
+                codigo: 'MUN',
+                // initialValue: paisEmisor ?? '',
+              ),
+            ],
             const Gap(30),
             OutlineTextfieldWidget(
               icon: Icon(
@@ -108,6 +119,7 @@ class _NuevaMenorWorkingDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Barrio Casa',
+              maxLength: 50,
               hintText: 'Ingresa Barrio Casa',
               onChange: (value) {
                 barrioCasa = value;
@@ -118,7 +130,6 @@ class _NuevaMenorWorkingDataWidgetState
             const Gap(20),
             CatalogoValorDropdownWidget(
               title: 'Condicion Casa',
-              // initialValue: initialValue ?? '',
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
                 if (item == null) return;
@@ -132,6 +143,7 @@ class _NuevaMenorWorkingDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Años Residir Casa',
+              textInputType: TextInputType.number,
               hintText: 'Ingresa Años Residir Casa',
               isValid: null,
               onChange: (value) {

@@ -60,8 +60,10 @@ class ObjectBoxService {
         .toList();
   }
 
-  List<ItemNacionalidad> getNacionalidadPaises(
-      {required String codigo, String whereClause = ''}) {
+  List<ItemNacionalidad> getNacionalidadPaises({
+    required String codigo,
+    String whereClause = '',
+  }) {
     switch (codigo) {
       case 'PAIS':
         final query = catalogoNacionalidadPaisBox.query().build();
@@ -78,11 +80,24 @@ class ObjectBoxService {
             .toList();
 
       case 'DEP':
-        log('Where Clause:$whereClause');
         if (whereClause.isEmpty) {
           final query = catalogoNacionalidadDepBox.query().build();
           final results = query.find();
-          log(' Results: $results');
+          query.close();
+          return results
+              .map((e) => ItemNacionalidad(
+                    id: e.id,
+                    valor: e.valor,
+                    nombre: e.nombre,
+                    relacion: e.relacion ?? 'No data',
+                  ))
+              .toList();
+        } else {
+          final query = catalogoNacionalidadDepBox
+              .query(CatalogoNacionalidadDepDb_.relacion.equals(whereClause))
+              .build();
+          final results = query.find();
+          log(results.toString());
           query.close();
           return results
               .map((e) => ItemNacionalidad(
@@ -93,33 +108,36 @@ class ObjectBoxService {
                   ))
               .toList();
         }
-        final query = catalogoNacionalidadDepBox.query().build();
-
-        final results = query.find();
-        final newResults =
-            results.where((element) => element.relacion == whereClause);
-        query.close();
-        return newResults
-            .map((e) => ItemNacionalidad(
-                  id: e.id,
-                  valor: e.valor,
-                  nombre: e.nombre,
-                  relacion: e.relacion ?? 'No data',
-                ))
-            .toList();
       case 'MUN':
-        final query = catalogoNacionalidadMunBox.query().build();
+        if (whereClause.isEmpty) {
+          final query = catalogoNacionalidadMunBox.query().build();
 
-        final results = query.find();
-        query.close();
-        return results
-            .map((e) => ItemNacionalidad(
-                  id: e.id,
-                  valor: e.valor,
-                  nombre: e.nombre,
-                  relacion: e.relacion ?? 'No data',
-                ))
-            .toList();
+          final results = query.find();
+          query.close();
+          return results
+              .map((e) => ItemNacionalidad(
+                    id: e.id,
+                    valor: e.valor,
+                    nombre: e.nombre,
+                    relacion: e.relacion ?? 'No data',
+                  ))
+              .toList();
+        } else {
+          final query = catalogoNacionalidadMunBox
+              .query(CatalogoNacionalidadMunDb_.relacion.equals(whereClause))
+              .build();
+          final results = query.find();
+          log(results.toString());
+          query.close();
+          return results
+              .map((e) => ItemNacionalidad(
+                    id: e.id,
+                    valor: e.valor,
+                    nombre: e.nombre,
+                    relacion: e.relacion ?? 'No data',
+                  ))
+              .toList();
+        }
     }
     return [];
   }
