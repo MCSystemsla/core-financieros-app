@@ -84,7 +84,7 @@ class _NuevaMenorWorkingDataWidgetState
             if (munWhereClause != null) ...[
               const Gap(30),
               CatalogoValorNacionalidad(
-                where: 'HON06',
+                where: munWhereClause,
                 hintText: 'Selecciona Municipio de Casa',
                 title: 'Municipio Domicilio',
                 validator: (value) =>
@@ -130,7 +130,6 @@ class _NuevaMenorWorkingDataWidgetState
             const Gap(20),
             CatalogoValorDropdownWidget(
               title: 'Condicion Casa',
-              // initialValue: initialValue ?? '',
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
                 if (item == null) return;
@@ -144,6 +143,7 @@ class _NuevaMenorWorkingDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Años Residir Casa',
+              textInputType: TextInputType.number,
               hintText: 'Ingresa Años Residir Casa',
               isValid: null,
               onChange: (value) {

@@ -97,6 +97,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               ),
               title: 'Monto',
               hintText: 'Ingresa Monto',
+              textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -157,6 +158,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
               validator: (value) => ClassValidator.validateRequired(value),
               title: 'Plazo Solicitud',
               hintText: 'Ingresa Plazo Solicitud',
+              textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
                 plazoSolicitud = value;

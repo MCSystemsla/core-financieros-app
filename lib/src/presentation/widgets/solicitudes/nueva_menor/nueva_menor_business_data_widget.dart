@@ -162,6 +162,7 @@ class _NuevaMenorBusinessDataWidgetState
               ),
               title: 'Tiempo Funcionamiento de Negocio',
               hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
+              textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
                 funcionamientoNegocio = value;

@@ -135,6 +135,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
                 ),
                 title: 'Telefono Trabajo Conyuge',
                 hintText: 'Ingresa el Telefono de Conyuge',
+                textInputType: TextInputType.number,
                 isValid: null,
                 onChange: (value) {
                   telefonoTrabajoConyuge = value;
@@ -148,6 +149,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
                 ),
                 title: 'Cantidad Hijos',
                 hintText: 'Ingresa Cantida de Hijos',
+                textInputType: TextInputType.number,
                 isValid: null,
                 onChange: (value) {
                   cantidadHijos = value;
@@ -210,6 +212,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               ),
               title: 'Persona a cargo',
               hintText: 'Ingresa la persona a cargo',
+              textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
                 personasACargo = value;
