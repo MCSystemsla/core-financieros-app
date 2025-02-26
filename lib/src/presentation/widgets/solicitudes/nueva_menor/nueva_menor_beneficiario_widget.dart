@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
@@ -68,6 +69,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
     }
   }
 
+  final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
@@ -91,6 +93,25 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              onFieldSubmitted: (value) {
+                String formattedValue =
+                    FormatField.formatMonto(montoController.text);
+                montoController.value = TextEditingValue(
+                  text: formattedValue,
+                  selection:
+                      TextSelection.collapsed(offset: formattedValue.length),
+                );
+              },
+              onTapOutside: (event) {
+                String formattedValue =
+                    FormatField.formatMonto(montoController.text);
+                montoController.value = TextEditingValue(
+                  text: formattedValue,
+                  selection:
+                      TextSelection.collapsed(offset: formattedValue.length),
+                );
+              },
+              textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -104,6 +125,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
                 monto = value;
               },
             ),
+
             OutlineTextfieldWidget(
               initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
