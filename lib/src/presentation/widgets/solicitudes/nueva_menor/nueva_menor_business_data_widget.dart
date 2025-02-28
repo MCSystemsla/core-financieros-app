@@ -24,7 +24,8 @@ class NuevaMenorBusinessDataWidget extends StatefulWidget {
 }
 
 class _NuevaMenorBusinessDataWidgetState
-    extends State<NuevaMenorBusinessDataWidget> {
+    extends State<NuevaMenorBusinessDataWidget>
+    with AutomaticKeepAliveClientMixin {
   String? profesion;
   String? actividad;
   String? actividad1;
@@ -95,6 +96,7 @@ class _NuevaMenorBusinessDataWidgetState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -118,6 +120,7 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 70,
               icon: Icon(
                 Icons.person_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -132,6 +135,7 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               icon: Icon(
                 Icons.business,
                 color: AppColors.getPrimaryColor(),
@@ -155,6 +159,7 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
                 Icons.access_time,
@@ -316,6 +321,7 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
                 Icons.business,
@@ -330,6 +336,7 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget.withCounter(
+              maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
                 Icons.location_on_rounded,
@@ -402,4 +409,7 @@ class _NuevaMenorBusinessDataWidgetState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

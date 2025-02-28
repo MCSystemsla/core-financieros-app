@@ -3,13 +3,18 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class OnErrorWidget extends StatelessWidget {
   final VoidCallback onPressed;
+  final String errorMsg;
+  final bool needToGoBack;
   const OnErrorWidget({
     super.key,
     required this.onPressed,
+    this.errorMsg = '',
+    this.needToGoBack = false,
   });
 
   @override
@@ -30,6 +35,12 @@ class OnErrorWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleLarge,
           ),
+          const Gap(5),
+          Text(
+            errorMsg,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const Gap(10),
           Padding(
             padding: const EdgeInsets.all(20),
@@ -38,7 +49,18 @@ class OnErrorWidget extends StatelessWidget {
               text: 'Volver a intentarlo',
               color: AppColors.getPrimaryColor(),
             ),
-          )
+          ),
+          if (needToGoBack) ...[
+            const Gap(10),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: CustomElevatedButton(
+                onPressed: () => context.pop(),
+                text: 'Regresar',
+                color: AppColors.getSecondaryColor(),
+              ),
+            )
+          ],
         ],
       ),
     );

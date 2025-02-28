@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,8 @@ class NuevaMenorEsPepsWidget extends StatefulWidget {
   State<NuevaMenorEsPepsWidget> createState() => _NuevaMenorEsPepsWidgetState();
 }
 
-class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
+class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
+    with AutomaticKeepAliveClientMixin {
   String? esPeps;
   String? nombreEntidadPeps;
   String? paisPeps;
@@ -40,6 +42,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -138,11 +141,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
                   },
                 ),
                 const Gap(20),
-                CatalogoValorDropdownWidget(
+                SearchDropdownWidget(
                   codigo: 'PARENTESCO',
                   onChanged: (item) {
                     if (item == null) return;
-                    parentesco = item.valor;
+                    parentesco = item.value;
                   },
                   title: 'Parentesco Familiar PEPs 2',
                 ),
@@ -263,4 +266,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

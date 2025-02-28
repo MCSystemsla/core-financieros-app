@@ -41,6 +41,8 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
                 ),
               ),
             Status.error => OnErrorWidget(
+                needToGoBack: true,
+                errorMsg: state.errorMsg,
                 onPressed: () {
                   context
                       .read<SolicitudNuevaMenorCubit>()
