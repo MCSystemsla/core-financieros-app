@@ -28,7 +28,8 @@ class NuevaMenorCreditoWidget extends StatefulWidget {
       _NuevaMenorCreditoWidgetState();
 }
 
-class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
+class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
+    with AutomaticKeepAliveClientMixin {
   String? moneda;
   String? monto;
   String? proposito;
@@ -72,6 +73,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
   final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -298,4 +300,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

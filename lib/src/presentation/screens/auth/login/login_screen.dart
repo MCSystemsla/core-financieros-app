@@ -101,117 +101,120 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          InputSimple(
-            title: 'auth.user'.tr(),
-            activeColor: true,
-            hintText: 'Ejem: John Doe',
-            enabled: true,
-            onChanged: (value) {
-              username = value;
-              setState(() {});
-            },
-            textFieldSettings: TextFieldSettings(
-              keyboardType: TextInputType.name,
-              textCapitalization: TextCapitalization.characters,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'auth.errors.username'.tr();
-                }
-                return null;
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
+          children: [
+            InputSimple(
+              title: 'auth.user'.tr(),
+              activeColor: true,
+              hintText: 'Ejem: John Doe',
+              enabled: true,
+              onChanged: (value) {
+                username = value;
+                setState(() {});
               },
-            ),
-          ),
-          // const Gap(25),
-          InputSimple(
-            title: 'auth.password'.tr(),
-            activeColor: true,
-            hintText: '****',
-            isPasswordField: true,
-            enabled: true,
-            textFieldSettings: TextFieldSettings(
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'auth.errors.password'.tr();
-                }
-                return null;
-              },
-            ),
-            onChanged: (value) {
-              password = value;
-              setState(() {});
-            },
-          ),
-          const Gap(25),
-          BlocBuilder<BranchteamCubit, BranchteamState>(
-            builder: (context, state) {
-              return JLuxDropdown(
-                isContainIcon: true,
-                isLoading: state.status == Status.inProgress,
+              textFieldSettings: TextFieldSettings(
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.characters,
                 validator: (value) {
-                  if (value == null) return 'auth.errors.branchTeam'.tr();
-
+                  if (value == null || value.isEmpty) {
+                    return 'auth.errors.username'.tr();
+                  }
                   return null;
                 },
-                title: 'auth.branch'.tr(),
-                items: state.branchTeams,
-                onChanged: (item) {
-                  if (item == null) return;
-                  branchTeam = item.nombreDb;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item.nombre;
-                },
-                hintText: 'auth.select_branch'.tr(),
-              );
-            },
-          ),
-          const Gap(30),
-          BlocConsumer<AuthCubit, AuthState>(
-            listener: (context, state) async {
-              final status = state.status;
-              if (status == Status.error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    showCloseIcon: true,
-                    content: Text(state.errorMsg),
-                  ),
-                );
-              }
-              if (state.status == Status.done) {
-                if (!context.mounted) return;
-                context.pushReplacement('/');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    showCloseIcon: true,
-                    content: Text('auth.logged'.tr()),
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return CustomElevatedButton(
-                enabled: state.status != Status.inProgress,
-                text: 'button.login'.tr(),
-                color: Colors.black,
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    context.read<AuthCubit>().login(
-                          userName: username!.toUpperCase().trim(),
-                          password: password!.trim(),
-                          dbName: branchTeam!,
-                        );
+              ),
+            ),
+            // const Gap(25),
+            InputSimple(
+              title: 'auth.password'.tr(),
+              activeColor: true,
+              hintText: '****',
+              isPasswordField: true,
+              enabled: true,
+              textFieldSettings: TextFieldSettings(
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'auth.errors.password'.tr();
                   }
+                  return null;
                 },
-              );
-            },
-          )
-        ],
+              ),
+              onChanged: (value) {
+                password = value;
+                setState(() {});
+              },
+            ),
+            const Gap(25),
+            BlocBuilder<BranchteamCubit, BranchteamState>(
+              builder: (context, state) {
+                return JLuxDropdown(
+                  isContainIcon: true,
+                  isLoading: state.status == Status.inProgress,
+                  validator: (value) {
+                    if (value == null) return 'auth.errors.branchTeam'.tr();
+
+                    return null;
+                  },
+                  title: 'auth.branch'.tr(),
+                  items: state.branchTeams,
+                  onChanged: (item) {
+                    if (item == null) return;
+                    branchTeam = item.nombreDb;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.nombre;
+                  },
+                  hintText: 'auth.select_branch'.tr(),
+                );
+              },
+            ),
+            const Gap(30),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) async {
+                final status = state.status;
+                if (status == Status.error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      showCloseIcon: true,
+                      content: Text(state.errorMsg),
+                    ),
+                  );
+                }
+                if (state.status == Status.done) {
+                  if (!context.mounted) return;
+                  context.pushReplacement('/');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      showCloseIcon: true,
+                      content: Text('auth.logged'.tr()),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return CustomElevatedButton(
+                  enabled: state.status != Status.inProgress,
+                  text: 'button.login'.tr(),
+                  color: Colors.black,
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      context.read<AuthCubit>().login(
+                            userName: username!.toUpperCase().trim(),
+                            password: password!.trim(),
+                            dbName: branchTeam!,
+                          );
+                    }
+                  },
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }

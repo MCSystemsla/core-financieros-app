@@ -99,6 +99,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    contextMenuBuilder: (context, editableTextState) =>
+                        const SizedBox(),
                     onFieldSubmitted: onFieldSubmitted,
                     onTapOutside: onTapOutside,
                     onTap: onTap,

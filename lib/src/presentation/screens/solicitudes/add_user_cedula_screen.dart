@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
@@ -6,7 +7,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,6 +62,8 @@ class AddUserCedulaScreen extends StatelessWidget {
               key: formKey,
               child: Center(
                 child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -73,24 +75,20 @@ class AddUserCedulaScreen extends StatelessWidget {
                       Text(
                         'Ingresar Usuario a solicitar Solicitud de Credito',
                         style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.start,
+                        textAlign: TextAlign.center,
                       ),
                       const Gap(10),
                       Text(
                         'Ingresa los datos requeridos',
                         style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.start,
+                        textAlign: TextAlign.center,
                       ),
                       const Gap(20),
                       OutlineTextfieldWidget(
+                        maxLength: 20,
                         textEditingController: cedulaController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-
-                          return null;
-                        },
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
                         icon: Icon(
                           Icons.credit_card_outlined,
                           color: AppColors.getPrimaryColor(),
