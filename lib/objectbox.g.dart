@@ -20,6 +20,7 @@ import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.d
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_parentesco.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -197,6 +198,505 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(10, 5156059507673561033),
+      name: 'ResponseLocalDb',
+      lastPropertyId: const obx_int.IdUid(98, 4241004158816654841),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4988638476438181614),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5529376376801727811),
+            name: 'objOrigenSolicitudId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 9068785462895059763),
+            name: 'nombre1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 7145783619371768007),
+            name: 'nombre2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 7055275141373444714),
+            name: 'apellido1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 2062383962663536309),
+            name: 'apellido2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 352608134239763331),
+            name: 'cedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 3398477135374293212),
+            name: 'objPaisEmisorCedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 7356443482573259606),
+            name: 'fechaEmisionCedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 8620034471808195271),
+            name: 'fechaVencimientoCedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(11, 9102321029365166718),
+            name: 'fechaNacimiento',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(12, 3207880347707460585),
+            name: 'telefono',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 6930179431728717839),
+            name: 'celular',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(14, 4311003597851445066),
+            name: 'direccionCasa',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(15, 4031294413771024769),
+            name: 'barrioCasa',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(16, 7986901660925047607),
+            name: 'objMunicipioCasaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(17, 1950589457744521354),
+            name: 'objDepartamentoCasaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(18, 28752528569814769),
+            name: 'objPaisCasaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(19, 8383967497641046004),
+            name: 'profesion',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(20, 2586103385323416604),
+            name: 'ocupacion',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(21, 3049797603114993491),
+            name: 'nacionalidad',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(22, 7029142082118098988),
+            name: 'objCondicionCasaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(23, 2288692761722791230),
+            name: 'anosResidirCasa',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(24, 3083676962811910525),
+            name: 'email',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(25, 115215976472777165),
+            name: 'monto',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(26, 8503751327504959626),
+            name: 'objMonedaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(27, 2639024742106140705),
+            name: 'objPropositoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(28, 4244840157473737544),
+            name: 'objFrecuenciaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(29, 4390361104297428196),
+            name: 'cuota',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(30, 243444281661094168),
+            name: 'objActividadId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(31, 3545319281818285277),
+            name: 'objActividadId1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(32, 837727334533355016),
+            name: 'objActividadId2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(33, 4452425646455832362),
+            name: 'objSectorId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(34, 2363290665862523420),
+            name: 'nombreNegocio',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(35, 2947566661176879374),
+            name: 'tiempoFuncionamientoNegocio',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(36, 9220662027034636426),
+            name: 'direccionNegocio',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(37, 2934592370247021840),
+            name: 'barrioNegocio',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(38, 7738875877626393452),
+            name: 'objMunicipioNegocioId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(39, 2501503574959858074),
+            name: 'objCondicionNegocioId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(40, 7328734351611272774),
+            name: 'horarioTrabajo',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(41, 428193611821991771),
+            name: 'horarioVisita',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(42, 3682398208465734257),
+            name: 'personasACargo',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(43, 1811670365559717653),
+            name: 'objEstadoCivilId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(44, 75663799033596612),
+            name: 'nombreConyugue',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(45, 8957487055441507471),
+            name: 'trabajaConyugue',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(46, 399023044216666429),
+            name: 'trabajoConyugue',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(47, 6080293005414594159),
+            name: 'direccionTrabajoConyugue',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(48, 5886723902134350106),
+            name: 'telefonoTrabajoConyugue',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(49, 3635061555831904230),
+            name: 'beneficiarioSeguro',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(50, 8587934935989215553),
+            name: 'cedulaBeneficiarioSeguro',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(51, 2340628920470919882),
+            name: 'objParentescoBeneficiarioSeguroId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(52, 7616156580758967372),
+            name: 'beneficiarioSeguro1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(53, 2977432103491975666),
+            name: 'cedulaBeneficiarioSeguro1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(54, 2234215006267868840),
+            name: 'objParentescoBeneficiarioSeguroId1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(55, 1513381042602805952),
+            name: 'objEstadoSolicitudId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(56, 8383245677318140057),
+            name: 'objOficialCreditoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(57, 4477654020527239147),
+            name: 'objProductoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(58, 6629998472966456064),
+            name: 'observacion',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(59, 7506480688547319438),
+            name: 'sucursal',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(60, 7720709553116854154),
+            name: 'ubicacionLongitud',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(61, 2858166688401071434),
+            name: 'ubicacionLatitud',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(62, 5916446141444596575),
+            name: 'ubicacionGradosLongitud',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(63, 6026592599693021647),
+            name: 'ubicacionGradosLatitud',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(64, 2553803346075584260),
+            name: 'objEscolaridadId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(65, 5732969796346181341),
+            name: 'cantidadHijos',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(66, 5579722577480888211),
+            name: 'nombrePublico',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(67, 6720291584927703702),
+            name: 'objSexoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(68, 5136568474844137560),
+            name: 'objPaisNacimientoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(69, 2863293681506651099),
+            name: 'nacionalidadConyugue',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(70, 7271719527636321884),
+            name: 'database',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(71, 6152252895721007114),
+            name: 'ubicacion',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(72, 8707214069627763276),
+            name: 'espeps',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(73, 2971958953666040933),
+            name: 'nombreDeEntidadPeps',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(74, 1804865296050567320),
+            name: 'paisPeps',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(75, 3948077003210099902),
+            name: 'periodoPeps',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(76, 5725859724638100982),
+            name: 'cargoOficialPeps',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(77, 6002792746728140581),
+            name: 'tieneFamiliarPeps',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(78, 1333878176834195371),
+            name: 'nombreFamiliarPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(79, 8754240396975845683),
+            name: 'parentescoFamiliarPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(80, 1028465654455079095),
+            name: 'cargoFamiliarPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(81, 4688921056082408406),
+            name: 'nombreEntidadPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(82, 7055781668181545041),
+            name: 'periodoPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(83, 5456094715741704344),
+            name: 'paisPeps2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(84, 5777624252059251984),
+            name: 'objRubroActividad',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(85, 6612782205818203915),
+            name: 'objActividadPredominante',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(86, 2864282043887046100),
+            name: 'esFamiliarEmpleado',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(87, 8808444959846571274),
+            name: 'nombreFamiliar',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(88, 3555247594659255414),
+            name: 'cedulaFamiliar',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(89, 1398998104018646012),
+            name: 'objTipoDocumentoId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(90, 1878347331355273303),
+            name: 'objRubroActividad2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(91, 8091873801294154389),
+            name: 'objRubroActividad3',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(92, 8854969421220433756),
+            name: 'objRubroActividadPredominante',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(93, 8569480508504201050),
+            name: 'tipoPersona',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(94, 8992954786239451967),
+            name: 'objTipoPersonaId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(95, 4661044095086715147),
+            name: 'telefonoBeneficiario',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(96, 161512810093354517),
+            name: 'telefonoBeneficiarioSeguro1',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(97, 4772611495266759078),
+            name: 'plazoSolicitud',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(98, 4241004158816654841),
+            name: 'fechaPrimerPagoSolicitud',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -235,7 +735,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(9, 7850167120603932692),
+      lastEntityId: const obx_int.IdUid(10, 5156059507673561033),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -497,6 +997,762 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    ResponseLocalDb: obx_int.EntityDefinition<ResponseLocalDb>(
+        model: _entities[6],
+        toOneRelations: (ResponseLocalDb object) => [],
+        toManyRelations: (ResponseLocalDb object) => {},
+        getId: (ResponseLocalDb object) => object.id,
+        setId: (ResponseLocalDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ResponseLocalDb object, fb.Builder fbb) {
+          final objOrigenSolicitudIdOffset = object.objOrigenSolicitudId == null
+              ? null
+              : fbb.writeString(object.objOrigenSolicitudId!);
+          final nombre1Offset =
+              object.nombre1 == null ? null : fbb.writeString(object.nombre1!);
+          final nombre2Offset =
+              object.nombre2 == null ? null : fbb.writeString(object.nombre2!);
+          final apellido1Offset = object.apellido1 == null
+              ? null
+              : fbb.writeString(object.apellido1!);
+          final apellido2Offset = object.apellido2 == null
+              ? null
+              : fbb.writeString(object.apellido2!);
+          final cedulaOffset =
+              object.cedula == null ? null : fbb.writeString(object.cedula!);
+          final objPaisEmisorCedulaOffset = object.objPaisEmisorCedula == null
+              ? null
+              : fbb.writeString(object.objPaisEmisorCedula!);
+          final fechaEmisionCedulaOffset = object.fechaEmisionCedula == null
+              ? null
+              : fbb.writeString(object.fechaEmisionCedula!);
+          final fechaVencimientoCedulaOffset =
+              object.fechaVencimientoCedula == null
+                  ? null
+                  : fbb.writeString(object.fechaVencimientoCedula!);
+          final fechaNacimientoOffset = object.fechaNacimiento == null
+              ? null
+              : fbb.writeString(object.fechaNacimiento!);
+          final telefonoOffset = object.telefono == null
+              ? null
+              : fbb.writeString(object.telefono!);
+          final celularOffset =
+              object.celular == null ? null : fbb.writeString(object.celular!);
+          final direccionCasaOffset = object.direccionCasa == null
+              ? null
+              : fbb.writeString(object.direccionCasa!);
+          final barrioCasaOffset = object.barrioCasa == null
+              ? null
+              : fbb.writeString(object.barrioCasa!);
+          final objMunicipioCasaIdOffset = object.objMunicipioCasaId == null
+              ? null
+              : fbb.writeString(object.objMunicipioCasaId!);
+          final objDepartamentoCasaIdOffset =
+              object.objDepartamentoCasaId == null
+                  ? null
+                  : fbb.writeString(object.objDepartamentoCasaId!);
+          final objPaisCasaIdOffset = object.objPaisCasaId == null
+              ? null
+              : fbb.writeString(object.objPaisCasaId!);
+          final profesionOffset = object.profesion == null
+              ? null
+              : fbb.writeString(object.profesion!);
+          final ocupacionOffset = object.ocupacion == null
+              ? null
+              : fbb.writeString(object.ocupacion!);
+          final nacionalidadOffset = object.nacionalidad == null
+              ? null
+              : fbb.writeString(object.nacionalidad!);
+          final objCondicionCasaIdOffset = object.objCondicionCasaId == null
+              ? null
+              : fbb.writeString(object.objCondicionCasaId!);
+          final emailOffset =
+              object.email == null ? null : fbb.writeString(object.email!);
+          final objMonedaIdOffset = object.objMonedaId == null
+              ? null
+              : fbb.writeString(object.objMonedaId!);
+          final objPropositoIdOffset = object.objPropositoId == null
+              ? null
+              : fbb.writeString(object.objPropositoId!);
+          final objFrecuenciaIdOffset = object.objFrecuenciaId == null
+              ? null
+              : fbb.writeString(object.objFrecuenciaId!);
+          final objActividadIdOffset = object.objActividadId == null
+              ? null
+              : fbb.writeString(object.objActividadId!);
+          final objActividadId1Offset = object.objActividadId1 == null
+              ? null
+              : fbb.writeString(object.objActividadId1!);
+          final objActividadId2Offset = object.objActividadId2 == null
+              ? null
+              : fbb.writeString(object.objActividadId2!);
+          final objSectorIdOffset = object.objSectorId == null
+              ? null
+              : fbb.writeString(object.objSectorId!);
+          final nombreNegocioOffset = object.nombreNegocio == null
+              ? null
+              : fbb.writeString(object.nombreNegocio!);
+          final tiempoFuncionamientoNegocioOffset =
+              object.tiempoFuncionamientoNegocio == null
+                  ? null
+                  : fbb.writeString(object.tiempoFuncionamientoNegocio!);
+          final direccionNegocioOffset = object.direccionNegocio == null
+              ? null
+              : fbb.writeString(object.direccionNegocio!);
+          final barrioNegocioOffset = object.barrioNegocio == null
+              ? null
+              : fbb.writeString(object.barrioNegocio!);
+          final objMunicipioNegocioIdOffset =
+              object.objMunicipioNegocioId == null
+                  ? null
+                  : fbb.writeString(object.objMunicipioNegocioId!);
+          final objCondicionNegocioIdOffset =
+              object.objCondicionNegocioId == null
+                  ? null
+                  : fbb.writeString(object.objCondicionNegocioId!);
+          final horarioTrabajoOffset = object.horarioTrabajo == null
+              ? null
+              : fbb.writeString(object.horarioTrabajo!);
+          final horarioVisitaOffset = object.horarioVisita == null
+              ? null
+              : fbb.writeString(object.horarioVisita!);
+          final objEstadoCivilIdOffset = object.objEstadoCivilId == null
+              ? null
+              : fbb.writeString(object.objEstadoCivilId!);
+          final nombreConyugueOffset = object.nombreConyugue == null
+              ? null
+              : fbb.writeString(object.nombreConyugue!);
+          final trabajoConyugueOffset = object.trabajoConyugue == null
+              ? null
+              : fbb.writeString(object.trabajoConyugue!);
+          final direccionTrabajoConyugueOffset =
+              object.direccionTrabajoConyugue == null
+                  ? null
+                  : fbb.writeString(object.direccionTrabajoConyugue!);
+          final telefonoTrabajoConyugueOffset =
+              object.telefonoTrabajoConyugue == null
+                  ? null
+                  : fbb.writeString(object.telefonoTrabajoConyugue!);
+          final beneficiarioSeguroOffset = object.beneficiarioSeguro == null
+              ? null
+              : fbb.writeString(object.beneficiarioSeguro!);
+          final cedulaBeneficiarioSeguroOffset =
+              object.cedulaBeneficiarioSeguro == null
+                  ? null
+                  : fbb.writeString(object.cedulaBeneficiarioSeguro!);
+          final objParentescoBeneficiarioSeguroIdOffset =
+              object.objParentescoBeneficiarioSeguroId == null
+                  ? null
+                  : fbb.writeString(object.objParentescoBeneficiarioSeguroId!);
+          final beneficiarioSeguro1Offset = object.beneficiarioSeguro1 == null
+              ? null
+              : fbb.writeString(object.beneficiarioSeguro1!);
+          final cedulaBeneficiarioSeguro1Offset =
+              object.cedulaBeneficiarioSeguro1 == null
+                  ? null
+                  : fbb.writeString(object.cedulaBeneficiarioSeguro1!);
+          final objParentescoBeneficiarioSeguroId1Offset =
+              object.objParentescoBeneficiarioSeguroId1 == null
+                  ? null
+                  : fbb.writeString(object.objParentescoBeneficiarioSeguroId1!);
+          final objEstadoSolicitudIdOffset = object.objEstadoSolicitudId == null
+              ? null
+              : fbb.writeString(object.objEstadoSolicitudId!);
+          final objOficialCreditoIdOffset = object.objOficialCreditoId == null
+              ? null
+              : fbb.writeString(object.objOficialCreditoId!);
+          final objProductoIdOffset = object.objProductoId == null
+              ? null
+              : fbb.writeString(object.objProductoId!);
+          final observacionOffset = object.observacion == null
+              ? null
+              : fbb.writeString(object.observacion!);
+          final sucursalOffset = object.sucursal == null
+              ? null
+              : fbb.writeString(object.sucursal!);
+          final ubicacionLongitudOffset = object.ubicacionLongitud == null
+              ? null
+              : fbb.writeString(object.ubicacionLongitud!);
+          final ubicacionLatitudOffset = object.ubicacionLatitud == null
+              ? null
+              : fbb.writeString(object.ubicacionLatitud!);
+          final ubicacionGradosLongitudOffset =
+              object.ubicacionGradosLongitud == null
+                  ? null
+                  : fbb.writeString(object.ubicacionGradosLongitud!);
+          final ubicacionGradosLatitudOffset =
+              object.ubicacionGradosLatitud == null
+                  ? null
+                  : fbb.writeString(object.ubicacionGradosLatitud!);
+          final objEscolaridadIdOffset = object.objEscolaridadId == null
+              ? null
+              : fbb.writeString(object.objEscolaridadId!);
+          final nombrePublicoOffset = object.nombrePublico == null
+              ? null
+              : fbb.writeString(object.nombrePublico!);
+          final objSexoIdOffset = object.objSexoId == null
+              ? null
+              : fbb.writeString(object.objSexoId!);
+          final objPaisNacimientoIdOffset = object.objPaisNacimientoId == null
+              ? null
+              : fbb.writeString(object.objPaisNacimientoId!);
+          final nacionalidadConyugueOffset = object.nacionalidadConyugue == null
+              ? null
+              : fbb.writeString(object.nacionalidadConyugue!);
+          final databaseOffset = object.database == null
+              ? null
+              : fbb.writeString(object.database!);
+          final ubicacionOffset = object.ubicacion == null
+              ? null
+              : fbb.writeString(object.ubicacion!);
+          final nombreDeEntidadPepsOffset = object.nombreDeEntidadPeps == null
+              ? null
+              : fbb.writeString(object.nombreDeEntidadPeps!);
+          final paisPepsOffset = object.paisPeps == null
+              ? null
+              : fbb.writeString(object.paisPeps!);
+          final periodoPepsOffset = object.periodoPeps == null
+              ? null
+              : fbb.writeString(object.periodoPeps!);
+          final cargoOficialPepsOffset = object.cargoOficialPeps == null
+              ? null
+              : fbb.writeString(object.cargoOficialPeps!);
+          final nombreFamiliarPeps2Offset = object.nombreFamiliarPeps2 == null
+              ? null
+              : fbb.writeString(object.nombreFamiliarPeps2!);
+          final parentescoFamiliarPeps2Offset =
+              object.parentescoFamiliarPeps2 == null
+                  ? null
+                  : fbb.writeString(object.parentescoFamiliarPeps2!);
+          final cargoFamiliarPeps2Offset = object.cargoFamiliarPeps2 == null
+              ? null
+              : fbb.writeString(object.cargoFamiliarPeps2!);
+          final nombreEntidadPeps2Offset = object.nombreEntidadPeps2 == null
+              ? null
+              : fbb.writeString(object.nombreEntidadPeps2!);
+          final periodoPeps2Offset = object.periodoPeps2 == null
+              ? null
+              : fbb.writeString(object.periodoPeps2!);
+          final paisPeps2Offset = object.paisPeps2 == null
+              ? null
+              : fbb.writeString(object.paisPeps2!);
+          final objRubroActividadOffset = object.objRubroActividad == null
+              ? null
+              : fbb.writeString(object.objRubroActividad!);
+          final objActividadPredominanteOffset =
+              object.objActividadPredominante == null
+                  ? null
+                  : fbb.writeString(object.objActividadPredominante!);
+          final nombreFamiliarOffset = object.nombreFamiliar == null
+              ? null
+              : fbb.writeString(object.nombreFamiliar!);
+          final cedulaFamiliarOffset = object.cedulaFamiliar == null
+              ? null
+              : fbb.writeString(object.cedulaFamiliar!);
+          final objTipoDocumentoIdOffset = object.objTipoDocumentoId == null
+              ? null
+              : fbb.writeString(object.objTipoDocumentoId!);
+          final objRubroActividad2Offset = object.objRubroActividad2 == null
+              ? null
+              : fbb.writeString(object.objRubroActividad2!);
+          final objRubroActividad3Offset = object.objRubroActividad3 == null
+              ? null
+              : fbb.writeString(object.objRubroActividad3!);
+          final objRubroActividadPredominanteOffset =
+              object.objRubroActividadPredominante == null
+                  ? null
+                  : fbb.writeString(object.objRubroActividadPredominante!);
+          final tipoPersonaOffset = object.tipoPersona == null
+              ? null
+              : fbb.writeString(object.tipoPersona!);
+          final objTipoPersonaIdOffset = object.objTipoPersonaId == null
+              ? null
+              : fbb.writeString(object.objTipoPersonaId!);
+          final telefonoBeneficiarioOffset = object.telefonoBeneficiario == null
+              ? null
+              : fbb.writeString(object.telefonoBeneficiario!);
+          final telefonoBeneficiarioSeguro1Offset =
+              object.telefonoBeneficiarioSeguro1 == null
+                  ? null
+                  : fbb.writeString(object.telefonoBeneficiarioSeguro1!);
+          final fechaPrimerPagoSolicitudOffset =
+              object.fechaPrimerPagoSolicitud == null
+                  ? null
+                  : fbb.writeString(object.fechaPrimerPagoSolicitud!);
+          fbb.startTable(99);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, objOrigenSolicitudIdOffset);
+          fbb.addOffset(2, nombre1Offset);
+          fbb.addOffset(3, nombre2Offset);
+          fbb.addOffset(4, apellido1Offset);
+          fbb.addOffset(5, apellido2Offset);
+          fbb.addOffset(6, cedulaOffset);
+          fbb.addOffset(7, objPaisEmisorCedulaOffset);
+          fbb.addOffset(8, fechaEmisionCedulaOffset);
+          fbb.addOffset(9, fechaVencimientoCedulaOffset);
+          fbb.addOffset(10, fechaNacimientoOffset);
+          fbb.addOffset(11, telefonoOffset);
+          fbb.addOffset(12, celularOffset);
+          fbb.addOffset(13, direccionCasaOffset);
+          fbb.addOffset(14, barrioCasaOffset);
+          fbb.addOffset(15, objMunicipioCasaIdOffset);
+          fbb.addOffset(16, objDepartamentoCasaIdOffset);
+          fbb.addOffset(17, objPaisCasaIdOffset);
+          fbb.addOffset(18, profesionOffset);
+          fbb.addOffset(19, ocupacionOffset);
+          fbb.addOffset(20, nacionalidadOffset);
+          fbb.addOffset(21, objCondicionCasaIdOffset);
+          fbb.addInt64(22, object.anosResidirCasa);
+          fbb.addOffset(23, emailOffset);
+          fbb.addInt64(24, object.monto);
+          fbb.addOffset(25, objMonedaIdOffset);
+          fbb.addOffset(26, objPropositoIdOffset);
+          fbb.addOffset(27, objFrecuenciaIdOffset);
+          fbb.addInt64(28, object.cuota);
+          fbb.addOffset(29, objActividadIdOffset);
+          fbb.addOffset(30, objActividadId1Offset);
+          fbb.addOffset(31, objActividadId2Offset);
+          fbb.addOffset(32, objSectorIdOffset);
+          fbb.addOffset(33, nombreNegocioOffset);
+          fbb.addOffset(34, tiempoFuncionamientoNegocioOffset);
+          fbb.addOffset(35, direccionNegocioOffset);
+          fbb.addOffset(36, barrioNegocioOffset);
+          fbb.addOffset(37, objMunicipioNegocioIdOffset);
+          fbb.addOffset(38, objCondicionNegocioIdOffset);
+          fbb.addOffset(39, horarioTrabajoOffset);
+          fbb.addOffset(40, horarioVisitaOffset);
+          fbb.addInt64(41, object.personasACargo);
+          fbb.addOffset(42, objEstadoCivilIdOffset);
+          fbb.addOffset(43, nombreConyugueOffset);
+          fbb.addBool(44, object.trabajaConyugue);
+          fbb.addOffset(45, trabajoConyugueOffset);
+          fbb.addOffset(46, direccionTrabajoConyugueOffset);
+          fbb.addOffset(47, telefonoTrabajoConyugueOffset);
+          fbb.addOffset(48, beneficiarioSeguroOffset);
+          fbb.addOffset(49, cedulaBeneficiarioSeguroOffset);
+          fbb.addOffset(50, objParentescoBeneficiarioSeguroIdOffset);
+          fbb.addOffset(51, beneficiarioSeguro1Offset);
+          fbb.addOffset(52, cedulaBeneficiarioSeguro1Offset);
+          fbb.addOffset(53, objParentescoBeneficiarioSeguroId1Offset);
+          fbb.addOffset(54, objEstadoSolicitudIdOffset);
+          fbb.addOffset(55, objOficialCreditoIdOffset);
+          fbb.addOffset(56, objProductoIdOffset);
+          fbb.addOffset(57, observacionOffset);
+          fbb.addOffset(58, sucursalOffset);
+          fbb.addOffset(59, ubicacionLongitudOffset);
+          fbb.addOffset(60, ubicacionLatitudOffset);
+          fbb.addOffset(61, ubicacionGradosLongitudOffset);
+          fbb.addOffset(62, ubicacionGradosLatitudOffset);
+          fbb.addOffset(63, objEscolaridadIdOffset);
+          fbb.addInt64(64, object.cantidadHijos);
+          fbb.addOffset(65, nombrePublicoOffset);
+          fbb.addOffset(66, objSexoIdOffset);
+          fbb.addOffset(67, objPaisNacimientoIdOffset);
+          fbb.addOffset(68, nacionalidadConyugueOffset);
+          fbb.addOffset(69, databaseOffset);
+          fbb.addOffset(70, ubicacionOffset);
+          fbb.addBool(71, object.espeps);
+          fbb.addOffset(72, nombreDeEntidadPepsOffset);
+          fbb.addOffset(73, paisPepsOffset);
+          fbb.addOffset(74, periodoPepsOffset);
+          fbb.addOffset(75, cargoOficialPepsOffset);
+          fbb.addBool(76, object.tieneFamiliarPeps);
+          fbb.addOffset(77, nombreFamiliarPeps2Offset);
+          fbb.addOffset(78, parentescoFamiliarPeps2Offset);
+          fbb.addOffset(79, cargoFamiliarPeps2Offset);
+          fbb.addOffset(80, nombreEntidadPeps2Offset);
+          fbb.addOffset(81, periodoPeps2Offset);
+          fbb.addOffset(82, paisPeps2Offset);
+          fbb.addOffset(83, objRubroActividadOffset);
+          fbb.addOffset(84, objActividadPredominanteOffset);
+          fbb.addBool(85, object.esFamiliarEmpleado);
+          fbb.addOffset(86, nombreFamiliarOffset);
+          fbb.addOffset(87, cedulaFamiliarOffset);
+          fbb.addOffset(88, objTipoDocumentoIdOffset);
+          fbb.addOffset(89, objRubroActividad2Offset);
+          fbb.addOffset(90, objRubroActividad3Offset);
+          fbb.addOffset(91, objRubroActividadPredominanteOffset);
+          fbb.addOffset(92, tipoPersonaOffset);
+          fbb.addOffset(93, objTipoPersonaIdOffset);
+          fbb.addOffset(94, telefonoBeneficiarioOffset);
+          fbb.addOffset(95, telefonoBeneficiarioSeguro1Offset);
+          fbb.addInt64(96, object.plazoSolicitud);
+          fbb.addOffset(97, fechaPrimerPagoSolicitudOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final objOrigenSolicitudIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 6);
+          final nombre1Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final nombre2Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 10);
+          final apellido1Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 12);
+          final apellido2Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final cedulaParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 16);
+          final objPaisEmisorCedulaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 18);
+          final fechaEmisionCedulaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 20);
+          final fechaVencimientoCedulaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 22);
+          final fechaNacimientoParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 24);
+          final telefonoParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 26);
+          final celularParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 28);
+          final direccionCasaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 30);
+          final barrioCasaParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 32);
+          final objMunicipioCasaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 34);
+          final objDepartamentoCasaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 36);
+          final objPaisCasaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 38);
+          final profesionParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 40);
+          final ocupacionParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 42);
+          final nacionalidadParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 44);
+          final objCondicionCasaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 46);
+          final anosResidirCasaParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 48);
+          final emailParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 50);
+          final montoParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 52);
+          final objMonedaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 54);
+          final objPropositoIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 56);
+          final objFrecuenciaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 58);
+          final cuotaParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 60);
+          final objActividadIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 62);
+          final objActividadId1Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 64);
+          final objActividadId2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 66);
+          final objSectorIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 68);
+          final nombreNegocioParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 70);
+          final tiempoFuncionamientoNegocioParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 72);
+          final direccionNegocioParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 74);
+          final barrioNegocioParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 76);
+          final objMunicipioNegocioIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 78);
+          final objCondicionNegocioIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 80);
+          final horarioTrabajoParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 82);
+          final horarioVisitaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 84);
+          final personasACargoParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 86);
+          final objEstadoCivilIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 88);
+          final nombreConyugueParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 90);
+          final trabajaConyugueParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 92);
+          final trabajoConyugueParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 94);
+          final direccionTrabajoConyugueParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 96);
+          final telefonoTrabajoConyugueParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 98);
+          final beneficiarioSeguroParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 100);
+          final cedulaBeneficiarioSeguroParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 102);
+          final objParentescoBeneficiarioSeguroIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 104);
+          final beneficiarioSeguro1Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 106);
+          final cedulaBeneficiarioSeguro1Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 108);
+          final objParentescoBeneficiarioSeguroId1Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 110);
+          final objEstadoSolicitudIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 112);
+          final objOficialCreditoIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 114);
+          final objProductoIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 116);
+          final observacionParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 118);
+          final sucursalParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 120);
+          final ubicacionLongitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 122);
+          final ubicacionLatitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 124);
+          final ubicacionGradosLongitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 126);
+          final ubicacionGradosLatitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 128);
+          final objEscolaridadIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 130);
+          final cantidadHijosParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 132);
+          final nombrePublicoParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 134);
+          final objSexoIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 136);
+          final objPaisNacimientoIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 138);
+          final nacionalidadConyugueParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 140);
+          final databaseParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 142);
+          final ubicacionParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 144);
+          final espepsParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 146);
+          final nombreDeEntidadPepsParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 148);
+          final paisPepsParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 150);
+          final periodoPepsParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 152);
+          final cargoOficialPepsParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 154);
+          final tieneFamiliarPepsParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 156);
+          final nombreFamiliarPeps2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 158);
+          final parentescoFamiliarPeps2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 160);
+          final cargoFamiliarPeps2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 162);
+          final nombreEntidadPeps2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 164);
+          final periodoPeps2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 166);
+          final paisPeps2Param = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 168);
+          final objRubroActividadParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 170);
+          final objActividadPredominanteParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 172);
+          final esFamiliarEmpleadoParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 174);
+          final nombreFamiliarParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 176);
+          final cedulaFamiliarParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 178);
+          final objTipoDocumentoIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 180);
+          final objRubroActividad2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 182);
+          final objRubroActividad3Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 184);
+          final objRubroActividadPredominanteParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 186);
+          final tipoPersonaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 188);
+          final objTipoPersonaIdParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 190);
+          final telefonoBeneficiarioParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 192);
+          final telefonoBeneficiarioSeguro1Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 194);
+          final plazoSolicitudParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 196);
+          final fechaPrimerPagoSolicitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 198);
+          final object = ResponseLocalDb(
+              objOrigenSolicitudId: objOrigenSolicitudIdParam,
+              nombre1: nombre1Param,
+              nombre2: nombre2Param,
+              apellido1: apellido1Param,
+              apellido2: apellido2Param,
+              cedula: cedulaParam,
+              objPaisEmisorCedula: objPaisEmisorCedulaParam,
+              fechaEmisionCedula: fechaEmisionCedulaParam,
+              fechaVencimientoCedula: fechaVencimientoCedulaParam,
+              fechaNacimiento: fechaNacimientoParam,
+              telefono: telefonoParam,
+              celular: celularParam,
+              direccionCasa: direccionCasaParam,
+              barrioCasa: barrioCasaParam,
+              objMunicipioCasaId: objMunicipioCasaIdParam,
+              objDepartamentoCasaId: objDepartamentoCasaIdParam,
+              objPaisCasaId: objPaisCasaIdParam,
+              profesion: profesionParam,
+              ocupacion: ocupacionParam,
+              nacionalidad: nacionalidadParam,
+              objCondicionCasaId: objCondicionCasaIdParam,
+              anosResidirCasa: anosResidirCasaParam,
+              email: emailParam,
+              monto: montoParam,
+              objMonedaId: objMonedaIdParam,
+              objPropositoId: objPropositoIdParam,
+              objFrecuenciaId: objFrecuenciaIdParam,
+              cuota: cuotaParam,
+              objActividadId: objActividadIdParam,
+              objActividadId1: objActividadId1Param,
+              objActividadId2: objActividadId2Param,
+              objSectorId: objSectorIdParam,
+              nombreNegocio: nombreNegocioParam,
+              tiempoFuncionamientoNegocio: tiempoFuncionamientoNegocioParam,
+              direccionNegocio: direccionNegocioParam,
+              barrioNegocio: barrioNegocioParam,
+              objMunicipioNegocioId: objMunicipioNegocioIdParam,
+              objCondicionNegocioId: objCondicionNegocioIdParam,
+              horarioTrabajo: horarioTrabajoParam,
+              horarioVisita: horarioVisitaParam,
+              personasACargo: personasACargoParam,
+              objEstadoCivilId: objEstadoCivilIdParam,
+              nombreConyugue: nombreConyugueParam,
+              trabajaConyugue: trabajaConyugueParam,
+              trabajoConyugue: trabajoConyugueParam,
+              direccionTrabajoConyugue: direccionTrabajoConyugueParam,
+              telefonoTrabajoConyugue: telefonoTrabajoConyugueParam,
+              beneficiarioSeguro: beneficiarioSeguroParam,
+              cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguroParam,
+              objParentescoBeneficiarioSeguroId:
+                  objParentescoBeneficiarioSeguroIdParam,
+              beneficiarioSeguro1: beneficiarioSeguro1Param,
+              cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1Param,
+              objParentescoBeneficiarioSeguroId1:
+                  objParentescoBeneficiarioSeguroId1Param,
+              objEstadoSolicitudId: objEstadoSolicitudIdParam,
+              objOficialCreditoId: objOficialCreditoIdParam,
+              objProductoId: objProductoIdParam,
+              observacion: observacionParam,
+              sucursal: sucursalParam,
+              ubicacionLongitud: ubicacionLongitudParam,
+              ubicacionLatitud: ubicacionLatitudParam,
+              ubicacionGradosLongitud: ubicacionGradosLongitudParam,
+              ubicacionGradosLatitud: ubicacionGradosLatitudParam,
+              objEscolaridadId: objEscolaridadIdParam,
+              cantidadHijos: cantidadHijosParam,
+              nombrePublico: nombrePublicoParam,
+              objSexoId: objSexoIdParam,
+              objPaisNacimientoId: objPaisNacimientoIdParam,
+              nacionalidadConyugue: nacionalidadConyugueParam,
+              database: databaseParam,
+              ubicacion: ubicacionParam,
+              espeps: espepsParam,
+              nombreDeEntidadPeps: nombreDeEntidadPepsParam,
+              paisPeps: paisPepsParam,
+              periodoPeps: periodoPepsParam,
+              cargoOficialPeps: cargoOficialPepsParam,
+              tieneFamiliarPeps: tieneFamiliarPepsParam,
+              nombreFamiliarPeps2: nombreFamiliarPeps2Param,
+              parentescoFamiliarPeps2: parentescoFamiliarPeps2Param,
+              cargoFamiliarPeps2: cargoFamiliarPeps2Param,
+              nombreEntidadPeps2: nombreEntidadPeps2Param,
+              periodoPeps2: periodoPeps2Param,
+              paisPeps2: paisPeps2Param,
+              objRubroActividad: objRubroActividadParam,
+              objActividadPredominante: objActividadPredominanteParam,
+              esFamiliarEmpleado: esFamiliarEmpleadoParam,
+              nombreFamiliar: nombreFamiliarParam,
+              cedulaFamiliar: cedulaFamiliarParam,
+              objTipoDocumentoId: objTipoDocumentoIdParam,
+              objRubroActividad2: objRubroActividad2Param,
+              objRubroActividad3: objRubroActividad3Param,
+              objRubroActividadPredominante: objRubroActividadPredominanteParam,
+              tipoPersona: tipoPersonaParam,
+              objTipoPersonaId: objTipoPersonaIdParam,
+              telefonoBeneficiario: telefonoBeneficiarioParam,
+              telefonoBeneficiarioSeguro1: telefonoBeneficiarioSeguro1Param,
+              plazoSolicitud: plazoSolicitudParam,
+              fechaPrimerPagoSolicitud: fechaPrimerPagoSolicitudParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -615,4 +1871,399 @@ class DepartmentsLocalDb_ {
   /// See [DepartmentsLocalDb.nombre].
   static final nombre =
       obx.QueryStringProperty<DepartmentsLocalDb>(_entities[5].properties[2]);
+}
+
+/// [ResponseLocalDb] entity fields to define ObjectBox queries.
+class ResponseLocalDb_ {
+  /// See [ResponseLocalDb.id].
+  static final id =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[0]);
+
+  /// See [ResponseLocalDb.objOrigenSolicitudId].
+  static final objOrigenSolicitudId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[1]);
+
+  /// See [ResponseLocalDb.nombre1].
+  static final nombre1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[2]);
+
+  /// See [ResponseLocalDb.nombre2].
+  static final nombre2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[3]);
+
+  /// See [ResponseLocalDb.apellido1].
+  static final apellido1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[4]);
+
+  /// See [ResponseLocalDb.apellido2].
+  static final apellido2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[5]);
+
+  /// See [ResponseLocalDb.cedula].
+  static final cedula =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[6]);
+
+  /// See [ResponseLocalDb.objPaisEmisorCedula].
+  static final objPaisEmisorCedula =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[7]);
+
+  /// See [ResponseLocalDb.fechaEmisionCedula].
+  static final fechaEmisionCedula =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[8]);
+
+  /// See [ResponseLocalDb.fechaVencimientoCedula].
+  static final fechaVencimientoCedula =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[9]);
+
+  /// See [ResponseLocalDb.fechaNacimiento].
+  static final fechaNacimiento =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[10]);
+
+  /// See [ResponseLocalDb.telefono].
+  static final telefono =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[11]);
+
+  /// See [ResponseLocalDb.celular].
+  static final celular =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[12]);
+
+  /// See [ResponseLocalDb.direccionCasa].
+  static final direccionCasa =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[13]);
+
+  /// See [ResponseLocalDb.barrioCasa].
+  static final barrioCasa =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[14]);
+
+  /// See [ResponseLocalDb.objMunicipioCasaId].
+  static final objMunicipioCasaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[15]);
+
+  /// See [ResponseLocalDb.objDepartamentoCasaId].
+  static final objDepartamentoCasaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[16]);
+
+  /// See [ResponseLocalDb.objPaisCasaId].
+  static final objPaisCasaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[17]);
+
+  /// See [ResponseLocalDb.profesion].
+  static final profesion =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[18]);
+
+  /// See [ResponseLocalDb.ocupacion].
+  static final ocupacion =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[19]);
+
+  /// See [ResponseLocalDb.nacionalidad].
+  static final nacionalidad =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[20]);
+
+  /// See [ResponseLocalDb.objCondicionCasaId].
+  static final objCondicionCasaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[21]);
+
+  /// See [ResponseLocalDb.anosResidirCasa].
+  static final anosResidirCasa =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[22]);
+
+  /// See [ResponseLocalDb.email].
+  static final email =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[23]);
+
+  /// See [ResponseLocalDb.monto].
+  static final monto =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[24]);
+
+  /// See [ResponseLocalDb.objMonedaId].
+  static final objMonedaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[25]);
+
+  /// See [ResponseLocalDb.objPropositoId].
+  static final objPropositoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[26]);
+
+  /// See [ResponseLocalDb.objFrecuenciaId].
+  static final objFrecuenciaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[27]);
+
+  /// See [ResponseLocalDb.cuota].
+  static final cuota =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[28]);
+
+  /// See [ResponseLocalDb.objActividadId].
+  static final objActividadId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[29]);
+
+  /// See [ResponseLocalDb.objActividadId1].
+  static final objActividadId1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[30]);
+
+  /// See [ResponseLocalDb.objActividadId2].
+  static final objActividadId2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[31]);
+
+  /// See [ResponseLocalDb.objSectorId].
+  static final objSectorId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[32]);
+
+  /// See [ResponseLocalDb.nombreNegocio].
+  static final nombreNegocio =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[33]);
+
+  /// See [ResponseLocalDb.tiempoFuncionamientoNegocio].
+  static final tiempoFuncionamientoNegocio =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[34]);
+
+  /// See [ResponseLocalDb.direccionNegocio].
+  static final direccionNegocio =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[35]);
+
+  /// See [ResponseLocalDb.barrioNegocio].
+  static final barrioNegocio =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[36]);
+
+  /// See [ResponseLocalDb.objMunicipioNegocioId].
+  static final objMunicipioNegocioId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[37]);
+
+  /// See [ResponseLocalDb.objCondicionNegocioId].
+  static final objCondicionNegocioId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[38]);
+
+  /// See [ResponseLocalDb.horarioTrabajo].
+  static final horarioTrabajo =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[39]);
+
+  /// See [ResponseLocalDb.horarioVisita].
+  static final horarioVisita =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[40]);
+
+  /// See [ResponseLocalDb.personasACargo].
+  static final personasACargo =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[41]);
+
+  /// See [ResponseLocalDb.objEstadoCivilId].
+  static final objEstadoCivilId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[42]);
+
+  /// See [ResponseLocalDb.nombreConyugue].
+  static final nombreConyugue =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[43]);
+
+  /// See [ResponseLocalDb.trabajaConyugue].
+  static final trabajaConyugue =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[44]);
+
+  /// See [ResponseLocalDb.trabajoConyugue].
+  static final trabajoConyugue =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[45]);
+
+  /// See [ResponseLocalDb.direccionTrabajoConyugue].
+  static final direccionTrabajoConyugue =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[46]);
+
+  /// See [ResponseLocalDb.telefonoTrabajoConyugue].
+  static final telefonoTrabajoConyugue =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[47]);
+
+  /// See [ResponseLocalDb.beneficiarioSeguro].
+  static final beneficiarioSeguro =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[48]);
+
+  /// See [ResponseLocalDb.cedulaBeneficiarioSeguro].
+  static final cedulaBeneficiarioSeguro =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[49]);
+
+  /// See [ResponseLocalDb.objParentescoBeneficiarioSeguroId].
+  static final objParentescoBeneficiarioSeguroId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[50]);
+
+  /// See [ResponseLocalDb.beneficiarioSeguro1].
+  static final beneficiarioSeguro1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[51]);
+
+  /// See [ResponseLocalDb.cedulaBeneficiarioSeguro1].
+  static final cedulaBeneficiarioSeguro1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[52]);
+
+  /// See [ResponseLocalDb.objParentescoBeneficiarioSeguroId1].
+  static final objParentescoBeneficiarioSeguroId1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[53]);
+
+  /// See [ResponseLocalDb.objEstadoSolicitudId].
+  static final objEstadoSolicitudId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[54]);
+
+  /// See [ResponseLocalDb.objOficialCreditoId].
+  static final objOficialCreditoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[55]);
+
+  /// See [ResponseLocalDb.objProductoId].
+  static final objProductoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[56]);
+
+  /// See [ResponseLocalDb.observacion].
+  static final observacion =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[57]);
+
+  /// See [ResponseLocalDb.sucursal].
+  static final sucursal =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[58]);
+
+  /// See [ResponseLocalDb.ubicacionLongitud].
+  static final ubicacionLongitud =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[59]);
+
+  /// See [ResponseLocalDb.ubicacionLatitud].
+  static final ubicacionLatitud =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[60]);
+
+  /// See [ResponseLocalDb.ubicacionGradosLongitud].
+  static final ubicacionGradosLongitud =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[61]);
+
+  /// See [ResponseLocalDb.ubicacionGradosLatitud].
+  static final ubicacionGradosLatitud =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[62]);
+
+  /// See [ResponseLocalDb.objEscolaridadId].
+  static final objEscolaridadId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[63]);
+
+  /// See [ResponseLocalDb.cantidadHijos].
+  static final cantidadHijos =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[64]);
+
+  /// See [ResponseLocalDb.nombrePublico].
+  static final nombrePublico =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[65]);
+
+  /// See [ResponseLocalDb.objSexoId].
+  static final objSexoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[66]);
+
+  /// See [ResponseLocalDb.objPaisNacimientoId].
+  static final objPaisNacimientoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[67]);
+
+  /// See [ResponseLocalDb.nacionalidadConyugue].
+  static final nacionalidadConyugue =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[68]);
+
+  /// See [ResponseLocalDb.database].
+  static final database =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[69]);
+
+  /// See [ResponseLocalDb.ubicacion].
+  static final ubicacion =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[70]);
+
+  /// See [ResponseLocalDb.espeps].
+  static final espeps =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[71]);
+
+  /// See [ResponseLocalDb.nombreDeEntidadPeps].
+  static final nombreDeEntidadPeps =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[72]);
+
+  /// See [ResponseLocalDb.paisPeps].
+  static final paisPeps =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[73]);
+
+  /// See [ResponseLocalDb.periodoPeps].
+  static final periodoPeps =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[74]);
+
+  /// See [ResponseLocalDb.cargoOficialPeps].
+  static final cargoOficialPeps =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[75]);
+
+  /// See [ResponseLocalDb.tieneFamiliarPeps].
+  static final tieneFamiliarPeps =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[76]);
+
+  /// See [ResponseLocalDb.nombreFamiliarPeps2].
+  static final nombreFamiliarPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[77]);
+
+  /// See [ResponseLocalDb.parentescoFamiliarPeps2].
+  static final parentescoFamiliarPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[78]);
+
+  /// See [ResponseLocalDb.cargoFamiliarPeps2].
+  static final cargoFamiliarPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[79]);
+
+  /// See [ResponseLocalDb.nombreEntidadPeps2].
+  static final nombreEntidadPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[80]);
+
+  /// See [ResponseLocalDb.periodoPeps2].
+  static final periodoPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[81]);
+
+  /// See [ResponseLocalDb.paisPeps2].
+  static final paisPeps2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[82]);
+
+  /// See [ResponseLocalDb.objRubroActividad].
+  static final objRubroActividad =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[83]);
+
+  /// See [ResponseLocalDb.objActividadPredominante].
+  static final objActividadPredominante =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[84]);
+
+  /// See [ResponseLocalDb.esFamiliarEmpleado].
+  static final esFamiliarEmpleado =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[85]);
+
+  /// See [ResponseLocalDb.nombreFamiliar].
+  static final nombreFamiliar =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[86]);
+
+  /// See [ResponseLocalDb.cedulaFamiliar].
+  static final cedulaFamiliar =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[87]);
+
+  /// See [ResponseLocalDb.objTipoDocumentoId].
+  static final objTipoDocumentoId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[88]);
+
+  /// See [ResponseLocalDb.objRubroActividad2].
+  static final objRubroActividad2 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[89]);
+
+  /// See [ResponseLocalDb.objRubroActividad3].
+  static final objRubroActividad3 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[90]);
+
+  /// See [ResponseLocalDb.objRubroActividadPredominante].
+  static final objRubroActividadPredominante =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[91]);
+
+  /// See [ResponseLocalDb.tipoPersona].
+  static final tipoPersona =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[92]);
+
+  /// See [ResponseLocalDb.objTipoPersonaId].
+  static final objTipoPersonaId =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[93]);
+
+  /// See [ResponseLocalDb.telefonoBeneficiario].
+  static final telefonoBeneficiario =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[94]);
+
+  /// See [ResponseLocalDb.telefonoBeneficiarioSeguro1].
+  static final telefonoBeneficiarioSeguro1 =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[95]);
+
+  /// See [ResponseLocalDb.plazoSolicitud].
+  static final plazoSolicitud =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[96]);
+
+  /// See [ResponseLocalDb.fechaPrimerPagoSolicitud].
+  static final fechaPrimerPagoSolicitud =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[97]);
 }
