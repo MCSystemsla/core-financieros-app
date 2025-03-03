@@ -91,6 +91,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
               Status.inProgress =>
                 const Center(child: CircularProgressIndicator()),
               Status.error => OnErrorWidget(
+                  errorMsg: 'Error de Sistema',
                   onPressed: () {
                     context
                         .read<SolicitudesPendientesCubit>()
