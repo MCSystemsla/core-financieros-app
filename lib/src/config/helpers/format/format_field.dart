@@ -9,7 +9,7 @@ class FormatField {
     int? number = int.tryParse(newValue);
     if (number == null) return value;
 
-    final NumberFormat formatter = NumberFormat('#,##0.00');
+    final NumberFormat formatter = NumberFormat('#,##0.00', 'en_US');
     return formatter.format(number);
   }
 }
