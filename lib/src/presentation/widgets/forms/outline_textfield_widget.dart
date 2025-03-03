@@ -6,6 +6,8 @@ typedef ValidatorCallback<T> = String? Function(T? value)?;
 typedef OnChangeCallback<T> = Function(T? value)?;
 
 class OutlineTextfieldWidget extends StatelessWidget {
+  final void Function(String)? onFieldSubmitted;
+  final void Function(PointerDownEvent)? onTapOutside;
   final int maxLength;
   final bool haveCounter;
   final String? hintText;
@@ -25,6 +27,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
   const OutlineTextfieldWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
+    this.onFieldSubmitted,
+    this.onTapOutside,
     required this.title,
     this.textEditingController,
     this.validator,
@@ -43,6 +47,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
   const OutlineTextfieldWidget.withCounter({
     super.key,
     this.hintText = 'Ingresa tu texto',
+    this.onFieldSubmitted,
+    this.onTapOutside,
     required this.title,
     this.textEditingController,
     this.validator,
@@ -93,6 +99,10 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    contextMenuBuilder: (context, editableTextState) =>
+                        const SizedBox(),
+                    onFieldSubmitted: onFieldSubmitted,
+                    onTapOutside: onTapOutside,
                     onTap: onTap,
                     keyboardType: textInputType,
                     controller: textEditingController,

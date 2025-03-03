@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/sending/sending_form_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,8 @@ class NuevaMenorBeneficiarioWidget extends StatefulWidget {
 }
 
 class _NuevaMenorBeneficiarioWidgetState
-    extends State<NuevaMenorBeneficiarioWidget> {
+    extends State<NuevaMenorBeneficiarioWidget>
+    with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? parentesco;
@@ -36,6 +37,7 @@ class _NuevaMenorBeneficiarioWidgetState
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -44,6 +46,7 @@ class _NuevaMenorBeneficiarioWidgetState
           children: [
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
@@ -57,6 +60,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -69,17 +73,18 @@ class _NuevaMenorBeneficiarioWidgetState
               },
             ),
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro',
-              hintText: 'Ingresa Parentesco Beneficiario Seguro',
+              // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
-                parentesco = item.valor;
+                parentesco = item.value;
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               icon: Icon(
                 Icons.security,
                 color: AppColors.getPrimaryColor(),
@@ -93,6 +98,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -105,17 +111,18 @@ class _NuevaMenorBeneficiarioWidgetState
               },
             ),
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro 1',
-              hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
+              // hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
               onChanged: (item) {
                 if (item == null) return;
-                parentescoBeneficiarioSeguro1 = item.valor;
+                parentescoBeneficiarioSeguro1 = item.value;
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 16,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -130,6 +137,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 16,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -187,4 +195,7 @@ class _NuevaMenorBeneficiarioWidgetState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

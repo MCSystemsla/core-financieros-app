@@ -237,10 +237,12 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      _selectedDate?.selectorFormat(),
+                    ),
                     hintText: _selectedDate?.selectorFormat() ??
                         'Ingrese Fecha Vencimiento',
-
-                    // initialValue: _selectedDate.selectorFormat(),
+                    // initialValue: _selectedDate?.selectorFormat() ?? '',
                     icon: Icon(
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
@@ -259,7 +261,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       color: AppColors.getPrimaryColor(),
                     ),
 
-                    title: 'FechaNacimiento',
+                    title: 'Fecha Nacimiento',
                     hintText: state.userCedulaResponse.fechaNacimiento
                         .selectorFormat(),
                     isValid: null,
@@ -269,6 +271,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    maxLength: 50,
                     icon: Icon(
                       Icons.flag,
                       color: AppColors.getPrimaryColor(),
@@ -308,7 +311,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget.withCounter(
-                    maxLength: 50,
+                    maxLength: 15,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -448,7 +451,8 @@ class IsCedulaUserNotExistsForm extends StatefulWidget {
       _IsCedulaUserNotExistsFormState();
 }
 
-class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
+class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
+    with AutomaticKeepAliveClientMixin {
   String? initialValue;
   String? departamentoEmisor;
   DateTime? _selectedDate;
@@ -518,6 +522,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -628,6 +633,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              maxLength: 10,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -669,6 +675,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (_) => ClassValidator.validateRequired(
+                _selectedDate?.selectorFormat(),
+              ),
               hintText: _selectedDate?.selectorFormat() ??
                   'Ingrese Fecha Vencimiento',
               icon: Icon(
@@ -722,19 +731,20 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
               // initialValue: paisEmisor ?? '',
             ),
             const Gap(30),
-            CatalogoValorDropdownWidget(
-              hintText: sexo ?? 'Ingresar Genero',
+            SearchDropdownWidget(
+              // hintText: sexo ?? 'Ingresar Genero',
               isRequired: true,
               codigo: 'SEXO',
               onChanged: (item) {
                 if (item == null || !mounted) return;
-                sexo = item.valor;
+                sexo = item.value;
               },
               title: 'Sexo',
-              initialValue: sexo,
+              // initialValue: sexo,
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              maxLength: 10,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -749,6 +759,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              maxLength: 10,
               icon: Icon(
                 Icons.phone_android,
                 color: AppColors.getPrimaryColor(),
@@ -847,4 +858,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

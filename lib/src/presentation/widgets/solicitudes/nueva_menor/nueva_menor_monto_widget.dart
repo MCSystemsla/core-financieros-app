@@ -24,7 +24,8 @@ class NuevaMenorMontoWidget extends StatefulWidget {
   State<NuevaMenorMontoWidget> createState() => _NuevaMenorMontoWidgetState();
 }
 
-class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
+class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
+    with AutomaticKeepAliveClientMixin {
   String? estadoCivil;
   String? nacionalidadConyuge;
   String? nombreConyuge;
@@ -40,6 +41,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -71,6 +73,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 icon: Icon(
                   Icons.woman,
                   color: AppColors.getPrimaryColor(),
@@ -103,6 +106,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 icon: Icon(
                   Icons.woman_2,
                   color: AppColors.getPrimaryColor(),
@@ -116,6 +120,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 icon: Icon(
                   Icons.woman_2,
                   color: AppColors.getPrimaryColor(),
@@ -129,13 +134,14 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 15,
                 icon: Icon(
                   Icons.phone,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Telefono Trabajo Conyuge',
                 hintText: 'Ingresa el Telefono de Conyuge',
-                textInputType: TextInputType.number,
+                textInputType: TextInputType.phone,
                 isValid: null,
                 onChange: (value) {
                   telefonoTrabajoConyuge = value;
@@ -270,4 +276,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

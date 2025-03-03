@@ -23,6 +23,8 @@ class SearchDropdownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FocusNode dropdownFocus = FocusNode();
+
     final localDbProvider = global<ObjectBoxService>();
     final items =
         localDbProvider.findParentescosByNombre(type: codigo).map((e) {
@@ -70,9 +72,13 @@ class SearchDropdownWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              popupProps: const PopupProps.menu(
+              popupProps: PopupProps.menu(
+                onDismissed: () {
+                  FocusScope.of(context).requestFocus(dropdownFocus);
+                },
                 showSearchBox: true,
-                searchFieldProps: TextFieldProps(
+                searchFieldProps: const TextFieldProps(
+                  autofocus: false,
                   decoration: InputDecoration(
                     labelText: 'Buscar',
                     border: OutlineInputBorder(

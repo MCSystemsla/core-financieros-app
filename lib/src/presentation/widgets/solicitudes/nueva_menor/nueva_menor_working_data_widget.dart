@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,8 @@ class NuevaMenorWorkingDataWidget extends StatefulWidget {
 }
 
 class _NuevaMenorWorkingDataWidgetState
-    extends State<NuevaMenorWorkingDataWidget> {
+    extends State<NuevaMenorWorkingDataWidget>
+    with AutomaticKeepAliveClientMixin {
   String? initialValue;
   String? paisDomicilio;
   String? departamentoDomicilio;
@@ -42,6 +44,7 @@ class _NuevaMenorWorkingDataWidgetState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -100,6 +103,7 @@ class _NuevaMenorWorkingDataWidgetState
             ],
             const Gap(30),
             OutlineTextfieldWidget(
+              maxLength: 50,
               icon: Icon(
                 Icons.house,
                 color: AppColors.getPrimaryColor(),
@@ -128,12 +132,12 @@ class _NuevaMenorWorkingDataWidgetState
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(20),
-            CatalogoValorDropdownWidget(
+            SearchDropdownWidget(
               title: 'Condicion Casa',
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
                 if (item == null) return;
-                condicionCasa = item.valor;
+                condicionCasa = item.value;
               },
             ),
             const Gap(20),
@@ -223,4 +227,7 @@ class _NuevaMenorWorkingDataWidgetState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
