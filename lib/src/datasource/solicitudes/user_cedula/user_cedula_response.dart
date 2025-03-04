@@ -11,7 +11,7 @@ class UserCedulaResponse {
   final String segundoApellido;
   final DateTime fechaNacimiento;
   final String sexo;
-  final String pais;
+  final String? pais;
   final String? departamento;
   final String? municipio;
   final String direccion;
@@ -27,7 +27,7 @@ class UserCedulaResponse {
     required this.segundoApellido,
     required this.fechaNacimiento,
     required this.sexo,
-    required this.pais,
+    this.pais,
     this.departamento,
     this.municipio,
     required this.direccion,

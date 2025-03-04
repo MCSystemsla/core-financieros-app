@@ -10,6 +10,7 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class SelectSolicitudScreen extends StatelessWidget {
   const SelectSolicitudScreen({super.key});
@@ -56,50 +57,9 @@ class SelectSolicitudScreen extends StatelessWidget {
                 ),
               ),
               const Gap(20),
-              Row(
-                children: [
-                  const Gap(10),
-                  Expanded(
-                    child: SolicitudCard(
-                      onPressed: () {
-                        context
-                            .pushTransparentRoute(const AddUserCedulaScreen());
-                      },
-                      svgPath: ImageAsset.nuevaMenorBg,
-                      title: 'Nueva Menor',
-                    ),
-                  ),
-                  const Gap(10),
-                  Expanded(
-                    child: SolicitudCard(
-                      onPressed: () {},
-                      svgPath: ImageAsset.nuevaMenorBg2,
-                      title: 'Asalariado',
-                    ),
-                  ),
-                  const Gap(10),
-                ],
-              ),
+              const _SolicitudCardsRow1(),
               const Gap(20),
-              const Row(
-                children: [
-                  Gap(10),
-                  Expanded(
-                    child: SolicitudCard(
-                      svgPath: ImageAsset.nuevaMenorBg3,
-                      title: 'Represtamo',
-                    ),
-                  ),
-                  Gap(10),
-                  Expanded(
-                    child: SolicitudCard(
-                      svgPath: ImageAsset.nuevaMenorBg3,
-                      title: '',
-                    ),
-                  ),
-                  Gap(10),
-                ],
-              ),
+              const _SolicitudesCardsRow2(),
             ],
           ),
         ),
@@ -108,19 +68,62 @@ class SelectSolicitudScreen extends StatelessWidget {
   }
 }
 
-class CustomLoadingWithTitle extends StatelessWidget {
-  const CustomLoadingWithTitle({
-    super.key,
-  });
+class _SolicitudesCardsRow2 extends StatelessWidget {
+  const _SolicitudesCardsRow2();
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
       children: [
-        Center(child: CircularProgressIndicator()),
-        Gap(20),
-        Text('Guardando Catalogos...'),
+        const Gap(10),
+        const Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg3,
+            title: 'Represtamo',
+          ),
+        ),
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            onPressed: () {
+              context.push('/solicitudes/solicitudes-pendientes');
+            },
+            svgPath: ImageAsset.nuevaMenorBg4,
+            title: 'Solicitudes Pendientes',
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _SolicitudCardsRow1 extends StatelessWidget {
+  const _SolicitudCardsRow1();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            onPressed: () {
+              context.pushTransparentRoute(const AddUserCedulaScreen());
+            },
+            svgPath: ImageAsset.nuevaMenorBg,
+            title: 'Nueva Menor',
+          ),
+        ),
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            onPressed: () {},
+            svgPath: ImageAsset.nuevaMenorBg2,
+            title: 'Asalariado',
+          ),
+        ),
+        const Gap(10),
       ],
     );
   }

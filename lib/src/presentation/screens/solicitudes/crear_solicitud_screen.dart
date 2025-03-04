@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -12,6 +13,7 @@ import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
 
 import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import '../../bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
@@ -24,8 +26,18 @@ class CrearSolicitudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return BlocProvider(
-      create: (ctx) => CalculoCuotaCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => CalculoCuotaCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => SolicitudNuevaMenorCubit(
+            SolicitudCreditoRepositoryImpl(),
+            global<ObjectBoxService>(),
+          ),
+        ),
+      ],
       child: Scaffold(
         body: Column(
           children: [

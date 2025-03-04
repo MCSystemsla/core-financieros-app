@@ -1,3 +1,4 @@
+export 'package:core_financiero_app/src/presentation/screens/solicitudes/solicitudes_pendientes_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/solicitudes/select_solicitud_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/estandar_screen.dart';

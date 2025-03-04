@@ -189,6 +189,12 @@ final router = GoRouter(
             return const CrearSolicitudScreen();
           },
         ),
+        GoRoute(
+          path: '/solicitudes-pendientes',
+          builder: (context, state) {
+            return const SolicitudesPendientesScreen();
+          },
+        ),
       ],
     ),
     GoRoute(

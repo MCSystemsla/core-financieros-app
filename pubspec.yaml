@@ -81,6 +81,7 @@ dependencies:
   change_app_package_name: ^1.4.0
   objectbox: ^4.0.3
   objectbox_flutter_libs: ^4.0.3
+  fl_chart: ^0.70.2
 
 
 
