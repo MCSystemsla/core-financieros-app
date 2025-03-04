@@ -191,28 +191,17 @@ class AdvanceCardState extends StatelessWidget {
                       title,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
-                      // style: context.getTitleLarge(
-                      //     // TextStyle(
-                      //     //   fontSize: getFontSize(
-                      //     //     context,
-                      //     //     TextType.bodySmall,
-                      //     //   ),
-                      //     // ),
-                      //     ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     'Cedula: $location',
-                    style: const TextStyle(
-                        // fontSize: getFontSize(context, TextType.displaySmall),
-                        color: AppColors.grey),
+                    style: const TextStyle(color: AppColors.grey),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     'Email: ${dateToStart ?? "--/--/----"}',
                     style: const TextStyle(
-                      // fontSize: getFontSize(context, TextType.displaySmall),
                       color: AppColors.grey,
                     ),
                   ),
