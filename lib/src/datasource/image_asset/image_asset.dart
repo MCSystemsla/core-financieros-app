@@ -29,6 +29,8 @@ abstract class ImageAsset {
       'assets/images/nueva_menor_success.json';
   static const String nuevaMenorUploading =
       'assets/images/nueva_menor_uploading.json';
+  static const String nuevaMenorBg4 = 'assets/images/solicitudes_pending.svg';
+  static const String noDataBg = 'assets/images/no-data.svg';
 
   // Download Catalogos
   static const String downloadCatalogoLoading =

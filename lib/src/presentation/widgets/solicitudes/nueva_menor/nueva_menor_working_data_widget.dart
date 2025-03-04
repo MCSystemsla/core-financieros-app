@@ -147,6 +147,10 @@ class _NuevaMenorWorkingDataWidgetState
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Años Residir Casa',
+              validator: (value) => ClassValidator.validateMaxIntValue(
+                value,
+                100,
+              ),
               textInputType: TextInputType.number,
               hintText: 'Ingresa Años Residir Casa',
               isValid: null,

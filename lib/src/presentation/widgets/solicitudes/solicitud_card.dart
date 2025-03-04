@@ -42,6 +42,7 @@ class SolicitudCard extends StatelessWidget {
             const Gap(30),
             Text(
               title,
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 20,

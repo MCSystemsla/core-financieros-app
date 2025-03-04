@@ -1,0 +1,26 @@
+import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:equatable/equatable.dart';
+
+part 'solicitudes_offline_state.dart';
+
+class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
+  final ObjectBoxService objectBoxService;
+  SolicitudesOfflineCubit(this.objectBoxService)
+      : super(SolicitudesOfflineInitial());
+
+  void getSolicitudesOffline() {
+    emit(OnSolicitudesOfflineLoading());
+    try {
+      final solicitudesOffline = objectBoxService.getSolicitudesResponse();
+      emit(OnSolicitudesOfflineSuccess(
+          solicitudesOffline: solicitudesOffline.reversed.toList()));
+    } on AppException catch (e) {
+      emit(OnSolicitudesOfflineError(errorMsg: e.toString()));
+    } catch (e) {
+      emit(OnSolicitudesOfflineError(errorMsg: e.toString()));
+    }
+  }
+}
