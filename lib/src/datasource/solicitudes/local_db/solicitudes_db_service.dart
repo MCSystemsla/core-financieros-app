@@ -6,7 +6,10 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:logger/logger.dart';
 
 class ObjectBoxService {
   late final Store _store;
@@ -15,6 +18,8 @@ class ObjectBoxService {
   late final Box<CatalogoNacionalidadDepDb> catalogoNacionalidadDepBox;
   late final Box<CatalogoNacionalidadMunDb> catalogoNacionalidadMunBox;
   late final Box<DepartmentsLocalDb> departmentsBox;
+  late final Box<ResponseLocalDb> solicitudesResponsesBox;
+  final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
     catalogoBox = _store.box<CatalogoLocalDb>();
@@ -22,6 +27,8 @@ class ObjectBoxService {
     catalogoNacionalidadDepBox = _store.box<CatalogoNacionalidadDepDb>();
     catalogoNacionalidadMunBox = _store.box<CatalogoNacionalidadMunDb>();
     departmentsBox = _store.box<DepartmentsLocalDb>();
+    solicitudesResponsesBox = _store.box<ResponseLocalDb>();
+    // solicitudesResponsesBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
@@ -140,5 +147,45 @@ class ObjectBoxService {
         }
     }
     return [];
+  }
+
+  ResponseLocalDb saveSolicitudesNuevaMenorResponses({
+    required ResponseLocalDb responseLocalDb,
+  }) {
+    try {
+      responseLocalDb.id = 0;
+      solicitudesResponsesBox.put(responseLocalDb);
+      _logger.i('Creado');
+      return responseLocalDb;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  void updateSolicitudNuevaMenorById({
+    required int id,
+    required ResponseLocalDb responseLocalDb,
+  }) {
+    try {
+      responseLocalDb.id = id;
+      final solicitud = solicitudesResponsesBox.get(responseLocalDb.id);
+      if (solicitud != null) {
+        solicitudesResponsesBox.put(responseLocalDb, mode: PutMode.update);
+      }
+      _logger.i('Actualizando');
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  List<ResponseLocalDb> getSolicitudesResponse() {
+    try {
+      final resp = solicitudesResponsesBox.getAll();
+      return resp;
+    } catch (e) {
+      _logger.e(e.toString());
+      throw AppException.toAppException(e);
+    }
   }
 }

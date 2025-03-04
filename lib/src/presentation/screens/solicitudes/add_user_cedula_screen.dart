@@ -36,7 +36,7 @@ class AddUserCedulaScreen extends StatelessWidget {
         context: context,
         title: errorMsg,
         onDone: () => context.pushReplacement('/solicitudes/solicitud-credito'),
-      ).showDialog(context, dialogType: DialogType.error);
+      ).showDialog(context, dialogType: DialogType.warning);
     }
 
     return Scaffold(

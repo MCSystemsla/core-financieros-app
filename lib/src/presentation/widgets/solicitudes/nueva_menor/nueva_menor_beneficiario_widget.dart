@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cu
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -46,11 +48,20 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaPrimerPago) {
+      if (!context.mounted) return;
+      if (picked.isBefore(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaPrimerPago = picked;
       setState(() {});
     }
@@ -60,11 +71,20 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
-    if (picked != null && picked != fechaPrimerPago) {
+    if (picked != null && picked != fechaDesembolso) {
+      if (!context.mounted) return;
+      if (picked.isBefore(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaDesembolso = picked;
       setState(() {});
     }
@@ -253,7 +273,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrincipalPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             objMonedaId: moneda,

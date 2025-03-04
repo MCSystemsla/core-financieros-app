@@ -5,6 +5,8 @@ import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 part 'auth_state.dart';
 
@@ -47,5 +49,14 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void logOut({required BuildContext context}) {
+    resetLocalStorage();
+    context.pushReplacement('/login');
+  }
+
+  void resetLocalStorage() {
+    LocalStorage.prefs.clear();
   }
 }
