@@ -417,34 +417,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               email: emailController.text.trim(),
                               objEscolaridadId: escolaridad,
                             );
-                        context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers(
-                            // nombre1: nombre1,
-                            // nombre2: nombre2,
-                            // apellido1: apellido1,
-                            // apellido2: apellido2,
-                            // tipoPersona: tipoPersonaCredito,
-                            // objTipoPersonaId: tipoPersonaCredito,
-                            // objTipoDocumentoId: tipoDocumento,
-                            // cedula: state.userCedulaResponse.cedula,
-                            // nombrePublico:
-                            //     nombrePublicoController.text.trim(),
-                            // objPaisEmisorCedula: paisEmisor,
-                            // fechaEmisionCedula: state
-                            //     .userCedulaResponse.fechaEmision
-                            //     .toIso8601String(),
-                            // fechaVencimientoCedula:
-                            //     _selectedDate?.toUtc().toIso8601String(),
-                            // fechaNacimiento: state
-                            //     .userCedulaResponse.fechaNacimiento
-                            //     .toIso8601String(),
-                            // nacionalidad: nacionalidadController.text.trim(),
-                            // objPaisNacimientoId: paisNacimiento,
-                            // objSexoId: state.userCedulaResponse.sexo,
-                            // telefono: telefonoController.text.trim(),
-                            // celular: celularController.text.trim(),
-                            // email: emailController.text.trim(),
-                            // objEscolaridadId: escolaridad,
-                            );
+                        context
+                            .read<SolicitudNuevaMenorCubit>()
+                            .saveLocalAnswers();
 
                         widget.controller.nextPage(
                           duration: const Duration(milliseconds: 300),
@@ -458,7 +433,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: CustomOutLineButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        context.pushReplacement('/solicitudes');
                       },
                       text: 'Cancelar',
                       textColor: AppColors.red,
