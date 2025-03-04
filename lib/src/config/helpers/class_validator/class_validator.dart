@@ -38,4 +38,12 @@ class ClassValidator {
     }
     return null;
   }
+
+  static String? validateMaxIntValue(String? value, int length) {
+    final numero = int.tryParse(value ?? '');
+    if (numero == null || numero < 0 || numero > length) {
+      return 'El valor no puede ser mayor a $length o menor a 0'.tr();
+    }
+    return null;
+  }
 }

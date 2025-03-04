@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -12,6 +14,7 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorDataClientWidget extends StatefulWidget {
   final PageController controller;
@@ -44,11 +47,20 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked.isBefore(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       _selectedDate = picked;
       setState(() {});
     }
@@ -502,11 +514,20 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked.isBefore(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       _selectedDate = picked;
       setState(() {});
     }
@@ -516,7 +537,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaEmisionCedula,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -530,11 +551,20 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaNacimiento) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaNacimiento = picked;
       setState(() {});
     }
