@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/sending/sending_form_widget.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -170,7 +169,15 @@ class _NuevaMenorBeneficiarioWidgetState
                         telefonoBeneficiario: telefonoBeneficiario,
                         telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
                       );
-                  context.pushTransparentRoute(const SendingFormWidget());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => BlocProvider.value(
+                        value: context.read<SolicitudNuevaMenorCubit>(),
+                        child: const SendingFormWidget(),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
