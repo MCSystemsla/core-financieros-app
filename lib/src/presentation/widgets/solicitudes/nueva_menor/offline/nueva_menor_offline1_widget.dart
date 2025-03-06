@@ -45,6 +45,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   String? fechaVencimientoCedula;
   String? sexo;
   String? escolaridad;
+  String? email;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -79,6 +80,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   void initState() {
     super.initState();
     sexo = widget.responseLocalDb.objSexoId;
+    fechaVencimientoCedula = widget.responseLocalDb.fechaVencimientoCedula;
+    email = widget.responseLocalDb.email;
   }
 
   @override
@@ -249,9 +252,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               title: 'Fecha Emision Cedula',
               isRequired: true,
 
-              initialValue: DateTime.tryParse(
-                      widget.responseLocalDb.fechaEmisionCedula ?? '')!
-                  .selectorFormat(),
+              initialValue: fechaVencimientoCedula,
               isValid: null,
             ),
             const Gap(30),
@@ -378,6 +379,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Email',
               hintText: 'Ingresa Email',
+              onChange: (value) {
+                email = value;
+              },
               textInputType: TextInputType.emailAddress,
               isValid: null,
               validator: (value) => ClassValidator.validateEmail(value),
@@ -420,8 +424,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         fechaEmisionCedula:
                             widget.responseLocalDb.fechaEmisionCedula,
                         // .toIso8601String(),
-                        fechaVencimientoCedula:
-                            _selectedDate?.toUtc().toIso8601String(),
+                        fechaVencimientoCedula: fechaVencimientoCedula,
                         fechaNacimiento: widget.responseLocalDb.fechaNacimiento,
                         // .toIso8601String(),
                         nacionalidad: nacionalidadController.text.trim(),
@@ -429,7 +432,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         objSexoId: widget.responseLocalDb.objSexoId,
                         telefono: telefonoController.text.trim(),
                         celular: celularController.text.trim(),
-                        email: emailController.text.trim(),
+                        email: email,
                         objEscolaridadId: escolaridad,
                       );
                   context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers();

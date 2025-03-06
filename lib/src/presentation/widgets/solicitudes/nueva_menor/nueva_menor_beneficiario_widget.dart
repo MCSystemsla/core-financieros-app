@@ -276,6 +276,9 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            prestamoInteres: tasaInteres,
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda,
                             monto: int.tryParse(monto!),
                             objPropositoId: proposito,

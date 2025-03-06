@@ -101,7 +101,9 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
     fechaPrimerPago =
         DateTime.tryParse(widget.responseLocalDb.fechaPrimerPagoSolicitud!);
     observacion = widget.responseLocalDb.observacion;
-    // fechaDesembolso = widget.responseLocalDb.desem;
+    fechaDesembolso =
+        DateTime.tryParse(widget.responseLocalDb.fechaDesembolso!);
+    tasaInteres = widget.responseLocalDb.prestamoInteres;
   }
 
   final montoController = TextEditingController();
