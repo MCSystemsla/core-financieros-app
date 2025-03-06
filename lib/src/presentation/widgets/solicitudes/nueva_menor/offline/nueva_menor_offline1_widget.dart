@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -46,6 +47,11 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   String? sexo;
   String? escolaridad;
   String? email;
+  String? cedula;
+  String? fechaEmisionCedula;
+  String? fechaNacimiento;
+  String? nacionalidad;
+  // String? objPaisNacimientoId;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -74,7 +80,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   final telefonoController = TextEditingController();
   final celularController = TextEditingController();
   final emailController = TextEditingController();
-  final nacionalidadController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -82,6 +87,26 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
     sexo = widget.responseLocalDb.objSexoId;
     fechaVencimientoCedula = widget.responseLocalDb.fechaVencimientoCedula;
     email = widget.responseLocalDb.email;
+    tipoPersonaCredito = widget.responseLocalDb.tipoPersona;
+    nombre1 = widget.responseLocalDb.nombre1;
+    nombre2 = widget.responseLocalDb.nombre2;
+    apellido1 = widget.responseLocalDb.apellido1;
+    apellido2 = widget.responseLocalDb.apellido2;
+    nombrePublicoController.value =
+        TextEditingValue(text: widget.responseLocalDb.nombrePublico!);
+    telefonoController.value =
+        TextEditingValue(text: widget.responseLocalDb.telefono!);
+    celularController.value =
+        TextEditingValue(text: widget.responseLocalDb.celular!);
+    emailController.value =
+        TextEditingValue(text: widget.responseLocalDb.email!);
+    tipoDocumento = widget.responseLocalDb.objTipoDocumentoId;
+    cedula = widget.responseLocalDb.cedula;
+    paisEmisor = widget.responseLocalDb.objPaisEmisorCedula;
+    fechaEmisionCedula = widget.responseLocalDb.fechaEmisionCedula;
+    fechaNacimiento = widget.responseLocalDb.fechaNacimiento;
+    nacionalidad = widget.responseLocalDb.nacionalidad;
+    paisNacimiento = widget.responseLocalDb.objPaisNacimientoId;
   }
 
   @override
@@ -94,7 +119,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
           children: [
             const Gap(30),
             SearchDropdownWidget(
-              hintText: widget.responseLocalDb.tipoPersona!,
+              hintText: tipoPersonaCredito ?? 'input.select_option'.tr(),
               codigo: 'TIPOSPERSONACREDITO',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -107,7 +132,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
               maxLength: 40,
-              initialValue: widget.responseLocalDb.nombre1,
+              initialValue: nombre1,
               icon: Icon(
                 Icons.person,
                 color: AppColors.getPrimaryColor(),
@@ -131,7 +156,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Nombre2',
-              initialValue: widget.responseLocalDb.nombre2,
+              initialValue: nombre2,
               hintText: 'Ingresa Nombre2',
               textCapitalization: TextCapitalization.words,
               isValid: null,
@@ -143,7 +168,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
-              initialValue: widget.responseLocalDb.apellido1,
+              initialValue: apellido1,
               maxLength: 40,
               icon: Icon(
                 Icons.badge,
@@ -162,7 +187,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
-              initialValue: widget.responseLocalDb.apellido2,
+              initialValue: apellido2,
               maxLength: 40,
               icon: Icon(
                 Icons.badge,
@@ -186,16 +211,16 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Nombre Publico',
               textCapitalization: TextCapitalization.words,
-              initialValue: widget.responseLocalDb.nombrePublico,
+              initialValue: nombrePublicoController.text,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
-              // textEditingController: nombrePublicoController,
+              textEditingController: nombrePublicoController,
               isRequired: true,
             ),
             const Gap(30),
             SearchDropdownWidget(
               // initialValue: '',
-              hintText: widget.responseLocalDb.objTipoDocumentoId!,
+              hintText: tipoDocumento ?? 'input.select_option'.tr(),
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -208,7 +233,10 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             OutlineTextfieldWidget.withCounter(
               maxLength: 16,
               readOnly: true,
-              initialValue: widget.responseLocalDb.cedula,
+              initialValue: cedula,
+              onChange: (value) {
+                cedula = value;
+              },
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -224,13 +252,12 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: widget.responseLocalDb.objPaisEmisorCedula ?? '',
-                nombre: widget.responseLocalDb.objPaisEmisorCedula!,
+                valor: paisEmisor ?? '',
+                nombre: paisEmisor ?? '',
                 relacion: '',
               ),
 
-              hintText: widget.responseLocalDb.objPaisEmisorCedula ??
-                  'Selecciona un Pais',
+              hintText: paisEmisor ?? 'Selecciona un Pais',
               // hintText: state.userCedulaResponse.pais,
               title: 'Pais Emisor',
               onChanged: (item) {
@@ -243,7 +270,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              // onTap: () => selectDate(context),
+              onTap: () => selectDate(context),
               readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
@@ -251,8 +278,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Fecha Emision Cedula',
               isRequired: true,
-
-              initialValue: fechaVencimientoCedula,
+              initialValue: fechaEmisionCedula,
               isValid: null,
             ),
             const Gap(30),
@@ -276,6 +302,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              onChange: (value) {
+                fechaNacimiento = value;
+              },
               readOnly: true,
               icon: Icon(
                 Icons.calendar_month,
@@ -283,7 +312,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
 
               title: 'Fecha Nacimiento',
-              hintText: widget.responseLocalDb.fechaNacimiento,
+              hintText: fechaNacimiento,
               isValid: null,
 
               // textEditingController: fechaNacimientoController,
@@ -299,18 +328,20 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               title: 'Nacionalidad',
               hintText: 'Ingresa Nacionalidad',
               isValid: null,
-              initialValue: widget.responseLocalDb.nacionalidad,
+              initialValue: nacionalidad,
+              onChange: (value) {
+                nacionalidad = value;
+              },
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: widget.responseLocalDb.objPaisNacimientoId ??
-                  'Selecciona Pais de Nacimiento',
+              hintText: paisNacimiento ?? 'Selecciona Pais de Nacimiento',
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: widget.responseLocalDb.objPaisNacimientoId!,
-                nombre: widget.responseLocalDb.objPaisNacimientoId!,
+                valor: paisNacimiento ?? '',
+                nombre: paisNacimiento ?? '',
                 relacion: '',
               ),
 
@@ -338,7 +369,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
-              initialValue: widget.responseLocalDb.telefono,
+              // initialValue: telefonoController.text,
               maxLength: 15,
               icon: Icon(
                 Icons.phone,
@@ -348,13 +379,13 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               hintText: 'Ingresa Telefono',
               textInputType: TextInputType.phone,
               isValid: null,
-              // textEditingController: telefonoController,
+              textEditingController: telefonoController,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
-              initialValue: widget.responseLocalDb.celular,
+              // initialValue: widget.responseLocalDb.celular,
               maxLength: 15,
               icon: Icon(
                 Icons.phone_android,
@@ -364,15 +395,15 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               hintText: 'Ingresa Celular',
               textInputType: TextInputType.phone,
               isValid: null,
-              // textEditingController: celularController,
+              textEditingController: celularController,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: widget.responseLocalDb.email,
+              // initialValue: widget.responseLocalDb.email,
               maxLength: 50,
-              // textEditingController: emailController,
+              textEditingController: emailController,
               icon: Icon(
                 Icons.email,
                 color: AppColors.getPrimaryColor(),
@@ -418,24 +449,23 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,
                         objTipoDocumentoId: tipoDocumento,
-                        cedula: widget.responseLocalDb.cedula,
+                        cedula: cedula,
                         nombrePublico: nombrePublicoController.text.trim(),
                         objPaisEmisorCedula: paisEmisor,
-                        fechaEmisionCedula:
-                            widget.responseLocalDb.fechaEmisionCedula,
+                        fechaEmisionCedula: fechaEmisionCedula,
                         // .toIso8601String(),
                         fechaVencimientoCedula: fechaVencimientoCedula,
-                        fechaNacimiento: widget.responseLocalDb.fechaNacimiento,
+                        fechaNacimiento: fechaNacimiento,
                         // .toIso8601String(),
-                        nacionalidad: nacionalidadController.text.trim(),
+                        nacionalidad: nacionalidad,
                         objPaisNacimientoId: paisNacimiento,
-                        objSexoId: widget.responseLocalDb.objSexoId,
+                        objSexoId: sexo,
                         telefono: telefonoController.text.trim(),
                         celular: celularController.text.trim(),
-                        email: email,
+                        email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );
-                  context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers();
+                  // context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers();
 
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
