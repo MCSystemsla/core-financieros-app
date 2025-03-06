@@ -179,7 +179,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "98:4241004158816654841",
+      "lastPropertyId": "100:9002422792238194696",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -672,6 +672,16 @@
           "id": "98:4241004158816654841",
           "name": "fechaPrimerPagoSolicitud",
           "type": 9
+        },
+        {
+          "id": "99:4852704771637279582",
+          "name": "fechaDesembolso",
+          "type": 9
+        },
+        {
+          "id": "100:9002422792238194696",
+          "name": "prestamoInteres",
+          "type": 8
         }
       ],
       "relations": []

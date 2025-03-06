@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -12,26 +13,24 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class NuevaMenorCreditoWidget extends StatefulWidget {
-  const NuevaMenorCreditoWidget({
-    super.key,
-    required this.pageController,
-  });
-
+class NuevaMenorOffline6Widget extends StatefulWidget {
   final PageController pageController;
+  final ResponseLocalDb responseLocalDb;
+  const NuevaMenorOffline6Widget(
+      {super.key, required this.pageController, required this.responseLocalDb});
 
   @override
-  State<NuevaMenorCreditoWidget> createState() =>
-      _NuevaMenorCreditoWidgetState();
+  State<NuevaMenorOffline6Widget> createState() =>
+      _NuevaMenorOffline6WidgetState();
 }
 
-class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
-    with AutomaticKeepAliveClientMixin {
+class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
   String? moneda;
   String? monto;
   String? proposito;
@@ -90,11 +89,30 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    moneda = widget.responseLocalDb.objMonedaId;
+    monto = widget.responseLocalDb.monto.toString();
+    proposito = widget.responseLocalDb.objPropositoId;
+    producto = widget.responseLocalDb.objProductoId;
+    frecuenciaDePago = widget.responseLocalDb.objFrecuenciaId;
+    plazoSolicitud = widget.responseLocalDb.plazoSolicitud.toString();
+    fechaPrimerPago =
+        DateTime.tryParse(widget.responseLocalDb.fechaPrimerPagoSolicitud!);
+    observacion = widget.responseLocalDb.observacion;
+    fechaDesembolso =
+        DateTime.tryParse(widget.responseLocalDb.fechaDesembolso!);
+    tasaInteres = widget.responseLocalDb.prestamoInteres;
+  }
+
   final montoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    montoController.value =
+        TextEditingValue(text: FormatField.formatMonto(monto ?? ''));
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -103,6 +121,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              hintText: moneda ?? 'input.select_option'.tr(),
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
@@ -139,9 +158,9 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Monto',
-              hintText: 'Ingresa Monto',
+              hintText: monto ?? 'Ingresa Monto',
               textInputType: TextInputType.number,
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) => ClassValidator.validateRequired(monto),
               isValid: null,
               onChange: (value) {
                 monto = value;
@@ -159,12 +178,13 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
+                  fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: proposito ?? 'Selecciona una opcion',
               codigo: 'DESTINOCREDITO',
               title: 'Proposito',
               onChanged: (item) {
@@ -174,6 +194,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: producto ?? 'Selecciona una opcion',
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
@@ -184,6 +205,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: frecuenciaDePago ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
@@ -195,6 +217,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: plazoSolicitud,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -210,6 +233,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: fechaPrimerPago?.selectorFormat(),
               validator: (value) => ClassValidator.validateRequired(
                   fechaPrimerPago?.selectorFormat()),
               readOnly: true,
@@ -242,6 +266,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             // ),
             // const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: observacion,
               icon: Icon(
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
@@ -267,8 +292,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? ''),
                     formadePago: frecuenciaDePago!,
-                    saldoPrincipal: double.parse(monto ?? ''),
-                    tasaInteresMensual: tasaInteres!,
+                    saldoPrincipal: double.tryParse(monto ?? '') ?? 0,
+                    tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
@@ -276,9 +301,6 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                            prestamoInteres: tasaInteres,
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda,
                             monto: int.tryParse(monto!),
                             objPropositoId: proposito,
@@ -323,7 +345,4 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

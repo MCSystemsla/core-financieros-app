@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class SolicitudesPendientesWidget extends StatelessWidget {
   final ResponseLocalDb solicitud;
@@ -15,7 +15,6 @@ class SolicitudesPendientesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double calcularPorcentajeLlenado(ResponseLocalDb respuesta) {
-      // Obtener todos los valores de los campos del objeto como una lista
       var valores = [
         respuesta.nombre1,
         respuesta.nombre2,
@@ -130,7 +129,14 @@ class SolicitudesPendientesWidget extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: AdvanceCardState(
         onPressed: () {
-          context.push('/solicitudes/solicitud-credito');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CrearSolicitudOfflineScreen(
+                responseLocalDb: solicitud,
+              ),
+            ),
+          );
         },
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'

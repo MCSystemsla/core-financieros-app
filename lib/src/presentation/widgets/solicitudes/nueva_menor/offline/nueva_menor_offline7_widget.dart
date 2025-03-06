@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -9,22 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorBeneficiarioWidget extends StatefulWidget {
-  const NuevaMenorBeneficiarioWidget({
-    super.key,
-    required this.pageController,
-  });
-
+class NuevaMenorOffline7Widget extends StatefulWidget {
   final PageController pageController;
+  final ResponseLocalDb responseLocalDb;
+  const NuevaMenorOffline7Widget(
+      {super.key, required this.pageController, required this.responseLocalDb});
 
   @override
-  State<NuevaMenorBeneficiarioWidget> createState() =>
-      _NuevaMenorBeneficiarioWidgetState();
+  State<NuevaMenorOffline7Widget> createState() =>
+      _NuevaMenorOffline7WidgetState();
 }
 
-class _NuevaMenorBeneficiarioWidgetState
-    extends State<NuevaMenorBeneficiarioWidget>
-    with AutomaticKeepAliveClientMixin {
+class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? parentesco;
@@ -35,8 +32,22 @@ class _NuevaMenorBeneficiarioWidgetState
   String? telefonoBeneficiario1;
   final formKey = GlobalKey<FormState>();
   @override
+  void initState() {
+    super.initState();
+    beneficiarioSeguro = widget.responseLocalDb.beneficiarioSeguro;
+    cedulaBeneficiarioSeguro = widget.responseLocalDb.cedulaBeneficiarioSeguro;
+    parentesco = widget.responseLocalDb.objParentescoBeneficiarioSeguroId;
+    beneficiarioSeguro1 = widget.responseLocalDb.beneficiarioSeguro1;
+    cedulaBeneficiarioSeguro1 =
+        widget.responseLocalDb.cedulaBeneficiarioSeguro1;
+    parentescoBeneficiarioSeguro1 =
+        widget.responseLocalDb.objParentescoBeneficiarioSeguroId1;
+    telefonoBeneficiario = widget.responseLocalDb.telefonoBeneficiario;
+    telefonoBeneficiario1 = widget.responseLocalDb.telefonoBeneficiarioSeguro1;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -45,6 +56,7 @@ class _NuevaMenorBeneficiarioWidgetState
           children: [
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: beneficiarioSeguro,
               maxLength: 50,
               icon: Icon(
                 Icons.family_restroom,
@@ -59,6 +71,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: cedulaBeneficiarioSeguro,
               maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
@@ -73,6 +86,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: parentesco ?? 'Selecciona una opcion',
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
@@ -83,6 +97,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: beneficiarioSeguro1,
               maxLength: 50,
               icon: Icon(
                 Icons.security,
@@ -97,6 +112,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: cedulaBeneficiarioSeguro1,
               maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
@@ -111,6 +127,8 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText:
+                  parentescoBeneficiarioSeguro1 ?? 'Selecciona una opcion',
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro 1',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
@@ -121,6 +139,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: telefonoBeneficiario,
               maxLength: 16,
               icon: Icon(
                 Icons.phone,
@@ -136,6 +155,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: telefonoBeneficiario1,
               maxLength: 16,
               icon: Icon(
                 Icons.phone,
@@ -202,7 +222,4 @@ class _NuevaMenorBeneficiarioWidgetState
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
