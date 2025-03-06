@@ -229,10 +229,14 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     String? telefonoBeneficiarioSeguro1,
     int? plazoSolicitud,
     String? fechaPrimerPagoSolicitud,
+    String? fechaDesembolso,
+    double? prestamoInteres,
   }) {
     emit(
       state.copyWith(
         objOrigenSolicitudId: objOrigenSolicitudId,
+        fechaDesembolso: fechaDesembolso,
+        prestamoInteres: prestamoInteres,
         nombre1: nombre1,
         nombre2: nombre2,
         apellido1: apellido1,
@@ -340,6 +344,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       localDbProvider.updateSolicitudNuevaMenorById(
         id: state.idLocalResponse,
         responseLocalDb: ResponseLocalDb(
+          fechaDesembolso: state.fechaDesembolso,
+          prestamoInteres: state.prestamoInteres,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
           horarioTrabajo: state.horarioTrabajo,
           horarioVisita: state.horarioVisita,

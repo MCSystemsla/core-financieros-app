@@ -101,6 +101,8 @@ class ResponseLocalDb {
   String? telefonoBeneficiarioSeguro1;
   int? plazoSolicitud;
   String? fechaPrimerPagoSolicitud;
+  String? fechaDesembolso;
+  double? prestamoInteres;
 
   ResponseLocalDb({
     this.objOrigenSolicitudId,
@@ -200,5 +202,7 @@ class ResponseLocalDb {
     this.telefonoBeneficiarioSeguro1,
     this.plazoSolicitud,
     this.fechaPrimerPagoSolicitud,
+    this.fechaDesembolso,
+    this.prestamoInteres,
   });
 }

@@ -41,7 +41,7 @@ class CrearSolicitudScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            const _Navbar(),
+            const Navbar(),
             Expanded(
               child: PageView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -197,8 +197,8 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
               itemAsString: (ItemNacionalidad? item) => item?.nombre ?? 'N/A',
               onChanged: widget.onChanged,
               selectedItem: ItemNacionalidad(
-                nombre: widget.title,
-                valor: '',
+                nombre: widget.hintText,
+                valor: widget.hintText,
                 relacion: '',
                 id: 0,
               ),
@@ -251,6 +251,10 @@ class _CatalogoValorDropdownWidgetState
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: JLuxDropdown(
+        // initialValue: CatalogoLocalDb(
+        //     valor: widget.initialValue ?? '',
+        //     nombre: widget.initialValue ?? '',
+        //     type: ''),
         hintText: widget.hintText,
         dropdownColor: Colors.white,
         isContainIcon: true,
@@ -325,8 +329,8 @@ class _CatalogoValorDepartamentosState
   }
 }
 
-class _Navbar extends StatelessWidget {
-  const _Navbar();
+class Navbar extends StatelessWidget {
+  const Navbar({super.key});
 
   @override
   Widget build(BuildContext context) {

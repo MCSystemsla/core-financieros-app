@@ -202,7 +202,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(10, 5156059507673561033),
       name: 'ResponseLocalDb',
-      lastPropertyId: const obx_int.IdUid(98, 4241004158816654841),
+      lastPropertyId: const obx_int.IdUid(100, 9002422792238194696),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -694,6 +694,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(98, 4241004158816654841),
             name: 'fechaPrimerPagoSolicitud',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(99, 4852704771637279582),
+            name: 'fechaDesembolso',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(100, 9002422792238194696),
+            name: 'prestamoInteres',
+            type: 8,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1281,7 +1291,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
               object.fechaPrimerPagoSolicitud == null
                   ? null
                   : fbb.writeString(object.fechaPrimerPagoSolicitud!);
-          fbb.startTable(99);
+          final fechaDesembolsoOffset = object.fechaDesembolso == null
+              ? null
+              : fbb.writeString(object.fechaDesembolso!);
+          fbb.startTable(101);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, objOrigenSolicitudIdOffset);
           fbb.addOffset(2, nombre1Offset);
@@ -1380,6 +1393,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(95, telefonoBeneficiarioSeguro1Offset);
           fbb.addInt64(96, object.plazoSolicitud);
           fbb.addOffset(97, fechaPrimerPagoSolicitudOffset);
+          fbb.addOffset(98, fechaDesembolsoOffset);
+          fbb.addFloat64(99, object.prestamoInteres);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1650,6 +1665,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final fechaPrimerPagoSolicitudParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 198);
+          final fechaDesembolsoParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 200);
+          final prestamoInteresParam = const fb.Float64Reader()
+              .vTableGetNullable(buffer, rootOffset, 202);
           final object = ResponseLocalDb(
               objOrigenSolicitudId: objOrigenSolicitudIdParam,
               nombre1: nombre1Param,
@@ -1749,7 +1769,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               telefonoBeneficiario: telefonoBeneficiarioParam,
               telefonoBeneficiarioSeguro1: telefonoBeneficiarioSeguro1Param,
               plazoSolicitud: plazoSolicitudParam,
-              fechaPrimerPagoSolicitud: fechaPrimerPagoSolicitudParam)
+              fechaPrimerPagoSolicitud: fechaPrimerPagoSolicitudParam,
+              fechaDesembolso: fechaDesembolsoParam,
+              prestamoInteres: prestamoInteresParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -2266,4 +2288,12 @@ class ResponseLocalDb_ {
   /// See [ResponseLocalDb.fechaPrimerPagoSolicitud].
   static final fechaPrimerPagoSolicitud =
       obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[97]);
+
+  /// See [ResponseLocalDb.fechaDesembolso].
+  static final fechaDesembolso =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[98]);
+
+  /// See [ResponseLocalDb.prestamoInteres].
+  static final prestamoInteres =
+      obx.QueryDoubleProperty<ResponseLocalDb>(_entities[6].properties[99]);
 }
