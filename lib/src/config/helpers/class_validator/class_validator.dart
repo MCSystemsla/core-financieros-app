@@ -23,7 +23,7 @@ class ClassValidator {
   }
 
   static String? validateRequired(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.isEmpty || value == 'input.select_option'.tr()) {
       return 'input.input_validator'.tr();
     }
     return null;

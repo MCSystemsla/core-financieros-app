@@ -11,6 +11,7 @@ class SearchDropdownWidget extends StatelessWidget {
   final bool isRequired;
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
+  final String hintText;
 
   const SearchDropdownWidget({
     super.key,
@@ -19,6 +20,7 @@ class SearchDropdownWidget extends StatelessWidget {
     this.isRequired = false,
     required this.onChanged,
     this.validator,
+    this.hintText = 'Selecciona una opcion',
   });
 
   @override
@@ -65,6 +67,7 @@ class SearchDropdownWidget extends StatelessWidget {
               validator: validator,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
+                  hintText: hintText,
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
@@ -90,8 +93,8 @@ class SearchDropdownWidget extends StatelessWidget {
               items: items,
               itemAsString: (Item? item) => item?.name ?? 'N/A',
               onChanged: onChanged,
-              selectedItem:
-                  Item(name: '$title ${isRequired ? '*' : ''}', value: null),
+              selectedItem: Item(
+                  name: '$hintText ${isRequired ? '*' : ''}', value: hintText),
             ),
           ),
         ],
