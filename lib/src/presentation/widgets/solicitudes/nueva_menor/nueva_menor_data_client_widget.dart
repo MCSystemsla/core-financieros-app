@@ -417,9 +417,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               email: emailController.text.trim(),
                               objEscolaridadId: escolaridad,
                             );
-                        context
-                            .read<SolicitudNuevaMenorCubit>()
-                            .saveLocalAnswers();
+                        // context
+                        //     .read<SolicitudNuevaMenorCubit>()
+                        //     .saveLocalAnswers();
 
                         widget.controller.nextPage(
                           duration: const Duration(milliseconds: 300),

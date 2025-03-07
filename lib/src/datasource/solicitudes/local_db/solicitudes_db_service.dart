@@ -32,7 +32,7 @@ class ObjectBoxService {
   }
 
   static Future<ObjectBoxService> init() async {
-    final store = await openStore(); // Inicializa el Store.
+    final store = await openStore(); // .
     return ObjectBoxService._create(store);
   }
 
@@ -186,6 +186,14 @@ class ObjectBoxService {
     } catch (e) {
       _logger.e(e.toString());
       throw AppException.toAppException(e);
+    }
+  }
+
+  void removeSolicitudWhenisUploaded({required int solicitudId}) {
+    try {
+      solicitudesResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
     }
   }
 }

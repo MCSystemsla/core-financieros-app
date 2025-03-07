@@ -174,7 +174,12 @@ class _NuevaMenorBeneficiarioWidgetState
                     MaterialPageRoute(
                       builder: (ctx) => BlocProvider.value(
                         value: context.read<SolicitudNuevaMenorCubit>(),
-                        child: const SendingFormWidget(),
+                        child: SendingFormWidget(
+                          solicitudId: context
+                              .read<SolicitudNuevaMenorCubit>()
+                              .state
+                              .idLocalResponse,
+                        ),
                       ),
                     ),
                   );
