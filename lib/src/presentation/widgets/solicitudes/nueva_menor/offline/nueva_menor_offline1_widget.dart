@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -109,12 +107,11 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
     fechaNacimiento = widget.responseLocalDb.fechaNacimiento;
     nacionalidad = widget.responseLocalDb.nacionalidad;
     paisNacimiento = widget.responseLocalDb.objPaisNacimientoId;
+    escolaridad = widget.responseLocalDb.objEscolaridadId;
   }
 
   @override
   Widget build(BuildContext context) {
-    log('ID: ${widget.responseLocalDb.id.toString()}');
-
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -424,8 +421,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             SearchDropdownWidget(
               // initialValue: '',
-              hintText: widget.responseLocalDb.objEscolaridadId ??
-                  'Selecciona una opcion',
+              hintText: escolaridad ?? 'Selecciona una opcion',
               codigo: 'ESCOLARIDAD',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -470,7 +466,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );
-                  // context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers();
 
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

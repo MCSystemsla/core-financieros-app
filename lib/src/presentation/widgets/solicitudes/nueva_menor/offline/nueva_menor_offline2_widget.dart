@@ -40,6 +40,19 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
   String? munWhereClause;
   final formKey = GlobalKey<FormState>();
   @override
+  void initState() {
+    super.initState();
+    paisDomicilio = widget.responseLocalDb.objPaisCasaId;
+    departamentoDomicilio = widget.responseLocalDb.objDepartamentoCasaId;
+    municipioDomicilio = widget.responseLocalDb.objMunicipioCasaId;
+    direccionCasa = widget.responseLocalDb.direccionCasa;
+    barrioCasa = widget.responseLocalDb.barrioCasa;
+    condicionCasa = widget.responseLocalDb.objCondicionCasaId;
+    anosResidirCasa = widget.responseLocalDb.anosResidirCasa.toString();
+    comunidad = widget.responseLocalDb.ubicacion;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -51,12 +64,11 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: widget.responseLocalDb.objPaisCasaId ?? '',
-                nombre: widget.responseLocalDb.objPaisCasaId ?? '',
+                valor: paisDomicilio ?? 'input.select_option'.tr(),
+                nombre: paisDomicilio ?? 'input.select_option'.tr(),
                 relacion: '',
               ),
-              hintText: widget.responseLocalDb.objPaisCasaId ??
-                  'Selecciona Pais de Casa',
+              hintText: paisDomicilio ?? 'Selecciona Pais de Casa',
               title: 'Pais Domicilio',
               onChanged: (item) {
                 if (item == null) return;
@@ -75,12 +87,12 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: widget.responseLocalDb.objDepartamentoCasaId ?? '',
-                nombre: widget.responseLocalDb.objDepartamentoCasaId ?? '',
+                valor: departamentoDomicilio ?? '',
+                nombre: departamentoDomicilio ?? '',
                 relacion: '',
               ),
-              hintText: widget.responseLocalDb.objDepartamentoCasaId ??
-                  'Selecciona Departamento de Casa',
+              hintText:
+                  departamentoDomicilio ?? 'Selecciona Departamento de Casa',
               title: 'Departamento Domicilio',
               onChanged: (item) {
                 if (item == null) return;
@@ -99,13 +111,12 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: widget.responseLocalDb.objMunicipioCasaId ?? '',
-                nombre: widget.responseLocalDb.objMunicipioCasaId ?? '',
+                valor: municipioDomicilio ?? '',
+                nombre: municipioDomicilio ?? '',
                 relacion: '',
               ),
               where: munWhereClause,
-              hintText: widget.responseLocalDb.objMunicipioCasaId ??
-                  'Selecciona Municipio de Casa',
+              hintText: municipioDomicilio ?? 'Selecciona Municipio de Casa',
               title: 'Municipio Domicilio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
@@ -120,7 +131,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             // ],
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: widget.responseLocalDb.direccionCasa,
+              initialValue: direccionCasa,
               maxLength: 50,
               icon: Icon(
                 Icons.house,
@@ -136,7 +147,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: widget.responseLocalDb.barrioCasa,
+              initialValue: barrioCasa,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
@@ -152,7 +163,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: widget.responseLocalDb.objCondicionCasaId ?? '',
+              hintText: condicionCasa ?? 'Selecciona una opcion',
               title: 'Condicion Casa',
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
@@ -162,7 +173,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: widget.responseLocalDb.anosResidirCasa.toString(),
+              initialValue: anosResidirCasa,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
@@ -194,8 +205,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
                 toStringItem: (item) {
                   return item.nombre;
                 },
-                hintText: widget.responseLocalDb.ubicacion ??
-                    'input.select_option'.tr(),
+                hintText: comunidad ?? 'input.select_option'.tr(),
               ),
             ),
             const Gap(20),
