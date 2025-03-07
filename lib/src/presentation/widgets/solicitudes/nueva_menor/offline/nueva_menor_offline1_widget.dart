@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -111,6 +113,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
 
   @override
   Widget build(BuildContext context) {
+    log('ID: ${widget.responseLocalDb.id.toString()}');
+
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -211,7 +215,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Nombre Publico',
               textCapitalization: TextCapitalization.words,
-              initialValue: nombrePublicoController.text,
+              // initialValue: nombrePublicoController.text,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
               textEditingController: nombrePublicoController,
@@ -442,6 +446,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        localSolicitudId: widget.responseLocalDb.id,
                         nombre1: nombre1,
                         nombre2: nombre2,
                         apellido1: apellido1,

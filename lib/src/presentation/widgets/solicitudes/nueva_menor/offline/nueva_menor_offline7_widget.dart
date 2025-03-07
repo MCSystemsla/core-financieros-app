@@ -194,7 +194,9 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
                     MaterialPageRoute(
                       builder: (ctx) => BlocProvider.value(
                         value: context.read<SolicitudNuevaMenorCubit>(),
-                        child: const SendingFormWidget(),
+                        child: SendingFormWidget(
+                          solicitudId: widget.responseLocalDb.id,
+                        ),
                       ),
                     ),
                   );

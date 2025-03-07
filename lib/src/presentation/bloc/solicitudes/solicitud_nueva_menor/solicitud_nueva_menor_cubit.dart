@@ -231,9 +231,11 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     String? fechaPrimerPagoSolicitud,
     String? fechaDesembolso,
     double? prestamoInteres,
+    int? localSolicitudId,
   }) {
     emit(
       state.copyWith(
+        idLocalResponse: localSolicitudId,
         objOrigenSolicitudId: objOrigenSolicitudId,
         fechaDesembolso: fechaDesembolso,
         prestamoInteres: prestamoInteres,
