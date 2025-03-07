@@ -128,6 +128,15 @@ class CatalogoValorNacionalidad extends StatefulWidget {
 class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
   late String value;
   late String whereClause;
+  @override
+  void didUpdateWidget(covariant CatalogoValorNacionalidad oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.where != widget.where) {
+      setState(() {
+        whereClause = widget.where ?? '';
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -182,12 +191,13 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
                   ),
                 ),
               ),
-              popupProps: const PopupProps.menu(
+              popupProps: PopupProps.menu(
                 showSearchBox: true,
                 searchFieldProps: TextFieldProps(
                   decoration: InputDecoration(
+                    hintText: widget.hintText,
                     labelText: 'Buscar',
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                   ),

@@ -1,4 +1,6 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -7,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendingFormWidget extends StatefulWidget {
-  const SendingFormWidget({super.key});
+  final int solicitudId;
+  const SendingFormWidget({super.key, required this.solicitudId});
 
   @override
   State<SendingFormWidget> createState() => _SendingFormWidgetState();
@@ -22,7 +25,15 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
+    final dbProvider = global<ObjectBoxService>();
+    return BlocConsumer<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
+      listener: (context, state) {
+        if (state.status == Status.done) {
+          dbProvider.removeSolicitudWhenisUploaded(
+            solicitudId: widget.solicitudId,
+          );
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: switch (state.status) {

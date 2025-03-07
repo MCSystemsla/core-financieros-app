@@ -107,6 +107,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
     fechaNacimiento = widget.responseLocalDb.fechaNacimiento;
     nacionalidad = widget.responseLocalDb.nacionalidad;
     paisNacimiento = widget.responseLocalDb.objPaisNacimientoId;
+    escolaridad = widget.responseLocalDb.objEscolaridadId;
   }
 
   @override
@@ -211,7 +212,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Nombre Publico',
               textCapitalization: TextCapitalization.words,
-              initialValue: nombrePublicoController.text,
+              // initialValue: nombrePublicoController.text,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
               textEditingController: nombrePublicoController,
@@ -420,8 +421,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             SearchDropdownWidget(
               // initialValue: '',
-              hintText: widget.responseLocalDb.objEscolaridadId ??
-                  'Selecciona una opcion',
+              hintText: escolaridad ?? 'Selecciona una opcion',
               codigo: 'ESCOLARIDAD',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -442,6 +442,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        localSolicitudId: widget.responseLocalDb.id,
                         nombre1: nombre1,
                         nombre2: nombre2,
                         apellido1: apellido1,
@@ -465,7 +466,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );
-                  // context.read<SolicitudNuevaMenorCubit>().saveLocalAnswers();
 
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

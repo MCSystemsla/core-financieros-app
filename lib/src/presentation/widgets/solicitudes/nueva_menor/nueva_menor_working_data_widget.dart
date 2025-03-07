@@ -76,6 +76,7 @@ class _NuevaMenorWorkingDataWidgetState
                   if (item == null) return;
                   departamentoDomicilio = item.valor;
                   munWhereClause = item.valor;
+
                   setState(() {});
                 },
                 codigo: 'DEP',
