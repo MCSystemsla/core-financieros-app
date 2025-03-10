@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spa
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/skeleton_loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -88,8 +89,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           },
           builder: (context, state) {
             return switch (state.status) {
-              Status.inProgress =>
-                const Center(child: CircularProgressIndicator()),
+              Status.inProgress => const SkeletonLoadingWidget(),
               Status.error => OnErrorWidget(
                   errorMsg: 'Error de Sistema',
                   onPressed: () {

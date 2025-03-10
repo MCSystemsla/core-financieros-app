@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
@@ -104,7 +102,6 @@ class ObjectBoxService {
               .query(CatalogoNacionalidadDepDb_.relacion.equals(whereClause))
               .build();
           final results = query.find();
-          log(results.toString());
           query.close();
           return results
               .map((e) => ItemNacionalidad(
@@ -134,7 +131,6 @@ class ObjectBoxService {
               .query(CatalogoNacionalidadMunDb_.relacion.equals(whereClause))
               .build();
           final results = query.find();
-          log(results.toString());
           query.close();
           return results
               .map((e) => ItemNacionalidad(

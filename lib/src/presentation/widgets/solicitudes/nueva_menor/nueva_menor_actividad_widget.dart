@@ -1,6 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -8,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_m
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorBeneficiarioWidget extends StatefulWidget {
   const NuevaMenorBeneficiarioWidget({
@@ -34,8 +38,11 @@ class _NuevaMenorBeneficiarioWidgetState
   String? telefonoBeneficiario;
   String? telefonoBeneficiario1;
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -169,6 +176,15 @@ class _NuevaMenorBeneficiarioWidgetState
                         telefonoBeneficiario: telefonoBeneficiario,
                         telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
                       );
+                  if (!isConnected) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                      onDone: () => context.pushReplacement('/solicitudes'),
+                    ).showDialog(context, dialogType: DialogType.infoReverse);
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
