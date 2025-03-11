@@ -21,7 +21,9 @@ class SolicitudesPendientesScreen extends StatelessWidget {
     return BlocProvider(
       create: (ctx) => SolicitudesOfflineCubit(
         global<ObjectBoxService>(),
-      )..getSolicitudesOffline(),
+      )
+        ..deleteItemByDeterminateDay()
+        ..getSolicitudesOffline(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Solicitudes Pendientes'),

@@ -38,6 +38,14 @@ class ObjectBoxService {
     _store.close(); // Cierra la conexión con la base de datos.
   }
 
+  void deleteRowsByDeterminateTime() {
+    final now = DateTime.now().subtract(const Duration(minutes: 30));
+    solicitudesResponsesBox
+        .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+  }
+
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
     final query = catalogoBox.query(CatalogoLocalDb_.type.equals(type)).build();
 

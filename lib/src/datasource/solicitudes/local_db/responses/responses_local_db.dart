@@ -103,6 +103,8 @@ class ResponseLocalDb {
   String? fechaPrimerPagoSolicitud;
   String? fechaDesembolso;
   double? prestamoInteres;
+  @Property(type: PropertyType.date)
+  DateTime? createdAt;
 
   ResponseLocalDb({
     this.objOrigenSolicitudId,
@@ -204,5 +206,6 @@ class ResponseLocalDb {
     this.fechaPrimerPagoSolicitud,
     this.fechaDesembolso,
     this.prestamoInteres,
+    this.createdAt,
   });
 }

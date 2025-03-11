@@ -346,6 +346,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       localDbProvider.updateSolicitudNuevaMenorById(
         id: state.idLocalResponse,
         responseLocalDb: ResponseLocalDb(
+          createdAt: DateTime.now(),
           fechaDesembolso: state.fechaDesembolso,
           prestamoInteres: state.prestamoInteres,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
@@ -454,6 +455,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesNuevaMenorResponses(
       responseLocalDb: ResponseLocalDb(
+        createdAt: DateTime.now(),
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         horarioTrabajo: state.horarioTrabajo,
         horarioVisita: state.horarioVisita,

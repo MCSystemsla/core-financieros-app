@@ -23,4 +23,8 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
       emit(OnSolicitudesOfflineError(errorMsg: e.toString()));
     }
   }
+
+  void deleteItemByDeterminateDay() {
+    objectBoxService.deleteRowsByDeterminateTime();
+  }
 }
