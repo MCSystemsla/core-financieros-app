@@ -70,42 +70,46 @@ class DownloadCatalogoLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Lottie.asset(
-            lottieAsset,
-            repeat: repeat,
-            height: 200,
-          ),
-          const Gap(10),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              lottieAsset,
+              repeat: repeat,
+              height: 200,
             ),
-          ),
-          if (isSucess ?? false) ...[
-            const Gap(20),
-            SizedBox(
-              width: 200,
-              child: CustomElevatedButton(
-                color: AppColors.getPrimaryColor(),
-                text: 'OK',
-                onPressed: () {
-                  if (isUploadingForms) {
-                    return context.pushReplacement('/');
-                  }
-                  if (context.canPop()) return context.pop();
-                  context.push('/');
-                },
+            const Gap(10),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
               ),
-            )
-          ]
-        ],
+            ),
+            if (isSucess ?? false) ...[
+              const Gap(20),
+              SizedBox(
+                width: 200,
+                child: CustomElevatedButton(
+                  color: AppColors.getPrimaryColor(),
+                  text: 'OK',
+                  onPressed: () {
+                    if (isUploadingForms) {
+                      return context.pushReplacement('/');
+                    }
+                    if (context.canPop()) return context.pop();
+                    context.push('/');
+                  },
+                ),
+              )
+            ]
+          ],
+        ),
       ),
     );
   }

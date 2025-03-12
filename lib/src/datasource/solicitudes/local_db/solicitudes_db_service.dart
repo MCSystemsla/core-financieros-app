@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
@@ -38,6 +36,27 @@ class ObjectBoxService {
 
   void close() {
     _store.close(); // Cierra la conexión con la base de datos.
+  }
+
+  void deleteRowsByDeterminateTime() {
+    final now = DateTime.now().subtract(const Duration(minutes: 30));
+    solicitudesResponsesBox
+        .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+  }
+
+  List<ResponseLocalDb> sendSolicitudWhenIsDone() {
+    try {
+      final solicitudes = solicitudesResponsesBox
+          .query(ResponseLocalDb_.isDone.equals(true))
+          .build()
+          .find();
+      return solicitudes;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
   }
 
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
@@ -104,7 +123,6 @@ class ObjectBoxService {
               .query(CatalogoNacionalidadDepDb_.relacion.equals(whereClause))
               .build();
           final results = query.find();
-          log(results.toString());
           query.close();
           return results
               .map((e) => ItemNacionalidad(
@@ -134,7 +152,6 @@ class ObjectBoxService {
               .query(CatalogoNacionalidadMunDb_.relacion.equals(whereClause))
               .build();
           final results = query.find();
-          log(results.toString());
           query.close();
           return results
               .map((e) => ItemNacionalidad(

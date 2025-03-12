@@ -51,6 +51,20 @@ class CarteraScreen extends StatelessWidget {
             //   ),
             // ),
             _Card(
+              onTap: () {
+                context.push('/solicitudes');
+              },
+              title: 'Solicitudes',
+              subtitle: 'Modulo Solicitudes de Credito',
+              firstColor: AppColors.blueIndigo,
+              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+              icon: const Icon(
+                Icons.description,
+                color: AppColors.white,
+                size: 35,
+              ),
+            ),
+            _Card(
               onTap: () async {
                 if (!context.mounted) return;
                 isInternetConnection
@@ -64,20 +78,6 @@ class CarteraScreen extends StatelessWidget {
                   AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
               icon: const Icon(
                 Icons.dynamic_form_outlined,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
-            _Card(
-              onTap: () {
-                context.push('/solicitudes');
-              },
-              title: 'Solicitudes',
-              subtitle: 'Modulo Solicitudes de Credito',
-              firstColor: AppColors.blueIndigo,
-              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.description,
                 color: AppColors.white,
                 size: 35,
               ),
