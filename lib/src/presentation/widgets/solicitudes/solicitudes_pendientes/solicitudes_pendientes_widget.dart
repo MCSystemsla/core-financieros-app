@@ -145,7 +145,9 @@ class SolicitudesPendientesWidget extends StatelessWidget {
         dateToStart: solicitud.email ?? 'N/A',
         dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
             ?.selectorFormat(),
-        percentage: calcularPorcentajeLlenado(solicitud),
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
@@ -15,15 +13,18 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
 
   Future<void> getSolicitudesPendientes() async {
     emit(state.copyWith(status: Status.inProgress));
+    await Future.delayed(const Duration(seconds: 2));
     try {
       final data =
           await solicitudesPendientesRepository.getSolicitudesPendientes();
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           solicitudesPendienteResponse: data.solicitudes,
           filteredSolicitudes: data.solicitudes,
-          status: Status.done));
+          status: Status.done,
+        ),
+      );
     } catch (e) {
-      log(e.toString());
       emit(state.copyWith(status: Status.error));
     }
   }

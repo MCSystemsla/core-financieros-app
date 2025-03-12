@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +22,9 @@ class SolicitudesPendientesScreen extends StatelessWidget {
     return BlocProvider(
       create: (ctx) => SolicitudesOfflineCubit(
         global<ObjectBoxService>(),
-      )..getSolicitudesOffline(),
+      )
+        ..deleteItemByDeterminateDay()
+        ..getSolicitudesOffline(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Solicitudes Pendientes'),
@@ -41,9 +44,7 @@ class SolicitudesPendientesScreen extends StatelessWidget {
                   errorMsg: state.errorMsg,
                   needToGoBack: true,
                 ),
-              OnSolicitudesOfflineLoading() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+              OnSolicitudesOfflineLoading() => const SolicitudLoading(),
               _ => const SizedBox(),
             };
           },

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
@@ -46,7 +44,6 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
         tipoSolicitud: tipoSolicitud,
       ),
     );
-    log(state.toString());
   }
 
   void saveAnswer2({
@@ -65,7 +62,6 @@ class MejoraViviendaCubit extends Cubit<MejoraViviendaState> {
         solicitudNuevamenorId: solicitudNuevamenorId,
       ),
     );
-    log(state.toString());
   }
 
   Future<void> sendAnswers() async {

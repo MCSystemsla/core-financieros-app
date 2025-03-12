@@ -104,8 +104,12 @@ class SolicitudNuevaMenorState extends Equatable {
   final String fechaPrimerPagoSolicitud;
   final double prestamoInteres;
   final String fechaDesembolso;
+  final String createdAt;
+  final bool isDone;
   const SolicitudNuevaMenorState({
+    this.isDone = false,
     this.idLocalResponse = 0,
+    this.createdAt = '',
     this.errorMsg = '',
     this.status = Status.notStarted,
     this.objOrigenSolicitudId = '',
@@ -312,7 +316,9 @@ class SolicitudNuevaMenorState extends Equatable {
         plazoSolicitud,
         fechaPrimerPagoSolicitud,
         prestamoInteres,
-        fechaDesembolso
+        fechaDesembolso,
+        createdAt,
+        isDone
       ];
 
   SolicitudNuevaMenorState copyWith({
@@ -418,6 +424,8 @@ class SolicitudNuevaMenorState extends Equatable {
     String? fechaPrimerPagoSolicitud,
     double? prestamoInteres,
     String? fechaDesembolso,
+    String? createdAt,
+    bool? isDone,
   }) {
     return SolicitudNuevaMenorState(
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
@@ -540,6 +548,8 @@ class SolicitudNuevaMenorState extends Equatable {
           fechaPrimerPagoSolicitud ?? this.fechaPrimerPagoSolicitud,
       prestamoInteres: prestamoInteres ?? this.prestamoInteres,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
+      createdAt: createdAt ?? this.createdAt,
+      isDone: isDone ?? this.isDone,
     );
   }
 }
