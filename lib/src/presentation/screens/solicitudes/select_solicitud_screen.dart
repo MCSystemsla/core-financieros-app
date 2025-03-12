@@ -4,7 +4,9 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class SelectSolicitudScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
     final repository = SolicitudCreditoRepositoryImpl();
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
 
     return MultiBlocProvider(
       providers: [
@@ -32,36 +36,66 @@ class SelectSolicitudScreen extends StatelessWidget {
                   context.read<InternetConnectionCubit>().state.isConnected,
             ),
         ),
+        BlocProvider(
+          create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
+            localDbProvider,
+            repository,
+          )..sendSolicitudWhenIsDone(isConnected: isConnected),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 10, bottom: 10),
-                child: Text(
-                  'Seleccionar un tipo de Credito',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 19,
+        body: BlocBuilder<EnviarSolicitudWhenIsdoneCubit,
+            EnviarSolicitudWhenIsdoneState>(
+          builder: (context, state) {
+            return switch (state) {
+              OnEnviarSolicitudWhenIsdoneLoading() =>
+                const DownloadCatalogoLoading(
+                  lottieAsset: ImageAsset.enviarSolicitudOfflines,
+                  text: 'Enviando Solicitudes Offline al Servidor',
+                ),
+              OnEnviarSolicitudWhenIsdoneSuccess() =>
+                const DownloadCatalogoLoading(
+                  isSucess: true,
+                  lottieAsset: ImageAsset.nuevaMenorSuccess,
+                  text: 'Solicitudes offline enviadas exitosamente!!',
+                  repeat: false,
+                  // isUploadingForms: true,
+                ),
+              _ => Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, bottom: 10),
+                        child: Text(
+                          'Seleccionar un tipo de Credito',
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontSize: 19,
+                                  ),
+                        ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, bottom: 10),
+                        child: Text(
+                          'Por favor, elige una de las siguientes opciones:',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(),
+                        ),
+                      ),
+                      const Gap(20),
+                      const _SolicitudCardsRow1(),
+                      const Gap(20),
+                      const _SolicitudesCardsRow2(),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 10, bottom: 10),
-                child: Text(
-                  'Por favor, elige una de las siguientes opciones:',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
-                ),
-              ),
-              const Gap(20),
-              const _SolicitudCardsRow1(),
-              const Gap(20),
-              const _SolicitudesCardsRow2(),
-            ],
-          ),
+            };
+          },
         ),
       ),
     );

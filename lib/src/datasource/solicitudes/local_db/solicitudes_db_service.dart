@@ -46,6 +46,19 @@ class ObjectBoxService {
         .remove();
   }
 
+  List<ResponseLocalDb> sendSolicitudWhenIsDone() {
+    try {
+      final solicitudes = solicitudesResponsesBox
+          .query(ResponseLocalDb_.isDone.equals(true))
+          .build()
+          .find();
+      return solicitudes;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
     final query = catalogoBox.query(CatalogoLocalDb_.type.equals(type)).build();
 

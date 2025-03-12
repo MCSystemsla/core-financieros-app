@@ -37,4 +37,6 @@ abstract class ImageAsset {
       'assets/images/save_catalogos.json';
   static const String downloadCatalogosSuccess =
       'assets/images/success2_catalogo.json';
+  static const String enviarSolicitudOfflines =
+      'assets/images/enviar_solicitud_offline.json';
 }
