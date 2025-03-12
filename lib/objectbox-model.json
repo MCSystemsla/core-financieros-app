@@ -179,7 +179,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "101:898568838743610383",
+      "lastPropertyId": "102:5119749245157915097",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -687,6 +687,11 @@
           "id": "101:898568838743610383",
           "name": "createdAt",
           "type": 10
+        },
+        {
+          "id": "102:5119749245157915097",
+          "name": "isDone",
+          "type": 1
         }
       ],
       "relations": []

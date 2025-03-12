@@ -202,7 +202,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(10, 5156059507673561033),
       name: 'ResponseLocalDb',
-      lastPropertyId: const obx_int.IdUid(101, 898568838743610383),
+      lastPropertyId: const obx_int.IdUid(102, 5119749245157915097),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -709,6 +709,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(101, 898568838743610383),
             name: 'createdAt',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(102, 5119749245157915097),
+            name: 'isDone',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1299,7 +1304,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final fechaDesembolsoOffset = object.fechaDesembolso == null
               ? null
               : fbb.writeString(object.fechaDesembolso!);
-          fbb.startTable(102);
+          fbb.startTable(103);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, objOrigenSolicitudIdOffset);
           fbb.addOffset(2, nombre1Offset);
@@ -1401,6 +1406,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(98, fechaDesembolsoOffset);
           fbb.addFloat64(99, object.prestamoInteres);
           fbb.addInt64(100, object.createdAt?.millisecondsSinceEpoch);
+          fbb.addBool(101, object.isDone);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1681,6 +1687,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final createdAtParam = createdAtValue == null
               ? null
               : DateTime.fromMillisecondsSinceEpoch(createdAtValue);
+          final isDoneParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 206);
           final object = ResponseLocalDb(
               objOrigenSolicitudId: objOrigenSolicitudIdParam,
               nombre1: nombre1Param,
@@ -1783,7 +1791,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               fechaPrimerPagoSolicitud: fechaPrimerPagoSolicitudParam,
               fechaDesembolso: fechaDesembolsoParam,
               prestamoInteres: prestamoInteresParam,
-              createdAt: createdAtParam)
+              createdAt: createdAtParam,
+              isDone: isDoneParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -2312,4 +2321,8 @@ class ResponseLocalDb_ {
   /// See [ResponseLocalDb.createdAt].
   static final createdAt =
       obx.QueryDateProperty<ResponseLocalDb>(_entities[6].properties[100]);
+
+  /// See [ResponseLocalDb.isDone].
+  static final isDone =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[101]);
 }

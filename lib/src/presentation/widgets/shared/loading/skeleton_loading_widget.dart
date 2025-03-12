@@ -13,13 +13,19 @@ class SkeletonLoadingWidget extends StatelessWidget {
           title: Container(
             width: double.infinity,
             height: 16.0,
-            color: Colors.grey[300],
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           subtitle: Container(
             width: double.infinity,
             height: 12.0,
             margin: const EdgeInsets.only(top: 4.0),
-            color: Colors.grey[300],
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -27,13 +33,19 @@ class SkeletonLoadingWidget extends StatelessWidget {
               Container(
                 width: 40.0,
                 height: 12.0,
-                color: Colors.grey[300],
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               const SizedBox(height: 5),
               Container(
                 width: 40.0,
                 height: 12.0,
-                color: Colors.grey[300],
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ],
           ),

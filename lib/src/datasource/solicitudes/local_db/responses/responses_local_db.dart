@@ -105,6 +105,7 @@ class ResponseLocalDb {
   double? prestamoInteres;
   @Property(type: PropertyType.date)
   DateTime? createdAt;
+  bool? isDone;
 
   ResponseLocalDb({
     this.objOrigenSolicitudId,
@@ -207,5 +208,6 @@ class ResponseLocalDb {
     this.fechaDesembolso,
     this.prestamoInteres,
     this.createdAt,
+    this.isDone = false,
   });
 }

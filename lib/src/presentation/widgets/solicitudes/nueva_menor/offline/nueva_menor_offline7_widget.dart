@@ -195,6 +195,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
                             parentescoBeneficiarioSeguro1,
                         telefonoBeneficiario: telefonoBeneficiario,
                         telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
+                        isDone: true,
                       );
                   if (!isConnected) {
                     CustomAlertDialog(

@@ -175,6 +175,7 @@ class _NuevaMenorBeneficiarioWidgetState
                             parentescoBeneficiarioSeguro1,
                         telefonoBeneficiario: telefonoBeneficiario,
                         telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
+                        isDone: true,
                       );
                   if (!isConnected) {
                     CustomAlertDialog(

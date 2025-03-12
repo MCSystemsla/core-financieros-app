@@ -11,8 +11,9 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
   SolicitudesOfflineCubit(this.objectBoxService)
       : super(SolicitudesOfflineInitial());
 
-  void getSolicitudesOffline() {
+  void getSolicitudesOffline() async {
     emit(OnSolicitudesOfflineLoading());
+    await Future.delayed(const Duration(seconds: 3));
     try {
       final solicitudesOffline = objectBoxService.getSolicitudesResponse();
       emit(OnSolicitudesOfflineSuccess(
