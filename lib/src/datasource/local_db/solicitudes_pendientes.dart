@@ -17,4 +17,5 @@ class SolicitudesPendientes {
   int? idAsesor;
   String? tipoSolicitud;
   String? motivoAnterior;
+  int? cantidadHijos;
 }

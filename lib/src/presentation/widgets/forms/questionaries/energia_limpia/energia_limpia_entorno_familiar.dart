@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -54,6 +55,7 @@ class _EnergiaLimpiaEntornoFamiliarState
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     final localDbProvider = global<ObjectBoxService>();
     final items = localDbProvider.departmentsBox.getAll();
     final departmentos =
@@ -167,73 +169,67 @@ class _EnergiaLimpiaEntornoFamiliarState
                       textEditingController: problemasEnergiaDescripcion,
                       title: 'Explique cual es el problema',
                     ),
-                  const Gap(20),
+                  // const Gap(20),
+                  // CommentaryWidget(
+                  //   title: 'Número de personas a cargo:*',
+                  //   textEditingController: personasCargo,
+                  //   textInputType: TextInputType.number,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'input.input_validator'.tr();
+                  //     }
+                  //     final numero = int.tryParse(value);
+                  //     if (numero == null || numero < 0 || numero >= 255) {
+                  //       return 'Valor no valido'.tr();
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  // const Gap(20),
                   CommentaryWidget(
-                    title: 'Número de personas a cargo:*',
-                    textEditingController: personasCargo,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
+                    title: 'Cantidad de hijos:',
+                    readOnly: true,
+                    initialValue: cantidadHijos.toString(),
                   ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de hijos:*',
-                    textEditingController: numeroHijos,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Qué edades tienen sus hijos?',
-                    textEditingController: edadHijos,
-                  ),
-                  const Gap(20),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-
-                        return null;
-                      },
-                      title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                      items: [
-                        'Ninguno'.tr(),
-                        'Preescolar'.tr(),
-                        'Primaria'.tr(),
-                        'Secundaria'.tr(),
-                        'Técnico'.tr(),
-                        'Universitario'.tr(),
-                      ],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        tipoEstudioHijos = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
+                  if (cantidadHijos > 0) ...[
+                    const Gap(20),
+                    CommentaryWidget(
+                      title: '¿Qué edades tienen sus hijos?',
+                      textEditingController: edadHijos,
                     ),
-                  ),
+                    const Gap(20),
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+
+                          return null;
+                        },
+                        title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                        items: [
+                          'Ninguno'.tr(),
+                          'Preescolar'.tr(),
+                          'Primaria'.tr(),
+                          'Secundaria'.tr(),
+                          'Técnico'.tr(),
+                          'Universitario'.tr(),
+                        ],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          tipoEstudioHijos = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
+                      ),
+                    ),
+                  ],
                   const Gap(20),
                   ButtonActionsWidget(
                     onPreviousPressed: () {
@@ -250,7 +246,6 @@ class _EnergiaLimpiaEntornoFamiliarState
                               problemasEnergiaDescripcion:
                                   problemasEnergiaDescripcion.text.trim(),
                               edadHijos: edadHijos.text.trim(),
-                              numeroHijos: int.parse(numeroHijos.text.trim()),
                               objOrigenCatalogoValorId:
                                   objOrigenCatalogoValorId,
                               objTipoComunidadId: objTipoComunidadId,

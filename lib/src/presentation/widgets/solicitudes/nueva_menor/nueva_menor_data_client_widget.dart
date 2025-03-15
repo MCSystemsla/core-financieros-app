@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -10,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,6 +75,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
   final emailController = TextEditingController();
   final nacionalidadController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  String countryCode = '+503';
+  String celularCode = '+503';
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +327,13 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     initialValue: sexo,
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget.withCounter(
+                  CountryInput(
+                    onCountryCodeChange: (value) {
+                      if (value == null) return;
+                      countryCode = value.dialCode!;
+                      log(countryCode);
+                    },
+                    haveCounter: true,
                     maxLength: 15,
                     icon: Icon(
                       Icons.phone,
@@ -338,7 +349,11 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget.withCounter(
+                  CountryInput(
+                    onCountryCodeChange: (value) {
+                      if (value == null) return;
+                      celularCode = value.dialCode!;
+                    },
                     maxLength: 15,
                     icon: Icon(
                       Icons.phone_android,
@@ -412,14 +427,13 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               nacionalidad: nacionalidadController.text.trim(),
                               objPaisNacimientoId: paisNacimiento,
                               objSexoId: state.userCedulaResponse.sexo,
-                              telefono: telefonoController.text.trim(),
-                              celular: celularController.text.trim(),
+                              telefono:
+                                  countryCode + telefonoController.text.trim(),
+                              celular:
+                                  celularCode + celularController.text.trim(),
                               email: emailController.text.trim(),
                               objEscolaridadId: escolaridad,
                             );
-                        // context
-                        //     .read<SolicitudNuevaMenorCubit>()
-                        //     .saveLocalAnswers();
 
                         widget.controller.nextPage(
                           duration: const Duration(milliseconds: 300),

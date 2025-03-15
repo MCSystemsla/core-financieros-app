@@ -35,6 +35,7 @@ class _MigrantesEconomicosAboutFamilyState
   String? enviaRemesas;
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -59,54 +60,46 @@ class _MigrantesEconomicosAboutFamilyState
               ),
               const Gap(20),
               CommentaryWidget(
-                title: 'Número de hijos:*'.tr(),
-                textEditingController: numeroHijos,
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0 || numero >= 255) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
+                title: 'Cantidad de hijos:',
+                readOnly: true,
+                initialValue: cantidadHijos.toString(),
               ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Qué edades tienen sus hijos? ',
-                textEditingController: edadHijos,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-                    return null;
-                  },
-                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                  items: const [
-                    'Ninguno',
-                    'Preescolar',
-                    'Primaria',
-                    'Secundaria',
-                    'Técnico',
-                    'Universitario'
-                  ],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tipoEstudioHijos = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+              if (cantidadHijos > 0) ...[
+                const Gap(20),
+                CommentaryWidget(
+                  title: '¿Qué edades tienen sus hijos?',
+                  textEditingController: edadHijos,
                 ),
-              ),
+                const Gap(20),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+                      return null;
+                    },
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      tipoEstudioHijos = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
+              ],
               const Gap(20),
               WhiteCard(
                 padding: const EdgeInsets.all(5),
@@ -155,7 +148,6 @@ class _MigrantesEconomicosAboutFamilyState
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     context.read<MigrantesEconomicosCubit>().saveAnswers(
-                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           edadHijos: edadHijos.text.trim(),
                           tipoEstudioHijos: tipoEstudioHijos,
                           enviaRemesas: enviaRemesas == 'input.yes'.tr(),
@@ -167,11 +159,6 @@ class _MigrantesEconomicosAboutFamilyState
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
-                        Response(
-                          question: 'Número de hijos'.tr(),
-                          response: numeroHijos.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
                         Response(
                           question: '¿Qué edades tienen sus hijos?'.tr(),
                           response: edadHijos.text.trim(),

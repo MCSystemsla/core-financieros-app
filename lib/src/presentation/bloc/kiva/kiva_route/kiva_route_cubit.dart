@@ -15,6 +15,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
     required String motivoAnterior,
     required String tipoSolicitud,
     required String numero,
+    required int cantidadHijos,
   }) {
     emit(state.copyWith(
       currentRoute: route,
@@ -23,6 +24,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
       motivoAnterior: motivoAnterior,
       tipoSolicitud: tipoSolicitud,
       numero: numero,
+      cantidadHijos: cantidadHijos,
     ));
     log('Solicitud ${state.solicitudId} - Route ${state.currentRoute}');
   }

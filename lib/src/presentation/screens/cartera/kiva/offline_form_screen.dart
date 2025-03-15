@@ -161,6 +161,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           '${widget.solicitud.numero} - ${widget.solicitud.nombre!.capitalizeAll}'),
       onTap: () async {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
+              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
               tipoSolicitud: widget.solicitud.tipoSolicitud ?? 'N/A',
               route: widget.solicitud.producto ?? 'N/A',
               solicitudId: widget.solicitud.solicitudId.toString(),

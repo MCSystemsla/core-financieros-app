@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -49,6 +50,7 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     final localDbProvider = global<ObjectBoxService>();
     final items = localDbProvider.departmentsBox.getAll();
     final departmentos =
@@ -104,70 +106,48 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                   ),
                   const Gap(20),
                   CommentaryWidget(
-                    title: 'Número de personas a cargo:*',
-                    textEditingController: personasCargo,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
+                    title: 'Cantidad de hijos:',
+                    readOnly: true,
+                    initialValue: cantidadHijos.toString(),
                   ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de hijos:*',
-                    textEditingController: numeroHijos,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: '¿Que edades tienen sus hijos?',
-                    textEditingController: edadHijos,
-                  ),
-                  const Gap(20),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-                        return null;
-                      },
-                      title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                      items: const [
-                        'Ninguno',
-                        'Preescolar',
-                        'Primaria',
-                        'Secundaria',
-                        'Técnico',
-                        'Universitario'
-                      ],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        tipoEstudioHijos = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
+                  if (cantidadHijos > 0) ...[
+                    const Gap(20),
+                    CommentaryWidget(
+                      title: '¿Que edades tienen sus hijos?',
+                      textEditingController: edadHijos,
                     ),
-                  ),
+                    const Gap(20),
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                        items: const [
+                          'Ninguno',
+                          'Preescolar',
+                          'Primaria',
+                          'Secundaria',
+                          'Técnico',
+                          'Universitario'
+                        ],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          tipoEstudioHijos = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
+                      ),
+                    ),
+                  ],
                   const Gap(20),
                   ButtonActionsWidget(
                     onPreviousPressed: () {
@@ -183,12 +163,8 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                         context.read<EstandarCubit>().saveAnswers(
                               objOrigenCatalogoValorId:
                                   objOrigenCatalogoValorId!,
-                              personasCargo:
-                                  int.tryParse(personasCargo.text.trim()),
-                              numeroHijos:
-                                  int.tryParse(numeroHijos.text.trim()),
                               edadHijos: edadHijos.text.trim(),
-                              tipoEstudioHijos: tipoEstudioHijos!,
+                              tipoEstudioHijos: tipoEstudioHijos ?? '',
                             );
                         context.read<ResponseCubit>().addResponses(
                           responses: [
@@ -197,16 +173,6 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                               question:
                                   'forms.entorno_familiar.person_origin'.tr(),
                               response: objOrigenCatalogoValorId ?? 'N/A',
-                            ),
-                            Response(
-                              index: widget.pageController.page?.toInt() ?? 0,
-                              question: 'Número de personas a cargo:*'.tr(),
-                              response: personasCargo.text.trim(),
-                            ),
-                            Response(
-                              index: widget.pageController.page?.toInt() ?? 0,
-                              question: 'Número de hijos:*'.tr(),
-                              response: numeroHijos.text.trim(),
                             ),
                             Response(
                               index: widget.pageController.page?.toInt() ?? 0,

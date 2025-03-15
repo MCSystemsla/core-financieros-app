@@ -361,7 +361,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
-            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
       }
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
@@ -509,7 +509,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
-            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
       }
 
       _logger.i(response.reasonPhrase);

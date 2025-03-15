@@ -913,6 +913,7 @@ class _EntornoSocialEstudioWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     final localDbProvider = global<ObjectBoxService>();
     final items = localDbProvider.departmentsBox.getAll();
     final departmentos =
@@ -944,52 +945,6 @@ class _EntornoSocialEstudioWidgetState
                         ),
                   ),
                   const Gap(10),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-
-                        return null;
-                      },
-                      title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                      items: ['input.yes'.tr(), 'input.no'.tr()],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        tieneTrabajo = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
-                  ),
-                  if (tieneTrabajo == 'input.yes'.tr())
-                    CommentaryWidget(
-                      title: 'Cual?',
-                      textEditingController: trabajoNegocioDescripcion,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                    ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Tiempo de la actividad (MESES)'.tr(),
-                    textEditingController: tiempoActividad,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                  ),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(
@@ -1050,69 +1005,47 @@ class _EntornoSocialEstudioWidgetState
                   ),
                   const Gap(20),
                   CommentaryWidget(
-                    title: 'Número de personas a cargo:*'.tr(),
-                    textEditingController: personasCargo,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
+                    title: 'Cantidad de hijos:'.tr(),
+                    readOnly: true,
+                    initialValue: cantidadHijos.toString(),
                   ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'Número de hijos:*'.tr(),
-                    textEditingController: numeroHijos,
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    title: 'forms.entorno_familiar.childs_age'.tr(),
-                    textEditingController: edadHijos,
-                  ),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-                        return null;
-                      },
-                      title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                      items: const [
-                        'Ninguno',
-                        'Preescolar',
-                        'Primaria',
-                        'Secundaria',
-                        'Técnico',
-                        'Universitario'
-                      ],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        tipoEstudioHijos = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
+                  if (cantidadHijos > 0) ...[
+                    const Gap(20),
+                    CommentaryWidget(
+                      title: 'forms.entorno_familiar.childs_age'.tr(),
+                      textEditingController: edadHijos,
                     ),
-                  ),
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        validator: (value) {
+                          if (value == null) {
+                            return 'input.input_validator'.tr();
+                          }
+                          return null;
+                        },
+                        title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                        items: const [
+                          'Ninguno',
+                          'Preescolar',
+                          'Primaria',
+                          'Secundaria',
+                          'Técnico',
+                          'Universitario'
+                        ],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          tipoEstudioHijos = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
+                      ),
+                    ),
+                  ],
                   const Gap(20),
                   ButtonActionsWidget(
                     onPreviousPressed: () {
@@ -1133,18 +1066,11 @@ class _EntornoSocialEstudioWidgetState
                               tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
                               trabajoNegocioDescripcion:
                                   trabajoNegocioDescripcion.text.trim(),
-                              tiempoActividad: int.tryParse(
-                                tiempoActividad.text.trim(),
-                              ),
                               otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                               otrosIngresosDescripcion:
                                   otrosIngresosDescripcion.text.trim(),
                               objOrigenCatalogoValorId:
                                   objOrigenCatalogoValorId,
-                              personasCargo:
-                                  int.tryParse(personasCargo.text.trim()),
-                              numeroHijos:
-                                  int.tryParse(numeroHijos.text.trim()),
                               edadHijos: edadHijos.text.trim(),
                               tipoEstudioHijos: tipoEstudioHijos,
                             );

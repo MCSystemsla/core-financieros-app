@@ -799,10 +799,11 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage = photo;
-                selectedImage1Path = localPath;
 
-                setState(() {});
+                setState(() {
+                  selectedImage = photo;
+                  selectedImage1Path = localPath;
+                });
               },
             ),
             const Gap(20),
@@ -834,9 +835,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage2 = photo;
-                selectedImage2Path = localPath;
-                setState(() {});
+                setState(() {
+                  selectedImage2 = photo;
+                  selectedImage2Path = localPath;
+                });
               },
             ),
             const Gap(15),
@@ -868,9 +870,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage3 = photo;
-                selectedImage3Path = localPath;
-                setState(() {});
+                setState(() {
+                  selectedImage3 = photo;
+                  selectedImage3Path = localPath;
+                });
               },
             ),
             // UploadImageWidget(

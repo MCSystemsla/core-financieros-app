@@ -47,9 +47,6 @@ class CrearSolicitudScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
-                  // NuevaMenorCreditoWidget(
-                  //   pageController: pageController,
-                  // ),
                   NuevaMenorDataClientWidget(
                     controller: pageController,
                   ),
