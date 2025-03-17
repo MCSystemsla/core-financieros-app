@@ -292,6 +292,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
   final tiempoActividad = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -347,116 +348,43 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     return null;
                   },
                 ),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
-                  title: '¿Tiene Trabajo? Cual?'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tieneTrabajo = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
+              const Gap(20),
+              CommentaryWidget(
+                title: 'Cantidad de hijos:*',
+                readOnly: true,
+                initialValue: cantidadHijos.toString(),
               ),
-              if (tieneTrabajo == 'input.yes'.tr())
+              if (cantidadHijos > 0) ...[
+                const Gap(20),
                 CommentaryWidget(
-                  title: 'Cuales?',
-                  textEditingController: trabajoNegocioDescripcion,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
+                  title: '¿Que edades tienen sus hijos?',
+                  textEditingController: edadHijos,
                 ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: tiempoActividad,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-
-                  return null;
-                },
-                title: 'Tiempo de la actividad:* (MESES)',
-                textInputType: TextInputType.number,
-              ),
-              CommentaryWidget(
-                title: 'Número de personas a cargo:*',
-                textEditingController: personasCargo,
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Número de hijos:*',
-                textEditingController: numeroHijos,
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Que edades tienen sus hijos?',
-                textEditingController: edadHijos,
-              ),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                  items: const [
-                    'Ninguno',
-                    'Preescolar',
-                    'Primaria',
-                    'Secundaria',
-                    'Técnico',
-                    'Universitario'
-                  ],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tipoEstudioHijos = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      tipoEstudioHijos = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
                 ),
-              ),
+              ],
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -474,17 +402,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               .read<KivaRouteCubit>()
                               .state
                               .tipoSolicitud,
-                          tiempoActividad:
-                              int.tryParse(tiempoActividad.text.trim()),
-                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                          tieneTrabajoDescripcion:
-                              trabajoNegocioDescripcion.text.trim(),
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),
-                          personasCargo:
-                              int.tryParse(personasCargo.text.trim()),
-                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           edadHijos: edadHijos.text.trim(),
                           tipoEstudioHijos: tipoEstudioHijos,
                         );
@@ -501,16 +421,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                             question: 'Cuales?',
                             response: otrosIngresosDescripcion.text.trim(),
                           ),
-                        Response(
-                          index: widget.pageController.page?.toInt() ?? 0,
-                          question: 'Número de personas a cargo:*',
-                          response: personasCargo.text.trim(),
-                        ),
-                        Response(
-                          index: widget.pageController.page?.toInt() ?? 0,
-                          question: 'Número de hijos:*',
-                          response: numeroHijos.text.trim(),
-                        ),
                         Response(
                           index: widget.pageController.page?.toInt() ?? 0,
                           question: '¿Que edades tienen sus hijos?',

@@ -346,6 +346,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -428,60 +429,46 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 ),
               const Gap(20),
               CommentaryWidget(
-                title: 'Numero de persona a cargo',
-                textEditingController: personasCargo,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
+                title: 'Cantidad de hijos:',
+                readOnly: true,
+                initialValue: cantidadHijos.toString(),
               ),
-              const Gap(20),
-              CommentaryWidget(
-                title: 'Número de hijos:*',
-                textEditingController: numeroHijos,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Qué edades tienen sus hijos?',
-                textEditingController: edadHijos,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-                    return null;
-                  },
-                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                  items: const [
-                    'Ninguno',
-                    'Preescolar',
-                    'Primaria',
-                    'Secundaria',
-                    'Técnico',
-                    'Universitario'
-                  ],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tipoEstudioHijos = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+              if (cantidadHijos > 0) ...[
+                const Gap(20),
+                CommentaryWidget(
+                  title: '¿Qué edades tienen sus hijos?',
+                  textEditingController: edadHijos,
                 ),
-              ),
+                const Gap(20),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
+                      return null;
+                    },
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      tipoEstudioHijos = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
+              ],
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -498,9 +485,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           problemasEnergiaDescripcion:
                               tieneProblemasDescriptionController.text.trim(),
                           edadHijos: edadHijos.text.trim(),
-                          numeroHijos: int.tryParse(numeroHijos.text.trim()),
                           objTipoComunidadId: objTipoComunidadId,
-                          personasCargo: personasCargo.text.trim(),
                           tieneProblemasEnergia:
                               tieneProblemasEnergia == 'input.yes'.tr(),
                           tipoEstudioHijos: tipoEstudioHijos,

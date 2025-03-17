@@ -205,55 +205,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   return null;
                 },
               ),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
-                isContainIcon: true,
-                validator: (value) {
-                  if (value == null) return 'input.input_validator'.tr();
-
-                  return null;
-                },
-                title: '¿Tiene Trabajo? Cual?'.tr(),
-                items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {
-                  if (item == null) return;
-                  tieneTrabajo = item;
-                  setState(() {});
-                },
-                toStringItem: (item) {
-                  return item;
-                },
-                hintText: 'input.select_option'.tr(),
-              ),
-            ),
-            if (tieneTrabajo == 'input.yes'.tr())
-              CommentaryWidget(
-                title: 'Cuales?',
-                textEditingController: tieneTrabajoDescripcion,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
-              ),
-            CommentaryWidget(
-              textEditingController: tiempoActividad,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'input.input_validator'.tr();
-                }
-                final numero = int.tryParse(value);
-                if (numero == null || numero < 0) {
-                  return 'Valor no valido'.tr();
-                }
-
-                return null;
-              },
-              title: 'Tiempo de la actividad:* (MESES)',
-              textInputType: TextInputType.number,
-            ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -269,10 +220,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   context.read<RecurrenteEstandartCubit>().saveAnswers(
                         tipoSolitud:
                             context.read<KivaRouteCubit>().state.tipoSolicitud,
-                        tiempoActividad:
-                            int.tryParse(tiempoActividad.text.trim()),
-                        tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                        trabajoDescripcion: tieneTrabajoDescripcion.text.trim(),
                         otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                         otrosIngresosDescripcion:
                             cualesOtrosIngrsos.text.trim(),

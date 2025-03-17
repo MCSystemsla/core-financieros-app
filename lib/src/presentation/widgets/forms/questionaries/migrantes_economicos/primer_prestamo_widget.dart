@@ -210,55 +210,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                   isContainIcon: true,
                   validator: (value) {
                     if (value == null) return 'input.input_validator'.tr();
-                    return null;
-                  },
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tieneTrabajo = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-              if (tieneTrabajo == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: 'Cual',
-                  textEditingController: trabajoNegocioDescripcion,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
-              const Gap(10),
-              CommentaryWidget(
-                title: 'Tiempo de la actividad:* (MESES)',
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0 || numero >= 255) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-                textEditingController: tiempoActividad,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
 
                     return null;
                   },
@@ -287,22 +238,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                   textEditingController: otrosIngresosDescripcion,
                 ),
               const Gap(20),
-              CommentaryWidget(
-                title: 'Número de personas a cargo:*',
-                textEditingController: personasCargo,
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0 || numero >= 255) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-              ),
-              const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
                   widget.controller.previousPage(
@@ -321,36 +256,12 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                               .read<KivaRouteCubit>()
                               .state
                               .tipoSolicitud,
-                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                          trabajoNegocioDescripcion:
-                              trabajoNegocioDescripcion.text.trim(),
-                          tiempoActividad:
-                              int.tryParse(tiempoActividad.text.trim()),
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),
-                          personasCargo:
-                              int.tryParse(personasCargo.text.trim()),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
-                        Response(
-                          question:
-                              '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                          response: tieneTrabajo ?? 'N/A',
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
-                        if (tieneTrabajo == 'input.yes'.tr())
-                          Response(
-                            question: 'Cual',
-                            response: trabajoNegocioDescripcion.text.trim(),
-                            index: widget.controller.page?.toInt() ?? 0,
-                          ),
-                        Response(
-                          question: 'Tiempo de la actividad:* (MESES)',
-                          response: tiempoActividad.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
                         Response(
                           question: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                           response: otrosIngresos ?? 'N/A',
@@ -362,11 +273,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                             response: otrosIngresosDescripcion.text.trim(),
                             index: widget.controller.page?.toInt() ?? 0,
                           ),
-                        Response(
-                          question: 'Número de personas a cargo:*',
-                          response: personasCargo.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
                       ],
                     );
                     widget.controller.nextPage(
