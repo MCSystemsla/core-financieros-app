@@ -71,6 +71,7 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String fotoAsesorFirma,
     required String numero,
+    required String cedula,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -83,6 +84,7 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String imagenAsesor,
     required String numero,
+    required String cedula,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -295,6 +297,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String fotoAsesorFirma,
     required String numero,
+    required String cedula,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -309,6 +312,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
+      request.fields['cedula'] = cedula;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
@@ -443,6 +447,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String imagenAsesor,
     required String numero,
+    required String cedula,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
@@ -457,6 +462,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
+      request.fields['cedula'] = cedula;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',

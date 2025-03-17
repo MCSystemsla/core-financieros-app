@@ -30,6 +30,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String formularioKiva,
     required String tipoSolicitud,
     required String numero,
+    required String cedula,
   }) async {
     await repository.uploadUserFiles(
       imagen1: state.imagen1,
@@ -42,6 +43,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       tipoSolicitud: tipoSolicitud,
       fotoAsesorFirma: state.firmaAsesor,
       numero: numero,
+      cedula: cedula,
     );
   }
 
@@ -55,6 +57,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String tipoSolicitud,
     required String imagenAsesor,
     required String numero,
+    required String cedula,
   }) async {
     await repository.uploadUserFilesOffline(
       imagen1: imagen1,
@@ -67,6 +70,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       tipoSolicitud: tipoSolicitud,
       imagenAsesor: imagenAsesor,
       numero: numero,
+      cedula: cedula,
     );
   }
 }

@@ -291,6 +291,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
 
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+              cedula: widget.solicitud.cedula ?? '',
               tipoSolicitud: widget.solicitud.tipoSolicitud,
               route: widget.solicitud.producto,
               solicitudId: widget.solicitud.id,
