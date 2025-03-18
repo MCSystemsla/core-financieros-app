@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 typedef ValidatorCallback<T> = String? Function(T? value)?;
@@ -24,6 +25,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final Icon? icon;
   final bool isRequired;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
   const OutlineTextfieldWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -43,6 +45,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.isRequired = false,
     this.onTap,
     this.maxLength = 500,
+    this.inputFormatters,
   }) : haveCounter = false;
   const OutlineTextfieldWidget.withCounter({
     super.key,
@@ -63,6 +66,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.isRequired = false,
     this.maxLength = 500,
     this.onTap,
+    this.inputFormatters,
   }) : haveCounter = true;
 
   @override
@@ -99,6 +103,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    inputFormatters: inputFormatters,
                     contextMenuBuilder: (context, editableTextState) =>
                         const SizedBox(),
                     onFieldSubmitted: onFieldSubmitted,

@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -137,7 +138,10 @@ class _NuevaMenorBeneficiarioWidgetState
                 telefonoBeneficiarioCode = value.dialCode!;
               },
               isRequired: false,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
               maxLength: 16,
               icon: Icon(
                 Icons.phone,
@@ -157,7 +161,10 @@ class _NuevaMenorBeneficiarioWidgetState
                 if (value == null) return;
                 telefonoBeneficiario1Code = value.dialCode!;
               },
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
               isRequired: false,
               maxLength: 16,
               icon: Icon(
@@ -189,10 +196,10 @@ class _NuevaMenorBeneficiarioWidgetState
                         cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
                         objParentescoBeneficiarioSeguroId1:
                             parentescoBeneficiarioSeguro1,
-                        telefonoBeneficiario:
-                            telefonoBeneficiarioCode + telefonoBeneficiario!,
-                        telefonoBeneficiarioSeguro1:
-                            telefonoBeneficiario1Code + telefonoBeneficiario1!,
+                        telefonoBeneficiario: telefonoBeneficiarioCode +
+                            telefonoBeneficiario!.trim().replaceAll('-', ''),
+                        telefonoBeneficiarioSeguro1: telefonoBeneficiario1Code +
+                            telefonoBeneficiario1!.trim().replaceAll('-', ''),
                         isDone: true,
                       );
                   if (!isConnected) {

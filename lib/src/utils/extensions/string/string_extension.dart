@@ -11,4 +11,12 @@ extension CapitalizeString on String {
     if (isEmpty) return this;
     return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
+
+  String get dashFormat {
+    if (isEmpty) return this;
+    String text = replaceAll('-', '');
+    String formattedText =
+        text.replaceAllMapped(RegExp(r'.{4}'), (match) => '${match.group(0)}-');
+    return formattedText;
+  }
 }

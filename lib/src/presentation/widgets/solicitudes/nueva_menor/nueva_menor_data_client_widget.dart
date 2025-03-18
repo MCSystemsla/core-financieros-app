@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -217,7 +220,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     ),
                     title: 'Cedula',
                     hintText: 'Ingresa Cedula',
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
                     isValid: null,
                     isRequired: true,
                     validator: (value) =>
@@ -327,7 +330,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CountryInput(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      DashFormatter(),
+                    ],
                     onCountryCodeChange: (value) {
                       if (value == null) return;
                       countryCode = value.dialCode!;
@@ -349,7 +355,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CountryInput(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      DashFormatter(),
+                    ],
                     onCountryCodeChange: (value) {
                       if (value == null) return;
                       celularCode = value.dialCode!;
@@ -403,6 +412,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       text: 'Siguiente',
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
+                        log(countryCode +
+                            telefonoController.text.replaceAll('-', ''));
+
                         if (!formKey.currentState!.validate()) return;
                         context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                               nombre1: nombre1,
@@ -427,10 +439,14 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               nacionalidad: nacionalidadController.text.trim(),
                               objPaisNacimientoId: paisNacimiento,
                               objSexoId: state.userCedulaResponse.sexo,
-                              telefono:
-                                  countryCode + telefonoController.text.trim(),
-                              celular:
-                                  celularCode + celularController.text.trim(),
+                              telefono: countryCode +
+                                  telefonoController.text
+                                      .trim()
+                                      .replaceAll('-', ''),
+                              celular: celularCode +
+                                  celularController.text
+                                      .trim()
+                                      .replaceAll('-', ''),
                               email: emailController.text.trim(),
                               objEscolaridadId: escolaridad,
                             );
@@ -793,7 +809,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             CountryInput(
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
               maxLength: 10,
               onCountryCodeChange: (value) {
                 if (value == null) return;
@@ -813,7 +832,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             CountryInput(
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
               onCountryCodeChange: (value) {
                 if (value == null) return;
                 celularCountyCode = value.dialCode!;
@@ -887,9 +909,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                         objPaisNacimientoId: paisNacimiento,
                         objSexoId: sexo,
                         telefono: telefonoCountryCode +
-                            telefonoController.text.trim(),
-                        celular:
-                            celularCountyCode + celularController.text.trim(),
+                            telefonoController.text.trim().replaceAll('-', ''),
+                        celular: celularCountyCode +
+                            celularController.text.trim().replaceAll('-', ''),
                         email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );
