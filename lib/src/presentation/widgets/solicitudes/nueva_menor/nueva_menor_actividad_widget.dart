@@ -7,8 +7,10 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/sending/sending_form_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +40,8 @@ class _NuevaMenorBeneficiarioWidgetState
   String? telefonoBeneficiario;
   String? telefonoBeneficiario1;
   final formKey = GlobalKey<FormState>();
+  String telefonoBeneficiarioCode = '+505';
+  String telefonoBeneficiario1Code = '+505';
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +131,13 @@ class _NuevaMenorBeneficiarioWidgetState
               },
             ),
             const Gap(20),
-            OutlineTextfieldWidget(
+            CountryInput(
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                telefonoBeneficiarioCode = value.dialCode!;
+              },
+              isRequired: false,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               maxLength: 16,
               icon: Icon(
                 Icons.phone,
@@ -142,7 +152,13 @@ class _NuevaMenorBeneficiarioWidgetState
               },
             ),
             const Gap(20),
-            OutlineTextfieldWidget(
+            CountryInput(
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                telefonoBeneficiario1Code = value.dialCode!;
+              },
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              isRequired: false,
               maxLength: 16,
               icon: Icon(
                 Icons.phone,
@@ -173,8 +189,10 @@ class _NuevaMenorBeneficiarioWidgetState
                         cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
                         objParentescoBeneficiarioSeguroId1:
                             parentescoBeneficiarioSeguro1,
-                        telefonoBeneficiario: telefonoBeneficiario,
-                        telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
+                        telefonoBeneficiario:
+                            telefonoBeneficiarioCode + telefonoBeneficiario!,
+                        telefonoBeneficiarioSeguro1:
+                            telefonoBeneficiario1Code + telefonoBeneficiario1!,
                         isDone: true,
                       );
                   if (!isConnected) {

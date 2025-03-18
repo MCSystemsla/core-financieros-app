@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 class CountryInput extends StatelessWidget {
@@ -24,6 +25,7 @@ class CountryInput extends StatelessWidget {
   final Icon? icon;
   final bool isRequired;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
   const CountryInput({
     super.key,
     this.onFieldSubmitted,
@@ -45,6 +47,7 @@ class CountryInput extends StatelessWidget {
     this.icon,
     required this.isRequired,
     this.onTap,
+    this.inputFormatters,
   });
 
   @override
@@ -82,6 +85,7 @@ class CountryInput extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    inputFormatters: inputFormatters,
                     contextMenuBuilder: (context, editableTextState) =>
                         const SizedBox(),
                     onFieldSubmitted: onFieldSubmitted,

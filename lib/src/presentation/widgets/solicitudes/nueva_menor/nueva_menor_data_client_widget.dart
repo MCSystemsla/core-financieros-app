@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -15,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -75,8 +74,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
   final emailController = TextEditingController();
   final nacionalidadController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  String countryCode = '+503';
-  String celularCode = '+503';
+  String countryCode = '+505';
+  String celularCode = '+505';
 
   @override
   Widget build(BuildContext context) {
@@ -328,10 +327,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CountryInput(
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onCountryCodeChange: (value) {
                       if (value == null) return;
                       countryCode = value.dialCode!;
-                      log(countryCode);
                     },
                     haveCounter: true,
                     maxLength: 15,
@@ -350,6 +349,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CountryInput(
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onCountryCodeChange: (value) {
                       if (value == null) return;
                       celularCode = value.dialCode!;
@@ -499,6 +499,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   String? escolaridad;
   DateTime? fechaEmisionCedula;
   DateTime? fechaNacimiento;
+  String celularCountyCode = '+505';
+  String telefonoCountryCode = '+505';
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -790,8 +792,13 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               // initialValue: sexo,
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
+            CountryInput(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               maxLength: 10,
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                telefonoCountryCode = value.dialCode!;
+              },
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -805,7 +812,12 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
+            CountryInput(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                celularCountyCode = value.dialCode!;
+              },
               maxLength: 10,
               icon: Icon(
                 Icons.phone_android,
@@ -874,8 +886,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                         nacionalidad: nacionalidadController.text.trim(),
                         objPaisNacimientoId: paisNacimiento,
                         objSexoId: sexo,
-                        telefono: telefonoController.text.trim(),
-                        celular: celularController.text.trim(),
+                        telefono: telefonoCountryCode +
+                            telefonoController.text.trim(),
+                        celular:
+                            celularCountyCode + celularController.text.trim(),
                         email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );

@@ -257,27 +257,51 @@ class _CatalogoValorDropdownWidgetState
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: JLuxDropdown(
-        // initialValue: CatalogoLocalDb(
-        //     valor: widget.initialValue ?? '',
-        //     nombre: widget.initialValue ?? '',
-        //     type: ''),
-        hintText: widget.hintText,
-        dropdownColor: Colors.white,
-        isContainIcon: true,
-        validator: widget.validator,
-        // isLoading: state.status == Status.inProgress,
-        // validator: (value) {
-        //   if (value == null) return 'auth.errors.branchTeam'.tr();
-
-        //   return null;
-        // },
-        title: '${widget.title} ${widget.isRequired! ? '*' : ''}',
-        items: localDbProvider.findParentescosByNombre(type: widget.codigo),
-        onChanged: widget.onChanged,
-        toStringItem: (item) {
-          return item.nombre;
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Gap(5),
+          Text(
+            widget.title,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          const Gap(15),
+          DropdownSearch<CatalogoLocalDb>(
+            validator: widget.validator,
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            popupProps: PopupProps.menu(
+              showSearchBox: true,
+              searchFieldProps: TextFieldProps(
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  labelText: 'Buscar',
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                ),
+              ),
+            ),
+            items: localDbProvider.findParentescosByNombre(type: widget.codigo),
+            itemAsString: (CatalogoLocalDb? item) => item?.nombre ?? 'N/A',
+            onChanged: widget.onChanged,
+            selectedItem: CatalogoLocalDb(
+              type: widget.codigo,
+              nombre: widget.initialValue ?? '',
+              valor: widget.initialValue ?? '',
+            ),
+          ),
+        ],
       ),
     );
   }
