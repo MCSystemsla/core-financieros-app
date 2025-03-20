@@ -188,7 +188,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 if (item == null) return;
-                frecuenciaDePago = item.value;
+                frecuenciaDePago = item.name;
               },
               codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',

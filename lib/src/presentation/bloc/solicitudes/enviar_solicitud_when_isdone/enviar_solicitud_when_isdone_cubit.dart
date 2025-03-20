@@ -23,7 +23,7 @@ class EnviarSolicitudWhenIsdoneCubit
         emit(EnviarSolicitudWhenIsdoneInitial());
         return;
       }
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 5));
       for (var solicitud in solicitudes) {
         repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: SolicitudNuevaMenor(

@@ -196,10 +196,19 @@ class _NuevaMenorBeneficiarioWidgetState
                         cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
                         objParentescoBeneficiarioSeguroId1:
                             parentescoBeneficiarioSeguro1,
-                        telefonoBeneficiario: telefonoBeneficiarioCode +
-                            telefonoBeneficiario!.trim().replaceAll('-', ''),
-                        telefonoBeneficiarioSeguro1: telefonoBeneficiario1Code +
-                            telefonoBeneficiario1!.trim().replaceAll('-', ''),
+                        telefonoBeneficiario: telefonoBeneficiario == null
+                            ? ''
+                            : telefonoBeneficiarioCode +
+                                (telefonoBeneficiario ?? '')
+                                    .trim()
+                                    .replaceAll('-', ''),
+                        telefonoBeneficiarioSeguro1:
+                            telefonoBeneficiario1 == null
+                                ? ''
+                                : telefonoBeneficiario1Code +
+                                    (telefonoBeneficiario1 ?? '')
+                                        .trim()
+                                        .replaceAll('-', ''),
                         isDone: true,
                       );
                   if (!isConnected) {
