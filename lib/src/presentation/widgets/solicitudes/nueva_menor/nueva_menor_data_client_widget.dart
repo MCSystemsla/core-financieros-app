@@ -211,7 +211,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget.withCounter(
-                    maxLength: 16,
+                    maxLength: 18,
                     readOnly: true,
                     initialValue: state.userCedulaResponse.cedula,
                     icon: Icon(
@@ -698,7 +698,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              maxLength: 10,
+              maxLength: 18,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),

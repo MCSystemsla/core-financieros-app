@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -67,7 +68,8 @@ class SearchDropdownWidget extends StatelessWidget {
               validator: validator,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
-                  hintText: hintText,
+                  hintText:
+                      hintText.isEmpty ? 'input.select_option'.tr() : hintText,
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
@@ -94,7 +96,9 @@ class SearchDropdownWidget extends StatelessWidget {
               itemAsString: (Item? item) => item?.name ?? 'N/A',
               onChanged: onChanged,
               selectedItem: Item(
-                  name: '$hintText ${isRequired ? '*' : ''}', value: hintText),
+                  name:
+                      hintText.isEmpty ? 'input.select_option'.tr() : hintText,
+                  value: hintText),
             ),
           ),
         ],

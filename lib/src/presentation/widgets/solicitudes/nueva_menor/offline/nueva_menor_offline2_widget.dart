@@ -173,7 +173,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: anosResidirCasa,
+              initialValue: anosResidirCasa == '0' ? null : anosResidirCasa,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
@@ -205,7 +205,9 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
                 toStringItem: (item) {
                   return item.nombre;
                 },
-                hintText: comunidad ?? 'input.select_option'.tr(),
+                hintText: comunidad!.isEmpty
+                    ? 'input.select_option'.tr()
+                    : comunidad!,
               ),
             ),
             const Gap(20),

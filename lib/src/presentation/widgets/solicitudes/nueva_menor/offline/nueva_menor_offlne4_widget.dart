@@ -47,8 +47,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
   String? barrioNegocio;
   String? direccionNegocio;
   final formKey = GlobalKey<FormState>();
+  String? horarioTrabajoString;
   TimeOfDay? horarioTrabajo;
   TimeOfDay? horarioTrabajoEndtime;
+  String? horarioVisitaString;
   TimeOfDay? horarioVisita;
   TimeOfDay? horarioVisitaEndtime;
   Future<TimeOfDay?> _selectTime(
@@ -68,6 +70,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
         setState(() {
           horarioTrabajo = start;
           horarioTrabajoEndtime = end;
+          horarioTrabajoString =
+              _formatTimeRange(startTime: start, endTime: end);
         });
       }
     }
@@ -82,6 +86,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
         setState(() {
           horarioVisita = start;
           horarioVisitaEndtime = end;
+          horarioVisitaString = _formatTimeRange(
+            startTime: start,
+            endTime: end,
+          );
         });
       }
     }
@@ -121,11 +129,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
     rubroActividad3 = widget.responseLocalDb.objRubroActividad3;
     sectorEconomico = widget.responseLocalDb.objSectorId;
     sectorEconomico2 = widget.responseLocalDb.objSectorId;
-    // horarioTrabajo = widget.responseLocalDb.horarioTrabajo as TimeOfDay;
-    // horarioVisita = widget.responseLocalDb.horarioVisita as TimeOfDay;
     municipioNegocio = widget.responseLocalDb.objMunicipioNegocioId;
     barrioNegocio = widget.responseLocalDb.barrioNegocio;
     direccionNegocio = widget.responseLocalDb.direccionNegocio;
+    horarioTrabajoString = widget.responseLocalDb.horarioTrabajo;
+    horarioVisitaString = widget.responseLocalDb.horarioVisita;
   }
 
   @override
@@ -321,9 +329,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              // initialValue:
-              //     '${horarioTrabajo?.format(context)} - ${horarioTrabajoEndtime?.format(context)}',
-              // initialValue: horarioTrabajo.toString(),
+              initialValue: horarioTrabajoString,
               icon: Icon(
                 Icons.watch_later_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -331,26 +337,23 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               title: 'Horario de Trabajo',
               readOnly: true,
               onTap: () => _pickTimeRange(),
-              // hintText: _formatTimeRange(
-              //   startTime: horarioTrabajo,
-              //   endTime: horarioTrabajoEndtime,
-              // ),
-              hintText: horarioTrabajo.toString(),
+              hintText: horarioTrabajoString!.isEmpty
+                  ? 'Ingresa un horario'
+                  : horarioTrabajoString,
               isValid: null,
               onChange: (value) {
                 horarioTrabajo = value;
+                // horarioTrabajoString = value;
                 setState(() {});
               },
             ),
             OutlineTextfieldWidget(
-              initialValue:
-                  '${horarioVisita?.format(context)} - ${horarioVisitaEndtime?.format(context)}',
+              initialValue: horarioVisitaString,
               readOnly: true,
               onTap: () => _pickHorarioVisita(),
-              hintText: _formatTimeRange(
-                startTime: horarioVisita,
-                endTime: horarioVisitaEndtime,
-              ),
+              hintText: horarioVisitaString!.isEmpty
+                  ? 'Ingresa un horario'
+                  : horarioVisitaString,
               icon: Icon(
                 Icons.watch_later_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -366,10 +369,12 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                   id: 0,
-                  valor: municipioNegocio ?? '',
-                  nombre: municipioNegocio ?? '',
+                  valor: municipioNegocio ?? 'Ingresa una opcion',
+                  nombre: municipioNegocio ?? 'Ingresa una opcion',
                   relacion: ''),
-              hintText: municipioNegocio ?? 'input.select_option'.tr(),
+              hintText: municipioNegocio!.isEmpty
+                  ? 'input.select_option'.tr()
+                  : municipioNegocio ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
               title: 'Municipio de Negocio',
@@ -433,10 +438,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                         objActividadId2: actividadEconomica2,
                         objSectorId: sectorEconomico,
                         // sectorEconomico: sectorEconomico2,
-                        // horarioTrabajo:
-                        //     '${horarioTrabajo?.format(context)} - ${horarioTrabajoEndtime?.format(context)}',
-                        // horarioVisita:
-                        //     '${horarioVisita?.format(context)} - ${horarioVisitaEndtime?.format(context)}',
+                        horarioTrabajo: horarioTrabajoString,
+                        horarioVisita: horarioVisitaString,
                         objMunicipioNegocioId: municipioNegocio,
                         barrioNegocio: barrioNegocio,
                         direccionNegocio: direccionNegocio,

@@ -63,7 +63,32 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
     );
     if (picked != null && picked != _selectedDate) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      _selectedDate = picked;
+      fechaNacimiento = picked.toIso8601String();
+      setState(() {});
+    }
+  }
+
+  Future<void> selectDateFechaVencimiento(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.tryParse(fechaVencimientoCedula!),
+      firstDate: DateTime(1930),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked
+          .isBefore(DateTime.tryParse(fechaEmisionCedula!) ?? DateTime.now())) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -71,8 +96,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      _selectedDate = picked;
-      setState(() {});
+      setState(() {
+        fechaVencimientoCedula = picked.toIso8601String();
+      });
     }
   }
 
@@ -279,16 +305,18 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Fecha Emision Cedula',
               isRequired: true,
-              initialValue: fechaEmisionCedula,
+              // initialValue: fechaEmisionCedula,
+              hintText: DateTime.tryParse(fechaNacimiento!)?.selectorFormat() ??
+                  'Ingrese fecha de nacimiento',
               isValid: null,
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: widget.responseLocalDb.fechaVencimientoCedula,
               validator: (value) => ClassValidator.validateRequired(
-                value,
+                fechaVencimientoCedula,
               ),
-              hintText: _selectedDate?.selectorFormat() ??
+              hintText: DateTime.tryParse(fechaVencimientoCedula!)
+                      ?.selectorFormat() ??
                   'Ingrese Fecha Vencimiento',
               // initialValue: _selectedDate?.selectorFormat() ?? '',
               icon: Icon(
@@ -299,10 +327,11 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               isValid: null,
               isRequired: true,
               readOnly: true,
-              onTap: () => selectDate(context),
+              onTap: () => selectDateFechaVencimiento(context),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              onTap: () => selectDate(context),
               onChange: (value) {
                 fechaNacimiento = value;
               },
@@ -313,7 +342,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
 
               title: 'Fecha Nacimiento',
-              hintText: fechaNacimiento,
+              hintText: DateTime.tryParse(fechaNacimiento!)?.selectorFormat(),
               isValid: null,
 
               // textEditingController: fechaNacimientoController,
@@ -366,7 +395,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 sexo = item.valor;
               },
               title: 'Sexo',
-              // initialValue: widget.responseLocalDb.objSexoId,
+              initialValue: widget.responseLocalDb.objSexoId,
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
@@ -453,11 +482,17 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                         cedula: cedula,
                         nombrePublico: nombrePublicoController.text.trim(),
                         objPaisEmisorCedula: paisEmisor,
-                        fechaEmisionCedula: fechaEmisionCedula,
-                        // .toIso8601String(),
-                        fechaVencimientoCedula: fechaVencimientoCedula,
-                        fechaNacimiento: fechaNacimiento,
-                        // .toIso8601String(),
+                        fechaEmisionCedula:
+                            DateTime.tryParse(fechaEmisionCedula!)!
+                                .toUtc()
+                                .toIso8601String(),
+                        fechaVencimientoCedula:
+                            DateTime.tryParse(fechaVencimientoCedula!)!
+                                .toUtc()
+                                .toIso8601String(),
+                        fechaNacimiento: DateTime.tryParse(fechaNacimiento!)!
+                            .toUtc()
+                            .toIso8601String(),
                         nacionalidad: nacionalidad,
                         objPaisNacimientoId: paisNacimiento,
                         objSexoId: sexo,

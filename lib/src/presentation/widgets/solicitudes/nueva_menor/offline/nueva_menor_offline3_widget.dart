@@ -44,14 +44,14 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
   @override
   void initState() {
     estadoCivil = widget.responseLocalDb.objEstadoCivilId;
-    esFamiliarEmpleado = widget.responseLocalDb.esFamiliarEmpleado ?? false
+    esFamiliarEmpleado = widget.responseLocalDb.esFamiliarEmpleado!
         ? 'input.yes'.tr()
         : 'input.no'.tr();
     nombreConyuge = widget.responseLocalDb.nombreConyugue;
     personasACargo = widget.responseLocalDb.personasACargo.toString();
     nacionalidadConyuge = widget.responseLocalDb.nacionalidadConyugue;
     nombreConyuge = widget.responseLocalDb.nombreConyugue;
-    trabajaConyuge = (widget.responseLocalDb.trabajaConyugue ?? false)
+    trabajaConyuge = (widget.responseLocalDb.trabajaConyugue!)
         ? 'input.yes'.tr()
         : 'input.no'.tr();
     trabajoConyuge = widget.responseLocalDb.trabajoConyugue;
@@ -216,7 +216,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
                 toStringItem: (item) {
                   return item;
                 },
-                hintText: esFamiliarEmpleado ?? 'input.select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
               ),
             ),
             if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
@@ -251,7 +251,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
             ],
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: personasACargo,
+              initialValue: personasACargo == '0' ? null : personasACargo,
               icon: Icon(
                 Icons.add_card_sharp,
                 color: AppColors.getPrimaryColor(),

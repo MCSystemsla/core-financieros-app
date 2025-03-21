@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +193,9 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
                 showSearchBox: true,
                 searchFieldProps: TextFieldProps(
                   decoration: InputDecoration(
-                    hintText: widget.hintText,
+                    hintText: widget.hintText.isEmpty
+                        ? 'input.select_option'.tr()
+                        : widget.hintText,
                     labelText: 'Buscar',
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -204,8 +207,12 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
               itemAsString: (ItemNacionalidad? item) => item?.nombre ?? 'N/A',
               onChanged: widget.onChanged,
               selectedItem: ItemNacionalidad(
-                nombre: widget.hintText,
-                valor: widget.hintText,
+                nombre: widget.hintText.isEmpty
+                    ? 'input.select_option'.tr()
+                    : widget.hintText,
+                valor: widget.hintText.isEmpty
+                    ? 'input.select_option'.tr()
+                    : widget.hintText,
                 relacion: '',
                 id: 0,
               ),
@@ -297,8 +304,8 @@ class _CatalogoValorDropdownWidgetState
             onChanged: widget.onChanged,
             selectedItem: CatalogoLocalDb(
               type: widget.codigo,
-              nombre: widget.initialValue ?? '',
-              valor: widget.initialValue ?? '',
+              nombre: widget.initialValue ?? 'input.select_option'.tr(),
+              valor: widget.initialValue ?? 'input.select_option'.tr(),
             ),
           ),
         ],
