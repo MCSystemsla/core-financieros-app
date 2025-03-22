@@ -151,7 +151,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
               context.pushTransparentRoute(const AddUserCedulaScreen());
             },
             svgPath: ImageAsset.nuevaMenorBg,
-            title: 'Nueva Menor',
+            title: 'Nueva',
           ),
         ),
         const Gap(10),
