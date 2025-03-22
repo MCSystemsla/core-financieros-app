@@ -57,54 +57,54 @@ class _EnergiaLimpiaAditionalDataWidgetState
                     currentStep: 2,
                   ),
                   const Gap(20),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-                        return null;
-                      },
-                      title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                      items: ['input.yes'.tr(), 'input.no'.tr()],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        tieneTrabajo = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
-                  ),
-                  if (tieneTrabajo == 'input.yes'.tr())
-                    CommentaryWidget(
-                      title: 'Cual',
-                      textEditingController: trabajoNegocioDescripcion,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                    ),
-                  const Gap(10),
-                  CommentaryWidget(
-                    title: 'Tiempo de la actividad (MESES) *',
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                    textEditingController: tiempoActividad,
-                  ),
+                  // WhiteCard(
+                  //   padding: const EdgeInsets.all(5),
+                  //   child: JLuxDropdown(
+                  //     isContainIcon: true,
+                  //     validator: (value) {
+                  //       if (value == null) return 'input.input_validator'.tr();
+                  //       return null;
+                  //     },
+                  //     title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                  //     items: ['input.yes'.tr(), 'input.no'.tr()],
+                  //     onChanged: (item) {
+                  //       if (item == null) return;
+                  //       tieneTrabajo = item;
+                  //       setState(() {});
+                  //     },
+                  //     toStringItem: (item) {
+                  //       return item;
+                  //     },
+                  //     hintText: 'input.select_option'.tr(),
+                  //   ),
+                  // ),
+                  // if (tieneTrabajo == 'input.yes'.tr())
+                  //   CommentaryWidget(
+                  //     title: 'Cual',
+                  //     textEditingController: trabajoNegocioDescripcion,
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'input.input_validator'.tr();
+                  //       }
+                  //       return null;
+                  //     },
+                  //   ),
+                  // const Gap(10),
+                  // CommentaryWidget(
+                  //   title: 'Tiempo de la actividad (MESES) *',
+                  //   textInputType: TextInputType.number,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'input.input_validator'.tr();
+                  //     }
+                  //     final numero = int.tryParse(value);
+                  //     if (numero == null || numero < 0 || numero >= 255) {
+                  //       return 'Valor no valido'.tr();
+                  //     }
+                  //     return null;
+                  //   },
+                  //   textEditingController: tiempoActividad,
+                  // ),
                   const Gap(20),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -263,46 +263,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
 
                     return null;
                   },
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tieneTrabajo = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-              if (tieneTrabajo == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: 'Cual?',
-                  textEditingController: trabajoNegocioDescripcion,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                ),
-              const Gap(10),
-              CommentaryWidget(
-                title: 'Tiempo de la actividad:',
-                textInputType: TextInputType.number,
-                textEditingController: tiempoActividad,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-
-                    return null;
-                  },
                   title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
@@ -347,30 +307,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           otrosIngresos: otrosIngresos == 'input.yes'.tr(),
                           otrosIngresosDescripcion:
                               otrosIngresosDescripcion.text.trim(),
-                          tiempoActividad:
-                              int.tryParse(tiempoActividad.text.trim()),
-                          tieneTrabajo: tieneTrabajo == 'input.yes'.tr(),
-                          trabajoNegocioDescripcion:
-                              trabajoNegocioDescripcion.text.trim(),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
-                        Response(
-                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                          response: tieneTrabajo ?? 'N/A',
-                          index: 1,
-                        ),
-                        if (tieneTrabajo == 'input.yes'.tr())
-                          Response(
-                            question: 'Cual?',
-                            response: trabajoNegocioDescripcion.text.trim(),
-                            index: 1,
-                          ),
-                        Response(
-                          question: 'Tiempo de la actividad:',
-                          response: tiempoActividad.text.trim(),
-                          index: 1,
-                        ),
                         Response(
                           question: '¿Tiene otros ingresos?¿Cuales?*',
                           response: otrosIngresos ?? 'N/A',

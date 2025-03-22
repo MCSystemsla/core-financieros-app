@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -10,8 +13,10 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -72,6 +77,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
   final emailController = TextEditingController();
   final nacionalidadController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  String countryCode = '+505';
+  String celularCode = '+505';
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +211,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget.withCounter(
-                    maxLength: 16,
+                    maxLength: 18,
                     readOnly: true,
                     initialValue: state.userCedulaResponse.cedula,
                     icon: Icon(
@@ -213,7 +220,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     ),
                     title: 'Cedula',
                     hintText: 'Ingresa Cedula',
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
                     isValid: null,
                     isRequired: true,
                     validator: (value) =>
@@ -322,7 +329,16 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     initialValue: sexo,
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget.withCounter(
+                  CountryInput(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      DashFormatter(),
+                    ],
+                    onCountryCodeChange: (value) {
+                      if (value == null) return;
+                      countryCode = value.dialCode!;
+                    },
+                    haveCounter: true,
                     maxLength: 15,
                     icon: Icon(
                       Icons.phone,
@@ -338,7 +354,15 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget.withCounter(
+                  CountryInput(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      DashFormatter(),
+                    ],
+                    onCountryCodeChange: (value) {
+                      if (value == null) return;
+                      celularCode = value.dialCode!;
+                    },
                     maxLength: 15,
                     icon: Icon(
                       Icons.phone_android,
@@ -388,6 +412,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       text: 'Siguiente',
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
+                        log(countryCode +
+                            telefonoController.text.replaceAll('-', ''));
+
                         if (!formKey.currentState!.validate()) return;
                         context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                               nombre1: nombre1,
@@ -412,14 +439,17 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               nacionalidad: nacionalidadController.text.trim(),
                               objPaisNacimientoId: paisNacimiento,
                               objSexoId: state.userCedulaResponse.sexo,
-                              telefono: telefonoController.text.trim(),
-                              celular: celularController.text.trim(),
+                              telefono: countryCode +
+                                  telefonoController.text
+                                      .trim()
+                                      .replaceAll('-', ''),
+                              celular: celularCode +
+                                  celularController.text
+                                      .trim()
+                                      .replaceAll('-', ''),
                               email: emailController.text.trim(),
                               objEscolaridadId: escolaridad,
                             );
-                        // context
-                        //     .read<SolicitudNuevaMenorCubit>()
-                        //     .saveLocalAnswers();
 
                         widget.controller.nextPage(
                           duration: const Duration(milliseconds: 300),
@@ -485,6 +515,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   String? escolaridad;
   DateTime? fechaEmisionCedula;
   DateTime? fechaNacimiento;
+  String celularCountyCode = '+505';
+  String telefonoCountryCode = '+505';
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -666,7 +698,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              maxLength: 10,
+              maxLength: 18,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -776,8 +808,16 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               // initialValue: sexo,
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
+            CountryInput(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
               maxLength: 10,
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                telefonoCountryCode = value.dialCode!;
+              },
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -791,7 +831,15 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
+            CountryInput(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+              ],
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                celularCountyCode = value.dialCode!;
+              },
               maxLength: 10,
               icon: Icon(
                 Icons.phone_android,
@@ -860,8 +908,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                         nacionalidad: nacionalidadController.text.trim(),
                         objPaisNacimientoId: paisNacimiento,
                         objSexoId: sexo,
-                        telefono: telefonoController.text.trim(),
-                        celular: celularController.text.trim(),
+                        telefono: telefonoCountryCode +
+                            telefonoController.text.trim().replaceAll('-', ''),
+                        celular: celularCountyCode +
+                            celularController.text.trim().replaceAll('-', ''),
                         email: emailController.text.trim(),
                         objEscolaridadId: escolaridad,
                       );

@@ -290,6 +290,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
         }
 
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
+              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+              cedula: widget.solicitud.cedula ?? '',
               tipoSolicitud: widget.solicitud.tipoSolicitud,
               route: widget.solicitud.producto,
               solicitudId: widget.solicitud.id,
@@ -304,7 +306,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           return;
         }
 
-        await context.push('/online', extra: widget.solicitud.producto);
+        context.pushReplacement('/online', extra: widget.solicitud.producto);
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),

@@ -103,6 +103,15 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              codigo: 'DESTINOCREDITO',
+              title: 'Proposito',
+              onChanged: (item) {
+                if (item == null) return;
+                proposito = item.value;
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
@@ -163,15 +172,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'DESTINOCREDITO',
-              title: 'Proposito',
-              onChanged: (item) {
-                if (item == null) return;
-                proposito = item.value;
-              },
-            ),
+
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PRODUCTO',
@@ -188,7 +189,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 if (item == null) return;
-                frecuenciaDePago = item.value;
+                frecuenciaDePago = item.name;
               },
               codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',

@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +48,16 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
   String? barrioNegocio;
   String? direccionNegocio;
   final formKey = GlobalKey<FormState>();
+  String? horarioTrabajoString;
   TimeOfDay? horarioTrabajo;
   TimeOfDay? horarioTrabajoEndtime;
+  String? horarioVisitaString;
   TimeOfDay? horarioVisita;
   TimeOfDay? horarioVisitaEndtime;
+  String? rubroActividadPredominante;
+  List<Item> actividadesPredominantesList = [];
+  List<Item> rubrosActividadesPredominanteList = [];
+  String? objRubroActividadPredominante;
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
     return await showTimePicker(
@@ -68,6 +75,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
         setState(() {
           horarioTrabajo = start;
           horarioTrabajoEndtime = end;
+          horarioTrabajoString =
+              _formatTimeRange(startTime: start, endTime: end);
         });
       }
     }
@@ -82,6 +91,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
         setState(() {
           horarioVisita = start;
           horarioVisitaEndtime = end;
+          horarioVisitaString = _formatTimeRange(
+            startTime: start,
+            endTime: end,
+          );
         });
       }
     }
@@ -121,11 +134,15 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
     rubroActividad3 = widget.responseLocalDb.objRubroActividad3;
     sectorEconomico = widget.responseLocalDb.objSectorId;
     sectorEconomico2 = widget.responseLocalDb.objSectorId;
-    // horarioTrabajo = widget.responseLocalDb.horarioTrabajo as TimeOfDay;
-    // horarioVisita = widget.responseLocalDb.horarioVisita as TimeOfDay;
     municipioNegocio = widget.responseLocalDb.objMunicipioNegocioId;
     barrioNegocio = widget.responseLocalDb.barrioNegocio;
     direccionNegocio = widget.responseLocalDb.direccionNegocio;
+    horarioTrabajoString = widget.responseLocalDb.horarioTrabajo;
+    horarioVisitaString = widget.responseLocalDb.horarioVisita;
+    objRubroActividadPredominante =
+        widget.responseLocalDb.objRubroActividadPredominante;
+    rubroActividadPredominante =
+        widget.responseLocalDb.objRubroActividadPredominante;
   }
 
   @override
@@ -213,92 +230,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad Predominante',
-              hintText: actividadPredominante ?? 'input.select_option'.tr(),
-              onChanged: (item) {
-                if (item == null) return;
-                actividadPredominante = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividad ?? 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad',
-              onChanged: (item) {
-                if (item == null) return;
-                actividad = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividad1 ?? 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
-              onChanged: (item) {
-                if (item == null) return;
-                actividad1 = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: rubroActividad ?? 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad Predominante',
-              onChanged: (item) {
-                rubroActividad = item?.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: rubroActividad2 ?? 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad 2',
-              onChanged: (item) {
-                if (item == null) return;
-                rubroActividad2 = item.value;
-              },
-            ),
-            // const Gap(20),
-            // const SearchDropdownWidget(
-            //   codigo: 'RUBROACTIVIDAD',
-            //   title: 'Rubro Actividad 2',
-            // ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividadEconomica2 ?? 'input.select_option'.tr(),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
-              onChanged: (item) {
-                if (item == null) return;
-                actividadEconomica2 = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: rubroActividad3 ?? 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad 3',
-              onChanged: (item) {
-                if (item == null) return;
-                rubroActividad3 = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
               hintText: sectorEconomico ?? 'Selecciona una opcion',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -311,19 +242,162 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: sectorEconomico2 ?? 'input.select_option'.tr(),
-              codigo: 'SECTORECONOMICO',
+              hintText: actividad ?? 'input.select_option'.tr(),
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'ACTIVIDADECONOMICA',
+              title: 'Actividad',
               onChanged: (item) {
                 if (item == null) return;
-                sectorEconomico2 = item.value;
+                actividad = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
               },
-              title: 'Sector Economico 2',
             ),
             const Gap(20),
+            SearchDropdownWidget(
+              hintText: actividad1 ?? 'input.select_option'.tr(),
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'ACTIVIDADECONOMICA',
+              title: 'Actividad 1',
+              onChanged: (item) {
+                if (item == null) return;
+                actividad1 = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
+              hintText: actividadEconomica2 ?? 'input.select_option'.tr(),
+              codigo: 'ACTIVIDADECONOMICA',
+              title: 'Actividad 2',
+              onChanged: (item) {
+                if (item == null) return;
+                actividadEconomica2 = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
+              },
+            ),
+            const Gap(20),
+            if (actividadesPredominantesList.isNotEmpty) ...[
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  // initialValue: Item(
+                  //   name: actividadPredominante!,
+                  //   value: actividadPredominante,
+                  // ),
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Actividad Predominante',
+                  items: actividadesPredominantesList.length >= 3
+                      ? actividadesPredominantesList
+                          .skip(actividadesPredominantesList.length - 3)
+                          .toSet()
+                          .toList()
+                      : actividadesPredominantesList.toSet().toList(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    actividadPredominante = item.value;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.name;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            ],
+            if (actividad == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                hintText: rubroActividad ?? 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad',
+                onChanged: (item) {
+                  if (item == null) return;
+
+                  rubroActividad = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividad1 == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                hintText: rubroActividad2 ?? 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 2',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad2 = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividadEconomica2 == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                hintText: rubroActividad3 ?? 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 3',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad3 = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (rubrosActividadesPredominanteList.length > 1) ...[
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  // initialValue: Item(
+                  //   name: objRubroActividadPredominante ?? '',
+                  //   value: objRubroActividadPredominante,
+                  // ),
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
+                  title: 'Rubro actividad Predominante',
+                  items: rubrosActividadesPredominanteList.length >= 3
+                      ? rubrosActividadesPredominanteList
+                          .skip(rubrosActividadesPredominanteList.length - 3)
+                          .toSet()
+                          .toList()
+                      : rubrosActividadesPredominanteList.toSet().toList(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    objRubroActividadPredominante = item.value;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.name;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            ],
+            const Gap(20),
             OutlineTextfieldWidget(
-              // initialValue:
-              //     '${horarioTrabajo?.format(context)} - ${horarioTrabajoEndtime?.format(context)}',
-              // initialValue: horarioTrabajo.toString(),
+              initialValue: horarioTrabajoString,
               icon: Icon(
                 Icons.watch_later_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -331,26 +405,23 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               title: 'Horario de Trabajo',
               readOnly: true,
               onTap: () => _pickTimeRange(),
-              // hintText: _formatTimeRange(
-              //   startTime: horarioTrabajo,
-              //   endTime: horarioTrabajoEndtime,
-              // ),
-              hintText: horarioTrabajo.toString(),
+              hintText: horarioTrabajoString!.isEmpty
+                  ? 'Ingresa un horario'
+                  : horarioTrabajoString,
               isValid: null,
               onChange: (value) {
                 horarioTrabajo = value;
+                // horarioTrabajoString = value;
                 setState(() {});
               },
             ),
             OutlineTextfieldWidget(
-              initialValue:
-                  '${horarioVisita?.format(context)} - ${horarioVisitaEndtime?.format(context)}',
+              initialValue: horarioVisitaString,
               readOnly: true,
               onTap: () => _pickHorarioVisita(),
-              hintText: _formatTimeRange(
-                startTime: horarioVisita,
-                endTime: horarioVisitaEndtime,
-              ),
+              hintText: horarioVisitaString!.isEmpty
+                  ? 'Ingresa un horario'
+                  : horarioVisitaString,
               icon: Icon(
                 Icons.watch_later_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -366,10 +437,12 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                   id: 0,
-                  valor: municipioNegocio ?? '',
-                  nombre: municipioNegocio ?? '',
+                  valor: municipioNegocio ?? 'Ingresa una opcion',
+                  nombre: municipioNegocio ?? 'Ingresa una opcion',
                   relacion: ''),
-              hintText: municipioNegocio ?? 'input.select_option'.tr(),
+              hintText: municipioNegocio!.isEmpty
+                  ? 'input.select_option'.tr()
+                  : municipioNegocio ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
               title: 'Municipio de Negocio',
@@ -433,15 +506,15 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                         objActividadId2: actividadEconomica2,
                         objSectorId: sectorEconomico,
                         // sectorEconomico: sectorEconomico2,
-                        // horarioTrabajo:
-                        //     '${horarioTrabajo?.format(context)} - ${horarioTrabajoEndtime?.format(context)}',
-                        // horarioVisita:
-                        //     '${horarioVisita?.format(context)} - ${horarioVisitaEndtime?.format(context)}',
+                        horarioTrabajo: horarioTrabajoString,
+                        horarioVisita: horarioVisitaString,
                         objMunicipioNegocioId: municipioNegocio,
                         barrioNegocio: barrioNegocio,
                         direccionNegocio: direccionNegocio,
                         objActividadId: actividad,
                         objActividadId1: actividad1,
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante,
                       );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

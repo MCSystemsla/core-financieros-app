@@ -18,63 +18,73 @@ const SolicitudesPendientesSchema = CollectionSchema(
   name: r'SolicitudesPendientes',
   id: -897172854623419597,
   properties: {
-    r'estado': PropertySchema(
+    r'cantidadHijos': PropertySchema(
       id: 0,
+      name: r'cantidadHijos',
+      type: IsarType.long,
+    ),
+    r'cedula': PropertySchema(
+      id: 1,
+      name: r'cedula',
+      type: IsarType.string,
+    ),
+    r'estado': PropertySchema(
+      id: 2,
       name: r'estado',
       type: IsarType.string,
     ),
     r'fecha': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'fecha',
       type: IsarType.dateTime,
     ),
     r'idAsesor': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'idAsesor',
       type: IsarType.long,
     ),
     r'moneda': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'moneda',
       type: IsarType.string,
     ),
     r'monto': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'monto',
       type: IsarType.double,
     ),
     r'motivoAnterior': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'motivoAnterior',
       type: IsarType.string,
     ),
     r'nombre': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'numero': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'numero',
       type: IsarType.string,
     ),
     r'producto': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'producto',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'solicitudId',
       type: IsarType.string,
     ),
     r'sucursal': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'sucursal',
       type: IsarType.string,
     ),
     r'tipoSolicitud': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'tipoSolicitud',
       type: IsarType.string,
     )
@@ -99,6 +109,12 @@ int _solicitudesPendientesEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.cedula;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.estado;
     if (value != null) {
@@ -162,18 +178,20 @@ void _solicitudesPendientesSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.estado);
-  writer.writeDateTime(offsets[1], object.fecha);
-  writer.writeLong(offsets[2], object.idAsesor);
-  writer.writeString(offsets[3], object.moneda);
-  writer.writeDouble(offsets[4], object.monto);
-  writer.writeString(offsets[5], object.motivoAnterior);
-  writer.writeString(offsets[6], object.nombre);
-  writer.writeString(offsets[7], object.numero);
-  writer.writeString(offsets[8], object.producto);
-  writer.writeString(offsets[9], object.solicitudId);
-  writer.writeString(offsets[10], object.sucursal);
-  writer.writeString(offsets[11], object.tipoSolicitud);
+  writer.writeLong(offsets[0], object.cantidadHijos);
+  writer.writeString(offsets[1], object.cedula);
+  writer.writeString(offsets[2], object.estado);
+  writer.writeDateTime(offsets[3], object.fecha);
+  writer.writeLong(offsets[4], object.idAsesor);
+  writer.writeString(offsets[5], object.moneda);
+  writer.writeDouble(offsets[6], object.monto);
+  writer.writeString(offsets[7], object.motivoAnterior);
+  writer.writeString(offsets[8], object.nombre);
+  writer.writeString(offsets[9], object.numero);
+  writer.writeString(offsets[10], object.producto);
+  writer.writeString(offsets[11], object.solicitudId);
+  writer.writeString(offsets[12], object.sucursal);
+  writer.writeString(offsets[13], object.tipoSolicitud);
 }
 
 SolicitudesPendientes _solicitudesPendientesDeserialize(
@@ -183,19 +201,21 @@ SolicitudesPendientes _solicitudesPendientesDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SolicitudesPendientes();
-  object.estado = reader.readStringOrNull(offsets[0]);
-  object.fecha = reader.readDateTimeOrNull(offsets[1]);
+  object.cantidadHijos = reader.readLongOrNull(offsets[0]);
+  object.cedula = reader.readStringOrNull(offsets[1]);
+  object.estado = reader.readStringOrNull(offsets[2]);
+  object.fecha = reader.readDateTimeOrNull(offsets[3]);
   object.id = id;
-  object.idAsesor = reader.readLongOrNull(offsets[2]);
-  object.moneda = reader.readStringOrNull(offsets[3]);
-  object.monto = reader.readDoubleOrNull(offsets[4]);
-  object.motivoAnterior = reader.readStringOrNull(offsets[5]);
-  object.nombre = reader.readStringOrNull(offsets[6]);
-  object.numero = reader.readStringOrNull(offsets[7]);
-  object.producto = reader.readStringOrNull(offsets[8]);
-  object.solicitudId = reader.readStringOrNull(offsets[9]);
-  object.sucursal = reader.readStringOrNull(offsets[10]);
-  object.tipoSolicitud = reader.readStringOrNull(offsets[11]);
+  object.idAsesor = reader.readLongOrNull(offsets[4]);
+  object.moneda = reader.readStringOrNull(offsets[5]);
+  object.monto = reader.readDoubleOrNull(offsets[6]);
+  object.motivoAnterior = reader.readStringOrNull(offsets[7]);
+  object.nombre = reader.readStringOrNull(offsets[8]);
+  object.numero = reader.readStringOrNull(offsets[9]);
+  object.producto = reader.readStringOrNull(offsets[10]);
+  object.solicitudId = reader.readStringOrNull(offsets[11]);
+  object.sucursal = reader.readStringOrNull(offsets[12]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[13]);
   return object;
 }
 
@@ -207,19 +227,19 @@ P _solicitudesPendientesDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
-    case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 2:
       return (reader.readLongOrNull(offset)) as P;
-    case 3:
+    case 1:
       return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
@@ -229,6 +249,10 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
+      return (reader.readStringOrNull(offset)) as P;
+    case 12:
+      return (reader.readStringOrNull(offset)) as P;
+    case 13:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -332,6 +356,236 @@ extension SolicitudesPendientesQueryWhere on QueryBuilder<SolicitudesPendientes,
 
 extension SolicitudesPendientesQueryFilter on QueryBuilder<
     SolicitudesPendientes, SolicitudesPendientes, QFilterCondition> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'cantidadHijos',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'cantidadHijos',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'cantidadHijos',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'cantidadHijos',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'cantidadHijos',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cantidadHijosBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'cantidadHijos',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'cedula',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'cedula',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'cedula',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      cedulaContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'cedula',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      cedulaMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'cedula',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'cedula',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> cedulaIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'cedula',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
       QAfterFilterCondition> estadoIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -2034,6 +2288,34 @@ extension SolicitudesPendientesQueryLinks on QueryBuilder<SolicitudesPendientes,
 extension SolicitudesPendientesQuerySortBy
     on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QSortBy> {
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByCantidadHijos() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cantidadHijos', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByCantidadHijosDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cantidadHijos', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByCedula() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cedula', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByCedulaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cedula', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       sortByEstado() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'estado', Sort.asc);
@@ -2204,6 +2486,34 @@ extension SolicitudesPendientesQuerySortBy
 
 extension SolicitudesPendientesQuerySortThenBy
     on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QSortThenBy> {
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByCantidadHijos() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cantidadHijos', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByCantidadHijosDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cantidadHijos', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByCedula() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cedula', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByCedulaDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'cedula', Sort.desc);
+    });
+  }
+
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       thenByEstado() {
     return QueryBuilder.apply(this, (query) {
@@ -2390,6 +2700,20 @@ extension SolicitudesPendientesQuerySortThenBy
 extension SolicitudesPendientesQueryWhereDistinct
     on QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct> {
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByCantidadHijos() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'cantidadHijos');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByCedula({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'cedula', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
       distinctByEstado({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'estado', caseSensitive: caseSensitive);
@@ -2481,6 +2805,20 @@ extension SolicitudesPendientesQueryProperty on QueryBuilder<
   QueryBuilder<SolicitudesPendientes, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, int?, QQueryOperations>
+      cantidadHijosProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'cantidadHijos');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      cedulaProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'cedula');
     });
   }
 

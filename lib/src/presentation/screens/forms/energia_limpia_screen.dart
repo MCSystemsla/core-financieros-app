@@ -425,6 +425,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
 
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -707,6 +708,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()

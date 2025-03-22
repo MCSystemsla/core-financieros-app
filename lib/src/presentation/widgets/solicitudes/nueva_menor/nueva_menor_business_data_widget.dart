@@ -5,7 +5,9 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -26,6 +28,8 @@ class NuevaMenorBusinessDataWidget extends StatefulWidget {
 class _NuevaMenorBusinessDataWidgetState
     extends State<NuevaMenorBusinessDataWidget>
     with AutomaticKeepAliveClientMixin {
+  List<Item> actividadesPredominantesList = [];
+  List<Item> rubrosActividadesPredominanteList = [];
   String? profesion;
   String? actividad;
   String? actividad1;
@@ -50,6 +54,7 @@ class _NuevaMenorBusinessDataWidgetState
   TimeOfDay? horarioTrabajoEndtime;
   TimeOfDay? horarioVisita;
   TimeOfDay? horarioVisitaEndtime;
+  String? objRubroActividadPredominante;
 
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
@@ -177,12 +182,12 @@ class _NuevaMenorBusinessDataWidgetState
             SearchDropdownWidget(
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad Predominante',
+              codigo: 'SECTORECONOMICO',
               onChanged: (item) {
                 if (item == null) return;
-                actividadPredominante = item.value;
+                sectorEconomico = item.value;
               },
+              title: 'Sector Economico',
             ),
             const Gap(20),
             SearchDropdownWidget(
@@ -192,7 +197,13 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad',
               onChanged: (item) {
                 if (item == null) return;
+                // if (actividadesPredominantesList
+                //     .any((element) => element.value == item.value)) {
+                //   return;
+                // }
                 actividad = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
               },
             ),
             const Gap(20),
@@ -203,75 +214,127 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
+                // if (actividadesPredominantesList
+                //     .any((element) => element.value == item.value)) {
+                //   return;
+                // }
                 actividad1 = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
               },
             ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad Predominante',
-              onChanged: (item) {
-                rubroActividad = item?.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad 2',
-              onChanged: (item) {
-                if (item == null) return;
-                rubroActividad2 = item.value;
-              },
-            ),
-            // const Gap(20),
-            // const SearchDropdownWidget(
-            //   codigo: 'RUBROACTIVIDAD',
-            //   title: 'Rubro Actividad 2',
-            // ),
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'ACTIVIDADECONOMICA',
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
+                // if (actividadesPredominantesList
+                //     .any((element) => element.value == item.value)) {
+                //   return;
+                // }
                 actividadEconomica2 = item.value;
+                actividadesPredominantesList.add(item);
+                setState(() {});
               },
             ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'RUBROACTIVIDAD',
-              title: 'Rubro Actividad 3',
-              onChanged: (item) {
-                if (item == null) return;
-                rubroActividad3 = item.value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'SECTORECONOMICO',
-              onChanged: (item) {
-                if (item == null) return;
-                sectorEconomico = item.value;
-              },
-              title: 'Sector Economico',
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'SECTORECONOMICO',
-              onChanged: (item) {
-                if (item == null) return;
-                sectorEconomico2 = item.value;
-              },
-              title: 'Sector Economico 2',
-            ),
+            if (actividadesPredominantesList.isNotEmpty) ...[
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Actividad Predominante',
+                  items: actividadesPredominantesList.length >= 3
+                      ? actividadesPredominantesList
+                          .skip(actividadesPredominantesList.length - 3)
+                          .toSet()
+                          .toList()
+                      : actividadesPredominantesList.toSet().toList(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                  },
+                  toStringItem: (item) {
+                    return item.name;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            ],
+            if (actividad == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad ',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad2 = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividad1 == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 2',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad2 = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividadEconomica2 == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 3',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad3 = item.value;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (rubrosActividadesPredominanteList.length > 1) ...[
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Rubro actividad Predominante',
+                  items: rubrosActividadesPredominanteList.length >= 3
+                      ? rubrosActividadesPredominanteList
+                          .skip(rubrosActividadesPredominanteList.length - 3)
+                          .toSet()
+                          .toList()
+                      : rubrosActividadesPredominanteList.toSet().toList(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    objRubroActividadPredominante = item.value;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.name;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            ],
             const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
@@ -380,6 +443,8 @@ class _NuevaMenorBusinessDataWidgetState
                         direccionNegocio: direccionNegocio,
                         objActividadId: actividad,
                         objActividadId1: actividad1,
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante,
                       );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

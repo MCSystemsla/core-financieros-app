@@ -98,11 +98,11 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
     producto = widget.responseLocalDb.objProductoId;
     frecuenciaDePago = widget.responseLocalDb.objFrecuenciaId;
     plazoSolicitud = widget.responseLocalDb.plazoSolicitud.toString();
-    fechaPrimerPago =
-        DateTime.tryParse(widget.responseLocalDb.fechaPrimerPagoSolicitud!);
+    fechaPrimerPago = DateTime.tryParse(
+        widget.responseLocalDb.fechaPrimerPagoSolicitud ?? '');
     observacion = widget.responseLocalDb.observacion;
     fechaDesembolso =
-        DateTime.tryParse(widget.responseLocalDb.fechaDesembolso!);
+        DateTime.tryParse(widget.responseLocalDb.fechaDesembolso ?? '');
     tasaInteres = widget.responseLocalDb.prestamoInteres;
   }
 
@@ -210,14 +210,14 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 if (item == null) return;
-                frecuenciaDePago = item.value;
+                frecuenciaDePago = item.name;
               },
               codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: plazoSolicitud,
+              initialValue: plazoSolicitud == '0' ? null : plazoSolicitud,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),

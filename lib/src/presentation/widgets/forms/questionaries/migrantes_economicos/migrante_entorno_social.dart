@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -211,6 +212,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
   String? tipoEstudioHijos;
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -234,50 +236,42 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               ),
               const Gap(20),
               CommentaryWidget(
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0 || numero >= 255) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-                textEditingController: numeroHijos,
-                title: 'Número de hijos:*',
+                readOnly: true,
+                initialValue: cantidadHijos.toString(),
+                title: 'Cantidad de hijos:',
               ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: edadHijos,
-                title: '¿Que edades tienen sus hijos?',
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                  items: const [
-                    'Ninguno',
-                    'Preescolar',
-                    'Primaria',
-                    'Secundaria',
-                    'Técnico',
-                    'Universitario'
-                  ],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tipoEstudioHijos = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+              if (cantidadHijos > 0) ...[
+                const Gap(20),
+                CommentaryWidget(
+                  textEditingController: edadHijos,
+                  title: '¿Que edades tienen sus hijos?',
                 ),
-              ),
+                const Gap(20),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      tipoEstudioHijos = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
+              ],
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -299,11 +293,6 @@ class _RecurrentFormState extends State<_RecurrentForm> {
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
-                        Response(
-                          question: 'Número de hijos:*',
-                          response: numeroHijos.text.trim(),
-                          index: widget.controller.page?.toInt() ?? 0,
-                        ),
                         Response(
                           question: '¿Que edades tienen sus hijos?',
                           response: edadHijos.text.trim(),
