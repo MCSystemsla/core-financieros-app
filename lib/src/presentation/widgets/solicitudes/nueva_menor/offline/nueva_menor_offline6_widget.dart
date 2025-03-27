@@ -32,10 +32,14 @@ class NuevaMenorOffline6Widget extends StatefulWidget {
 
 class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
   String? moneda;
+  String? monedaVer;
   String? monto;
   String? proposito;
+  String? propositoVer;
   String? producto;
+  String? productoVer;
   String? frecuenciaDePago;
+  String? frecuenciaDePagoVer;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -92,6 +96,10 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
   @override
   void initState() {
     super.initState();
+    propositoVer = widget.responseLocalDb.objPropositoIdVer;
+    monedaVer = widget.responseLocalDb.objMonedaIdVer;
+    productoVer = widget.responseLocalDb.objProductoIdVer;
+    frecuenciaDePagoVer = widget.responseLocalDb.objFrecuenciaIdVer;
     moneda = widget.responseLocalDb.objMonedaId;
     monto = widget.responseLocalDb.monto.toString();
     proposito = widget.responseLocalDb.objPropositoId;
@@ -121,11 +129,12 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
           children: [
             const Gap(20),
             SearchDropdownWidget(
-              hintText: moneda ?? 'input.select_option'.tr(),
+              hintText: monedaVer ?? 'input.select_option'.tr(),
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
                 moneda = item.value;
+                monedaVer = item.name;
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -184,33 +193,36 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: proposito ?? 'Selecciona una opcion',
+              hintText: propositoVer ?? 'Selecciona una opcion',
               codigo: 'DESTINOCREDITO',
               title: 'Proposito',
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item.value;
+                propositoVer = item.name;
               },
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: producto ?? 'Selecciona una opcion',
+              hintText: productoVer ?? 'Selecciona una opcion',
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;
                 producto = item.value;
+                productoVer = item.name;
                 tasaInteres = item.interes;
               },
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: frecuenciaDePago ?? 'input.select_option'.tr(),
+              hintText: frecuenciaDePagoVer ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item.name;
+                frecuenciaDePagoVer = item.name;
               },
               codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
@@ -291,16 +303,20 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!,
+                    formadePago: frecuenciaDePagoVer!,
                     saldoPrincipal: double.tryParse(monto ?? '') ?? 0,
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $monedaVer',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            objFrecuenciaIdVer: frecuenciaDePagoVer,
+                            objProductoIdVer: productoVer,
+                            objMonedaIdVer: monedaVer,
+                            objPropositoIdVer: propositoVer,
                             objMonedaId: moneda,
                             monto: int.tryParse(monto!),
                             objPropositoId: proposito,

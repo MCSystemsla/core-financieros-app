@@ -30,21 +30,31 @@ class NuevaMenorOfflne4Widget extends StatefulWidget {
 class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
   String? profesion;
   String? actividad;
+  String? actividadVer;
   String? actividad1;
+  String? actividad1Ver;
   String? ocupacion;
   String? nombreNegocio;
   String? condicionNegocio;
+  String? condicionNegocioVer;
   String? funcionamientoNegocio;
   String? actividadPredominante;
+  String? actividadPredominanteVer;
   String? rubroActividad;
+  String? rubroActividadVer;
   String? rubroActividad2;
+  String? rubroActividad2Ver;
   String? rubroActividad3;
+  String? rubroActividad3Ver;
   String? actividadEconomica2;
+  String? actividadEconomica2Ver;
   String? sectorEconomico;
+  String? sectorEconomicoVer;
   String? sectorEconomico2;
   // String? horarioTrabajo;
   // String? horarioVisita;
   String? municipioNegocio;
+  String? municipioNegocioVer;
   String? barrioNegocio;
   String? direccionNegocio;
   final formKey = GlobalKey<FormState>();
@@ -58,6 +68,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
   List<Item> actividadesPredominantesList = [];
   List<Item> rubrosActividadesPredominanteList = [];
   String? objRubroActividadPredominante;
+  String? objRubroActividadPredominanteVer;
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
     return await showTimePicker(
@@ -120,6 +131,19 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
   @override
   void initState() {
     super.initState();
+    condicionNegocioVer = widget.responseLocalDb.objCondicionNegocioIdVer;
+    sectorEconomicoVer = widget.responseLocalDb.objSectorIdVer;
+    actividadVer = widget.responseLocalDb.objActividadIdVer;
+    actividad1Ver = widget.responseLocalDb.objActividadId1Ver;
+    actividadEconomica2Ver = widget.responseLocalDb.objActividadId2Ver;
+    actividadPredominanteVer =
+        widget.responseLocalDb.objActividadPredominanteVer;
+    rubroActividadVer = widget.responseLocalDb.objRubroActividadVer;
+    rubroActividad2Ver = widget.responseLocalDb.objRubroActividad2Ver;
+    rubroActividad3Ver = widget.responseLocalDb.objRubroActividad3Ver;
+    objRubroActividadPredominanteVer =
+        widget.responseLocalDb.objRubroActividadPredominanteVer;
+    municipioNegocioVer = widget.responseLocalDb.objMunicipioNegocioIdVer;
     profesion = widget.responseLocalDb.profesion;
     ocupacion = widget.responseLocalDb.ocupacion;
     nombreNegocio = widget.responseLocalDb.nombreNegocio;
@@ -207,8 +231,9 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               onChanged: (item) {
                 if (item == null) return;
                 condicionNegocio = item.value;
+                condicionNegocioVer = item.name;
               },
-              hintText: condicionNegocio ?? 'input.select_option'.tr(),
+              hintText: condicionNegocioVer ?? 'input.select_option'.tr(),
               title: 'Condicion Negocio',
             ),
             const Gap(20),
@@ -230,19 +255,20 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: sectorEconomico ?? 'Selecciona una opcion',
+              hintText: sectorEconomicoVer ?? 'Selecciona una opcion',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'SECTORECONOMICO',
               onChanged: (item) {
                 if (item == null) return;
                 sectorEconomico = item.value;
+                sectorEconomicoVer = item.name;
               },
               title: 'Sector Economico',
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: actividad ?? 'input.select_option'.tr(),
+              hintText: actividadVer ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
@@ -250,13 +276,14 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               onChanged: (item) {
                 if (item == null) return;
                 actividad = item.value;
+                actividadVer = item.name;
                 actividadesPredominantesList.add(item);
                 setState(() {});
               },
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: actividad1 ?? 'input.select_option'.tr(),
+              hintText: actividad1Ver ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
@@ -264,18 +291,20 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               onChanged: (item) {
                 if (item == null) return;
                 actividad1 = item.value;
+                actividad1Ver = item.name;
                 actividadesPredominantesList.add(item);
                 setState(() {});
               },
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: actividadEconomica2 ?? 'input.select_option'.tr(),
+              hintText: actividadEconomica2Ver ?? 'input.select_option'.tr(),
               codigo: 'ACTIVIDADECONOMICA',
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
                 actividadEconomica2 = item.value;
+                actividadEconomica2Ver = item.name;
                 actividadesPredominantesList.add(item);
                 setState(() {});
               },
@@ -288,9 +317,23 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
                   // initialValue: Item(
-                  //   name: actividadPredominante!,
+                  //   name: actividadPredominanteVer ?? '',
                   //   value: actividadPredominante,
                   // ),
+                  // initialValue: actividadesPredominantesList.firstWhere(
+                  //   (item) => item.value == actividadPredominante,
+                  //   orElse: () => const Item(
+                  //     name: '',
+                  //     value: null,
+                  //   ),
+                  // ),
+                  initialValue: actividadesPredominantesList
+                          .any((item) => item.value == actividadPredominante)
+                      ? actividadesPredominantesList.firstWhere(
+                          (item) => item.value == actividadPredominante,
+                        )
+                      : null, // Si no hay coincidencias, se usa null
+
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
@@ -303,6 +346,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item.value;
+                    actividadPredominanteVer = item.name;
+
                     setState(() {});
                   },
                   toStringItem: (item) {
@@ -315,7 +360,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             if (actividad == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                hintText: rubroActividad ?? 'input.select_option'.tr(),
+                hintText: rubroActividadVer ?? 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
@@ -324,6 +369,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                   if (item == null) return;
 
                   rubroActividad = item.value;
+                  rubroActividadVer = item.name;
                   rubrosActividadesPredominanteList.add(item);
                   setState(() {});
                 },
@@ -332,7 +378,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             if (actividad1 == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                hintText: rubroActividad2 ?? 'input.select_option'.tr(),
+                hintText: rubroActividad2Ver ?? 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
@@ -340,6 +386,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad2 = item.value;
+                  rubroActividad2Ver = item.name;
                   rubrosActividadesPredominanteList.add(item);
                   setState(() {});
                 },
@@ -348,7 +395,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             if (actividadEconomica2 == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                hintText: rubroActividad3 ?? 'input.select_option'.tr(),
+                hintText: rubroActividad3Ver ?? 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
@@ -356,6 +403,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad3 = item.value;
+                  rubroActividad3Ver = item.name;
                   rubrosActividadesPredominanteList.add(item);
                   setState(() {});
                 },
@@ -368,9 +416,16 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
                   // initialValue: Item(
-                  //   name: objRubroActividadPredominante ?? '',
+                  //   name: objRubroActividadPredominanteVer ?? '',
                   //   value: objRubroActividadPredominante,
                   // ),
+                  initialValue: rubrosActividadesPredominanteList
+                          .any((item) => item.value == actividadPredominante)
+                      ? rubrosActividadesPredominanteList.firstWhere(
+                          (item) => item.value == objRubroActividadPredominante,
+                        )
+                      : null, // Si no encuentra coincidencias, deja el initialValue en null
+
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   validator: (value) => ClassValidator.validateRequired(
@@ -386,6 +441,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                   onChanged: (item) {
                     if (item == null) return;
                     objRubroActividadPredominante = item.value;
+                    objRubroActividadPredominanteVer = item.name;
                     setState(() {});
                   },
                   toStringItem: (item) {
@@ -438,17 +494,18 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               initialValue: ItemNacionalidad(
                   id: 0,
                   valor: municipioNegocio ?? 'Ingresa una opcion',
-                  nombre: municipioNegocio ?? 'Ingresa una opcion',
+                  nombre: municipioNegocioVer ?? 'Ingresa una opcion',
                   relacion: ''),
-              hintText: municipioNegocio!.isEmpty
+              hintText: municipioNegocioVer!.isEmpty
                   ? 'input.select_option'.tr()
-                  : municipioNegocio ?? 'input.select_option'.tr(),
+                  : municipioNegocioVer ?? 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
               title: 'Municipio de Negocio',
               onChanged: (item) {
                 if (item == null) return;
                 municipioNegocio = item.valor;
+                municipioNegocioVer = item.nombre;
               },
               codigo: 'MUN',
             ),
@@ -494,6 +551,18 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objMunicipioNegocioIdVer: municipioNegocioVer,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominanteVer,
+                        objRubroActividad3Ver: rubroActividad3Ver,
+                        objRubroActividad2Ver: rubroActividad2Ver,
+                        objRubroActividadVer: rubroActividadVer,
+                        objActividadPredominanteVer: actividadPredominanteVer,
+                        objActividadId2Ver: actividadEconomica2Ver,
+                        objActividadId1Ver: actividad1Ver,
+                        objActividadIdVer: actividadVer,
+                        objSectorIdVer: sectorEconomicoVer,
+                        objCondicionNegocioIdVer: condicionNegocioVer,
                         profesion: profesion,
                         ocupacion: ocupacion,
                         nombreNegocio: nombreNegocio,

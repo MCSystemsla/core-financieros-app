@@ -29,6 +29,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? parentesco;
+  String? parentescoVer;
   String? beneficiarioSeguro1;
   String? cedulaBeneficiarioSeguro1;
   String? parentescoBeneficiarioSeguro1;
@@ -39,6 +40,8 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
   void initState() {
     super.initState();
     // context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    parentescoVer =
+        widget.responseLocalDb.objParentescoBeneficiarioSeguroId1Ver;
     beneficiarioSeguro = widget.responseLocalDb.beneficiarioSeguro;
     cedulaBeneficiarioSeguro = widget.responseLocalDb.cedulaBeneficiarioSeguro;
     parentesco = widget.responseLocalDb.objParentescoBeneficiarioSeguroId;
@@ -93,13 +96,14 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: parentesco ?? 'Selecciona una opcion',
+              hintText: parentescoVer ?? 'Selecciona una opcion',
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
                 parentesco = item.value;
+                parentescoVer = item.name;
               },
             ),
             const Gap(20),
@@ -186,6 +190,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objParentescoBeneficiarioSeguroId1Ver: parentescoVer,
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco,

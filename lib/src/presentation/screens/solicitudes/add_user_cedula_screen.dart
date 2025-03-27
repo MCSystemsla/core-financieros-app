@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
@@ -86,7 +85,6 @@ class AddUserCedulaScreen extends StatelessWidget {
                       ),
                       const Gap(20),
                       OutlineTextfieldWidget(
-                        inputFormatters: [DashFormatter()],
                         maxLength: 20,
                         textEditingController: cedulaController,
                         validator: (value) =>
@@ -111,9 +109,7 @@ class AddUserCedulaScreen extends StatelessWidget {
                           onPressed: () {
                             if (!formKey.currentState!.validate()) return;
                             context.read<UserByCedulaCubit>().getUserByCedula(
-                                  cedula: cedulaController.text
-                                      .trim()
-                                      .replaceAll('-', ''),
+                                  cedula: cedulaController.text.trim(),
                                 );
                           },
                         ),
