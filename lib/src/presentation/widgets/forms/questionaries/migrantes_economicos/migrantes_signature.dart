@@ -30,8 +30,10 @@ import 'package:signature/signature.dart';
 import '../../../../bloc/kiva/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
 
 class MigrantesFormSignature extends StatefulWidget {
+  final PageController controller;
   const MigrantesFormSignature({
     super.key,
+    required this.controller,
   });
 
   @override
@@ -234,7 +236,6 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -256,6 +257,19 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
@@ -323,8 +337,10 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
 }
 
 class RecurrenteMigrantesFormSignature extends StatefulWidget {
+  final PageController controller;
   const RecurrenteMigrantesFormSignature({
     super.key,
+    required this.controller,
   });
 
   @override
@@ -529,7 +545,6 @@ class _RecurrenteMigrantesFormSignatureState
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -551,6 +566,19 @@ class _RecurrenteMigrantesFormSignatureState
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],

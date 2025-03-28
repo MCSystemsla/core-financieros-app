@@ -37,7 +37,9 @@ class SeguimientoScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
-              const SignQuestionaryWidget(),
+              SignQuestionaryWidget(
+                controller: pageController,
+              ),
             ],
           ),
         ),

@@ -19,7 +19,6 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_aditional_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
@@ -106,10 +105,13 @@ class EstandarScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
-              AsesorSignatureWidget(
-                pageController: pageController,
-              ),
-              isRecurrentForm ? const _RecurrentSign() : const EstandarSign(),
+              isRecurrentForm
+                  ? _RecurrentSign(
+                      controller: pageController,
+                    )
+                  : EstandarSign(
+                      controller: pageController,
+                    ),
             ],
           ),
         ),
@@ -119,7 +121,8 @@ class EstandarScreen extends StatelessWidget {
 }
 
 class _RecurrentSign extends StatefulWidget {
-  const _RecurrentSign();
+  final PageController controller;
+  const _RecurrentSign({required this.controller});
 
   @override
   State<_RecurrentSign> createState() => _RecurrentSignState();
@@ -333,7 +336,6 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -356,6 +358,19 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
