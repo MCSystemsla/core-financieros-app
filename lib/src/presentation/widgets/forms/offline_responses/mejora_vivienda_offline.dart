@@ -71,7 +71,6 @@ class _ViviendaNuevaOfflineResponseState
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -348,7 +347,6 @@ class _RecurrenteViviendaOfflineResponseState
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,

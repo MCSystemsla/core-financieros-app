@@ -50,7 +50,6 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required int solicitudId,
     required String formularioKiva,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
     required String cedula,
   }) async {
@@ -63,7 +62,6 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       formularioKiva: formularioKiva,
       database: LocalStorage().database,
       tipoSolicitud: tipoSolicitud,
-      imagenAsesor: imagenAsesor,
       numero: numero,
       cedula: cedula,
     );

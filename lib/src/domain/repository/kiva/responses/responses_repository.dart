@@ -81,7 +81,6 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
     required String cedula,
   });
@@ -443,7 +442,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
     required String cedula,
   }) async {
@@ -496,12 +494,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   filename: fotoCedula,
       //   contentType: MediaType('image', 'jpg'),
       // ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigitalAsesor',
-        imagenAsesor,
-        filename: imagenAsesor,
-        contentType: MediaType('image', 'png'),
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'fotoFirmaDigitalAsesor',
+      //   imagenAsesor,
+      //   filename: imagenAsesor,
+      //   contentType: MediaType('image', 'png'),
+      // ));
       request.headers.addAll({
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
