@@ -17,18 +17,18 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   /// - En producción (`isProdMode == true`), revisa si hay acceso a Internet y que este en modo Produccion,
   ///   el tipo de conectividad y si la red es válida.
   Future<void> getInternetStatusConnection() async {
+    final isConnected = await InternetConnectionChecker().hasConnection;
     const isInProdMode = bool.fromEnvironment('isProdMode');
     if (!isInProdMode) {
       emit(
         state.copyWith(
           currentIp: 'DEVMODE',
-          isConnected: true,
+          isConnected: isConnected,
           isCorrectNetwork: true,
         ),
       );
     }
 
-    final isConnected = await InternetConnectionChecker().hasConnection;
     final connectivityResult = await Connectivity().checkConnectivity();
     final info = NetworkInfo();
 
