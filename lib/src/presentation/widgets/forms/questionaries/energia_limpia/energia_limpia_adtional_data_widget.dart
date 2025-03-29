@@ -169,23 +169,6 @@ class _EnergiaLimpiaAditionalDataWidgetState
                           responses: [
                             Response(
                               index: 1,
-                              question:
-                                  '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                              response: tieneTrabajo ?? 'N/A',
-                            ),
-                            if (tieneTrabajo == 'input.yes'.tr())
-                              Response(
-                                index: 1,
-                                question: 'Cual',
-                                response: trabajoNegocioDescripcion.text.trim(),
-                              ),
-                            Response(
-                              index: 1,
-                              question: 'Tiempo de la actividad:*',
-                              response: tiempoActividad.text.trim(),
-                            ),
-                            Response(
-                              index: 1,
                               question: '¿Tiene otros ingresos?¿Cuales?*',
                               response: otrosIngresos ?? 'N/A',
                             ),

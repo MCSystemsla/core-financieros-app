@@ -124,17 +124,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        readOnly: true,
-                        textInputType: TextInputType.number,
-                        initialValue: resp
-                                .recurrenteEstandarDbLocal?.personasCargo
-                                .toString() ??
-                            '0',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         readOnly: true,
                         initialValue: resp
                                 .recurrenteEstandarDbLocal?.numeroHijos
@@ -457,15 +447,7 @@ class _EstandarFormState extends State<EstandarForm> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        initialValue:
-                            state.estandarDbLocal?.personasCargo.toString() ??
-                                'N/A',
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue:
                             state.estandarDbLocal?.numeroHijos.toString() ??
                                 'N/A',

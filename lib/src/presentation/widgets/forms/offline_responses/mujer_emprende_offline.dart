@@ -118,21 +118,6 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                                 ?.otrosIngresosDescripcion ??
                             'N/A',
                       ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue:
-                            state.mujerEmprendeDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: 'Tiene Trabajo?',
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cuales',
-                        initialValue: state.mujerEmprendeDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
@@ -156,7 +141,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                       ),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state.mujerEmprendeDbLocal?.numeroHijos
                                 .toString() ??
                             'N/A',
@@ -419,6 +404,7 @@ class _RecurrenteMujerEmprendeOfflineState
                     children: [
                       const Gap(10),
                       CommentaryWidget(
+                        readOnly: true,
                         initialValue:
                             state.recurrenteMujerEmprende?.otrosIngresos ??
                                     false
@@ -432,31 +418,10 @@ class _RecurrenteMujerEmprendeOfflineState
                                 ?.otrosIngresosDescripcion ??
                             'N/A',
                       ),
-                      CommentaryWidget(
-                        title: '¿Tiene Trabajo? Cual?',
-                        initialValue:
-                            state.recurrenteMujerEmprende?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        title: 'Cuales?',
-                        initialValue: state.recurrenteMujerEmprende
-                                ?.tieneTrabajoDescripcion ??
-                            'N/A',
-                      ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        initialValue: state
-                                .recurrenteMujerEmprende?.personasCargo
-                                .toString() ??
-                            '0',
-                        textInputType: TextInputType.number,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        readOnly: true,
+                        title: 'Cantidad de hijos:*',
                         initialValue: state.recurrenteMujerEmprende?.numeroHijos
                                 .toString() ??
                             '0',

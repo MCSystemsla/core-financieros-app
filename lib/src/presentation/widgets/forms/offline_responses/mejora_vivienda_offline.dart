@@ -106,31 +106,6 @@ class _ViviendaNuevaOfflineResponseState
                     children: [
                       const Gap(20),
                       CommentaryWidget(
-                        initialValue:
-                            state.mejoraViviendaDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.mejoraViviendaDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                        title: 'Cual?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state
-                                .mejoraViviendaDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                        title: 'Tiempo de la actividad:*',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
                         readOnly: true,
                         title: '¿Tiene otros ingresos?¿Cuales?*',
                         initialValue:
@@ -172,17 +147,10 @@ class _ViviendaNuevaOfflineResponseState
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        initialValue:
-                            state.mejoraViviendaDbLocal?.personasCargo ?? 'N/A',
-                        title: 'Número de personas a cargo:*',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
                         initialValue: state.mejoraViviendaDbLocal?.numeroHijos
                                 .toString() ??
                             'N/A',
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         textInputType: TextInputType.number,
                       ),
                       const Gap(20),
@@ -384,33 +352,6 @@ class _RecurrenteViviendaOfflineResponseState
                       CommentaryWidget(
                         readOnly: true,
                         initialValue: state.recurrenteMejoraViviendaDbLocal
-                                    ?.tieneTrabajo ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual?',
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.tiempoActividad
-                                .toString() ??
-                            '0',
-                        title: 'Tiempo de la actividad:*',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
                                     ?.otrosIngresos ??
                                 false
                             ? 'input.yes'.tr()
@@ -445,19 +386,10 @@ class _RecurrenteViviendaOfflineResponseState
                       CommentaryWidget(
                         readOnly: true,
                         initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.personasCargo ??
-                            'N/A',
-                        title: 'Número de personas a cargo:*',
-                        textInputType: TextInputType.number,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
                                 ?.trabajoNegocioDescripcion ??
                             'N/A',
                         textInputType: TextInputType.number,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                       ),
                       const Gap(20),
                       CommentaryWidget(

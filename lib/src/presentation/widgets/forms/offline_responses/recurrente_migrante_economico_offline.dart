@@ -106,52 +106,6 @@ class _RecurrenteMigranteEconomicoOfflineState
                       const Gap(20),
                       CommentaryWidget(
                         initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                    ?.tieneTrabajo ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        readOnly: true,
-                      ),
-                      if (state.recurrenteMigranteEconomicoDbLocal
-                              ?.tieneTrabajo ??
-                          false)
-                        CommentaryWidget(
-                          title: 'Cual',
-                          initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                  ?.trabajoNegocioDescripcion ??
-                              '',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'input.input_validator'.tr();
-                            }
-                            return null;
-                          },
-                          readOnly: true,
-                        ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        title: 'Tiempo de la actividad:* (MESES)',
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.tiempoActividad
-                                ?.toString() ??
-                            '',
-                        textInputType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          final numero = int.tryParse(value);
-                          if (numero == null || numero < 0 || numero >= 255) {
-                            return 'Valor no valido'.tr();
-                          }
-                          return null;
-                        },
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
                                     ?.otrosIngresos ??
                                 false
                             ? 'input.yes'.tr()
@@ -177,27 +131,8 @@ class _RecurrenteMigranteEconomicoOfflineState
                         ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.personasCargo
-                                ?.toString() ??
-                            '0',
                         textInputType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          final numero = int.tryParse(value);
-                          if (numero == null || numero < 0 || numero >= 255) {
-                            return 'Valor no valido'.tr();
-                          }
-                          return null;
-                        },
-                        readOnly: true,
-                      ),
-                      CommentaryWidget(
-                        textInputType: TextInputType.number,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state
                                 .recurrenteMigranteEconomicoDbLocal?.numeroHijos
                                 ?.toString() ??

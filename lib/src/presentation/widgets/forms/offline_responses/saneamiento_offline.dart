@@ -102,29 +102,6 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        initialValue:
-                            state.saneamientoDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual?',
-                        initialValue: state.saneamientoDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Tiempo de la actividad (MESES)',
-                        initialValue: state.saneamientoDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                      ),
                       const Gap(10),
                       CommentaryWidget(
                         readOnly: true,
@@ -147,14 +124,8 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                           title: 'forms.entorno_familiar.person_origin'.tr()),
                       const Gap(10),
                       CommentaryWidget(
-                          readOnly: true,
-                          title: 'Número de personas a cargo:*',
-                          initialValue:
-                              state.saneamientoDbLocal?.personasCargo ?? ''),
-                      const Gap(10),
-                      CommentaryWidget(
                         readOnly: true,
-                        title: 'Numero de Hijos',
+                        title: 'Cantidad de Hijos',
                         initialValue:
                             state.saneamientoDbLocal?.numeroHijos.toString() ??
                                 '0',
@@ -443,39 +414,6 @@ class _RecurrenteSaneamientoOfflineState
                       const Gap(10),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Número de personas a cargo:*',
-                        initialValue:
-                            state.recurrenteSaneamientoDbLocal?.personasCargo ??
-                                'N/A',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        initialValue:
-                            state.recurrenteSaneamientoDbLocal?.tieneTrabajo ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual?',
-                        initialValue: state.recurrenteSaneamientoDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state
-                                .recurrenteSaneamientoDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                        title: 'Tiempo de la actividad (MESES):*',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
                         initialValue:
                             state.recurrenteSaneamientoDbLocal?.otrosIngresos ??
                                     false
@@ -493,7 +431,7 @@ class _RecurrenteSaneamientoOfflineState
                       const Gap(10),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state
                                 .recurrenteSaneamientoDbLocal?.numeroHijos
                                 .toString() ??
@@ -582,23 +520,6 @@ class _RecurrenteSaneamientoOfflineState
                         initialValue:
                             state.recurrenteSaneamientoDbLocal?.siguientePaso ??
                                 'N/A',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        initialValue:
-                            state.recurrenteSaneamientoDbLocal?.tieneTrabajo ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Por que?',
-                        initialValue: state.recurrenteSaneamientoDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
                       ),
                       const Gap(20),
                       ButtonActionsWidget(

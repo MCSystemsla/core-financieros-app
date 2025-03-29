@@ -281,13 +281,8 @@ class _EnergiaLimpiaEntornoFamiliarState
                             ),
                             Response(
                               index: 2,
-                              question: 'Número de personas a cargo:*',
-                              response: personasCargo.text.trim(),
-                            ),
-                            Response(
-                              index: 2,
-                              question: 'Número de hijos:*',
-                              response: numeroHijos.text.trim(),
+                              question: 'Cantidad de hijos:',
+                              response: cantidadHijos.toString(),
                             ),
                             Response(
                               index: 2,

@@ -244,14 +244,8 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                               ),
                               Response(
                                 index: widget.controller.page?.toInt() ?? 0,
-                                question: 'Número de personas a cargo:*'.tr(),
-                                response: personasCargo.text.trim(),
-                              ),
-                              Response(
-                                index: widget.controller.page?.toInt() ?? 0,
-                                question:
-                                    'forms.entorno_familiar.childs_age'.tr(),
-                                response: question2Controller.text.trim(),
+                                question: 'Cantidad Hijos'.tr(),
+                                response: cantidadHijos.toString(),
                               ),
                               Response(
                                 index: widget.controller.page?.toInt() ?? 0,

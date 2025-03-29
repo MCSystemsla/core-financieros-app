@@ -333,22 +333,6 @@ class _MejoraViviendaEntornoSocialState
                         context.read<ResponseCubit>().addResponses(
                           responses: [
                             Response(
-                              question:
-                                  '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                              response: question1 ?? 'N/A',
-                              index: 1,
-                            ),
-                            Response(
-                              question: '¿Cuál?',
-                              response: storeDescription.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
-                              question: 'Tiempo de la actividad:*',
-                              response: question2.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
                               question: '¿Tiene otros ingresos?¿Cuales?*',
                               response: question3 ?? 'N/A',
                               index: 1,
@@ -377,13 +361,8 @@ class _MejoraViviendaEntornoSocialState
                               index: 1,
                             ),
                             Response(
-                              question: 'Número de personas a cargo:*'.tr(),
-                              response: question6.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
-                              question: 'Número de hijos:*'.tr(),
-                              response: question7.text.trim(),
+                              question: 'Cantidad Hijos'.tr(),
+                              response: cantidadHijos.toString(),
                               index: 1,
                             ),
                             Response(

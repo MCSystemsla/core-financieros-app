@@ -112,23 +112,6 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
                         context.read<ResponseCubit>().addResponses(
                           responses: [
                             Response(
-                              question:
-                                  '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                              response: tieneTrabajo ?? 'N/A',
-                              index: widget.controller.page?.toInt() ?? 0,
-                            ),
-                            if (tieneTrabajo == 'input.yes'.tr())
-                              Response(
-                                question: 'Cual',
-                                response: trabajoNegocioDescripcion.text.trim(),
-                                index: widget.controller.page?.toInt() ?? 0,
-                              ),
-                            Response(
-                              question: 'Tiempo de la actividad:* (MESES)',
-                              response: tiempoActividad.text.trim(),
-                              index: widget.controller.page?.toInt() ?? 0,
-                            ),
-                            Response(
                               question: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                               response: otrosIngresos ?? 'N/A',
                               index: widget.controller.page?.toInt() ?? 0,

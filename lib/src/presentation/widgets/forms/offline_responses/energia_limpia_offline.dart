@@ -106,32 +106,6 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        initialValue:
-                            state.energiaLimpiaDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual',
-                        initialValue:
-                            state.energiaLimpiaDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Tiempo de la actividad:*',
-                        initialValue: state
-                                .energiaLimpiaDbLocal?.tiempoActividad
-                                .toString() ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
                         title: '¿Tiene otros ingresos?¿Cuales?*',
                         initialValue:
                             state.energiaLimpiaDbLocal?.otrosIngresos ?? false
@@ -166,17 +140,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Numero de persona a cargo',
-                        initialValue:
-                            state.energiaLimpiaDbLocal?.tieneProblemasEnergia ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state.energiaLimpiaDbLocal?.numeroHijos
                                 .toString() ??
                             '0',
@@ -399,32 +363,6 @@ class _RecurrenteEnergiaLimpiaOfflineState
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        initialValue: state.recurrenteEnergiaLimpiaDbLocal
-                                    ?.tieneTrabajo ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                      ),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual?',
-                        initialValue: state.recurrenteEnergiaLimpiaDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Tiempo de la actividad:',
-                        initialValue: state
-                                .recurrenteEnergiaLimpiaDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
                         title: 'Tiene otros ingresos?¿Cuales?*',
                         initialValue: state.recurrenteEnergiaLimpiaDbLocal
                                     ?.otrosIngresos ??
@@ -461,15 +399,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        title: 'Numero de persona a cargo',
-                        initialValue: state.recurrenteEnergiaLimpiaDbLocal
-                                ?.personasCargo ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state
                                 .recurrenteEnergiaLimpiaDbLocal?.numeroHijos
                                 .toString() ??
