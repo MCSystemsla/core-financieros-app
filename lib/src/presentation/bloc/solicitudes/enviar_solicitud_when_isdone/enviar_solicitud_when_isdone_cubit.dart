@@ -28,6 +28,7 @@ class EnviarSolicitudWhenIsdoneCubit
         try {
           final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
             solicitudNuevaMenor: SolicitudNuevaMenor(
+              isOffline: solicitud.isDone ?? false,
               objOrigenSolicitudId: solicitud.objOrigenSolicitudId ?? '',
               nombre1: solicitud.nombre1 ?? '',
               nombre2: solicitud.nombre2 ?? '',

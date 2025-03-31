@@ -44,10 +44,6 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
-                  // NuevaMenorOfflne4Widget(
-                  //   pageController: pageController,
-                  //   responseLocalDb: responseLocalDb,
-                  // ),
                   NuevaMenorOffline1(
                     responseLocalDb: responseLocalDb,
                     pageController: pageController,

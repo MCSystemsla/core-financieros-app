@@ -6,6 +6,7 @@ String solicitudNuevaMenorToJson(SolicitudNuevaMenor data) =>
     json.encode(data.toJson());
 
 class SolicitudNuevaMenor {
+  final bool isOffline;
   final String objOrigenSolicitudId;
   final String nombre1;
   final String nombre2;
@@ -103,8 +104,8 @@ class SolicitudNuevaMenor {
   final String telefonoBeneficiarioSeguro1;
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
-
   SolicitudNuevaMenor({
+    required this.isOffline,
     required this.objOrigenSolicitudId,
     required this.nombre1,
     required this.nombre2,
@@ -303,5 +304,6 @@ class SolicitudNuevaMenor {
         'TelefonoBeneficiarioSeguro1': telefonoBeneficiarioSeguro1,
         'PlazoSolicitud': plazoSolicitud,
         'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud,
+        'IsOffline': isOffline,
       };
 }

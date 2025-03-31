@@ -211,7 +211,7 @@ class _NuevaMenorBeneficiarioWidgetState
                                     (telefonoBeneficiario1 ?? '')
                                         .trim()
                                         .replaceAll('-', ''),
-                        isDone: true,
+                        isDone: !isConnected,
                       );
                   if (!isConnected) {
                     CustomAlertDialog(

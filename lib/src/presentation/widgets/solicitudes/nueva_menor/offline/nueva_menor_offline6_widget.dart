@@ -299,12 +299,21 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+
+                  if (double.tryParse(monto ?? '0') == 0) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'El monto no puede ser 0',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? ''),
                     formadePago: frecuenciaDePagoVer!,
-                    saldoPrincipal: double.tryParse(monto ?? '') ?? 0,
+                    saldoPrincipal: double.tryParse(monto ?? '0') ?? 0,
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(

@@ -22,6 +22,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       await Future.delayed(const Duration(seconds: 3));
       final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: SolicitudNuevaMenor(
+        isOffline: state.isDone,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         nombre1: state.nombre1,
         nombre2: state.nombre2,
