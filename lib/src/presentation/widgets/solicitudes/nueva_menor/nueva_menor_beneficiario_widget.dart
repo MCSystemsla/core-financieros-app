@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_d
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +33,11 @@ class NuevaMenorCreditoWidget extends StatefulWidget {
 
 class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
     with AutomaticKeepAliveClientMixin {
-  String? moneda;
+  Item? moneda;
   String? monto;
-  String? proposito;
-  String? producto;
-  String? frecuenciaDePago;
+  Item? proposito;
+  Item? producto;
+  Item? frecuenciaDePago;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -103,10 +104,19 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              codigo: 'DESTINOCREDITO',
+              title: 'Proposito',
+              onChanged: (item) {
+                if (item == null) return;
+                proposito = item;
+              },
+            ),
+            const Gap(20),
+            SearchDropdownWidget(
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
-                moneda = item.value;
+                moneda = item;
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -163,22 +173,14 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'DESTINOCREDITO',
-              title: 'Proposito',
-              onChanged: (item) {
-                if (item == null) return;
-                proposito = item.value;
-              },
-            ),
+
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;
-                producto = item.value;
+                producto = item;
                 tasaInteres = item.interes;
               },
             ),
@@ -188,7 +190,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 if (item == null) return;
-                frecuenciaDePago = item.value;
+                frecuenciaDePago = item;
               },
               codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
@@ -262,28 +264,40 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  if (double.tryParse(monto ?? '0') == 0) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'El monto no puede ser 0',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!,
+                    formadePago: frecuenciaDePago!.name,
                     saldoPrincipal: double.parse(monto ?? ''),
                     tasaInteresMensual: tasaInteres!,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $moneda',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            objFrecuenciaIdVer: frecuenciaDePago?.name,
+                            objProductoIdVer: producto?.name,
+                            objMonedaIdVer: moneda?.name,
+                            objPropositoIdVer: proposito?.name,
                             prestamoInteres: tasaInteres,
                             fechaDesembolso:
                                 fechaDesembolso?.toUtc().toIso8601String(),
-                            objMonedaId: moneda,
+                            objMonedaId: moneda?.value,
                             monto: int.tryParse(monto!),
-                            objPropositoId: proposito,
-                            objProductoId: producto,
-                            objFrecuenciaId: frecuenciaDePago,
+                            objPropositoId: proposito?.value,
+                            objProductoId: producto?.value,
+                            objFrecuenciaId: frecuenciaDePago?.value,
                             plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),

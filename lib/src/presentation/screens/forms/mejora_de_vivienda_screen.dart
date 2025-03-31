@@ -21,7 +21,6 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
@@ -125,12 +124,14 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
               FormResponses(
                 controller: pageController,
               ),
-              AsesorSignatureWidget(
-                pageController: pageController,
-              ),
+
               isRecurrentForm ?? false
-                  ? const RecurrentSign()
-                  : const SignQuestionaryWidget(),
+                  ? RecurrentSign(
+                      controller: pageController,
+                    )
+                  : SignQuestionaryWidget(
+                      controller: pageController,
+                    ),
             ],
           ),
         ),
@@ -140,7 +141,8 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
 }
 
 class RecurrentSign extends StatefulWidget {
-  const RecurrentSign({super.key});
+  final PageController controller;
+  const RecurrentSign({super.key, required this.controller});
 
   @override
   State<RecurrentSign> createState() => _RecurrentSignState();
@@ -247,6 +249,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -353,7 +356,6 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -375,6 +377,19 @@ class _RecurrentSignState extends State<RecurrentSign> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],

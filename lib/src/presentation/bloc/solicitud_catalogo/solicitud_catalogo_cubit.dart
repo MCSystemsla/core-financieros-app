@@ -43,6 +43,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       _objectBoxService.catalogoBox.put(CatalogoLocalDb(
         valor: item.valor,
         nombre: item.nombre,
+        interes: item.interes,
         type: 'PRODUCTO',
       ));
     }

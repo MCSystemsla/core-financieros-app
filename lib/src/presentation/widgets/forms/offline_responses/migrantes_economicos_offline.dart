@@ -57,6 +57,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
@@ -64,7 +65,6 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -99,32 +99,6 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue:
-                            state.migranteEconomicoDbLocal?.tieneTrabajo ??
-                                    false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
-                      const Gap(20),
-                      if (state.migranteEconomicoDbLocal?.tieneTrabajo ?? false)
-                        CommentaryWidget(
-                          title: 'Cual',
-                          initialValue: state.migranteEconomicoDbLocal
-                                  ?.trabajoNegocioDescripcion ??
-                              'N/A',
-                        ),
-                      const Gap(10),
-                      CommentaryWidget(
-                        title: 'Tiempo de la actividad:* (MESES)',
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.tiempoActividad
-                                ?.toString() ??
-                            '0',
-                      ),
                       const Gap(20),
                       CommentaryWidget(
                         initialValue:
@@ -142,15 +116,6 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                                   ?.otrosIngresosDescripcion ??
                               'N/A',
                         ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        initialValue: state
-                                .migranteEconomicoDbLocal?.personasCargo
-                                ?.toString() ??
-                            '0',
-                        textInputType: TextInputType.number,
-                      ),
                       const Gap(20),
                       CommentaryWidget(
                         title: 'forms.entorno_familiar.person_origin'.tr(),
@@ -188,7 +153,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue: state
                                 .migranteEconomicoDbLocal?.numeroHijos
                                 ?.toString() ??

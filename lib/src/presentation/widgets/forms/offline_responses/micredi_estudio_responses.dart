@@ -62,6 +62,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
@@ -69,7 +70,6 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -119,20 +119,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                             '',
                         readOnly: true,
                       ),
-                      const CommentaryWidget(
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        readOnly: true,
-                      ),
                       const Gap(20),
-                      CommentaryWidget(
-                        title: 'Tiempo de la actividad (MESES)'.tr(),
-                        readOnly: true,
-                        textInputType: TextInputType.number,
-                        initialValue: state
-                                .miCrediEstudioDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                      ),
                       CommentaryWidget(
                         title: '¿Tiene otros ingresos?¿Cuales?*',
                         readOnly: true,
@@ -158,15 +145,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*'.tr(),
-                        readOnly: true,
-                        initialValue: state.miCrediEstudioDbLocal?.personasCargo
-                                .toString() ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*'.tr(),
+                        title: 'Cantidad de hijos:*'.tr(),
                         readOnly: true,
                         initialValue: state.miCrediEstudioDbLocal?.numeroHijos
                                 .toString() ??
@@ -476,6 +455,7 @@ class _MiCrediEstudioRecurrenteFormState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
@@ -483,7 +463,6 @@ class _MiCrediEstudioRecurrenteFormState
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -518,30 +497,11 @@ class _MiCrediEstudioRecurrenteFormState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CommentaryWidget(
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                        readOnly: true,
-                        initialValue: (state.recurrenteMiCrediEstudioDbLocal
-                                    ?.tieneTrabajo ??
-                                false)
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
                         title: 'Cual?',
                         readOnly: true,
                         initialValue: state.recurrenteMiCrediEstudioDbLocal
                                 ?.trabajoNegocioDescripcion ??
                             'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Tiempo de la actividad (MESES)',
-                        readOnly: true,
-                        initialValue: state.recurrenteMiCrediEstudioDbLocal
-                                ?.tiempoActividad
-                                .toString() ??
-                            '0',
                       ),
                       const Gap(20),
                       CommentaryWidget(
@@ -563,16 +523,7 @@ class _MiCrediEstudioRecurrenteFormState
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        readOnly: true,
-                        initialValue: state
-                                .recurrenteMiCrediEstudioDbLocal?.personasCargo
-                                .toString() ??
-                            '0',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         readOnly: true,
                         initialValue: state
                                 .recurrenteMiCrediEstudioDbLocal?.numeroHijos
@@ -581,7 +532,7 @@ class _MiCrediEstudioRecurrenteFormState
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: '¿Que edades tienen sus hijos? ',
+                        title: '¿Que edades tienen sus hijos?',
                         readOnly: true,
                         initialValue: state
                                 .recurrenteMiCrediEstudioDbLocal?.edadHijos

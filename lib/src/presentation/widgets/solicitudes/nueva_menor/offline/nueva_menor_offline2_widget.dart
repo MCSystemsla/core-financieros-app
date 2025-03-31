@@ -29,10 +29,14 @@ class NuevaMenorOffline2Widget extends StatefulWidget {
 class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
   String? initialValue;
   String? paisDomicilio;
+  String? objPaisCasaIdVer;
   String? departamentoDomicilio;
+  String? objDepartamentoCasaIdVer;
   String? municipioDomicilio;
+  String? objMunicipioCasaIdVer;
   String? barrioCasa;
   String? condicionCasa;
+  String? objCondicionCasaIdVer;
   String? anosResidirCasa;
   String? comunidad;
   String? direccionCasa;
@@ -43,6 +47,10 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
   void initState() {
     super.initState();
     paisDomicilio = widget.responseLocalDb.objPaisCasaId;
+    objDepartamentoCasaIdVer = widget.responseLocalDb.objDepartamentoCasaIdVer;
+    objMunicipioCasaIdVer = widget.responseLocalDb.objMunicipioCasaIdVer;
+    objPaisCasaIdVer = widget.responseLocalDb.objPaisCasaIdVer;
+    objCondicionCasaIdVer = widget.responseLocalDb.objCondicionCasaIdVer;
     departamentoDomicilio = widget.responseLocalDb.objDepartamentoCasaId;
     municipioDomicilio = widget.responseLocalDb.objMunicipioCasaId;
     direccionCasa = widget.responseLocalDb.direccionCasa;
@@ -65,14 +73,15 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
               initialValue: ItemNacionalidad(
                 id: 0,
                 valor: paisDomicilio ?? 'input.select_option'.tr(),
-                nombre: paisDomicilio ?? 'input.select_option'.tr(),
+                nombre: objPaisCasaIdVer ?? 'input.select_option'.tr(),
                 relacion: '',
               ),
-              hintText: paisDomicilio ?? 'Selecciona Pais de Casa',
+              hintText: objPaisCasaIdVer ?? 'Selecciona Pais de Casa',
               title: 'Pais Domicilio',
               onChanged: (item) {
                 if (item == null) return;
                 paisDomicilio = item.valor;
+                objPaisCasaIdVer = item.nombre;
                 depWhereClause = item.valor;
 
                 setState(() {});
@@ -88,16 +97,17 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
               initialValue: ItemNacionalidad(
                 id: 0,
                 valor: departamentoDomicilio ?? '',
-                nombre: departamentoDomicilio ?? '',
+                nombre: objDepartamentoCasaIdVer ?? '',
                 relacion: '',
               ),
               hintText:
-                  departamentoDomicilio ?? 'Selecciona Departamento de Casa',
+                  objDepartamentoCasaIdVer ?? 'Selecciona Departamento de Casa',
               title: 'Departamento Domicilio',
               onChanged: (item) {
                 if (item == null) return;
                 departamentoDomicilio = item.valor;
                 munWhereClause = item.valor;
+                objDepartamentoCasaIdVer = item.nombre;
                 setState(() {});
               },
               codigo: 'DEP',
@@ -112,11 +122,11 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
               initialValue: ItemNacionalidad(
                 id: 0,
                 valor: municipioDomicilio ?? '',
-                nombre: municipioDomicilio ?? '',
+                nombre: objMunicipioCasaIdVer ?? '',
                 relacion: '',
               ),
               where: munWhereClause,
-              hintText: municipioDomicilio ?? 'Selecciona Municipio de Casa',
+              hintText: objMunicipioCasaIdVer ?? 'Selecciona Municipio de Casa',
               title: 'Municipio Domicilio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
@@ -124,6 +134,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
               onChanged: (item) {
                 if (item == null) return;
                 municipioDomicilio = item.valor;
+                objMunicipioCasaIdVer = item.nombre;
               },
               codigo: 'MUN',
               // initialValue: paisEmisor ?? '',
@@ -163,17 +174,18 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
-              hintText: condicionCasa ?? 'Selecciona una opcion',
+              hintText: objCondicionCasaIdVer ?? 'Selecciona una opcion',
               title: 'Condicion Casa',
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
                 if (item == null) return;
                 condicionCasa = item.value;
+                objCondicionCasaIdVer = item.name;
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: anosResidirCasa,
+              initialValue: anosResidirCasa == '0' ? null : anosResidirCasa,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
@@ -205,7 +217,9 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
                 toStringItem: (item) {
                   return item.nombre;
                 },
-                hintText: comunidad ?? 'input.select_option'.tr(),
+                hintText: comunidad!.isEmpty
+                    ? 'input.select_option'.tr()
+                    : comunidad!,
               ),
             ),
             const Gap(20),
@@ -223,6 +237,10 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
                       await geolocationService.getCurrentLocation();
                   if (!context.mounted) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objCondicionCasaIdVer: objCondicionCasaIdVer,
+                        objMunicipioCasaIdVer: objMunicipioCasaIdVer,
+                        objDepartamentoCasaIdVer: objDepartamentoCasaIdVer,
+                        objPaisCasaIdVer: objPaisCasaIdVer,
                         barrioCasa: barrioCasa,
                         objPaisCasaId: paisDomicilio,
                         objDepartamentoCasaId: departamentoDomicilio,

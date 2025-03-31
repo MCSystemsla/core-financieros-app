@@ -24,7 +24,6 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/m
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
@@ -143,12 +142,13 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
               FormResponses(
                 controller: _pageController,
               ),
-              AsesorSignatureWidget(
-                pageController: _pageController,
-              ),
               isRecurrentForm
-                  ? const _RecurrentSign()
-                  : const _SaneamientoSign(),
+                  ? _RecurrentSign(
+                      controller: _pageController,
+                    )
+                  : _SaneamientoSign(
+                      controller: _pageController,
+                    ),
             ],
           ),
         ),
@@ -158,7 +158,8 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
 }
 
 class _RecurrentSign extends StatefulWidget {
-  const _RecurrentSign();
+  final PageController controller;
+  const _RecurrentSign({required this.controller});
 
   @override
   State<_RecurrentSign> createState() => _RecurrentSignState();
@@ -265,6 +266,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -360,7 +362,6 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -382,6 +383,19 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
@@ -441,7 +455,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
 }
 
 class EstandarSign extends StatefulWidget {
-  const EstandarSign({super.key});
+  final PageController controller;
+  const EstandarSign({super.key, required this.controller});
 
   @override
   State<EstandarSign> createState() => _EstandarSignState();
@@ -547,6 +562,7 @@ class _EstandarSignState extends State<EstandarSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -644,7 +660,6 @@ class _EstandarSignState extends State<EstandarSign> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -664,6 +679,19 @@ class _EstandarSignState extends State<EstandarSign> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
@@ -799,10 +827,11 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage = photo;
-                selectedImage1Path = localPath;
 
-                setState(() {});
+                setState(() {
+                  selectedImage = photo;
+                  selectedImage1Path = localPath;
+                });
               },
             ),
             const Gap(20),
@@ -834,9 +863,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage2 = photo;
-                selectedImage2Path = localPath;
-                setState(() {});
+                setState(() {
+                  selectedImage2 = photo;
+                  selectedImage2Path = localPath;
+                });
               },
             ),
             const Gap(15),
@@ -868,9 +898,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 final imageFile = File(photo.path);
                 await imageFile.copy(localPath);
                 if (!mounted) return;
-                selectedImage3 = photo;
-                selectedImage3Path = localPath;
-                setState(() {});
+                setState(() {
+                  selectedImage3 = photo;
+                  selectedImage3Path = localPath;
+                });
               },
             ),
             // UploadImageWidget(
@@ -1009,7 +1040,8 @@ class ButtonActionsWidget extends StatelessWidget {
 }
 
 class _SaneamientoSign extends StatefulWidget {
-  const _SaneamientoSign();
+  final PageController controller;
+  const _SaneamientoSign({required this.controller});
 
   @override
   State<_SaneamientoSign> createState() => _SaneamientoSignState();
@@ -1115,6 +1147,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -1210,7 +1243,6 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -1232,6 +1264,19 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
@@ -1291,7 +1336,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
 }
 
 class SignQuestionaryWidget extends StatefulWidget {
-  const SignQuestionaryWidget({super.key});
+  final PageController controller;
+  const SignQuestionaryWidget({super.key, required this.controller});
 
   @override
   State<SignQuestionaryWidget> createState() => _SignQuestionaryWidgetState();
@@ -1398,6 +1444,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -1493,7 +1540,6 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -1515,6 +1561,19 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],

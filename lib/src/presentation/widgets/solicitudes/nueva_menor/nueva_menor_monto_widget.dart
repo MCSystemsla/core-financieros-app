@@ -26,7 +26,7 @@ class NuevaMenorMontoWidget extends StatefulWidget {
 
 class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
     with AutomaticKeepAliveClientMixin {
-  String? estadoCivil;
+  Item? estadoCivil;
   String? nacionalidadConyuge;
   String? nombreConyuge;
   String? trabajaConyuge;
@@ -54,13 +54,13 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
               codigo: 'ESTADOCIVIL',
               onChanged: (item) {
                 if (item == null) return;
-                estadoCivil = item.value;
+                estadoCivil = Item(name: item.name, value: item.value);
                 setState(() {});
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
             ),
-            if (estadoCivil == 'UNI' || estadoCivil == 'CAS') ...[
+            if (estadoCivil?.value == 'UNI' || estadoCivil?.value == 'CAS') ...[
               const Gap(20),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
@@ -234,7 +234,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objEstadoCivilId: estadoCivil,
+                        objEstadoCivilIdVer: estadoCivil?.name,
+                        objEstadoCivilId: estadoCivil?.value,
                         nacionalidadConyugue: nacionalidadConyuge,
                         nombreConyugue: nombreConyuge,
                         trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),

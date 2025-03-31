@@ -1,21 +1,21 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-typedef ValidatorCallback<T> = String? Function(T? value)?;
-typedef OnChangeCallback<T> = Function(T? value)?;
-
-class OutlineTextfieldWidget extends StatelessWidget {
+class CountryInput extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function(PointerDownEvent)? onTapOutside;
   final int maxLength;
-  final bool haveCounter;
+  final bool? haveCounter;
   final String? hintText;
   final TextEditingController? textEditingController;
   final String title;
   final ValidatorCallback validator;
   final OnChangeCallback? onChange;
+  final OnChangeCallback<CountryCode>? onCountryCodeChange;
   final String? initialValue;
   final double? marginTop;
   final TextInputType? textInputType;
@@ -26,48 +26,29 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final bool isRequired;
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
-  const OutlineTextfieldWidget({
+  const CountryInput({
     super.key,
-    this.hintText = 'Ingresa tu texto',
     this.onFieldSubmitted,
+    this.onCountryCodeChange,
     this.onTapOutside,
-    required this.title,
+    required this.maxLength,
+    this.haveCounter,
+    this.hintText,
     this.textEditingController,
-    this.validator,
-    this.initialValue,
-    this.onChange,
-    this.marginTop = 10,
-    this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
-    this.readOnly = false,
-    this.isValid,
-    this.icon, // Permitir nulo como estado inicial
-    this.isRequired = false,
-    this.onTap,
-    this.maxLength = 500,
-    this.inputFormatters,
-  }) : haveCounter = false;
-  const OutlineTextfieldWidget.withCounter({
-    super.key,
-    this.hintText = 'Ingresa tu texto',
-    this.onFieldSubmitted,
-    this.onTapOutside,
     required this.title,
-    this.textEditingController,
     this.validator,
-    this.initialValue,
     this.onChange,
-    this.marginTop = 10,
-    this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
-    this.readOnly = false,
+    this.initialValue,
+    this.marginTop,
+    this.textInputType,
+    this.textCapitalization,
+    this.readOnly,
     this.isValid,
     this.icon,
-    this.isRequired = false,
-    this.maxLength = 500,
+    required this.isRequired,
     this.onTap,
     this.inputFormatters,
-  }) : haveCounter = true;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +81,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
               ),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -124,7 +106,24 @@ class OutlineTextfieldWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                     decoration: InputDecoration(
-                      prefixIcon: icon,
+                      prefixIcon: CountryCodePicker(
+                        hideSearch: true,
+                        dialogSize: const Size.fromHeight(520),
+                        headerText: 'Seleccionar Pais',
+                        padding: const EdgeInsets.all(2),
+                        onChanged: onCountryCodeChange,
+                        initialSelection: 'NI',
+                        countryFilter: const [
+                          'HN',
+                          'NI',
+                          'PA',
+                          'CR',
+                        ],
+                        showCountryOnly: false,
+                        showDropDownButton: true,
+                        showOnlyCountryWhenClosed: false,
+                        alignLeft: false,
+                      ),
                       counter: const Offstage(),
                       hintText: hintText,
                       border: InputBorder.none,

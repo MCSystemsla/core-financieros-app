@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,10 @@ class SelectSolicitudScreen extends StatelessWidget {
                   text: 'Solicitudes offline enviadas exitosamente!!',
                   repeat: false,
                   // isUploadingForms: true,
+                ),
+              OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
+                  errorMsg: state.msgError,
+                  onPressed: () {},
                 ),
               _ => Padding(
                   padding: const EdgeInsets.all(5),
@@ -137,16 +142,22 @@ class _SolicitudCardsRow1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Row(
       children: [
         const Gap(10),
         Expanded(
           child: SolicitudCard(
             onPressed: () {
+              if (!isConnected) {
+                context.pushReplacement('/solicitudes/solicitud-credito');
+                return;
+              }
               context.pushTransparentRoute(const AddUserCedulaScreen());
             },
             svgPath: ImageAsset.nuevaMenorBg,
-            title: 'Nueva Menor',
+            title: 'Nueva',
           ),
         ),
         const Gap(10),

@@ -20,16 +20,13 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     ));
   }
 
-  void saveFirmaAsesor({required String firmaAsesorPath}) {
-    emit(state.copyWith(firmaAsesor: firmaAsesorPath));
-  }
-
   Future<void> uploadUserFiles({
     required String fotoFirma,
     required int solicitudId,
     required String formularioKiva,
     required String tipoSolicitud,
     required String numero,
+    required String cedula,
   }) async {
     await repository.uploadUserFiles(
       imagen1: state.imagen1,
@@ -40,8 +37,8 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       formularioKiva: formularioKiva,
       database: LocalStorage().database,
       tipoSolicitud: tipoSolicitud,
-      fotoAsesorFirma: state.firmaAsesor,
       numero: numero,
+      cedula: cedula,
     );
   }
 
@@ -53,8 +50,8 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required int solicitudId,
     required String formularioKiva,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
+    required String cedula,
   }) async {
     await repository.uploadUserFilesOffline(
       imagen1: imagen1,
@@ -65,8 +62,8 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       formularioKiva: formularioKiva,
       database: LocalStorage().database,
       tipoSolicitud: tipoSolicitud,
-      imagenAsesor: imagenAsesor,
       numero: numero,
+      cedula: cedula,
     );
   }
 }

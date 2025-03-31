@@ -69,6 +69,7 @@ class _MejoraViviendaEntornoSocialState
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     final localDbProvider = global<ObjectBoxService>();
     final items = localDbProvider.departmentsBox.getAll();
     final departmentos =
@@ -100,56 +101,56 @@ class _MejoraViviendaEntornoSocialState
                         ),
                   ),
                   const Gap(20),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      validator: (value) {
-                        if (value == null) return 'input.input_validator'.tr();
-                        return null;
-                      },
-                      isContainIcon: true,
-                      title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                      items: ['input.yes'.tr(), 'input.no'.tr()],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        question1 = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
-                    ),
-                  ),
-                  const Gap(20),
-                  if (question1 == 'input.yes'.tr())
-                    CommentaryWidget(
-                      textEditingController: storeDescription,
-                      title: 'Cual?',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'input.input_validator'.tr();
-                        }
-                        return null;
-                      },
-                    ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    textEditingController: question2,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
+                  // WhiteCard(
+                  //   padding: const EdgeInsets.all(5),
+                  //   child: JLuxDropdown(
+                  //     validator: (value) {
+                  //       if (value == null) return 'input.input_validator'.tr();
+                  //       return null;
+                  //     },
+                  //     isContainIcon: true,
+                  //     title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
+                  //     items: ['input.yes'.tr(), 'input.no'.tr()],
+                  //     onChanged: (item) {
+                  //       if (item == null) return;
+                  //       question1 = item;
+                  //       setState(() {});
+                  //     },
+                  //     toStringItem: (item) {
+                  //       return item;
+                  //     },
+                  //     hintText: 'input.select_option'.tr(),
+                  //   ),
+                  // ),
+                  // const Gap(20),
+                  // if (question1 == 'input.yes'.tr())
+                  //   CommentaryWidget(
+                  //     textEditingController: storeDescription,
+                  //     title: 'Cual?',
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'input.input_validator'.tr();
+                  //       }
+                  //       return null;
+                  //     },
+                  //   ),
+                  // const Gap(20),
+                  // CommentaryWidget(
+                  //   textEditingController: question2,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'input.input_validator'.tr();
+                  //     }
+                  //     final numero = int.tryParse(value);
+                  //     if (numero == null || numero < 0 || numero >= 255) {
+                  //       return 'Valor no valido'.tr();
+                  //     }
 
-                      return null;
-                    },
-                    title: 'Tiempo de la actividad:* (MESES)',
-                    textInputType: TextInputType.number,
-                  ),
+                  //     return null;
+                  //   },
+                  //   title: 'Tiempo de la actividad:* (MESES)',
+                  //   textInputType: TextInputType.number,
+                  // ),
                   const Gap(20),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
@@ -241,69 +242,60 @@ class _MejoraViviendaEntornoSocialState
                     textEditingController: necesidadesController,
                     title: '¿Cuáles son las necesidades en su comunidad?',
                   ),
+                  // const Gap(20),
+                  // CommentaryWidget(
+                  //   textEditingController: question6,
+                  //   title: 'Número de personas a cargo:*',
+                  //   textInputType: TextInputType.number,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'input.input_validator'.tr();
+                  //     }
+                  //     final numero = int.tryParse(value);
+                  //     if (numero == null || numero < 0 || numero >= 255) {
+                  //       return 'Valor no valido'.tr();
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const Gap(20),
                   CommentaryWidget(
-                    textEditingController: question6,
-                    title: 'Número de personas a cargo:*',
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-                      return null;
-                    },
-                  ),
+                      title: 'Cantidad Hijos',
+                      textInputType: TextInputType.number,
+                      readOnly: true,
+                      initialValue: cantidadHijos.toString()),
                   const Gap(20),
-                  CommentaryWidget(
-                    textEditingController: question7,
-                    title: 'Número de hijos:*',
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'input.input_validator'.tr();
-                      }
-                      final numero = int.tryParse(value);
-                      if (numero == null || numero < 0 || numero >= 255) {
-                        return 'Valor no valido'.tr();
-                      }
-
-                      return null;
-                    },
-                  ),
-                  const Gap(20),
-                  CommentaryWidget(
-                    textEditingController: question8,
-                    title: '¿Que edades tienen sus hijos?',
-                  ),
-                  const Gap(20),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
-                      isContainIcon: true,
-                      title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                      items: const [
-                        'Ninguno',
-                        'Preescolar',
-                        'Primaria',
-                        'Secundaria',
-                        'Técnico',
-                        'Universitario'
-                      ],
-                      onChanged: (item) {
-                        if (item == null) return;
-                        question9 = item;
-                        setState(() {});
-                      },
-                      toStringItem: (item) {
-                        return item;
-                      },
-                      hintText: 'input.select_option'.tr(),
+                  if (cantidadHijos > 0) ...[
+                    CommentaryWidget(
+                      textEditingController: question8,
+                      title: '¿Que edades tienen sus hijos?',
                     ),
-                  ),
+                    const Gap(20),
+                    WhiteCard(
+                      padding: const EdgeInsets.all(5),
+                      child: JLuxDropdown(
+                        isContainIcon: true,
+                        title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                        items: const [
+                          'Ninguno',
+                          'Preescolar',
+                          'Primaria',
+                          'Secundaria',
+                          'Técnico',
+                          'Universitario'
+                        ],
+                        onChanged: (item) {
+                          if (item == null) return;
+                          question9 = item;
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item;
+                        },
+                        hintText: 'input.select_option'.tr(),
+                      ),
+                    ),
+                  ],
                   const Gap(20),
                   ButtonActionsWidget(
                     onPreviousPressed: () {
@@ -341,22 +333,6 @@ class _MejoraViviendaEntornoSocialState
                         context.read<ResponseCubit>().addResponses(
                           responses: [
                             Response(
-                              question:
-                                  '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                              response: question1 ?? 'N/A',
-                              index: 1,
-                            ),
-                            Response(
-                              question: '¿Cuál?',
-                              response: storeDescription.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
-                              question: 'Tiempo de la actividad:*',
-                              response: question2.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
                               question: '¿Tiene otros ingresos?¿Cuales?*',
                               response: question3 ?? 'N/A',
                               index: 1,
@@ -385,13 +361,8 @@ class _MejoraViviendaEntornoSocialState
                               index: 1,
                             ),
                             Response(
-                              question: 'Número de personas a cargo:*'.tr(),
-                              response: question6.text.trim(),
-                              index: 1,
-                            ),
-                            Response(
-                              question: 'Número de hijos:*'.tr(),
-                              response: question7.text.trim(),
+                              question: 'Cantidad Hijos'.tr(),
+                              response: cantidadHijos.toString(),
                               index: 1,
                             ),
                             Response(
@@ -462,6 +433,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
 
   @override
   Widget build(BuildContext context) {
+    final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -482,61 +454,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
-                    return null;
-                  },
-                  onChanged: (item) {
-                    if (item == null) return;
-                    question1 = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-              const Gap(20),
-              if (question1 == 'input.yes'.tr())
-                CommentaryWidget(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
-                  title: 'Cual?',
-                  textEditingController: cualesOtroTrabajoController,
-                ),
-              // if (question1 == 'input.yes'.tr())
-              //   CommentaryWidget(
-              //     textEditingController: storeDescription,
-              //     title: 'Cual?',
-              //   ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: question2,
-                title: 'Tiempo de la actividad:*',
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
               ),
               const Gap(20),
               WhiteCard(
@@ -575,7 +492,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   },
                 ),
               const Gap(20),
-
               WhiteCard(
                 padding: const EdgeInsets.all(5),
                 child: JLuxDropdown(
@@ -608,66 +524,42 @@ class _RecurrentFormState extends State<_RecurrentForm>
               ),
               const Gap(20),
               CommentaryWidget(
-                textEditingController: question6,
-                title: 'Número de personas a cargo:*',
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
+                readOnly: true,
+                initialValue: cantidadHijos.toString(),
+                title: 'Cantidad Hijos:',
               ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: question7,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  final numero = int.tryParse(value);
-                  if (numero == null || numero < 0) {
-                    return 'Valor no valido'.tr();
-                  }
-                  return null;
-                },
-                textInputType: TextInputType.number,
-                title: 'Número de hijos:*',
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: question8,
-                title: '¿Que edades tienen sus hijos?',
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
-                  items: const [
-                    'Ninguno',
-                    'Preescolar',
-                    'Primaria',
-                    'Secundaria',
-                    'Técnico',
-                    'Universitario'
-                  ],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    question9 = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+              if (cantidadHijos > 0) ...[
+                const Gap(20),
+                CommentaryWidget(
+                  textEditingController: question8,
+                  title: '¿Que edades tienen sus hijos?',
                 ),
-              ),
+                const Gap(20),
+                WhiteCard(
+                  padding: const EdgeInsets.all(5),
+                  child: JLuxDropdown(
+                    isContainIcon: true,
+                    title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
+                    items: const [
+                      'Ninguno',
+                      'Preescolar',
+                      'Primaria',
+                      'Secundaria',
+                      'Técnico',
+                      'Universitario'
+                    ],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      question9 = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
+                ),
+              ],
               const Gap(20),
               ButtonActionsWidget(
                 onPreviousPressed: () {
@@ -685,16 +577,11 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               .read<KivaRouteCubit>()
                               .state
                               .tipoSolicitud,
-                          tieneTrabajo: question1 == 'input.yes'.tr(),
-                          tiempoActividad: int.tryParse(question2.text),
                           otrosIngresos: question3 == 'input.yes'.tr(),
                           objTipoComunidadId: question5,
                           necesidadesComunidad:
                               necesidadesController.text.trim(),
                           personasCargo: question6.text.trim(),
-                          numeroHijos: int.parse(
-                            question7.text.trim(),
-                          ),
                           edadHijos: question8.text.trim(),
                           tipoEstudioHijos: question9,
                           otrosIngresosDescripcion:
@@ -704,22 +591,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
-                        Response(
-                          index: 1,
-                          question: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                          response: question1 ?? 'N/A',
-                        ),
-                        if (question1 == 'input.yes'.tr())
-                          Response(
-                            index: 1,
-                            question: 'Cual?',
-                            response: cualesOtroTrabajoController.text.trim(),
-                          ),
-                        Response(
-                          index: 1,
-                          question: 'Tiempo de la actividad:*',
-                          response: question2.text.trim(),
-                        ),
                         Response(
                           index: 1,
                           question: '¿Tiene otros ingresos?¿Cuales?*',
@@ -746,11 +617,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           index: 1,
                           question: 'Número de personas a cargo:*',
                           response: question6.text.trim(),
-                        ),
-                        Response(
-                          index: 1,
-                          question: 'Número de hijos:*',
-                          response: question7.text.trim(),
                         ),
                         Response(
                           index: 1,

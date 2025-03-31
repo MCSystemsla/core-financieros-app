@@ -50,28 +50,21 @@ class RecurrenteEstandarModel {
   Map<String, dynamic> toJson() => {
         'tipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
-        'otrosIngresos': otrosIngresos,
-        'otrosIngresosDescripcion':
+        'OtrosIngresos': otrosIngresos,
+        'OtrosIngresosDescripcion':
             otrosIngresosDescripcion.isEmpty ? null : otrosIngresosDescripcion,
-        'personasCargo': personasCargo,
-        'numeroHijos': numeroHijos,
-        'edadHijos': edadHijos,
-        'tipoEstudioHijos': tipoEstudioHijos,
-        'apoyanNegocio': apoyanNegocio,
-        'cuantosApoyan': cuantosApoyan.isEmpty ? null : cuantosApoyan,
+        'EdadHijos': edadHijos,
+        'TipoEstudioHijos': tipoEstudioHijos,
+        'ApoyanNegocio': apoyanNegocio,
+        'CuantosApoyan': cuantosApoyan.isEmpty ? null : cuantosApoyan,
         'objSolicitudId': objSolicitudRecurrenteId,
-        'coincideRespuesta': coincideRespuesta,
-        'explicacionInversion':
+        'CoincideRespuesta': coincideRespuesta,
+        'ExplicacionInversion':
             explicacionInversion.isEmpty ? null : explicacionInversion,
-        'comoMejoraEntorno': comoMejoraEntorno,
-        'motivoPrestamo': motivoPrestamo,
-        'comoFortalece': comoFortalece,
-        'siguientePaso': siguientePaso,
-        'personaAutoSuficiente': personaAutoSuficiente,
-        'tieneTrabajo': tieneTrabajo,
-        'tiempoActividadMeses': tiempoActividad,
-        'trabajoNegocioDescripcion': trabajoNegocioDescripcion.isEmpty
-            ? null
-            : trabajoNegocioDescripcion,
+        'ComoMejoroEntorno': comoMejoraEntorno,
+        'MotivoPrestamo': motivoPrestamo,
+        'ComoFortalece': comoFortalece,
+        'SiguientePaso': siguientePaso,
+        'PersonaAutoSuficiente': personaAutoSuficiente,
       };
 }

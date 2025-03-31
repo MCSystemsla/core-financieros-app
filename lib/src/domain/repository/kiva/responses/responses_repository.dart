@@ -69,8 +69,8 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String fotoAsesorFirma,
     required String numero,
+    required String cedula,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -81,8 +81,8 @@ abstract class ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
+    required String cedula,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -293,8 +293,8 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String fotoAsesorFirma,
     required String numero,
+    required String cedula,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -309,6 +309,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
+      request.fields['cedula'] = cedula;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
@@ -344,12 +345,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   filename: fotoCedula,
       //   contentType: MediaType('image', 'jpeg'),
       // ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigitalAsesor',
-        fotoAsesorFirma,
-        filename: fotoAsesorFirma,
-        contentType: MediaType('image', 'png'),
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'fotoFirmaDigitalAsesor',
+      //   fotoAsesorFirma,
+      //   filename: fotoAsesorFirma,
+      //   contentType: MediaType('image', 'png'),
+      // ));
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -361,7 +362,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
-            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
       }
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
@@ -441,8 +442,8 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String formularioKiva,
     required String database,
     required String tipoSolicitud,
-    required String imagenAsesor,
     required String numero,
+    required String cedula,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
     const apiUrl = String.fromEnvironment('apiUrl');
@@ -457,6 +458,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
+      request.fields['cedula'] = cedula;
 
       request.files.add(await http.MultipartFile.fromPath(
         'fotoCliente1',
@@ -492,12 +494,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   filename: fotoCedula,
       //   contentType: MediaType('image', 'jpg'),
       // ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigitalAsesor',
-        imagenAsesor,
-        filename: imagenAsesor,
-        contentType: MediaType('image', 'png'),
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'fotoFirmaDigitalAsesor',
+      //   imagenAsesor,
+      //   filename: imagenAsesor,
+      //   contentType: MediaType('image', 'png'),
+      // ));
       request.headers.addAll({
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
@@ -509,7 +511,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
-            'Error del servidor: ${response.statusCode}, ${responseBody.body}');
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
       }
 
       _logger.i(response.reasonPhrase);

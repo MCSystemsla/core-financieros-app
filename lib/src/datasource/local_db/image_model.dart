@@ -11,5 +11,4 @@ class ImageModel {
   String? imagen3;
   String? imagen4;
   String? imagenFirma;
-  String? imagenAsesor;
 }

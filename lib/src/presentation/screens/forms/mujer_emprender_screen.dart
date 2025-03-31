@@ -19,7 +19,6 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/asesor_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_impacto_social_widget.dart';
@@ -103,12 +102,13 @@ class MujerEmprenderScreen extends StatelessWidget {
               FormResponses(
                 controller: pageController,
               ),
-              AsesorSignatureWidget(
-                pageController: pageController,
-              ),
               isRecurrentForm
-                  ? const _RecurrentSignSignature()
-                  : const _SignSignature(),
+                  ? _RecurrentSignSignature(
+                      controller: pageController,
+                    )
+                  : _SignSignature(
+                      controller: pageController,
+                    ),
             ],
           ),
         ),
@@ -118,7 +118,8 @@ class MujerEmprenderScreen extends StatelessWidget {
 }
 
 class _RecurrentSignSignature extends StatefulWidget {
-  const _RecurrentSignSignature();
+  final PageController controller;
+  const _RecurrentSignSignature({required this.controller});
 
   @override
   State<_RecurrentSignSignature> createState() =>
@@ -226,6 +227,7 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -321,7 +323,6 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -343,6 +344,19 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],
@@ -402,7 +416,8 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
 }
 
 class _SignSignature extends StatefulWidget {
-  const _SignSignature();
+  final PageController controller;
+  const _SignSignature({required this.controller});
 
   @override
   State<_SignSignature> createState() => _SignSignatureState();
@@ -508,6 +523,7 @@ class _SignSignatureState extends State<_SignSignature> {
                       await file.writeAsBytes(signatureImage!);
                       if (!context.mounted) return;
                       context.read<UploadUserFileCubit>().uploadUserFiles(
+                            cedula: context.read<KivaRouteCubit>().state.cedula,
                             numero: context.read<KivaRouteCubit>().state.numero,
                             tipoSolicitud: context
                                 .read<KivaRouteCubit>()
@@ -603,7 +619,6 @@ class _SignSignatureState extends State<_SignSignature> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
-                                      ..imagenAsesor = imageProvider.firmaAsesor
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -625,6 +640,19 @@ class _SignSignatureState extends State<_SignSignature> {
                       },
                     );
                   },
+                ),
+                const Gap(10),
+                Expanded(
+                  flex: 0,
+                  child: CustomElevatedButton(
+                    alignment: MainAxisAlignment.center,
+                    text: 'Regresar',
+                    color: Colors.red,
+                    onPressed: () => widget.controller.previousPage(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeIn,
+                    ),
+                  ),
                 ),
                 const Gap(10),
               ],

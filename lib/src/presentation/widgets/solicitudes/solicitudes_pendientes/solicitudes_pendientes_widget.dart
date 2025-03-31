@@ -141,7 +141,7 @@ class SolicitudesPendientesWidget extends StatelessWidget {
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
                 .capitalizeAll,
-        location: solicitud.cedula ?? 'N/A',
+        location: solicitud.cedula?.dashFormat ?? 'N/A',
         dateToStart: solicitud.email ?? 'N/A',
         dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
             ?.selectorFormat(),
