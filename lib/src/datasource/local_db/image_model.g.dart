@@ -37,18 +37,13 @@ const ImageModelSchema = CollectionSchema(
       name: r'imagen4',
       type: IsarType.string,
     ),
-    r'imagenAsesor': PropertySchema(
-      id: 4,
-      name: r'imagenAsesor',
-      type: IsarType.string,
-    ),
     r'imagenFirma': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'imagenFirma',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'solicitudId',
       type: IsarType.long,
     )
@@ -98,12 +93,6 @@ int _imageModelEstimateSize(
     }
   }
   {
-    final value = object.imagenAsesor;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
     final value = object.imagenFirma;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -122,9 +111,8 @@ void _imageModelSerialize(
   writer.writeString(offsets[1], object.imagen2);
   writer.writeString(offsets[2], object.imagen3);
   writer.writeString(offsets[3], object.imagen4);
-  writer.writeString(offsets[4], object.imagenAsesor);
-  writer.writeString(offsets[5], object.imagenFirma);
-  writer.writeLong(offsets[6], object.solicitudId);
+  writer.writeString(offsets[4], object.imagenFirma);
+  writer.writeLong(offsets[5], object.solicitudId);
 }
 
 ImageModel _imageModelDeserialize(
@@ -139,9 +127,8 @@ ImageModel _imageModelDeserialize(
   object.imagen2 = reader.readStringOrNull(offsets[1]);
   object.imagen3 = reader.readStringOrNull(offsets[2]);
   object.imagen4 = reader.readStringOrNull(offsets[3]);
-  object.imagenAsesor = reader.readStringOrNull(offsets[4]);
-  object.imagenFirma = reader.readStringOrNull(offsets[5]);
-  object.solicitudId = reader.readLongOrNull(offsets[6]);
+  object.imagenFirma = reader.readStringOrNull(offsets[4]);
+  object.solicitudId = reader.readLongOrNull(offsets[5]);
   return object;
 }
 
@@ -163,8 +150,6 @@ P _imageModelDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
-    case 6:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -912,160 +897,6 @@ extension ImageModelQueryFilter
   }
 
   QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'imagenAsesor',
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'imagenAsesor',
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'imagenAsesor',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'imagenAsesor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'imagenAsesor',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagenAsesor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
-      imagenAsesorIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'imagenAsesor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
       imagenFirmaIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1350,18 +1181,6 @@ extension ImageModelQuerySortBy
     });
   }
 
-  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortByImagenAsesor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenAsesor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortByImagenAsesorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenAsesor', Sort.desc);
-    });
-  }
-
   QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortByImagenFirma() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'imagenFirma', Sort.asc);
@@ -1449,18 +1268,6 @@ extension ImageModelQuerySortThenBy
     });
   }
 
-  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> thenByImagenAsesor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenAsesor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> thenByImagenAsesorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imagenAsesor', Sort.desc);
-    });
-  }
-
   QueryBuilder<ImageModel, ImageModel, QAfterSortBy> thenByImagenFirma() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'imagenFirma', Sort.asc);
@@ -1516,13 +1323,6 @@ extension ImageModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<ImageModel, ImageModel, QDistinct> distinctByImagenAsesor(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'imagenAsesor', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<ImageModel, ImageModel, QDistinct> distinctByImagenFirma(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1566,12 +1366,6 @@ extension ImageModelQueryProperty
   QueryBuilder<ImageModel, String?, QQueryOperations> imagen4Property() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'imagen4');
-    });
-  }
-
-  QueryBuilder<ImageModel, String?, QQueryOperations> imagenAsesorProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'imagenAsesor');
     });
   }
 

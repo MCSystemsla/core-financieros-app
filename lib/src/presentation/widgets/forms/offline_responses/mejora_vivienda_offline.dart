@@ -71,7 +71,6 @@ class _ViviendaNuevaOfflineResponseState
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -105,31 +104,6 @@ class _ViviendaNuevaOfflineResponseState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue:
-                            state.mejoraViviendaDbLocal?.tieneTrabajo ?? false
-                                ? 'input.yes'.tr()
-                                : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.mejoraViviendaDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                        title: 'Cual?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state
-                                .mejoraViviendaDbLocal?.tiempoActividad
-                                .toString() ??
-                            '0',
-                        title: 'Tiempo de la actividad:*',
-                      ),
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
@@ -173,17 +147,10 @@ class _ViviendaNuevaOfflineResponseState
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
-                        initialValue:
-                            state.mejoraViviendaDbLocal?.personasCargo ?? 'N/A',
-                        title: 'Número de personas a cargo:*',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
                         initialValue: state.mejoraViviendaDbLocal?.numeroHijos
                                 .toString() ??
                             'N/A',
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         textInputType: TextInputType.number,
                       ),
                       const Gap(20),
@@ -348,7 +315,6 @@ class _RecurrenteViviendaOfflineResponseState
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -382,33 +348,6 @@ class _RecurrenteViviendaOfflineResponseState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
-                                    ?.tieneTrabajo ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title: '¿Tiene algún trabajo o negocio? ¿Cuál?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        title: 'Cual?',
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.trabajoNegocioDescripcion ??
-                            'N/A',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.tiempoActividad
-                                .toString() ??
-                            '0',
-                        title: 'Tiempo de la actividad:*',
-                      ),
                       const Gap(20),
                       CommentaryWidget(
                         readOnly: true,
@@ -447,19 +386,10 @@ class _RecurrenteViviendaOfflineResponseState
                       CommentaryWidget(
                         readOnly: true,
                         initialValue: state.recurrenteMejoraViviendaDbLocal
-                                ?.personasCargo ??
-                            'N/A',
-                        title: 'Número de personas a cargo:*',
-                        textInputType: TextInputType.number,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue: state.recurrenteMejoraViviendaDbLocal
                                 ?.trabajoNegocioDescripcion ??
                             'N/A',
                         textInputType: TextInputType.number,
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                       ),
                       const Gap(20),
                       CommentaryWidget(

@@ -142,12 +142,18 @@ class _SolicitudCardsRow1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Row(
       children: [
         const Gap(10),
         Expanded(
           child: SolicitudCard(
             onPressed: () {
+              if (!isConnected) {
+                context.pushReplacement('/solicitudes/solicitud-credito');
+                return;
+              }
               context.pushTransparentRoute(const AddUserCedulaScreen());
             },
             svgPath: ImageAsset.nuevaMenorBg,

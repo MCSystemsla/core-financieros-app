@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +54,7 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
               ),
             Status.error => OnErrorWidget(
                 needToGoBack: true,
-                errorMsg: state.errorMsg,
+                errorMsg: state.errorMsg.capitalizeAll,
                 onPressed: () {
                   context
                       .read<SolicitudNuevaMenorCubit>()

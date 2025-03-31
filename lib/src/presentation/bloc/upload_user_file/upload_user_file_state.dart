@@ -7,19 +7,16 @@ class UploadUserFileState extends Equatable {
   final String imagen3;
   final String imagen4;
   final String fotoFirma;
-  final String firmaAsesor;
   const UploadUserFileState({
     this.imagen3 = '',
     this.imagen4 = '',
     this.imagen1 = '',
     this.imagen2 = '',
     this.fotoFirma = '',
-    this.firmaAsesor = '',
   });
 
   @override
-  List<Object> get props =>
-      [imagen1, imagen2, imagen3, imagen4, fotoFirma, firmaAsesor];
+  List<Object> get props => [imagen1, imagen2, imagen3, imagen4, fotoFirma];
 
   UploadUserFileState copyWith({
     String? imagen1,
@@ -27,7 +24,6 @@ class UploadUserFileState extends Equatable {
     String? imagen3,
     String? imagen4,
     String? fotoFirma,
-    String? firmaAsesor,
   }) {
     return UploadUserFileState(
       imagen1: imagen1 ?? this.imagen1,
@@ -35,7 +31,6 @@ class UploadUserFileState extends Equatable {
       imagen3: imagen3 ?? this.imagen3,
       imagen4: imagen4 ?? this.imagen4,
       fotoFirma: fotoFirma ?? this.fotoFirma,
-      firmaAsesor: firmaAsesor ?? this.firmaAsesor,
     );
   }
 }

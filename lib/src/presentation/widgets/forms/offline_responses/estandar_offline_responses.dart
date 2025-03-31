@@ -72,7 +72,6 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     imagen2: resp.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: resp.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -125,17 +124,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        readOnly: true,
-                        textInputType: TextInputType.number,
-                        initialValue: resp
-                                .recurrenteEstandarDbLocal?.personasCargo
-                                .toString() ??
-                            '0',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         readOnly: true,
                         initialValue: resp
                                 .recurrenteEstandarDbLocal?.numeroHijos
@@ -398,7 +387,6 @@ class _EstandarFormState extends State<EstandarForm> {
                     imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
                     imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
-                    imagenAsesor: state.imageModel?.imagenAsesor ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -459,15 +447,7 @@ class _EstandarFormState extends State<EstandarForm> {
                       ),
                       const Gap(20),
                       CommentaryWidget(
-                        title: 'Número de personas a cargo:*',
-                        initialValue:
-                            state.estandarDbLocal?.personasCargo.toString() ??
-                                'N/A',
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        title: 'Número de hijos:*',
+                        title: 'Cantidad de hijos:*',
                         initialValue:
                             state.estandarDbLocal?.numeroHijos.toString() ??
                                 'N/A',

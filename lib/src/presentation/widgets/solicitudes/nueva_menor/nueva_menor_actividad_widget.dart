@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/sending/sending_form_widget.dart';
@@ -34,7 +35,7 @@ class _NuevaMenorBeneficiarioWidgetState
     with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
-  String? parentesco;
+  Item? parentesco;
   String? beneficiarioSeguro1;
   String? cedulaBeneficiarioSeguro1;
   String? parentescoBeneficiarioSeguro1;
@@ -90,7 +91,7 @@ class _NuevaMenorBeneficiarioWidgetState
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
-                parentesco = item.value;
+                parentesco = item;
               },
             ),
             const Gap(20),
@@ -189,9 +190,10 @@ class _NuevaMenorBeneficiarioWidgetState
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objParentescoBeneficiarioSeguroId1Ver: parentesco?.name,
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco,
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
                         beneficiarioSeguro1: beneficiarioSeguro1,
                         cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
                         objParentescoBeneficiarioSeguroId1:
@@ -209,7 +211,7 @@ class _NuevaMenorBeneficiarioWidgetState
                                     (telefonoBeneficiario1 ?? '')
                                         .trim()
                                         .replaceAll('-', ''),
-                        isDone: true,
+                        isDone: !isConnected,
                       );
                   if (!isConnected) {
                     CustomAlertDialog(

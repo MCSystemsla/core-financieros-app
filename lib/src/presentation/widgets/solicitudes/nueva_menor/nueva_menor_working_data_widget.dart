@@ -30,11 +30,11 @@ class _NuevaMenorWorkingDataWidgetState
     extends State<NuevaMenorWorkingDataWidget>
     with AutomaticKeepAliveClientMixin {
   String? initialValue;
-  String? paisDomicilio;
-  String? departamentoDomicilio;
-  String? municipioDomicilio;
+  Item? paisDomicilio;
+  Item? departamentoDomicilio;
+  Item? municipioDomicilio;
   String? barrioCasa;
-  String? condicionCasa;
+  Item? condicionCasa;
   String? anosResidirCasa;
   String? comunidad;
   String? direccionCasa;
@@ -57,7 +57,7 @@ class _NuevaMenorWorkingDataWidgetState
               title: 'Pais Domicilio',
               onChanged: (item) {
                 if (item == null) return;
-                paisDomicilio = item.valor;
+                paisDomicilio = Item(name: item.nombre, value: item.valor);
                 depWhereClause = item.valor;
 
                 setState(() {});
@@ -74,7 +74,8 @@ class _NuevaMenorWorkingDataWidgetState
                 title: 'Departamento Domicilio',
                 onChanged: (item) {
                   if (item == null) return;
-                  departamentoDomicilio = item.valor;
+                  departamentoDomicilio =
+                      Item(name: item.nombre, value: item.valor);
                   munWhereClause = item.valor;
 
                   setState(() {});
@@ -96,7 +97,8 @@ class _NuevaMenorWorkingDataWidgetState
 
                 onChanged: (item) {
                   if (item == null) return;
-                  municipioDomicilio = item.valor;
+                  municipioDomicilio =
+                      Item(name: item.nombre, value: item.valor);
                 },
                 codigo: 'MUN',
                 // initialValue: paisEmisor ?? '',
@@ -138,7 +140,7 @@ class _NuevaMenorWorkingDataWidgetState
               codigo: 'TIPOVIVIENDA',
               onChanged: (item) {
                 if (item == null) return;
-                condicionCasa = item.value;
+                condicionCasa = Item(name: item.name, value: item.value);
               },
             ),
             const Gap(20),
@@ -192,11 +194,15 @@ class _NuevaMenorWorkingDataWidgetState
                       await geolocationService.getCurrentLocation();
                   if (!context.mounted) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objCondicionCasaIdVer: condicionCasa?.name,
+                        objMunicipioCasaIdVer: municipioDomicilio?.name,
+                        objDepartamentoCasaIdVer: departamentoDomicilio?.name,
+                        objPaisCasaIdVer: paisDomicilio?.name,
                         barrioCasa: barrioCasa,
-                        objPaisCasaId: paisDomicilio,
-                        objDepartamentoCasaId: departamentoDomicilio,
-                        objMunicipioCasaId: municipioDomicilio,
-                        objCondicionCasaId: condicionCasa,
+                        objPaisCasaId: paisDomicilio?.value,
+                        objDepartamentoCasaId: departamentoDomicilio?.value,
+                        objMunicipioCasaId: municipioDomicilio?.value,
+                        objCondicionCasaId: condicionCasa?.value,
                         anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
                         ubicacion: comunidad,
                         ubicacionLatitud: currentLocation?.latitude.toString(),

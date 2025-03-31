@@ -29,6 +29,7 @@ class NuevaMenorOffline3Widget extends StatefulWidget {
 
 class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
   String? estadoCivil;
+  String? objEstadoCivilIdVer;
   String? nacionalidadConyuge;
   String? nombreConyuge;
   String? trabajaConyuge;
@@ -44,6 +45,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
   @override
   void initState() {
     estadoCivil = widget.responseLocalDb.objEstadoCivilId;
+    objEstadoCivilIdVer = widget.responseLocalDb.objEstadoCivilIdVer;
     esFamiliarEmpleado = widget.responseLocalDb.esFamiliarEmpleado!
         ? 'input.yes'.tr()
         : 'input.no'.tr();
@@ -73,13 +75,13 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
           children: [
             const Gap(20),
             SearchDropdownWidget(
-              hintText: widget.responseLocalDb.objEstadoCivilId ??
-                  'Selecciona una Opcion',
+              hintText: objEstadoCivilIdVer ?? 'Selecciona una Opcion',
               title: 'Estado Civil',
               codigo: 'ESTADOCIVIL',
               onChanged: (item) {
                 if (item == null) return;
                 estadoCivil = item.value;
+                objEstadoCivilIdVer = item.name;
                 setState(() {});
               },
               validator: (value) =>
@@ -274,6 +276,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objEstadoCivilIdVer: objEstadoCivilIdVer,
                         objEstadoCivilId: estadoCivil,
                         nacionalidadConyugue: nacionalidadConyuge,
                         nombreConyugue: nombreConyuge,

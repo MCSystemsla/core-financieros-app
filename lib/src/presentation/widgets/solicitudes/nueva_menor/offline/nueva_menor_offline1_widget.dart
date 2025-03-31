@@ -36,16 +36,22 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   DateTime? _selectedDate;
 
   String? tipoPersonaCredito;
+  String? tipoPersonaCreditoVer;
   String? nombre1;
   String? nombre2;
   String? apellido1;
   String? apellido2;
   String? tipoDocumento;
+  String? tipoDocumentoVer;
   String? paisEmisor;
+  String? paisEmisorVer;
   String? paisNacimiento;
+  String? paisNacimientoVer;
   String? fechaVencimientoCedula;
   String? sexo;
+  String? sexoVer;
   String? escolaridad;
+  String? escolaridadVer;
   String? email;
   String? cedula;
   String? fechaEmisionCedula;
@@ -111,6 +117,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   void initState() {
     super.initState();
     sexo = widget.responseLocalDb.objSexoId;
+    sexoVer = widget.responseLocalDb.objSexoIdVer;
     fechaVencimientoCedula = widget.responseLocalDb.fechaVencimientoCedula;
     email = widget.responseLocalDb.email;
     tipoPersonaCredito = widget.responseLocalDb.tipoPersona;
@@ -134,6 +141,11 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
     nacionalidad = widget.responseLocalDb.nacionalidad;
     paisNacimiento = widget.responseLocalDb.objPaisNacimientoId;
     escolaridad = widget.responseLocalDb.objEscolaridadId;
+    tipoPersonaCreditoVer = widget.responseLocalDb.objTipoPersonaIdVer;
+    tipoDocumentoVer = widget.responseLocalDb.objTipoDocumentoIdVer;
+    paisEmisorVer = widget.responseLocalDb.objPaisEmisorCedulaVer;
+    paisNacimientoVer = widget.responseLocalDb.objPaisNacimientoIdVer;
+    escolaridadVer = widget.responseLocalDb.objEscolaridadIdVer;
   }
 
   @override
@@ -146,11 +158,12 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
           children: [
             const Gap(30),
             SearchDropdownWidget(
-              hintText: tipoPersonaCredito ?? 'input.select_option'.tr(),
+              hintText: tipoPersonaCreditoVer ?? 'input.select_option'.tr(),
               codigo: 'TIPOSPERSONACREDITO',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 tipoPersonaCredito = item.value;
+                tipoPersonaCreditoVer = item.name;
               },
               title: 'Tipo de Persona',
               validator: (value) =>
@@ -247,11 +260,12 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             SearchDropdownWidget(
               // initialValue: '',
-              hintText: tipoDocumento ?? 'input.select_option'.tr(),
+              hintText: tipoDocumentoVer ?? 'input.select_option'.tr(),
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 tipoDocumento = item.value;
+                tipoDocumentoVer = item.name;
                 setState(() {});
               },
               title: 'Tipo Documento',
@@ -279,17 +293,18 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             CatalogoValorNacionalidad(
               initialValue: ItemNacionalidad(
                 id: 0,
-                valor: paisEmisor ?? '',
-                nombre: paisEmisor ?? '',
+                valor: paisEmisorVer ?? '',
+                nombre: paisEmisorVer ?? '',
                 relacion: '',
               ),
 
-              hintText: paisEmisor ?? 'Selecciona un Pais',
+              hintText: paisEmisorVer ?? 'Selecciona un Pais',
               // hintText: state.userCedulaResponse.pais,
               title: 'Pais Emisor',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisEmisor = item.valor;
+                paisEmisorVer = item.nombre;
                 setState(() {});
               },
               codigo: 'PAIS',
@@ -367,11 +382,11 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: paisNacimiento ?? 'Selecciona Pais de Nacimiento',
+              hintText: paisNacimientoVer ?? 'Selecciona Pais de Nacimiento',
               initialValue: ItemNacionalidad(
                 id: 0,
                 valor: paisNacimiento ?? '',
-                nombre: paisNacimiento ?? '',
+                nombre: paisNacimientoVer ?? '',
                 relacion: '',
               ),
 
@@ -379,6 +394,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisNacimiento = item.valor;
+                paisNacimientoVer = item.nombre;
               },
               codigo: 'PAIS',
               validator: (value) =>
@@ -387,15 +403,16 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             CatalogoValorDropdownWidget(
-              hintText: sexo ?? 'Ingresar Genero',
+              hintText: sexoVer ?? 'Ingresar Genero',
               isRequired: true,
               codigo: 'SEXO',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 sexo = item.valor;
+                sexoVer = item.nombre;
               },
               title: 'Sexo',
-              initialValue: widget.responseLocalDb.objSexoId,
+              initialValue: sexoVer,
             ),
             const Gap(30),
             OutlineTextfieldWidget.withCounter(
@@ -450,11 +467,12 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             SearchDropdownWidget(
               // initialValue: '',
-              hintText: escolaridad ?? 'Selecciona una opcion',
+              hintText: escolaridadVer ?? 'Selecciona una opcion',
               codigo: 'ESCOLARIDAD',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 escolaridad = item.value;
+                escolaridadVer = item.name;
               },
               title: 'Escolaridad',
               isRequired: true,
@@ -471,6 +489,12 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                        objPaisNacimientoIdVer: paisNacimientoVer,
+                        objSexoIdVer: sexoVer,
+                        objEscolaridadIdVer: escolaridadVer,
+                        objPaisEmisorCedulaVer: paisEmisorVer,
+                        objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                        objTipoDocumentoIdVer: tipoDocumentoVer,
                         localSolicitudId: widget.responseLocalDb.id,
                         nombre1: nombre1,
                         nombre2: nombre2,
