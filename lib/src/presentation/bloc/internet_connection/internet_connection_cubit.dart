@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +11,19 @@ part 'internet_connection_state.dart';
 /// Cubit para gestionar el estado de la conexión a Internet.
 
 class InternetConnectionCubit extends Cubit<InternetConnectionState> {
-  InternetConnectionCubit() : super(InternetConnectionInitial());
+  StreamSubscription<List<ConnectivityResult>>? connectivitySubscription;
+
+  InternetConnectionCubit() : super(InternetConnectionInitial()) {
+    startMonitoring();
+  }
+
+  void startMonitoring() {
+    connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      getInternetStatusConnection();
+    });
+  }
 
   /// Verifica el estado de la conexión a Internet.
   ///
