@@ -18,6 +18,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import 'src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
 class App extends StatelessWidget {
@@ -62,6 +63,7 @@ class App extends StatelessWidget {
           create: (ctx) => UserByCedulaCubit(SolicitudCreditoRepositoryImpl()),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+        BlocProvider(create: (ctx) => BiometricCubit()),
       ],
       child: BlocConsumer<LangCubit, LangState>(
         listener: (context, state) async {
