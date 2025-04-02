@@ -8,17 +8,24 @@ import 'package:flutter/material.dart';
 part 'biometric_state.dart';
 
 class BiometricCubit extends Cubit<BiometricState> {
-  BiometricCubit() : super(BiometricInitial());
-  void authenticate(BuildContext context) async {
+  final BiometricAuthService _biometricAuthService;
+
+  BiometricCubit(this._biometricAuthService) : super(BiometricInitial());
+
+  Future<void> authenticate(BuildContext context) async {
     try {
-      final isAuth = await BiometricAuthService().authenticate();
+      final isAuth = await _biometricAuthService.authenticate();
       if (!isAuth) {
         if (!context.mounted) return;
-        context.pushTransparentRoute(const BiometricNeedAuthScreen());
+        _navigateToBiometricAuthScreen(context);
       }
       emit(state.copyWith(isAuthenticated: isAuth));
     } catch (e) {
       emit(state.copyWith(isAuthenticated: false, isBiometricAvailable: false));
     }
+  }
+
+  void _navigateToBiometricAuthScreen(BuildContext context) {
+    context.pushTransparentRoute(const BiometricNeedAuthScreen());
   }
 }
