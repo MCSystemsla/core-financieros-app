@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -11,10 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AddUserCedulaScreen extends StatelessWidget {
-  const AddUserCedulaScreen({super.key});
+  final TypeForm typeForm;
+  const AddUserCedulaScreen({super.key, required this.typeForm});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,12 @@ class AddUserCedulaScreen extends StatelessWidget {
       CustomAlertDialog(
         context: context,
         title: '$firstName $lastName listo para crear solicitud!!',
-        onDone: () => context.pushReplacement('/solicitudes/solicitud-credito'),
+        onDone: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => CrearSolicitudScreen(typeForm: typeForm)),
+          ),
+        ),
       ).showDialog(context, dialogType: DialogType.success);
     }
 
@@ -35,7 +41,12 @@ class AddUserCedulaScreen extends StatelessWidget {
       AddUserCedulaDialog(
         context: context,
         title: errorMsg,
-        onDone: () => context.pushReplacement('/solicitudes/solicitud-credito'),
+        onDone: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => CrearSolicitudScreen(typeForm: typeForm)),
+          ),
+        ),
       ).showDialog(context, dialogType: DialogType.warning);
     }
 

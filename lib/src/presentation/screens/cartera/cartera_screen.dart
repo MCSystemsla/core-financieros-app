@@ -15,86 +15,93 @@ class CarteraScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isInternetConnection =
         context.read<InternetConnectionCubit>().state.isConnected;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomBannerWidget(
-              icon: const Icon(
-                Icons.wallet_rounded,
-                color: AppColors.white,
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          context.push('/');
+        }
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomBannerWidget(
+                icon: const Icon(
+                  Icons.wallet_rounded,
+                  color: AppColors.white,
+                ),
+                title: 'home.item5'.tr(),
+                image: ImageAsset.carteraBg,
               ),
-              title: 'home.item5'.tr(),
-              image: ImageAsset.carteraBg,
-            ),
-            const Gap(20),
-            Container(
-              margin: const EdgeInsets.all(18),
-              child: Text(
-                'cartera.description'.tr(),
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontSize: 19,
-                    ),
+              const Gap(20),
+              Container(
+                margin: const EdgeInsets.all(18),
+                child: Text(
+                  'cartera.description'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontSize: 19,
+                      ),
+                ),
               ),
-            ),
-            // _Card(
-            //   onTap: () => context.push('/credito'),
-            //   title: 'cartera.credit'.tr(),
-            //   subtitle: 'cartera.credit_title'.tr(),
-            //   firstColor: AppColors.getSecondaryColor(),
-            //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-            //   icon: const Icon(
-            //     Icons.credit_card,
-            //     color: AppColors.white,
-            //     size: 35,
-            //   ),
-            // ),
-            _Card(
-              onTap: () {
-                context.push('/solicitudes');
-              },
-              title: 'Solicitudes',
-              subtitle: 'Modulo Solicitudes de Credito',
-              firstColor: AppColors.blueIndigo,
-              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.description,
-                color: AppColors.white,
-                size: 35,
+              // _Card(
+              //   onTap: () => context.push('/credito'),
+              //   title: 'cartera.credit'.tr(),
+              //   subtitle: 'cartera.credit_title'.tr(),
+              //   firstColor: AppColors.getSecondaryColor(),
+              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+              //   icon: const Icon(
+              //     Icons.credit_card,
+              //     color: AppColors.white,
+              //     size: 35,
+              //   ),
+              // ),
+              _Card(
+                onTap: () {
+                  context.push('/solicitudes');
+                },
+                title: 'Solicitudes',
+                subtitle: 'Modulo Solicitudes de Credito',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.description,
+                  color: AppColors.white,
+                  size: 35,
+                ),
               ),
-            ),
-            _Card(
-              onTap: () async {
-                if (!context.mounted) return;
-                isInternetConnection
-                    ? context.push('/cartera/formulario-kiva')
-                    : context.push('/cartera/kiva-offline');
-              },
-              title: 'cartera.kiva'.tr(),
-              subtitle: 'cartera.kiva_description'.tr(),
-              firstColor: AppColors.blueIndigo,
-              secondColor:
-                  AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-              icon: const Icon(
-                Icons.dynamic_form_outlined,
-                color: AppColors.white,
-                size: 35,
+              _Card(
+                onTap: () async {
+                  if (!context.mounted) return;
+                  isInternetConnection
+                      ? context.push('/cartera/formulario-kiva')
+                      : context.push('/cartera/kiva-offline');
+                },
+                title: 'cartera.kiva'.tr(),
+                subtitle: 'cartera.kiva_description'.tr(),
+                firstColor: AppColors.blueIndigo,
+                secondColor:
+                    AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.dynamic_form_outlined,
+                  color: AppColors.white,
+                  size: 35,
+                ),
               ),
-            ),
-            // _Card(
-            //   onTap: () {},
-            //   title: 'Proximamente',
-            //   subtitle: 'Proximamente',
-            //   firstColor: AppColors.blueIndigo,
-            //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-            //   icon: const Icon(
-            //     Icons.question_mark_outlined,
-            //     color: AppColors.white,
-            //     size: 35,
-            //   ),
-            // ),
-          ],
+              // _Card(
+              //   onTap: () {},
+              //   title: 'Proximamente',
+              //   subtitle: 'Proximamente',
+              //   firstColor: AppColors.blueIndigo,
+              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+              //   icon: const Icon(
+              //     Icons.question_mark_outlined,
+              //     color: AppColors.white,
+              //     size: 35,
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );
