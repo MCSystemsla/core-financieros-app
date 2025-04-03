@@ -21,8 +21,15 @@ import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_monto_widget.dart';
 import '../../widgets/solicitudes/nueva_menor/nueva_menor_working_data_widget.dart';
 
+enum TypeForm {
+  nueva,
+  asalariado,
+  represtamo,
+}
+
 class CrearSolicitudScreen extends StatelessWidget {
-  const CrearSolicitudScreen({super.key});
+  final TypeForm? typeForm;
+  const CrearSolicitudScreen({super.key, this.typeForm});
 
   @override
   Widget build(BuildContext context) {
@@ -40,41 +47,61 @@ class CrearSolicitudScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        body: Column(
-          children: [
-            const Navbar(),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: pageController,
-                children: [
-                  NuevaMenorDataClientWidget(
-                    controller: pageController,
-                  ),
-                  NuevaMenorWorkingDataWidget(
-                    controller: pageController,
-                  ),
-                  NuevaMenorMontoWidget(
-                    pageController: pageController,
-                  ),
-                  NuevaMenorBusinessDataWidget(
-                    pageController: pageController,
-                  ),
-                  NuevaMenorEsPepsWidget(
-                    pageController: pageController,
-                  ),
-                  NuevaMenorCreditoWidget(
-                    pageController: pageController,
-                  ),
-                  NuevaMenorBeneficiarioWidget(
-                    pageController: pageController,
-                  ),
-                ],
-              ),
+        body: switch (typeForm) {
+          TypeForm.nueva => NuevaMenorForm(
+              pageController: pageController,
             ),
-          ],
-        ),
+          TypeForm.asalariado => const Text('ASALARIADO'),
+          _ => const SizedBox(),
+        },
       ),
+    );
+  }
+}
+
+class NuevaMenorForm extends StatelessWidget {
+  const NuevaMenorForm({
+    super.key,
+    required this.pageController,
+  });
+
+  final PageController pageController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Navbar(),
+        Expanded(
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: [
+              NuevaMenorDataClientWidget(
+                controller: pageController,
+              ),
+              NuevaMenorWorkingDataWidget(
+                controller: pageController,
+              ),
+              NuevaMenorMontoWidget(
+                pageController: pageController,
+              ),
+              NuevaMenorBusinessDataWidget(
+                pageController: pageController,
+              ),
+              NuevaMenorEsPepsWidget(
+                pageController: pageController,
+              ),
+              NuevaMenorCreditoWidget(
+                pageController: pageController,
+              ),
+              NuevaMenorBeneficiarioWidget(
+                pageController: pageController,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +37,10 @@ class HomeItemsWidget extends StatelessWidget {
                 context: context,
                 title: 'Necesitas Sincronizar para avanzar',
               ).showDialog(context);
-              return;
             }
-
-            context.push('/cartera');
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const CarteraScreen()),
+            );
           },
         ),
       // HomeItemCard(
