@@ -23,7 +23,10 @@ class LoginScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
-            ..getBranchTeam(accessCode: '2wydJKIvNuO41hCZ7Y6'),
+            ..getBranchTeam(
+              accessCode: '2wydJKIvNuO41hCZ7Y6',
+              context: context,
+            ),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
         BlocProvider(

@@ -118,13 +118,32 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Row(
       children: [
         const Gap(10),
-        const Expanded(
+        Expanded(
           child: SolicitudCard(
             svgPath: ImageAsset.nuevaMenorBg3,
             title: 'Represtamo',
+            onPressed: () {
+              if (!isConnected) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const CrearSolicitudScreen(
+                        typeForm: TypeForm.represtamo)),
+                  ),
+                );
+                return;
+              }
+              context.pushTransparentRoute(
+                const AddUserCedulaScreen(
+                  typeForm: TypeForm.represtamo,
+                ),
+              );
+            },
           ),
         ),
         const Gap(10),

@@ -1,25 +1,19 @@
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form.dart';
+import 'package:flutter/material.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_data_client_widget.dart';
-
 import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import '../../bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import '../../widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
-import '../../widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
-import '../../widgets/solicitudes/nueva_menor/nueva_menor_espeps_widget.dart';
-import '../../widgets/solicitudes/nueva_menor/nueva_menor_monto_widget.dart';
-import '../../widgets/solicitudes/nueva_menor/nueva_menor_working_data_widget.dart';
 
 enum TypeForm {
   nueva,
@@ -52,56 +46,12 @@ class CrearSolicitudScreen extends StatelessWidget {
               pageController: pageController,
             ),
           TypeForm.asalariado => const Text('ASALARIADO'),
+          TypeForm.represtamo => ReprestamoForm(
+              controller: pageController,
+            ),
           _ => const SizedBox(),
         },
       ),
-    );
-  }
-}
-
-class NuevaMenorForm extends StatelessWidget {
-  const NuevaMenorForm({
-    super.key,
-    required this.pageController,
-  });
-
-  final PageController pageController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Navbar(),
-        Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              NuevaMenorDataClientWidget(
-                controller: pageController,
-              ),
-              NuevaMenorWorkingDataWidget(
-                controller: pageController,
-              ),
-              NuevaMenorMontoWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorBusinessDataWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorEsPepsWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorCreditoWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorBeneficiarioWidget(
-                pageController: pageController,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -395,7 +345,13 @@ class _CatalogoValorDepartamentosState
 }
 
 class Navbar extends StatelessWidget {
-  const Navbar({super.key});
+  final String? imageUrl;
+  final String title;
+  const Navbar({
+    super.key,
+    required this.title,
+    this.imageUrl = ImageAsset.carteraBg2,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -411,10 +367,10 @@ class Navbar extends StatelessWidget {
               bottomRight: Radius.circular(15),
             ),
           ),
-          child: const Image(
+          child: Image(
             fit: BoxFit.cover,
             image: AssetImage(
-              ImageAsset.carteraBg2,
+              imageUrl!,
             ),
           ),
         ),
@@ -447,7 +403,7 @@ class Navbar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Crear nueva Solicitud Nueva Menor',
+                    title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,

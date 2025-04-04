@@ -38,7 +38,9 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            const Navbar(),
+            const Navbar(
+              title: 'Crear nueva Solicitud Nueva Menor',
+            ),
             Expanded(
               child: PageView(
                 physics: const NeverScrollableScrollPhysics(),

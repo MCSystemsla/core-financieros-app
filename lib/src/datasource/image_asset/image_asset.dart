@@ -39,4 +39,7 @@ abstract class ImageAsset {
       'assets/images/success2_catalogo.json';
   static const String enviarSolicitudOfflines =
       'assets/images/enviar_solicitud_offline.json';
+
+  // REPRESTAMO
+  static const String represtamoBg = 'assets/images/represtamo.webp';
 }
