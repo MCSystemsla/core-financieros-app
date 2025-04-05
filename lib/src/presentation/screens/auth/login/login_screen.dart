@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -97,6 +98,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? username;
   String? password;
   String? branchTeam;
+  bool isPasswordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -111,7 +113,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             InputSimple(
               title: 'auth.user'.tr(),
               activeColor: true,
-              hintText: 'Ejem: John Doe',
+              hintText: 'Ejem: DGALEAS',
               enabled: true,
               onChanged: (value) {
                 username = value;
@@ -128,12 +130,25 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
             ),
-            // const Gap(25),
+            const Gap(25),
             InputSimple(
               title: 'auth.password'.tr(),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: AppColors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+              ),
               activeColor: true,
               hintText: '****',
-              isPasswordField: true,
+              isPasswordField: !isPasswordVisible,
               enabled: true,
               textFieldSettings: TextFieldSettings(
                 keyboardType: TextInputType.text,
