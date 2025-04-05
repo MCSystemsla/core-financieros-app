@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -10,11 +11,13 @@ class AddUserCedulaDialog extends OdsDialog {
   @override
   // ignore: overridden_fields
   final String title;
+  final TypeForm typeForm;
   const AddUserCedulaDialog({
     super.key,
     this.onDone,
     required this.context,
     required this.title,
+    this.typeForm = TypeForm.nueva,
   }) : super(
           title: title,
         );
@@ -25,11 +28,12 @@ class AddUserCedulaDialog extends OdsDialog {
   @override
   List<CustomElevatedButton>? actions(BuildContext context) {
     return [
-      CustomElevatedButton(
-        text: 'Ir a Formulario'.tr(),
-        color: AppColors.getPrimaryColor(),
-        onPressed: onDone,
-      ),
+      if (typeForm == TypeForm.nueva)
+        CustomElevatedButton(
+          text: 'Ir a Formulario'.tr(),
+          color: AppColors.getPrimaryColor(),
+          onPressed: onDone,
+        ),
       CustomElevatedButton(
         text: 'Regresar'.tr(),
         color: AppColors.red,

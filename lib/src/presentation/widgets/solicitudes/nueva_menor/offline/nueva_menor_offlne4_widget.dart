@@ -27,7 +27,8 @@ class NuevaMenorOfflne4Widget extends StatefulWidget {
       _NuevaMenorOfflne4WidgetState();
 }
 
-class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
+class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
+    with AutomaticKeepAliveClientMixin {
   String? profesion;
   String? actividad;
   String? actividadVer;
@@ -171,6 +172,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -613,4 +615,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

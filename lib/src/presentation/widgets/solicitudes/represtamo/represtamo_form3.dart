@@ -25,7 +25,8 @@ class ReprestamoForm3 extends StatefulWidget {
   State<ReprestamoForm3> createState() => _ReprestamoForm3State();
 }
 
-class _ReprestamoForm3State extends State<ReprestamoForm3> {
+class _ReprestamoForm3State extends State<ReprestamoForm3>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -87,6 +88,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3> {
   final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -150,7 +152,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3> {
                 monto = value;
               },
             ),
-
+            const Gap(20),
             OutlineTextfieldWidget(
               initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
@@ -195,8 +197,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3> {
                 color: AppColors.getPrimaryColor(),
               ),
               validator: (value) => ClassValidator.validateRequired(value),
-              title: 'Plazo Solicitud',
-              hintText: 'Ingresa Plazo Solicitud',
+              title: 'Plazo en meses',
+              hintText: 'Ingresa en meses',
               textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
@@ -330,4 +332,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

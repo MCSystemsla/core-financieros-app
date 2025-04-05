@@ -30,7 +30,8 @@ class NuevaMenorOffline6Widget extends StatefulWidget {
       _NuevaMenorOffline6WidgetState();
 }
 
-class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
+class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
+    with AutomaticKeepAliveClientMixin {
   String? moneda;
   String? monedaVer;
   String? monto;
@@ -118,6 +119,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     montoController.value =
         TextEditingValue(text: FormatField.formatMonto(monto ?? ''));
@@ -370,4 +372,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

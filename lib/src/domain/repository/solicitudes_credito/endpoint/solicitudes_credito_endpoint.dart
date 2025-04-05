@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
 
 class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   final SolicitudNuevaMenor solicitudNuevaMenor;
@@ -98,4 +99,20 @@ class UserCedulaEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'cedula': cedula,
       };
+}
+
+class SolicitudReprestamoEndpoint extends Endpoint {
+  final SolicitudReprestamo solicitudReprestamo;
+  SolicitudReprestamoEndpoint({required this.solicitudReprestamo});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/solicitudes/crear-solicitud-represtamo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => solicitudReprestamo.toJson();
 }
