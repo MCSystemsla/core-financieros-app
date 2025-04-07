@@ -32,7 +32,7 @@ class SolicitudesPendientesScreen extends StatelessWidget {
         body: BlocBuilder<SolicitudesOfflineCubit, SolicitudesOfflineState>(
           builder: (context, state) {
             return switch (state) {
-              OnSolicitudesOfflineSuccess() => _SolicitudesPendientesItems(
+              OnSolicitudesOfflineSuccess() => SolicitudesCreditoView(
                   solicitudesOffline: state.solicitudesOffline,
                 ),
               OnSolicitudesOfflineError() => OnErrorWidget(
@@ -54,9 +54,36 @@ class SolicitudesPendientesScreen extends StatelessWidget {
   }
 }
 
-class _SolicitudesPendientesItems extends StatelessWidget {
+class SolicitudesCreditoView extends StatelessWidget {
   final List<ResponseLocalDb> solicitudesOffline;
-  const _SolicitudesPendientesItems({required this.solicitudesOffline});
+
+  const SolicitudesCreditoView({super.key, required this.solicitudesOffline});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = PageController();
+
+    return PageView(
+      controller: controller,
+      children: [
+        _SolicitudesPendientesItems(
+          solicitudesOffline: solicitudesOffline,
+          controller: controller,
+        ),
+        _SolicitudesPendientesItems(
+          solicitudesOffline: solicitudesOffline,
+          controller: controller,
+        ),
+      ],
+    );
+  }
+}
+
+class _SolicitudesPendientesItems extends StatelessWidget {
+  final PageController controller;
+  final List<ResponseLocalDb> solicitudesOffline;
+  const _SolicitudesPendientesItems(
+      {required this.solicitudesOffline, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +105,69 @@ class _SolicitudesPendientesItems extends StatelessWidget {
         ),
       );
     }
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: solicitudesOffline.length,
-      itemBuilder: (BuildContext context, int index) {
-        return SolicitudesPendientesWidget(
-          solicitud: solicitudesOffline[index],
-        );
-      },
+    return Column(
+      children: [
+        _SlidePageviewView(controller: controller),
+        ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: solicitudesOffline.length,
+          itemBuilder: (BuildContext context, int index) {
+            return SolicitudesPendientesWidget(
+              solicitud: solicitudesOffline[index],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _SlidePageviewView extends StatelessWidget {
+  const _SlidePageviewView({required this.controller});
+
+  final PageController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: IconButton(
+            iconSize: 18,
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn,
+              );
+            },
+            icon: const Icon(Icons.arrow_back_ios_new),
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Text(
+            'Solicitudes Nuevas',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 14,
+                ),
+          ),
+        ),
+        Expanded(
+          child: IconButton(
+            iconSize: 18,
+            onPressed: () {
+              controller.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn,
+              );
+            },
+            icon: const Icon(Icons.arrow_forward_ios),
+          ),
+        ),
+      ],
     );
   }
 }
