@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
+import 'package:core_financiero_app/src/config/services/biometric/biometric_auth_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import 'src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
 class App extends StatelessWidget {
@@ -62,6 +64,7 @@ class App extends StatelessWidget {
           create: (ctx) => UserByCedulaCubit(SolicitudCreditoRepositoryImpl()),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+        BlocProvider(create: (ctx) => BiometricCubit(BiometricAuthService())),
       ],
       child: BlocConsumer<LangCubit, LangState>(
         listener: (context, state) async {
