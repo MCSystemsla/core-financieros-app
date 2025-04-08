@@ -33,6 +33,7 @@ class _UploadImageDialogState extends State<UploadImageDialog> {
                   if (image != null) {
                     widget.onSelected(image);
                   }
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 });
               },
@@ -53,6 +54,7 @@ class _UploadImageDialogState extends State<UploadImageDialog> {
                   if (photo != null) {
                     widget.onSelected(photo);
                   }
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 });
               },

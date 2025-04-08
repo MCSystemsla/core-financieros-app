@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/global_locator.dart';
