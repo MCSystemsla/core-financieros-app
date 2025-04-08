@@ -39,7 +39,7 @@ class ObjectBoxService {
   }
 
   void deleteRowsByDeterminateTime() {
-    final now = DateTime.now().subtract(const Duration(minutes: 30));
+    final now = DateTime.now().subtract(const Duration(hours: 3));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
         .build()
@@ -209,6 +209,20 @@ class ObjectBoxService {
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  void updateWhenSolicitdIsFailed(
+      {required int solicitudId, String? errorMsg}) {
+    try {
+      final solicitud = solicitudesResponsesBox.get(solicitudId);
+      if (solicitud != null) {
+        solicitud.hasVerified = true;
+        solicitud.errorMsg = errorMsg;
+        solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
+      }
     } catch (e) {
       _logger.e(e.toString());
     }

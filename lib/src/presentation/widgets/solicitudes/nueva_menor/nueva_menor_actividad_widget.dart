@@ -214,6 +214,10 @@ class _NuevaMenorBeneficiarioWidgetState
                         isDone: !isConnected,
                       );
                   if (!isConnected) {
+                    context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                          errorMsg:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        );
                     CustomAlertDialog(
                       context: context,
                       title:

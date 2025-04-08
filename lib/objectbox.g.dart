@@ -202,7 +202,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(10, 5156059507673561033),
       name: 'ResponseLocalDb',
-      lastPropertyId: const obx_int.IdUid(133, 3676648163337378415),
+      lastPropertyId: const obx_int.IdUid(135, 24664822438630500),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -869,6 +869,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(133, 3676648163337378415),
             name: 'objTipoPersonaIdVer',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(134, 3655892115959976053),
+            name: 'errorMsg',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(135, 24664822438630500),
+            name: 'hasVerified',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1571,7 +1581,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final objTipoPersonaIdVerOffset = object.objTipoPersonaIdVer == null
               ? null
               : fbb.writeString(object.objTipoPersonaIdVer!);
-          fbb.startTable(134);
+          final errorMsgOffset = object.errorMsg == null
+              ? null
+              : fbb.writeString(object.errorMsg!);
+          fbb.startTable(136);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, objOrigenSolicitudIdOffset);
           fbb.addOffset(2, nombre1Offset);
@@ -1705,6 +1718,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(130, objRubroActividad3VerOffset);
           fbb.addOffset(131, objRubroActividadPredominanteVerOffset);
           fbb.addOffset(132, objTipoPersonaIdVerOffset);
+          fbb.addOffset(133, errorMsgOffset);
+          fbb.addBool(134, object.hasVerified);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -2080,6 +2095,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : DateTime.fromMillisecondsSinceEpoch(createdAtValue);
           final isDoneParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 206);
+          final hasVerifiedParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 272);
+          final errorMsgParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 270);
           final object = ResponseLocalDb(
               objOrigenSolicitudId: objOrigenSolicitudIdParam,
               objOrigenSolicitudIdVer: objOrigenSolicitudIdVerParam,
@@ -2217,7 +2236,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               fechaDesembolso: fechaDesembolsoParam,
               prestamoInteres: prestamoInteresParam,
               createdAt: createdAtParam,
-              isDone: isDoneParam)
+              isDone: isDoneParam,
+              hasVerified: hasVerifiedParam,
+              errorMsg: errorMsgParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -2874,4 +2895,12 @@ class ResponseLocalDb_ {
   /// See [ResponseLocalDb.objTipoPersonaIdVer].
   static final objTipoPersonaIdVer =
       obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[132]);
+
+  /// See [ResponseLocalDb.errorMsg].
+  static final errorMsg =
+      obx.QueryStringProperty<ResponseLocalDb>(_entities[6].properties[133]);
+
+  /// See [ResponseLocalDb.hasVerified].
+  static final hasVerified =
+      obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[134]);
 }

@@ -128,6 +128,10 @@ class SolicitudesPendientesWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
         onPressed: () {
           Navigator.push(
             context,
@@ -160,6 +164,7 @@ class AdvanceCardState extends StatelessWidget {
   final String? dateToStart;
   final String? dateToEnd;
   final double percentage;
+  final Color backgroundColor;
   const AdvanceCardState({
     required this.title,
     required this.location,
@@ -167,6 +172,7 @@ class AdvanceCardState extends StatelessWidget {
     required this.dateToEnd,
     required this.percentage,
     required this.onPressed,
+    this.backgroundColor = Colors.white,
     super.key,
   });
 
@@ -180,7 +186,7 @@ class AdvanceCardState extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: backgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             )),

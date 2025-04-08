@@ -107,6 +107,7 @@ class _SolicitudesPendientesItems extends StatelessWidget {
     }
     return Column(
       children: [
+        const Gap(15),
         _SlidePageviewView(controller: controller),
         ListView.builder(
           physics: const BouncingScrollPhysics(),

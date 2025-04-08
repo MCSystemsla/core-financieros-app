@@ -137,6 +137,8 @@ class ResponseLocalDb {
   @Property(type: PropertyType.date)
   DateTime? createdAt;
   bool? isDone;
+  String? errorMsg;
+  bool? hasVerified;
 
   ResponseLocalDb({
     this.objOrigenSolicitudId,
@@ -271,5 +273,7 @@ class ResponseLocalDb {
     this.prestamoInteres,
     this.createdAt,
     this.isDone = false,
+    this.hasVerified = false,
+    this.errorMsg,
   });
 }

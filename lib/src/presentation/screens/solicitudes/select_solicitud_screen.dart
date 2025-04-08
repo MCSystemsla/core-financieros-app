@@ -56,17 +56,33 @@ class SelectSolicitudScreen extends StatelessWidget {
                   lottieAsset: ImageAsset.enviarSolicitudOfflines,
                   text: 'Enviando Solicitudes Offline al Servidor',
                 ),
-              OnEnviarSolicitudWhenIsdoneSuccess() =>
-                const DownloadCatalogoLoading(
+              OnEnviarSolicitudWhenIsdoneSuccess() => DownloadCatalogoLoading(
+                  onDownloadComplete: () {
+                    context.push('/solicitudes');
+                  },
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
                   text: 'Solicitudes offline enviadas exitosamente!!',
                   repeat: false,
+
                   // isUploadingForms: true,
                 ),
               OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                   errorMsg: state.msgError,
-                  onPressed: () {},
+                  onPressed: () {
+                    context
+                        .read<EnviarSolicitudWhenIsdoneCubit>()
+                        .sendSolicitudWhenIsDone(
+                          isConnected: isConnected,
+                        );
+                  },
+                ),
+              OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  btnTitle: 'OK',
+                  errorMsg: state.msgError,
+                  onPressed: () {
+                    context.read<EnviarSolicitudWhenIsdoneCubit>().resetState();
+                  },
                 ),
               _ => const _SelectSolicitud(),
             };

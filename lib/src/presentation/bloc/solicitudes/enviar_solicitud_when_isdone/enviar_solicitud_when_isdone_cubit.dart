@@ -16,6 +16,7 @@ class EnviarSolicitudWhenIsdoneCubit
   final _logger = Logger();
 
   void sendSolicitudWhenIsDone({required bool isConnected}) async {
+    bool hasAnySent = false;
     emit(OnEnviarSolicitudWhenIsdoneLoading());
     try {
       final solicitudes = objectBoxService.sendSolicitudWhenIsDone();
@@ -23,9 +24,15 @@ class EnviarSolicitudWhenIsdoneCubit
         emit(EnviarSolicitudWhenIsdoneInitial());
         return;
       }
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 3));
       for (var solicitud in solicitudes) {
         try {
+          if (solicitud.hasVerified == true) {
+            _logger
+                .i('Solicitud ${solicitud.id} marked as pending verification.');
+            continue;
+          }
+
           final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
             solicitudNuevaMenor: SolicitudNuevaMenor(
               isOffline: solicitud.isDone ?? false,
@@ -139,6 +146,8 @@ class EnviarSolicitudWhenIsdoneCubit
             ),
           );
           if (!isOk) {
+            objectBoxService.updateWhenSolicitdIsFailed(
+                solicitudId: solicitud.id, errorMsg: msg);
             emit(OnEnviarSolicitudWhenIsdoneError(
                 msgError:
                     'Error en Solicitud de ${solicitud.nombre1} ${solicitud.apellido1}: $msg'));
@@ -147,15 +156,26 @@ class EnviarSolicitudWhenIsdoneCubit
           objectBoxService.removeSolicitudWhenisUploaded(
             solicitudId: solicitud.id,
           );
+          hasAnySent = true;
         } catch (e) {
           _logger.e(e);
           emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
         }
       }
-      emit(const OnEnviarSolicitudWhenIsdoneSuccess());
+      if (hasAnySent == true) {
+        emit(const OnEnviarSolicitudWhenIsdoneSuccess());
+      } else {
+        emit(const OnEnviarSolicitudWhenIsdonePendingVerification(
+            msgError:
+                'Algunas solicitudes tienen errores y no se pudieron procesar.'));
+      }
     } catch (e) {
       _logger.e(e);
       emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
     }
+  }
+
+  void resetState() {
+    emit(EnviarSolicitudWhenIsdoneInitial());
   }
 }

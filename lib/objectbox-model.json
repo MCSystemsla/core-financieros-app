@@ -179,7 +179,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "133:3676648163337378415",
+      "lastPropertyId": "135:24664822438630500",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -847,6 +847,16 @@
           "id": "133:3676648163337378415",
           "name": "objTipoPersonaIdVer",
           "type": 9
+        },
+        {
+          "id": "134:3655892115959976053",
+          "name": "errorMsg",
+          "type": 9
+        },
+        {
+          "id": "135:24664822438630500",
+          "name": "hasVerified",
+          "type": 1
         }
       ],
       "relations": []

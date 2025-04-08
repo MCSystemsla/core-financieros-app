@@ -39,7 +39,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
 
-        return (false, resp['message']['message'] as String);
+        return (false, resp['message'] as String);
       }
 
       _logger.i(resp);
@@ -101,7 +101,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        throw AppException(optionalMsg: resp['message']['message']);
+        throw AppException(optionalMsg: resp['message']);
       }
       final data = UserCedulaResponse.fromJson(resp);
       return data;

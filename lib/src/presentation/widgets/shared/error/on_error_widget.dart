@@ -10,11 +10,13 @@ class OnErrorWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final String errorMsg;
   final bool needToGoBack;
+  final String btnTitle;
   const OnErrorWidget({
     super.key,
     required this.onPressed,
     this.errorMsg = '',
     this.needToGoBack = false,
+    this.btnTitle = 'Volver a intentarlo',
   });
 
   @override
@@ -46,7 +48,7 @@ class OnErrorWidget extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: CustomElevatedButton(
               onPressed: onPressed,
-              text: 'Volver a intentarlo',
+              text: btnTitle,
               color: AppColors.getPrimaryColor(),
             ),
           ),

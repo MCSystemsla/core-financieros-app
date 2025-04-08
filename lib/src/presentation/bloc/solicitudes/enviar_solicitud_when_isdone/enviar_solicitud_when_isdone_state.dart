@@ -28,3 +28,13 @@ final class OnEnviarSolicitudWhenIsdoneError
   @override
   List<Object> get props => [msgError];
 }
+
+final class OnEnviarSolicitudWhenIsdonePendingVerification
+    extends EnviarSolicitudWhenIsdoneState {
+  final String msgError;
+
+  const OnEnviarSolicitudWhenIsdonePendingVerification(
+      {required this.msgError});
+  @override
+  List<Object> get props => [msgError];
+}

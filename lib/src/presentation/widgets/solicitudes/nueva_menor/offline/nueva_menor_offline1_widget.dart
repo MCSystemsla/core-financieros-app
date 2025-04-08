@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,27 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
         key: formKey,
         child: Column(
           children: [
-            const Gap(30),
+            if (widget.responseLocalDb.errorMsg!.isNotEmpty) ...[
+              const Gap(30),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: ExpansionTitleCustom(
+                  title: Text(
+                    'Motivo de error de la solicitud',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  finalStep: true,
+                  children: [
+                    Text(widget.responseLocalDb.errorMsg ?? ''),
+                  ],
+                ),
+              ),
+            ],
+            const Gap(10),
             SearchDropdownWidget(
               hintText: tipoPersonaCreditoVer ?? 'input.select_option'.tr(),
               codigo: 'TIPOSPERSONACREDITO',
@@ -540,7 +561,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  context
+                      .pushReplacement('/solicitudes/solicitudes-pendientes');
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,
