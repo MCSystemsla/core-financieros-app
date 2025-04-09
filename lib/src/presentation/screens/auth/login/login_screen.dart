@@ -2,10 +2,12 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
@@ -34,52 +36,66 @@ class LoginScreen extends StatelessWidget {
           create: (ctx) => LogoCubit(AuthRepositoryImpl())..getLogo(),
         ),
       ],
-      child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-        builder: (context, state) {
-          if (!state.isCorrectNetwork) {
-            return const VpnNoFound(routeIsVpnConnected: '/login');
+      child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
+        listener: (context, state) {
+          if (state is AutoupdateSuccess) {
+            UpdateAppDialog(
+              apkUrl: state.apkVersion,
+              context: context,
+              title: 'Debes actualiar la app para poder continuar',
+              versionName: state.apkVersionName,
+            ).showDialog(context);
           }
+        },
+        builder: (context, state) {
+          return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+            builder: (context, state) {
+              if (!state.isCorrectNetwork) {
+                return const VpnNoFound(routeIsVpnConnected: '/login');
+              }
 
-          return Scaffold(
-            body: PopScope(
-              canPop: false,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ChangeLangWidget(
-                        child: LoginScreen(),
+              return Scaffold(
+                body: PopScope(
+                  canPop: false,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const ChangeLangWidget(
+                            child: LoginScreen(),
+                          ),
+                          BlocBuilder<LogoCubit, LogoState>(
+                            builder: (context, state) {
+                              if (state is OnLogoSuccess) {
+                                return Image(
+                                    height: 200,
+                                    image: NetworkImage(
+                                      state.imgUrl,
+                                    ));
+                              }
+                              if (state is OnLogoLoading) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (state is OnLogoError) {
+                                return const Text('error');
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                          // const Gap(10),
+                          const Expanded(
+                            flex: 5,
+                            child: LoginFormWidget(),
+                          ),
+                        ],
                       ),
-                      BlocBuilder<LogoCubit, LogoState>(
-                        builder: (context, state) {
-                          if (state is OnLogoSuccess) {
-                            return Image(
-                                height: 200,
-                                image: NetworkImage(
-                                  state.imgUrl,
-                                ));
-                          }
-                          if (state is OnLogoLoading) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (state is OnLogoError) {
-                            return const Text('error');
-                          }
-                          return const SizedBox();
-                        },
-                      ),
-                      // const Gap(10),
-                      const Expanded(
-                        flex: 5,
-                        child: LoginFormWidget(),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
@@ -111,7 +127,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         child: Column(
           children: [
             InputSimple(
-              title: 'auth.user'.tr(),
+              // title: 'auth.user'.tr(),
+              title: 'USERNAME'.tr(),
               activeColor: true,
               hintText: 'Ejem: DGALEAS',
               enabled: true,

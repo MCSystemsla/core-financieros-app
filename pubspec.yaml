@@ -85,6 +85,8 @@ dependencies:
   objectbox: ^4.0.3
   objectbox_flutter_libs: ^4.0.3
   local_auth: ^2.3.0
+  package_info_plus: ^8.3.0
+  flutter_app_update: ^3.2.2
 
 
 
