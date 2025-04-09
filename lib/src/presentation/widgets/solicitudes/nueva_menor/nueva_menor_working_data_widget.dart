@@ -194,6 +194,7 @@ class _NuevaMenorWorkingDataWidgetState
                       GeolocationService(context: context);
                   final currentLocation =
                       await geolocationService.getCurrentLocation();
+                  if (currentLocation == null) return;
                   if (!context.mounted) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objCondicionCasaIdVer: condicionCasa?.name,
@@ -207,9 +208,8 @@ class _NuevaMenorWorkingDataWidgetState
                         objCondicionCasaId: condicionCasa?.value,
                         anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
                         ubicacion: comunidad,
-                        ubicacionLatitud: currentLocation?.latitude.toString(),
-                        ubicacionLongitud:
-                            currentLocation?.longitude.toString(),
+                        ubicacionLatitud: currentLocation.latitude.toString(),
+                        ubicacionLongitud: currentLocation.longitude.toString(),
                         direccionCasa: direccionCasa,
                       );
                   widget.controller.nextPage(

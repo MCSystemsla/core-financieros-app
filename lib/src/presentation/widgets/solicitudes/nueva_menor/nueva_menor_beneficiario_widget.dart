@@ -317,7 +317,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             objFrecuenciaIdVer: frecuenciaDePago?.name,

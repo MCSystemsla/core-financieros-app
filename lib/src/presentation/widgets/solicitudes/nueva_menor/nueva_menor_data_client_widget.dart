@@ -61,6 +61,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
       initialDate: _selectedDate,
       firstDate: DateTime(1930),
       lastDate: DateTime(2101),
+      keyboardType: TextInputType.datetime,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != _selectedDate) {
@@ -539,6 +540,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
+      keyboardType: TextInputType.datetime,
       firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
@@ -723,7 +725,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               ),
               title: 'Cedula',
               hintText: 'Ingresa Cedula',
-              textInputType: TextInputType.number,
+              textInputType: TextInputType.text,
               textEditingController: cedulaController,
               isValid: null,
               isRequired: true,

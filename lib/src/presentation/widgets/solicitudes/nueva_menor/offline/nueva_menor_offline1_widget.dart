@@ -309,7 +309,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
               ),
               title: 'Cedula',
               hintText: 'Ingresa Cedula',
-              textInputType: TextInputType.number,
+              textInputType: TextInputType.text,
               isValid: null,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),

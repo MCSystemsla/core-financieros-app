@@ -349,7 +349,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $monedaVer',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} $monedaVer',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             objFrecuenciaIdVer: frecuenciaDePagoVer,
