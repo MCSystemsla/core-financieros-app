@@ -26,11 +26,15 @@ class Catalogo {
   final String valor;
   final String nombre;
   final double? interes;
+  final int? montoMinimo;
+  final double? montoMaximo;
 
   Catalogo({
     required this.valor,
     required this.nombre,
     this.interes,
+    this.montoMaximo,
+    this.montoMinimo,
   });
 
   factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
@@ -39,11 +43,19 @@ class Catalogo {
         interes: json.containsKey('interes')
             ? (json['interes'] as num).toDouble()
             : null,
+        montoMaximo: json.containsKey('montoMaximo')
+            ? (json['montoMaximo'] as num).toDouble()
+            : null,
+        montoMinimo: json.containsKey('montoMinimo')
+            ? (json['montoMinimo'] as int)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         'valor': valor,
         'nombre': nombre,
         if (interes != null) 'interes': interes,
+        if (montoMinimo != null) 'montoMinimo': montoMinimo,
+        if (montoMaximo != null) 'montoMaximo': montoMaximo,
       };
 }

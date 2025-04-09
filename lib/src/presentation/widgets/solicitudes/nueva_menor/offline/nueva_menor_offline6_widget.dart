@@ -15,6 +15,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,6 +51,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   DateTime? fechaPrimerPago;
   DateTime? fechaDesembolso;
   double? tasaInteres;
+  int? montoMinimo;
+  double? montoMaximo;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -216,6 +220,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 producto = item.value;
                 productoVer = item.name;
                 tasaInteres = item.interes;
+                montoMinimo = item.montoMinimo;
+                montoMaximo = item.montoMaximo;
               },
             ),
             const Gap(20),
@@ -308,6 +314,26 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                     CustomAlertDialog(
                       context: context,
                       title: 'El monto no puede ser 0',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! <
+                      montoMinimo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! >
+                      montoMaximo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;

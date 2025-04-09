@@ -127,8 +127,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         child: Column(
           children: [
             InputSimple(
-              // title: 'auth.user'.tr(),
-              title: 'USERNAME'.tr(),
+              title: 'auth.user'.tr(),
               activeColor: true,
               hintText: 'Ejem: DGALEAS',
               enabled: true,

@@ -57,7 +57,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 1884745770876461125),
       name: 'CatalogoLocalDb',
-      lastPropertyId: const obx_int.IdUid(5, 180936357922445037),
+      lastPropertyId: const obx_int.IdUid(7, 6679724367122666228),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -83,6 +83,16 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(5, 180936357922445037),
             name: 'interes',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 8179045150577337740),
+            name: 'montoMinimo',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 6679724367122666228),
+            name: 'montoMaximo',
             type: 8,
             flags: 0)
       ],
@@ -997,12 +1007,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final valorOffset = fbb.writeString(object.valor);
           final nombreOffset = fbb.writeString(object.nombre);
           final typeOffset = fbb.writeString(object.type);
-          fbb.startTable(6);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, valorOffset);
           fbb.addOffset(2, nombreOffset);
           fbb.addOffset(3, typeOffset);
           fbb.addFloat64(4, object.interes);
+          fbb.addInt64(5, object.montoMinimo);
+          fbb.addFloat64(6, object.montoMaximo);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1017,11 +1029,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 10, '');
           final interesParam = const fb.Float64Reader()
               .vTableGetNullable(buffer, rootOffset, 12);
+          final montoMinimoParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+          final montoMaximoParam = const fb.Float64Reader()
+              .vTableGetNullable(buffer, rootOffset, 16);
           final object = CatalogoLocalDb(
               valor: valorParam,
               nombre: nombreParam,
               type: typeParam,
-              interes: interesParam)
+              interes: interesParam,
+              montoMinimo: montoMinimoParam,
+              montoMaximo: montoMaximoParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -2288,6 +2306,14 @@ class CatalogoLocalDb_ {
   /// See [CatalogoLocalDb.interes].
   static final interes =
       obx.QueryDoubleProperty<CatalogoLocalDb>(_entities[1].properties[4]);
+
+  /// See [CatalogoLocalDb.montoMinimo].
+  static final montoMinimo =
+      obx.QueryIntegerProperty<CatalogoLocalDb>(_entities[1].properties[5]);
+
+  /// See [CatalogoLocalDb.montoMaximo].
+  static final montoMaximo =
+      obx.QueryDoubleProperty<CatalogoLocalDb>(_entities[1].properties[6]);
 }
 
 /// [CatalogoNacionalidadPaisDb] entity fields to define ObjectBox queries.

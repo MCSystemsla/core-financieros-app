@@ -37,6 +37,8 @@ class SearchDropdownWidget extends StatelessWidget {
         value: e.valor,
         name: e.nombre,
         interes: e.interes ?? 0,
+        montoMaximo: e.montoMaximo ?? 0,
+        montoMinimo: e.montoMinimo ?? 0,
       );
     }).toList();
     return Padding(

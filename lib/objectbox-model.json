@@ -34,7 +34,7 @@
     },
     {
       "id": "5:1884745770876461125",
-      "lastPropertyId": "5:180936357922445037",
+      "lastPropertyId": "7:6679724367122666228",
       "name": "CatalogoLocalDb",
       "properties": [
         {
@@ -61,6 +61,16 @@
         {
           "id": "5:180936357922445037",
           "name": "interes",
+          "type": 8
+        },
+        {
+          "id": "6:8179045150577337740",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "7:6679724367122666228",
+          "name": "montoMaximo",
           "type": 8
         }
       ],
