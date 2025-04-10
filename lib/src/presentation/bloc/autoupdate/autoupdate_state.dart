@@ -22,3 +22,11 @@ final class AutoupdateSuccess extends AutoupdateState {
 }
 
 final class AutoupdateError extends AutoupdateState {}
+
+final class AutoupdateFoundVersion extends AutoupdateState {
+  final String versionName;
+
+  const AutoupdateFoundVersion({required this.versionName});
+  @override
+  List<Object> get props => [versionName];
+}

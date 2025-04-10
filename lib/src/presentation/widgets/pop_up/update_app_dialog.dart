@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_app_update/azhon_app_update.dart';
 import 'package:flutter_app_update/update_model.dart';
-import 'package:go_router/go_router.dart';
 
 class UpdateAppDialog extends OdsDialog {
   @override
@@ -41,6 +40,7 @@ class UpdateAppDialog extends OdsDialog {
             '$versionName.apk',
             'ic_launcher',
             '',
+            showBgdToast: false,
           );
           AzhonAppUpdate.update(model).then((value) {
             debugPrint('Resultado de la actualización: $value');
@@ -53,11 +53,6 @@ class UpdateAppDialog extends OdsDialog {
             MaterialPageRoute(builder: (_) => const AutoupdateScreen()),
           );
         },
-      ),
-      CustomElevatedButton(
-        text: 'Más tarde'.tr(),
-        color: AppColors.red,
-        onPressed: () => context.pop(),
       ),
     ];
   }

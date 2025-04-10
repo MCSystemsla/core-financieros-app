@@ -36,6 +36,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
 
           return;
         }
+        emit(AutoupdateFoundVersion(versionName: versionActual));
       }
     } catch (e) {
       log('Error al verificar versión: $e');

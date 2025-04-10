@@ -47,3 +47,6 @@ api-key.json
 api-key-prod.json
 
 .vscode
+
+# Version control environment file
+version.json

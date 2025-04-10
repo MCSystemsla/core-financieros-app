@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_d
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -205,7 +206,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 );
               },
             ),
-            const Gap(30),
+            const VersionControlWidget(),
+            const Gap(20),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) async {
                 final status = state.status;
