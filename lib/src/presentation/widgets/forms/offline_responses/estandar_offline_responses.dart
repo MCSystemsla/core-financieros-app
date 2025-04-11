@@ -64,6 +64,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
             }
             if (state.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: resp.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
@@ -379,6 +380,7 @@ class _EstandarFormState extends State<EstandarForm> {
             }
             if (stateEstandar.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:

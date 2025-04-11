@@ -60,6 +60,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
@@ -360,6 +361,7 @@ class _RecurrenteMujerEmprendeOfflineState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:

@@ -46,6 +46,11 @@ const ImageModelSchema = CollectionSchema(
       id: 5,
       name: r'solicitudId',
       type: IsarType.long,
+    ),
+    r'typeSigner': PropertySchema(
+      id: 6,
+      name: r'typeSigner',
+      type: IsarType.string,
     )
   },
   estimateSize: _imageModelEstimateSize,
@@ -98,6 +103,12 @@ int _imageModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.typeSigner;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -113,6 +124,7 @@ void _imageModelSerialize(
   writer.writeString(offsets[3], object.imagen4);
   writer.writeString(offsets[4], object.imagenFirma);
   writer.writeLong(offsets[5], object.solicitudId);
+  writer.writeString(offsets[6], object.typeSigner);
 }
 
 ImageModel _imageModelDeserialize(
@@ -129,6 +141,7 @@ ImageModel _imageModelDeserialize(
   object.imagen4 = reader.readStringOrNull(offsets[3]);
   object.imagenFirma = reader.readStringOrNull(offsets[4]);
   object.solicitudId = reader.readLongOrNull(offsets[5]);
+  object.typeSigner = reader.readStringOrNull(offsets[6]);
   return object;
 }
 
@@ -151,6 +164,8 @@ P _imageModelDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 5:
       return (reader.readLongOrNull(offset)) as P;
+    case 6:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1123,6 +1138,159 @@ extension ImageModelQueryFilter
       ));
     });
   }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'typeSigner',
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'typeSigner',
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition> typeSignerEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition> typeSignerBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'typeSigner',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'typeSigner',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition> typeSignerMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'typeSigner',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeSigner',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterFilterCondition>
+      typeSignerIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'typeSigner',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension ImageModelQueryObject
@@ -1202,6 +1370,18 @@ extension ImageModelQuerySortBy
   QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortBySolicitudIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'solicitudId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortByTypeSigner() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeSigner', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> sortByTypeSignerDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeSigner', Sort.desc);
     });
   }
 }
@@ -1291,6 +1471,18 @@ extension ImageModelQuerySortThenBy
       return query.addSortBy(r'solicitudId', Sort.desc);
     });
   }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> thenByTypeSigner() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeSigner', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QAfterSortBy> thenByTypeSignerDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeSigner', Sort.desc);
+    });
+  }
 }
 
 extension ImageModelQueryWhereDistinct
@@ -1333,6 +1525,13 @@ extension ImageModelQueryWhereDistinct
   QueryBuilder<ImageModel, ImageModel, QDistinct> distinctBySolicitudId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'solicitudId');
+    });
+  }
+
+  QueryBuilder<ImageModel, ImageModel, QDistinct> distinctByTypeSigner(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'typeSigner', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1378,6 +1577,12 @@ extension ImageModelQueryProperty
   QueryBuilder<ImageModel, int?, QQueryOperations> solicitudIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'solicitudId');
+    });
+  }
+
+  QueryBuilder<ImageModel, String?, QQueryOperations> typeSignerProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'typeSigner');
     });
   }
 }

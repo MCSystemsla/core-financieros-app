@@ -32,6 +32,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -168,6 +169,7 @@ class _RecurrentSign extends StatefulWidget {
 }
 
 class _RecurrentSignState extends State<_RecurrentSign> {
+  TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -187,223 +189,249 @@ class _RecurrentSignState extends State<_RecurrentSign> {
           steps: 5,
           currentStep: 5,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  'forms.firmar.title'.tr(),
-                  style: const TextStyle(
-                    color: AppColors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(10),
-                Text(
-                  'forms.firmar.description'.tr(),
-                  style: TextStyle(
-                    color: AppColors.greyWithOpacityV4,
-                  ),
-                ),
-                const Gap(20),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.boxGrey,
-                            width: .9,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Signature(
-                            key: const Key('signature'),
-                            controller: controller,
-                            // height: size.height * .56,
-                            width: size.width * .9,
-                            backgroundColor: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconBorder.fromIcon(
-                          color: AppColors.red,
-                          icon: Icons.delete_forever,
-                          onTap: () => controller.clear(),
-                          size: const Size(44, 44),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(30),
-                BlocConsumer<RecurrenteAguaYSaneamientoCubit,
-                    RecurrenteAguaYSaneamientoState>(
-                  listener: (context, state) async {
-                    final status = state.status;
-                    if (status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context, dialogType: DialogType.error);
-                    }
-                    if (state.status == Status.done) {
-                      final signatureImage = await controller.toPngBytes();
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final filePath = '${directory.path}/signature.png';
-
-                      // Guarda la imagen en el archivo
-                      final file = File(filePath);
-                      await file.writeAsBytes(signatureImage!);
-                      if (!context.mounted) return;
-                      context.read<UploadUserFileCubit>().uploadUserFiles(
-                            cedula: context.read<KivaRouteCubit>().state.cedula,
-                            numero: context.read<KivaRouteCubit>().state.numero,
-                            tipoSolicitud: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .tipoSolicitud,
-                            fotoFirma: file.path,
-                            solicitudId: int.parse(
-                              context.read<KivaRouteCubit>().state.solicitudId,
-                            ),
-                            formularioKiva: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .currentRoute,
-                          );
-                      await customPopUp(
-                        context: context,
-                        dismissOnTouchOutside: false,
-                        size: size,
-                        title: 'Formulario Kiva Enviado exitosamente!!',
-                        subtitle: 'Las respuestas se han enviado Exitosamente',
-                        dialogType: DialogType.success,
-                        buttonAcept: true,
-                        textButtonAcept: 'Ok',
-                        colorButtonAcept: AppColors.getPrimaryColor(),
-                        onPressedAccept: () {
-                          context.pushReplacement('/');
-                        },
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return CustomElevatedButton(
-                      icon: const Icon(
-                        Icons.edit,
-                        color: AppColors.white,
-                      ),
-                      enabled: state.status != Status.inProgress,
-                      positionIcon: PositionIcon.left,
-                      text: state.status == Status.inProgress
-                          ? 'Cargando...'
-                          : 'button.send'.tr(),
-                      color: context.primaryColor(),
-                      onPressed: () async {
-                        await customPopUp(
-                          context: context,
-                          size: size,
-                          title:
-                              'Confirmas que has leido y confirmado el Formulario Kiva?',
-                          dialogType: DialogType.warning,
-                          buttonAcept: true,
-                          buttonCancel: true,
-                          colorButtonCancel: AppColors.red,
-                          textButtonAcept: 'Aceptar',
-                          textButtonCancel: 'Cancelar',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () async {
-                            final directory =
-                                await getApplicationDocumentsDirectory();
-                            final customDir =
-                                Directory('${directory.path}/MySignatures');
-
-                            // Crea el directorio si no existe
-                            if (!await customDir.exists()) {
-                              await customDir.create(recursive: true);
-                              log('Directorio creado: ${customDir.path}');
-                            }
-
-                            // Define la ruta de la imagen directamente en el directorio
-                            final localPath =
-                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
-
-                            // Genera la imagen de la firma
-                            final signatureImage =
-                                await controller.toPngBytes();
-
-                            if (signatureImage != null) {
-                              // Guarda la imagen directamente en el directorio
-                              final file = File(localPath);
-                              await file.writeAsBytes(signatureImage);
-                              log('Firma guardada en: $localPath');
-                            } else {
-                              log('No se pudo generar la imagen de la firma.');
-                              return;
-                            }
-                            if (!context.mounted) return;
-                            !isConnected.isConnected ||
-                                    !isConnected.isCorrectNetwork
-                                ? await saveAnswersOnLocalDB(
-                                    context,
-                                    state,
-                                    ImageModel()
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                    !isConnected.isCorrectNetwork
-                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                        : 'Formulario Kiva Guardado Exitosamente!!',
-                                  )
-                                : context
-                                    .read<RecurrenteAguaYSaneamientoCubit>()
-                                    .sendAnswers();
-                            if (!context.mounted) return;
-                            context.pop();
-                          },
-                          onPressedCancel: () => context.pop(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                Expanded(
-                  flex: 0,
-                  child: CustomElevatedButton(
-                    alignment: MainAxisAlignment.center,
-                    text: 'Regresar',
-                    color: Colors.red,
-                    onPressed: () => widget.controller.previousPage(
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeIn,
-                    ),
-                  ),
-                ),
-                const Gap(10),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: JLuxDropdown(
+            dropdownColor: AppColors.white,
+            title: 'Tiene capacidad el usuario para firma?',
+            items: ['input.yes'.tr(), 'input.no'.tr()],
+            onChanged: (item) {
+              setState(() {
+                typeSigner = item == 'input.yes'.tr()
+                    ? TypeSigner.cliente
+                    : TypeSigner.asesor;
+              });
+            },
+            toStringItem: (item) => item,
+            hintText: 'input.select_option'.tr(),
           ),
         ),
+        if (typeSigner != TypeSigner.ninguno)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'forms.firmar.title'.tr(),
+                    style: const TextStyle(
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Gap(10),
+                  Text(
+                    'forms.firmar.description'.tr(),
+                    style: TextStyle(
+                      color: AppColors.greyWithOpacityV4,
+                    ),
+                  ),
+                  const Gap(20),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.boxGrey,
+                              width: .9,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Signature(
+                              key: const Key('signature'),
+                              controller: controller,
+                              // height: size.height * .56,
+                              width: size.width * .9,
+                              backgroundColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: IconBorder.fromIcon(
+                            color: AppColors.red,
+                            icon: Icons.delete_forever,
+                            onTap: () => controller.clear(),
+                            size: const Size(44, 44),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(30),
+                  BlocConsumer<RecurrenteAguaYSaneamientoCubit,
+                      RecurrenteAguaYSaneamientoState>(
+                    listener: (context, state) async {
+                      final status = state.status;
+                      if (status == Status.error) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.errorMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
+                      }
+                      if (state.status == Status.done) {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
+                        context.read<UploadUserFileCubit>().uploadUserFiles(
+                              typeSigner: typeSigner,
+                              cedula:
+                                  context.read<KivaRouteCubit>().state.cedula,
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
+                              fotoFirma: file.path,
+                              solicitudId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                              formularioKiva: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .currentRoute,
+                            );
+                        await customPopUp(
+                          context: context,
+                          dismissOnTouchOutside: false,
+                          size: size,
+                          title: 'Formulario Kiva Enviado exitosamente!!',
+                          subtitle:
+                              'Las respuestas se han enviado Exitosamente',
+                          dialogType: DialogType.success,
+                          buttonAcept: true,
+                          textButtonAcept: 'Ok',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.pushReplacement('/');
+                          },
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomElevatedButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: AppColors.white,
+                        ),
+                        enabled: state.status != Status.inProgress,
+                        positionIcon: PositionIcon.left,
+                        text: state.status == Status.inProgress
+                            ? 'Cargando...'
+                            : 'button.send'.tr(),
+                        color: context.primaryColor(),
+                        onPressed: () async {
+                          await customPopUp(
+                            context: context,
+                            size: size,
+                            title:
+                                'Confirmas que has leido y confirmado el Formulario Kiva?',
+                            dialogType: DialogType.warning,
+                            buttonAcept: true,
+                            buttonCancel: true,
+                            colorButtonCancel: AppColors.red,
+                            textButtonAcept: 'Aceptar',
+                            textButtonCancel: 'Cancelar',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () async {
+                              final directory =
+                                  await getApplicationDocumentsDirectory();
+                              final customDir =
+                                  Directory('${directory.path}/MySignatures');
+
+                              // Crea el directorio si no existe
+                              if (!await customDir.exists()) {
+                                await customDir.create(recursive: true);
+                                log('Directorio creado: ${customDir.path}');
+                              }
+
+                              // Define la ruta de la imagen directamente en el directorio
+                              final localPath =
+                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                              // Genera la imagen de la firma
+                              final signatureImage =
+                                  await controller.toPngBytes();
+
+                              if (signatureImage != null) {
+                                // Guarda la imagen directamente en el directorio
+                                final file = File(localPath);
+                                await file.writeAsBytes(signatureImage);
+                                log('Firma guardada en: $localPath');
+                              } else {
+                                log('No se pudo generar la imagen de la firma.');
+                                return;
+                              }
+                              if (!context.mounted) return;
+                              !isConnected.isConnected ||
+                                      !isConnected.isCorrectNetwork
+                                  ? await saveAnswersOnLocalDB(
+                                      context,
+                                      state,
+                                      ImageModel()
+                                        ..typeSigner = typeSigner.name
+                                        ..imagenFirma = localPath
+                                        ..imagen1 = imageProvider.imagen1
+                                        ..imagen2 = imageProvider.imagen2
+                                        ..imagen3 = imageProvider.imagen3
+                                        ..solicitudId = int.tryParse(
+                                          context
+                                              .read<KivaRouteCubit>()
+                                              .state
+                                              .solicitudId,
+                                        ),
+                                      !isConnected.isCorrectNetwork
+                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                          : 'Formulario Kiva Guardado Exitosamente!!',
+                                    )
+                                  : context
+                                      .read<RecurrenteAguaYSaneamientoCubit>()
+                                      .sendAnswers();
+                              if (!context.mounted) return;
+                              context.pop();
+                            },
+                            onPressedCancel: () => context.pop(),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    flex: 0,
+                    child: CustomElevatedButton(
+                      alignment: MainAxisAlignment.center,
+                      text: 'Regresar',
+                      color: Colors.red,
+                      onPressed: () => widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeIn,
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -465,6 +493,7 @@ class EstandarSign extends StatefulWidget {
 }
 
 class _EstandarSignState extends State<EstandarSign> {
+  TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -484,222 +513,248 @@ class _EstandarSignState extends State<EstandarSign> {
           steps: 5,
           currentStep: 5,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  'forms.firmar.title'.tr(),
-                  style: const TextStyle(
-                    color: AppColors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(10),
-                Text(
-                  'forms.firmar.description'.tr(),
-                  style: TextStyle(
-                    color: AppColors.greyWithOpacityV4,
-                  ),
-                ),
-                const Gap(20),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.boxGrey,
-                            width: .9,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Signature(
-                            key: const Key('signature'),
-                            controller: controller,
-                            // height: size.height * .56,
-                            width: size.width * .9,
-                            backgroundColor: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconBorder.fromIcon(
-                          color: AppColors.red,
-                          icon: Icons.delete_forever,
-                          onTap: () => controller.clear(),
-                          size: const Size(44, 44),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(30),
-                BlocConsumer<EstandarCubit, EstandarState>(
-                  listener: (context, state) async {
-                    final status = state.status;
-                    if (status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context, dialogType: DialogType.error);
-                    }
-                    if (state.status == Status.done) {
-                      final signatureImage = await controller.toPngBytes();
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final filePath = '${directory.path}/signature.png';
-
-                      // Guarda la imagen en el archivo
-                      final file = File(filePath);
-                      await file.writeAsBytes(signatureImage!);
-                      if (!context.mounted) return;
-                      context.read<UploadUserFileCubit>().uploadUserFiles(
-                            cedula: context.read<KivaRouteCubit>().state.cedula,
-                            numero: context.read<KivaRouteCubit>().state.numero,
-                            tipoSolicitud: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .tipoSolicitud,
-                            fotoFirma: file.path,
-                            solicitudId: int.parse(
-                              context.read<KivaRouteCubit>().state.solicitudId,
-                            ),
-                            formularioKiva: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .currentRoute,
-                          );
-                      await customPopUp(
-                        context: context,
-                        dismissOnTouchOutside: false,
-                        size: size,
-                        title: 'Formulario Kiva Enviado exitosamente!!',
-                        subtitle: 'Las respuestas se han enviado Exitosamente',
-                        dialogType: DialogType.success,
-                        buttonAcept: true,
-                        textButtonAcept: 'Ok',
-                        colorButtonAcept: AppColors.getPrimaryColor(),
-                        onPressedAccept: () {
-                          context.pushReplacement('/');
-                        },
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return CustomElevatedButton(
-                      icon: const Icon(
-                        Icons.edit,
-                        color: AppColors.white,
-                      ),
-                      enabled: state.status != Status.inProgress,
-                      positionIcon: PositionIcon.left,
-                      text: state.status == Status.inProgress
-                          ? 'Cargando...'
-                          : 'button.send'.tr(),
-                      color: context.primaryColor(),
-                      onPressed: () async {
-                        FocusScope.of(context).unfocus();
-                        await customPopUp(
-                          context: context,
-                          size: size,
-                          title:
-                              'Confirmas que has leido y confirmado el Formulario Kiva?',
-                          dialogType: DialogType.warning,
-                          buttonAcept: true,
-                          buttonCancel: true,
-                          colorButtonCancel: AppColors.red,
-                          textButtonAcept: 'Aceptar',
-                          textButtonCancel: 'Cancelar',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () async {
-                            FocusScope.of(context).unfocus();
-                            final directory =
-                                await getApplicationDocumentsDirectory();
-                            final customDir =
-                                Directory('${directory.path}/MySignatures');
-
-                            // Crea el directorio si no existe
-                            if (!await customDir.exists()) {
-                              await customDir.create(recursive: true);
-                              log('Directorio creado: ${customDir.path}');
-                            }
-
-                            // Define la ruta de la imagen directamente en el directorio
-                            final localPath =
-                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
-
-                            // Genera la imagen de la firma
-                            final signatureImage =
-                                await controller.toPngBytes();
-
-                            if (signatureImage != null) {
-                              // Guarda la imagen directamente en el directorio
-                              final file = File(localPath);
-                              await file.writeAsBytes(signatureImage);
-                              log('Firma guardada en: $localPath');
-                            } else {
-                              log('No se pudo generar la imagen de la firma.');
-                              return;
-                            }
-                            if (!context.mounted) return;
-                            !isConnected.isConnected ||
-                                    !isConnected.isCorrectNetwork
-                                ? await saveOfflineResponses(
-                                    context,
-                                    state,
-                                    ImageModel()
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                    !isConnected.isCorrectNetwork
-                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                        : 'Formulario Kiva Guardado Exitosamente!!',
-                                  )
-                                : context.read<EstandarCubit>().sendAnswers();
-                            if (!context.mounted) return;
-                            context.pop();
-                          },
-                          onPressedCancel: () => context.pop(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                Expanded(
-                  flex: 0,
-                  child: CustomElevatedButton(
-                    alignment: MainAxisAlignment.center,
-                    text: 'Regresar',
-                    color: Colors.red,
-                    onPressed: () => widget.controller.previousPage(
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeIn,
-                    ),
-                  ),
-                ),
-                const Gap(10),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: JLuxDropdown(
+            dropdownColor: AppColors.white,
+            title: 'Tiene capacidad el usuario para firma?',
+            items: ['input.yes'.tr(), 'input.no'.tr()],
+            onChanged: (item) {
+              setState(() {
+                typeSigner = item == 'input.yes'.tr()
+                    ? TypeSigner.cliente
+                    : TypeSigner.asesor;
+              });
+            },
+            toStringItem: (item) => item,
+            hintText: 'input.select_option'.tr(),
           ),
         ),
+        if (typeSigner != TypeSigner.ninguno)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'forms.firmar.title'.tr(),
+                    style: const TextStyle(
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Gap(10),
+                  Text(
+                    'forms.firmar.description'.tr(),
+                    style: TextStyle(
+                      color: AppColors.greyWithOpacityV4,
+                    ),
+                  ),
+                  const Gap(20),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.boxGrey,
+                              width: .9,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Signature(
+                              key: const Key('signature'),
+                              controller: controller,
+                              // height: size.height * .56,
+                              width: size.width * .9,
+                              backgroundColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: IconBorder.fromIcon(
+                            color: AppColors.red,
+                            icon: Icons.delete_forever,
+                            onTap: () => controller.clear(),
+                            size: const Size(44, 44),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(30),
+                  BlocConsumer<EstandarCubit, EstandarState>(
+                    listener: (context, state) async {
+                      final status = state.status;
+                      if (status == Status.error) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.errorMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
+                      }
+                      if (state.status == Status.done) {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
+                        context.read<UploadUserFileCubit>().uploadUserFiles(
+                              typeSigner: typeSigner,
+                              cedula:
+                                  context.read<KivaRouteCubit>().state.cedula,
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
+                              fotoFirma: file.path,
+                              solicitudId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                              formularioKiva: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .currentRoute,
+                            );
+                        await customPopUp(
+                          context: context,
+                          dismissOnTouchOutside: false,
+                          size: size,
+                          title: 'Formulario Kiva Enviado exitosamente!!',
+                          subtitle:
+                              'Las respuestas se han enviado Exitosamente',
+                          dialogType: DialogType.success,
+                          buttonAcept: true,
+                          textButtonAcept: 'Ok',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.pushReplacement('/');
+                          },
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomElevatedButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: AppColors.white,
+                        ),
+                        enabled: state.status != Status.inProgress,
+                        positionIcon: PositionIcon.left,
+                        text: state.status == Status.inProgress
+                            ? 'Cargando...'
+                            : 'button.send'.tr(),
+                        color: context.primaryColor(),
+                        onPressed: () async {
+                          FocusScope.of(context).unfocus();
+                          await customPopUp(
+                            context: context,
+                            size: size,
+                            title:
+                                'Confirmas que has leido y confirmado el Formulario Kiva?',
+                            dialogType: DialogType.warning,
+                            buttonAcept: true,
+                            buttonCancel: true,
+                            colorButtonCancel: AppColors.red,
+                            textButtonAcept: 'Aceptar',
+                            textButtonCancel: 'Cancelar',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () async {
+                              FocusScope.of(context).unfocus();
+                              final directory =
+                                  await getApplicationDocumentsDirectory();
+                              final customDir =
+                                  Directory('${directory.path}/MySignatures');
+
+                              // Crea el directorio si no existe
+                              if (!await customDir.exists()) {
+                                await customDir.create(recursive: true);
+                                log('Directorio creado: ${customDir.path}');
+                              }
+
+                              // Define la ruta de la imagen directamente en el directorio
+                              final localPath =
+                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                              // Genera la imagen de la firma
+                              final signatureImage =
+                                  await controller.toPngBytes();
+
+                              if (signatureImage != null) {
+                                // Guarda la imagen directamente en el directorio
+                                final file = File(localPath);
+                                await file.writeAsBytes(signatureImage);
+                                log('Firma guardada en: $localPath');
+                              } else {
+                                log('No se pudo generar la imagen de la firma.');
+                                return;
+                              }
+                              if (!context.mounted) return;
+                              !isConnected.isConnected ||
+                                      !isConnected.isCorrectNetwork
+                                  ? await saveOfflineResponses(
+                                      context,
+                                      state,
+                                      ImageModel()
+                                        ..typeSigner = typeSigner.name
+                                        ..imagenFirma = localPath
+                                        ..imagen1 = imageProvider.imagen1
+                                        ..imagen2 = imageProvider.imagen2
+                                        ..imagen3 = imageProvider.imagen3
+                                        ..solicitudId = int.tryParse(
+                                          context
+                                              .read<KivaRouteCubit>()
+                                              .state
+                                              .solicitudId,
+                                        ),
+                                      !isConnected.isCorrectNetwork
+                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                          : 'Formulario Kiva Guardado Exitosamente!!',
+                                    )
+                                  : context.read<EstandarCubit>().sendAnswers();
+                              if (!context.mounted) return;
+                              context.pop();
+                            },
+                            onPressedCancel: () => context.pop(),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    flex: 0,
+                    child: CustomElevatedButton(
+                      alignment: MainAxisAlignment.center,
+                      text: 'Regresar',
+                      color: Colors.red,
+                      onPressed: () => widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeIn,
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -1162,6 +1217,7 @@ class _SaneamientoSign extends StatefulWidget {
 }
 
 class _SaneamientoSignState extends State<_SaneamientoSign> {
+  TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -1181,222 +1237,248 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
           steps: 5,
           currentStep: 5,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  'forms.firmar.title'.tr(),
-                  style: const TextStyle(
-                    color: AppColors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(10),
-                Text(
-                  'forms.firmar.description'.tr(),
-                  style: TextStyle(
-                    color: AppColors.greyWithOpacityV4,
-                  ),
-                ),
-                const Gap(20),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.boxGrey,
-                            width: .9,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Signature(
-                            key: const Key('signature'),
-                            controller: controller,
-                            // height: size.height * .56,
-                            width: size.width * .9,
-                            backgroundColor: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconBorder.fromIcon(
-                          color: AppColors.red,
-                          icon: Icons.delete_forever,
-                          onTap: () => controller.clear(),
-                          size: const Size(44, 44),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(30),
-                BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
-                  listener: (context, state) async {
-                    final status = state.status;
-                    if (status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context, dialogType: DialogType.error);
-                    }
-                    if (state.status == Status.done) {
-                      final signatureImage = await controller.toPngBytes();
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final filePath = '${directory.path}/signature.png';
-
-                      // Guarda la imagen en el archivo
-                      final file = File(filePath);
-                      await file.writeAsBytes(signatureImage!);
-                      if (!context.mounted) return;
-                      context.read<UploadUserFileCubit>().uploadUserFiles(
-                            cedula: context.read<KivaRouteCubit>().state.cedula,
-                            numero: context.read<KivaRouteCubit>().state.numero,
-                            tipoSolicitud: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .tipoSolicitud,
-                            fotoFirma: file.path,
-                            solicitudId: int.parse(
-                              context.read<KivaRouteCubit>().state.solicitudId,
-                            ),
-                            formularioKiva: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .currentRoute,
-                          );
-                      await customPopUp(
-                        context: context,
-                        dismissOnTouchOutside: false,
-                        size: size,
-                        title: 'Formulario Kiva Enviado exitosamente!!',
-                        subtitle: 'Las respuestas se han enviado Exitosamente',
-                        dialogType: DialogType.success,
-                        buttonAcept: true,
-                        textButtonAcept: 'Ok',
-                        colorButtonAcept: AppColors.getPrimaryColor(),
-                        onPressedAccept: () {
-                          context.pushReplacement('/');
-                        },
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return CustomElevatedButton(
-                      icon: const Icon(
-                        Icons.edit,
-                        color: AppColors.white,
-                      ),
-                      enabled: state.status != Status.inProgress,
-                      positionIcon: PositionIcon.left,
-                      text: state.status == Status.inProgress
-                          ? 'Cargando...'
-                          : 'button.send'.tr(),
-                      color: context.primaryColor(),
-                      onPressed: () async {
-                        await customPopUp(
-                          context: context,
-                          size: size,
-                          title:
-                              'Confirmas que has leido y confirmado el Formulario Kiva?',
-                          dialogType: DialogType.warning,
-                          buttonAcept: true,
-                          buttonCancel: true,
-                          colorButtonCancel: AppColors.red,
-                          textButtonAcept: 'Aceptar',
-                          textButtonCancel: 'Cancelar',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () async {
-                            final directory =
-                                await getApplicationDocumentsDirectory();
-                            final customDir =
-                                Directory('${directory.path}/MySignatures');
-
-                            // Crea el directorio si no existe
-                            if (!await customDir.exists()) {
-                              await customDir.create(recursive: true);
-                              log('Directorio creado: ${customDir.path}');
-                            }
-
-                            // Define la ruta de la imagen directamente en el directorio
-                            final localPath =
-                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
-
-                            // Genera la imagen de la firma
-                            final signatureImage =
-                                await controller.toPngBytes();
-
-                            if (signatureImage != null) {
-                              // Guarda la imagen directamente en el directorio
-                              final file = File(localPath);
-                              await file.writeAsBytes(signatureImage);
-                              log('Firma guardada en: $localPath');
-                            } else {
-                              log('No se pudo generar la imagen de la firma.');
-                              return;
-                            }
-                            if (!context.mounted) return;
-                            !isConnected.isConnected ||
-                                    !isConnected.isCorrectNetwork
-                                ? await saveAnswersOnLocalDB(
-                                    context,
-                                    state,
-                                    ImageModel()
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                    !isConnected.isCorrectNetwork
-                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                        : 'Formulario Kiva Guardado Exitosamente!!',
-                                  )
-                                : context
-                                    .read<AguaYSaneamientoCubit>()
-                                    .sendAnswers();
-                            if (!context.mounted) return;
-                            context.pop();
-                          },
-                          onPressedCancel: () => context.pop(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                Expanded(
-                  flex: 0,
-                  child: CustomElevatedButton(
-                    alignment: MainAxisAlignment.center,
-                    text: 'Regresar',
-                    color: Colors.red,
-                    onPressed: () => widget.controller.previousPage(
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeIn,
-                    ),
-                  ),
-                ),
-                const Gap(10),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: JLuxDropdown(
+            dropdownColor: AppColors.white,
+            title: 'Tiene capacidad el usuario para firma?',
+            items: ['input.yes'.tr(), 'input.no'.tr()],
+            onChanged: (item) {
+              setState(() {
+                typeSigner = item == 'input.yes'.tr()
+                    ? TypeSigner.cliente
+                    : TypeSigner.asesor;
+              });
+            },
+            toStringItem: (item) => item,
+            hintText: 'input.select_option'.tr(),
           ),
         ),
+        if (typeSigner != TypeSigner.ninguno)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'forms.firmar.title'.tr(),
+                    style: const TextStyle(
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Gap(10),
+                  Text(
+                    'forms.firmar.description'.tr(),
+                    style: TextStyle(
+                      color: AppColors.greyWithOpacityV4,
+                    ),
+                  ),
+                  const Gap(20),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.boxGrey,
+                              width: .9,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Signature(
+                              key: const Key('signature'),
+                              controller: controller,
+                              // height: size.height * .56,
+                              width: size.width * .9,
+                              backgroundColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: IconBorder.fromIcon(
+                            color: AppColors.red,
+                            icon: Icons.delete_forever,
+                            onTap: () => controller.clear(),
+                            size: const Size(44, 44),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(30),
+                  BlocConsumer<AguaYSaneamientoCubit, AguaYSaneamientoState>(
+                    listener: (context, state) async {
+                      final status = state.status;
+                      if (status == Status.error) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.errorMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
+                      }
+                      if (state.status == Status.done) {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
+                        context.read<UploadUserFileCubit>().uploadUserFiles(
+                              typeSigner: typeSigner,
+                              cedula:
+                                  context.read<KivaRouteCubit>().state.cedula,
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
+                              fotoFirma: file.path,
+                              solicitudId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                              formularioKiva: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .currentRoute,
+                            );
+                        await customPopUp(
+                          context: context,
+                          dismissOnTouchOutside: false,
+                          size: size,
+                          title: 'Formulario Kiva Enviado exitosamente!!',
+                          subtitle:
+                              'Las respuestas se han enviado Exitosamente',
+                          dialogType: DialogType.success,
+                          buttonAcept: true,
+                          textButtonAcept: 'Ok',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.pushReplacement('/');
+                          },
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomElevatedButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: AppColors.white,
+                        ),
+                        enabled: state.status != Status.inProgress,
+                        positionIcon: PositionIcon.left,
+                        text: state.status == Status.inProgress
+                            ? 'Cargando...'
+                            : 'button.send'.tr(),
+                        color: context.primaryColor(),
+                        onPressed: () async {
+                          await customPopUp(
+                            context: context,
+                            size: size,
+                            title:
+                                'Confirmas que has leido y confirmado el Formulario Kiva?',
+                            dialogType: DialogType.warning,
+                            buttonAcept: true,
+                            buttonCancel: true,
+                            colorButtonCancel: AppColors.red,
+                            textButtonAcept: 'Aceptar',
+                            textButtonCancel: 'Cancelar',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () async {
+                              final directory =
+                                  await getApplicationDocumentsDirectory();
+                              final customDir =
+                                  Directory('${directory.path}/MySignatures');
+
+                              // Crea el directorio si no existe
+                              if (!await customDir.exists()) {
+                                await customDir.create(recursive: true);
+                                log('Directorio creado: ${customDir.path}');
+                              }
+
+                              // Define la ruta de la imagen directamente en el directorio
+                              final localPath =
+                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                              // Genera la imagen de la firma
+                              final signatureImage =
+                                  await controller.toPngBytes();
+
+                              if (signatureImage != null) {
+                                // Guarda la imagen directamente en el directorio
+                                final file = File(localPath);
+                                await file.writeAsBytes(signatureImage);
+                                log('Firma guardada en: $localPath');
+                              } else {
+                                log('No se pudo generar la imagen de la firma.');
+                                return;
+                              }
+                              if (!context.mounted) return;
+                              !isConnected.isConnected ||
+                                      !isConnected.isCorrectNetwork
+                                  ? await saveAnswersOnLocalDB(
+                                      context,
+                                      state,
+                                      ImageModel()
+                                        ..typeSigner = typeSigner.name
+                                        ..imagenFirma = localPath
+                                        ..imagen1 = imageProvider.imagen1
+                                        ..imagen2 = imageProvider.imagen2
+                                        ..imagen3 = imageProvider.imagen3
+                                        ..solicitudId = int.tryParse(
+                                          context
+                                              .read<KivaRouteCubit>()
+                                              .state
+                                              .solicitudId,
+                                        ),
+                                      !isConnected.isCorrectNetwork
+                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                          : 'Formulario Kiva Guardado Exitosamente!!',
+                                    )
+                                  : context
+                                      .read<AguaYSaneamientoCubit>()
+                                      .sendAnswers();
+                              if (!context.mounted) return;
+                              context.pop();
+                            },
+                            onPressedCancel: () => context.pop(),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    flex: 0,
+                    child: CustomElevatedButton(
+                      alignment: MainAxisAlignment.center,
+                      text: 'Regresar',
+                      color: Colors.red,
+                      onPressed: () => widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeIn,
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -1458,6 +1540,7 @@ class SignQuestionaryWidget extends StatefulWidget {
 }
 
 class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
+  TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
@@ -1478,222 +1561,248 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
           steps: 5,
           currentStep: 5,
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  'forms.firmar.title'.tr(),
-                  style: const TextStyle(
-                    color: AppColors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(10),
-                Text(
-                  'forms.firmar.description'.tr(),
-                  style: TextStyle(
-                    color: AppColors.greyWithOpacityV4,
-                  ),
-                ),
-                const Gap(20),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.boxGrey,
-                            width: .9,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Signature(
-                            key: const Key('signature'),
-                            controller: controller,
-                            // height: size.height * .56,
-                            width: size.width * .9,
-                            backgroundColor: AppColors.white,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconBorder.fromIcon(
-                          color: AppColors.red,
-                          icon: Icons.delete_forever,
-                          onTap: () => controller.clear(),
-                          size: const Size(44, 44),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(30),
-                BlocConsumer<MejoraViviendaCubit, MejoraViviendaState>(
-                  listener: (context, state) async {
-                    final status = state.status;
-                    if (status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context, dialogType: DialogType.error);
-                    }
-                    if (state.status == Status.done) {
-                      final signatureImage = await controller.toPngBytes();
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final filePath = '${directory.path}/signature.png';
-
-                      // Guarda la imagen en el archivo
-                      final file = File(filePath);
-                      await file.writeAsBytes(signatureImage!);
-                      if (!context.mounted) return;
-                      context.read<UploadUserFileCubit>().uploadUserFiles(
-                            cedula: context.read<KivaRouteCubit>().state.cedula,
-                            numero: context.read<KivaRouteCubit>().state.numero,
-                            tipoSolicitud: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .tipoSolicitud,
-                            fotoFirma: file.path,
-                            solicitudId: int.parse(
-                              context.read<KivaRouteCubit>().state.solicitudId,
-                            ),
-                            formularioKiva: context
-                                .read<KivaRouteCubit>()
-                                .state
-                                .currentRoute,
-                          );
-                      await customPopUp(
-                        context: context,
-                        dismissOnTouchOutside: false,
-                        size: size,
-                        title: 'Formulario Kiva Enviado exitosamente!!',
-                        subtitle: 'Las respuestas se han enviado Exitosamente',
-                        dialogType: DialogType.success,
-                        buttonAcept: true,
-                        textButtonAcept: 'Ok',
-                        colorButtonAcept: AppColors.getPrimaryColor(),
-                        onPressedAccept: () {
-                          context.pushReplacement('/');
-                        },
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return CustomElevatedButton(
-                      icon: const Icon(
-                        Icons.edit,
-                        color: AppColors.white,
-                      ),
-                      enabled: state.status != Status.inProgress,
-                      positionIcon: PositionIcon.left,
-                      text: state.status == Status.inProgress
-                          ? 'Cargando...'
-                          : 'button.send'.tr(),
-                      color: context.primaryColor(),
-                      onPressed: () async {
-                        await customPopUp(
-                          context: context,
-                          size: size,
-                          title:
-                              'Confirmas que has leido y confirmado el Formulario Kiva?',
-                          dialogType: DialogType.warning,
-                          buttonAcept: true,
-                          buttonCancel: true,
-                          colorButtonCancel: AppColors.red,
-                          textButtonAcept: 'Aceptar',
-                          textButtonCancel: 'Cancelar',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () async {
-                            final directory =
-                                await getApplicationDocumentsDirectory();
-                            final customDir =
-                                Directory('${directory.path}/MySignatures');
-
-                            // Crea el directorio si no existe
-                            if (!await customDir.exists()) {
-                              await customDir.create(recursive: true);
-                              log('Directorio creado: ${customDir.path}');
-                            }
-
-                            // Define la ruta de la imagen directamente en el directorio
-                            final localPath =
-                                '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
-
-                            // Genera la imagen de la firma
-                            final signatureImage =
-                                await controller.toPngBytes();
-
-                            if (signatureImage != null) {
-                              // Guarda la imagen directamente en el directorio
-                              final file = File(localPath);
-                              await file.writeAsBytes(signatureImage);
-                              log('Firma guardada en: $localPath');
-                            } else {
-                              log('No se pudo generar la imagen de la firma.');
-                              return;
-                            }
-                            if (!context.mounted) return;
-                            !isConnected.isConnected ||
-                                    !isConnected.isCorrectNetwork
-                                ? await saveMejoraViviendaForm(
-                                    context,
-                                    state,
-                                    ImageModel()
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                    !isConnected.isCorrectNetwork
-                                        ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                        : 'Formulario Kiva Guardado Exitosamente!!',
-                                  )
-                                : context
-                                    .read<MejoraViviendaCubit>()
-                                    .sendAnswers();
-                            if (!context.mounted) return;
-                            context.pop();
-                          },
-                          onPressedCancel: () => context.pop(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                Expanded(
-                  flex: 0,
-                  child: CustomElevatedButton(
-                    alignment: MainAxisAlignment.center,
-                    text: 'Regresar',
-                    color: Colors.red,
-                    onPressed: () => widget.controller.previousPage(
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeIn,
-                    ),
-                  ),
-                ),
-                const Gap(10),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: JLuxDropdown(
+            dropdownColor: AppColors.white,
+            title: 'Tiene capacidad el usuario para firma?',
+            items: ['input.yes'.tr(), 'input.no'.tr()],
+            onChanged: (item) {
+              setState(() {
+                typeSigner = item == 'input.yes'.tr()
+                    ? TypeSigner.cliente
+                    : TypeSigner.asesor;
+              });
+            },
+            toStringItem: (item) => item,
+            hintText: 'input.select_option'.tr(),
           ),
         ),
+        if (typeSigner != TypeSigner.ninguno)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'forms.firmar.title'.tr(),
+                    style: const TextStyle(
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Gap(10),
+                  Text(
+                    'forms.firmar.description'.tr(),
+                    style: TextStyle(
+                      color: AppColors.greyWithOpacityV4,
+                    ),
+                  ),
+                  const Gap(20),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.boxGrey,
+                              width: .9,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Signature(
+                              key: const Key('signature'),
+                              controller: controller,
+                              // height: size.height * .56,
+                              width: size.width * .9,
+                              backgroundColor: AppColors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: IconBorder.fromIcon(
+                            color: AppColors.red,
+                            icon: Icons.delete_forever,
+                            onTap: () => controller.clear(),
+                            size: const Size(44, 44),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(30),
+                  BlocConsumer<MejoraViviendaCubit, MejoraViviendaState>(
+                    listener: (context, state) async {
+                      final status = state.status;
+                      if (status == Status.error) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.errorMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
+                      }
+                      if (state.status == Status.done) {
+                        final signatureImage = await controller.toPngBytes();
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        final filePath = '${directory.path}/signature.png';
+
+                        // Guarda la imagen en el archivo
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage!);
+                        if (!context.mounted) return;
+                        context.read<UploadUserFileCubit>().uploadUserFiles(
+                              typeSigner: typeSigner,
+                              cedula:
+                                  context.read<KivaRouteCubit>().state.cedula,
+                              numero:
+                                  context.read<KivaRouteCubit>().state.numero,
+                              tipoSolicitud: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .tipoSolicitud,
+                              fotoFirma: file.path,
+                              solicitudId: int.parse(
+                                context
+                                    .read<KivaRouteCubit>()
+                                    .state
+                                    .solicitudId,
+                              ),
+                              formularioKiva: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .currentRoute,
+                            );
+                        await customPopUp(
+                          context: context,
+                          dismissOnTouchOutside: false,
+                          size: size,
+                          title: 'Formulario Kiva Enviado exitosamente!!',
+                          subtitle:
+                              'Las respuestas se han enviado Exitosamente',
+                          dialogType: DialogType.success,
+                          buttonAcept: true,
+                          textButtonAcept: 'Ok',
+                          colorButtonAcept: AppColors.getPrimaryColor(),
+                          onPressedAccept: () {
+                            context.pushReplacement('/');
+                          },
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomElevatedButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: AppColors.white,
+                        ),
+                        enabled: state.status != Status.inProgress,
+                        positionIcon: PositionIcon.left,
+                        text: state.status == Status.inProgress
+                            ? 'Cargando...'
+                            : 'button.send'.tr(),
+                        color: context.primaryColor(),
+                        onPressed: () async {
+                          await customPopUp(
+                            context: context,
+                            size: size,
+                            title:
+                                'Confirmas que has leido y confirmado el Formulario Kiva?',
+                            dialogType: DialogType.warning,
+                            buttonAcept: true,
+                            buttonCancel: true,
+                            colorButtonCancel: AppColors.red,
+                            textButtonAcept: 'Aceptar',
+                            textButtonCancel: 'Cancelar',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () async {
+                              final directory =
+                                  await getApplicationDocumentsDirectory();
+                              final customDir =
+                                  Directory('${directory.path}/MySignatures');
+
+                              // Crea el directorio si no existe
+                              if (!await customDir.exists()) {
+                                await customDir.create(recursive: true);
+                                log('Directorio creado: ${customDir.path}');
+                              }
+
+                              // Define la ruta de la imagen directamente en el directorio
+                              final localPath =
+                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+
+                              // Genera la imagen de la firma
+                              final signatureImage =
+                                  await controller.toPngBytes();
+
+                              if (signatureImage != null) {
+                                // Guarda la imagen directamente en el directorio
+                                final file = File(localPath);
+                                await file.writeAsBytes(signatureImage);
+                                log('Firma guardada en: $localPath');
+                              } else {
+                                log('No se pudo generar la imagen de la firma.');
+                                return;
+                              }
+                              if (!context.mounted) return;
+                              !isConnected.isConnected ||
+                                      !isConnected.isCorrectNetwork
+                                  ? await saveMejoraViviendaForm(
+                                      context,
+                                      state,
+                                      ImageModel()
+                                        ..typeSigner = typeSigner.name
+                                        ..imagenFirma = localPath
+                                        ..imagen1 = imageProvider.imagen1
+                                        ..imagen2 = imageProvider.imagen2
+                                        ..imagen3 = imageProvider.imagen3
+                                        ..solicitudId = int.tryParse(
+                                          context
+                                              .read<KivaRouteCubit>()
+                                              .state
+                                              .solicitudId,
+                                        ),
+                                      !isConnected.isCorrectNetwork
+                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                          : 'Formulario Kiva Guardado Exitosamente!!',
+                                    )
+                                  : context
+                                      .read<MejoraViviendaCubit>()
+                                      .sendAnswers();
+                              if (!context.mounted) return;
+                              context.pop();
+                            },
+                            onPressedCancel: () => context.pop(),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    flex: 0,
+                    child: CustomElevatedButton(
+                      alignment: MainAxisAlignment.center,
+                      text: 'Regresar',
+                      color: Colors.red,
+                      onPressed: () => widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeIn,
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

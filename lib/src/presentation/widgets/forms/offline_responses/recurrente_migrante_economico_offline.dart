@@ -61,6 +61,7 @@ class _RecurrenteMigranteEconomicoOfflineState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
