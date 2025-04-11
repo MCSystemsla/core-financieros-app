@@ -34,6 +34,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -43,6 +44,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:signature/signature.dart';
 // import 'package:path/path.dart' as path; // Para manejar nombres de archivo
 
@@ -771,6 +773,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
         context.read<InternetConnectionCubit>().state.isConnected;
     final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
     final size = MediaQuery.sizeOf(context);
+
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -806,34 +809,66 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
                 if (!mounted) return;
-                final photo = await picker.pickImage(
-                  source: ImageSource.camera,
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  imageQuality: 85,
-                );
-                if (!mounted || photo == null) return;
-                final appDir = await getApplicationDocumentsDirectory();
-                final customDir = Directory('${appDir.path}/MyImages');
-
-                // Crea el directorio si no existe
-                if (!await customDir.exists()) {
-                  await customDir.create(recursive: true);
-                  log('Directorio creado: ${customDir.path}');
+                final hasPermission = await _requestPermissions();
+                if (!context.mounted) return;
+                if (!hasPermission) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'No tienes permisos para usar la camara',
+                    onDone: () async {
+                      final isOpened = await openAppSettings();
+                      if (!context.mounted) return;
+                      if (isOpened) {
+                        context.pop();
+                      }
+                    },
+                  ).showDialog(context, dialogType: DialogType.error);
+                  return;
                 }
-                // Define la ruta de la imagen en el directorio
-                final localPath =
-                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                try {
+                  final photo = await picker.pickImage(
+                    source: ImageSource.camera,
+                    maxHeight: 600,
+                    maxWidth: 600,
+                    imageQuality: 85,
+                  );
+                  if (!mounted || photo == null) return;
+                  final appDir = await getApplicationDocumentsDirectory();
+                  final customDir = Directory('${appDir.path}/MyImages');
 
-                // Copia la imagen seleccionada al directorio
-                final imageFile = File(photo.path);
-                await imageFile.copy(localPath);
-                if (!mounted) return;
+                  // Crea el directorio si no existe
+                  if (!await customDir.exists()) {
+                    await customDir.create(recursive: true);
+                    log('Directorio creado: ${customDir.path}');
+                  }
+                  // Define la ruta de la imagen en el directorio
+                  final localPath =
+                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                setState(() {
-                  selectedImage = photo;
-                  selectedImage1Path = localPath;
-                });
+                  // Copia la imagen seleccionada al directorio
+                  final imageFile = File(photo.path);
+                  await imageFile.copy(localPath);
+                  if (!mounted) return;
+
+                  setState(() {
+                    selectedImage = photo;
+                    selectedImage1Path = localPath;
+                  });
+                } on PlatformException catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.message}',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                } catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.toString()}',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                }
               },
             ),
             const Gap(20),
@@ -842,33 +877,71 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
                 if (!mounted) return;
-                final photo = await picker.pickImage(
-                  source: ImageSource.camera,
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  imageQuality: 85,
-                );
-                if (!mounted || photo == null) return;
-                final appDir = await getApplicationDocumentsDirectory();
-                final customDir = Directory('${appDir.path}/MyImages');
-
-                // Crea el directorio si no existe
-                if (!await customDir.exists()) {
-                  await customDir.create(recursive: true);
-                  log('Directorio creado: ${customDir.path}');
+                final hasPermission = await _requestPermissions();
+                if (!context.mounted) return;
+                if (!hasPermission) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'No tienes permisos para usar la camara',
+                    onDone: () async {
+                      final isOpened = await openAppSettings();
+                      if (!context.mounted) return;
+                      if (isOpened) {
+                        context.pop();
+                      }
+                    },
+                  ).showDialog(context, dialogType: DialogType.error);
+                  return;
                 }
-                // Define la ruta de la imagen en el directorio
-                final localPath =
-                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                try {
+                  final photo = await picker.pickImage(
+                    source: ImageSource.camera,
+                    maxHeight: 600,
+                    maxWidth: 600,
+                    imageQuality: 85,
+                  );
+                  if (!mounted || photo == null) return;
+                  final appDir = await getApplicationDocumentsDirectory();
+                  final customDir = Directory('${appDir.path}/MyImages');
 
-                // Copia la imagen seleccionada al directorio
-                final imageFile = File(photo.path);
-                await imageFile.copy(localPath);
-                if (!mounted) return;
-                setState(() {
-                  selectedImage2 = photo;
-                  selectedImage2Path = localPath;
-                });
+                  // Crea el directorio si no existe
+                  if (!await customDir.exists()) {
+                    await customDir.create(recursive: true);
+                    log('Directorio creado: ${customDir.path}');
+                  }
+                  // Define la ruta de la imagen en el directorio
+                  final localPath =
+                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                  // Copia la imagen seleccionada al directorio
+                  final imageFile = File(photo.path);
+                  await imageFile.copy(localPath);
+                  if (!mounted) return;
+                  setState(() {
+                    selectedImage2 = photo;
+                    selectedImage2Path = localPath;
+                  });
+                } on PlatformException catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.code}',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                } catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.toString()}',
+                    onDone: () async {
+                      final isOpened = await openAppSettings();
+                      if (!context.mounted) return;
+                      if (isOpened) {
+                        context.pop();
+                      }
+                    },
+                  ).showDialog(context, dialogType: DialogType.error);
+                }
               },
             ),
             const Gap(15),
@@ -877,33 +950,65 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
                 if (!mounted) return;
-                final photo = await picker.pickImage(
-                  source: ImageSource.camera,
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  imageQuality: 85,
-                );
-                if (!mounted || photo == null) return;
-                final appDir = await getApplicationDocumentsDirectory();
-                final customDir = Directory('${appDir.path}/MyImages');
-
-                // Crea el directorio si no existe
-                if (!await customDir.exists()) {
-                  await customDir.create(recursive: true);
-                  log('Directorio creado: ${customDir.path}');
+                final hasPermission = await _requestPermissions();
+                if (!context.mounted) return;
+                if (!hasPermission) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'No tienes permisos para usar la camara',
+                    onDone: () async {
+                      final isOpened = await openAppSettings();
+                      if (!context.mounted) return;
+                      if (isOpened) {
+                        context.pop();
+                      }
+                    },
+                  ).showDialog(context, dialogType: DialogType.error);
+                  return;
                 }
-                // Define la ruta de la imagen en el directorio
-                final localPath =
-                    '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                try {
+                  final photo = await picker.pickImage(
+                    source: ImageSource.camera,
+                    maxHeight: 600,
+                    maxWidth: 600,
+                    imageQuality: 85,
+                  );
+                  if (!mounted || photo == null) return;
+                  final appDir = await getApplicationDocumentsDirectory();
+                  final customDir = Directory('${appDir.path}/MyImages');
 
-                // Copia la imagen seleccionada al directorio
-                final imageFile = File(photo.path);
-                await imageFile.copy(localPath);
-                if (!mounted) return;
-                setState(() {
-                  selectedImage3 = photo;
-                  selectedImage3Path = localPath;
-                });
+                  // Crea el directorio si no existe
+                  if (!await customDir.exists()) {
+                    await customDir.create(recursive: true);
+                    log('Directorio creado: ${customDir.path}');
+                  }
+                  // Define la ruta de la imagen en el directorio
+                  final localPath =
+                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                  // Copia la imagen seleccionada al directorio
+                  final imageFile = File(photo.path);
+                  await imageFile.copy(localPath);
+                  if (!mounted) return;
+                  setState(() {
+                    selectedImage3 = photo;
+                    selectedImage3Path = localPath;
+                  });
+                } on PlatformException catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.message}',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                } catch (e) {
+                  if (!context.mounted) return;
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Error al tomar la foto ${e.toString()}',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                }
               },
             ),
             // UploadImageWidget(
@@ -991,6 +1096,11 @@ class _SaneamientoContentState extends State<SaneamientoContent>
         ),
       ),
     );
+  }
+
+  Future<bool> _requestPermissions() async {
+    final cameraStatus = await Permission.camera.request();
+    return cameraStatus.isGranted;
   }
 
   @override
