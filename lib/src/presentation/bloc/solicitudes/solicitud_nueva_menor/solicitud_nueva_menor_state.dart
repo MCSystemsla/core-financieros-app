@@ -2,6 +2,7 @@
 part of 'solicitud_nueva_menor_cubit.dart';
 
 class SolicitudNuevaMenorState extends Equatable {
+  final String onSuccessMsg;
   final bool hasVerified;
   final int idLocalResponse;
   final String errorMsg;
@@ -139,6 +140,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String createdAt;
   final bool isDone;
   const SolicitudNuevaMenorState({
+    this.onSuccessMsg = '',
     this.hasVerified = false,
     this.isDone = false,
     this.idLocalResponse = 0,
@@ -279,6 +281,7 @@ class SolicitudNuevaMenorState extends Equatable {
 
   @override
   List<Object> get props => [
+        onSuccessMsg,
         hasVerified,
         idLocalResponse,
         errorMsg,
@@ -418,6 +421,8 @@ class SolicitudNuevaMenorState extends Equatable {
       ];
 
   SolicitudNuevaMenorState copyWith({
+    String? onSuccessMsg,
+    bool? hasVerified,
     int? idLocalResponse,
     String? errorMsg,
     Status? status,
@@ -553,9 +558,9 @@ class SolicitudNuevaMenorState extends Equatable {
     String? fechaDesembolso,
     String? createdAt,
     bool? isDone,
-    bool? hasVerified,
   }) {
     return SolicitudNuevaMenorState(
+      onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
       hasVerified: hasVerified ?? this.hasVerified,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       errorMsg: errorMsg ?? this.errorMsg,

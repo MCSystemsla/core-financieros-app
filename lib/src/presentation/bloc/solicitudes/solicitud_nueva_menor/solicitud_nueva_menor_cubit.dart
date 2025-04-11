@@ -126,7 +126,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       if (!isOk) {
         return emit(state.copyWith(status: Status.error, errorMsg: msg));
       }
-      emit(state.copyWith(status: Status.done));
+      emit(state.copyWith(status: Status.done, onSuccessMsg: msg));
     } catch (e) {
       saveAnswers(errorMsg: e.toString());
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));

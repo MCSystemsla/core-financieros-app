@@ -45,7 +45,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       _logger.i(resp);
       _logger.i(endpoint.body);
 
-      return (true, resp.toString());
+      return (true, resp['message'] as String);
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
@@ -128,7 +128,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
 
       _logger.i(resp);
 
-      return (true, resp.toString());
+      return (true, resp['message'] as String);
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
