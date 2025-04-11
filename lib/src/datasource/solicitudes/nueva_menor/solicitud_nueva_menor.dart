@@ -206,7 +206,7 @@ class SolicitudNuevaMenor {
   });
 
   Map<String, dynamic> toJson() => {
-        'objOrigenSolicitudID': 'CEL',
+        'objOrigenSolicitudID': 'APPMOVIL',
         'Nombre1': nombre1,
         'Nombre2': nombre2,
         'Apellido1': apellido1,
