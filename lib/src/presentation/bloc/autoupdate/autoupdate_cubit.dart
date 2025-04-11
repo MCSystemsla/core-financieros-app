@@ -11,8 +11,7 @@ part 'autoupdate_state.dart';
 class AutoupdateCubit extends Cubit<AutoupdateState> {
   AutoupdateCubit() : super(AutoupdateInitial());
   Future<void> verificarActualizacion(BuildContext context) async {
-    const String versionJsonUrl =
-        'https://drive.google.com/uc?export=download&id=1S5Tt-AdrbsKwRp_XBq7K2xRrlRMKJ_Lb';
+    const String versionJsonUrl = String.fromEnvironment('versionUrl');
 
     try {
       emit(AutoupdateLoading());
