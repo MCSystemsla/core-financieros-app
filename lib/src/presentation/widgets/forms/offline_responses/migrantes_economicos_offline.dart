@@ -57,6 +57,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:

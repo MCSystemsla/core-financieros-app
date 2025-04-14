@@ -61,6 +61,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:
@@ -370,6 +371,7 @@ class _RecurrenteSaneamientoOfflineState
             }
             if (resp.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: state.imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
                     tipoSolicitud:

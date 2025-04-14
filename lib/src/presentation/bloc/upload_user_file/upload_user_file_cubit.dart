@@ -27,6 +27,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
     await repository.uploadUserFiles(
       imagen1: state.imagen1,
@@ -39,6 +40,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       tipoSolicitud: tipoSolicitud,
       numero: numero,
       cedula: cedula,
+      typeSigner: typeSigner,
     );
   }
 
@@ -52,6 +54,7 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required String typeSigner,
   }) async {
     await repository.uploadUserFilesOffline(
       imagen1: imagen1,
@@ -64,6 +67,9 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       tipoSolicitud: tipoSolicitud,
       numero: numero,
       cedula: cedula,
+      typeSigner: typeSigner == TypeSigner.asesor.name
+          ? TypeSigner.asesor
+          : TypeSigner.cliente,
     );
   }
 }

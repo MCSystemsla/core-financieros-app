@@ -1,5 +1,6 @@
 {
     "apiUrl": "URL DEL SERVIDOR",
     "protocol": "PROTOCOLO A USAR HTTP o HTTPS",
-    "isProdMode": false
+    "isProdMode": false,
+    "versionUrl": "URL DEL VERSIONAMIENTO DE APP"
 }

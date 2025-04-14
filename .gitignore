@@ -50,3 +50,4 @@ api-key-prod.json
 
 # Version control environment file
 version.json
+version-prod.json
