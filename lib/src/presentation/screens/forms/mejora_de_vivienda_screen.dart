@@ -196,7 +196,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,

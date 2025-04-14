@@ -364,7 +364,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
@@ -692,7 +692,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                 children: [
                   // const SizedBox(height: 20),
                   Text(
-                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma del Asesor'}',
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,

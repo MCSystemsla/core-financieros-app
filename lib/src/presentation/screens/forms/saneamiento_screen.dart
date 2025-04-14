@@ -215,7 +215,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
@@ -539,7 +539,7 @@ class _EstandarSignState extends State<EstandarSign> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
@@ -864,6 +864,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () async {
                 if (!mounted) return;
+                if (!context.mounted) return;
                 final hasPermission = await _requestPermissions();
                 if (!context.mounted) return;
                 if (!hasPermission) {
@@ -1263,7 +1264,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
@@ -1587,7 +1588,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'forms.firmar.title'.tr(),
+                    ' ${typeSigner == TypeSigner.cliente ? 'forms.firmar.title'.tr() : 'Firma de Representante de Micrédito'}',
                     style: const TextStyle(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
