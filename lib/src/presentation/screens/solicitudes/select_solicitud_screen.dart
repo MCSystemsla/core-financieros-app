@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -156,7 +157,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
                 return;
               }
               context.pushTransparentRoute(
-                const AddUserCedulaScreen(
+                const ReprestamoAddUserCedulaScreen(
                   typeForm: TypeForm.represtamo,
                 ),
               );

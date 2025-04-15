@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
@@ -22,6 +23,9 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<CatalogoValor> getCatalogoProductos();
   Future<UserCedulaResponse> getUserByCedula({required String cedula});
+  Future<ReprestamoUserCedula> getUserReprestamoByCedula({
+    required String cedula,
+  });
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -133,6 +137,24 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       _logger.e(e);
       _logger.i(endpoint.body);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<ReprestamoUserCedula> getUserReprestamoByCedula({
+    required String cedula,
+  }) async {
+    final endpoint = ReprestamoUserCedulaEndpoint(cedula: cedula);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        throw AppException(optionalMsg: resp['message']);
+      }
+      final data = ReprestamoUserCedula.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

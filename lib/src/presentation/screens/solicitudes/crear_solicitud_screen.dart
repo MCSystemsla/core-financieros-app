@@ -26,7 +26,12 @@ enum TypeForm {
 
 class CrearSolicitudScreen extends StatelessWidget {
   final TypeForm? typeForm;
-  const CrearSolicitudScreen({super.key, this.typeForm});
+  final int? objClienteId;
+  const CrearSolicitudScreen({
+    super.key,
+    this.typeForm,
+    this.objClienteId,
+  });
 
   @override
   Widget build(BuildContext context) {

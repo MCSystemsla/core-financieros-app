@@ -113,7 +113,7 @@ class SolicitudReprestamo {
   Map<String, dynamic> toJson() => {
         'objOrigenSolicitudID': 'APPMOVIL',
         'database': LocalStorage().database,
-        'objClienteID': 35280,
+        'objClienteID': objClienteId,
         'Monto': monto,
         'objMonedaID': objMonedaId,
         'objPropositoID': objPropositoId,

@@ -43,12 +43,6 @@ class AddUserCedulaScreen extends StatelessWidget {
       AddUserCedulaDialog(
         context: context,
         title: errorMsg,
-        onDone: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => CrearSolicitudScreen(typeForm: typeForm)),
-          ),
-        ),
       ).showDialog(context, dialogType: DialogType.warning);
     }
 

@@ -12,14 +12,12 @@ class AddUserCedulaDialog extends OdsDialog {
   final String title;
   const AddUserCedulaDialog({
     super.key,
-    this.onDone,
     required this.context,
     required this.title,
   }) : super(
           title: title,
         );
 
-  final VoidCallback? onDone;
   final BuildContext context;
 
   @override

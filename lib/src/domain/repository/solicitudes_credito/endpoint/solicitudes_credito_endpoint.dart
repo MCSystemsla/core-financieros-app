@@ -116,3 +116,22 @@ class SolicitudReprestamoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => solicitudReprestamo.toJson();
 }
+
+class ReprestamoUserCedulaEndpoint extends Endpoint {
+  final String cedula;
+  ReprestamoUserCedulaEndpoint({required this.cedula});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-cliente-id';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'Cedula': cedula,
+      };
+}
