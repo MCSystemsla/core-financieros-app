@@ -81,6 +81,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
         emit(
           state.copyWith(errorMsg: msg, status: Status.error),
         );
+        return;
       }
       emit(
         state.copyWith(successMsg: msg, status: Status.done),

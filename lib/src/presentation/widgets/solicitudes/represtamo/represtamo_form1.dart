@@ -23,7 +23,12 @@ import 'package:go_router/go_router.dart';
 
 class ReprestamoForm1 extends StatefulWidget {
   final PageController controller;
-  const ReprestamoForm1({super.key, required this.controller});
+  final int objClienteId;
+  const ReprestamoForm1({
+    super.key,
+    required this.controller,
+    required this.objClienteId,
+  });
 
   @override
   State<ReprestamoForm1> createState() => _ReprestamoForm1State();
@@ -211,6 +216,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                         ubicacion: ubicacion,
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,
+                        objClienteId: widget.objClienteId,
                         // celularReprestamo: celularReprestamo == null
                         //     ? ''
                         //     : celularCode +

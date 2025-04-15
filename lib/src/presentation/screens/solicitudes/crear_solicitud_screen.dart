@@ -59,7 +59,10 @@ class CrearSolicitudScreen extends StatelessWidget {
         body: switch (typeForm) {
           TypeForm.nueva => NuevaMenorForm(pageController: pageController),
           TypeForm.asalariado => const Text('ASALARIADO'),
-          TypeForm.represtamo => ReprestamoForm(controller: pageController),
+          TypeForm.represtamo => ReprestamoForm(
+              controller: pageController,
+              objClienteId: objClienteId ?? 0,
+            ),
           _ => const SizedBox(),
         },
       ),

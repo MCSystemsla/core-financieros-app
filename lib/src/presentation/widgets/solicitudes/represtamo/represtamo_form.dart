@@ -9,8 +9,13 @@ import 'package:flutter/material.dart';
 
 class ReprestamoForm extends StatelessWidget {
   final PageController controller;
+  final int objClienteId;
 
-  const ReprestamoForm({super.key, required this.controller});
+  const ReprestamoForm({
+    super.key,
+    required this.controller,
+    required this.objClienteId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,10 @@ class ReprestamoForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: controller,
             children: [
-              ReprestamoForm1(controller: controller),
+              ReprestamoForm1(
+                controller: controller,
+                objClienteId: objClienteId,
+              ),
               ReprestamoForm2(controller: controller),
               ReprestamoForm3(controller: controller),
               ReprestamoForm4(controller: controller),
