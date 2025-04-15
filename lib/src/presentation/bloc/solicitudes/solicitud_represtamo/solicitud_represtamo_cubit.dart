@@ -78,14 +78,10 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
         ),
       );
       if (!isOk) {
-        emit(
-          state.copyWith(errorMsg: msg, status: Status.error),
-        );
+        emit(state.copyWith(errorMsg: msg, status: Status.error));
         return;
       }
-      emit(
-        state.copyWith(successMsg: msg, status: Status.done),
-      );
+      emit(state.copyWith(successMsg: msg, status: Status.done));
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,

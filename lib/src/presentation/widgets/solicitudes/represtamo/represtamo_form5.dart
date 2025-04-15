@@ -138,14 +138,12 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco?.value,
-                        // telefonoBeneficiario: telefonoBeneficiario == null
-                        //     ? ''
-                        //     : telefonoBeneficiarioCode +
-                        //         (telefonoBeneficiario ?? '')
-                        //             .trim()
-                        //             .replaceAll('-', ''),
-                        telefonoBeneficiario:
-                            telefonoBeneficiario?.replaceAll('-', ''),
+                        telefonoBeneficiario: telefonoBeneficiario == null
+                            ? ''
+                            : telefonoBeneficiarioCode +
+                                (telefonoBeneficiario ?? '')
+                                    .trim()
+                                    .replaceAll('-', ''),
                         isDone: !isConnected,
                       );
                   if (!isConnected) {

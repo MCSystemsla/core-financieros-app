@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
@@ -76,7 +74,6 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   void initState() {
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
-        log('Ubicacion: ${value?.latitude}, ${value?.longitude}');
         if (value == null) return;
         locationLatitude = value.latitude.toString();
         locationLongitude = value.longitude.toString();
@@ -217,14 +214,12 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,
                         objClienteId: widget.objClienteId,
-                        // celularReprestamo: celularReprestamo == null
-                        //     ? ''
-                        //     : celularCode +
-                        //         (celularReprestamo ?? '')
-                        //             .trim()
-                        //             .replaceAll('-', ''),
-                        celularReprestamo:
-                            celularReprestamo?.replaceAll('-', ''),
+                        celularReprestamo: celularReprestamo == null
+                            ? ''
+                            : celularCode +
+                                (celularReprestamo ?? '')
+                                    .trim()
+                                    .replaceAll('-', ''),
                       );
 
                   widget.controller.nextPage(
