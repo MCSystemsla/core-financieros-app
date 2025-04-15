@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -151,6 +152,112 @@ class SolicitudesPendientesWidget extends StatelessWidget {
         dateToStart: solicitud.email ?? 'N/A',
         dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
             ?.selectorFormat(),
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
+class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
+  final ReprestamoResponsesLocalDb solicitud;
+  const SolicitudesReprestamoPendientesWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(ReprestamoResponsesLocalDb respuesta) {
+      var valores = [
+        respuesta.database,
+        respuesta.objClienteId,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objActividadId,
+        respuesta.objActividadId1,
+        respuesta.objActividadId2,
+        respuesta.objSectorId,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.sucursal,
+        respuesta.ubicacion,
+        respuesta.esPeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.celularReprestamo,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud,
+      ];
+
+      int camposLlenos = valores
+          .where((valor) =>
+              valor != null &&
+              valor.toString().trim().isNotEmpty &&
+              valor.toString().trim() != '0')
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
+        onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => CrearSolicitudOfflineScreen(
+          //       responseLocalDb: solicitud,
+          //     ),
+          //   ),
+          // );
+        },
+        title:
+            // '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
+            '${solicitud.celularReprestamo}'.capitalizeAll,
+        // location: solicitud.cedula?.dashFormat ?? 'N/A',
+        location: solicitud.celularReprestamo ?? 'N/A',
+        // dateToStart: solicitud.email ?? 'N/A',
+        dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
+        // dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
+        //     ?.selectorFormat(),
+        dateToEnd: 'Fecha ',
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),

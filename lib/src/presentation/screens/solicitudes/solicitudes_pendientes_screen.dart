@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,8 @@ class SolicitudesPendientesScreen extends StatelessWidget {
             return switch (state) {
               OnSolicitudesOfflineSuccess() => SolicitudesCreditoView(
                   solicitudesOffline: state.solicitudesOffline,
+                  solicitudesOfflineReprestamo:
+                      state.solicitudesOfflineReprestamo,
                 ),
               OnSolicitudesOfflineError() => OnErrorWidget(
                   onPressed: () {
@@ -56,8 +59,13 @@ class SolicitudesPendientesScreen extends StatelessWidget {
 
 class SolicitudesCreditoView extends StatelessWidget {
   final List<ResponseLocalDb> solicitudesOffline;
+  final List<ReprestamoResponsesLocalDb> solicitudesOfflineReprestamo;
 
-  const SolicitudesCreditoView({super.key, required this.solicitudesOffline});
+  const SolicitudesCreditoView({
+    super.key,
+    required this.solicitudesOffline,
+    required this.solicitudesOfflineReprestamo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +78,62 @@ class SolicitudesCreditoView extends StatelessWidget {
           solicitudesOffline: solicitudesOffline,
           controller: controller,
         ),
-        _SolicitudesPendientesItems(
-          solicitudesOffline: solicitudesOffline,
+        _SolicitudesReprestamoPendientesItems(
+          solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
           controller: controller,
         ),
       ],
+    );
+  }
+}
+
+class _SolicitudesReprestamoPendientesItems extends StatelessWidget {
+  final PageController controller;
+  final List<ReprestamoResponsesLocalDb> solicitudesReprestamoOffline;
+  const _SolicitudesReprestamoPendientesItems({
+    required this.solicitudesReprestamoOffline,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Gap(15),
+          _SlidePageviewView(
+            controller: controller,
+            title: 'Solicitudes Represtamo',
+          ),
+          solicitudesReprestamoOffline.isEmpty
+              ? Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        height: 170,
+                        ImageAsset.noDataBg,
+                      ),
+                      const Gap(25),
+                      Text(
+                        'No hay solicitudes pendientes',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: solicitudesReprestamoOffline.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SolicitudesReprestamoPendientesWidget(
+                      solicitud: solicitudesReprestamoOffline[index],
+                    );
+                  },
+                ),
+        ],
+      ),
     );
   }
 }
@@ -87,46 +146,49 @@ class _SolicitudesPendientesItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (solicitudesOffline.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              height: 170,
-              ImageAsset.noDataBg,
-            ),
-            const Gap(25),
-            Text(
-              'No hay solicitudes pendientes',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ],
-        ),
-      );
-    }
     return Column(
       children: [
         const Gap(15),
-        _SlidePageviewView(controller: controller),
-        ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: solicitudesOffline.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SolicitudesPendientesWidget(
-              solicitud: solicitudesOffline[index],
-            );
-          },
+        _SlidePageviewView(
+          controller: controller,
+          title: 'Solicitudes Nuevas',
         ),
+        solicitudesOffline.isEmpty
+            ? Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      height: 170,
+                      ImageAsset.noDataBg,
+                    ),
+                    const Gap(25),
+                    Text(
+                      'No hay solicitudes pendientes',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: solicitudesOffline.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SolicitudesPendientesWidget(
+                    solicitud: solicitudesOffline[index],
+                  );
+                },
+              ),
       ],
     );
   }
 }
 
 class _SlidePageviewView extends StatelessWidget {
-  const _SlidePageviewView({required this.controller});
-
+  const _SlidePageviewView({required this.controller, required this.title});
+  final String title;
   final PageController controller;
 
   @override
@@ -149,7 +211,7 @@ class _SlidePageviewView extends StatelessWidget {
         Expanded(
           flex: 5,
           child: Text(
-            'Solicitudes Nuevas',
+            title,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 14,

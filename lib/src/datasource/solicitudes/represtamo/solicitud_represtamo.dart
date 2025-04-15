@@ -6,15 +6,16 @@ String solicitudReprestamoToJson(SolicitudReprestamo data) =>
     json.encode(data.toJson());
 
 class SolicitudReprestamo {
+  final String username;
+  final String userIp;
   final String database;
-  final DateTime fecha;
   final String objOrigenSolicitudId;
   final int objClienteId;
-  final double monto;
+  final int monto;
   final String objMonedaId;
   final String objPropositoId;
   final String objFrecuenciaId;
-  final double cuota;
+  final int cuota;
   final String objActividadId;
   final String objActividadId1;
   final String objActividadId2;
@@ -26,18 +27,7 @@ class SolicitudReprestamo {
   final String observacion;
   final String ubicacionLongitud;
   final String ubicacionLatitud;
-  final String ubicacionGradosLongitud;
-  final String ubicacionGradosLatitud;
   final String sucursal;
-  final String usuarioCreacion;
-  final DateTime fechaCreacion;
-  final String maquinaCreacion;
-  final String usuarioModificacion;
-  final DateTime fechaModificacion;
-  final String maquinaModificacion;
-  final DateTime fechaAprobacion;
-  final String usuarioAprobacion;
-  final DateTime fechaARevision;
   final String ubicacion;
   final bool esPeps;
   final String nombreDeEntidadPeps;
@@ -45,39 +35,32 @@ class SolicitudReprestamo {
   final String periodoPeps;
   final String cargoOficialPeps;
   final bool tieneFamiliarPeps;
-  final dynamic nombreFamiliarPeps2;
-  final dynamic parentescoFamiliarPeps2;
-  final dynamic cargoFamiliarPeps2;
-  final dynamic nombreEntidadPeps2;
-  final dynamic periodoPeps2;
-  final dynamic paisPeps2;
+  final String nombreFamiliarPeps2;
+  final String parentescoFamiliarPeps2;
+  final String cargoFamiliarPeps2;
+  final String nombreEntidadPeps2;
+  final String periodoPeps2;
+  final String paisPeps2;
   final String objRubroActividad;
   final String objActividadPredominante;
   final String objTipoDocumentoId;
   final String objRubroActividad2;
   final String objRubroActividad3;
   final String objRubroActividadPredominante;
-  final dynamic tipoPersona;
+  final String tipoPersona;
   final String objTipoPersonaId;
-  final String objPremioSolicitudId;
   final String telefonoBeneficiario;
-  final String objMotivoRechazoSauid;
-  final String objCategoriaRechazoSauId;
-  final String celularRepresntamo;
-  final String estadoSms;
-  final String referenciaSms;
+  final String celularReprestamo;
   final bool esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
-  final bool cargaAnalisisAutomatico;
-  final String objMotivoRevisionId;
   final int plazoSolicitud;
-  final String celularReprestamo;
   final DateTime fechaPrimerPagoSolicitud;
 
   SolicitudReprestamo({
+    required this.username,
+    required this.userIp,
     required this.database,
-    required this.fecha,
     required this.objOrigenSolicitudId,
     required this.objClienteId,
     required this.monto,
@@ -96,18 +79,7 @@ class SolicitudReprestamo {
     required this.observacion,
     required this.ubicacionLongitud,
     required this.ubicacionLatitud,
-    required this.ubicacionGradosLongitud,
-    required this.ubicacionGradosLatitud,
     required this.sucursal,
-    required this.usuarioCreacion,
-    required this.fechaCreacion,
-    required this.maquinaCreacion,
-    required this.usuarioModificacion,
-    required this.fechaModificacion,
-    required this.maquinaModificacion,
-    required this.fechaAprobacion,
-    required this.usuarioAprobacion,
-    required this.fechaARevision,
     required this.ubicacion,
     required this.esPeps,
     required this.nombreDeEntidadPeps,
@@ -129,28 +101,19 @@ class SolicitudReprestamo {
     required this.objRubroActividadPredominante,
     required this.tipoPersona,
     required this.objTipoPersonaId,
-    required this.objPremioSolicitudId,
     required this.telefonoBeneficiario,
-    required this.objMotivoRechazoSauid,
-    required this.objCategoriaRechazoSauId,
-    required this.celularRepresntamo,
-    required this.estadoSms,
-    required this.referenciaSms,
     required this.esFamiliarEmpleado,
     required this.nombreFamiliar,
     required this.cedulaFamiliar,
-    required this.cargaAnalisisAutomatico,
-    required this.objMotivoRevisionId,
     required this.plazoSolicitud,
     required this.celularReprestamo,
     required this.fechaPrimerPagoSolicitud,
   });
 
   Map<String, dynamic> toJson() => {
-        'database': LocalStorage().database,
-        'Fecha': fecha.toIso8601String(),
         'objOrigenSolicitudID': 'APPMOVIL',
-        'objClienteID': objClienteId,
+        'database': LocalStorage().database,
+        'objClienteID': 35280,
         'Monto': monto,
         'objMonedaID': objMonedaId,
         'objPropositoID': objPropositoId,
@@ -167,18 +130,7 @@ class SolicitudReprestamo {
         'Observacion': observacion,
         'UbicacionLongitud': ubicacionLongitud,
         'UbicacionLatitud': ubicacionLatitud,
-        'UbicacionGradosLongitud': ubicacionGradosLongitud,
-        'UbicacionGradosLatitud': ubicacionGradosLatitud,
         'Sucursal': sucursal,
-        'UsuarioCreacion': usuarioCreacion,
-        'FechaCreacion': fechaCreacion.toIso8601String(),
-        'MaquinaCreacion': maquinaCreacion,
-        'UsuarioModificacion': usuarioModificacion,
-        'FechaModificacion': fechaModificacion.toIso8601String(),
-        'MaquinaModificacion': maquinaModificacion,
-        'FechaAprobacion': fechaAprobacion.toIso8601String(),
-        'UsuarioAprobacion': usuarioAprobacion,
-        'FechaARevision': fechaARevision.toIso8601String(),
         'Ubicacion': ubicacion,
         'EsPEPS': esPeps,
         'NombreDeEntidadPeps': nombreDeEntidadPeps,
@@ -200,18 +152,10 @@ class SolicitudReprestamo {
         'objRubroActividadPredominante': objRubroActividadPredominante,
         'TipoPersona': tipoPersona,
         'objTipoPersonaID': objTipoPersonaId,
-        'objPremioSolicitudId': objPremioSolicitudId,
         'TelefonoBeneficiario': telefonoBeneficiario,
-        'objMotivoRechazoSAUID': objMotivoRechazoSauid,
-        'objCategoriaRechazoSAUId': objCategoriaRechazoSauId,
-        'CelularRepresntamo': celularRepresntamo,
-        'EstadoSMS': estadoSms,
-        'ReferenciaSMS': referenciaSms,
         'EsFamiliarEmpleado': esFamiliarEmpleado,
         'NombreFamiliar': nombreFamiliar,
         'CedulaFamiliar': cedulaFamiliar,
-        'CargaAnalisisAutomatico': cargaAnalisisAutomatico,
-        'objMotivoRevisionID': objMotivoRevisionId,
         'PlazoSolicitud': plazoSolicitud,
         'CelularReprestamo': celularReprestamo,
         'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud.toIso8601String(),

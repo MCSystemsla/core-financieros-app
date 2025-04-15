@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/sending/represtamo_sending_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +40,7 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
   final formKey = GlobalKey<FormState>();
   String telefonoBeneficiarioCode = '+505';
   String telefonoBeneficiario1Code = '+505';
+  Item? sector;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -56,7 +59,7 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
-                // sector = item;
+                sector = item;
               },
             ),
             const Gap(20),
@@ -130,30 +133,21 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                  //       objParentescoBeneficiarioSeguroId1Ver: parentesco?.name,
-                  //       beneficiarioSeguro: beneficiarioSeguro,
-                  //       cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                  //       objParentescoBeneficiarioSeguroId: parentesco?.value,
-                  //       beneficiarioSeguro1: beneficiarioSeguro1,
-                  //       cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
-                  //       objParentescoBeneficiarioSeguroId1:
-                  //           parentescoBeneficiarioSeguro1,
-                  //       telefonoBeneficiario: telefonoBeneficiario == null
-                  //           ? ''
-                  //           : telefonoBeneficiarioCode +
-                  //               (telefonoBeneficiario ?? '')
-                  //                   .trim()
-                  //                   .replaceAll('-', ''),
-                  //       telefonoBeneficiarioSeguro1:
-                  //           telefonoBeneficiario1 == null
-                  //               ? ''
-                  //               : telefonoBeneficiario1Code +
-                  //                   (telefonoBeneficiario1 ?? '')
-                  //                       .trim()
-                  //                       .replaceAll('-', ''),
-                  //       isDone: !isConnected,
-                  //     );
+                  context.read<SolicitudReprestamoCubit>().saveAnswers(
+                        objSectorId: sector?.value,
+                        beneficiarioSeguro: beneficiarioSeguro,
+                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        // telefonoBeneficiario: telefonoBeneficiario == null
+                        //     ? ''
+                        //     : telefonoBeneficiarioCode +
+                        //         (telefonoBeneficiario ?? '')
+                        //             .trim()
+                        //             .replaceAll('-', ''),
+                        telefonoBeneficiario:
+                            telefonoBeneficiario?.replaceAll('-', ''),
+                        isDone: !isConnected,
+                      );
                   if (!isConnected) {
                     CustomAlertDialog(
                       context: context,
@@ -163,20 +157,21 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                     ).showDialog(context, dialogType: DialogType.infoReverse);
                     return;
                   }
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (ctx) => BlocProvider.value(
-                  //       value: context.read<SolicitudNuevaMenorCubit>(),
-                  //       child: SendingFormWidget(
-                  //         solicitudId: context
-                  //             .read<SolicitudNuevaMenorCubit>()
-                  //             .state
-                  //             .idLocalResponse,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => BlocProvider.value(
+                        value: context.read<SolicitudReprestamoCubit>(),
+                        child: ReprestamoSendingWidget(
+                          solicitudId: context
+                              .read<SolicitudReprestamoCubit>()
+                              .state
+                              .idLocalResponse,
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

@@ -2,12 +2,14 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ReprestamoForm4 extends StatefulWidget {
@@ -62,7 +64,7 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad',
+              title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList
@@ -79,7 +81,7 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
+              title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList
@@ -94,7 +96,7 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
+              title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList
@@ -132,6 +134,78 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 ),
               ),
             ],
+            if (actividad?.value == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad = item;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividad1?.value == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 2',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad2 = item;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividadEconomica2?.value == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 3',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad3 = item;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (rubrosActividadesPredominanteList.length > 1) ...[
+              const Gap(20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: 'Rubro actividad Predominante',
+                  items: rubrosActividadesPredominanteList.length >= 3
+                      ? rubrosActividadesPredominanteList
+                          .skip(rubrosActividadesPredominanteList.length - 3)
+                          .toSet()
+                          .toList()
+                      : rubrosActividadesPredominanteList.toSet().toList(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    objRubroActividadPredominante = item;
+                    setState(() {});
+                  },
+                  toStringItem: (item) {
+                    return item.name;
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+              ),
+            ],
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -145,45 +219,19 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
-                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                  //       objParentescoBeneficiarioSeguroId1Ver: parentesco?.name,
-                  //       beneficiarioSeguro: beneficiarioSeguro,
-                  //       cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                  //       objParentescoBeneficiarioSeguroId: parentesco?.value,
-                  //       beneficiarioSeguro1: beneficiarioSeguro1,
-                  //       cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
-                  //       objParentescoBeneficiarioSeguroId1:
-                  //           parentescoBeneficiarioSeguro1,
-                  //       telefonoBeneficiario: telefonoBeneficiario == null
-                  //           ? ''
-                  //           : telefonoBeneficiarioCode +
-                  //               (telefonoBeneficiario ?? '')
-                  //                   .trim()
-                  //                   .replaceAll('-', ''),
-                  //       telefonoBeneficiarioSeguro1:
-                  //           telefonoBeneficiario1 == null
-                  //               ? ''
-                  //               : telefonoBeneficiario1Code +
-                  //                   (telefonoBeneficiario1 ?? '')
-                  //                       .trim()
-                  //                       .replaceAll('-', ''),
-                  //       isDone: !isConnected,
-                  //     );
-
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (ctx) => BlocProvider.value(
-                  //       value: context.read<SolicitudNuevaMenorCubit>(),
-                  //       child: SendingFormWidget(
-                  //         solicitudId: context
-                  //             .read<SolicitudNuevaMenorCubit>()
-                  //             .state
-                  //             .idLocalResponse,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+                  context.read<SolicitudReprestamoCubit>().saveAnswers(
+                        objActividadPredominante: actividadPredominante?.value,
+                        objRubroActividad: rubroActividad?.value,
+                        objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad3: rubroActividad3?.value,
+                        objActividadId2: actividadEconomica2?.value,
+                        objSectorId: sectorEconomico?.value,
+                        // sectorEconomico: sectorEconomico2,
+                        objActividadId: actividad?.value,
+                        objActividadId1: actividad1?.value,
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante?.value,
+                      );
                 },
               ),
             ),

@@ -148,8 +148,9 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => const CrearSolicitudScreen(
-                        typeForm: TypeForm.represtamo)),
+                    builder: ((ctx) => const CrearSolicitudScreen(
+                          typeForm: TypeForm.represtamo,
+                        )),
                   ),
                 );
                 return;

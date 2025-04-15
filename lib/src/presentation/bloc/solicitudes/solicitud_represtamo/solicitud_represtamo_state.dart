@@ -2,17 +2,22 @@
 part of 'solicitud_represtamo_cubit.dart';
 
 class SolicitudReprestamoState extends Equatable {
+  final String successMsg;
+  final int idLocalResponse;
+  final double tasaInteres;
+  final String fechaDesembolso;
   final Status status;
   final String errorMsg;
+  final String username;
+  final String userIp;
   final String database;
-  final String fecha;
   final String objOrigenSolicitudId;
   final int objClienteId;
-  final double monto;
+  final int monto;
   final String objMonedaId;
   final String objPropositoId;
   final String objFrecuenciaId;
-  final double cuota;
+  final int cuota;
   final String objActividadId;
   final String objActividadId1;
   final String objActividadId2;
@@ -24,18 +29,7 @@ class SolicitudReprestamoState extends Equatable {
   final String observacion;
   final String ubicacionLongitud;
   final String ubicacionLatitud;
-  final String ubicacionGradosLongitud;
-  final String ubicacionGradosLatitud;
   final String sucursal;
-  final String usuarioCreacion;
-  final String fechaCreacion;
-  final String maquinaCreacion;
-  final String usuarioModificacion;
-  final String fechaModificacion;
-  final String maquinaModificacion;
-  final String fechaAprobacion;
-  final String usuarioAprobacion;
-  final String fechaARevision;
   final String ubicacion;
   final bool esPeps;
   final String nombreDeEntidadPeps;
@@ -57,33 +51,28 @@ class SolicitudReprestamoState extends Equatable {
   final String objRubroActividadPredominante;
   final String tipoPersona;
   final String objTipoPersonaId;
-  final String objPremioSolicitudId;
   final String telefonoBeneficiario;
-  final String objMotivoRechazoSauid;
-  final String objCategoriaRechazoSauId;
-  final String celularRepresntamo;
-  final String estadoSms;
-  final String referenciaSms;
+  final String celularReprestamo;
   final bool esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
-  final bool cargaAnalisisAutomatico;
-  final String objMotivoRevisionId;
   final int plazoSolicitud;
-  final String celularReprestamo;
   final String fechaPrimerPagoSolicitud;
   const SolicitudReprestamoState({
+    this.successMsg = '',
+    this.tasaInteres = 0.00,
+    this.fechaDesembolso = '',
+    this.idLocalResponse = 0,
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.database = '',
-    this.fecha = '',
     this.objOrigenSolicitudId = '',
     this.objClienteId = 0,
-    this.monto = 0.0,
+    this.monto = 0,
     this.objMonedaId = '',
     this.objPropositoId = '',
     this.objFrecuenciaId = '',
-    this.cuota = 0.0,
+    this.cuota = 0,
     this.objActividadId = '',
     this.objActividadId1 = '',
     this.objActividadId2 = '',
@@ -95,18 +84,7 @@ class SolicitudReprestamoState extends Equatable {
     this.observacion = '',
     this.ubicacionLongitud = '',
     this.ubicacionLatitud = '',
-    this.ubicacionGradosLongitud = '',
-    this.ubicacionGradosLatitud = '',
     this.sucursal = '',
-    this.usuarioCreacion = '',
-    this.fechaCreacion = '',
-    this.maquinaCreacion = '',
-    this.usuarioModificacion = '',
-    this.fechaModificacion = '',
-    this.maquinaModificacion = '',
-    this.fechaAprobacion = '',
-    this.usuarioAprobacion = '',
-    this.fechaARevision = '',
     this.ubicacion = '',
     this.esPeps = false,
     this.nombreDeEntidadPeps = '',
@@ -128,29 +106,26 @@ class SolicitudReprestamoState extends Equatable {
     this.objRubroActividadPredominante = '',
     this.tipoPersona = '',
     this.objTipoPersonaId = '',
-    this.objPremioSolicitudId = '',
     this.telefonoBeneficiario = '',
-    this.objMotivoRechazoSauid = '',
-    this.objCategoriaRechazoSauId = '',
-    this.celularRepresntamo = '',
-    this.estadoSms = '',
-    this.referenciaSms = '',
     this.esFamiliarEmpleado = false,
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
-    this.cargaAnalisisAutomatico = false,
-    this.objMotivoRevisionId = '',
     this.plazoSolicitud = 0,
     this.celularReprestamo = '',
     this.fechaPrimerPagoSolicitud = '',
+    this.userIp = '',
+    this.username = '',
   });
 
   @override
   List<Object> get props => [
+        successMsg,
+        tasaInteres,
+        fechaDesembolso,
+        idLocalResponse,
         status,
         errorMsg,
         database,
-        fecha,
         objOrigenSolicitudId,
         objClienteId,
         monto,
@@ -169,18 +144,7 @@ class SolicitudReprestamoState extends Equatable {
         observacion,
         ubicacionLongitud,
         ubicacionLatitud,
-        ubicacionGradosLongitud,
-        ubicacionGradosLatitud,
         sucursal,
-        usuarioCreacion,
-        fechaCreacion,
-        maquinaCreacion,
-        usuarioModificacion,
-        fechaModificacion,
-        maquinaModificacion,
-        fechaAprobacion,
-        usuarioAprobacion,
-        fechaARevision,
         ubicacion,
         esPeps,
         nombreDeEntidadPeps,
@@ -202,35 +166,32 @@ class SolicitudReprestamoState extends Equatable {
         objRubroActividadPredominante,
         tipoPersona,
         objTipoPersonaId,
-        objPremioSolicitudId,
         telefonoBeneficiario,
-        objMotivoRechazoSauid,
-        objCategoriaRechazoSauId,
-        celularRepresntamo,
-        estadoSms,
-        referenciaSms,
         esFamiliarEmpleado,
         nombreFamiliar,
         cedulaFamiliar,
-        cargaAnalisisAutomatico,
-        objMotivoRevisionId,
         plazoSolicitud,
         celularReprestamo,
         fechaPrimerPagoSolicitud,
       ];
 
   SolicitudReprestamoState copyWith({
+    String? successMsg,
+    int? idLocalResponse,
+    double? tasaInteres,
+    String? fechaDesembolso,
     Status? status,
     String? errorMsg,
+    String? username,
+    String? userIp,
     String? database,
-    String? fecha,
     String? objOrigenSolicitudId,
     int? objClienteId,
-    double? monto,
+    int? monto,
     String? objMonedaId,
     String? objPropositoId,
     String? objFrecuenciaId,
-    double? cuota,
+    int? cuota,
     String? objActividadId,
     String? objActividadId1,
     String? objActividadId2,
@@ -242,18 +203,7 @@ class SolicitudReprestamoState extends Equatable {
     String? observacion,
     String? ubicacionLongitud,
     String? ubicacionLatitud,
-    String? ubicacionGradosLongitud,
-    String? ubicacionGradosLatitud,
     String? sucursal,
-    String? usuarioCreacion,
-    String? fechaCreacion,
-    String? maquinaCreacion,
-    String? usuarioModificacion,
-    String? fechaModificacion,
-    String? maquinaModificacion,
-    String? fechaAprobacion,
-    String? usuarioAprobacion,
-    String? fechaARevision,
     String? ubicacion,
     bool? esPeps,
     String? nombreDeEntidadPeps,
@@ -275,27 +225,24 @@ class SolicitudReprestamoState extends Equatable {
     String? objRubroActividadPredominante,
     String? tipoPersona,
     String? objTipoPersonaId,
-    String? objPremioSolicitudId,
     String? telefonoBeneficiario,
-    String? objMotivoRechazoSauid,
-    String? objCategoriaRechazoSauId,
-    String? celularRepresntamo,
-    String? estadoSms,
-    String? referenciaSms,
+    String? celularReprestamo,
     bool? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
-    bool? cargaAnalisisAutomatico,
-    String? objMotivoRevisionId,
     int? plazoSolicitud,
-    String? celularReprestamo,
     String? fechaPrimerPagoSolicitud,
   }) {
     return SolicitudReprestamoState(
+      successMsg: successMsg ?? this.successMsg,
+      idLocalResponse: idLocalResponse ?? this.idLocalResponse,
+      tasaInteres: tasaInteres ?? this.tasaInteres,
+      fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
+      username: username ?? this.username,
+      userIp: userIp ?? this.userIp,
       database: database ?? this.database,
-      fecha: fecha ?? this.fecha,
       objOrigenSolicitudId: objOrigenSolicitudId ?? this.objOrigenSolicitudId,
       objClienteId: objClienteId ?? this.objClienteId,
       monto: monto ?? this.monto,
@@ -316,20 +263,7 @@ class SolicitudReprestamoState extends Equatable {
       observacion: observacion ?? this.observacion,
       ubicacionLongitud: ubicacionLongitud ?? this.ubicacionLongitud,
       ubicacionLatitud: ubicacionLatitud ?? this.ubicacionLatitud,
-      ubicacionGradosLongitud:
-          ubicacionGradosLongitud ?? this.ubicacionGradosLongitud,
-      ubicacionGradosLatitud:
-          ubicacionGradosLatitud ?? this.ubicacionGradosLatitud,
       sucursal: sucursal ?? this.sucursal,
-      usuarioCreacion: usuarioCreacion ?? this.usuarioCreacion,
-      fechaCreacion: fechaCreacion ?? this.fechaCreacion,
-      maquinaCreacion: maquinaCreacion ?? this.maquinaCreacion,
-      usuarioModificacion: usuarioModificacion ?? this.usuarioModificacion,
-      fechaModificacion: fechaModificacion ?? this.fechaModificacion,
-      maquinaModificacion: maquinaModificacion ?? this.maquinaModificacion,
-      fechaAprobacion: fechaAprobacion ?? this.fechaAprobacion,
-      usuarioAprobacion: usuarioAprobacion ?? this.usuarioAprobacion,
-      fechaARevision: fechaARevision ?? this.fechaARevision,
       ubicacion: ubicacion ?? this.ubicacion,
       esPeps: esPeps ?? this.esPeps,
       nombreDeEntidadPeps: nombreDeEntidadPeps ?? this.nombreDeEntidadPeps,
@@ -354,23 +288,12 @@ class SolicitudReprestamoState extends Equatable {
           objRubroActividadPredominante ?? this.objRubroActividadPredominante,
       tipoPersona: tipoPersona ?? this.tipoPersona,
       objTipoPersonaId: objTipoPersonaId ?? this.objTipoPersonaId,
-      objPremioSolicitudId: objPremioSolicitudId ?? this.objPremioSolicitudId,
       telefonoBeneficiario: telefonoBeneficiario ?? this.telefonoBeneficiario,
-      objMotivoRechazoSauid:
-          objMotivoRechazoSauid ?? this.objMotivoRechazoSauid,
-      objCategoriaRechazoSauId:
-          objCategoriaRechazoSauId ?? this.objCategoriaRechazoSauId,
-      celularRepresntamo: celularRepresntamo ?? this.celularRepresntamo,
-      estadoSms: estadoSms ?? this.estadoSms,
-      referenciaSms: referenciaSms ?? this.referenciaSms,
+      celularReprestamo: celularReprestamo ?? this.celularReprestamo,
       esFamiliarEmpleado: esFamiliarEmpleado ?? this.esFamiliarEmpleado,
       nombreFamiliar: nombreFamiliar ?? this.nombreFamiliar,
       cedulaFamiliar: cedulaFamiliar ?? this.cedulaFamiliar,
-      cargaAnalisisAutomatico:
-          cargaAnalisisAutomatico ?? this.cargaAnalisisAutomatico,
-      objMotivoRevisionId: objMotivoRevisionId ?? this.objMotivoRevisionId,
       plazoSolicitud: plazoSolicitud ?? this.plazoSolicitud,
-      celularReprestamo: celularReprestamo ?? this.celularReprestamo,
       fechaPrimerPagoSolicitud:
           fechaPrimerPagoSolicitud ?? this.fechaPrimerPagoSolicitud,
     );

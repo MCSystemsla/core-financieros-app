@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -10,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ReprestamoForm2 extends StatefulWidget {
@@ -25,7 +27,20 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
   final formKey = GlobalKey<FormState>();
   String? familiarEmpleado;
   String? familiarEntidad;
-  String? familiarCargoPublico;
+  String? tieneFamiliarPeps;
+  String? nombreEmpleado;
+  String? cedulaEmpleado;
+  String? espeps;
+  String? nombreDeEntidadPeps;
+  Item? paisPeps;
+  String? periodoPeps;
+  String? cargoOficialPeps;
+  String? nombreFamiliarPeps2;
+  Item? parentescoFamiliarPeps2;
+  String? cargoFamiliarPeps2;
+  String? nombreEntidadPeps2;
+  String? periodoPeps2;
+  Item? paisPeps2;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -68,7 +83,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Nombre del empleado',
                 hintText: 'Ingresa Nombre del empleado',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  nombreEmpleado = value;
+                },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -79,7 +96,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Cedula',
                 hintText: 'Ingresa Cedula del empleado',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  cedulaEmpleado = value;
+                },
               ),
             ],
             const Gap(20),
@@ -94,7 +113,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
-                  familiarEntidad = item;
+                  espeps = item;
                   setState(() {});
                 },
                 validator: (value) {
@@ -107,7 +126,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            if (familiarEntidad == 'input.yes'.tr()) ...[
+            if (espeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
                 icon: Icon(
@@ -117,7 +136,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Nombre de la entidad',
                 hintText: 'Ingresa Nombre de la entidad',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  nombreDeEntidadPeps = value;
+                },
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
@@ -125,6 +146,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;
+                  paisPeps = Item(name: item.nombre, value: item.valor);
                   // paisDomicilio = Item(name: item.nombre, value: item.valor);
                   // depWhereClause = item.valor;
 
@@ -144,7 +166,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Periodo',
                 hintText: 'Ingrese periodo',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  periodoPeps = value;
+                },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -155,7 +179,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Cargo oficial',
                 hintText: 'Ingrese Cargo oficial',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  cargoOficialPeps = value;
+                },
               ),
             ],
             const Gap(20),
@@ -170,7 +196,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
-                  familiarCargoPublico = item;
+                  tieneFamiliarPeps = item;
                   setState(() {});
                 },
                 validator: (value) {
@@ -183,7 +209,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            if (familiarCargoPublico == 'input.yes'.tr()) ...[
+            if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
                 icon: Icon(
@@ -193,7 +219,22 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Nombre del familiar',
                 hintText: 'Ingrese Nombre del familiar',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  nombreFamiliarPeps2 = value;
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.credit_card,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Cargo Familiar',
+                hintText: 'Ingrese Cargo Familiar',
+                isValid: null,
+                onChange: (value) {
+                  cargoFamiliarPeps2 = value;
+                },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -204,12 +245,16 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Nombre de la entidad',
                 hintText: 'Ingrese Nombre de la entidad',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  nombreEntidadPeps2 = value;
+                },
               ),
               const Gap(20),
               SearchDropdownWidget(
                 onChanged: (item) {
                   if (item == null) return;
+                  parentescoFamiliarPeps2 =
+                      Item(name: item.name, value: item.value);
                   setState(() {});
                 },
                 codigo: 'PARENTESCO',
@@ -225,7 +270,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Periodo',
                 hintText: 'Ingrese Periodo',
                 isValid: null,
-                onChange: (value) {},
+                onChange: (value) {
+                  periodoPeps2 = value;
+                },
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
@@ -233,6 +280,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;
+                  paisPeps2 = Item(name: item.nombre, value: item.valor);
                   // paisDomicilio = Item(name: item.nombre, value: item.valor);
                   // depWhereClause = item.valor;
 
@@ -252,7 +300,26 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
+                  // if (!formKey.currentState!.validate()) return;
+                  context.read<SolicitudReprestamoCubit>().saveAnswers(
+                        esFamiliarEmpleado:
+                            familiarEmpleado == 'input.yes'.tr(),
+                        nombreFamiliar: nombreEmpleado?.trim(),
+                        cedulaFamiliar: cedulaEmpleado?.trim(),
+                        esPeps: espeps == 'input.yes'.tr(),
+                        nombreDeEntidadPeps: nombreDeEntidadPeps,
+                        paisPeps: paisPeps?.value,
+                        periodoPeps: periodoPeps,
+                        cargoOficialPeps: cargoOficialPeps,
+                        tieneFamiliarPeps:
+                            tieneFamiliarPeps == 'input.yes'.tr(),
+                        nombreFamiliarPeps2: nombreFamiliarPeps2,
+                        parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                        cargoFamiliarPeps2: cargoFamiliarPeps2,
+                        nombreEntidadPeps2: nombreEntidadPeps2,
+                        periodoPeps2: periodoPeps2,
+                        paisPeps2: paisPeps2?.value,
+                      );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

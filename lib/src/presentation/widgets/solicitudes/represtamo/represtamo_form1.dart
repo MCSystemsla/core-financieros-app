@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.d
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -32,6 +33,7 @@ class ReprestamoForm1 extends StatefulWidget {
 class _ReprestamoForm1State extends State<ReprestamoForm1>
     with AutomaticKeepAliveClientMixin {
   DateTime? _selectedDate;
+  String? ubicacion;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -60,14 +62,20 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   String? departamentoEmisor;
 
   String? tipoPersonaCredito;
+  String? tipoDocumento;
   String? tipoPersonaCreditoVer;
   String? celularReprestamo;
+  String? locationLatitude;
+  String? locationLongitude;
 
   @override
   void initState() {
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
         log('Ubicacion: ${value?.latitude}, ${value?.longitude}');
+        if (value == null) return;
+        locationLatitude = value.latitude.toString();
+        locationLongitude = value.longitude.toString();
       },
     );
 
@@ -105,8 +113,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
-                tipoPersonaCredito = item.value;
-                tipoPersonaCreditoVer = item.name;
+                tipoDocumento = item.value;
               },
               title: 'Tipo de Documento',
               validator: (value) =>
@@ -191,6 +198,22 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () async {
                   // if (!formKey.currentState!.validate()) return;
+                  context.read<SolicitudReprestamoCubit>().saveAnswers(
+                        tipoPersona: tipoPersonaCredito,
+                        objTipoPersonaId: tipoPersonaCredito,
+                        objTipoDocumentoId: tipoDocumento,
+                        ubicacion: ubicacion,
+                        ubicacionLatitud: locationLatitude,
+                        ubicacionLongitud: locationLongitude,
+                        // celularReprestamo: celularReprestamo == null
+                        //     ? ''
+                        //     : celularCode +
+                        //         (celularReprestamo ?? '')
+                        //             .trim()
+                        //             .replaceAll('-', ''),
+                        celularReprestamo:
+                            celularReprestamo?.replaceAll('-', ''),
+                      );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

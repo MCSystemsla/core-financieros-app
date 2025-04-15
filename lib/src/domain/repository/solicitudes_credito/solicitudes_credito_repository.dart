@@ -128,7 +128,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
 
       _logger.i(resp);
 
-      return (true, resp['message'] as String);
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);

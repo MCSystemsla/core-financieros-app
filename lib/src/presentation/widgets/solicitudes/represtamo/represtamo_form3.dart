@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/format/format_field.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -308,27 +309,23 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     title:
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
                     onDone: () {
-                      // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                      //       objFrecuenciaIdVer: frecuenciaDePago?.name,
-                      //       objProductoIdVer: producto?.name,
-                      //       objMonedaIdVer: moneda?.name,
-                      //       objPropositoIdVer: proposito?.name,
-                      //       prestamoInteres: tasaInteres,
-                      //       fechaDesembolso:
-                      //           fechaDesembolso?.toUtc().toIso8601String(),
-                      //       objMonedaId: moneda?.value,
-                      //       monto: int.tryParse(monto!),
-                      //       objPropositoId: proposito?.value,
-                      //       objProductoId: producto?.value,
-                      //       objFrecuenciaId: frecuenciaDePago?.value,
-                      //       plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                      //       fechaPrimerPagoSolicitud:
-                      //           fechaPrimerPago?.toUtc().toIso8601String(),
-                      //       cuota: calcularCuotaProvider
-                      //           .state.montoPrincipalPrimeraCuota
-                      //           .toInt(),
-                      //       observacion: observacion,
-                      //     );
+                      context.read<SolicitudReprestamoCubit>().saveAnswers(
+                            tasaInteres: tasaInteres,
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
+                            objMonedaId: moneda?.value,
+                            monto: int.tryParse(monto!),
+                            objPropositoId: proposito?.value,
+                            objProductoId: producto?.value,
+                            objFrecuenciaId: frecuenciaDePago?.value,
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            fechaPrimerPagoSolicitud:
+                                fechaPrimerPago?.toUtc().toIso8601String(),
+                            cuota: calcularCuotaProvider
+                                .state.montoPrincipalPrimeraCuota
+                                .toInt(),
+                            observacion: observacion,
+                          );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
