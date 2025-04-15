@@ -300,7 +300,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
-                  // if (!formKey.currentState!.validate()) return;
+                  if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         esFamiliarEmpleado:
                             familiarEmpleado == 'input.yes'.tr(),

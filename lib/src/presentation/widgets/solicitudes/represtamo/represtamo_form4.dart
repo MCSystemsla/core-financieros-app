@@ -78,8 +78,8 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
             ),
             const Gap(20),
             SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+              // validator: (value) =>
+              //     ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
               title: 'Actividad 2',
               onChanged: (item) {
@@ -114,6 +114,8 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
@@ -152,8 +154,8 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
             if (actividad1?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
+                // validator: (value) =>
+                //     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad 2',
                 onChanged: (item) {
@@ -167,8 +169,8 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
             if (actividadEconomica2?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
+                // validator: (value) =>
+                //     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad 3',
                 onChanged: (item) {
@@ -185,6 +187,8 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Rubro actividad Predominante',

@@ -15,7 +15,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,24 +132,24 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               hintText: 'Selecciona Fecha',
               isValid: null,
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              validator: (value) => ClassValidator.validateRequired(
-                _selectedDate?.selectorFormat(),
-              ),
-              hintText: _selectedDate?.selectorFormat() ??
-                  'Ingrese Fecha Vencimiento',
-              // initialValue: _selectedDate?.selectorFormat() ?? '',
-              icon: Icon(
-                Icons.calendar_today,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Fecha Vencimiento Cedula',
-              isValid: null,
-              isRequired: true,
-              readOnly: true,
-              onTap: () => selectDate(context),
-            ),
+            // const Gap(30),
+            // OutlineTextfieldWidget(
+            //   validator: (value) => ClassValidator.validateRequired(
+            //     _selectedDate?.selectorFormat(),
+            //   ),
+            //   hintText: _selectedDate?.selectorFormat() ??
+            //       'Ingrese Fecha Vencimiento',
+            //   // initialValue: _selectedDate?.selectorFormat() ?? '',
+            //   icon: Icon(
+            //     Icons.calendar_today,
+            //     color: AppColors.getPrimaryColor(),
+            //   ),
+            //   title: 'Fecha Vencimiento Cedula',
+            //   isValid: null,
+            //   isRequired: true,
+            //   readOnly: true,
+            //   onTap: () => selectDate(context),
+            // ),
             const Gap(30),
             CountryInput(
               maxLength: 40,
@@ -170,7 +169,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               hintText: 'Ingresa Celular Represtamo',
               isValid: null,
               isRequired: true,
-              validator: (value) => ClassValidator.validateRequired(value),
+              // validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -187,7 +186,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               hintText: 'Ingresa Ubicacion',
               isValid: null,
               isRequired: true,
-              validator: (value) => ClassValidator.validateRequired(value),
+              // validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             Container(
@@ -197,7 +196,14 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () async {
-                  // if (!formKey.currentState!.validate()) return;
+                  if (!formKey.currentState!.validate()) return;
+                  if (locationLatitude == null && locationLongitude == null) {
+                    final position = await GeolocationService(context: context)
+                        .getCurrentLocation();
+                    locationLatitude = position?.latitude.toString();
+                    locationLongitude = position?.longitude.toString();
+                  }
+                  if (!context.mounted) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,
