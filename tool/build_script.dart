@@ -9,21 +9,19 @@ void main() async {
 Future<void> run(String command) async {
   final shell = Platform.isWindows ? 'cmd' : 'bash';
   final args = Platform.isWindows ? ['/c', command] : ['-c', command];
+
   stdout.writeln('\n🔧 Ejecutando: $command\n');
 
   final process = await Process.start(shell, args);
 
-  // Escucha stdout (salida normal)
   process.stdout.transform(utf8.decoder).listen((data) {
-    stdout.write(data); // muestra en tiempo real
+    stdout.write(data);
   });
 
-  // Escucha stderr (errores)
   process.stderr.transform(utf8.decoder).listen((data) {
-    stderr.write(data); // muestra errores en rojo
+    stderr.write(data);
   });
 
-  // Espera a que termine el proceso
   final exitCode = await process.exitCode;
   if (exitCode != 0) {
     stdout.writeln(
