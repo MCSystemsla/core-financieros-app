@@ -151,8 +151,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       state.copyWith(
         fechaDesembolso: fechaDesembolso,
         tasaInteres: tasaInteres,
-        // hasVerified: hasVerified ?? state.hasVerified,
-        // isDone: isDone ?? state.isDone,
+        hasVerified: hasVerified,
+        isDone: isDone,
         // idLocalResponse: idLocalResponse ?? state.idLocalResponse,
         username: username,
         userIp: userIp,
@@ -216,6 +216,9 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
         id: state.idLocalResponse,
         responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
           fechaDesembolso: DateTime.tryParse(state.fechaDesembolso),
+          createdAt: DateTime.now(),
+          hasVerified: state.hasVerified,
+          isDone: state.isDone,
           prestamoInteres: state.tasaInteres,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
           objClienteId: state.objClienteId,
@@ -273,6 +276,9 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesReprestamoResponses(
       responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+        createdAt: DateTime.now(),
+        hasVerified: state.hasVerified,
+        isDone: state.isDone,
         fechaDesembolso: DateTime.tryParse(state.fechaDesembolso),
         prestamoInteres: state.tasaInteres,
         objOrigenSolicitudId: state.objOrigenSolicitudId,

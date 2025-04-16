@@ -2,6 +2,8 @@
 part of 'solicitud_represtamo_cubit.dart';
 
 class SolicitudReprestamoState extends Equatable {
+  final bool isDone;
+  final bool hasVerified;
   final String successMsg;
   final int idLocalResponse;
   final double tasaInteres;
@@ -59,6 +61,8 @@ class SolicitudReprestamoState extends Equatable {
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
   const SolicitudReprestamoState({
+    this.hasVerified = false,
+    this.isDone = false,
     this.successMsg = '',
     this.tasaInteres = 0.00,
     this.fechaDesembolso = '',
@@ -119,6 +123,8 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        hasVerified,
+        isDone,
         successMsg,
         tasaInteres,
         fechaDesembolso,
@@ -176,6 +182,8 @@ class SolicitudReprestamoState extends Equatable {
       ];
 
   SolicitudReprestamoState copyWith({
+    bool? isDone,
+    bool? hasVerified,
     String? successMsg,
     int? idLocalResponse,
     double? tasaInteres,
@@ -234,6 +242,8 @@ class SolicitudReprestamoState extends Equatable {
     String? fechaPrimerPagoSolicitud,
   }) {
     return SolicitudReprestamoState(
+      isDone: isDone ?? this.isDone,
+      hasVerified: hasVerified ?? this.hasVerified,
       successMsg: successMsg ?? this.successMsg,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       tasaInteres: tasaInteres ?? this.tasaInteres,
