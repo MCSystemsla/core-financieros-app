@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-const flavor = Flavor.nicaragua;
+const flavor = Flavor.costaRica;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.configurePrefs();
@@ -20,7 +20,6 @@ void main() async {
     supportedLocales: ['es', 'en'],
   );
   log('FLAVOR: $flavor ');
-
   runApp(
     LocalizedApp(
       delegate,

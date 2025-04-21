@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
@@ -13,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -121,12 +123,18 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final currentFlavor = context.read<FlavorCubit>().state.flavor;
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
+            Text(
+              'App de ${currentFlavor.name.replaceAll('_', ' ').capitalizeAll}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const Gap(20),
             InputSimple(
               title: 'auth.user'.tr(),
               activeColor: true,
