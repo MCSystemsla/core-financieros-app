@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
@@ -13,6 +14,7 @@ class BiometricNeedAuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BiometricCubit, BiometricState>(
+      bloc: global<BiometricCubit>(),
       listener: (context, state) {
         if (state.isAuthenticated) {
           context.pushTransparentRoute(const HomeScreen());
@@ -43,7 +45,7 @@ class BiometricNeedAuthScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(18),
                     child: CustomElevatedButton(
                       onPressed: () async {
-                        context.read<BiometricCubit>().authenticate(context);
+                        global<BiometricCubit>().authenticate(context);
                       },
                       text: 'Autenticar',
                       color: AppColors.getSecondaryColor(),

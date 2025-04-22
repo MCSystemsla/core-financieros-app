@@ -5,7 +5,7 @@ import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-const flavor = Flavor.nicaragua;
+const flavor = Flavor.costaRica;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.configurePrefs();
@@ -15,7 +15,6 @@ void main() async {
     fallbackLocale: 'es',
     supportedLocales: ['es', 'en'],
   );
-
   runApp(
     LocalizedApp(
       delegate,

@@ -1,8 +1,8 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
-import 'package:core_financiero_app/src/config/services/biometric/biometric_auth_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -20,11 +20,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import 'src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
-import 'src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final Flavor flavor;
+  const App({super.key, required this.flavor});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class App extends StatelessWidget {
           create: (ctx) => UserByCedulaCubit(SolicitudCreditoRepositoryImpl()),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
-        BlocProvider(create: (ctx) => BiometricCubit(BiometricAuthService())),
+        // BlocProvider(create: (ctx) => BiometricCubit(BiometricAuthService())),
         BlocProvider(
             lazy: false,
             create: (ctx) =>

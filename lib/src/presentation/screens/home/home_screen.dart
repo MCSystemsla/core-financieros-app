@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    final bioProvider = context.read<BiometricCubit>();
+    final bioProvider = global<BiometricCubit>();
 
     if (!bioProvider.state.isAuthenticated) {
       bioProvider.authenticate(context);
@@ -36,15 +37,16 @@ class _HomeScreenState extends State<HomeScreen> {
     if (shouldSync && isConnected.isConnected && isConnected.isCorrectNetwork) {
       return DownsloadingCatalogosWidget(
         onDownloadComplete: () {
-          context.read<BiometricCubit>().authenticate(context);
+          global<BiometricCubit>().authenticate(context);
           context.push('/');
         },
       );
     }
     return BlocConsumer<BiometricCubit, BiometricState>(
+      bloc: global<BiometricCubit>(),
       listener: (context, state) {
         if (!state.isAuthenticated) {
-          context.read<BiometricCubit>().authenticate(context);
+          global<BiometricCubit>().authenticate(context);
         }
       },
       builder: (context, state) {

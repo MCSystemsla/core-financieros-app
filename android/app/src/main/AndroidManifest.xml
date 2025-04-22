@@ -16,7 +16,7 @@
     </queries>
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="MiCrédito"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         >
