@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
@@ -14,7 +15,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -123,7 +123,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final currentFlavor = context.read<FlavorCubit>().state.flavor;
+    final currentFlavor = global<FlavorCubit>().state.flavor;
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -131,7 +131,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         child: Column(
           children: [
             Text(
-              'App de ${currentFlavor.name.replaceAll('_', ' ').capitalizeAll}',
+              'App de ${currentFlavor.name}',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Gap(20),

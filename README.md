@@ -62,7 +62,7 @@ Instrucciones para generar las versiones de prueba o de producción de la app.
 CORE FINANCIERO
 
 ```
-flutter build apk --dart-define-from-file=api-key.json --target=lib/main.dart --release --obfuscate --split-debug-info=../
+flutter build apk --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 
 ó
@@ -74,7 +74,7 @@ si se quiere generar un archivo `.apk` para compartir o para subir a tiendas com
 CORE FINANCIERO
 
 ```
-flutter build appbundle --dart-define-from-file=api-key-prod.json --target=lib/main.dart --release --obfuscate --split-debug-info=../
+flutter build appbundle --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 si se quiere generar un archivo .aab para subir a la tienda de google
 
@@ -88,7 +88,7 @@ si se quiere generar un archivo .aab para subir a la tienda de google
 CORE FINANCIERO
 
 ```
-flutter build ipa --dart-define-from-file=api-key.json --target=lib/main.dart  --release --obfuscate --split-debug-info=../
+flutter build ipa --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 
 ## Debug
@@ -98,7 +98,7 @@ Instrucciones para compilar la app.
 
 Ejecutar:
 ```
-flutter run --dart-define-from-file=api-key.json --target=lib/main.dart
+flutter run --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart
 ```
 
 ### Notas importantes 🔑
