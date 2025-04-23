@@ -17,43 +17,43 @@ class SolicitudesReprestamoPendientesItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Gap(15),
-          SlidePageviewView(
-            controller: controller,
-            title: 'Solicitudes Represtamo',
-          ),
-          solicitudesReprestamoOffline.isEmpty
-              ? Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        height: 170,
-                        ImageAsset.noDataBg,
-                      ),
-                      const Gap(25),
-                      Text(
-                        'No hay solicitudes pendientes',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.builder(
+    return Column(
+      children: [
+        const Gap(15),
+        SlidePageviewView(
+          controller: controller,
+          title: 'Solicitudes Represtamo',
+        ),
+        solicitudesReprestamoOffline.isEmpty
+            ? Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      height: 170,
+                      ImageAsset.noDataBg,
+                    ),
+                    const Gap(25),
+                    Text(
+                      'No hay solicitudes pendientes',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+              )
+            : Expanded(
+                child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: solicitudesReprestamoOffline.length,
-                  itemBuilder: (BuildContext context, int index) {
+                  itemBuilder: (_, int index) {
                     return SolicitudesReprestamoPendientesWidget(
                       solicitud: solicitudesReprestamoOffline[index],
                     );
                   },
                 ),
-        ],
-      ),
+              ),
+      ],
     );
   }
 }

@@ -153,7 +153,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
         tasaInteres: tasaInteres,
         hasVerified: hasVerified,
         isDone: isDone,
-        // idLocalResponse: idLocalResponse ?? state.idLocalResponse,
+        idLocalResponse: idLocalResponse,
         username: username,
         userIp: userIp,
         database: database,

@@ -73,21 +73,21 @@ android {
     productFlavors {
         micreditoNicaragua {
             dimension "country"
-            resValue "string", "app_name", "Micrédito"
+            resValue "string", "app_name", "MiCrédito"
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.ni"
             signingConfig signingConfigs.debug
         }
         micreditoHonduras {
             dimension "country"
-            resValue "string", "app_name", "Micrédito Honduras"
+            resValue "string", "app_name", "MiCrédito Honduras"
             // versionNameSuffix ".hn"
             applicationId "com.mcsystem.core_financiero_app.hn"
             signingConfig signingConfigs.debug
         }
         micreditoCostaRica {
             dimension "country"
-            resValue "string", "app_name", "Micrédito Costa Rica"
+            resValue "string", "app_name", "MiCrédito Costa Rica"
             // versionNameSuffix ".cr"
             applicationId "com.mcsystem.core_financiero_app.cr"
             signingConfig signingConfigs.debug

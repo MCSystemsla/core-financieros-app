@@ -149,7 +149,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((ctx) => const CrearSolicitudScreen(
+                    builder: ((_) => const CrearSolicitudScreen(
                           typeForm: TypeForm.represtamo,
                         )),
                   ),
@@ -197,7 +197,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) =>
+                    builder: ((_) =>
                         const CrearSolicitudScreen(typeForm: TypeForm.nueva)),
                   ),
                 );
@@ -219,7 +219,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => const CrearSolicitudScreen(
+                    builder: ((_) => const CrearSolicitudScreen(
                         typeForm: TypeForm.asalariado)),
                   ),
                 );

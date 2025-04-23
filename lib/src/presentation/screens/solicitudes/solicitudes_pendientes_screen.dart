@@ -16,12 +16,16 @@ class SolicitudesPendientesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => SolicitudesOfflineCubit(
-        global<ObjectBoxService>(),
-      )
-        ..deleteItemByDeterminateDay()
-        ..getSolicitudesOffline(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => SolicitudesOfflineCubit(
+            global<ObjectBoxService>(),
+          )
+            ..deleteItemByDeterminateDay()
+            ..getSolicitudesOffline(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Solicitudes Pendientes'),
