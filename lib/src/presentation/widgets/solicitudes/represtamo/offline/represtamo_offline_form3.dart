@@ -1,9 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
@@ -15,23 +18,22 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class ReprestamoForm3 extends StatefulWidget {
+class ReprestamoOfflineForm3 extends StatefulWidget {
+  final ReprestamoResponsesLocalDb solicitud;
   final PageController controller;
-  const ReprestamoForm3({super.key, required this.controller});
+  const ReprestamoOfflineForm3(
+      {super.key, required this.controller, required this.solicitud});
 
   @override
-  State<ReprestamoForm3> createState() => _ReprestamoForm3State();
+  State<ReprestamoOfflineForm3> createState() => _ReprestamoOfflineForm3State();
 }
 
-class _ReprestamoForm3State extends State<ReprestamoForm3>
-    with AutomaticKeepAliveClientMixin {
+class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -94,8 +96,31 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
 
   final montoController = TextEditingController();
   @override
+  void initState() {
+    final solicitud = widget.solicitud;
+    proposito =
+        Item(name: solicitud.objPropositoId!, value: solicitud.objPropositoId);
+    moneda = Item(name: solicitud.objMonedaId!, value: solicitud.objMonedaId!);
+    monto = solicitud.monto.toString();
+    fechaDesembolso = solicitud.fechaDesembolso;
+    producto = Item(
+      name: solicitud.objProductoId!,
+      value: solicitud.objProductoId,
+      // montoMaximo: solicitud.montoMaximo,
+      // montoMinimo: solicitud.montoMinimo,
+    );
+    tasaInteres = solicitud.prestamoInteres;
+    frecuenciaDePago = Item(
+        name: solicitud.objFrecuenciaIdVer!, value: solicitud.objFrecuenciaId);
+    plazoSolicitud = solicitud.plazoSolicitud.toString();
+    fechaPrimerPago = solicitud.fechaPrimerPagoSolicitud;
+    observacion = solicitud.observacion;
+    montoController.text = solicitud.monto.toString();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -106,6 +131,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              hintText: proposito?.name ?? 'Seleccionar Proposito',
               codigo: 'DESTINOCREDITO',
               title: 'Proposito',
               onChanged: (item) {
@@ -115,6 +141,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: moneda?.name ?? 'Seleccionar Moneda',
               codigo: 'MONEDA',
               onChanged: (item) {
                 if (item == null) return;
@@ -127,6 +154,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              // initialValue: monto ?? '0',
+
               onFieldSubmitted: (value) {
                 String formattedValue =
                     FormatField.formatMonto(montoController.text);
@@ -151,7 +180,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Monto',
-              hintText: 'Ingresa Monto',
+              hintText: monto ?? 'Ingresa Monto',
               textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
@@ -178,18 +207,22 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
 
             const Gap(20),
             SearchDropdownWidget(
+              hintText: producto?.name ?? 'Seleccionar Producto',
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;
                 producto = item;
                 tasaInteres = item.interes;
-                montoMinimo = item.montoMinimo;
-                montoMaximo = item.montoMaximo;
+                log(item.interes.toString());
+                // montoMinimo = item.montoMinimo;
+                // montoMaximo = item.montoMaximo;
+                setState(() {});
               },
             ),
             const Gap(20),
             SearchDropdownWidget(
+              hintText: frecuenciaDePago?.name ?? 'Seleccionar Frecuencia',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
@@ -201,6 +234,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: plazoSolicitud,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -216,6 +250,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: fechaPrimerPago?.selectorFormat(),
               validator: (value) => ClassValidator.validateRequired(
                   fechaPrimerPago?.selectorFormat()),
               readOnly: true,
@@ -248,6 +283,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             // ),
             // const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: observacion,
               icon: Icon(
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
@@ -276,26 +312,26 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  if (double.tryParse(monto ?? '0')! <
-                      montoMinimo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! >
-                      montoMaximo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
+                  // if (double.tryParse(monto ?? '0')! <
+                  //     montoMinimo!.toDouble()) {
+                  //   CustomAlertDialog(
+                  //     context: context,
+                  //     title:
+                  //         'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                  //     onDone: () => context.pop(),
+                  //   ).showDialog(context, dialogType: DialogType.warning);
+                  //   return;
+                  // }
+                  // if (double.tryParse(monto ?? '0')! >
+                  //     montoMaximo!.toDouble()) {
+                  //   CustomAlertDialog(
+                  //     context: context,
+                  //     title:
+                  //         'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                  //     onDone: () => context.pop(),
+                  //   ).showDialog(context, dialogType: DialogType.warning);
+                  //   return;
+                  // }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
@@ -358,7 +394,4 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

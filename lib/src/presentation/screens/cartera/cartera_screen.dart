@@ -74,7 +74,7 @@ class CarteraScreen extends StatelessWidget {
                   size: 35,
                 ),
               ),
-              if (actions.contains('LLENARKIVAMOVIL'))
+              if (actions.contains('MODCARTERA'))
                 _Card(
                   onTap: () async {
                     if (!context.mounted) return;

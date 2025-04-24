@@ -897,7 +897,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 4280151073531314887),
       name: 'ReprestamoResponsesLocalDb',
-      lastPropertyId: const obx_int.IdUid(57, 3982052265241771747),
+      lastPropertyId: const obx_int.IdUid(59, 3079226695348210825),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -924,11 +924,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(5, 4924893662371556806),
             name: 'objOrigenSolicitudId',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 8084697961678830896),
-            name: 'objClienteId',
-            type: 6,
             flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(7, 2383001129052975273),
@@ -1184,6 +1179,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(57, 3982052265241771747),
             name: 'fechaDesembolso',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(58, 252184913322232207),
+            name: 'objFrecuenciaIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(59, 3079226695348210825),
+            name: 'cedula',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1247,7 +1252,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         9149075065927782478,
         4231670949194548259,
         8381761593523512187,
-        7187538665278236547
+        7187538665278236547,
+        8084697961678830896
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -2699,13 +2705,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final errorMsgOffset = object.errorMsg == null
               ? null
               : fbb.writeString(object.errorMsg!);
-          fbb.startTable(58);
+          final objFrecuenciaIdVerOffset = object.objFrecuenciaIdVer == null
+              ? null
+              : fbb.writeString(object.objFrecuenciaIdVer!);
+          final cedulaOffset =
+              object.cedula == null ? null : fbb.writeString(object.cedula!);
+          fbb.startTable(60);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, usernameOffset);
           fbb.addOffset(2, userIpOffset);
           fbb.addOffset(3, databaseOffset);
           fbb.addOffset(4, objOrigenSolicitudIdOffset);
-          fbb.addInt64(5, object.objClienteId);
           fbb.addInt64(6, object.monto);
           fbb.addOffset(7, objMonedaIdOffset);
           fbb.addOffset(8, objPropositoIdOffset);
@@ -2758,6 +2768,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(54, object.hasVerified);
           fbb.addFloat64(55, object.prestamoInteres);
           fbb.addInt64(56, object.fechaDesembolso?.millisecondsSinceEpoch);
+          fbb.addOffset(57, objFrecuenciaIdVerOffset);
+          fbb.addOffset(58, cedulaOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -2770,6 +2782,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 106);
           final fechaDesembolsoValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 116);
+          final objFrecuenciaIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 118);
           final usernameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 6);
           final userIpParam = const fb.StringReader(asciiOptimization: true)
@@ -2779,8 +2794,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final objOrigenSolicitudIdParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 12);
-          final objClienteIdParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+          final cedulaParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 120);
           final montoParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 16);
           final objMonedaIdParam =
@@ -2923,11 +2938,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final hasVerifiedParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 112);
           final object = ReprestamoResponsesLocalDb(
+              objFrecuenciaIdVer: objFrecuenciaIdVerParam,
               username: usernameParam,
               userIp: userIpParam,
               database: databaseParam,
               objOrigenSolicitudId: objOrigenSolicitudIdParam,
-              objClienteId: objClienteIdParam,
+              cedula: cedulaParam,
               monto: montoParam,
               objMonedaId: objMonedaIdParam,
               objPropositoId: objPropositoIdParam,
@@ -3677,253 +3693,257 @@ class ReprestamoResponsesLocalDb_ {
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
           _entities[7].properties[4]);
 
-  /// See [ReprestamoResponsesLocalDb.objClienteId].
-  static final objClienteId =
-      obx.QueryIntegerProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[5]);
-
   /// See [ReprestamoResponsesLocalDb.monto].
   static final monto = obx.QueryIntegerProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[6]);
+      _entities[7].properties[5]);
 
   /// See [ReprestamoResponsesLocalDb.objMonedaId].
   static final objMonedaId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[7]);
+          _entities[7].properties[6]);
 
   /// See [ReprestamoResponsesLocalDb.objPropositoId].
   static final objPropositoId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[8]);
+          _entities[7].properties[7]);
 
   /// See [ReprestamoResponsesLocalDb.objFrecuenciaId].
   static final objFrecuenciaId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[9]);
+          _entities[7].properties[8]);
 
   /// See [ReprestamoResponsesLocalDb.cuota].
   static final cuota = obx.QueryIntegerProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[10]);
+      _entities[7].properties[9]);
 
   /// See [ReprestamoResponsesLocalDb.objActividadId].
   static final objActividadId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[11]);
+          _entities[7].properties[10]);
 
   /// See [ReprestamoResponsesLocalDb.objActividadId1].
   static final objActividadId1 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[12]);
+          _entities[7].properties[11]);
 
   /// See [ReprestamoResponsesLocalDb.objActividadId2].
   static final objActividadId2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[13]);
+          _entities[7].properties[12]);
 
   /// See [ReprestamoResponsesLocalDb.objSectorId].
   static final objSectorId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[14]);
+          _entities[7].properties[13]);
 
   /// See [ReprestamoResponsesLocalDb.beneficiarioSeguro].
   static final beneficiarioSeguro =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[15]);
+          _entities[7].properties[14]);
 
   /// See [ReprestamoResponsesLocalDb.cedulaBeneficiarioSeguro].
   static final cedulaBeneficiarioSeguro =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[16]);
+          _entities[7].properties[15]);
 
   /// See [ReprestamoResponsesLocalDb.objParentescoBeneficiarioSeguroId].
   static final objParentescoBeneficiarioSeguroId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[17]);
+          _entities[7].properties[16]);
 
   /// See [ReprestamoResponsesLocalDb.objProductoId].
   static final objProductoId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[18]);
+          _entities[7].properties[17]);
 
   /// See [ReprestamoResponsesLocalDb.observacion].
   static final observacion =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[19]);
+          _entities[7].properties[18]);
 
   /// See [ReprestamoResponsesLocalDb.ubicacionLongitud].
   static final ubicacionLongitud =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[20]);
+          _entities[7].properties[19]);
 
   /// See [ReprestamoResponsesLocalDb.ubicacionLatitud].
   static final ubicacionLatitud =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[21]);
+          _entities[7].properties[20]);
 
   /// See [ReprestamoResponsesLocalDb.sucursal].
   static final sucursal = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[22]);
+      _entities[7].properties[21]);
 
   /// See [ReprestamoResponsesLocalDb.ubicacion].
   static final ubicacion = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[23]);
+      _entities[7].properties[22]);
 
   /// See [ReprestamoResponsesLocalDb.esPeps].
   static final esPeps = obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[24]);
+      _entities[7].properties[23]);
 
   /// See [ReprestamoResponsesLocalDb.nombreDeEntidadPeps].
   static final nombreDeEntidadPeps =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[25]);
+          _entities[7].properties[24]);
 
   /// See [ReprestamoResponsesLocalDb.paisPeps].
   static final paisPeps = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[26]);
+      _entities[7].properties[25]);
 
   /// See [ReprestamoResponsesLocalDb.periodoPeps].
   static final periodoPeps =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[27]);
+          _entities[7].properties[26]);
 
   /// See [ReprestamoResponsesLocalDb.cargoOficialPeps].
   static final cargoOficialPeps =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[28]);
+          _entities[7].properties[27]);
 
   /// See [ReprestamoResponsesLocalDb.tieneFamiliarPeps].
   static final tieneFamiliarPeps =
       obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[29]);
+          _entities[7].properties[28]);
 
   /// See [ReprestamoResponsesLocalDb.nombreFamiliarPeps2].
   static final nombreFamiliarPeps2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[30]);
+          _entities[7].properties[29]);
 
   /// See [ReprestamoResponsesLocalDb.parentescoFamiliarPeps2].
   static final parentescoFamiliarPeps2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[31]);
+          _entities[7].properties[30]);
 
   /// See [ReprestamoResponsesLocalDb.cargoFamiliarPeps2].
   static final cargoFamiliarPeps2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[32]);
+          _entities[7].properties[31]);
 
   /// See [ReprestamoResponsesLocalDb.nombreEntidadPeps2].
   static final nombreEntidadPeps2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[33]);
+          _entities[7].properties[32]);
 
   /// See [ReprestamoResponsesLocalDb.periodoPeps2].
   static final periodoPeps2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[34]);
+          _entities[7].properties[33]);
 
   /// See [ReprestamoResponsesLocalDb.paisPeps2].
   static final paisPeps2 = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[35]);
+      _entities[7].properties[34]);
 
   /// See [ReprestamoResponsesLocalDb.objRubroActividad].
   static final objRubroActividad =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[36]);
+          _entities[7].properties[35]);
 
   /// See [ReprestamoResponsesLocalDb.objActividadPredominante].
   static final objActividadPredominante =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[37]);
+          _entities[7].properties[36]);
 
   /// See [ReprestamoResponsesLocalDb.objTipoDocumentoId].
   static final objTipoDocumentoId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[38]);
+          _entities[7].properties[37]);
 
   /// See [ReprestamoResponsesLocalDb.objRubroActividad2].
   static final objRubroActividad2 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[39]);
+          _entities[7].properties[38]);
 
   /// See [ReprestamoResponsesLocalDb.objRubroActividad3].
   static final objRubroActividad3 =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[40]);
+          _entities[7].properties[39]);
 
   /// See [ReprestamoResponsesLocalDb.objRubroActividadPredominante].
   static final objRubroActividadPredominante =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[41]);
+          _entities[7].properties[40]);
 
   /// See [ReprestamoResponsesLocalDb.tipoPersona].
   static final tipoPersona =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[42]);
+          _entities[7].properties[41]);
 
   /// See [ReprestamoResponsesLocalDb.objTipoPersonaId].
   static final objTipoPersonaId =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[43]);
+          _entities[7].properties[42]);
 
   /// See [ReprestamoResponsesLocalDb.telefonoBeneficiario].
   static final telefonoBeneficiario =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[44]);
+          _entities[7].properties[43]);
 
   /// See [ReprestamoResponsesLocalDb.celularReprestamo].
   static final celularReprestamo =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[45]);
+          _entities[7].properties[44]);
 
   /// See [ReprestamoResponsesLocalDb.esFamiliarEmpleado].
   static final esFamiliarEmpleado =
       obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[46]);
+          _entities[7].properties[45]);
 
   /// See [ReprestamoResponsesLocalDb.nombreFamiliar].
   static final nombreFamiliar =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[47]);
+          _entities[7].properties[46]);
 
   /// See [ReprestamoResponsesLocalDb.cedulaFamiliar].
   static final cedulaFamiliar =
       obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[48]);
+          _entities[7].properties[47]);
 
   /// See [ReprestamoResponsesLocalDb.plazoSolicitud].
   static final plazoSolicitud =
       obx.QueryIntegerProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[49]);
+          _entities[7].properties[48]);
 
   /// See [ReprestamoResponsesLocalDb.fechaPrimerPagoSolicitud].
   static final fechaPrimerPagoSolicitud =
       obx.QueryDateProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[50]);
+          _entities[7].properties[49]);
 
   /// See [ReprestamoResponsesLocalDb.createdAt].
   static final createdAt = obx.QueryDateProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[51]);
+      _entities[7].properties[50]);
 
   /// See [ReprestamoResponsesLocalDb.isDone].
   static final isDone = obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[52]);
+      _entities[7].properties[51]);
 
   /// See [ReprestamoResponsesLocalDb.errorMsg].
   static final errorMsg = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
-      _entities[7].properties[53]);
+      _entities[7].properties[52]);
 
   /// See [ReprestamoResponsesLocalDb.hasVerified].
   static final hasVerified =
       obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[54]);
+          _entities[7].properties[53]);
 
   /// See [ReprestamoResponsesLocalDb.prestamoInteres].
   static final prestamoInteres =
       obx.QueryDoubleProperty<ReprestamoResponsesLocalDb>(
-          _entities[7].properties[55]);
+          _entities[7].properties[54]);
 
   /// See [ReprestamoResponsesLocalDb.fechaDesembolso].
   static final fechaDesembolso =
       obx.QueryDateProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[55]);
+
+  /// See [ReprestamoResponsesLocalDb.objFrecuenciaIdVer].
+  static final objFrecuenciaIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
           _entities[7].properties[56]);
+
+  /// See [ReprestamoResponsesLocalDb.cedula].
+  static final cedula = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+      _entities[7].properties[57]);
 }

@@ -35,7 +35,7 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
     return BlocConsumer<SolicitudReprestamoCubit, SolicitudReprestamoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
-          dbProvider.removeSolicitudWhenisUploaded(
+          dbProvider.removeSolicitudReprestamoWhenisUploaded(
             solicitudId: widget.solicitudId,
           );
         }

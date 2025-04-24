@@ -10,7 +10,7 @@ class SolicitudReprestamo {
   final String userIp;
   final String database;
   final String objOrigenSolicitudId;
-  final int objClienteId;
+  final String cedula;
   final int monto;
   final String objMonedaId;
   final String objPropositoId;
@@ -62,7 +62,7 @@ class SolicitudReprestamo {
     required this.userIp,
     required this.database,
     required this.objOrigenSolicitudId,
-    required this.objClienteId,
+    required this.cedula,
     required this.monto,
     required this.objMonedaId,
     required this.objPropositoId,
@@ -111,9 +111,10 @@ class SolicitudReprestamo {
   });
 
   Map<String, dynamic> toJson() => {
+        'objClienteID': 35280,
         'objOrigenSolicitudID': 'APPMOVIL',
         'database': LocalStorage().database,
-        'objClienteID': objClienteId,
+        'Cedula': cedula,
         'Monto': monto,
         'objMonedaID': objMonedaId,
         'objPropositoID': objPropositoId,

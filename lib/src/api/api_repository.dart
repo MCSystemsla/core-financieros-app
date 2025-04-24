@@ -50,6 +50,9 @@ class DefaultAPIRepository implements APIRepository {
     var headers = {
       HttpHeaders.acceptHeader: '*/*',
       HttpHeaders.contentTypeHeader: 'application/json',
+      'CF-Access-Client-Id': '50695cbd68f241b5db5d5182b598ce5f.access',
+      'CF-Access-Client-Secret':
+          'f685b14fc1780604fa57a6e88292c2a2fec49bb879ebbccef79785e8f5d9ab6f',
     };
     headers.addAll(endpoint.headers);
     try {

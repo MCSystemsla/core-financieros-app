@@ -21,7 +21,7 @@ class HomeItemsWidget extends StatelessWidget {
     final actions = LocalStorage().currentActions;
 
     List<HomeItemCard> homeItemData = [
-      if (actions.contains('MENUCARTERAMOVIL'))
+      if (actions.contains('MODCARTERA'))
         HomeItemCard(
           title: 'home.item5'.tr(),
           subtitle: 'Descripcion'.tr(),

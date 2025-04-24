@@ -14,11 +14,12 @@ class SolicitudReprestamoState extends Equatable {
   final String userIp;
   final String database;
   final String objOrigenSolicitudId;
-  final int objClienteId;
+  final String cedula;
   final int monto;
   final String objMonedaId;
   final String objPropositoId;
   final String objFrecuenciaId;
+  final String objFrecuenciaIdVer;
   final int cuota;
   final String objActividadId;
   final String objActividadId1;
@@ -61,6 +62,7 @@ class SolicitudReprestamoState extends Equatable {
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
   const SolicitudReprestamoState({
+    this.objFrecuenciaIdVer = '',
     this.hasVerified = false,
     this.isDone = false,
     this.successMsg = '',
@@ -71,7 +73,7 @@ class SolicitudReprestamoState extends Equatable {
     this.errorMsg = '',
     this.database = '',
     this.objOrigenSolicitudId = '',
-    this.objClienteId = 0,
+    this.cedula = '',
     this.monto = 0,
     this.objMonedaId = '',
     this.objPropositoId = '',
@@ -123,6 +125,7 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        objFrecuenciaIdVer,
         hasVerified,
         isDone,
         successMsg,
@@ -133,7 +136,7 @@ class SolicitudReprestamoState extends Equatable {
         errorMsg,
         database,
         objOrigenSolicitudId,
-        objClienteId,
+        cedula,
         monto,
         objMonedaId,
         objPropositoId,
@@ -194,11 +197,12 @@ class SolicitudReprestamoState extends Equatable {
     String? userIp,
     String? database,
     String? objOrigenSolicitudId,
-    int? objClienteId,
+    String? cedula,
     int? monto,
     String? objMonedaId,
     String? objPropositoId,
     String? objFrecuenciaId,
+    String? objFrecuenciaIdVer,
     int? cuota,
     String? objActividadId,
     String? objActividadId1,
@@ -254,11 +258,12 @@ class SolicitudReprestamoState extends Equatable {
       userIp: userIp ?? this.userIp,
       database: database ?? this.database,
       objOrigenSolicitudId: objOrigenSolicitudId ?? this.objOrigenSolicitudId,
-      objClienteId: objClienteId ?? this.objClienteId,
+      cedula: cedula ?? this.cedula,
       monto: monto ?? this.monto,
       objMonedaId: objMonedaId ?? this.objMonedaId,
       objPropositoId: objPropositoId ?? this.objPropositoId,
       objFrecuenciaId: objFrecuenciaId ?? this.objFrecuenciaId,
+      objFrecuenciaIdVer: objFrecuenciaIdVer ?? this.objFrecuenciaIdVer,
       cuota: cuota ?? this.cuota,
       objActividadId: objActividadId ?? this.objActividadId,
       objActividadId1: objActividadId1 ?? this.objActividadId1,

@@ -9,11 +9,12 @@ class ReprestamoResponsesLocalDb {
   String? userIp;
   String? database;
   String? objOrigenSolicitudId;
-  int? objClienteId;
+  String? cedula;
   int? monto;
   String? objMonedaId;
   String? objPropositoId;
   String? objFrecuenciaId;
+  String? objFrecuenciaIdVer;
   int? cuota;
   String? objActividadId;
   String? objActividadId1;
@@ -63,11 +64,12 @@ class ReprestamoResponsesLocalDb {
   String? errorMsg;
   bool? hasVerified;
   ReprestamoResponsesLocalDb({
+    this.objFrecuenciaIdVer,
     this.username,
     this.userIp,
     this.database,
     this.objOrigenSolicitudId,
-    this.objClienteId,
+    this.cedula,
     this.monto,
     this.objMonedaId,
     this.objPropositoId,

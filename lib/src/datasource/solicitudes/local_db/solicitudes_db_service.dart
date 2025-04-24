@@ -30,7 +30,7 @@ class ObjectBoxService {
     solicitudesResponsesBox = _store.box<ResponseLocalDb>();
     solicitudesReprestamoResponsesBox =
         _store.box<ReprestamoResponsesLocalDb>();
-    // solicitudesResponsesBox.removeAll();
+    // solicitudesReprestamoResponsesBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
@@ -257,6 +257,14 @@ class ObjectBoxService {
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  void removeSolicitudReprestamoWhenisUploaded({required int solicitudId}) {
+    try {
+      solicitudesReprestamoResponsesBox.remove(solicitudId);
     } catch (e) {
       _logger.e(e.toString());
     }

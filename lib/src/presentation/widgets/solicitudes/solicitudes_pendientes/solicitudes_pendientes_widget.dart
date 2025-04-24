@@ -173,7 +173,7 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
     double calcularPorcentajeLlenado(ReprestamoResponsesLocalDb respuesta) {
       var valores = [
         respuesta.database,
-        respuesta.objClienteId,
+        respuesta.cedula,
         respuesta.monto,
         respuesta.objMonedaId,
         respuesta.objPropositoId,
