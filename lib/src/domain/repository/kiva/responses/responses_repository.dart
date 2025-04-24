@@ -359,13 +359,16 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //     contentType: MediaType('image', 'png'),
       //   ));
       // }
-      request.headers.addAll({
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-        'CF-Access-Client-Id': '50695cbd68f241b5db5d5182b598ce5f.access',
-        'CF-Access-Client-Secret':
-            'f685b14fc1780604fa57a6e88292c2a2fec49bb879ebbccef79785e8f5d9ab6f',
-      });
+      request.headers.addAll(
+        {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${LocalStorage().jwt}',
+          'CF-Access-Client-Id':
+              const String.fromEnvironment('CF-Access-Client-Id'),
+          'CF-Access-Client-Secret':
+              const String.fromEnvironment('CF-Access-Client-Secret'),
+        },
+      );
       var response = await request.send();
 
       var responseBody = await http.Response.fromStream(response);
@@ -527,9 +530,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
-        'CF-Access-Client-Id': '50695cbd68f241b5db5d5182b598ce5f.access',
+        'CF-Access-Client-Id':
+            const String.fromEnvironment('CF-Access-Client-Id'),
         'CF-Access-Client-Secret':
-            'f685b14fc1780604fa57a6e88292c2a2fec49bb879ebbccef79785e8f5d9ab6f',
+            const String.fromEnvironment('CF-Access-Client-Secret'),
       });
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
