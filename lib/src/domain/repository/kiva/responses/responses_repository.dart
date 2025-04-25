@@ -364,9 +364,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${LocalStorage().jwt}',
           'CF-Access-Client-Id':
-              const String.fromEnvironment('CF-Access-Client-Id'),
+              const String.fromEnvironment('CFAccessClientId'),
           'CF-Access-Client-Secret':
-              const String.fromEnvironment('CF-Access-Client-Secret'),
+              const String.fromEnvironment('CFAccessClientSecret'),
         },
       );
       var response = await request.send();
@@ -530,10 +530,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
-        'CF-Access-Client-Id':
-            const String.fromEnvironment('CF-Access-Client-Id'),
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
         'CF-Access-Client-Secret':
-            const String.fromEnvironment('CF-Access-Client-Secret'),
+            const String.fromEnvironment('CFAccessClientSecret'),
       });
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
