@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -21,11 +22,11 @@ import 'package:go_router/go_router.dart';
 
 class ReprestamoForm1 extends StatefulWidget {
   final PageController controller;
-  final int objClienteId;
+  final String cedula;
   const ReprestamoForm1({
     super.key,
     required this.controller,
-    required this.objClienteId,
+    required this.cedula,
   });
 
   @override
@@ -69,9 +70,11 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   String? celularReprestamo;
   String? locationLatitude;
   String? locationLongitude;
+  String? cedula;
 
   @override
   void initState() {
+    cedula = widget.cedula;
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
         if (value == null) return;
@@ -88,6 +91,8 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   String celularCode = '+505';
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -119,6 +124,24 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               title: 'Tipo de Documento',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
+              initialValue: cedula,
+              // onTap: () => selectDate(context),
+              readOnly: isConnected,
+              icon: Icon(
+                Icons.edit_document,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cedula',
+              isRequired: true,
+              hintText: 'Ingresa Cedula',
+              isValid: null,
+              onChange: (value) {
+                cedula = value;
+              },
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -183,6 +206,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               title: 'Ubicacion',
               textCapitalization: TextCapitalization.words,
               onChange: (value) {
+                ubicacion = value;
                 setState(() {});
               },
               hintText: 'Ingresa Ubicacion',
@@ -213,7 +237,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                         ubicacion: ubicacion,
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,
-                        cedula: widget.objClienteId.toString(),
+                        cedula: widget.cedula,
                         celularReprestamo: celularReprestamo == null
                             ? ''
                             : celularCode +

@@ -157,7 +157,6 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5> {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objSectorId: sector?.value,
-                        cedula: '08422602740000D',
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco?.value,

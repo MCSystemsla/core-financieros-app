@@ -26,7 +26,7 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     void showSuccessDialog({
       required String firstName,
-      required int objClienteId,
+      required String cedula,
     }) {
       CustomAlertDialog(
         context: context,
@@ -35,9 +35,9 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: ((context) => CrearSolicitudScreen(
+              builder: ((_) => CrearSolicitudScreen(
                     typeForm: typeForm,
-                    objClienteId: objClienteId,
+                    cedula: cedula,
                   )),
             ),
           );
@@ -68,8 +68,8 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
             }
             if (state is OnReprestaUserByCedulaSuccess) {
               showSuccessDialog(
+                cedula: state.represtamoUserCedula.cedula,
                 firstName: state.represtamoUserCedula.nombreCompleto,
-                objClienteId: int.parse(state.represtamoUserCedula.id),
               );
             }
           },

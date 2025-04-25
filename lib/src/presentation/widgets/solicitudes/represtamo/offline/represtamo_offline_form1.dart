@@ -35,7 +35,6 @@ class ReprestamoOfflineForm1 extends StatefulWidget {
 
 class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
   DateTime? _selectedDate;
-  String? ubicacion;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -69,12 +68,16 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
   String? celularReprestamo;
   String? locationLatitude;
   String? locationLongitude;
+  String? cedula;
+  String? ubicacion;
 
   @override
   void initState() {
     tipoPersonaCredito = widget.solicitud.objTipoPersonaId;
     tipoDocumento = widget.solicitud.objTipoDocumentoId;
     celularReprestamo = widget.solicitud.celularReprestamo;
+    cedula = widget.solicitud.cedula;
+    ubicacion = widget.solicitud.ubicacion;
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
         if (value == null) return;
@@ -123,6 +126,23 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
               title: 'Tipo de Documento',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
+            ),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
+              initialValue: cedula,
+              // onTap: () => selectDate(context),
+              readOnly: true,
+              icon: Icon(
+                Icons.edit_document,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cedula',
+              isRequired: true,
+              hintText: 'Ingresa Cedula',
+              isValid: null,
+              onChange: (value) {
+                cedula = value;
+              },
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -214,6 +234,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
                   }
                   if (!context.mounted) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
+                        cedula: cedula,
                         idLocalResponse: widget.solicitud.id,
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,

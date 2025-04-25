@@ -249,16 +249,10 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
             ),
           );
         },
-        title:
-            // '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
-            '${solicitud.celularReprestamo}'.capitalizeAll,
-        // location: solicitud.cedula?.dashFormat ?? 'N/A',
+        title: '${solicitud.cedula}'.toUpperCase(),
         location: solicitud.celularReprestamo ?? 'N/A',
-        // dateToStart: solicitud.email ?? 'N/A',
         dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
-        // dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
-        //     ?.selectorFormat(),
-        dateToEnd: 'Fecha ',
+        dateToEnd: 'Fecha',
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),

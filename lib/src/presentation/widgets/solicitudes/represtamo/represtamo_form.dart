@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 
 class ReprestamoForm extends StatelessWidget {
   final PageController controller;
-  final int objClienteId;
+  final String cedula;
 
   const ReprestamoForm({
     super.key,
     required this.controller,
-    required this.objClienteId,
+    required this.cedula,
   });
 
   @override
@@ -32,7 +32,7 @@ class ReprestamoForm extends StatelessWidget {
             children: [
               ReprestamoForm1(
                 controller: controller,
-                objClienteId: objClienteId,
+                cedula: cedula,
               ),
               ReprestamoForm2(controller: controller),
               ReprestamoForm3(controller: controller),
