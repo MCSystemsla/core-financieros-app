@@ -55,7 +55,7 @@ class SolicitudReprestamo {
   final String nombreFamiliar;
   final String cedulaFamiliar;
   final int plazoSolicitud;
-  final DateTime fechaPrimerPagoSolicitud;
+  final DateTime? fechaPrimerPagoSolicitud;
 
   SolicitudReprestamo({
     required this.username,
@@ -107,58 +107,71 @@ class SolicitudReprestamo {
     required this.cedulaFamiliar,
     required this.plazoSolicitud,
     required this.celularReprestamo,
-    required this.fechaPrimerPagoSolicitud,
+    this.fechaPrimerPagoSolicitud,
   });
 
-  Map<String, dynamic> toJson() => {
-        'objClienteID': 35280,
-        'objOrigenSolicitudID': 'APPMOVIL',
-        'database': LocalStorage().database,
-        'Cedula': cedula,
-        'Monto': monto,
-        'objMonedaID': objMonedaId,
-        'objPropositoID': objPropositoId,
-        'objFrecuenciaID': objFrecuenciaId,
-        'Cuota': cuota,
-        'objActividadID': objActividadId,
-        'objActividadID1': objActividadId1,
-        'objActividadID2': objActividadId2,
-        'objSectorID': objSectorId,
-        'BeneficiarioSeguro': beneficiarioSeguro,
-        'CedulaBeneficiarioSeguro': cedulaBeneficiarioSeguro,
-        'objParentescoBeneficiarioSeguroID': objParentescoBeneficiarioSeguroId,
-        'objProductoID': objProductoId,
-        'Observacion': observacion,
-        'UbicacionLongitud': ubicacionLongitud,
-        'UbicacionLatitud': ubicacionLatitud,
-        'Sucursal': sucursal,
-        'Ubicacion': ubicacion,
-        'EsPEPS': esPeps,
-        'NombreDeEntidadPeps': nombreDeEntidadPeps,
-        'PaisPeps': paisPeps,
-        'PeriodoPeps': periodoPeps,
-        'CargoOficialPeps': cargoOficialPeps,
-        'TieneFamiliarPeps': tieneFamiliarPeps,
-        'NombreFamiliarPeps2': nombreFamiliarPeps2,
-        'ParentescoFamiliarPeps2': parentescoFamiliarPeps2,
-        'CargoFamiliarPeps2': cargoFamiliarPeps2,
-        'NombreEntidadPeps2': nombreEntidadPeps2,
-        'PeriodoPeps2': periodoPeps2,
-        'PaisPeps2': paisPeps2,
-        'objRubroActividad': objRubroActividad,
-        'objActividadPredominante': objActividadPredominante,
-        'objTipoDocumentoID': objTipoDocumentoId,
-        'objRubroActividad2': objRubroActividad2,
-        'objRubroActividad3': objRubroActividad3,
-        'objRubroActividadPredominante': objRubroActividadPredominante,
-        'TipoPersona': tipoPersona,
-        'objTipoPersonaID': objTipoPersonaId,
-        'TelefonoBeneficiario': telefonoBeneficiario,
-        'EsFamiliarEmpleado': esFamiliarEmpleado,
-        'NombreFamiliar': nombreFamiliar,
-        'CedulaFamiliar': cedulaFamiliar,
-        'PlazoSolicitud': plazoSolicitud,
-        'CelularReprestamo': celularReprestamo,
-        'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud.toIso8601String(),
-      };
+  Map<String, dynamic> toJson() {
+    // 'objClienteID': 35280,
+    final Map<String, dynamic> data = {
+      'objOrigenSolicitudID': 'APPMOVIL',
+      'database': LocalStorage().database,
+      'Cedula': cedula,
+      'Monto': monto,
+      'objMonedaID': objMonedaId.isEmpty ? null : objMonedaId,
+      'objPropositoID': objPropositoId.isEmpty ? null : objPropositoId,
+      'objFrecuenciaID': objFrecuenciaId.isEmpty ? null : objFrecuenciaId,
+      'Cuota': cuota,
+      'objActividadID': objActividadId.isEmpty ? null : objActividadId,
+      'objActividadID1': objActividadId1.isEmpty ? null : objActividadId1,
+      'objActividadID2': objActividadId2.isEmpty ? null : objActividadId2,
+      'objSectorID': objSectorId.isEmpty ? null : objSectorId,
+      'BeneficiarioSeguro': beneficiarioSeguro,
+      'CedulaBeneficiarioSeguro': cedulaBeneficiarioSeguro,
+      'objParentescoBeneficiarioSeguroID':
+          objParentescoBeneficiarioSeguroId.isEmpty
+              ? null
+              : objParentescoBeneficiarioSeguroId,
+      'objProductoID': objProductoId.isEmpty ? null : objProductoId,
+      'Observacion': observacion,
+      'UbicacionLongitud': ubicacionLongitud,
+      'UbicacionLatitud': ubicacionLatitud,
+      'Ubicacion': ubicacion,
+      'EsPEPS': esPeps,
+      'NombreDeEntidadPeps': nombreDeEntidadPeps,
+      'PaisPeps': paisPeps,
+      'PeriodoPeps': periodoPeps,
+      'CargoOficialPeps': cargoOficialPeps,
+      'TieneFamiliarPeps': tieneFamiliarPeps,
+      'NombreFamiliarPeps2': nombreFamiliarPeps2,
+      'ParentescoFamiliarPeps2': parentescoFamiliarPeps2,
+      'CargoFamiliarPeps2': cargoFamiliarPeps2,
+      'NombreEntidadPeps2': nombreEntidadPeps2,
+      'PeriodoPeps2': periodoPeps2,
+      'PaisPeps2': paisPeps2,
+      'objRubroActividad': objRubroActividad.isEmpty ? null : objRubroActividad,
+      'objActividadPredominante':
+          objActividadPredominante.isEmpty ? null : objActividadPredominante,
+      'objTipoDocumentoID':
+          objTipoDocumentoId.isEmpty ? null : objTipoDocumentoId,
+      'objRubroActividad2':
+          objRubroActividad2.isEmpty ? null : objRubroActividad2,
+      'objRubroActividad3':
+          objRubroActividad3.isEmpty ? null : objRubroActividad3,
+      'objRubroActividadPredominante': objRubroActividadPredominante.isEmpty
+          ? null
+          : objRubroActividadPredominante,
+      'TipoPersona': tipoPersona,
+      'objTipoPersonaID': objTipoPersonaId.isEmpty ? null : objTipoPersonaId,
+      'TelefonoBeneficiario': telefonoBeneficiario,
+      'EsFamiliarEmpleado': esFamiliarEmpleado,
+      'NombreFamiliar': nombreFamiliar,
+      'CedulaFamiliar': cedulaFamiliar,
+      'PlazoSolicitud': plazoSolicitud,
+      'CelularReprestamo': celularReprestamo,
+      'FechaPrimerPagoSolicitud':
+          fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
+    };
+    data.removeWhere((key, value) => value == null || value == '');
+    return data;
+  }
 }

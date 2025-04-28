@@ -50,12 +50,47 @@ class ObjectBoxService {
         .remove();
   }
 
-  List<ResponseLocalDb> sendSolicitudWhenIsDone() {
+  // List<dynamic> sendSolicitudWhenIsDone({required TypeForm typeForm}) {
+  //   try {
+  //     return switch (typeForm) {
+  //       TypeForm.nueva => solicitudesResponsesBox
+  //           .query(ResponseLocalDb_.isDone
+  //               .equals(true)
+  //               .and(ResponseLocalDb_.hasVerified.equals(false)))
+  //           .build()
+  //           .find(),
+  //       TypeForm.represtamo => sendSolicitudReprestamoWhenIsDone(),
+  //       _ => [],
+  //     };
+  //   } catch (e) {
+  //     _logger.e(e.toString());
+  //     rethrow;
+  //   }
+  // }
+  List<dynamic> sendSolicitudesWhenIsDone() {
     try {
-      final solicitudes = solicitudesResponsesBox
+      final nuevas = solicitudesResponsesBox
           .query(ResponseLocalDb_.isDone
               .equals(true)
               .and(ResponseLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+
+      final represtamos = sendSolicitudReprestamoWhenIsDone();
+
+      return [...nuevas, ...represtamos];
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  List<ReprestamoResponsesLocalDb> sendSolicitudReprestamoWhenIsDone() {
+    try {
+      final solicitudes = solicitudesReprestamoResponsesBox
+          .query(ReprestamoResponsesLocalDb_.isDone
+              .equals(true)
+              .and(ReprestamoResponsesLocalDb_.hasVerified.equals(false)))
           .build()
           .find();
       return solicitudes;
@@ -274,10 +309,20 @@ class ObjectBoxService {
       {required int solicitudId, String? errorMsg}) {
     try {
       final solicitud = solicitudesResponsesBox.get(solicitudId);
+      final solicitudReprestamo =
+          solicitudesReprestamoResponsesBox.get(solicitudId);
       if (solicitud != null) {
         solicitud.hasVerified = true;
         solicitud.errorMsg = errorMsg;
         solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
+        solicitudesReprestamoResponsesBox.put(solicitudReprestamo!,
+            mode: PutMode.update);
+      }
+      if (solicitudReprestamo != null) {
+        solicitudReprestamo.hasVerified = true;
+        solicitudReprestamo.errorMsg = errorMsg;
+        solicitudesReprestamoResponsesBox.put(solicitudReprestamo,
+            mode: PutMode.update);
       }
     } catch (e) {
       _logger.e(e.toString());

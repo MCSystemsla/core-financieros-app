@@ -118,8 +118,8 @@ class ReprestamoResponsesLocalDb {
     this.prestamoInteres,
     this.fechaDesembolso,
     this.createdAt,
-    this.isDone,
-    this.errorMsg,
-    this.hasVerified,
+    this.isDone = false,
+    this.errorMsg = '',
+    this.hasVerified = false,
   });
 }
