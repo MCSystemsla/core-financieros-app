@@ -71,6 +71,13 @@ android {
     }
     flavorDimensions "country"
     productFlavors {
+        micreditoQA {
+            dimension "country"
+            resValue "string", "app_name", "MiCrédito QA"
+            // versionNameSuffix ".ni"
+            applicationId "com.mcsystem.core_financiero_app.qa"
+            signingConfig signingConfigs.debug
+        }
         micreditoNicaragua {
             dimension "country"
             resValue "string", "app_name", "MiCrédito"

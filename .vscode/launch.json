@@ -74,6 +74,18 @@
           "micreditoCostaRica"
         ]
       },
+      {
+        "name": "MiCrédito QA (DEV)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key.json",
+          "--flavor",
+          "micreditoQA"
+        ]
+      },
      
     ]
   }
