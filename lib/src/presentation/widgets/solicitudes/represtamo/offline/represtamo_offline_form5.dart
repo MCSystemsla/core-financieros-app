@@ -167,6 +167,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5> {
                                     .trim()
                                     .replaceAll('-', ''),
                         isDone: !isConnected,
+                        isOffline: true,
                       );
                   if (!isConnected) {
                     CustomAlertDialog(

@@ -6,6 +6,7 @@ String solicitudReprestamoToJson(SolicitudReprestamo data) =>
     json.encode(data.toJson());
 
 class SolicitudReprestamo {
+  final bool isOffline;
   final String username;
   final String userIp;
   final String database;
@@ -58,6 +59,7 @@ class SolicitudReprestamo {
   final DateTime? fechaPrimerPagoSolicitud;
 
   SolicitudReprestamo({
+    required this.isOffline,
     required this.username,
     required this.userIp,
     required this.database,
@@ -114,6 +116,7 @@ class SolicitudReprestamo {
     // 'objClienteID': 35280,
     final Map<String, dynamic> data = {
       'objOrigenSolicitudID': 'APPMOVIL',
+      'isOffline': isOffline,
       'database': LocalStorage().database,
       'Cedula': cedula,
       'Monto': monto,

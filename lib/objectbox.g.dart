@@ -897,7 +897,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 4280151073531314887),
       name: 'ReprestamoResponsesLocalDb',
-      lastPropertyId: const obx_int.IdUid(59, 3079226695348210825),
+      lastPropertyId: const obx_int.IdUid(60, 1785096795156890895),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -1189,6 +1189,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(59, 3079226695348210825),
             name: 'cedula',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(60, 1785096795156890895),
+            name: 'isOffline',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -2710,7 +2715,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : fbb.writeString(object.objFrecuenciaIdVer!);
           final cedulaOffset =
               object.cedula == null ? null : fbb.writeString(object.cedula!);
-          fbb.startTable(60);
+          fbb.startTable(61);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, usernameOffset);
           fbb.addOffset(2, userIpOffset);
@@ -2770,6 +2775,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(56, object.fechaDesembolso?.millisecondsSinceEpoch);
           fbb.addOffset(57, objFrecuenciaIdVerOffset);
           fbb.addOffset(58, cedulaOffset);
+          fbb.addBool(59, object.isOffline);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -2782,6 +2788,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 106);
           final fechaDesembolsoValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 116);
+          final isOfflineParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 122);
           final objFrecuenciaIdVerParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 118);
@@ -2938,6 +2946,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final hasVerifiedParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 112);
           final object = ReprestamoResponsesLocalDb(
+              isOffline: isOfflineParam,
               objFrecuenciaIdVer: objFrecuenciaIdVerParam,
               username: usernameParam,
               userIp: userIpParam,
@@ -3946,4 +3955,8 @@ class ReprestamoResponsesLocalDb_ {
   /// See [ReprestamoResponsesLocalDb.cedula].
   static final cedula = obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
       _entities[7].properties[57]);
+
+  /// See [ReprestamoResponsesLocalDb.isOffline].
+  static final isOffline = obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
+      _entities[7].properties[58]);
 }

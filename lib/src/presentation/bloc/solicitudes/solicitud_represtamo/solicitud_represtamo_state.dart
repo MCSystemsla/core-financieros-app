@@ -61,8 +61,10 @@ class SolicitudReprestamoState extends Equatable {
   final String cedulaFamiliar;
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
+  final bool isOffline;
   const SolicitudReprestamoState({
     this.objFrecuenciaIdVer = '',
+    this.isOffline = false,
     this.hasVerified = false,
     this.isDone = false,
     this.successMsg = '',
@@ -126,6 +128,7 @@ class SolicitudReprestamoState extends Equatable {
   @override
   List<Object> get props => [
         objFrecuenciaIdVer,
+        isOffline,
         hasVerified,
         isDone,
         successMsg,
@@ -244,6 +247,7 @@ class SolicitudReprestamoState extends Equatable {
     String? cedulaFamiliar,
     int? plazoSolicitud,
     String? fechaPrimerPagoSolicitud,
+    bool? isOffline,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -311,6 +315,7 @@ class SolicitudReprestamoState extends Equatable {
       plazoSolicitud: plazoSolicitud ?? this.plazoSolicitud,
       fechaPrimerPagoSolicitud:
           fechaPrimerPagoSolicitud ?? this.fechaPrimerPagoSolicitud,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }

@@ -79,6 +79,7 @@ class SelectSolicitudScreen extends StatelessWidget {
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  errors: state.errors,
                   btnTitle: 'OK',
                   errorMsg: state.msgError,
                   onPressed: () {

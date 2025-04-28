@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 class OnErrorWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final String errorMsg;
+  final List<String> errors;
   final bool needToGoBack;
   final String btnTitle;
   const OnErrorWidget({
@@ -17,6 +18,7 @@ class OnErrorWidget extends StatelessWidget {
     this.errorMsg = '',
     this.needToGoBack = false,
     this.btnTitle = 'Volver a intentarlo',
+    this.errors = const [],
   });
 
   @override
@@ -39,7 +41,7 @@ class OnErrorWidget extends StatelessWidget {
           ),
           const Gap(5),
           Text(
-            errorMsg,
+            '$errorMsg\n${errors.isNotEmpty ? errors.join('\n') : ''}',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),

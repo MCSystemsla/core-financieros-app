@@ -152,7 +152,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
               validator: (value) => ClassValidator.validateRequired(value),
               initialValue: cedula,
               // onTap: () => selectDate(context),
-              readOnly: true,
               icon: Icon(
                 Icons.edit_document,
                 color: AppColors.getPrimaryColor(),

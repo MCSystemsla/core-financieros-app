@@ -292,6 +292,7 @@ class ObjectBoxService {
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
+      solicitudesReprestamoResponsesBox.remove(solicitudId);
     } catch (e) {
       _logger.e(e.toString());
     }

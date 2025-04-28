@@ -203,6 +203,22 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
             if (actividad1?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
+                hintText: rubroActividad?.name ?? 'Selecciona una opcion',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad = item;
+                  rubrosActividadesPredominanteList.add(item);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividadEconomica2?.value == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
                 hintText: rubroActividad2?.name ?? 'Selecciona una opcion',
                 // validator: (value) =>
                 //     ClassValidator.validateRequired(value?.value),

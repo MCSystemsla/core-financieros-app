@@ -23,6 +23,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       final (isOk, msg) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
+          isOffline: state.isOffline,
           cuota: state.cuota.toInt(),
           monto: state.monto.toInt(),
           userIp: '',
@@ -147,9 +148,11 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     String? fechaPrimerPagoSolicitud,
     String? fechaDesembolso,
     double? tasaInteres,
+    bool? isOffline,
   }) {
     emit(
       state.copyWith(
+        isOffline: isOffline,
         fechaDesembolso: fechaDesembolso,
         tasaInteres: tasaInteres,
         hasVerified: hasVerified,
@@ -217,6 +220,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       localDbProvider.updateSolicitudReprestamoById(
         id: state.idLocalResponse,
         responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+          isOffline: state.isOffline,
+          objRubroActividad: state.objRubroActividad,
           objFrecuenciaIdVer: state.objFrecuenciaIdVer,
           fechaDesembolso: DateTime.tryParse(state.fechaDesembolso),
           createdAt: DateTime.now(),
@@ -256,7 +261,6 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
           nombreEntidadPeps2: state.nombreEntidadPeps2,
           periodoPeps2: state.periodoPeps2,
           paisPeps2: state.paisPeps2,
-          objRubroActividad: state.objRubroActividad,
           objActividadPredominante: state.objActividadPredominante,
           objTipoDocumentoId: state.objTipoDocumentoId,
           objRubroActividad2: state.objRubroActividad2,
@@ -279,6 +283,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesReprestamoResponses(
       responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+        isOffline: state.isOffline,
         objFrecuenciaIdVer: state.objFrecuenciaIdVer,
         createdAt: DateTime.now(),
         hasVerified: state.hasVerified,

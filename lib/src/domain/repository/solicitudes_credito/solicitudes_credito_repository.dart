@@ -124,6 +124,11 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] == 409) {
+        _logger.i(endpoint.body);
+        AppException(optionalMsg: resp['message'] as String);
+        return (false, resp['message'] as String);
+      }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         AppException(optionalMsg: resp['message']['message'] as String);

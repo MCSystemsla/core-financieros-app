@@ -63,7 +63,9 @@ class ReprestamoResponsesLocalDb {
   bool? isDone;
   String? errorMsg;
   bool? hasVerified;
+  bool? isOffline;
   ReprestamoResponsesLocalDb({
+    this.isOffline = false,
     this.objFrecuenciaIdVer,
     this.username,
     this.userIp,

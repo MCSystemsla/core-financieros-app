@@ -237,7 +237,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                         ubicacion: ubicacion,
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,
-                        cedula: widget.cedula,
+                        cedula: cedula,
                         celularReprestamo: celularReprestamo == null
                             ? ''
                             : celularCode +

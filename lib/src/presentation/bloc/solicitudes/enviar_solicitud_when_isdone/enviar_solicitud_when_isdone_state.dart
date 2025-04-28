@@ -32,9 +32,10 @@ final class OnEnviarSolicitudWhenIsdoneError
 final class OnEnviarSolicitudWhenIsdonePendingVerification
     extends EnviarSolicitudWhenIsdoneState {
   final String msgError;
+  final List<String> errors;
 
   const OnEnviarSolicitudWhenIsdonePendingVerification(
-      {required this.msgError});
+      {required this.msgError, this.errors = const []});
   @override
-  List<Object> get props => [msgError];
+  List<Object> get props => [msgError, errors];
 }

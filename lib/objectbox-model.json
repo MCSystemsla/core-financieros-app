@@ -873,7 +873,7 @@
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "59:3079226695348210825",
+      "lastPropertyId": "60:1785096795156890895",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1166,6 +1166,11 @@
           "id": "59:3079226695348210825",
           "name": "cedula",
           "type": 9
+        },
+        {
+          "id": "60:1785096795156890895",
+          "name": "isOffline",
+          "type": 1
         }
       ],
       "relations": []
