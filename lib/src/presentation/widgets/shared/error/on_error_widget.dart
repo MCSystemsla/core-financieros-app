@@ -10,6 +10,7 @@ class OnErrorWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final String errorMsg;
   final List<String> errors;
+  final List<String> solicitudesSent;
   final bool needToGoBack;
   final String btnTitle;
   const OnErrorWidget({
@@ -19,6 +20,7 @@ class OnErrorWidget extends StatelessWidget {
     this.needToGoBack = false,
     this.btnTitle = 'Volver a intentarlo',
     this.errors = const [],
+    this.solicitudesSent = const [],
   });
 
   @override
@@ -41,10 +43,18 @@ class OnErrorWidget extends StatelessWidget {
           ),
           const Gap(5),
           Text(
-            '$errorMsg\n${errors.isNotEmpty ? errors.join('\n') : ''}',
+            '$errorMsg\n\n${errors.join('\n')}',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
+          if (solicitudesSent.isNotEmpty) ...[
+            const Gap(5),
+            Text(
+              'Solicitudes Enviadas Exitosamente:\n\n${solicitudesSent.join('\n')}',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
           const Gap(10),
           Padding(
             padding: const EdgeInsets.all(20),

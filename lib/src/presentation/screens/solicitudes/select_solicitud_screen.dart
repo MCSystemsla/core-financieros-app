@@ -63,7 +63,8 @@ class SelectSolicitudScreen extends StatelessWidget {
                   },
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Solicitudes offline enviadas exitosamente!!',
+                  text:
+                      'Solicitudes offline enviadas exitosamente!!\n\n${state.solicitudesSent.isNotEmpty ? state.solicitudesSent.join('\n') : ''}',
                   repeat: false,
 
                   // isUploadingForms: true,
@@ -79,6 +80,7 @@ class SelectSolicitudScreen extends StatelessWidget {
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  solicitudesSent: state.solicitudesSent,
                   errors: state.errors,
                   btnTitle: 'OK',
                   errorMsg: state.msgError,
