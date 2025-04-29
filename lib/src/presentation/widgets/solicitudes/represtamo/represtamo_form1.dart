@@ -177,6 +177,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
             // ),
             const Gap(30),
             CountryInput(
+              textInputType: TextInputType.phone,
               maxLength: 40,
               icon: Icon(
                 Icons.person,

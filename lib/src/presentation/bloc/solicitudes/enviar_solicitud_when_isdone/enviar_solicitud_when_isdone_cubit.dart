@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -73,6 +76,20 @@ class EnviarSolicitudWhenIsdoneCubit
           ),
         );
       }
+    } on TimeoutException catch (e) {
+      _logger.e(e);
+      emit(
+        const OnEnviarSolicitudWhenIsdoneError(
+          msgError: 'El servidor tardó demasiado en responder.',
+        ),
+      );
+    } on SocketException catch (e) {
+      _logger.e(e);
+      emit(
+        const OnEnviarSolicitudWhenIsdoneError(
+          msgError: 'Error de conexion de red, Verifica tu red',
+        ),
+      );
     } catch (e) {
       _logger.e(e);
       emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
