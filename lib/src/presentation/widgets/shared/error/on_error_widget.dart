@@ -43,16 +43,62 @@ class OnErrorWidget extends StatelessWidget {
           ),
           const Gap(5),
           Text(
-            '$errorMsg\n\n${errors.join('\n')}',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
+            errorMsg,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 16,
+                ),
+          ),
+          const Gap(5),
+          ...errors.map(
+            (error) => ListTile(
+              title: Text(
+                error,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              leading: const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 20,
+              ),
+            ),
           ),
           if (solicitudesSent.isNotEmpty) ...[
-            const Gap(5),
-            Text(
-              'Solicitudes Enviadas Exitosamente:\n\n${solicitudesSent.join('\n')}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
+            const Gap(10),
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColors.getSecondaryColor(),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Solicitudes Enviadas Exitosamente:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getSecondaryColor(),
+                        ),
+                  ),
+                  const Gap(5),
+                  ...solicitudesSent.map(
+                    (solicitud) => ListTile(
+                      title: Text(
+                        solicitud,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      leading: const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
           const Gap(10),
