@@ -1,10 +1,9 @@
 import 'dart:developer';
-
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_update/azhon_app_update.dart';
 import 'package:flutter_app_update/result_model.dart';
 import 'package:gap/gap.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 
 class AutoupdateScreen extends StatefulWidget {
   const AutoupdateScreen({super.key});
@@ -14,46 +13,71 @@ class AutoupdateScreen extends StatefulWidget {
 }
 
 class _AutoupdateScreenState extends State<AutoupdateScreen> {
-  String progress = '0%';
+  double _progress = 0;
+
   @override
   void initState() {
-    AzhonAppUpdate.listener((ResultModel model) {
-      progress = model.progress.toString();
-      log('Progreso de la actualización: $progress');
-      setState(() {});
-    });
     super.initState();
+
+    // Escuchamos progreso de descarga
+    AzhonAppUpdate.listener((ResultModel model) {
+      if (!mounted) return;
+      setState(() {
+        _progress = model.progress?.toDouble() ?? 0;
+      });
+      log('Progreso de la actualización: $_progress%');
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
     AzhonAppUpdate.cancel;
     AzhonAppUpdate.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    const double estimatedTotalBytes = 100 * 1024 * 1024; // 100 MB aprox
+
+    final double percentage =
+        (_progress / estimatedTotalBytes * 100).clamp(0, 100);
+
+    final theme = Theme.of(context);
+
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.downloading_sharp,
-                size: 110,
-                color: AppColors.getPrimaryColor(),
-              ),
-              const Gap(20),
-              Text(
-                'Actualizando... ${progress.toString().substring(0, 2)}%',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w400,
-                    ),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.downloading_rounded,
+                  size: 110,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                const Gap(20),
+                Text(
+                  'Actualizando la aplicación...',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Gap(20),
+                LinearProgressIndicator(
+                  value: percentage / 100,
+                  minHeight: 8,
+                  backgroundColor: Colors.grey.shade300,
+                  color: AppColors.getPrimaryColor(),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ],
+            ),
           ),
         ),
       ),

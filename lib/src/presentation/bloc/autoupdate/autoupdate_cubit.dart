@@ -6,39 +6,58 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 part 'autoupdate_state.dart';
 
 class AutoupdateCubit extends Cubit<AutoupdateState> {
   AutoupdateCubit() : super(AutoupdateInitial());
+
   Future<void> verificarActualizacion(BuildContext context) async {
     const String versionJsonUrl = String.fromEnvironment('versionUrl');
 
+    if (versionJsonUrl.isEmpty) {
+      log('URL de versión no definida');
+      return;
+    }
+
+    emit(AutoupdateLoading());
+
     try {
-      emit(AutoupdateLoading());
       final response = await http.get(Uri.parse(versionJsonUrl));
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final nuevaVersion = data['version'];
-        final apkUrl = data['apkUrl'];
-
-        final info = await PackageInfo.fromPlatform();
-        final versionActual = info.version;
-        log('Version actual: $versionActual');
-        if (nuevaVersion != versionActual) {
-          log('Necesitas Actualizar');
-          if (!context.mounted) return;
-          emit(AutoupdateSuccess(
-            apkVersion: apkUrl,
-            apkVersionName: nuevaVersion,
-          ));
-
-          return;
-        }
-        emit(AutoupdateFoundVersion(versionName: versionActual));
+      if (response.statusCode != 200) {
+        log('Error al obtener versión: código ${response.statusCode}');
+        emit(AutoupdateError());
+        return;
       }
-    } catch (e) {
-      log('Error al verificar versión: $e');
+
+      final data = json.decode(response.body);
+      final nuevaVersion = data['version']?.toString();
+      final apkUrl = data['apkUrl']?.toString();
+
+      if (nuevaVersion == null || apkUrl == null) {
+        log('Formato JSON inválido');
+        emit(AutoupdateError());
+        return;
+      }
+
+      final info = await PackageInfo.fromPlatform();
+      final versionActual = info.version;
+      log('Versión actual: $versionActual - Nueva versión: $nuevaVersion');
+
+      if (nuevaVersion != versionActual) {
+        if (!context.mounted) return;
+
+        emit(AutoupdateSuccess(
+          apkVersion: apkUrl,
+          apkVersionName: nuevaVersion,
+        ));
+        return;
+      }
+      emit(AutoupdateFoundVersion(versionName: versionActual));
+    } catch (e, stack) {
+      log('Excepción al verificar actualización', error: e, stackTrace: stack);
+      emit(AutoupdateError());
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -46,7 +47,18 @@ class _DownsloadingCatalogosWidgetState
                 isSucess: true,
                 onDownloadComplete: widget.onDownloadComplete,
               ),
-            SolicitudCatalogoError() => Text('Error: ${state.error}'),
+            SolicitudCatalogoError() => OnErrorWidget(
+                onPressed: () {
+                  context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+                        isConnected: context
+                            .read<InternetConnectionCubit>()
+                            .state
+                            .isConnected,
+                      );
+                },
+                btnTitle: 'Intentar de nuevo',
+                errorMsg: state.error,
+              ),
             _ => const SizedBox(),
           };
         },

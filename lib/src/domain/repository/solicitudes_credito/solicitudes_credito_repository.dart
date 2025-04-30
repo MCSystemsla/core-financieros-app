@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
@@ -62,8 +65,17 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     final endpoint = CatalogoSolicitudEndpoint(codigo: codigo);
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        throw AppException(optionalMsg: 'App Exception: ${resp['message']}');
+      }
       final data = CatalogoValor.fromJson(resp);
       return data;
+    } on TimeoutException catch (e) {
+      _logger.e('Tiempo de espera agotado: $e');
+      throw AppException(optionalMsg: 'Tiemp de espera agotado');
+    } on SocketException catch (e) {
+      _logger.e('Sin conexión a internet: $e');
+      throw AppException(optionalMsg: 'No hay conexión a internet');
     } catch (e) {
       _logger.e(e);
       rethrow;

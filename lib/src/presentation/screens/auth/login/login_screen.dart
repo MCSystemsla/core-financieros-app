@@ -25,10 +25,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const isProdMode = bool.fromEnvironment('isProdCloudflare');
-    // if (isProdMode) {
-    //   return const HtmlCloudflareScreen();
-    // }
     return MultiBlocProvider(
       providers: [
         BlocProvider(
