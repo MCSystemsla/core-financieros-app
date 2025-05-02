@@ -2,7 +2,6 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
@@ -29,16 +28,6 @@ class SelectSolicitudScreen extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          lazy: false,
-          create: (ctx) => CatologoNacionalidadCubit(
-            repository,
-            localDbProvider,
-          )..saveAllCatalogos(
-              isConnected:
-                  context.read<InternetConnectionCubit>().state.isConnected,
-            ),
-        ),
         BlocProvider(
           create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
             localDbProvider,

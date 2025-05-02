@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -24,6 +25,10 @@ class _DownsloadingCatalogosWidgetState
   @override
   void initState() {
     context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+          isConnected:
+              context.read<InternetConnectionCubit>().state.isConnected,
+        );
+    context.read<CatologoNacionalidadCubit>().saveAllCatalogos(
           isConnected:
               context.read<InternetConnectionCubit>().state.isConnected,
         );
