@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -27,7 +29,8 @@ class NuevaMenorOfflne4Widget extends StatefulWidget {
       _NuevaMenorOfflne4WidgetState();
 }
 
-class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
+class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
+    with AutomaticKeepAliveClientMixin {
   String? profesion;
   String? actividad;
   String? actividadVer;
@@ -171,6 +174,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -245,7 +249,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
                 Icons.access_time,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Tiempo Funcionamiento de Negocio',
+              title: 'Tiempo Funcionamiento de Negocio (Años)',
               hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
               textInputType: TextInputType.number,
               isValid: null,
@@ -272,7 +276,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad',
+              title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
                 actividad = item.value;
@@ -287,7 +291,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
+              title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
                 actividad1 = item.value;
@@ -300,7 +304,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
             SearchDropdownWidget(
               hintText: actividadEconomica2Ver ?? 'input.select_option'.tr(),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
+              title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
                 actividadEconomica2 = item.value;
@@ -613,4 +617,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

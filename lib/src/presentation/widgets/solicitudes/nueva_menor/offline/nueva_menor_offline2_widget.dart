@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -26,7 +28,8 @@ class NuevaMenorOffline2Widget extends StatefulWidget {
       _NuevaMenorOffline2WidgetState();
 }
 
-class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
+class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
+    with AutomaticKeepAliveClientMixin {
   String? initialValue;
   String? paisDomicilio;
   String? objPaisCasaIdVer;
@@ -62,6 +65,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -281,4 +285,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -11,15 +11,19 @@ class Item<T> extends Equatable {
   final String name;
   final T value;
   final double? interes;
+  final int? montoMinimo;
+  final double? montoMaximo;
 
   const Item({
     required this.name,
     required this.value,
     this.interes,
+    this.montoMinimo,
+    this.montoMaximo,
   });
 
   @override
-  List<Object?> get props => [name, value, interes];
+  List<Object?> get props => [name, value, interes, montoMinimo, montoMaximo];
 }
 
 class JLuxDropdown<T> extends StatelessWidget {

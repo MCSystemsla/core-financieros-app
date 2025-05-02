@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -35,6 +37,8 @@ class SearchDropdownWidget extends StatelessWidget {
         value: e.valor,
         name: e.nombre,
         interes: e.interes ?? 0,
+        montoMaximo: e.montoMaximo ?? 0,
+        montoMinimo: e.montoMinimo ?? 0,
       );
     }).toList();
     return Padding(

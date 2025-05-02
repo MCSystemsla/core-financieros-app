@@ -20,6 +20,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
+enum TypeSigner { asesor, cliente, ambos, ninguno }
+
 abstract class ResponsesRepository {
   Future<(bool, String)> mejoraViviendaAnswer({
     required MejoraViviendaAnswer mejoraVivienda,
@@ -71,6 +73,7 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -83,6 +86,7 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
@@ -295,6 +299,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -302,6 +307,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     const url = '$protocol://$apiUrl/kiva/subir-imagenes';
 
     final currentProduct = setCurrentProdut(product: formularioKiva);
+    final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
@@ -333,7 +339,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigital',
+        typeSignerString,
         fotoFirma,
         filename: fotoFirma,
         contentType: MediaType('image', 'png'),
@@ -345,16 +351,24 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       //   filename: fotoCedula,
       //   contentType: MediaType('image', 'jpeg'),
       // ));
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoFirmaDigitalAsesor',
-      //   fotoAsesorFirma,
-      //   filename: fotoAsesorFirma,
-      //   contentType: MediaType('image', 'png'),
-      // ));
-      request.headers.addAll({
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      });
+      // if (typeSigner == TypeSigner.asesor) {
+      //   request.files.add(await http.MultipartFile.fromPath(
+      //     'fotoFirmaDigitalAsesor',
+      //     fotoFirma,
+      //     filename: fotoFirma,
+      //     contentType: MediaType('image', 'png'),
+      //   ));
+      // }
+      request.headers.addAll(
+        {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${LocalStorage().jwt}',
+          'CF-Access-Client-Id':
+              const String.fromEnvironment('CFAccessClientId'),
+          'CF-Access-Client-Secret':
+              const String.fromEnvironment('CFAccessClientSecret'),
+        },
+      );
       var response = await request.send();
 
       var responseBody = await http.Response.fromStream(response);
@@ -370,6 +384,16 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       _logger.e(e);
       return (false, e.toString());
     }
+  }
+
+  String setFirmaByTypeSigner({
+    required TypeSigner typeSigner,
+  }) {
+    return switch (typeSigner) {
+      TypeSigner.asesor => 'fotoFirmaDigitalAsesor',
+      TypeSigner.cliente => 'fotoFirmaDigital',
+      _ => 'N/A',
+    };
   }
 
   String setCurrentProdut({required String product}) {
@@ -444,8 +468,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
     final currentProduct = setCurrentProdut(product: formularioKiva);
+    final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
 
@@ -482,7 +508,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigital',
+        typeSignerString,
         fotoFirma,
         filename: fotoFirma,
         contentType: MediaType('image', 'png'),
@@ -504,6 +530,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
       });
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);

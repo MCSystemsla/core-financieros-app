@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -13,10 +16,11 @@ class CarteraScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
     final isInternetConnection =
         context.read<InternetConnectionCubit>().state.isConnected;
     return PopScope(
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
           context.push('/');
         }
@@ -70,24 +74,25 @@ class CarteraScreen extends StatelessWidget {
                   size: 35,
                 ),
               ),
-              _Card(
-                onTap: () async {
-                  if (!context.mounted) return;
-                  isInternetConnection
-                      ? context.push('/cartera/formulario-kiva')
-                      : context.push('/cartera/kiva-offline');
-                },
-                title: 'cartera.kiva'.tr(),
-                subtitle: 'cartera.kiva_description'.tr(),
-                firstColor: AppColors.blueIndigo,
-                secondColor:
-                    AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.dynamic_form_outlined,
-                  color: AppColors.white,
-                  size: 35,
+              if (actions.contains('MODCARTERA'))
+                _Card(
+                  onTap: () async {
+                    if (!context.mounted) return;
+                    isInternetConnection
+                        ? context.push('/cartera/formulario-kiva')
+                        : context.push('/cartera/kiva-offline');
+                  },
+                  title: 'cartera.kiva'.tr(),
+                  subtitle: 'cartera.kiva_description'.tr(),
+                  firstColor: AppColors.blueIndigo,
+                  secondColor:
+                      AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.dynamic_form_outlined,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
                 ),
-              ),
               // _Card(
               //   onTap: () {},
               //   title: 'Proximamente',

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -27,7 +29,8 @@ class NuevaMenorOffline3Widget extends StatefulWidget {
       _NuevaMenorOffline3WidgetState();
 }
 
-class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
+class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
+    with AutomaticKeepAliveClientMixin {
   String? estadoCivil;
   String? objEstadoCivilIdVer;
   String? nacionalidadConyuge;
@@ -67,6 +70,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -319,4 +323,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,0 +1,92 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "MiCrédito Nicaragua (DEV)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key.json",
+           "--flavor",
+          "micreditoNicaragua"
+        ]
+      },
+     
+      {
+        "name": "MiCrédito Nicaragua (PROD)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key-prod.json",
+          "--flavor",
+          "micreditoNicaragua"
+        ]
+      },
+      {
+        "name": "MiCrédito Honduras (DEV)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main_hn.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key.json",
+          "--flavor",
+          "micreditoHonduras"
+        ]
+      },
+      {
+        "name": "MiCrédito Honduras (PROD)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main_hn.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key-prod.json",
+          "--flavor",
+          "micreditoHonduras"
+        ]
+      },
+      {
+        "name": "MiCrédito Costa Rica (DEV)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main_cr.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key.json",
+          "--flavor",
+          "micreditoCostaRica"
+        ]
+      },
+      {
+        "name": "MiCrédito Costa Rica (PROD)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main_cr.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key-prod.json",
+          "--flavor",
+          "micreditoCostaRica"
+        ]
+      },
+      {
+        "name": "MiCrédito QA (DEV)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key.json",
+          "--flavor",
+          "micreditoQA"
+        ]
+      },
+     
+    ]
+  }
+  

@@ -9,12 +9,18 @@ import 'package:lottie/lottie.dart';
 class OnErrorWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final String errorMsg;
+  final List<String> errors;
+  final List<String> solicitudesSent;
   final bool needToGoBack;
+  final String btnTitle;
   const OnErrorWidget({
     super.key,
     required this.onPressed,
     this.errorMsg = '',
     this.needToGoBack = false,
+    this.btnTitle = 'Volver a intentarlo',
+    this.errors = const [],
+    this.solicitudesSent = const [],
   });
 
   @override
@@ -38,15 +44,59 @@ class OnErrorWidget extends StatelessWidget {
           const Gap(5),
           Text(
             errorMsg,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 16,
+                ),
           ),
+          const Gap(5),
+          ...errors.map(
+            (error) => ListTile(
+              title: Text(
+                error,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              leading: const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 20,
+              ),
+            ),
+          ),
+          if (solicitudesSent.isNotEmpty) ...[
+            const Gap(10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Solicitudes Enviadas Exitosamente:',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getSecondaryColor(),
+                      ),
+                ),
+                const Gap(5),
+                ...solicitudesSent.map(
+                  (solicitud) => ListTile(
+                    title: Text(
+                      solicitud,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    leading: const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const Gap(10),
           Padding(
             padding: const EdgeInsets.all(20),
             child: CustomElevatedButton(
               onPressed: onPressed,
-              text: 'Volver a intentarlo',
+              text: btnTitle,
               color: AppColors.getPrimaryColor(),
             ),
           ),

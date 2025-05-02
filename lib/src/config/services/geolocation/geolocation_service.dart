@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 
 ///  Clase que se encarga de obtener la ubicación actual del usuario.
 class GeolocationService {
@@ -17,7 +18,10 @@ class GeolocationService {
           context: context,
           title: 'GPS desactivado. Actívalo para obtener la ubicación.',
           onDone: () async {
-            await Geolocator.requestPermission();
+            await Geolocator.openLocationSettings();
+            // await getCurrentLocation();
+            if (!context.mounted) return;
+            context.pop();
           },
         ).showDialog(context, dialogType: DialogType.warning);
         return null;
@@ -29,8 +33,9 @@ class GeolocationService {
         if (!context.mounted) return null;
         CustomAlertDialog(
           context: context,
-          title: 'Permiso de ubicación no concedido.',
+          title: 'Permiso de ubicación denegado permanentemente',
           onDone: () async {
+            // context.pop();
             await Geolocator.openLocationSettings();
           },
         ).showDialog(context, dialogType: DialogType.error);
@@ -44,6 +49,7 @@ class GeolocationService {
         context: context,
         title: 'Error al obtener la ubicación: $e',
         onDone: () async {
+          context.pop();
           await Geolocator.openLocationSettings();
         },
       ).showDialog(context, dialogType: DialogType.error);

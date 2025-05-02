@@ -10,6 +10,7 @@ class InputSimple extends StatefulWidget {
   final bool enabled;
   final TextFieldSettings? textFieldSettings;
   final bool isPasswordField;
+  final Widget? suffixIcon;
 
   const InputSimple({
     required this.title,
@@ -21,6 +22,7 @@ class InputSimple extends StatefulWidget {
     this.textFieldSettings,
     super.key,
     this.isPasswordField = false,
+    this.suffixIcon,
   });
 
   @override
@@ -66,6 +68,7 @@ class InputSimpleState extends State<InputSimple> {
               color: AppColors.borderGrey,
             ),
             decoration: InputDecoration(
+              suffixIcon: widget.suffixIcon,
               fillColor: widget.activeColor ? AppColors.white : AppColors.grey,
               hintText: widget.hintText,
               // context: context,

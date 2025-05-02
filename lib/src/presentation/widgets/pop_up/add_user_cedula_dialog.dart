@@ -12,24 +12,23 @@ class AddUserCedulaDialog extends OdsDialog {
   final String title;
   const AddUserCedulaDialog({
     super.key,
-    this.onDone,
     required this.context,
     required this.title,
   }) : super(
           title: title,
         );
 
-  final VoidCallback? onDone;
   final BuildContext context;
 
   @override
   List<CustomElevatedButton>? actions(BuildContext context) {
     return [
-      CustomElevatedButton(
-        text: 'Ir a Formulario'.tr(),
-        color: AppColors.getPrimaryColor(),
-        onPressed: onDone,
-      ),
+      // if (typeForm == TypeForm.nueva)
+      //   CustomElevatedButton(
+      //     text: 'Ir a Formulario'.tr(),
+      //     color: AppColors.getPrimaryColor(),
+      //     onPressed: onDone,
+      //   ),
       CustomElevatedButton(
         text: 'Regresar'.tr(),
         color: AppColors.red,

@@ -13,10 +13,14 @@ final class OnSolicitudesOfflineLoading extends SolicitudesOfflineState {}
 
 final class OnSolicitudesOfflineSuccess extends SolicitudesOfflineState {
   final List<ResponseLocalDb> solicitudesOffline;
+  final List<ReprestamoResponsesLocalDb> solicitudesOfflineReprestamo;
 
-  const OnSolicitudesOfflineSuccess({required this.solicitudesOffline});
+  const OnSolicitudesOfflineSuccess({
+    required this.solicitudesOffline,
+    required this.solicitudesOfflineReprestamo,
+  });
   @override
-  List<Object> get props => [solicitudesOffline];
+  List<Object> get props => [solicitudesOffline, solicitudesOfflineReprestamo];
 }
 
 final class OnSolicitudesOfflineError extends SolicitudesOfflineState {

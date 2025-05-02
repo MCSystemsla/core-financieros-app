@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -17,6 +18,7 @@ class ObjectBoxService {
   late final Box<CatalogoNacionalidadMunDb> catalogoNacionalidadMunBox;
   late final Box<DepartmentsLocalDb> departmentsBox;
   late final Box<ResponseLocalDb> solicitudesResponsesBox;
+  late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -26,7 +28,9 @@ class ObjectBoxService {
     catalogoNacionalidadMunBox = _store.box<CatalogoNacionalidadMunDb>();
     departmentsBox = _store.box<DepartmentsLocalDb>();
     solicitudesResponsesBox = _store.box<ResponseLocalDb>();
-    // solicitudesResponsesBox.removeAll();
+    solicitudesReprestamoResponsesBox =
+        _store.box<ReprestamoResponsesLocalDb>();
+    // solicitudesReprestamoResponsesBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
@@ -39,17 +43,54 @@ class ObjectBoxService {
   }
 
   void deleteRowsByDeterminateTime() {
-    final now = DateTime.now().subtract(const Duration(minutes: 30));
+    final now = DateTime.now().subtract(const Duration(hours: 3));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
         .build()
         .remove();
   }
 
-  List<ResponseLocalDb> sendSolicitudWhenIsDone() {
+  // List<dynamic> sendSolicitudWhenIsDone({required TypeForm typeForm}) {
+  //   try {
+  //     return switch (typeForm) {
+  //       TypeForm.nueva => solicitudesResponsesBox
+  //           .query(ResponseLocalDb_.isDone
+  //               .equals(true)
+  //               .and(ResponseLocalDb_.hasVerified.equals(false)))
+  //           .build()
+  //           .find(),
+  //       TypeForm.represtamo => sendSolicitudReprestamoWhenIsDone(),
+  //       _ => [],
+  //     };
+  //   } catch (e) {
+  //     _logger.e(e.toString());
+  //     rethrow;
+  //   }
+  // }
+  List<dynamic> sendSolicitudesWhenIsDone() {
     try {
-      final solicitudes = solicitudesResponsesBox
-          .query(ResponseLocalDb_.isDone.equals(true))
+      final nuevas = solicitudesResponsesBox
+          .query(ResponseLocalDb_.isDone
+              .equals(true)
+              .and(ResponseLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+
+      final represtamos = sendSolicitudReprestamoWhenIsDone();
+
+      return [...nuevas, ...represtamos];
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  List<ReprestamoResponsesLocalDb> sendSolicitudReprestamoWhenIsDone() {
+    try {
+      final solicitudes = solicitudesReprestamoResponsesBox
+          .query(ReprestamoResponsesLocalDb_.isDone
+              .equals(true)
+              .and(ReprestamoResponsesLocalDb_.hasVerified.equals(false)))
           .build()
           .find();
       return solicitudes;
@@ -180,6 +221,20 @@ class ObjectBoxService {
     }
   }
 
+  ReprestamoResponsesLocalDb saveSolicitudesReprestamoResponses({
+    required ReprestamoResponsesLocalDb responseReprestamoLocalDb,
+  }) {
+    try {
+      responseReprestamoLocalDb.id = 0;
+      solicitudesReprestamoResponsesBox.put(responseReprestamoLocalDb);
+      _logger.i('Creado');
+      return responseReprestamoLocalDb;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
   void updateSolicitudNuevaMenorById({
     required int id,
     required ResponseLocalDb responseLocalDb,
@@ -189,6 +244,24 @@ class ObjectBoxService {
       final solicitud = solicitudesResponsesBox.get(responseLocalDb.id);
       if (solicitud != null) {
         solicitudesResponsesBox.put(responseLocalDb, mode: PutMode.update);
+      }
+      _logger.i('Actualizando');
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  void updateSolicitudReprestamoById({
+    required int id,
+    required ReprestamoResponsesLocalDb responseReprestamoLocalDb,
+  }) {
+    try {
+      responseReprestamoLocalDb.id = id;
+      final solicitud =
+          solicitudesReprestamoResponsesBox.get(responseReprestamoLocalDb.id);
+      if (solicitud != null) {
+        solicitudesReprestamoResponsesBox.put(responseReprestamoLocalDb,
+            mode: PutMode.update);
       }
       _logger.i('Actualizando');
     } catch (e) {
@@ -206,9 +279,52 @@ class ObjectBoxService {
     }
   }
 
+  List<ReprestamoResponsesLocalDb> getSolicitudesReprestamoResponse() {
+    try {
+      final resp = solicitudesReprestamoResponsesBox.getAll();
+      return resp;
+    } catch (e) {
+      _logger.e(e.toString());
+      throw AppException.toAppException(e);
+    }
+  }
+
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
+      solicitudesReprestamoResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  void removeSolicitudReprestamoWhenisUploaded({required int solicitudId}) {
+    try {
+      solicitudesReprestamoResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
+  void updateWhenSolicitdIsFailed(
+      {required int solicitudId, String? errorMsg}) {
+    try {
+      final solicitud = solicitudesResponsesBox.get(solicitudId);
+      final solicitudReprestamo =
+          solicitudesReprestamoResponsesBox.get(solicitudId);
+      if (solicitud != null) {
+        solicitud.hasVerified = true;
+        solicitud.errorMsg = errorMsg;
+        solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
+        solicitudesReprestamoResponsesBox.put(solicitudReprestamo!,
+            mode: PutMode.update);
+      }
+      if (solicitudReprestamo != null) {
+        solicitudReprestamo.hasVerified = true;
+        solicitudReprestamo.errorMsg = errorMsg;
+        solicitudesReprestamoResponsesBox.put(solicitudReprestamo,
+            mode: PutMode.update);
+      }
     } catch (e) {
       _logger.e(e.toString());
     }

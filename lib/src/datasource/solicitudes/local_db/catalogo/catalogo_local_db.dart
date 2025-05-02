@@ -9,11 +9,15 @@ class CatalogoLocalDb {
   String nombre;
   String type;
   double? interes;
+  int? montoMinimo;
+  double? montoMaximo;
 
   CatalogoLocalDb({
     required this.valor,
     required this.nombre,
     required this.type,
     this.interes,
+    this.montoMinimo,
+    this.montoMaximo,
   });
 }

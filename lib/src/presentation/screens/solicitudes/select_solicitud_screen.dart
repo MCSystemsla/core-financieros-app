@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -56,17 +57,36 @@ class SelectSolicitudScreen extends StatelessWidget {
                   lottieAsset: ImageAsset.enviarSolicitudOfflines,
                   text: 'Enviando Solicitudes Offline al Servidor',
                 ),
-              OnEnviarSolicitudWhenIsdoneSuccess() =>
-                const DownloadCatalogoLoading(
+              OnEnviarSolicitudWhenIsdoneSuccess() => DownloadCatalogoLoading(
+                  onDownloadComplete: () {
+                    context.push('/solicitudes');
+                  },
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Solicitudes offline enviadas exitosamente!!',
+                  text:
+                      'Solicitudes offline enviadas exitosamente!!\n\n${state.solicitudesSent.isNotEmpty ? state.solicitudesSent.join('\n') : ''}',
                   repeat: false,
+
                   // isUploadingForms: true,
                 ),
               OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                   errorMsg: state.msgError,
-                  onPressed: () {},
+                  onPressed: () {
+                    context
+                        .read<EnviarSolicitudWhenIsdoneCubit>()
+                        .sendSolicitudWhenIsDone(
+                          isConnected: isConnected,
+                        );
+                  },
+                ),
+              OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  solicitudesSent: state.solicitudesSent,
+                  errors: state.errors,
+                  btnTitle: 'OK',
+                  errorMsg: state.msgError,
+                  onPressed: () {
+                    context.read<EnviarSolicitudWhenIsdoneCubit>().resetState();
+                  },
                 ),
               _ => const _SelectSolicitud(),
             };
@@ -118,13 +138,33 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     return Row(
       children: [
         const Gap(10),
-        const Expanded(
+        Expanded(
           child: SolicitudCard(
             svgPath: ImageAsset.nuevaMenorBg3,
             title: 'Represtamo',
+            onPressed: () {
+              if (!isConnected) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const CrearSolicitudScreen(
+                          typeForm: TypeForm.represtamo,
+                        )),
+                  ),
+                );
+                return;
+              }
+              context.pushTransparentRoute(
+                const ReprestamoAddUserCedulaScreen(
+                  typeForm: TypeForm.represtamo,
+                ),
+              );
+            },
           ),
         ),
         const Gap(10),
@@ -160,7 +200,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) =>
+                    builder: ((_) =>
                         const CrearSolicitudScreen(typeForm: TypeForm.nueva)),
                   ),
                 );
@@ -182,7 +222,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => const CrearSolicitudScreen(
+                    builder: ((_) => const CrearSolicitudScreen(
                         typeForm: TypeForm.asalariado)),
                   ),
                 );

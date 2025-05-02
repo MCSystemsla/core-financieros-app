@@ -1,9 +1,10 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-typedef ValidatorCallback<T> = String? Function(T? value)?;
+// typedef ValidatorCallback<T> = String? Function(T? value)?;
 typedef OnChangeCallback<T> = Function(T? value)?;
 
 class OutlineTextfieldWidget extends StatelessWidget {

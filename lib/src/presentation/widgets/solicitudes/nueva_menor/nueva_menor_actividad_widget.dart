@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -214,6 +216,10 @@ class _NuevaMenorBeneficiarioWidgetState
                         isDone: !isConnected,
                       );
                   if (!isConnected) {
+                    context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                          errorMsg:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        );
                     CustomAlertDialog(
                       context: context,
                       title:

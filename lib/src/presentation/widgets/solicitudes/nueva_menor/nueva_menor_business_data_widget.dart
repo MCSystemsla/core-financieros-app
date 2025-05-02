@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -170,7 +172,7 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.access_time,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Tiempo Funcionamiento de Negocio',
+              title: 'Tiempo Funcionamiento de Negocio (Años)',
               hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
               textInputType: TextInputType.number,
               isValid: null,
@@ -194,7 +196,7 @@ class _NuevaMenorBusinessDataWidgetState
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad',
+              title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList
@@ -211,7 +213,7 @@ class _NuevaMenorBusinessDataWidgetState
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
+              title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList
@@ -226,7 +228,7 @@ class _NuevaMenorBusinessDataWidgetState
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
+              title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
                 // if (actividadesPredominantesList

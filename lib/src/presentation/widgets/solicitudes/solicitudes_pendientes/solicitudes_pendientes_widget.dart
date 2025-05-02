@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/offline/crear_solicitud_offline_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/offline/represtamo_offline_view.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +132,10 @@ class SolicitudesPendientesWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
         onPressed: () {
           Navigator.push(
             context,
@@ -153,6 +161,106 @@ class SolicitudesPendientesWidget extends StatelessWidget {
   }
 }
 
+class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
+  final ReprestamoResponsesLocalDb solicitud;
+  const SolicitudesReprestamoPendientesWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(ReprestamoResponsesLocalDb respuesta) {
+      var valores = [
+        respuesta.database,
+        respuesta.cedula,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objActividadId,
+        respuesta.objActividadId1,
+        respuesta.objActividadId2,
+        respuesta.objSectorId,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.sucursal,
+        respuesta.ubicacion,
+        respuesta.esPeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.celularReprestamo,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud,
+      ];
+
+      int camposLlenos = valores
+          .where((valor) =>
+              valor != null &&
+              valor.toString().trim().isNotEmpty &&
+              valor.toString().trim() != '0')
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ReprestamoOfflineView(
+                solicitudReprestamoOffline: solicitud,
+              ),
+            ),
+          );
+        },
+        title: '${solicitud.cedula}'.toUpperCase(),
+        location: solicitud.celularReprestamo ?? 'N/A',
+        dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
+        dateToEnd: 'Fecha',
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
 class AdvanceCardState extends StatelessWidget {
   final VoidCallback onPressed;
   final String title;
@@ -160,6 +268,7 @@ class AdvanceCardState extends StatelessWidget {
   final String? dateToStart;
   final String? dateToEnd;
   final double percentage;
+  final Color backgroundColor;
   const AdvanceCardState({
     required this.title,
     required this.location,
@@ -167,6 +276,7 @@ class AdvanceCardState extends StatelessWidget {
     required this.dateToEnd,
     required this.percentage,
     required this.onPressed,
+    this.backgroundColor = Colors.white,
     super.key,
   });
 
@@ -180,7 +290,7 @@ class AdvanceCardState extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: backgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             )),

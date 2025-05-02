@@ -1,13 +1,19 @@
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,59 +29,76 @@ class LoginScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
-            ..getBranchTeam(accessCode: '2wydJKIvNuO41hCZ7Y6'),
+            ..getBranchTeam(
+              accessCode: '2wydJKIvNuO41hCZ7Y6',
+              context: context,
+            ),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
         BlocProvider(
           create: (ctx) => LogoCubit(AuthRepositoryImpl())..getLogo(),
         ),
       ],
-      child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-        builder: (context, state) {
-          if (!state.isCorrectNetwork) {
-            return const VpnNoFound(routeIsVpnConnected: '/login');
+      child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
+        listener: (context, state) {
+          if (state is AutoupdateSuccess) {
+            UpdateAppDialog(
+              apkUrl: state.apkVersion,
+              context: context,
+              title: 'Debes actualiar la app para poder continuar',
+              versionName: state.apkVersionName,
+            ).showDialog(context);
           }
+        },
+        builder: (context, state) {
+          return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+            builder: (context, state) {
+              if (!state.isCorrectNetwork) {
+                return const VpnNoFound(routeIsVpnConnected: '/login');
+              }
 
-          return Scaffold(
-            body: PopScope(
-              canPop: false,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ChangeLangWidget(
-                        child: LoginScreen(),
+              return Scaffold(
+                body: PopScope(
+                  canPop: false,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const ChangeLangWidget(
+                            child: LoginScreen(),
+                          ),
+                          BlocBuilder<LogoCubit, LogoState>(
+                            builder: (context, state) {
+                              if (state is OnLogoSuccess) {
+                                return Image(
+                                    height: 200,
+                                    image: NetworkImage(
+                                      state.imgUrl,
+                                    ));
+                              }
+                              if (state is OnLogoLoading) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (state is OnLogoError) {
+                                return const Text('error');
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                          // const Gap(10),
+                          const Expanded(
+                            flex: 5,
+                            child: LoginFormWidget(),
+                          ),
+                        ],
                       ),
-                      BlocBuilder<LogoCubit, LogoState>(
-                        builder: (context, state) {
-                          if (state is OnLogoSuccess) {
-                            return Image(
-                                height: 200,
-                                image: NetworkImage(
-                                  state.imgUrl,
-                                ));
-                          }
-                          if (state is OnLogoLoading) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (state is OnLogoError) {
-                            return const Text('error');
-                          }
-                          return const SizedBox();
-                        },
-                      ),
-                      // const Gap(10),
-                      const Expanded(
-                        flex: 5,
-                        child: LoginFormWidget(),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
@@ -94,21 +117,28 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? username;
   String? password;
   String? branchTeam;
+  bool isPasswordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final currentFlavor = global<FlavorCubit>().state.flavor;
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
+            Text(
+              'App de ${currentFlavor.name}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const Gap(20),
             InputSimple(
               title: 'auth.user'.tr(),
               activeColor: true,
-              hintText: 'Ejem: John Doe',
+              hintText: 'Ejem: DGALEAS',
               enabled: true,
               onChanged: (value) {
                 username = value;
@@ -125,12 +155,25 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
             ),
-            // const Gap(25),
+            const Gap(25),
             InputSimple(
               title: 'auth.password'.tr(),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: AppColors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+              ),
               activeColor: true,
               hintText: '****',
-              isPasswordField: true,
+              isPasswordField: !isPasswordVisible,
               enabled: true,
               textFieldSettings: TextFieldSettings(
                 keyboardType: TextInputType.text,
@@ -171,7 +214,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 );
               },
             ),
-            const Gap(30),
+            const VersionControlWidget(),
+            const Gap(20),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) async {
                 final status = state.status;

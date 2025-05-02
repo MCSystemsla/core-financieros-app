@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -192,6 +194,7 @@ class _NuevaMenorWorkingDataWidgetState
                       GeolocationService(context: context);
                   final currentLocation =
                       await geolocationService.getCurrentLocation();
+                  if (currentLocation == null) return;
                   if (!context.mounted) return;
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objCondicionCasaIdVer: condicionCasa?.name,
@@ -205,9 +208,8 @@ class _NuevaMenorWorkingDataWidgetState
                         objCondicionCasaId: condicionCasa?.value,
                         anosResidirCasa: int.tryParse(anosResidirCasa ?? ''),
                         ubicacion: comunidad,
-                        ubicacionLatitud: currentLocation?.latitude.toString(),
-                        ubicacionLongitud:
-                            currentLocation?.longitude.toString(),
+                        ubicacionLatitud: currentLocation.latitude.toString(),
+                        ubicacionLongitud: currentLocation.longitude.toString(),
                         direccionCasa: direccionCasa,
                       );
                   widget.controller.nextPage(

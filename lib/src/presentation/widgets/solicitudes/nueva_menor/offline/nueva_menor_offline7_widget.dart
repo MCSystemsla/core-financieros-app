@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -17,15 +19,19 @@ import 'package:go_router/go_router.dart';
 class NuevaMenorOffline7Widget extends StatefulWidget {
   final PageController pageController;
   final ResponseLocalDb responseLocalDb;
-  const NuevaMenorOffline7Widget(
-      {super.key, required this.pageController, required this.responseLocalDb});
+  const NuevaMenorOffline7Widget({
+    super.key,
+    required this.pageController,
+    required this.responseLocalDb,
+  });
 
   @override
   State<NuevaMenorOffline7Widget> createState() =>
       _NuevaMenorOffline7WidgetState();
 }
 
-class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
+class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
+    with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? parentesco;
@@ -56,6 +62,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     return SingleChildScrollView(
@@ -246,4 +253,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
