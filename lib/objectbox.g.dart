@@ -213,7 +213,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(10, 5156059507673561033),
       name: 'ResponseLocalDb',
-      lastPropertyId: const obx_int.IdUid(135, 24664822438630500),
+      lastPropertyId: const obx_int.IdUid(137, 5082510137953328148),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -890,6 +890,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(135, 24664822438630500),
             name: 'hasVerified',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(136, 3629660196712283064),
+            name: 'montoMinimo',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(137, 5082510137953328148),
+            name: 'montoMaximo',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1908,7 +1918,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final errorMsgOffset = object.errorMsg == null
               ? null
               : fbb.writeString(object.errorMsg!);
-          fbb.startTable(136);
+          fbb.startTable(138);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, objOrigenSolicitudIdOffset);
           fbb.addOffset(2, nombre1Offset);
@@ -2044,6 +2054,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(132, objTipoPersonaIdVerOffset);
           fbb.addOffset(133, errorMsgOffset);
           fbb.addBool(134, object.hasVerified);
+          fbb.addInt64(135, object.montoMinimo);
+          fbb.addInt64(136, object.montoMaximo);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -2052,6 +2064,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final createdAtValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 204);
+          final montoMaximoParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 276);
+          final montoMinimoParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 274);
           final objOrigenSolicitudIdParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 6);
@@ -2424,6 +2440,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final errorMsgParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 270);
           final object = ResponseLocalDb(
+              montoMaximo: montoMaximoParam,
+              montoMinimo: montoMinimoParam,
               objOrigenSolicitudId: objOrigenSolicitudIdParam,
               objOrigenSolicitudIdVer: objOrigenSolicitudIdVerParam,
               nombre1: nombre1Param,
@@ -3677,6 +3695,14 @@ class ResponseLocalDb_ {
   /// See [ResponseLocalDb.hasVerified].
   static final hasVerified =
       obx.QueryBooleanProperty<ResponseLocalDb>(_entities[6].properties[134]);
+
+  /// See [ResponseLocalDb.montoMinimo].
+  static final montoMinimo =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[135]);
+
+  /// See [ResponseLocalDb.montoMaximo].
+  static final montoMaximo =
+      obx.QueryIntegerProperty<ResponseLocalDb>(_entities[6].properties[136]);
 }
 
 /// [ReprestamoResponsesLocalDb] entity fields to define ObjectBox queries.

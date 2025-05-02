@@ -268,16 +268,18 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     bool? isDone,
     String? errorMsg,
     bool? hasVerified,
+    int? montoMinimo,
+    int? montoMaximo,
   }) {
     emit(
       state.copyWith(
+          prestamoInteres: prestamoInteres,
           hasVerified: hasVerified,
           isDone: isDone,
           idLocalResponse: localSolicitudId,
           objOrigenSolicitudId: objOrigenSolicitudId,
           objOrigenSolicitudIdVer: objOrigenSolicitudIdVer,
           fechaDesembolso: fechaDesembolso,
-          prestamoInteres: prestamoInteres,
           nombre1: nombre1,
           nombre2: nombre2,
           apellido1: apellido1,
@@ -407,6 +409,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           telefonoBeneficiarioSeguro1: telefonoBeneficiarioSeguro1,
           plazoSolicitud: plazoSolicitud,
           fechaPrimerPagoSolicitud: fechaPrimerPagoSolicitud,
+          montoMaximo: montoMaximo,
+          montoMinimo: montoMinimo,
           errorMsg: errorMsg),
     );
     saveLocalAnswers(isUpdate: state.idLocalResponse != 0);
@@ -418,6 +422,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       localDbProvider.updateSolicitudNuevaMenorById(
         id: state.idLocalResponse,
         responseLocalDb: ResponseLocalDb(
+          montoMaximo: state.montoMaximo,
+          montoMinimo: state.montoMinimo,
           hasVerified: state.hasVerified,
           errorMsg: state.errorMsg,
           isDone: state.isDone,
@@ -564,6 +570,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesNuevaMenorResponses(
       responseLocalDb: ResponseLocalDb(
+        montoMaximo: state.montoMaximo,
+        montoMinimo: state.montoMinimo,
         hasVerified: state.hasVerified,
         errorMsg: state.errorMsg,
         isDone: state.isDone,

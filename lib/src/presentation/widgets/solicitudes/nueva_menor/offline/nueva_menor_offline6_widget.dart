@@ -119,6 +119,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     fechaDesembolso =
         DateTime.tryParse(widget.responseLocalDb.fechaDesembolso ?? '');
     tasaInteres = widget.responseLocalDb.prestamoInteres;
+    montoMinimo = widget.responseLocalDb.montoMinimo;
+    montoMaximo = widget.responseLocalDb.montoMaximo?.toDouble();
   }
 
   final montoController = TextEditingController();
@@ -212,6 +214,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
             ),
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               hintText: productoVer ?? 'Selecciona una opcion',
               codigo: 'PRODUCTO',
               title: 'Producto',
@@ -352,6 +356,10 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} $monedaVer',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            montoMaximo: montoMaximo?.toInt(),
+                            montoMinimo: montoMinimo?.toInt(),
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
                             objFrecuenciaIdVer: frecuenciaDePagoVer,
                             objProductoIdVer: productoVer,
                             objMonedaIdVer: monedaVer,
@@ -368,6 +376,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                                 .state.montoPrincipalPrimeraCuota
                                 .toInt(),
                             observacion: observacion,
+                            prestamoInteres: tasaInteres,
                           );
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),

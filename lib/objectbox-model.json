@@ -189,7 +189,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "135:24664822438630500",
+      "lastPropertyId": "137:5082510137953328148",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -867,6 +867,16 @@
           "id": "135:24664822438630500",
           "name": "hasVerified",
           "type": 1
+        },
+        {
+          "id": "136:3629660196712283064",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "137:5082510137953328148",
+          "name": "montoMaximo",
+          "type": 6
         }
       ],
       "relations": []

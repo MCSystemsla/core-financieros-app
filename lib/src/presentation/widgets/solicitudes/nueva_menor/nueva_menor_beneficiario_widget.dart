@@ -195,6 +195,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 montoMaximo = item.montoMaximo;
                 log(item.montoMaximo.toString());
                 log(item.montoMinimo.toString());
+                log(item.interes.toString());
+                setState(() {});
               },
             ),
             const Gap(20),
@@ -320,6 +322,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            montoMaximo: montoMaximo?.toInt(),
+                            montoMinimo: montoMinimo?.toInt(),
                             objFrecuenciaIdVer: frecuenciaDePago?.name,
                             objProductoIdVer: producto?.name,
                             objMonedaIdVer: moneda?.name,

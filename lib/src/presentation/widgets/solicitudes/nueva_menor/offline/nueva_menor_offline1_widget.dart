@@ -87,6 +87,30 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
     }
   }
 
+  Future<void> selectFechaEmisionDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1930),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      _selectedDate = picked;
+      fechaEmisionCedula = picked.toIso8601String();
+      setState(() {});
+    }
+  }
+
   Future<void> selectDateFechaVencimiento(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -337,7 +361,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              onTap: () => selectDate(context),
+              onTap: () => selectFechaEmisionDate(context),
               readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
@@ -346,8 +370,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
               title: 'Fecha Emision Cedula',
               isRequired: true,
               // initialValue: fechaEmisionCedula,
-              hintText: DateTime.tryParse(fechaNacimiento!)?.selectorFormat() ??
-                  'Ingrese fecha de nacimiento',
+              hintText:
+                  DateTime.tryParse(fechaEmisionCedula!)?.selectorFormat() ??
+                      'Ingrese fecha de Emision',
               isValid: null,
             ),
             const Gap(30),
@@ -372,9 +397,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
             const Gap(30),
             OutlineTextfieldWidget(
               onTap: () => selectDate(context),
-              onChange: (value) {
-                fechaNacimiento = value;
-              },
               readOnly: true,
               icon: Icon(
                 Icons.calendar_month,

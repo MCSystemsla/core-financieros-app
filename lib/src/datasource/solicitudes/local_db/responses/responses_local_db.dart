@@ -139,8 +139,12 @@ class ResponseLocalDb {
   bool? isDone;
   String? errorMsg;
   bool? hasVerified;
+  int? montoMinimo;
+  int? montoMaximo;
 
   ResponseLocalDb({
+    this.montoMaximo,
+    this.montoMinimo,
     this.objOrigenSolicitudId,
     this.objOrigenSolicitudIdVer,
     this.nombre1,

@@ -139,7 +139,11 @@ class SolicitudNuevaMenorState extends Equatable {
   final String fechaDesembolso;
   final String createdAt;
   final bool isDone;
+  final int montoMinimo;
+  final int montoMaximo;
   const SolicitudNuevaMenorState({
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
     this.onSuccessMsg = '',
     this.hasVerified = false,
     this.isDone = false,
@@ -558,6 +562,8 @@ class SolicitudNuevaMenorState extends Equatable {
     String? fechaDesembolso,
     String? createdAt,
     bool? isDone,
+    int? montoMinimo,
+    int? montoMaximo,
   }) {
     return SolicitudNuevaMenorState(
       onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
@@ -734,6 +740,8 @@ class SolicitudNuevaMenorState extends Equatable {
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
       createdAt: createdAt ?? this.createdAt,
       isDone: isDone ?? this.isDone,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
     );
   }
 }
