@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/global_locator.dart';
@@ -36,6 +38,7 @@ class CrearSolicitudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = SolicitudCreditoRepositoryImpl();
     final localDbProvider = global<ObjectBoxService>();
     final pageController = PageController();
     return MultiBlocProvider(
@@ -45,21 +48,29 @@ class CrearSolicitudScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorCubit(
-            SolicitudCreditoRepositoryImpl(),
+            repository,
             localDbProvider,
           ),
         ),
         BlocProvider(
           create: (ctx) => SolicitudReprestamoCubit(
-            SolicitudCreditoRepositoryImpl(),
+            repository,
             localDbProvider,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => SolicitudAsalariadoCubit(
+            repository,
+            // localDbProvider,
           ),
         ),
       ],
       child: Scaffold(
         body: switch (typeForm) {
           TypeForm.nueva => NuevaMenorForm(pageController: pageController),
-          TypeForm.asalariado => const Text('ASALARIADO'),
+          TypeForm.asalariado => AsalariadoForm(
+              controller: pageController,
+            ),
           TypeForm.represtamo => ReprestamoForm(
               cedula: cedula ?? '',
               controller: pageController,
