@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -10,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AsalariadoForm2 extends StatefulWidget {
@@ -21,6 +23,23 @@ class AsalariadoForm2 extends StatefulWidget {
 }
 
 class _AsalariadoForm2State extends State<AsalariadoForm2> {
+  String? beneficiarioSeguro;
+  String? parentesco;
+  String? cedula;
+  String? telefono;
+  String? esPeps;
+  String? nombreEntidad;
+  String? paisPeps;
+  String? periodoPeps;
+  String? cargoOficialPeps;
+  String? familiarPeps;
+  String? nombreFamiliarPeps;
+  String? parentescoFamiliarPeps;
+  String? cargoFamiliarPeps;
+  String? nombreEntidadPeps;
+  String? periodoFamiliarPeps;
+  String? paisPepsFamiliar;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -38,29 +57,41 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                beneficiarioSeguro = value;
+              },
               title: 'Nombre y Apellido',
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
             ),
             const Gap(30),
             SearchDropdownWidget(
-              onChanged: (item) {},
+              onChanged: (item) {
+                parentesco = item?.value;
+                setState(() {});
+              },
               codigo: 'PARENTESCO',
               title: 'Parentesco',
               hintText: 'Ingrese Parentesco',
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                cedula = value;
+              },
               title: 'Cedula',
-              icon: Icon(Icons.badge),
+              icon: const Icon(Icons.badge),
             ),
             const Gap(30),
-            const CountryInput(
+            CountryInput(
+              onChange: (value) {
+                telefono = value;
+              },
               isRequired: false,
               hintText: 'Ingresa Telefono',
               maxLength: 15,
               title: 'Telefono',
-              icon: Icon(Icons.badge),
+              icon: const Icon(Icons.badge),
             ),
             const Gap(30),
             Padding(
@@ -79,16 +110,22 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 title:
                     '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años?',
                 items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {},
+                onChanged: (item) {
+                  esPeps = item;
+                  setState(() {});
+                },
                 // validator: (value) {},
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreEntidad = value;
+              },
               title: 'Nombre de la Entidad',
-              icon: Icon(Icons.account_balance),
+              icon: const Icon(Icons.account_balance),
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
@@ -96,6 +133,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
               title: 'Pais',
               onChanged: (item) {
                 if (item == null) return;
+                paisPeps = item.valor;
                 // paisDomicilio = Item(name: item.nombre, value: item.valor);
                 // depWhereClause = item.valor;
 
@@ -107,14 +145,20 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
               // initialValue: paisEmisor ?? '',
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                periodoPeps = value;
+              },
               title: 'Periodo',
-              icon: Icon(Icons.date_range),
+              icon: const Icon(Icons.date_range),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                cargoOficialPeps = value;
+              },
               title: 'Cargo Oficial',
-              icon: Icon(Icons.work),
+              icon: const Icon(Icons.work),
             ),
             const Gap(30),
             Padding(
@@ -126,43 +170,63 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                     '¿Eres familia de una persona que ha desempeñado un cargo público o figura pública de alto nivel?',
 
                 items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {},
+                onChanged: (item) {
+                  familiarPeps = item;
+                },
                 // validator: (value) {},
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreFamiliarPeps = value;
+              },
               title: 'Nombre del Familiar',
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
             ),
             const Gap(30),
             SearchDropdownWidget(
-              onChanged: (item) {},
+              onChanged: (item) {
+                parentescoFamiliarPeps = item?.value;
+                setState(() {});
+              },
               codigo: 'PARENTESCO',
               title: 'Parentesco',
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                cargoFamiliarPeps = value;
+              },
               title: 'Cargo del Familiar',
-              icon: Icon(Icons.work),
+              icon: const Icon(Icons.work),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreEntidadPeps = value;
+              },
               title: 'Nombre de la Entidad',
-              icon: Icon(Icons.account_balance),
+              icon: const Icon(Icons.account_balance),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                periodoFamiliarPeps = value;
+              },
               title: 'Periodo',
-              icon: Icon(Icons.date_range),
+              icon: const Icon(Icons.date_range),
             ),
             const Gap(30),
-            CatalogoValorDropdownWidget(
+            CatalogoValorNacionalidad(
+              hintText: 'Ingresa Pais',
               codigo: 'PAIS',
               title: 'País',
-              onChanged: (item) {},
+              onChanged: (item) {
+                paisPepsFamiliar = item?.valor;
+              },
             ),
             const Gap(20),
             Container(
@@ -172,6 +236,24 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        beneficiarioSeguro: beneficiarioSeguro,
+                        objParentescoBeneficiarioSeguroId: parentesco,
+                        cedulaBeneficiarioSeguro: cedula,
+                        telefonoBeneficiario: telefono,
+                        espeps: esPeps == 'input.yes'.tr(),
+                        nombreDeEntidadPeps: nombreEntidad,
+                        paisPeps: paisPeps,
+                        periodoPeps: periodoPeps,
+                        cargoOficialPeps: cargoOficialPeps,
+                        tieneFamiliarPeps: familiarPeps == 'input.yes'.tr(),
+                        nombreFamiliarPeps2: nombreFamiliarPeps,
+                        parentescoFamiliarPeps2: parentescoFamiliarPeps,
+                        cargoFamiliarPeps2: cargoFamiliarPeps,
+                        nombreEntidadPeps2: nombreEntidadPeps,
+                        periodoPeps2: periodoFamiliarPeps,
+                        paisPeps2: paisPepsFamiliar,
+                      );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

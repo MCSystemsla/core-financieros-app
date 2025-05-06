@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/format/format_field.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -13,9 +14,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -266,74 +266,89 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
               child: CustomElevatedButton(
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
+                onPressed: () async {
                   if (!formKey.currentState!.validate()) return;
-                  if (double.tryParse(monto ?? '0') == 0) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: 'El monto no puede ser 0',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! <
-                      montoMinimo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! >
-                      montoMaximo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  calcularCuotaProvider.calcularCantidadCuotas(
-                    fechaDesembolso: fechaDesembolso!,
-                    fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!.name,
-                    saldoPrincipal: double.parse(monto ?? ''),
-                    tasaInteresMensual: tasaInteres!,
-                  );
-                  CuotaDataDialog(
+                  // if (double.tryParse(monto ?? '0') == 0) {
+                  //   CustomAlertDialog(
+                  //     context: context,
+                  //     title: 'El monto no puede ser 0',
+                  //     onDone: () => context.pop(),
+                  //   ).showDialog(context, dialogType: DialogType.warning);
+                  //   return;
+                  // }
+                  // if (double.tryParse(monto ?? '0')! <
+                  //     montoMinimo!.toDouble()) {
+                  //   CustomAlertDialog(
+                  //     context: context,
+                  //     title:
+                  //         'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                  //     onDone: () => context.pop(),
+                  //   ).showDialog(context, dialogType: DialogType.warning);
+                  //   return;
+                  // }
+                  // if (double.tryParse(monto ?? '0')! >
+                  //     montoMaximo!.toDouble()) {
+                  //   CustomAlertDialog(
+                  //     context: context,
+                  //     title:
+                  //         'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                  //     onDone: () => context.pop(),
+                  //   ).showDialog(context, dialogType: DialogType.warning);
+                  //   return;
+                  // }
+                  // calcularCuotaProvider.calcularCantidadCuotas(
+                  //   fechaDesembolso: fechaDesembolso!,
+                  //   fechaPrimeraCuota: fechaPrimerPago!,
+                  //   plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                  //   formadePago: frecuenciaDePago!.name,
+                  //   saldoPrincipal: double.parse(monto ?? '0'),
+                  //   tasaInteresMensual: tasaInteres!,
+                  // );
+                  await CuotaDataDialog(
                     context: context,
                     title:
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
                     onDone: () {
-                      // context.read<SolicitudReprestamoCubit>().saveAnswers(
-                      //       objFrecuenciaIdVer: frecuenciaDePago?.name,
-                      //       tasaInteres: tasaInteres,
-                      //       fechaDesembolso:
-                      //           fechaDesembolso?.toUtc().toIso8601String(),
-                      //       objMonedaId: moneda?.value,
-                      //       monto: int.tryParse(monto!),
-                      //       objPropositoId: proposito?.value,
-                      //       objProductoId: producto?.value,
-                      //       objFrecuenciaId: frecuenciaDePago?.value,
-                      //       plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                      //       fechaPrimerPagoSolicitud:
-                      //           fechaPrimerPago?.toUtc().toIso8601String(),
-                      //       cuota: calcularCuotaProvider
-                      //           .state.montoPrincipalPrimeraCuota
-                      //           .toInt(),
-                      //       observacion: observacion,
-                      //     );
-                      widget.controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
+                      context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                            // objFrecuenciaIdVer: frecuenciaDePago?.name,
+                            // tasaInteres: tasaInteres,
+                            // fechaDesembolso:
+                            //     fechaDesembolso?.toUtc().toIso8601String(),
+                            objMonedaId: moneda?.value,
+                            monto: double.tryParse(monto ?? '0'),
+                            objPropositoId: proposito?.value,
+                            objProductoId: producto?.value,
+                            objFrecuenciaId: frecuenciaDePago?.value,
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
+                            fechaPrimerPagoSolicitud:
+                                fechaPrimerPago?.toUtc().toIso8601String(),
+                            cuota: calcularCuotaProvider
+                                .state.montoPrincipalPrimeraCuota,
+                            observacion: observacion,
+                          );
+
+                      // widget.controller.nextPage(
+                      //   duration: const Duration(milliseconds: 300),
+                      //   curve: Curves.easeIn,
+                      // );
                       context.pop();
                     },
                   ).showDialog(context);
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => BlocProvider.value(
+                        value: context.read<SolicitudAsalariadoCubit>(),
+                        child: const AsalariadoSendingForm(
+                            // solicitudId: context
+                            //     .read<SolicitudReprestamoCubit>()
+                            //     .state
+                            //     .idLocalResponse,
+                            ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

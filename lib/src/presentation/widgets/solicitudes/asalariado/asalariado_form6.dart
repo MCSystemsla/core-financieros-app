@@ -1,13 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AsalariadoForm6 extends StatefulWidget {
@@ -19,6 +23,22 @@ class AsalariadoForm6 extends StatefulWidget {
 }
 
 class _AsalariadoForm6State extends State<AsalariadoForm6> {
+  String? nombreFamiliarCercano;
+  String? telefonoFamiliarCercano;
+  String? parentescoFamiliarCercano;
+  String? direccionDomicilioFamiiiar;
+  String? nombreConyuge;
+  String? nacionalidadConyuge;
+  String? profesionConyuge;
+  String? trabajaConyuge;
+  String? salarioNetoMensualConyuge;
+  String? otrosIngresosConyuge;
+  String? fuenteOtrosIngresosConyuge;
+  String? totalIngresosMesConyuge;
+  String? observaciones;
+  String? nombreDelaEmpresaConyuge;
+  String? telefonoOficinaConyuge;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -36,28 +56,45 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreFamiliarCercano = value;
+              },
               title: 'Nombre',
-              icon: Icon(Icons.person_outline),
+              icon: const Icon(Icons.person_outline),
             ),
             const Gap(30),
-            const CountryInput(
+            CountryInput(
+              onChange: (value) {
+                telefonoFamiliarCercano = value;
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
               maxLength: 15,
               isRequired: false,
               hintText: 'Ingresa Telefono',
               title: 'Telefono',
-              icon: Icon(Icons.phone_outlined),
+              icon: const Icon(Icons.phone_outlined),
               textInputType: TextInputType.phone,
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            SearchDropdownWidget(
+              codigo: 'PARENTESCO',
+              onChanged: (item) {
+                parentescoFamiliarCercano = item?.value;
+                setState(() {});
+              },
               title: 'Parentesco',
-              icon: Icon(Icons.group_outlined),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                direccionDomicilioFamiiiar = value;
+              },
               title: 'Dirección Domicilio',
-              icon: Icon(Icons.location_on_outlined),
+              icon: const Icon(Icons.location_on_outlined),
             ),
             const Gap(30),
             Padding(
@@ -68,19 +105,28 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreConyuge = value;
+              },
               title: 'Nombre y Apellido',
-              icon: Icon(Icons.badge_outlined),
+              icon: const Icon(Icons.badge_outlined),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nacionalidadConyuge = value;
+              },
               title: 'Nacionalidad del conyugue',
-              icon: Icon(Icons.flag_outlined),
+              icon: const Icon(Icons.flag_outlined),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                profesionConyuge = value;
+              },
               title: 'Profesión',
-              icon: Icon(Icons.work_outline),
+              icon: const Icon(Icons.work_outline),
             ),
             const Gap(30),
             Padding(
@@ -90,51 +136,74 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 isContainIcon: true,
                 title: '¿Trabaja?:',
                 items: ['input.yes'.tr(), 'input.no'.tr()],
-                onChanged: (item) {},
+                onChanged: (item) {
+                  trabajaConyuge = item;
+                },
                 // validator: (value) {},
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                salarioNetoMensualConyuge = value;
+              },
               title: 'Salario Neto Mensual (C\$)',
-              icon: Icon(Icons.attach_money_outlined),
+              icon: const Icon(Icons.attach_money_outlined),
               textInputType: TextInputType.number,
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                otrosIngresosConyuge = value;
+              },
               title: 'Otros ingresos (C\$)',
-              icon: Icon(Icons.money_off_csred_outlined),
+              icon: const Icon(Icons.money_off_csred_outlined),
               textInputType: TextInputType.number,
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                fuenteOtrosIngresosConyuge = value;
+              },
               title: 'Fuentes otros ingresos',
-              icon: Icon(Icons.source_outlined),
+              icon: const Icon(Icons.source_outlined),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                totalIngresosMesConyuge = value;
+              },
               title: 'Total ingresos mes (C\$)',
-              icon: Icon(Icons.calculate_outlined),
+              icon: const Icon(Icons.calculate_outlined),
               textInputType: TextInputType.number,
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                observaciones = value;
+              },
               title: 'Observaciones',
-              icon: Icon(Icons.note_alt_outlined),
+              icon: const Icon(Icons.note_alt_outlined),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreDelaEmpresaConyuge = value;
+              },
               title: 'Nombres de la empresa',
-              icon: Icon(Icons.business_outlined),
+              icon: const Icon(Icons.business_outlined),
             ),
             const Gap(30),
-            const CountryInput(
+            CountryInput(
+              onChange: (value) {
+                telefonoOficinaConyuge = value;
+              },
               maxLength: 15,
               isRequired: false,
               title: 'Teléfono Oficina',
-              icon: Icon(Icons.phone_iphone_outlined),
+              icon: const Icon(Icons.phone_iphone_outlined),
               textInputType: TextInputType.phone,
             ),
             const Gap(20),
@@ -145,6 +214,27 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        nombreFamiliarCercano: nombreFamiliarCercano,
+                        telefonoFamiliarCercano: telefonoFamiliarCercano,
+                        objParentescoFamiliarCercanoId:
+                            parentescoFamiliarCercano,
+                        direccionFamiliarCercano: direccionDomicilioFamiiiar,
+                        nombreConyugue: nombreConyuge,
+                        nacionalidadConyugue: nacionalidadConyuge,
+                        profesionConyugue: profesionConyuge,
+                        trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),
+                        sueldoMesConyugue:
+                            double.tryParse(salarioNetoMensualConyuge ?? '0'),
+                        otrosIngresosConyugue:
+                            double.tryParse(otrosIngresosConyuge ?? '0'),
+                        fuenteOtrosIngresosConyugue: fuenteOtrosIngresosConyuge,
+                        totalIngresoMesConyugue:
+                            double.tryParse(totalIngresosMesConyuge ?? '0'),
+                        observacion: observaciones,
+                        trabajoConyugue: nombreDelaEmpresaConyuge,
+                        telefonoTrabajoConyugue: telefonoOficinaConyuge,
+                      );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

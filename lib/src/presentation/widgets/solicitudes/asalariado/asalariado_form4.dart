@@ -2,12 +2,14 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AsalariadoForm4 extends StatefulWidget {
@@ -219,19 +221,19 @@ class _AsalariadoForm4State extends State<AsalariadoForm4> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
-                  // context.read<SolicitudReprestamoCubit>().saveAnswers(
-                  //       objActividadPredominante: actividadPredominante?.value,
-                  //       objRubroActividad: rubroActividad?.value,
-                  //       objRubroActividad2: rubroActividad2?.value,
-                  //       objRubroActividad3: rubroActividad3?.value,
-                  //       objActividadId2: actividadEconomica2?.value,
-                  //       objSectorId: sectorEconomico?.value,
-                  //       // sectorEconomico: sectorEconomico2,
-                  //       objActividadId: actividad?.value,
-                  //       objActividadId1: actividad1?.value,
-                  //       objRubroActividadPredominante:
-                  //           objRubroActividadPredominante?.value,
-                  //     );
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        objActividadPredominante: actividadPredominante?.value,
+                        objRubroActividad: rubroActividad?.value,
+                        objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad3: rubroActividad3?.value,
+                        objActividadEconomicaId2: actividadEconomica2?.value,
+                        objSectorId: sectorEconomico?.value,
+                        // sectorEconomico: sectorEconomico2,
+                        objActividadEconomicaId: actividad?.value,
+                        objActividadEconomicaId1: actividad1?.value,
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante?.value,
+                      );
                 },
               ),
             ),

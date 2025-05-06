@@ -14,9 +14,9 @@ class SolicitudAsalariado {
   final String apellido2;
   final String cedula;
   final String objPaisEmisorCedula;
-  final DateTime fechaEmisionCedula;
-  final DateTime fechaVencimientoCedula;
-  final DateTime fechaNacimiento;
+  final DateTime? fechaEmisionCedula;
+  final DateTime? fechaVencimientoCedula;
+  final DateTime? fechaNacimiento;
   final String telefono;
   final String celular;
   final String direccionCasa;
@@ -88,7 +88,7 @@ class SolicitudAsalariado {
   final String telefonoBeneficiario;
   final String codigoRed;
   final int plazoSolicitud;
-  final DateTime fechaPrimerPagoSolicitud;
+  final DateTime? fechaPrimerPagoSolicitud;
   final String nombreTrabajo;
   final String direccionTrabajo;
   final String barrioTrabajo;
@@ -98,7 +98,7 @@ class SolicitudAsalariado {
   final String cargo;
   final String direccionFamiliarCercano;
   final String duenoVivienda;
-  final DateTime fechaVenceAvaluoAsalariado;
+  final DateTime? fechaVenceAvaluoAsalariado;
   final String fuenteOtrosIngresos;
   final String fuenteOtrosIngresosConyugue;
   final String lugarTrabajoAnterior;
@@ -126,9 +126,9 @@ class SolicitudAsalariado {
     required this.apellido2,
     required this.cedula,
     required this.objPaisEmisorCedula,
-    required this.fechaEmisionCedula,
-    required this.fechaVencimientoCedula,
-    required this.fechaNacimiento,
+    this.fechaEmisionCedula,
+    this.fechaVencimientoCedula,
+    this.fechaNacimiento,
     required this.telefono,
     required this.celular,
     required this.direccionCasa,
@@ -200,7 +200,7 @@ class SolicitudAsalariado {
     required this.telefonoBeneficiario,
     required this.codigoRed,
     required this.plazoSolicitud,
-    required this.fechaPrimerPagoSolicitud,
+    this.fechaPrimerPagoSolicitud,
     required this.nombreTrabajo,
     required this.direccionTrabajo,
     required this.barrioTrabajo,
@@ -210,7 +210,7 @@ class SolicitudAsalariado {
     required this.cargo,
     required this.direccionFamiliarCercano,
     required this.duenoVivienda,
-    required this.fechaVenceAvaluoAsalariado,
+    this.fechaVenceAvaluoAsalariado,
     required this.fuenteOtrosIngresos,
     required this.fuenteOtrosIngresosConyugue,
     required this.lugarTrabajoAnterior,
@@ -232,17 +232,17 @@ class SolicitudAsalariado {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
-      'objOrigenSolicitudID': objOrigenSolicitudId,
-      'database': LocalStorage().jwt,
+      'objOrigenSolicitudID': 'APPMOVIL',
+      'database': LocalStorage().database,
       'Nombre1': nombre1,
       'Nombre2': nombre2,
       'Apellido1': apellido1,
       'Apellido2': apellido2,
       'Cedula': cedula,
       'ObjPaisEmisorCedula': objPaisEmisorCedula,
-      'FechaEmisionCedula': fechaEmisionCedula.toIso8601String(),
-      'FechaVencimientoCedula': fechaVencimientoCedula.toIso8601String(),
-      'FechaNacimiento': fechaNacimiento.toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toIso8601String(),
+      'FechaVencimientoCedula': fechaVencimientoCedula?.toIso8601String(),
+      'FechaNacimiento': fechaNacimiento?.toIso8601String(),
       'Telefono': telefono,
       'Celular': celular,
       'DireccionCasa': direccionCasa,
@@ -303,8 +303,8 @@ class SolicitudAsalariado {
       'objRubroActividad': objRubroActividad,
       'objActividadPredominante': objActividadPredominante,
       'EsFamiliarEmpleado': esFamiliarEmpleado,
-      'nombreFamiliar': nombreFamiliar,
-      'cedulaFamiliar': cedulaFamiliar,
+      'NombreFamiliar': nombreFamiliar,
+      'CedulaFamiliar': cedulaFamiliar,
       'objTipoDocumentoID': objTipoDocumentoId,
       'objRubroActividad2': objRubroActividad2,
       'objRubroActividad3': objRubroActividad3,
@@ -314,7 +314,7 @@ class SolicitudAsalariado {
       'TelefonoBeneficiario': telefonoBeneficiario,
       'codigoRed': codigoRed,
       'PlazoSolicitud': plazoSolicitud,
-      'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud.toIso8601String(),
+      'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud?.toIso8601String(),
       'NombreTrabajo': nombreTrabajo,
       'DireccionTrabajo': direccionTrabajo,
       'BarrioTrabajo': barrioTrabajo,
@@ -325,7 +325,7 @@ class SolicitudAsalariado {
       'DireccionFamiliarCercano': direccionFamiliarCercano,
       'DuenoVivienda': duenoVivienda,
       'FechaVenceAvaluoAsalariado':
-          fechaVenceAvaluoAsalariado.toIso8601String(),
+          fechaVenceAvaluoAsalariado?.toIso8601String(),
       'FuenteOtrosIngresos': fuenteOtrosIngresos,
       'FuenteOtrosIngresosConyugue': fuenteOtrosIngresosConyugue,
       'LugarTrabajoAnterior': lugarTrabajoAnterior,

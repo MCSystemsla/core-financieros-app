@@ -1,10 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AsalariadoForm5 extends StatefulWidget {
@@ -16,6 +20,16 @@ class AsalariadoForm5 extends StatefulWidget {
 }
 
 class _AsalariadoForm5State extends State<AsalariadoForm5> {
+  String? nombreEmpresa;
+  String? barrioEmpresa;
+  String? otrosIngresos;
+  String? cargo;
+  String? lugarTrabajoAnterior;
+  String? fuenteOtrosIngresos;
+  String? telefonoOficina;
+  String? salarioNetoMensual;
+  String? tiempoDeTrabajar;
+  String? direccionEmpresa;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -33,44 +47,80 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
               ),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                nombreEmpresa = value;
+              },
               title: 'Nombre de la empresa',
-              icon: Icon(Icons.business),
+              icon: const Icon(Icons.business),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                barrioEmpresa = value;
+              },
               title: 'Barrio de la empresa',
-              icon: Icon(Icons.location_city),
+              icon: const Icon(Icons.location_city),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                otrosIngresos = value;
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
+              textInputType: TextInputType.number,
               title: 'Otros ingresos (C\$)',
-              icon: Icon(Icons.attach_money),
+              icon: const Icon(Icons.attach_money),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                cargo = value;
+              },
               title: 'Cargo que Ocupa',
-              icon: Icon(Icons.badge),
+              icon: const Icon(Icons.badge),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                lugarTrabajoAnterior = value;
+              },
               title: 'Lugar trabajo anterior',
-              icon: Icon(Icons.history),
+              icon: const Icon(Icons.history),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                fuenteOtrosIngresos = value;
+              },
               title: 'Fuente otros ingresos',
-              icon: Icon(Icons.money_off),
+              icon: const Icon(Icons.money_off),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            CountryInput(
+              maxLength: 15,
+              isRequired: false,
+              onChange: (value) {
+                telefonoOficina = value;
+              },
               title: 'Teléfono Oficina',
-              icon: Icon(Icons.phone),
+              icon: const Icon(Icons.phone),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                salarioNetoMensual = value;
+              },
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
               title: 'Salario Neto Mensual (C\$)',
-              icon: Icon(Icons.money),
+              icon: const Icon(Icons.money),
             ),
             const Gap(30),
             const OutlineTextfieldWidget(
@@ -78,14 +128,25 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
               icon: Icon(Icons.summarize),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                tiempoDeTrabajar = value;
+              },
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               title: 'Tiempo de Trabajar',
-              icon: Icon(Icons.schedule),
+              icon: const Icon(Icons.schedule),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                direccionEmpresa = value;
+              },
               title: 'Dirección de la empresa',
-              icon: Icon(Icons.location_on),
+              icon: const Icon(Icons.location_on),
             ),
             const Gap(20),
             Container(
@@ -95,6 +156,20 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        nombreTrabajo: nombreEmpresa,
+                        barrioTrabajo: barrioEmpresa,
+                        otrosIngresosCordoba:
+                            double.tryParse(otrosIngresos ?? '0'),
+                        cargo: cargo,
+                        lugarTrabajoAnterior: lugarTrabajoAnterior,
+                        fuenteOtrosIngresos: fuenteOtrosIngresos,
+                        telefonoTrabajo: telefonoOficina,
+                        salarioNetoCordoba:
+                            double.tryParse(salarioNetoMensual ?? '0'),
+                        tiempoLaborar: tiempoDeTrabajar,
+                        direccionTrabajo: direccionEmpresa,
+                      );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

@@ -24,9 +24,10 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           apellido2: state.apellido2,
           cedula: state.cedula,
           objPaisEmisorCedula: state.objPaisEmisorCedula,
-          fechaEmisionCedula: DateTime.parse(state.fechaEmisionCedula),
-          fechaVencimientoCedula: DateTime.parse(state.fechaVencimientoCedula),
-          fechaNacimiento: DateTime.parse(state.fechaNacimiento),
+          fechaEmisionCedula: DateTime.tryParse(state.fechaEmisionCedula),
+          fechaVencimientoCedula:
+              DateTime.tryParse(state.fechaVencimientoCedula),
+          fechaNacimiento: DateTime.tryParse(state.fechaNacimiento),
           telefono: state.telefono,
           celular: state.celular,
           direccionCasa: state.direccionCasa,
@@ -100,7 +101,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           codigoRed: state.codigoRed,
           plazoSolicitud: state.plazoSolicitud,
           fechaPrimerPagoSolicitud:
-              DateTime.parse(state.fechaPrimerPagoSolicitud),
+              DateTime.tryParse(state.fechaPrimerPagoSolicitud),
           nombreTrabajo: state.nombreTrabajo,
           direccionTrabajo: state.direccionTrabajo,
           barrioTrabajo: state.barrioTrabajo,
@@ -111,7 +112,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           direccionFamiliarCercano: state.direccionFamiliarCercano,
           duenoVivienda: state.duenoVivienda,
           fechaVenceAvaluoAsalariado:
-              DateTime.parse(state.fechaVenceAvaluoAsalariado),
+              DateTime.tryParse(state.fechaVenceAvaluoAsalariado),
           fuenteOtrosIngresos: state.fuenteOtrosIngresos,
           fuenteOtrosIngresosConyugue: state.fuenteOtrosIngresosConyugue,
           lugarTrabajoAnterior: state.lugarTrabajoAnterior,
