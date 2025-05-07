@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/solicitudes_asalariado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/solicitudes_pendientes_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/solicitudes_represtamo_pendientes_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_loading.dart';
@@ -82,6 +83,7 @@ class SolicitudesCreditoView extends StatelessWidget {
           solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
           controller: controller,
         ),
+        const SolicitudesAsalariadoPendientesItems(),
       ],
     );
   }
