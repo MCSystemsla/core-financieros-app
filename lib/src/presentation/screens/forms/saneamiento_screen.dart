@@ -884,9 +884,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
+                    maxHeight: 400,
+                    maxWidth: 400,
+                    imageQuality: 50,
+                    preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;
                   final appDir = await getApplicationDocumentsDirectory();
@@ -952,9 +953,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
+                    maxHeight: 400,
+                    maxWidth: 400,
+                    imageQuality: 50,
+                    preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;
                   final appDir = await getApplicationDocumentsDirectory();
@@ -981,7 +983,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                   if (!context.mounted) return;
                   CustomAlertDialog(
                     context: context,
-                    title: 'Error al tomar la foto ${e.code}',
+                    title: 'Error al tomar la foto ${e.message}',
                     onDone: () => context.pop(),
                   ).showDialog(context, dialogType: DialogType.error);
                 } catch (e) {
@@ -1025,9 +1027,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
+                    maxHeight: 400,
+                    maxWidth: 400,
+                    imageQuality: 50,
+                    preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;
                   final appDir = await getApplicationDocumentsDirectory();
