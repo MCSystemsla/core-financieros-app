@@ -613,11 +613,11 @@ class _RecurrentFormState extends State<_RecurrentForm>
                               '¿Cuáles son las necesidades en su comunidad?',
                           response: necesidadesController.text.trim(),
                         ),
-                        Response(
-                          index: 1,
-                          question: 'Número de personas a cargo:*',
-                          response: question6.text.trim(),
-                        ),
+                        // Response(
+                        //   index: 1,
+                        //   question: 'Número de personas a cargo:*',
+                        //   response: question6.text.trim(),
+                        // ),
                         Response(
                           index: 1,
                           question: '¿Qué tipo de estudios reciben sus hijos?',
