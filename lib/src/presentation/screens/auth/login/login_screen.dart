@@ -1,14 +1,14 @@
-import 'package:core_financiero_app/global_locator.dart';
+import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -118,22 +118,27 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? password;
   String? branchTeam;
   bool isPasswordVisible = false;
+  String? captchaToken;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final currentFlavor = global<FlavorCubit>().state.flavor;
+    final TurnstileOptions options = TurnstileOptions(
+      size: TurnstileSize.flexible,
+      theme: TurnstileTheme.light,
+      borderRadius: BorderRadius.circular(10),
+      language: 'es',
+      retryAutomatically: false,
+      refreshTimeout: TurnstileRefreshTimeout.manual,
+    );
+
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
-            Text(
-              'App de ${currentFlavor.name}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
             const Gap(20),
             InputSimple(
               title: 'auth.user'.tr(),
@@ -215,7 +220,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               },
             ),
             const VersionControlWidget(),
-            const Gap(20),
+            const Gap(10),
+            CloudflareTurnstile(
+              options: options,
+              siteKey: const String.fromEnvironment('CFAccessSiteKey'),
+              baseUrl: 'http://localhost/',
+              onTokenReceived: (token) {
+                captchaToken = token;
+                setState(() {});
+              },
+            ),
+            const Gap(14),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) async {
                 final status = state.status;
@@ -246,6 +261,14 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   text: 'button.login'.tr(),
                   color: Colors.black,
                   onPressed: () {
+                    if (captchaToken == null) {
+                      CustomAlertDialog(
+                        context: context,
+                        title: 'Por favor verifica que eres un humano',
+                        onDone: () => context.pop(),
+                      ).showDialog(context);
+                      return;
+                    }
                     if (_formKey.currentState?.validate() ?? false) {
                       context.read<AuthCubit>().login(
                             userName: username!.toUpperCase().trim(),
