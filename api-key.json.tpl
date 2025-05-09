@@ -4,5 +4,6 @@
     "isProdMode": false,
     "versionUrl": "URL DEL VERSIONAMIENTO DE APP",
     "CFAccessClientId": "SECRET CLIENT ID DE CLOUDFLARE",
-    "CFAccessClientSecret": "SECRET KEY DE CLOUDFLARE"
+    "CFAccessClientSecret": "SECRET KEY DE CLOUDFLARE",
+    "CFAccessSiteKey": "SITE KEY DE CLOUDFLARE"
 }
