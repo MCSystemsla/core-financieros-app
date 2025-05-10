@@ -28,7 +28,7 @@ class NoVpnPopUpOnKiva extends OdsDialog {
         text: 'OK',
         color: AppColors.getPrimaryColor(),
         onPressed: () {
-          context.pushReplacement('/');
+          context.push('/');
         },
       ),
     ];

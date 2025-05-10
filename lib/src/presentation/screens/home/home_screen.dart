@@ -50,30 +50,33 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          floatingActionButton:
-              isConnected.isConnected && isConnected.isCorrectNetwork
-                  ? FloatingActionButton.extended(
-                      label: const Row(
-                        children: [
-                          Icon(Icons.update_rounded),
-                          Gap(5),
-                          Text('Sincronizar'),
-                        ],
-                      ),
-                      onPressed: () => {
-                        context.pushTransparentRoute(
-                            const DownsloadingCatalogosWidget()),
-                      },
-                    )
-                  : const SizedBox(),
-          body: const Column(
-            children: [
-              HomeBannerWidget(),
-              Expanded(
-                child: HomeItemsWidget(),
-              ),
-            ],
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            floatingActionButton:
+                isConnected.isConnected && isConnected.isCorrectNetwork
+                    ? FloatingActionButton.extended(
+                        label: const Row(
+                          children: [
+                            Icon(Icons.update_rounded),
+                            Gap(5),
+                            Text('Sincronizar'),
+                          ],
+                        ),
+                        onPressed: () => {
+                          context.pushTransparentRoute(
+                              const DownsloadingCatalogosWidget()),
+                        },
+                      )
+                    : const SizedBox(),
+            body: const Column(
+              children: [
+                HomeBannerWidget(),
+                Expanded(
+                  child: HomeItemsWidget(),
+                ),
+              ],
+            ),
           ),
         );
       },
