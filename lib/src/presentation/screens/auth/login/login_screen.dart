@@ -4,9 +4,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
@@ -51,54 +49,46 @@ class LoginScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-            builder: (context, state) {
-              if (!state.isCorrectNetwork) {
-                return const VpnNoFound(routeIsVpnConnected: '/login');
-              }
-
-              return Scaffold(
-                body: PopScope(
-                  canPop: false,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const ChangeLangWidget(
-                            child: LoginScreen(),
-                          ),
-                          BlocBuilder<LogoCubit, LogoState>(
-                            builder: (context, state) {
-                              if (state is OnLogoSuccess) {
-                                return Image(
-                                    height: 200,
-                                    image: NetworkImage(
-                                      state.imgUrl,
-                                    ));
-                              }
-                              if (state is OnLogoLoading) {
-                                return const CircularProgressIndicator();
-                              }
-                              if (state is OnLogoError) {
-                                return const Text('error');
-                              }
-                              return const SizedBox();
-                            },
-                          ),
-                          // const Gap(10),
-                          const Expanded(
-                            flex: 5,
-                            child: LoginFormWidget(),
-                          ),
-                        ],
+          return Scaffold(
+            body: PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ChangeLangWidget(
+                        child: LoginScreen(),
                       ),
-                    ),
+                      BlocBuilder<LogoCubit, LogoState>(
+                        builder: (context, state) {
+                          if (state is OnLogoSuccess) {
+                            return Image(
+                                height: 200,
+                                image: NetworkImage(
+                                  state.imgUrl,
+                                ));
+                          }
+                          if (state is OnLogoLoading) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (state is OnLogoError) {
+                            return const Text('error');
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                      // const Gap(10),
+                      const Expanded(
+                        flex: 5,
+                        child: LoginFormWidget(),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           );
         },
       ),
