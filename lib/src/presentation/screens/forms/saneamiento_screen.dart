@@ -1111,8 +1111,8 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             ButtonActionsWidget(
               onPreviousPressed: () {
                 isInternetConnection
-                    ? context.push('/cartera/formulario-kiva')
-                    : context.push('/cartera/kiva-offline');
+                    ? context.pushReplacement('/cartera/formulario-kiva')
+                    : context.pushReplacement('/cartera/kiva-offline');
               },
               onNextPressed: () async {
                 if (selectedImage == null ||
