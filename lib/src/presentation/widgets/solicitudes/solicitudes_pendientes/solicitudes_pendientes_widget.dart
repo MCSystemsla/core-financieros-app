@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/offline/crear_solicitud_offline_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_offline_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/offline/represtamo_offline_view.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -402,14 +403,14 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
                 ? Colors.white
                 : AppColors.red.withOpacity(.3).withBlue(170),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) => ReprestamoOfflineView(
-          //       solicitudReprestamoOffline: solicitud,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AsalariadoOfflineView(
+                asalariadoResponsesLocalDb: solicitud,
+              ),
+            ),
+          );
         },
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1}'
