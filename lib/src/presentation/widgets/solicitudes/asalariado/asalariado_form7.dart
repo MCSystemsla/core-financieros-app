@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
@@ -31,7 +32,8 @@ class AsalariadoForm7 extends StatefulWidget {
   State<AsalariadoForm7> createState() => _AsalariadoForm7State();
 }
 
-class _AsalariadoForm7State extends State<AsalariadoForm7> {
+class _AsalariadoForm7State extends State<AsalariadoForm7>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -97,6 +99,9 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -327,6 +332,9 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
                     onDone: () {
                       context.read<SolicitudAsalariadoCubit>().saveAnswers(
                             ubicacion: ubicacion,
+                            isOffline: !isConnected,
+                            isDone: !isConnected,
+
                             // objFrecuenciaIdVer: frecuenciaDePago?.name,
                             // tasaInteres: tasaInteres,
                             // fechaDesembolso:
@@ -351,18 +359,32 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
                       context.pop();
                     },
                   ).showDialog(context);
+
                   if (!context.mounted) return;
+                  if (!isConnected) {
+                    context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                          errorMsg:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        );
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                      onDone: () => context.pushReplacement('/solicitudes'),
+                    ).showDialog(context, dialogType: DialogType.infoReverse);
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (ctx) => BlocProvider.value(
                         value: context.read<SolicitudAsalariadoCubit>(),
-                        child: const AsalariadoSendingForm(
-                            // solicitudId: context
-                            //     .read<SolicitudReprestamoCubit>()
-                            //     .state
-                            //     .idLocalResponse,
-                            ),
+                        child: AsalariadoSendingForm(
+                          solicitudId: context
+                              .read<SolicitudAsalariadoCubit>()
+                              .state
+                              .idLocalResponse,
+                        ),
                       ),
                     ),
                   );
@@ -390,4 +412,7 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

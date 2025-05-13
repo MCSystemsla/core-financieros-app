@@ -117,7 +117,9 @@ class AsalariadoResponsesLocalDb {
   double? totalIngresoMesConyugue;
   String? errorMsg;
   bool? isDone;
+  bool? isOffline;
   AsalariadoResponsesLocalDb({
+    this.isOffline,
     this.errorMsg,
     this.isDone,
     this.objOrigenSolicitudId,

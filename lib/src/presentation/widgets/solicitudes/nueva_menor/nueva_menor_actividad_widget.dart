@@ -60,7 +60,7 @@ class _NuevaMenorBeneficiarioWidgetState
           children: [
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 50,
+              maxLength: 15,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
@@ -144,6 +144,7 @@ class _NuevaMenorBeneficiarioWidgetState
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
+                LengthLimitingTextInputFormatter(15),
               ],
               maxLength: 16,
               icon: Icon(

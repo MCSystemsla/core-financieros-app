@@ -1,4 +1,6 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -8,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AsalariadoSendingForm extends StatefulWidget {
-  const AsalariadoSendingForm({super.key});
+  final int solicitudId;
+  const AsalariadoSendingForm({super.key, required this.solicitudId});
 
   @override
   State<AsalariadoSendingForm> createState() => _AsalariadoSendingFormState();
@@ -23,13 +26,14 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
 
   @override
   Widget build(BuildContext context) {
+    final dbProvider = global<ObjectBoxService>();
     return BlocConsumer<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
       listener: (context, state) {
-        // if (state.status == Status.done) {
-        //   dbProvider.removeSolicitudReprestamoWhenisUploaded(
-        //     solicitudId: widget.solicitudId,
-        //   );
-        // }
+        if (state.status == Status.done) {
+          dbProvider.removeSolicitudAsalariadoWhenisUploaded(
+            solicitudId: widget.solicitudId,
+          );
+        }
       },
       builder: (context, state) {
         return Scaffold(
@@ -53,9 +57,9 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
                 needToGoBack: true,
                 errorMsg: state.errorMsg.capitalizeAll,
                 onPressed: () {
-                  // context
-                  //     .read<SolicitudReprestamoCubit>()
-                  //     .createSolicitudReprestamo();
+                  context
+                      .read<SolicitudAsalariadoCubit>()
+                      .createSolicitudAsalariado();
                 },
               ),
             _ => const SizedBox(),

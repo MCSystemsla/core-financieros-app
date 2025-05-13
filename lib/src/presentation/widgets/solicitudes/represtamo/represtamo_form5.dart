@@ -148,6 +148,10 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                         isOffline: !isConnected,
                       );
                   if (!isConnected) {
+                    context.read<SolicitudReprestamoCubit>().saveAnswers(
+                          errorMsg:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        );
                     CustomAlertDialog(
                       context: context,
                       title:

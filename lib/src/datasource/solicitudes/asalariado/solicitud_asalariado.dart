@@ -6,6 +6,7 @@ String solicitudAsalariadoToJson(SolicitudAsalariado data) =>
     json.encode(data.toJson());
 
 class SolicitudAsalariado {
+  final bool isOffline;
   final String objOrigenSolicitudId;
   final String database;
   final String nombre1;
@@ -118,6 +119,7 @@ class SolicitudAsalariado {
   final double totalIngresoMesConyugue;
 
   SolicitudAsalariado({
+    required this.isOffline,
     required this.objOrigenSolicitudId,
     required this.database,
     required this.nombre1,
@@ -343,6 +345,7 @@ class SolicitudAsalariado {
       'TiempoLaborarConyugue': tiempoLaborarConyugue,
       'TotalIngresoMes': totalIngresoMes,
       'TotalIngresoMesConyugue': totalIngresoMesConyugue,
+      'IsOffline': isOffline,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

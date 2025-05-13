@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -23,7 +25,8 @@ class AsalariadoForm2 extends StatefulWidget {
   State<AsalariadoForm2> createState() => _AsalariadoForm2State();
 }
 
-class _AsalariadoForm2State extends State<AsalariadoForm2> {
+class _AsalariadoForm2State extends State<AsalariadoForm2>
+    with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
   String? parentesco;
   String? cedula;
@@ -44,6 +47,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -87,6 +91,12 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
             ),
             const Gap(30),
             CountryInput(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
               onChange: (value) {
                 telefono = value;
               },
@@ -178,6 +188,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   familiarPeps = item;
+                  setState(() {});
                 },
                 // validator: (value) {},
                 toStringItem: (item) => item,
@@ -292,4 +303,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

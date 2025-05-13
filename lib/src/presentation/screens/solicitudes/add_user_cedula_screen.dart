@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,16 +25,19 @@ class AddUserCedulaScreen extends StatelessWidget {
     final cedulaController = TextEditingController();
     final formKey = GlobalKey<FormState>();
     void showSuccessDialog({
-      required String firstName,
-      required String lastName,
+      required UserByCedulaSolicitud userByCedula,
     }) {
       CustomAlertDialog(
         context: context,
-        title: '$firstName $lastName listo para crear solicitud!!',
-        onDone: () => Navigator.push(
+        title:
+            '${userByCedula.primerNombre} ${userByCedula.primerApellido} listo para crear solicitud!!',
+        onDone: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: ((context) => CrearSolicitudScreen(typeForm: typeForm)),
+            builder: ((context) => CrearSolicitudScreen(
+                  typeForm: typeForm,
+                  userByCedulaSolicitud: userByCedula,
+                )),
           ),
         ),
       ).showDialog(context, dialogType: DialogType.success);
@@ -57,8 +61,17 @@ class AddUserCedulaScreen extends StatelessWidget {
           }
           if (state is OnUserByCedulaSuccess) {
             showSuccessDialog(
-              firstName: state.userCedulaResponse.primerNombre,
-              lastName: state.userCedulaResponse.primerApellido,
+              userByCedula: UserByCedulaSolicitud(
+                segundoApellido: state.userCedulaResponse.segundoApellido,
+                segundoNombre: state.userCedulaResponse.segundoNombre,
+                primerNombre: state.userCedulaResponse.primerNombre,
+                primerApellido: state.userCedulaResponse.primerApellido,
+                cedula: state.userCedulaResponse.cedula,
+                fechaEmision: state.userCedulaResponse.fechaEmision,
+                fechaVencimiento: state.userCedulaResponse.fechaExpira,
+                fechaNacimiento: state.userCedulaResponse.fechaNacimiento,
+                tipoDocumento: state.userCedulaResponse.tipoDocumento,
+              ),
             );
           }
         },

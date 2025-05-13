@@ -207,19 +207,19 @@ class _SolicitudCardsRow1 extends StatelessWidget {
         Expanded(
           child: SolicitudCard(
             onPressed: () {
-              // if (!isConnected) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const CrearSolicitudScreen(
-                      typeForm: TypeForm.asalariado)),
-                ),
-              );
-              // return;
-              // }
-              // context.pushTransparentRoute(const AddUserCedulaScreen(
-              //   typeForm: TypeForm.asalariado,
-              // ));
+              if (!isConnected) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const CrearSolicitudScreen(
+                        typeForm: TypeForm.asalariado)),
+                  ),
+                );
+                return;
+              }
+              context.pushTransparentRoute(const AddUserCedulaScreen(
+                typeForm: TypeForm.asalariado,
+              ));
             },
             svgPath: ImageAsset.nuevaMenorBg2,
             title: 'Asalariado',

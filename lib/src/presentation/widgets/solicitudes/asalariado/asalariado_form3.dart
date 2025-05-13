@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -20,7 +21,8 @@ class AsalariadoForm3 extends StatefulWidget {
   State<AsalariadoForm3> createState() => _AsalariadoForm3State();
 }
 
-class _AsalariadoForm3State extends State<AsalariadoForm3> {
+class _AsalariadoForm3State extends State<AsalariadoForm3>
+    with AutomaticKeepAliveClientMixin {
   String? paisCasa;
   String? depCasa;
   String? munCasa;
@@ -35,6 +37,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -98,6 +101,11 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               onChange: (value) {
                 anosResidir = value;
               },
@@ -180,4 +188,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

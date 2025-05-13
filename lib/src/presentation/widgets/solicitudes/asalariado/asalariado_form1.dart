@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -13,36 +14,31 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class AsalariadoForm1 extends StatefulWidget {
   final PageController controller;
-  const AsalariadoForm1({super.key, required this.controller});
+  final UserByCedulaSolicitud? userByCedulaSolicitud;
+  const AsalariadoForm1({
+    super.key,
+    required this.controller,
+    this.userByCedulaSolicitud,
+  });
 
   @override
   State<AsalariadoForm1> createState() => _AsalariadoForm1State();
 }
 
-class _AsalariadoForm1State extends State<AsalariadoForm1> {
+class _AsalariadoForm1State extends State<AsalariadoForm1>
+    with AutomaticKeepAliveClientMixin {
   String? locationLatitude;
   String? locationLongitude;
-
-  @override
-  void initState() {
-    GeolocationService(context: context).getCurrentLocation().then(
-      (value) {
-        if (value == null) return;
-        locationLatitude = value.latitude.toString();
-        locationLongitude = value.longitude.toString();
-      },
-    );
-
-    super.initState();
-  }
 
   String? cedula;
   String? primerNombre;
@@ -70,6 +66,29 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
   String? nacionalidad;
   String? estadoCivil;
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    final userByCedula = widget.userByCedulaSolicitud;
+    cedula = userByCedula?.cedula;
+    primerNombre = userByCedula?.primerNombre;
+    segundoNombre = userByCedula?.segundoNombre;
+    segundoApellido = userByCedula?.segundoApellido;
+    primerApellido = userByCedula?.primerApellido;
+    fechaEmisionCedula = userByCedula?.fechaEmision;
+    fechaVencimientoCedula = userByCedula?.fechaVencimiento;
+    fechaNacimiento = userByCedula?.fechaNacimiento;
+    tipoDocumento = userByCedula?.tipoDocumento;
+    GeolocationService(context: context).getCurrentLocation().then(
+      (value) {
+        if (value == null) return;
+        locationLatitude = value.latitude.toString();
+        locationLongitude = value.longitude.toString();
+      },
+    );
+
+    super.initState();
+  }
+
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -142,6 +161,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -159,6 +179,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: cedula,
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 cedula = value;
@@ -168,6 +189,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: primerNombre,
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 primerNombre = value;
@@ -177,6 +199,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: segundoNombre,
               onChange: (value) {
                 segundoNombre = value;
               },
@@ -185,6 +208,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: primerApellido,
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 primerApellido = value;
@@ -194,6 +218,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: segundoApellido,
               onChange: (value) {
                 segundoApellido = value;
               },
@@ -288,6 +313,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             SearchDropdownWidget(
+              hintText: tipoDocumento ?? '',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'TIPODOCUMENTOPERSONA',
@@ -333,12 +359,24 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
               onChange: (value) {
                 telefono = value;
               },
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
               maxLength: 15,
               title: 'Teléfono',
               icon: const Icon(Icons.phone),
             ),
             const Gap(30),
             CountryInput(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 celular = value;
@@ -368,6 +406,11 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             // ),
             const Gap(30),
             OutlineTextfieldWidget(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               onChange: (value) {
                 cantidadHijos = value;
               },
@@ -467,4 +510,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -92,6 +92,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   }
 
   void saveAnswers({
+    String? errorMsg,
     bool? hasVerified,
     bool? isDone,
     int? idLocalResponse,
@@ -152,6 +153,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   }) {
     emit(
       state.copyWith(
+        errorMsg: errorMsg,
         isOffline: isOffline,
         fechaDesembolso: fechaDesembolso,
         tasaInteres: tasaInteres,
@@ -220,6 +222,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       localDbProvider.updateSolicitudReprestamoById(
         id: state.idLocalResponse,
         responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+          errorMsg: state.errorMsg,
           isOffline: state.isOffline,
           objRubroActividad: state.objRubroActividad,
           objFrecuenciaIdVer: state.objFrecuenciaIdVer,
@@ -283,6 +286,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesReprestamoResponses(
       responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+        errorMsg: state.errorMsg,
         isOffline: state.isOffline,
         objFrecuenciaIdVer: state.objFrecuenciaIdVer,
         createdAt: DateTime.now(),

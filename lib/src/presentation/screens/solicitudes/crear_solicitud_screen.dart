@@ -29,11 +29,13 @@ enum TypeForm {
 class CrearSolicitudScreen extends StatelessWidget {
   final TypeForm? typeForm;
   final String? cedula;
+  final UserByCedulaSolicitud? userByCedulaSolicitud;
 
   const CrearSolicitudScreen({
     super.key,
     this.typeForm,
     this.cedula,
+    this.userByCedulaSolicitud,
   });
 
   @override
@@ -70,6 +72,7 @@ class CrearSolicitudScreen extends StatelessWidget {
           TypeForm.nueva => NuevaMenorForm(pageController: pageController),
           TypeForm.asalariado => AsalariadoForm(
               controller: pageController,
+              userByCedulaSolicitud: userByCedulaSolicitud,
             ),
           TypeForm.represtamo => ReprestamoForm(
               cedula: cedula ?? '',

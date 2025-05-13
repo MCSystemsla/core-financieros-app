@@ -22,6 +22,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
     try {
       final (isOk, msg) = await _repository.createSolicitudAsalariado(
         solicitudAsalariado: SolicitudAsalariado(
+          isOffline: state.isOffline,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
           database: state.database,
           nombre1: state.nombre1,
@@ -158,6 +159,9 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
   }
 
   void saveAnswers({
+    String? errorMsg,
+    bool? isDone,
+    bool? isOffline,
     String? database,
     String? nombre1,
     String? nombre2,
@@ -271,6 +275,9 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
   }) {
     emit(
       state.copyWith(
+        errorMsg: errorMsg,
+        isDone: isDone,
+        isOffline: isOffline,
         database: database,
         nombre1: nombre1,
         nombre2: nombre2,
@@ -391,6 +398,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       localDbProvider.updateSolicitudAsalariadoById(
         id: state.idLocalResponse,
         asalariadoResponsesLocalDb: AsalariadoResponsesLocalDb(
+          isOffline: state.isOffline,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
           database: state.database,
           nombre1: state.nombre1,
@@ -514,6 +522,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesAsalariadoResponses(
       responseAsalariadoLocalDb: AsalariadoResponsesLocalDb(
+        isOffline: state.isOffline,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         database: state.database,
         nombre1: state.nombre1,

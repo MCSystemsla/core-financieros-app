@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -20,7 +21,8 @@ class AsalariadoForm5 extends StatefulWidget {
   State<AsalariadoForm5> createState() => _AsalariadoForm5State();
 }
 
-class _AsalariadoForm5State extends State<AsalariadoForm5> {
+class _AsalariadoForm5State extends State<AsalariadoForm5>
+    with AutomaticKeepAliveClientMixin {
   String? nombreEmpresa;
   String? barrioEmpresa;
   String? otrosIngresos;
@@ -34,6 +36,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -108,6 +111,11 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
             CountryInput(
               maxLength: 15,
               isRequired: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
               onChange: (value) {
                 telefonoOficina = value;
               },
@@ -128,9 +136,14 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
               icon: const Icon(Icons.money),
             ),
             const Gap(30),
-            const OutlineTextfieldWidget(
+            OutlineTextfieldWidget(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
               title: 'Total ingresos mes (C\$)',
-              icon: Icon(Icons.summarize),
+              icon: const Icon(Icons.summarize),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -204,4 +217,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

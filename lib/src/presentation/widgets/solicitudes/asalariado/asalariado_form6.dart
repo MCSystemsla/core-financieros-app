@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -22,7 +23,8 @@ class AsalariadoForm6 extends StatefulWidget {
   State<AsalariadoForm6> createState() => _AsalariadoForm6State();
 }
 
-class _AsalariadoForm6State extends State<AsalariadoForm6> {
+class _AsalariadoForm6State extends State<AsalariadoForm6>
+    with AutomaticKeepAliveClientMixin {
   String? nombreFamiliarCercano;
   String? telefonoFamiliarCercano;
   String? parentescoFamiliarCercano;
@@ -44,6 +46,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -75,6 +78,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
               ],
               maxLength: 15,
               isRequired: false,
@@ -142,6 +146,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   trabajaConyuge = item;
+                  setState(() {});
                 },
                 // validator: (value) {},
                 toStringItem: (item) => item,
@@ -159,6 +164,11 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 onChange: (value) {
                   tiempoLaborarConyugue = value;
                 },
@@ -167,21 +177,27 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
                 onChange: (value) {
                   salarioNetoMensualConyuge = value;
                 },
                 title: 'Salario Neto Mensual (C\$)',
                 icon: const Icon(Icons.attach_money_outlined),
-                textInputType: TextInputType.number,
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
                 onChange: (value) {
                   otrosIngresosConyuge = value;
                 },
                 title: 'Otros ingresos (C\$)',
                 icon: const Icon(Icons.money_off_csred_outlined),
-                textInputType: TextInputType.number,
               ),
               const Gap(30),
               OutlineTextfieldWidget(
@@ -193,12 +209,15 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
                 onChange: (value) {
                   totalIngresosMesConyuge = value;
                 },
                 title: 'Total ingresos mes (C\$)',
                 icon: const Icon(Icons.calculate_outlined),
-                textInputType: TextInputType.number,
               ),
               const Gap(30),
               OutlineTextfieldWidget(
@@ -218,6 +237,12 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
               ),
               const Gap(30),
               CountryInput(
+                textInputType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(15),
+                  DashFormatter(),
+                ],
                 onChange: (value) {
                   telefonoOficinaConyuge = value;
                 },
@@ -225,7 +250,6 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 isRequired: false,
                 title: 'Teléfono Oficina',
                 icon: const Icon(Icons.phone_iphone_outlined),
-                textInputType: TextInputType.phone,
               ),
             ],
             const Gap(20),
@@ -288,4 +312,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
