@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/solicitudes_asalariado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/solicitudes_pendientes_items.dart';
@@ -35,6 +36,7 @@ class SolicitudesPendientesScreen extends StatelessWidget {
           builder: (context, state) {
             return switch (state) {
               OnSolicitudesOfflineSuccess() => SolicitudesCreditoView(
+                  solicitudesAsalariado: state.solicitudesAsalariado,
                   solicitudesOffline: state.solicitudesOffline,
                   solicitudesOfflineReprestamo:
                       state.solicitudesOfflineReprestamo,
@@ -61,11 +63,13 @@ class SolicitudesPendientesScreen extends StatelessWidget {
 class SolicitudesCreditoView extends StatelessWidget {
   final List<ResponseLocalDb> solicitudesOffline;
   final List<ReprestamoResponsesLocalDb> solicitudesOfflineReprestamo;
+  final List<AsalariadoResponsesLocalDb> solicitudesAsalariado;
 
   const SolicitudesCreditoView({
     super.key,
     required this.solicitudesOffline,
     required this.solicitudesOfflineReprestamo,
+    required this.solicitudesAsalariado,
   });
 
   @override
@@ -83,7 +87,10 @@ class SolicitudesCreditoView extends StatelessWidget {
           solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
           controller: controller,
         ),
-        const SolicitudesAsalariadoPendientesItems(),
+        SolicitudesAsalariadoPendientesItems(
+          controller: controller,
+          solicitudesAsalariado: solicitudesAsalariado,
+        ),
       ],
     );
   }

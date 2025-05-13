@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -30,11 +31,14 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
   String? direccionDomicilio;
   String? barrio;
   String? sector;
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
+        key: formKey,
         child: Column(
           children: [
             const Gap(30),
@@ -102,6 +106,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 direccionDomicilio = value;
               },
@@ -110,6 +115,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 barrio = value;
               },
@@ -133,6 +139,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         objPaisCasaId: paisCasa,
                         objDepartamentoCasaId: depCasa,

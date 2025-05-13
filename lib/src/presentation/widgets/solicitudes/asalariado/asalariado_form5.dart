@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -30,11 +31,13 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
   String? salarioNetoMensual;
   String? tiempoDeTrabajar;
   String? direccionEmpresa;
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,6 +51,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 nombreEmpresa = value;
               },
@@ -56,6 +60,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 barrioEmpresa = value;
               },
@@ -156,6 +161,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         nombreTrabajo: nombreEmpresa,
                         barrioTrabajo: barrioEmpresa,

@@ -38,12 +38,16 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
   String? observaciones;
   String? nombreDelaEmpresaConyuge;
   String? telefonoOficinaConyuge;
+  String? direccionTrabajoConyugue;
+  String? tiempoLaborarConyugue;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -147,6 +151,22 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
             const Gap(30),
             OutlineTextfieldWidget(
               onChange: (value) {
+                direccionTrabajoConyugue = value;
+              },
+              title: 'Direccion de la Empresa',
+              icon: const Icon(Icons.badge_outlined),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                tiempoLaborarConyugue = value;
+              },
+              title: 'Tiempo de laborar',
+              icon: const Icon(Icons.badge_outlined),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              onChange: (value) {
                 salarioNetoMensualConyuge = value;
               },
               title: 'Salario Neto Mensual (C\$)',
@@ -214,7 +234,10 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        direccionTrabajoConyugue: direccionTrabajoConyugue,
+                        tiempoLaborarConyugue: tiempoLaborarConyugue,
                         nombreFamiliarCercano: nombreFamiliarCercano,
                         telefonoFamiliarCercano: telefonoFamiliarCercano,
                         objParentescoFamiliarCercanoId:

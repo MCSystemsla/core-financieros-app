@@ -199,6 +199,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         return (false, resp['message'] as String);
       }
       _logger.i(resp);
+      _logger.i(endpoint.body);
 
       return (true, resp['message'] as String);
     } catch (e) {

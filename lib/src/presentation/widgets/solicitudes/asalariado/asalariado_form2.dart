@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -39,12 +40,14 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
   String? nombreEntidadPeps;
   String? periodoFamiliarPeps;
   String? paisPepsFamiliar;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -105,6 +108,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: JLuxDropdown(
+                validator: (value) => ClassValidator.validateRequired(value),
                 dropdownColor: Colors.white,
                 isContainIcon: true,
                 title:
@@ -236,6 +240,8 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
+
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         beneficiarioSeguro: beneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco,

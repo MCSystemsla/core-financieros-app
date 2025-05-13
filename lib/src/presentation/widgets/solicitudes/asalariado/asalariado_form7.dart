@@ -16,6 +16,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -38,6 +40,7 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
+  String? ubicacion;
   DateTime? fechaPrimerPago;
   DateTime? fechaDesembolso;
   double? tasaInteres;
@@ -260,6 +263,19 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
               },
             ),
             const Gap(20),
+            OutlineTextfieldWidget(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Ubicacion',
+              hintText: 'Ingresa Ubicacion',
+              isValid: null,
+              onChange: (value) {
+                ubicacion = value;
+              },
+            ),
+            const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
@@ -268,48 +284,49 @@ class _AsalariadoForm7State extends State<AsalariadoForm7> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () async {
                   if (!formKey.currentState!.validate()) return;
-                  // if (double.tryParse(monto ?? '0') == 0) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title: 'El monto no puede ser 0',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // if (double.tryParse(monto ?? '0')! <
-                  //     montoMinimo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // if (double.tryParse(monto ?? '0')! >
-                  //     montoMaximo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // calcularCuotaProvider.calcularCantidadCuotas(
-                  //   fechaDesembolso: fechaDesembolso!,
-                  //   fechaPrimeraCuota: fechaPrimerPago!,
-                  //   plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                  //   formadePago: frecuenciaDePago!.name,
-                  //   saldoPrincipal: double.parse(monto ?? '0'),
-                  //   tasaInteresMensual: tasaInteres!,
-                  // );
+                  if (double.tryParse(monto ?? '0') == 0) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'El monto no puede ser 0',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! <
+                      montoMinimo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! >
+                      montoMaximo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  calcularCuotaProvider.calcularCantidadCuotas(
+                    fechaDesembolso: fechaDesembolso!,
+                    fechaPrimeraCuota: fechaPrimerPago!,
+                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                    formadePago: frecuenciaDePago!.name,
+                    saldoPrincipal: double.parse(monto ?? '0'),
+                    tasaInteresMensual: tasaInteres ?? 0,
+                  );
                   await CuotaDataDialog(
                     context: context,
                     title:
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                            ubicacion: ubicacion,
                             // objFrecuenciaIdVer: frecuenciaDePago?.name,
                             // tasaInteres: tasaInteres,
                             // fechaDesembolso:

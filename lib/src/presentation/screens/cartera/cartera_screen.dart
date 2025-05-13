@@ -60,21 +60,21 @@ class CarteraScreen extends StatelessWidget {
               //     size: 35,
               //   ),
               // ),
-              // TODO: CAMBIAR ESTOY CUANDO SALGA SOLICITUDES
-              // _Card(
-              //   onTap: () {
-              //     context.push('/solicitudes');
-              //   },
-              //   title: 'Solicitudes',
-              //   subtitle: 'Modulo Solicitudes de Credito',
-              //   firstColor: AppColors.blueIndigo,
-              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              //   icon: const Icon(
-              //     Icons.description,
-              //     color: AppColors.white,
-              //     size: 35,
-              //   ),
-              // ),
+              // TODO: CAMBIAR ESTO CUANDO SALGA SOLICITUDES
+              _Card(
+                onTap: () {
+                  context.push('/solicitudes');
+                },
+                title: 'Solicitudes',
+                subtitle: 'Modulo Solicitudes de Credito',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.description,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 _Card(
                   onTap: () async {

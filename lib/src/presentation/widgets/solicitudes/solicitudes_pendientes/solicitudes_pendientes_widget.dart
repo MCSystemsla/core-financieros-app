@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/offline/crear_solicitud_offline_screen.dart';
@@ -253,6 +254,169 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
         location: solicitud.celularReprestamo ?? 'N/A',
         dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
         dateToEnd: 'Fecha',
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
+class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
+  final AsalariadoResponsesLocalDb solicitud;
+  const SolicitudesAsalariadoPendientesWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(AsalariadoResponsesLocalDb respuesta) {
+      var valores = [
+        respuesta.nombre1,
+        respuesta.nombre2,
+        respuesta.apellido1,
+        respuesta.apellido2,
+        respuesta.cedula,
+        respuesta.objPaisEmisorCedula,
+        respuesta.fechaEmisionCedula,
+        respuesta.fechaVencimientoCedula,
+        respuesta.fechaNacimiento,
+        respuesta.telefono,
+        respuesta.celular,
+        respuesta.direccionCasa,
+        respuesta.barrioCasa,
+        respuesta.objMunicipioCasaId,
+        respuesta.objDepartamentoCasaId,
+        respuesta.objPaisCasaId,
+        respuesta.profesion,
+        respuesta.ocupacion,
+        respuesta.nacionalidad,
+        respuesta.objCondicionCasaId,
+        respuesta.anosResidirCasa,
+        respuesta.email,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objSectorId,
+        respuesta.personasACargo,
+        respuesta.objEstadoCivilId,
+        respuesta.nombreConyugue,
+        respuesta.trabajaConyugue,
+        respuesta.trabajoConyugue,
+        respuesta.direccionTrabajoConyugue,
+        respuesta.telefonoTrabajoConyugue,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.objEstadoSolicitudId,
+        respuesta.objOficialCreditoId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.sucursal,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.ubicacionGradosLongitud,
+        respuesta.ubicacionGradosLatitud,
+        respuesta.objEscolaridadId,
+        respuesta.cantidadHijos,
+        respuesta.nombrePublico,
+        respuesta.objSexoId,
+        respuesta.objPaisNacimientoId,
+        respuesta.nacionalidadConyugue,
+        respuesta.ubicacion,
+        respuesta.espeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.codigoRed,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud,
+        respuesta.nombreTrabajo,
+        respuesta.direccionTrabajo,
+        respuesta.barrioTrabajo,
+        respuesta.objActividadEconomicaId,
+        respuesta.objActividadEconomicaId1,
+        respuesta.objActividadEconomicaId2,
+        respuesta.cargo,
+        respuesta.direccionFamiliarCercano,
+        respuesta.duenoVivienda,
+        respuesta.fechaVenceAvaluoAsalariado,
+        respuesta.fuenteOtrosIngresos,
+        respuesta.fuenteOtrosIngresosConyugue,
+        respuesta.lugarTrabajoAnterior,
+        respuesta.nombreFamiliarCercano,
+        respuesta.objParentescoFamiliarCercanoId,
+        respuesta.otrosIngresosConyugue,
+        respuesta.otrosIngresosCordoba,
+        respuesta.pagoAlquiler,
+        respuesta.profesionConyugue,
+        respuesta.salarioNetoCordoba,
+        respuesta.sueldoMesConyugue,
+        respuesta.telefonoFamiliarCercano,
+        respuesta.telefonoTrabajo,
+        respuesta.tiempoLaborar,
+        respuesta.tiempoLaborarConyugue,
+        respuesta.totalIngresoMes,
+        respuesta.totalIngresoMesConyugue,
+      ];
+
+      int camposLlenos = valores
+          .where((valor) =>
+              valor != null &&
+              valor.toString().trim().isNotEmpty &&
+              valor.toString().trim() != '0')
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
+        onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) => ReprestamoOfflineView(
+          //       solicitudReprestamoOffline: solicitud,
+          //     ),
+          //   ),
+          // );
+        },
+        title:
+            '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1}'
+                .capitalizeAll,
+        location: solicitud.cedula ?? 'N/A',
+        dateToEnd: solicitud.fechaNacimiento?.selectorFormat() ?? 'N/A',
+        dateToStart: solicitud.email ?? 'N/A',
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),

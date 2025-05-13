@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -19,6 +20,7 @@ class ObjectBoxService {
   late final Box<DepartmentsLocalDb> departmentsBox;
   late final Box<ResponseLocalDb> solicitudesResponsesBox;
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
+  late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -30,6 +32,8 @@ class ObjectBoxService {
     solicitudesResponsesBox = _store.box<ResponseLocalDb>();
     solicitudesReprestamoResponsesBox =
         _store.box<ReprestamoResponsesLocalDb>();
+    solicitudesAsalariadoResponsesBox =
+        _store.box<AsalariadoResponsesLocalDb>();
     // solicitudesReprestamoResponsesBox.removeAll();
   }
 
@@ -235,6 +239,20 @@ class ObjectBoxService {
     }
   }
 
+  AsalariadoResponsesLocalDb saveSolicitudesAsalariadoResponses({
+    required AsalariadoResponsesLocalDb responseAsalariadoLocalDb,
+  }) {
+    try {
+      responseAsalariadoLocalDb.id = 0;
+      solicitudesAsalariadoResponsesBox.put(responseAsalariadoLocalDb);
+      _logger.i('Creado');
+      return responseAsalariadoLocalDb;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
   void updateSolicitudNuevaMenorById({
     required int id,
     required ResponseLocalDb responseLocalDb,
@@ -269,6 +287,24 @@ class ObjectBoxService {
     }
   }
 
+  void updateSolicitudAsalariadoById({
+    required int id,
+    required AsalariadoResponsesLocalDb asalariadoResponsesLocalDb,
+  }) {
+    try {
+      asalariadoResponsesLocalDb.id = id;
+      final solicitud =
+          solicitudesAsalariadoResponsesBox.get(asalariadoResponsesLocalDb.id);
+      if (solicitud != null) {
+        solicitudesAsalariadoResponsesBox.put(asalariadoResponsesLocalDb,
+            mode: PutMode.update);
+      }
+      _logger.i('Actualizando');
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
   List<ResponseLocalDb> getSolicitudesResponse() {
     try {
       final resp = solicitudesResponsesBox.getAll();
@@ -282,6 +318,16 @@ class ObjectBoxService {
   List<ReprestamoResponsesLocalDb> getSolicitudesReprestamoResponse() {
     try {
       final resp = solicitudesReprestamoResponsesBox.getAll();
+      return resp;
+    } catch (e) {
+      _logger.e(e.toString());
+      throw AppException.toAppException(e);
+    }
+  }
+
+  List<AsalariadoResponsesLocalDb> getSolicitudesAsalariadoResponse() {
+    try {
+      final resp = solicitudesAsalariadoResponsesBox.getAll();
       return resp;
     } catch (e) {
       _logger.e(e.toString());

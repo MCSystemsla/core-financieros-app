@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
@@ -27,6 +28,22 @@ class AsalariadoForm1 extends StatefulWidget {
 }
 
 class _AsalariadoForm1State extends State<AsalariadoForm1> {
+  String? locationLatitude;
+  String? locationLongitude;
+
+  @override
+  void initState() {
+    GeolocationService(context: context).getCurrentLocation().then(
+      (value) {
+        if (value == null) return;
+        locationLatitude = value.latitude.toString();
+        locationLongitude = value.longitude.toString();
+      },
+    );
+
+    super.initState();
+  }
+
   String? cedula;
   String? primerNombre;
   String? segundoNombre;
@@ -52,6 +69,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
   String? tipoPersona;
   String? nacionalidad;
   String? estadoCivil;
+  final formKey = GlobalKey<FormState>();
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -127,7 +145,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
-        // key: formKey,
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -141,6 +159,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 cedula = value;
               },
@@ -149,6 +168,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 primerNombre = value;
               },
@@ -165,6 +185,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 primerApellido = value;
               },
@@ -189,6 +210,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaNacimiento?.selectorFormat()),
               initialValue: fechaNacimiento?.selectorFormat(),
               onTap: () => selectFechaNacimiento(context),
               hintText: fechaNacimiento?.selectorFormat(),
@@ -198,6 +221,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
               hintText: 'Ingresa Pais',
               onChanged: (item) {
                 paisNacimiento = item?.valor;
@@ -216,6 +241,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             // ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'SEXO',
               onChanged: (item) {
                 sexo = item?.value;
@@ -261,6 +288,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 tipoDocumento = item?.value;
@@ -270,6 +299,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'TIPOSPERSONACREDITO',
               onChanged: (item) {
                 tipoPersona = item?.value;
@@ -287,6 +318,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 estadoCivil = item?.value;
                 setState(() {});
@@ -306,6 +339,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             CountryInput(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 celular = value;
               },
@@ -342,6 +376,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'ESCOLARIDAD',
               onChanged: (item) {
                 escolaridad = item?.value;
@@ -363,12 +399,19 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
               child: CustomElevatedButton(
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
+                onPressed: () async {
+                  if (!formKey.currentState!.validate()) return;
+                  if (locationLatitude == null && locationLongitude == null) {
+                    final position = await GeolocationService(context: context)
+                        .getCurrentLocation();
+                    locationLatitude = position?.latitude.toString();
+                    locationLongitude = position?.longitude.toString();
+                  }
+                  if (!context.mounted) return;
+
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        ubicacionLatitud: locationLatitude,
+                        ubicacionLongitud: locationLongitude,
                         cedula: cedula,
                         nombre1: primerNombre,
                         nombre2: segundoNombre,
@@ -399,6 +442,10 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
                         objEscolaridadId: escolaridad,
                         profesion: profesion,
                       );
+                  widget.controller.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
                 },
               ),
             ),
@@ -407,12 +454,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
+                  context.pop();
                 },
-                text: 'Atras',
+                text: 'Salir',
                 textColor: AppColors.red,
                 color: AppColors.red,
               ),
