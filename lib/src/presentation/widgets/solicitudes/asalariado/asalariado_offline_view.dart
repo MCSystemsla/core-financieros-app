@@ -10,7 +10,7 @@ class AsalariadoOfflineView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Trabajar en asalariado offline
+    /// TODO: Trabajar en asalariado offline
     return const Placeholder();
   }
 }
