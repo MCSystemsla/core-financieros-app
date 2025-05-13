@@ -148,84 +148,86 @@ class _AsalariadoForm6State extends State<AsalariadoForm6> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                direccionTrabajoConyugue = value;
-              },
-              title: 'Direccion de la Empresa',
-              icon: const Icon(Icons.badge_outlined),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                tiempoLaborarConyugue = value;
-              },
-              title: 'Tiempo de laborar',
-              icon: const Icon(Icons.badge_outlined),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                salarioNetoMensualConyuge = value;
-              },
-              title: 'Salario Neto Mensual (C\$)',
-              icon: const Icon(Icons.attach_money_outlined),
-              textInputType: TextInputType.number,
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                otrosIngresosConyuge = value;
-              },
-              title: 'Otros ingresos (C\$)',
-              icon: const Icon(Icons.money_off_csred_outlined),
-              textInputType: TextInputType.number,
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                fuenteOtrosIngresosConyuge = value;
-              },
-              title: 'Fuentes otros ingresos',
-              icon: const Icon(Icons.source_outlined),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                totalIngresosMesConyuge = value;
-              },
-              title: 'Total ingresos mes (C\$)',
-              icon: const Icon(Icons.calculate_outlined),
-              textInputType: TextInputType.number,
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                observaciones = value;
-              },
-              title: 'Observaciones',
-              icon: const Icon(Icons.note_alt_outlined),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreDelaEmpresaConyuge = value;
-              },
-              title: 'Nombres de la empresa',
-              icon: const Icon(Icons.business_outlined),
-            ),
-            const Gap(30),
-            CountryInput(
-              onChange: (value) {
-                telefonoOficinaConyuge = value;
-              },
-              maxLength: 15,
-              isRequired: false,
-              title: 'Teléfono Oficina',
-              icon: const Icon(Icons.phone_iphone_outlined),
-              textInputType: TextInputType.phone,
-            ),
+            if (trabajaConyuge == 'input.yes'.tr()) ...[
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  direccionTrabajoConyugue = value;
+                },
+                title: 'Direccion de la Empresa',
+                icon: const Icon(Icons.badge_outlined),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  tiempoLaborarConyugue = value;
+                },
+                title: 'Tiempo de laborar',
+                icon: const Icon(Icons.badge_outlined),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  salarioNetoMensualConyuge = value;
+                },
+                title: 'Salario Neto Mensual (C\$)',
+                icon: const Icon(Icons.attach_money_outlined),
+                textInputType: TextInputType.number,
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  otrosIngresosConyuge = value;
+                },
+                title: 'Otros ingresos (C\$)',
+                icon: const Icon(Icons.money_off_csred_outlined),
+                textInputType: TextInputType.number,
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  fuenteOtrosIngresosConyuge = value;
+                },
+                title: 'Fuentes otros ingresos',
+                icon: const Icon(Icons.source_outlined),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  totalIngresosMesConyuge = value;
+                },
+                title: 'Total ingresos mes (C\$)',
+                icon: const Icon(Icons.calculate_outlined),
+                textInputType: TextInputType.number,
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  observaciones = value;
+                },
+                title: 'Observaciones',
+                icon: const Icon(Icons.note_alt_outlined),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  nombreDelaEmpresaConyuge = value;
+                },
+                title: 'Nombres de la empresa',
+                icon: const Icon(Icons.business_outlined),
+              ),
+              const Gap(30),
+              CountryInput(
+                onChange: (value) {
+                  telefonoOficinaConyuge = value;
+                },
+                maxLength: 15,
+                isRequired: false,
+                title: 'Teléfono Oficina',
+                icon: const Icon(Icons.phone_iphone_outlined),
+                textInputType: TextInputType.phone,
+              ),
+            ],
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -123,48 +123,50 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreEntidad = value;
-              },
-              title: 'Nombre de la Entidad',
-              icon: const Icon(Icons.account_balance),
-            ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              hintText: 'Ingresa Pais',
-              title: 'Pais',
-              onChanged: (item) {
-                if (item == null) return;
-                paisPeps = item.valor;
-                // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                // depWhereClause = item.valor;
+            if (esPeps == 'input.yes'.tr()) ...[
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  nombreEntidad = value;
+                },
+                title: 'Nombre de la Entidad',
+                icon: const Icon(Icons.account_balance),
+              ),
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                hintText: 'Ingresa Pais',
+                title: 'Pais',
+                onChanged: (item) {
+                  if (item == null) return;
+                  paisPeps = item.valor;
+                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
+                  // depWhereClause = item.valor;
 
-                setState(() {});
-              },
-              codigo: 'PAIS',
-              // validator: (value) =>
-              //     ClassValidator.validateRequired(value?.valor),
-              // initialValue: paisEmisor ?? '',
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                periodoPeps = value;
-              },
-              title: 'Periodo',
-              icon: const Icon(Icons.date_range),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                cargoOficialPeps = value;
-              },
-              title: 'Cargo Oficial',
-              icon: const Icon(Icons.work),
-            ),
-            const Gap(30),
+                  setState(() {});
+                },
+                codigo: 'PAIS',
+                // validator: (value) =>
+                //     ClassValidator.validateRequired(value?.valor),
+                // initialValue: paisEmisor ?? '',
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  periodoPeps = value;
+                },
+                title: 'Periodo',
+                icon: const Icon(Icons.date_range),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  cargoOficialPeps = value;
+                },
+                title: 'Cargo Oficial',
+                icon: const Icon(Icons.work),
+              ),
+              const Gap(30),
+            ],
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: JLuxDropdown(
@@ -182,56 +184,58 @@ class _AsalariadoForm2State extends State<AsalariadoForm2> {
                 hintText: 'input.select_option'.tr(),
               ),
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreFamiliarPeps = value;
-              },
-              title: 'Nombre del Familiar',
-              icon: const Icon(Icons.person),
-            ),
-            const Gap(30),
-            SearchDropdownWidget(
-              onChanged: (item) {
-                parentescoFamiliarPeps = item?.value;
-                setState(() {});
-              },
-              codigo: 'PARENTESCO',
-              title: 'Parentesco',
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                cargoFamiliarPeps = value;
-              },
-              title: 'Cargo del Familiar',
-              icon: const Icon(Icons.work),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreEntidadPeps = value;
-              },
-              title: 'Nombre de la Entidad',
-              icon: const Icon(Icons.account_balance),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                periodoFamiliarPeps = value;
-              },
-              title: 'Periodo',
-              icon: const Icon(Icons.date_range),
-            ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              hintText: 'Ingresa Pais',
-              codigo: 'PAIS',
-              title: 'País',
-              onChanged: (item) {
-                paisPepsFamiliar = item?.valor;
-              },
-            ),
+            if (familiarPeps == 'input.yes'.tr()) ...[
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  nombreFamiliarPeps = value;
+                },
+                title: 'Nombre del Familiar',
+                icon: const Icon(Icons.person),
+              ),
+              const Gap(30),
+              SearchDropdownWidget(
+                onChanged: (item) {
+                  parentescoFamiliarPeps = item?.value;
+                  setState(() {});
+                },
+                codigo: 'PARENTESCO',
+                title: 'Parentesco',
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  cargoFamiliarPeps = value;
+                },
+                title: 'Cargo del Familiar',
+                icon: const Icon(Icons.work),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  nombreEntidadPeps = value;
+                },
+                title: 'Nombre de la Entidad',
+                icon: const Icon(Icons.account_balance),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                onChange: (value) {
+                  periodoFamiliarPeps = value;
+                },
+                title: 'Periodo',
+                icon: const Icon(Icons.date_range),
+              ),
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                hintText: 'Ingresa Pais',
+                codigo: 'PAIS',
+                title: 'País',
+                onChanged: (item) {
+                  paisPepsFamiliar = item?.valor;
+                },
+              ),
+            ],
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
