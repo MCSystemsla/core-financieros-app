@@ -884,9 +884,9 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 1024,
-                    maxWidth: 1024,
-                    imageQuality: 70,
+                    maxHeight: 1080,
+                    maxWidth: 1920,
+                    imageQuality: 45,
                     preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;
@@ -953,9 +953,9 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 1024,
-                    maxWidth: 1024,
-                    imageQuality: 70,
+                    maxHeight: 1080,
+                    maxWidth: 1920,
+                    imageQuality: 45,
                     preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;
@@ -1027,9 +1027,9 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 try {
                   final photo = await picker.pickImage(
                     source: ImageSource.camera,
-                    maxHeight: 1024,
-                    maxWidth: 1024,
-                    imageQuality: 70,
+                    maxHeight: 1080,
+                    maxWidth: 1920,
+                    imageQuality: 45,
                     preferredCameraDevice: CameraDevice.rear,
                   );
                   if (!mounted || photo == null) return;

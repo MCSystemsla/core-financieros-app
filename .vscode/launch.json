@@ -13,6 +13,18 @@
           "micreditoNicaragua"
         ]
       },
+      {
+        "name": "MiCrédito Nicaragua (LOCAL)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--dart-define-from-file",
+          "api-key-local.json",
+           "--flavor",
+          "micreditoNicaragua"
+        ]
+      },
      
       {
         "name": "MiCrédito Nicaragua (PROD)",

@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +49,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
     );
     if (picked != null && picked != _selectedDate) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isAfter(DateTime.now())) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -145,7 +146,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              // onTap: () => selectDate(context),
+              onTap: () => selectDate(context),
               readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
@@ -153,8 +154,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               ),
               title: 'Fecha Emision Cedula',
               isRequired: true,
-
-              hintText: 'Selecciona Fecha',
+              hintText: _selectedDate?.selectorFormat() ?? 'Selecciona Fecha',
               isValid: null,
             ),
             // const Gap(30),

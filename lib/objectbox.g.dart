@@ -1212,7 +1212,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(12, 4888282068940134747),
       name: 'AsalariadoResponsesLocalDb',
-      lastPropertyId: const obx_int.IdUid(114, 8436293950302245757),
+      lastPropertyId: const obx_int.IdUid(115, 634071419170633261),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -1783,6 +1783,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(114, 8436293950302245757),
             name: 'isOffline',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(115, 634071419170633261),
+            name: 'hasVerified',
             type: 1,
             flags: 0)
       ],
@@ -3897,7 +3902,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final errorMsgOffset = object.errorMsg == null
               ? null
               : fbb.writeString(object.errorMsg!);
-          fbb.startTable(115);
+          fbb.startTable(116);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, objOrigenSolicitudIdOffset);
           fbb.addOffset(2, databaseOffset);
@@ -4015,6 +4020,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(111, errorMsgOffset);
           fbb.addBool(112, object.isDone);
           fbb.addBool(113, object.isOffline);
+          fbb.addBool(114, object.hasVerified);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -4031,6 +4037,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 170);
           final fechaVenceAvaluoAsalariadoValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 190);
+          final hasVerifiedParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 232);
           final isOfflineParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 230);
           final errorMsgParam = const fb.StringReader(asciiOptimization: true)
@@ -4338,6 +4346,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final totalIngresoMesConyugueParam = const fb.Float64Reader()
               .vTableGetNullable(buffer, rootOffset, 224);
           final object = AsalariadoResponsesLocalDb(
+              hasVerified: hasVerifiedParam,
               isOffline: isOfflineParam,
               errorMsg: errorMsgParam,
               isDone: isDoneParam,
@@ -5962,4 +5971,9 @@ class AsalariadoResponsesLocalDb_ {
   /// See [AsalariadoResponsesLocalDb.isOffline].
   static final isOffline = obx.QueryBooleanProperty<AsalariadoResponsesLocalDb>(
       _entities[8].properties[113]);
+
+  /// See [AsalariadoResponsesLocalDb.hasVerified].
+  static final hasVerified =
+      obx.QueryBooleanProperty<AsalariadoResponsesLocalDb>(
+          _entities[8].properties[114]);
 }

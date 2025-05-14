@@ -275,6 +275,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
   }) {
     emit(
       state.copyWith(
+        idLocalResponse: idLocalResponse,
         errorMsg: errorMsg,
         isDone: isDone,
         isOffline: isOffline,
@@ -398,6 +399,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       localDbProvider.updateSolicitudAsalariadoById(
         id: state.idLocalResponse,
         asalariadoResponsesLocalDb: AsalariadoResponsesLocalDb(
+          hasVerified: state.hasVerified,
           isOffline: state.isOffline,
           objOrigenSolicitudId: state.objOrigenSolicitudId,
           database: state.database,
@@ -522,6 +524,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesAsalariadoResponses(
       responseAsalariadoLocalDb: AsalariadoResponsesLocalDb(
+        hasVerified: state.hasVerified,
         isOffline: state.isOffline,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         database: state.database,

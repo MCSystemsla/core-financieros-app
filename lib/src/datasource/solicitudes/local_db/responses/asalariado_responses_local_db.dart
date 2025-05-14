@@ -118,7 +118,9 @@ class AsalariadoResponsesLocalDb {
   String? errorMsg;
   bool? isDone;
   bool? isOffline;
+  bool? hasVerified;
   AsalariadoResponsesLocalDb({
+    this.hasVerified,
     this.isOffline,
     this.errorMsg,
     this.isDone,

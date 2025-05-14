@@ -2,6 +2,7 @@
 part of 'solicitud_asalariado_cubit.dart';
 
 class SolicitudAsalariadoState extends Equatable {
+  final bool hasVerified;
   final bool isOffline;
   final bool isDone;
   final int idLocalResponse;
@@ -119,6 +120,7 @@ class SolicitudAsalariadoState extends Equatable {
   final double totalIngresoMes;
   final double totalIngresoMesConyugue;
   const SolicitudAsalariadoState({
+    this.hasVerified = false,
     this.isOffline = false,
     this.isDone = false,
     this.idLocalResponse = 0,
@@ -239,6 +241,7 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        hasVerified,
         isOffline,
         isDone,
         idLocalResponse,
@@ -358,6 +361,7 @@ class SolicitudAsalariadoState extends Equatable {
       ];
 
   SolicitudAsalariadoState copyWith({
+    bool? hasVerified,
     bool? isOffline,
     bool? isDone,
     int? idLocalResponse,
@@ -476,6 +480,7 @@ class SolicitudAsalariadoState extends Equatable {
     double? totalIngresoMesConyugue,
   }) {
     return SolicitudAsalariadoState(
+      hasVerified: hasVerified ?? this.hasVerified,
       isOffline: isOffline ?? this.isOffline,
       isDone: isDone ?? this.isDone,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,

@@ -82,8 +82,9 @@ class ObjectBoxService {
           .find();
 
       final represtamos = sendSolicitudReprestamoWhenIsDone();
+      final asalariados = sendSolicitudAsalariadoWhenIsDone();
 
-      return [...nuevas, ...represtamos];
+      return [...nuevas, ...represtamos, ...asalariados];
     } catch (e) {
       _logger.e(e.toString());
       rethrow;
@@ -96,6 +97,21 @@ class ObjectBoxService {
           .query(ReprestamoResponsesLocalDb_.isDone
               .equals(true)
               .and(ReprestamoResponsesLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+      return solicitudes;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  List<AsalariadoResponsesLocalDb> sendSolicitudAsalariadoWhenIsDone() {
+    try {
+      final solicitudes = solicitudesAsalariadoResponsesBox
+          .query(AsalariadoResponsesLocalDb_.isDone
+              .equals(true)
+              .and(AsalariadoResponsesLocalDb_.hasVerified.equals(false)))
           .build()
           .find();
       return solicitudes;
@@ -339,7 +355,7 @@ class ObjectBoxService {
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
-      solicitudesReprestamoResponsesBox.remove(solicitudId);
+      // solicitudesReprestamoResponsesBox.remove(solicitudId);
     } catch (e) {
       _logger.e(e.toString());
     }
@@ -367,6 +383,8 @@ class ObjectBoxService {
       final solicitud = solicitudesResponsesBox.get(solicitudId);
       final solicitudReprestamo =
           solicitudesReprestamoResponsesBox.get(solicitudId);
+      final solicitudAsalariado =
+          solicitudesAsalariadoResponsesBox.get(solicitudId);
       if (solicitud != null) {
         solicitud.hasVerified = true;
         solicitud.errorMsg = errorMsg;
@@ -379,6 +397,14 @@ class ObjectBoxService {
         solicitudReprestamo.errorMsg = errorMsg;
         solicitudesReprestamoResponsesBox.put(solicitudReprestamo,
             mode: PutMode.update);
+      }
+      if (solicitudAsalariado != null) {
+        solicitudAsalariado.hasVerified = true;
+        solicitudAsalariado.errorMsg = errorMsg;
+        solicitudesAsalariadoResponsesBox.put(
+          solicitudAsalariado,
+          mode: PutMode.update,
+        );
       }
     } catch (e) {
       _logger.e(e.toString());

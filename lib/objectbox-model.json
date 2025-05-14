@@ -1187,7 +1187,7 @@
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "114:8436293950302245757",
+      "lastPropertyId": "115:634071419170633261",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -1759,6 +1759,11 @@
         {
           "id": "114:8436293950302245757",
           "name": "isOffline",
+          "type": 1
+        },
+        {
+          "id": "115:634071419170633261",
+          "name": "hasVerified",
           "type": 1
         }
       ],
