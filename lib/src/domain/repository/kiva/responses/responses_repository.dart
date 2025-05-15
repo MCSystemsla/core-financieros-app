@@ -345,20 +345,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         contentType: MediaType('image', 'png'),
       ));
 
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoCedula',
-      //   fotoCedula,
-      //   filename: fotoCedula,
-      //   contentType: MediaType('image', 'jpeg'),
-      // ));
-      // if (typeSigner == TypeSigner.asesor) {
-      //   request.files.add(await http.MultipartFile.fromPath(
-      //     'fotoFirmaDigitalAsesor',
-      //     fotoFirma,
-      //     filename: fotoFirma,
-      //     contentType: MediaType('image', 'png'),
-      //   ));
-      // }
       request.headers.addAll(
         {
           'Accept': 'application/json',

@@ -75,12 +75,12 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -469,12 +469,12 @@ class _MiCrediEstudioRecurrenteFormState
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

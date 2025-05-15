@@ -9,6 +9,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
   KivaRouteCubit() : super(KivaRouteInitial());
 
   void setCurrentRouteProduct({
+    int? tableRowId,
     required String route,
     required String solicitudId,
     required String nombre,
@@ -29,5 +30,6 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
       cedula: cedula,
     ));
     log('Solicitud ${state.solicitudId} - Route ${state.currentRoute}');
+    log('CEDULA ${state.cedula} - Route ${state.currentRoute}');
   }
 }

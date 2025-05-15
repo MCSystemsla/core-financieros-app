@@ -6,7 +6,6 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
@@ -40,13 +39,6 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isCorrectNetwork =
-        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
-    if (!isCorrectNetwork) {
-      return const VpnNoFound(
-        routeIsVpnConnected: '/cartera/formulario-kiva',
-      );
-    }
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -74,6 +66,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                       ..numero = e.numero
                       ..producto = e.producto
                       ..solicitudId = e.id
+                      ..cedula = e.cedula
                       ..sucursal = LocalStorage().database
                       ..nombre = e.nombre
                       ..monto = double.tryParse(e.monto.toString()) ?? 0.00

@@ -19,4 +19,5 @@ class SolicitudesPendientes {
   String? motivoAnterior;
   int? cantidadHijos;
   String? cedula;
+  bool? isSended = false;
 }

@@ -79,12 +79,12 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                   );
 
               if (!context.mounted) return;
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    widget.typeProduct,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       widget.typeProduct,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -393,12 +393,12 @@ class _EstandarFormState extends State<EstandarForm> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

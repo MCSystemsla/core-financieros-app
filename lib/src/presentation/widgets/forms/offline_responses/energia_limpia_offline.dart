@@ -74,12 +74,12 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
 
               await customPopUp(
                 context: context,
@@ -332,12 +332,12 @@ class _RecurrenteEnergiaLimpiaOfflineState
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
 
               await customPopUp(
                 context: context,

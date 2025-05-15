@@ -427,6 +427,14 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                         ).showDialog(context, dialogType: DialogType.error);
                       }
                       if (state.status == Status.done) {
+                        context
+                            .read<SolicitudesPendientesLocalDbCubit>()
+                            .updateIsSendedOnSolicitud(
+                              solicitudId: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .solicitudId,
+                            );
                         final signatureImage = await controller.toPngBytes();
                         final directory =
                             await getApplicationDocumentsDirectory();
@@ -502,6 +510,14 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -827,6 +843,14 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =

@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 
 part 'internet_connection_state.dart';
 
@@ -18,28 +17,16 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   ///   el tipo de conectividad y si la red es válida.
   Future<void> getInternetStatusConnection() async {
     final isConnected = await InternetConnectionChecker().hasConnection;
-    const isInProdMode = bool.fromEnvironment('isProdMode');
-    if (!isInProdMode) {
-      emit(
-        state.copyWith(
-          currentIp: 'DEVMODE',
-          isConnected: isConnected,
-          isCorrectNetwork: true,
-        ),
-      );
-    }
 
     final connectivityResult = await Connectivity().checkConnectivity();
-    final info = NetworkInfo();
+    // final info = NetworkInfo();
 
-    if (isConnected && isInProdMode) {
+    if (isConnected) {
       if (_isValidPhoneConnection(connections: connectivityResult)) {
-        final wifiIp = await info.getWifiIP();
-
         emit(state.copyWith(
-          isConnected: true,
-          isCorrectNetwork: wifiIp != null && _isValidNetwork(wifiIp: wifiIp),
-          currentIp: wifiIp ?? 'Unknown IP',
+          isConnected: isConnected,
+          isCorrectNetwork: true,
+          currentIp: 'Unknown IP',
         ));
         return;
       }
@@ -59,12 +46,12 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   /// - `172.16`
   ///
 
-  bool _isValidNetwork({String? wifiIp}) {
-    if (wifiIp == null) return false;
-    return wifiIp.startsWith('172.17.5.') ||
-        wifiIp.startsWith('10.212.134.') ||
-        wifiIp.startsWith('172.16');
-  }
+  // bool _isValidNetwork({String? wifiIp}) {
+  //   if (wifiIp == null) return false;
+  //   return wifiIp.startsWith('172.17.5.') ||
+  //       wifiIp.startsWith('10.212.134.') ||
+  //       wifiIp.startsWith('172.16');
+  // }
 
   bool _isValidPhoneConnection({
     required List<ConnectivityResult> connections,

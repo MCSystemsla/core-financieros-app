@@ -73,12 +73,12 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
 
               await customPopUp(
                 context: context,
@@ -374,12 +374,12 @@ class _RecurrenteMujerEmprendeOfflineState
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
 
               await customPopUp(
                 context: context,

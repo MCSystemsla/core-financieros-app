@@ -317,6 +317,14 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -810,6 +818,14 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =

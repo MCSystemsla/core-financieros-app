@@ -96,6 +96,25 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<void> updateIsSendedOnSolicitud({required String solicitudId}) async {
+    // await Future.delayed(const Duration(seconds: 3));
+    try {
+      // Actualiza el campo isSended en true solo para la solicitud con el id dado
+      await state.isar!.writeTxn(() async {
+        final existing = await state.isar!.solicitudesPendientes
+            .filter()
+            .solicitudIdEqualTo(solicitudId)
+            .findFirst();
+        if (existing != null) {
+          existing.isSended = true;
+          await state.isar!.solicitudesPendientes.put(existing);
+        }
+      });
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
   Future<void> getSolicitudes() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -105,6 +124,19 @@ class SolicitudesPendientesLocalDbCubit
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  Future<void> getSolicitudesUploaded() async {
+    try {
+      final solicitudes = await state.isar!.solicitudesPendientes
+          .filter()
+          .isSendedEqualTo(true)
+          .findAll();
+
+      emit(state.copyWith(solicitudes: solicitudes));
+    } catch (e) {
+      _logger.e(e);
     }
   }
 
@@ -200,7 +232,7 @@ class SolicitudesPendientesLocalDbCubit
     emit(state.copyWith(status: Status.inProgress));
     try {
       log('Solicitud id: ${solicitudRecurrenteId.toString()}');
-      final solicitud = await state.isar!.imageModels
+      final solicitud = await state.isar?.imageModels
           .filter()
           .solicitudIdEqualTo(solicitudRecurrenteId)
           .findFirst();

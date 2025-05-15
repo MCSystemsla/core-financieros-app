@@ -8,6 +8,7 @@ class UploadUserFileState extends Equatable {
   final String imagen4;
   final String fotoFirma;
   final TypeSigner typeSigner;
+  final Status status;
   const UploadUserFileState({
     this.imagen3 = '',
     this.imagen4 = '',
@@ -15,6 +16,7 @@ class UploadUserFileState extends Equatable {
     this.imagen2 = '',
     this.fotoFirma = '',
     this.typeSigner = TypeSigner.ninguno,
+    this.status = Status.notStarted,
   });
 
   @override
@@ -25,6 +27,7 @@ class UploadUserFileState extends Equatable {
         imagen4,
         fotoFirma,
         typeSigner,
+        status,
       ];
 
   UploadUserFileState copyWith({
@@ -34,6 +37,7 @@ class UploadUserFileState extends Equatable {
     String? imagen4,
     String? fotoFirma,
     TypeSigner? typeSigner,
+    Status? status,
   }) {
     return UploadUserFileState(
       imagen1: imagen1 ?? this.imagen1,
@@ -42,6 +46,7 @@ class UploadUserFileState extends Equatable {
       imagen4: imagen4 ?? this.imagen4,
       fotoFirma: fotoFirma ?? this.fotoFirma,
       typeSigner: typeSigner ?? this.typeSigner,
+      status: status ?? this.status,
     );
   }
 }

@@ -352,6 +352,14 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -676,6 +684,14 @@ class _EstandarSignState extends State<EstandarSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               FocusScope.of(context).unfocus();
                               final directory =
                                   await getApplicationDocumentsDirectory();
@@ -1070,43 +1086,6 @@ class _SaneamientoContentState extends State<SaneamientoContent>
                 }
               },
             ),
-            // UploadImageWidget(
-            //   selectedImage: selectedImage4,
-            //   title: '4-  ${'Agregar foto de cedula'.tr()}',
-            //   onPressed: () async {
-            //     await picker
-            //         .pickImage(
-            //       source: ImageSource.camera,
-            //       maxHeight: 600,
-            //       maxWidth: 600,
-            //       imageQuality: 85,
-            //     )
-            //         .then(
-            //       (XFile? photo) async {
-            //         if (photo != null) {
-            //           final appDir = await getApplicationDocumentsDirectory();
-            //           final customDir = Directory('${appDir.path}/MyImages');
-
-            //           // Crea el directorio si no existe
-            //           if (!await customDir.exists()) {
-            //             await customDir.create(recursive: true);
-            //             log('Directorio creado: ${customDir.path}');
-            //           }
-            //           // Define la ruta de la imagen en el directorio
-            //           final localPath =
-            //               '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-            //           // Copia la imagen seleccionada al directorio
-            //           final imageFile = File(photo.path);
-            //           await imageFile.copy(localPath);
-            //           selectedImage4 = photo;
-            //           selectedImage4Path = localPath;
-            //           setState(() {});
-            //         }
-            //       },
-            //     );
-            //   },
-            // ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
@@ -1403,6 +1382,14 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -1727,6 +1714,14 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =

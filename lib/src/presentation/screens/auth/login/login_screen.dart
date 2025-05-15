@@ -1,10 +1,12 @@
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/no_internet_connection_snackbar.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
@@ -49,38 +51,43 @@ class LoginScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Scaffold(
+          return const Scaffold(
             body: PopScope(
               canPop: false,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const ChangeLangWidget(
+                      ChangeLangWidget(
                         child: LoginScreen(),
                       ),
-                      BlocBuilder<LogoCubit, LogoState>(
-                        builder: (context, state) {
-                          if (state is OnLogoSuccess) {
-                            return Image(
-                                height: 200,
-                                image: NetworkImage(
-                                  state.imgUrl,
-                                ));
-                          }
-                          if (state is OnLogoLoading) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (state is OnLogoError) {
-                            return const Text('error');
-                          }
-                          return const SizedBox();
-                        },
-                      ),
+                      Image(
+                          height: 200,
+                          image: AssetImage(
+                            'assets/images/logo_original.png',
+                          )),
+                      // BlocBuilder<LogoCubit, LogoState>(
+                      //   builder: (context, state) {
+                      //     if (state is OnLogoSuccess) {
+                      //       return Image(
+                      //           height: 200,
+                      //           image: NetworkImage(
+                      //             state.imgUrl,
+                      //           ));
+                      //     }
+                      //     if (state is OnLogoLoading) {
+                      //       return const CircularProgressIndicator();
+                      //     }
+                      //     if (state is OnLogoError) {
+                      //       return const Text('error');
+                      //     }
+                      //     return const SizedBox();
+                      //   },
+                      // ),
                       // const Gap(10),
-                      const Expanded(
+                      Expanded(
                         flex: 5,
                         child: LoginFormWidget(),
                       ),
@@ -114,6 +121,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final internetConectionProvider = context.read<InternetConnectionCubit>();
     final TurnstileOptions options = TurnstileOptions(
       size: TurnstileSize.flexible,
       theme: TurnstileTheme.light,
@@ -250,7 +258,19 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   enabled: state.status != Status.inProgress,
                   text: 'button.login'.tr(),
                   color: Colors.black,
-                  onPressed: () {
+                  onPressed: () async {
+                    await internetConectionProvider
+                        .getInternetStatusConnection();
+                    if (!mounted) return;
+                    if (!context.mounted) return;
+                    if (!internetConectionProvider.state.isConnected) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        noInternetConnectionSnackbar(),
+                      );
+                      context.pushReplacement('/');
+                      return;
+                    }
                     if (captchaToken == null) {
                       CustomAlertDialog(
                         context: context,

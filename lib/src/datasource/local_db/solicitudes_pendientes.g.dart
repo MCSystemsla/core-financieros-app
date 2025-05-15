@@ -43,48 +43,53 @@ const SolicitudesPendientesSchema = CollectionSchema(
       name: r'idAsesor',
       type: IsarType.long,
     ),
-    r'moneda': PropertySchema(
+    r'isSended': PropertySchema(
       id: 5,
+      name: r'isSended',
+      type: IsarType.bool,
+    ),
+    r'moneda': PropertySchema(
+      id: 6,
       name: r'moneda',
       type: IsarType.string,
     ),
     r'monto': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'monto',
       type: IsarType.double,
     ),
     r'motivoAnterior': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'motivoAnterior',
       type: IsarType.string,
     ),
     r'nombre': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'numero': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'numero',
       type: IsarType.string,
     ),
     r'producto': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'producto',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'solicitudId',
       type: IsarType.string,
     ),
     r'sucursal': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'sucursal',
       type: IsarType.string,
     ),
     r'tipoSolicitud': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'tipoSolicitud',
       type: IsarType.string,
     )
@@ -183,15 +188,16 @@ void _solicitudesPendientesSerialize(
   writer.writeString(offsets[2], object.estado);
   writer.writeDateTime(offsets[3], object.fecha);
   writer.writeLong(offsets[4], object.idAsesor);
-  writer.writeString(offsets[5], object.moneda);
-  writer.writeDouble(offsets[6], object.monto);
-  writer.writeString(offsets[7], object.motivoAnterior);
-  writer.writeString(offsets[8], object.nombre);
-  writer.writeString(offsets[9], object.numero);
-  writer.writeString(offsets[10], object.producto);
-  writer.writeString(offsets[11], object.solicitudId);
-  writer.writeString(offsets[12], object.sucursal);
-  writer.writeString(offsets[13], object.tipoSolicitud);
+  writer.writeBool(offsets[5], object.isSended);
+  writer.writeString(offsets[6], object.moneda);
+  writer.writeDouble(offsets[7], object.monto);
+  writer.writeString(offsets[8], object.motivoAnterior);
+  writer.writeString(offsets[9], object.nombre);
+  writer.writeString(offsets[10], object.numero);
+  writer.writeString(offsets[11], object.producto);
+  writer.writeString(offsets[12], object.solicitudId);
+  writer.writeString(offsets[13], object.sucursal);
+  writer.writeString(offsets[14], object.tipoSolicitud);
 }
 
 SolicitudesPendientes _solicitudesPendientesDeserialize(
@@ -207,15 +213,16 @@ SolicitudesPendientes _solicitudesPendientesDeserialize(
   object.fecha = reader.readDateTimeOrNull(offsets[3]);
   object.id = id;
   object.idAsesor = reader.readLongOrNull(offsets[4]);
-  object.moneda = reader.readStringOrNull(offsets[5]);
-  object.monto = reader.readDoubleOrNull(offsets[6]);
-  object.motivoAnterior = reader.readStringOrNull(offsets[7]);
-  object.nombre = reader.readStringOrNull(offsets[8]);
-  object.numero = reader.readStringOrNull(offsets[9]);
-  object.producto = reader.readStringOrNull(offsets[10]);
-  object.solicitudId = reader.readStringOrNull(offsets[11]);
-  object.sucursal = reader.readStringOrNull(offsets[12]);
-  object.tipoSolicitud = reader.readStringOrNull(offsets[13]);
+  object.isSended = reader.readBoolOrNull(offsets[5]);
+  object.moneda = reader.readStringOrNull(offsets[6]);
+  object.monto = reader.readDoubleOrNull(offsets[7]);
+  object.motivoAnterior = reader.readStringOrNull(offsets[8]);
+  object.nombre = reader.readStringOrNull(offsets[9]);
+  object.numero = reader.readStringOrNull(offsets[10]);
+  object.producto = reader.readStringOrNull(offsets[11]);
+  object.solicitudId = reader.readStringOrNull(offsets[12]);
+  object.sucursal = reader.readStringOrNull(offsets[13]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[14]);
   return object;
 }
 
@@ -237,11 +244,11 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 6:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 8:
       return (reader.readStringOrNull(offset)) as P;
     case 9:
@@ -253,6 +260,8 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
+      return (reader.readStringOrNull(offset)) as P;
+    case 14:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -942,6 +951,34 @@ extension SolicitudesPendientesQueryFilter on QueryBuilder<
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> isSendedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isSended',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> isSendedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isSended',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> isSendedEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isSended',
+        value: value,
       ));
     });
   }
@@ -2358,6 +2395,20 @@ extension SolicitudesPendientesQuerySortBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByIsSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSended', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByIsSendedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSended', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       sortByMoneda() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.asc);
@@ -2571,6 +2622,20 @@ extension SolicitudesPendientesQuerySortThenBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByIsSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSended', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByIsSendedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSended', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       thenByMoneda() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'moneda', Sort.asc);
@@ -2735,6 +2800,13 @@ extension SolicitudesPendientesQueryWhereDistinct
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByIsSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isSended');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
       distinctByMoneda({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'moneda', caseSensitive: caseSensitive);
@@ -2840,6 +2912,13 @@ extension SolicitudesPendientesQueryProperty on QueryBuilder<
       idAsesorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'idAsesor');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, bool?, QQueryOperations>
+      isSendedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isSended');
     });
   }
 

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class CarteraScreen extends StatelessWidget {
+class CarteraScreen extends StatefulWidget {
   const CarteraScreen({super.key});
+
+  @override
+  State<CarteraScreen> createState() => _CarteraScreenState();
+}
+
+class _CarteraScreenState extends State<CarteraScreen> {
+  // @override
+  // void initState() {
+  //   final isInternetConnectionProvider =
+  //       context.read<InternetConnectionCubit>();
+  //   isInternetConnectionProvider.getInternetStatusConnection();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +75,20 @@ class CarteraScreen extends StatelessWidget {
               //   ),
               // ),
               // TODO: CAMBIAR ESTO CUANDO SALGA SOLICITUDES
-              _Card(
-                onTap: () {
-                  context.push('/solicitudes');
-                },
-                title: 'Solicitudes',
-                subtitle: 'Modulo Solicitudes de Credito',
-                firstColor: AppColors.blueIndigo,
-                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.description,
-                  color: AppColors.white,
-                  size: 35,
-                ),
-              ),
+              // _Card(
+              //   onTap: () {
+              //     context.push('/solicitudes');
+              //   },
+              //   title: 'Solicitudes',
+              //   subtitle: 'Modulo Solicitudes de Credito',
+              //   firstColor: AppColors.blueIndigo,
+              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+              //   icon: const Icon(
+              //     Icons.description,
+              //     color: AppColors.white,
+              //     size: 35,
+              //   ),
+              // ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 _Card(
                   onTap: () async {
@@ -94,18 +108,24 @@ class CarteraScreen extends StatelessWidget {
                     size: 35,
                   ),
                 ),
-              // _Card(
-              //   onTap: () {},
-              //   title: 'Proximamente',
-              //   subtitle: 'Proximamente',
-              //   firstColor: AppColors.blueIndigo,
-              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              //   icon: const Icon(
-              //     Icons.question_mark_outlined,
-              //     color: AppColors.white,
-              //     size: 35,
-              //   ),
-              // ),
+              _Card(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const KivaHistoryRequestScreen();
+                    },
+                  ));
+                },
+                title: 'Kiva Imagenes Guardadas',
+                subtitle: 'Kiva Imagenes Guardadas',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.image,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
             ],
           ),
         ),

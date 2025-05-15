@@ -29,6 +29,24 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
     }
   }
 
+  Future<void> getSolicitudesPendientesSended() async {
+    emit(state.copyWith(status: Status.inProgress));
+    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final data =
+          await solicitudesPendientesRepository.getSolicitudesPendientes();
+      emit(
+        state.copyWith(
+          solicitudesPendienteResponse: data.solicitudes,
+          filteredSolicitudes: data.solicitudes,
+          status: Status.done,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: Status.error));
+    }
+  }
+
   void filterSolicitudes(String query) {
     final solicitudes = state.solicitudesPendienteResponse;
 

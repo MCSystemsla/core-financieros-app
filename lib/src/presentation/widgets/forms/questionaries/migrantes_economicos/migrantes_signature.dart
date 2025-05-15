@@ -225,6 +225,14 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -561,6 +569,14 @@ class _RecurrenteMigrantesFormSignatureState
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =

@@ -76,12 +76,12 @@ class _ViviendaNuevaOfflineResponseState
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -321,12 +321,12 @@ class _RecurrenteViviendaOfflineResponseState
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

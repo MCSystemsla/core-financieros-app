@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';
@@ -31,11 +33,13 @@ import '../../../bloc/kiva/recurrente_migrante_economico/recurrente_migrantes_ec
 
 class ConfirmationOfflineResponsesScreen extends StatelessWidget {
   final String typeProduct;
+  final String? widgetsolicitudId;
   const ConfirmationOfflineResponsesScreen(
-      {super.key, required this.typeProduct});
+      {super.key, required this.typeProduct, this.widgetsolicitudId});
 
   @override
   Widget build(BuildContext context) {
+    log('Solicitud widget: $widgetsolicitudId');
     final solicitudId = context.read<KivaRouteCubit>().state.solicitudId;
     final name = context.read<KivaRouteCubit>().state.nombre;
     final isar = context.read<SolicitudesPendientesLocalDbCubit>().state.isar;
@@ -102,7 +106,8 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
         ),
         body: _CurrentForm(
           typeProduct: typeProduct,
-          solicitudId: solicitudId,
+          solicitudId:
+              solicitudId != '0' ? solicitudId : (widgetsolicitudId ?? '0'),
         ),
       ),
     );
