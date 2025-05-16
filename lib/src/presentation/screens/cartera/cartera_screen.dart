@@ -4,9 +4,10 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/pinput/custom_pinput_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -108,24 +109,21 @@ class _CarteraScreenState extends State<CarteraScreen> {
                     size: 35,
                   ),
                 ),
-              _Card(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const KivaHistoryRequestScreen();
-                    },
-                  ));
-                },
-                title: 'Kiva Imagenes Guardadas',
-                subtitle: 'Kiva Imagenes Guardadas',
-                firstColor: AppColors.blueIndigo,
-                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.image,
-                  color: AppColors.white,
-                  size: 35,
+              if (isInternetConnection)
+                _Card(
+                  onTap: () {
+                    context.pushTransparentRoute(const CustomPinputWidget());
+                  },
+                  title: 'Historial Solicitudes Enviadas',
+                  subtitle: 'Modulo Solicitudes Kiva Enviadas',
+                  firstColor: AppColors.blueIndigo,
+                  secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.send_to_mobile_rounded,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
                 ),
-              ),
             ],
           ),
         ),

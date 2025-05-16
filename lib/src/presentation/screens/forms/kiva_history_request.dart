@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spa
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -47,26 +48,30 @@ class _KivaHistoryRequestScreenState extends State<KivaHistoryRequestScreen> {
         body: BlocBuilder<SolicitudesPendientesLocalDbCubit,
             SolicitudesPendientesLocalDbState>(
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: state.solicitudes.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const KivaFormSpacing();
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return _SolicitudExpasionTitle(
-                        solicitud: state.solicitudes[index],
-                        imageModel: state.imageModel,
-                      );
-                    },
+            return switch (state.status) {
+              Status.inProgress => const LoadingWidget(),
+              Status.done => SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.solicitudes.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const KivaFormSpacing();
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return _SolicitudExpasionTitle(
+                            solicitud: state.solicitudes[index],
+                            imageModel: state.imageModel,
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
+                ),
+              _ => const SizedBox(),
+            };
           },
         ),
       ),
@@ -74,7 +79,7 @@ class _KivaHistoryRequestScreenState extends State<KivaHistoryRequestScreen> {
   }
 }
 
-class _SolicitudExpasionTitle extends StatelessWidget {
+class _SolicitudExpasionTitle extends StatefulWidget {
   final SolicitudesPendientes solicitud;
   final ImageModel? imageModel;
   const _SolicitudExpasionTitle({
@@ -83,13 +88,28 @@ class _SolicitudExpasionTitle extends StatelessWidget {
   });
 
   @override
+  State<_SolicitudExpasionTitle> createState() =>
+      _SolicitudExpasionTitleState();
+}
+
+class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
+  @override
+  void initState() {
+    final solicitudId = widget.solicitud.solicitudId ?? '';
+    context.read<SolicitudesPendientesLocalDbCubit>().getImagesModel(
+          int.parse(solicitudId),
+        );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ExpansionTitleCustom(
         title: Text(
-          '${solicitud.nombre} ${solicitud.numero}',
+          '${widget.solicitud.nombre} ${widget.solicitud.numero}',
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -121,27 +141,20 @@ class _SolicitudExpasionTitle extends StatelessWidget {
               return CustomElevatedButton(
                 enabled: state.status != Status.inProgress,
                 onPressed: () {
-                  context
-                      .read<SolicitudesPendientesLocalDbCubit>()
-                      .getImagesModel(
-                        int.parse(
-                          solicitud.solicitudId ?? '0',
-                        ),
-                      );
                   if (!context.mounted) return;
                   context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                        fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
+                        fotoFirma: widget.imageModel?.imagenFirma ?? 'NO PATH',
                         solicitudId: int.parse(
-                          solicitud.solicitudId ?? '0',
+                          widget.solicitud.solicitudId ?? '0',
                         ),
-                        formularioKiva: solicitud.producto ?? '',
-                        tipoSolicitud: solicitud.tipoSolicitud ?? '',
-                        numero: solicitud.numero ?? '',
-                        cedula: solicitud.cedula ?? '',
-                        imagen1: imageModel?.imagen1 ?? 'NO PATH',
-                        imagen2: imageModel?.imagen2 ?? 'NO PATH',
-                        imagen3: imageModel?.imagen3 ?? 'NO PATH',
-                        typeSigner: imageModel?.typeSigner ?? '',
+                        formularioKiva: widget.solicitud.producto ?? '',
+                        tipoSolicitud: widget.solicitud.tipoSolicitud ?? '',
+                        numero: widget.solicitud.numero ?? '',
+                        cedula: widget.solicitud.cedula ?? '',
+                        imagen1: widget.imageModel?.imagen1 ?? 'NO PATH',
+                        imagen2: widget.imageModel?.imagen2 ?? 'NO PATH',
+                        imagen3: widget.imageModel?.imagen3 ?? 'NO PATH',
+                        typeSigner: widget.imageModel?.typeSigner ?? '',
                       );
                 },
                 text: 'Enviar Imagenes Kiva',
@@ -156,19 +169,19 @@ class _SolicitudExpasionTitle extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) {
                     context.read<KivaRouteCubit>().setCurrentRouteProduct(
-                          cantidadHijos: solicitud.cantidadHijos ?? 0,
-                          cedula: solicitud.cedula ?? '',
-                          tipoSolicitud: solicitud.tipoSolicitud ?? '0',
-                          route: solicitud.producto ?? '',
-                          solicitudId: solicitud.solicitudId ?? '0',
-                          nombre: solicitud.nombre ?? '',
-                          numero: solicitud.nombre ?? '',
-                          motivoAnterior: solicitud.motivoAnterior ??
+                          cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+                          cedula: widget.solicitud.cedula ?? '',
+                          tipoSolicitud: widget.solicitud.tipoSolicitud ?? '0',
+                          route: widget.solicitud.producto ?? '',
+                          solicitudId: widget.solicitud.solicitudId ?? '0',
+                          nombre: widget.solicitud.nombre ?? '',
+                          numero: widget.solicitud.nombre ?? '',
+                          motivoAnterior: widget.solicitud.motivoAnterior ??
                               'Motivo Anterior no registrado',
                         );
                     return ConfirmationOfflineResponsesScreen(
-                      typeProduct: solicitud.producto ?? '',
-                      widgetsolicitudId: solicitud.solicitudId,
+                      typeProduct: widget.solicitud.producto ?? '',
+                      widgetsolicitudId: widget.solicitud.solicitudId,
                     );
                   },
                 ),
