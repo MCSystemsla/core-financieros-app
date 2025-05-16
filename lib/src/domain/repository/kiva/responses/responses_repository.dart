@@ -94,6 +94,9 @@ abstract class ResponsesRepository {
   Future<(bool, String)> migrantesEconomicosRecurrente({
     required MigrantesEconomicosRecurrente migrantesEconmicos,
   });
+  Future<(bool, String)> sendCodigoVerificacion({
+    required String codigo,
+  });
 }
 
 class ResponsesRepositoryImpl extends ResponsesRepository {
@@ -363,6 +366,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (false, response.reasonPhrase ?? 'Error enviando imagenes kiva');
       }
       _logger.i(response.reasonPhrase);
       return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
@@ -500,18 +504,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         contentType: MediaType('image', 'png'),
       ));
 
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoCedula',
-      //   fotoCedula,
-      //   filename: fotoCedula,
-      //   contentType: MediaType('image', 'jpg'),
-      // ));
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoFirmaDigitalAsesor',
-      //   imagenAsesor,
-      //   filename: imagenAsesor,
-      //   contentType: MediaType('image', 'png'),
-      // ));
       request.headers.addAll({
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
@@ -527,6 +519,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (false, response.reasonPhrase ?? 'Error enviando imagenes kiva');
       }
 
       _logger.i(response.reasonPhrase);
@@ -568,6 +561,23 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> sendCodigoVerificacion(
+      {required String codigo}) async {
+    final endpoint = CodigoVerificationEndpoint(codigo: codigo);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        return (false, 'Codigo Verificacion Incorrecto');
+      }
+      _logger.e(resp);
+      return (true, 'Codigo verificacion correcto');
+    } catch (e) {
+      _logger.e(e);
+      return (false, 'Codigo Verificacion Incorrecto');
     }
   }
 }

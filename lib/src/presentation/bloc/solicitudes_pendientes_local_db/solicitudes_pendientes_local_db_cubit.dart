@@ -82,7 +82,10 @@ class SolicitudesPendientesLocalDbCubit
     // await Future.delayed(const Duration(seconds: 3));
     try {
       await state.isar!.writeTxn(() {
-        return state.isar!.solicitudesPendientes.clear();
+        return state.isar!.solicitudesPendientes
+            .filter()
+            .isSendedEqualTo(false)
+            .deleteAll();
       });
 
       await state.isar!.writeTxn(() {
@@ -135,7 +138,10 @@ class SolicitudesPendientesLocalDbCubit
           .isSendedEqualTo(true)
           .findAll();
 
-      emit(state.copyWith(solicitudes: solicitudes, status: Status.done));
+      emit(state.copyWith(
+        solicitudes: solicitudes,
+        status: Status.done,
+      ));
     } catch (e) {
       _logger.e(e);
     }
@@ -230,7 +236,7 @@ class SolicitudesPendientesLocalDbCubit
   }
 
   Future<ImageModel?> getImagesModel(int solicitudRecurrenteId) async {
-    emit(state.copyWith(status: Status.inProgress));
+    // emit(state.copyWith(status: Status.inProgress));
     try {
       log('Solicitud id: ${solicitudRecurrenteId.toString()}');
       final solicitud = await state.isar?.imageModels
@@ -238,7 +244,7 @@ class SolicitudesPendientesLocalDbCubit
           .solicitudIdEqualTo(solicitudRecurrenteId)
           .findFirst();
       emit(state.copyWith(
-        status: Status.done,
+        // status: Status.done,
         imageModel: solicitud,
       ));
       log('Imagen 1: ${solicitud?.imagen1 ?? 'NO PATH'} ');

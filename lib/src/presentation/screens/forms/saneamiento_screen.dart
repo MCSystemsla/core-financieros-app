@@ -389,6 +389,22 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 return;
                               }
                               if (!context.mounted) return;
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .saveImagesLocal(
+                                    imageModel: ImageModel()
+                                      ..typeSigner = typeSigner.name
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      ),
+                                  );
                               !isConnected.isConnected ||
                                       !isConnected.isCorrectNetwork
                                   ? await saveAnswersOnLocalDB(
@@ -722,6 +738,22 @@ class _EstandarSignState extends State<EstandarSign> {
                                 return;
                               }
                               if (!context.mounted) return;
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .saveImagesLocal(
+                                    imageModel: ImageModel()
+                                      ..typeSigner = typeSigner.name
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      ),
+                                  );
                               !isConnected.isConnected ||
                                       !isConnected.isCorrectNetwork
                                   ? await saveOfflineResponses(
@@ -1419,6 +1451,22 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 return;
                               }
                               if (!context.mounted) return;
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .saveImagesLocal(
+                                    imageModel: ImageModel()
+                                      ..typeSigner = typeSigner.name
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      ),
+                                  );
                               !isConnected.isConnected ||
                                       !isConnected.isCorrectNetwork
                                   ? await saveAnswersOnLocalDB(
@@ -1751,6 +1799,22 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                 return;
                               }
                               if (!context.mounted) return;
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .saveImagesLocal(
+                                    imageModel: ImageModel()
+                                      ..typeSigner = typeSigner.name
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      ),
+                                  );
                               !isConnected.isConnected ||
                                       !isConnected.isCorrectNetwork
                                   ? await saveMejoraViviendaForm(

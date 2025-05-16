@@ -36,8 +36,8 @@ class EstandarOfflineForm extends StatefulWidget {
 class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   @override
   void initState() {
-    super.initState();
     initFunctions();
+    super.initState();
   }
 
   initFunctions() async {

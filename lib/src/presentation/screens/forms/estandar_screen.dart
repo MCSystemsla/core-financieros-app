@@ -357,6 +357,25 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 return;
                               }
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                await saveResponsesOnLocalDb(
+                                  context,
+                                  state,
+                                  ImageModel()
+                                    ..typeSigner = typeSigner.name
+                                    ..imagenFirma = localPath
+                                    ..imagen1 = imageProvider.imagen1
+                                    ..imagen2 = imageProvider.imagen2
+                                    ..imagen3 = imageProvider.imagen3
+                                    ..solicitudId = int.parse(
+                                      context
+                                          .read<KivaRouteCubit>()
+                                          .state
+                                          .solicitudId,
+                                    ),
+                                );
+                              }
+                              if (!context.mounted) return;
                               !isConnected.isConnected ||
                                       !isConnected.isCorrectNetwork
                                   ? await saveOfflineResponses(
@@ -368,7 +387,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                         ..imagen1 = imageProvider.imagen1
                                         ..imagen2 = imageProvider.imagen2
                                         ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
+                                        ..solicitudId = int.parse(
                                           context
                                               .read<KivaRouteCubit>()
                                               .state
@@ -457,5 +476,40 @@ class _RecurrentSignState extends State<_RecurrentSign> {
       header: '',
       isVpnConnected: isVpnConnected,
     ).showDialog(context, dialogType: DialogType.info);
+  }
+
+  saveResponsesOnLocalDb(
+    BuildContext context,
+    RecurrenteEstandartState state,
+    ImageModel imageModel,
+  ) async {
+    if (!context.mounted) return;
+
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
+
+    context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
+          recurrenteEstandarModel: RecurrenteEstandarDbLocal()
+            ..apoyanNegocio = state.apoyanNegocio
+            ..tipoSolicitud = state.tipoSolitud
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoFortalece = state.comoFortalece
+            ..comoMejoraEntorno = state.comoMejoraEntorno
+            ..cuantosApoyan = state.cuantosApoyan
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionInversion = state.explicacionInversion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId =
+                int.tryParse(context.read<KivaRouteCubit>().state.solicitudId)
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personaAutoSuficiente = state.personaAutoSuficiente
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..siguientePaso = state.siguientePaso
+            ..personasCargo = state.personasCargo,
+        );
   }
 }

@@ -17,6 +17,7 @@ class VersionControlWidget extends StatelessWidget {
         };
       },
       builder: (context, state) {
+        const isProdMode = bool.fromEnvironment('isProdMode');
         return Container(
           width: double.infinity,
           margin: const EdgeInsets.symmetric(
@@ -24,7 +25,7 @@ class VersionControlWidget extends StatelessWidget {
             vertical: 5,
           ),
           child: Text(
-            state,
+            !isProdMode ? 'devNi.$state' : state,
             textAlign: TextAlign.end,
             style: const TextStyle(
               fontSize: 10,
