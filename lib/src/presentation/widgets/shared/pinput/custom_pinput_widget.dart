@@ -86,6 +86,7 @@ class _TitlePinputField extends StatelessWidget {
 class _PinPutField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final pinController = TextEditingController();
     final defaultPinTheme = PinTheme(
       width: 60,
       height: 60,
@@ -127,6 +128,8 @@ class _PinPutField extends StatelessWidget {
       },
       builder: (context, state) {
         return Pinput(
+          obscureText: true,
+          controller: pinController,
           inputFormatters: [
             LengthLimitingTextInputFormatter(6),
             FilteringTextInputFormatter.digitsOnly,
@@ -151,6 +154,7 @@ class _PinPutField extends StatelessWidget {
             context
                 .read<CodigoVerificacionCubit>()
                 .sendCodigoVerificacion(codigo: pin);
+            pinController.clear();
           },
           showCursor: true,
           autofocus: true,

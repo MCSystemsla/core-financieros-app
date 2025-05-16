@@ -76,20 +76,20 @@ class _CarteraScreenState extends State<CarteraScreen> {
               //   ),
               // ),
               // TODO: CAMBIAR ESTO CUANDO SALGA SOLICITUDES
-              // _Card(
-              //   onTap: () {
-              //     context.push('/solicitudes');
-              //   },
-              //   title: 'Solicitudes',
-              //   subtitle: 'Modulo Solicitudes de Credito',
-              //   firstColor: AppColors.blueIndigo,
-              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              //   icon: const Icon(
-              //     Icons.description,
-              //     color: AppColors.white,
-              //     size: 35,
-              //   ),
-              // ),
+              _Card(
+                onTap: () {
+                  context.push('/solicitudes');
+                },
+                title: 'Solicitudes',
+                subtitle: 'Modulo Solicitudes de Credito',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.description,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 _Card(
                   onTap: () async {
@@ -109,15 +109,15 @@ class _CarteraScreenState extends State<CarteraScreen> {
                     size: 35,
                   ),
                 ),
-              if (isInternetConnection)
+              if (isInternetConnection && actions.contains('LLENARKIVAMOVIL'))
                 _Card(
                   onTap: () {
                     context.pushTransparentRoute(const CustomPinputWidget());
                   },
-                  title: 'Historial Solicitudes Enviadas',
+                  title: 'KIVA Histórico',
                   subtitle: 'Modulo Solicitudes Kiva Enviadas',
                   firstColor: AppColors.blueIndigo,
-                  secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                  secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
                   icon: const Icon(
                     Icons.send_to_mobile_rounded,
                     color: AppColors.white,
