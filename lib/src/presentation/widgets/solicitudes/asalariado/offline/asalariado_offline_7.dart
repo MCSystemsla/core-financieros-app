@@ -18,6 +18,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -104,17 +106,18 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
   @override
   void initState() {
     final solicitud = widget.asalariadoResponsesLocalDb;
-    moneda =
-        Item(name: solicitud?.objMonedaId ?? '', value: solicitud?.objMonedaId);
+    moneda = Item(
+        name: solicitud?.objMonedaIdVer ?? '', value: solicitud?.objMonedaId);
     monto = solicitud?.monto.toString();
     proposito = Item(
-      name: solicitud?.objPropositoId ?? '',
+      name: solicitud?.objPropositoIdVer ?? '',
       value: solicitud?.objPropositoId,
     );
     producto = Item(
-        name: solicitud?.objProductoId ?? '', value: solicitud?.objProductoId);
+        name: solicitud?.objProductoIdVer ?? '',
+        value: solicitud?.objProductoId);
     frecuenciaDePago = Item(
-      name: solicitud?.objFrecuenciaId ?? '',
+      name: solicitud?.objFrecuenciaIdVer ?? '',
       value: solicitud?.objFrecuenciaId,
     );
     plazoSolicitud = solicitud?.plazoSolicitud.toString();
@@ -122,11 +125,10 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
     observacion = solicitud?.observacion;
     ubicacion = solicitud?.ubicacion;
     fechaPrimerPago = solicitud?.fechaPrimerPagoSolicitud;
-    // TODO: Agregar esto a BD Local
-    //  fechaDesembolso = solicitud?.fec;
-    //  tasaInteres = solicitud?.tasaInteres;
-    //  montoMinimo = solicitud?.montoMinimo;
-    //  montoMaximo = solicitud?.montoMaximo;
+    fechaDesembolso = solicitud?.fechaDesembolso;
+    tasaInteres = solicitud?.tasaInteres;
+    montoMinimo = solicitud?.montoMinimo;
+    montoMaximo = solicitud?.montoMaximo?.toDouble();
 
     super.initState();
   }
@@ -216,7 +218,6 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
             const Gap(20),
             SearchDropdownWidget(
               hintText: producto?.name ?? '',
@@ -277,23 +278,6 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               initialValue: observacion,
               icon: Icon(
@@ -330,39 +314,39 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () async {
                   if (!formKey.currentState!.validate()) return;
-                  // if (double.tryParse(monto ?? '0') == 0) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title: 'El monto no puede ser 0',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // if (double.tryParse(monto ?? '0')! <
-                  //     montoMinimo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // if (double.tryParse(monto ?? '0')! >
-                  //     montoMaximo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
+                  if (double.tryParse(monto ?? '0') == 0) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'El monto no puede ser 0',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! <
+                      montoMinimo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! >
+                      montoMaximo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago!.name,
+                    formadePago: frecuenciaDePago?.name ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
@@ -375,16 +359,20 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
                             ubicacion: ubicacion,
                             isOffline: !isConnected,
                             isDone: !isConnected,
-
-                            // objFrecuenciaIdVer: frecuenciaDePago?.name,
-                            // tasaInteres: tasaInteres,
-                            // fechaDesembolso:
-                            //     fechaDesembolso?.toUtc().toIso8601String(),
+                            tasaInteres: tasaInteres,
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
+                            montoMaximo: montoMaximo?.toInt(),
+                            montoMinimo: montoMinimo,
                             objMonedaId: moneda?.value,
+                            objMonedaIdVer: moneda?.name,
                             monto: double.tryParse(monto ?? '0'),
                             objPropositoId: proposito?.value,
+                            objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
+                            objProductoIdVer: producto?.name,
                             objFrecuenciaId: frecuenciaDePago?.value,
+                            objFrecuenciaIdVer: frecuenciaDePago?.name,
                             plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),
@@ -393,10 +381,6 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
                             observacion: observacion,
                           );
 
-                      // widget.controller.nextPage(
-                      //   duration: const Duration(milliseconds: 300),
-                      //   curve: Curves.easeIn,
-                      // );
                       context.pop();
                     },
                   ).showDialog(context);

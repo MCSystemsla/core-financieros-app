@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,16 +24,16 @@ class AsalariadoForm3 extends StatefulWidget {
 
 class _AsalariadoForm3State extends State<AsalariadoForm3>
     with AutomaticKeepAliveClientMixin {
-  String? paisCasa;
-  String? depCasa;
-  String? munCasa;
-  String? condicionCasa;
+  Item? paisCasa;
+  Item? depCasa;
+  Item? munCasa;
+  Item? condicionCasa;
   String? nombreDuenoCasa;
   String? pagoAlquiler;
   String? anosResidir;
   String? direccionDomicilio;
   String? barrio;
-  String? sector;
+  Item? sector;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -49,7 +50,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               codigo: 'PAIS',
               title: 'País',
               onChanged: (item) {
-                paisCasa = item?.valor;
+                paisCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                 setState(() {});
               },
               hintText: 'Ingresa Pais',
@@ -60,7 +61,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               title: 'Departamento',
               hintText: 'Ingresa Departamento',
               onChanged: (item) {
-                depCasa = item?.valor;
+                depCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                 setState(() {});
               },
             ),
@@ -70,7 +71,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               title: 'Municipio',
               hintText: 'Ingresa Municipio',
               onChanged: (item) {
-                munCasa = item?.valor;
+                munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                 setState(() {});
               },
             ),
@@ -79,7 +80,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               codigo: 'TIPOVIVIENDA',
               title: 'Condicion Casa',
               onChanged: (item) {
-                condicionCasa = item?.value;
+                condicionCasa = item;
                 setState(() {});
               },
             ),
@@ -135,7 +136,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               codigo: 'SECTORECONOMICO',
               title: 'Sector',
               onChanged: (item) {
-                sector = item?.value;
+                sector = item;
                 setState(() {});
               },
             ),
@@ -149,16 +150,21 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                        objPaisCasaId: paisCasa,
-                        objDepartamentoCasaId: depCasa,
-                        objMunicipioCasaId: munCasa,
-                        objCondicionCasaId: condicionCasa,
+                        objPaisCasaId: paisCasa?.value,
+                        objPaisCasaIdVer: paisCasa?.name,
+                        objDepartamentoCasaId: depCasa?.value,
+                        objDepartamentoCasaIdVer: depCasa?.name,
+                        objMunicipioCasaId: munCasa?.value,
+                        objMunicipioCasaIdVer: munCasa?.name,
+                        objCondicionCasaId: condicionCasa?.value,
+                        objCondicionCasaIdVer: condicionCasa?.name,
                         duenoVivienda: nombreDuenoCasa,
                         pagoAlquiler: int.tryParse(pagoAlquiler ?? '0'),
                         anosResidirCasa: int.tryParse(anosResidir ?? '0'),
                         direccionCasa: direccionDomicilio,
                         barrioCasa: barrio,
-                        objSectorId: sector,
+                        objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
                       );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

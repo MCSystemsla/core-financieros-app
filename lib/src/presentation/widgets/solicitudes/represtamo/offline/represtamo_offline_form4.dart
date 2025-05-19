@@ -23,7 +23,8 @@ class ReprestamoOfflineForm4 extends StatefulWidget {
   State<ReprestamoOfflineForm4> createState() => _ReprestamoOfflineForm4State();
 }
 
-class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
+class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
+    with AutomaticKeepAliveClientMixin {
   List<Item> actividadesPredominantesList = [];
   List<Item> rubrosActividadesPredominanteList = [];
   String? profesion;
@@ -92,6 +93,7 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -333,4 +335,7 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

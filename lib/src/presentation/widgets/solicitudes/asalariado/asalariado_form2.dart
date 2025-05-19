@@ -28,7 +28,7 @@ class AsalariadoForm2 extends StatefulWidget {
 class _AsalariadoForm2State extends State<AsalariadoForm2>
     with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
-  String? parentesco;
+  Item? parentesco;
   String? cedula;
   String? telefono;
   String? esPeps;
@@ -74,7 +74,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
             const Gap(30),
             SearchDropdownWidget(
               onChanged: (item) {
-                parentesco = item?.value;
+                parentesco = item;
                 setState(() {});
               },
               codigo: 'PARENTESCO',
@@ -259,7 +259,8 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
 
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         beneficiarioSeguro: beneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco,
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                         cedulaBeneficiarioSeguro: cedula,
                         telefonoBeneficiario: telefono,
                         espeps: esPeps == 'input.yes'.tr(),

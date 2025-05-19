@@ -60,35 +60,35 @@ class _AsalariadoOffline4State extends State<AsalariadoOffline4> {
     final solicitud = widget.asalariadoResponsesLocalDb;
     profesion = solicitud?.profesion;
     actividad = Item(
-      name: solicitud?.objActividadEconomicaId ?? '',
+      name: solicitud?.objActividadEconomicaIdVer ?? '',
       value: solicitud?.objActividadEconomicaId,
     );
     actividad1 = Item(
-      name: solicitud?.objActividadEconomicaId1 ?? '',
+      name: solicitud?.objActividadEconomicaId1Ver ?? '',
       value: solicitud?.objActividadEconomicaId1,
     );
     actividadEconomica2 = Item(
-      name: solicitud?.objActividadEconomicaId2 ?? '',
+      name: solicitud?.objActividadEconomicaId2Ver ?? '',
       value: solicitud?.objActividadEconomicaId2,
     );
     rubroActividad = Item(
-      name: solicitud?.objRubroActividad ?? '',
+      name: solicitud?.objRubroActividadVer ?? '',
       value: solicitud?.objRubroActividad,
     );
     rubroActividad2 = Item(
-      name: solicitud?.objRubroActividad2 ?? '',
+      name: solicitud?.objRubroActividad2Ver ?? '',
       value: solicitud?.objRubroActividad2,
     );
     rubroActividad3 = Item(
-      name: solicitud?.objRubroActividad3 ?? '',
+      name: solicitud?.objRubroActividad3Ver ?? '',
       value: solicitud?.objRubroActividad3,
     );
     actividadPredominante = Item(
-      name: solicitud?.objActividadPredominante ?? '',
+      name: solicitud?.objActividadPredominanteVer ?? '',
       value: solicitud?.objActividadPredominante,
     );
     objRubroActividadPredominante = Item(
-      name: solicitud?.objRubroActividadPredominante ?? '',
+      name: solicitud?.objRubroActividadPredominanteVer ?? '',
       value: solicitud?.objRubroActividadPredominante,
     );
     ocupacion = solicitud?.ocupacion;
@@ -290,16 +290,27 @@ class _AsalariadoOffline4State extends State<AsalariadoOffline4> {
                   );
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
                         objRubroActividad: rubroActividad?.value,
+                        objRubroActividadVer: rubroActividad?.name,
                         objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad2Ver: rubroActividad2?.name,
                         objRubroActividad3: rubroActividad3?.value,
+                        objRubroActividad3Ver: rubroActividad3?.name,
                         objActividadEconomicaId2: actividadEconomica2?.value,
+                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
                         objSectorId: sectorEconomico?.value,
+                        objSectorIdVer: sectorEconomico?.name,
                         // sectorEconomico: sectorEconomico2,
                         objActividadEconomicaId: actividad?.value,
+                        objActividadEconomicaIdVer: actividad?.name,
                         objActividadEconomicaId1: actividad1?.value,
+                        objActividadEconomicaId1Ver: actividad1?.name,
                         objRubroActividadPredominante:
                             objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
                       );
                 },
               ),

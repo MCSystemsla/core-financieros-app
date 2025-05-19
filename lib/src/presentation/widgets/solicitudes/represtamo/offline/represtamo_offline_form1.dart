@@ -34,7 +34,8 @@ class ReprestamoOfflineForm1 extends StatefulWidget {
   State<ReprestamoOfflineForm1> createState() => _ReprestamoOfflineForm1State();
 }
 
-class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
+class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
+    with AutomaticKeepAliveClientMixin {
   DateTime? _selectedDate;
 
   Future<void> selectDate(BuildContext context) async {
@@ -79,6 +80,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
     celularReprestamo = widget.solicitud.celularReprestamo;
     cedula = widget.solicitud.cedula;
     ubicacion = widget.solicitud.ubicacion;
+    // _selectedDate = widget.solicitud.fec;
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
         if (value == null) return;
@@ -95,6 +97,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
   String celularCode = '+505';
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -148,6 +151,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
             ),
+            const Gap(30),
             OutlineTextfieldWidget(
               validator: (value) => ClassValidator.validateRequired(value),
               initialValue: cedula,
@@ -165,20 +169,18 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
                 setState(() {});
               },
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              // onTap: () => selectDate(context),
-              readOnly: true,
-              icon: Icon(
-                Icons.calendar_today,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Fecha Emision Cedula',
-              isRequired: true,
-
-              hintText: 'Selecciona Fecha',
-              isValid: null,
-            ),
+            // OutlineTextfieldWidget(
+            //   onTap: () => selectDate(context),
+            //   readOnly: true,
+            //   icon: Icon(
+            //     Icons.calendar_today,
+            //     color: AppColors.getPrimaryColor(),
+            //   ),
+            //   title: 'Fecha Emision Cedula',
+            //   isRequired: true,
+            //   hintText: 'Selecciona Fecha',
+            //   isValid: null,
+            // ),
             // const Gap(30),
             // OutlineTextfieldWidget(
             //   validator: (value) => ClassValidator.validateRequired(
@@ -297,4 +299,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

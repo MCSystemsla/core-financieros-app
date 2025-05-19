@@ -34,7 +34,7 @@ class AsalariadoOffline2 extends StatefulWidget {
 class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
   String? beneficiarioSeguro;
 
-  String? parentesco;
+  Item? parentesco;
 
   String? cedula;
 
@@ -69,7 +69,10 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
   void initState() {
     final solicitud = widget.asalariadoResponsesLocalDb;
     beneficiarioSeguro = solicitud?.beneficiarioSeguro;
-    parentesco = solicitud?.objParentescoBeneficiarioSeguroId;
+    parentesco = Item(
+      name: solicitud?.objParentescoBeneficiarioSeguroIdVer ?? '',
+      value: solicitud?.objParentescoBeneficiarioSeguroId,
+    );
     cedula = solicitud?.cedulaBeneficiarioSeguro;
     telefono = solicitud?.telefonoBeneficiario;
     esPeps = (solicitud?.espeps ?? false) ? 'input.yes'.tr() : 'input.no'.tr();
@@ -124,7 +127,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
               },
               codigo: 'PARENTESCO',
               title: 'Parentesco',
-              hintText: parentesco ?? '',
+              hintText: parentesco?.name ?? '',
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -316,7 +319,8 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
 
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         beneficiarioSeguro: beneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco,
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                         cedulaBeneficiarioSeguro: cedula,
                         telefonoBeneficiario: telefono,
                         espeps: esPeps == 'input.yes'.tr(),

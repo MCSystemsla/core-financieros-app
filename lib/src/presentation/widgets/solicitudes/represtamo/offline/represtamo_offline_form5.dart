@@ -30,7 +30,8 @@ class ReprestamoOfflineForm5 extends StatefulWidget {
   State<ReprestamoOfflineForm5> createState() => _ReprestamoOfflineForm5State();
 }
 
-class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5> {
+class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
+    with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   Item? parentesco;
@@ -62,6 +63,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     return SingleChildScrollView(
@@ -217,4 +219,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

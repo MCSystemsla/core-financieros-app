@@ -1187,7 +1187,7 @@
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "115:634071419170633261",
+      "lastPropertyId": "148:1220575747707855763",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -1765,6 +1765,171 @@
           "id": "115:634071419170633261",
           "name": "hasVerified",
           "type": 1
+        },
+        {
+          "id": "116:323363010468476260",
+          "name": "fechaDesembolso",
+          "type": 10
+        },
+        {
+          "id": "117:6447728504017783120",
+          "name": "tasaInteres",
+          "type": 8
+        },
+        {
+          "id": "118:5644783684009714852",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "119:2996129743065939455",
+          "name": "montoMaximo",
+          "type": 6
+        },
+        {
+          "id": "120:11859000356986806",
+          "name": "objOrigenSolicitudIdVer",
+          "type": 9
+        },
+        {
+          "id": "121:8256286556324378004",
+          "name": "objPaisEmisorCedulaVer",
+          "type": 9
+        },
+        {
+          "id": "122:8202194560986051248",
+          "name": "objMunicipioCasaIdVer",
+          "type": 9
+        },
+        {
+          "id": "123:4190071636704217765",
+          "name": "objDepartamentoCasaIdVer",
+          "type": 9
+        },
+        {
+          "id": "124:1582198819047172411",
+          "name": "objPaisCasaIdVer",
+          "type": 9
+        },
+        {
+          "id": "125:1288008074321548506",
+          "name": "objCondicionCasaIdVer",
+          "type": 9
+        },
+        {
+          "id": "126:1822723270406513666",
+          "name": "objMonedaIdVer",
+          "type": 9
+        },
+        {
+          "id": "127:6001803765886181657",
+          "name": "objPropositoIdVer",
+          "type": 9
+        },
+        {
+          "id": "128:1729669963579296115",
+          "name": "objFrecuenciaIdVer",
+          "type": 9
+        },
+        {
+          "id": "129:7420981224294942823",
+          "name": "objSectorIdVer",
+          "type": 9
+        },
+        {
+          "id": "130:459696899323406935",
+          "name": "objEstadoCivilIdVer",
+          "type": 9
+        },
+        {
+          "id": "131:8767618869656125720",
+          "name": "objParentescoBeneficiarioSeguroIdVer",
+          "type": 9
+        },
+        {
+          "id": "132:3030974150913850346",
+          "name": "objEstadoSolicitudIdVer",
+          "type": 9
+        },
+        {
+          "id": "133:4228477057486410241",
+          "name": "objOficialCreditoIdVer",
+          "type": 9
+        },
+        {
+          "id": "134:2018635807027152590",
+          "name": "objProductoIdVer",
+          "type": 9
+        },
+        {
+          "id": "135:6667823542688245047",
+          "name": "objEscolaridadIdVer",
+          "type": 9
+        },
+        {
+          "id": "136:384945547790409063",
+          "name": "objSexoIdVer",
+          "type": 9
+        },
+        {
+          "id": "137:6519379863731049892",
+          "name": "objPaisNacimientoIdVer",
+          "type": 9
+        },
+        {
+          "id": "138:5411348379780986698",
+          "name": "objRubroActividadVer",
+          "type": 9
+        },
+        {
+          "id": "139:7454625027538331303",
+          "name": "objActividadPredominanteVer",
+          "type": 9
+        },
+        {
+          "id": "140:8499188086676425595",
+          "name": "objTipoDocumentoIdVer",
+          "type": 9
+        },
+        {
+          "id": "141:3659607251769972744",
+          "name": "objRubroActividad2Ver",
+          "type": 9
+        },
+        {
+          "id": "142:2749637797177228381",
+          "name": "objRubroActividad3Ver",
+          "type": 9
+        },
+        {
+          "id": "143:6909993413640054080",
+          "name": "objRubroActividadPredominanteVer",
+          "type": 9
+        },
+        {
+          "id": "144:1477641133223715981",
+          "name": "objTipoPersonaIdVer",
+          "type": 9
+        },
+        {
+          "id": "145:8066872186811765712",
+          "name": "objActividadEconomicaIdVer",
+          "type": 9
+        },
+        {
+          "id": "146:6376647708262640274",
+          "name": "objActividadEconomicaId1Ver",
+          "type": 9
+        },
+        {
+          "id": "147:6261742500083826682",
+          "name": "objActividadEconomicaId2Ver",
+          "type": 9
+        },
+        {
+          "id": "148:1220575747707855763",
+          "name": "objParentescoFamiliarCercanoIdVer",
+          "type": 9
         }
       ],
       "relations": []

@@ -225,16 +225,27 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
                   );
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
                         objRubroActividad: rubroActividad?.value,
+                        objRubroActividadVer: rubroActividad?.name,
                         objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad2Ver: rubroActividad2?.name,
                         objRubroActividad3: rubroActividad3?.value,
+                        objRubroActividad3Ver: rubroActividad3?.name,
                         objActividadEconomicaId2: actividadEconomica2?.value,
+                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
                         objSectorId: sectorEconomico?.value,
+                        objSectorIdVer: sectorEconomico?.name,
                         // sectorEconomico: sectorEconomico2,
                         objActividadEconomicaId: actividad?.value,
+                        objActividadEconomicaIdVer: actividad?.name,
                         objActividadEconomicaId1: actividad1?.value,
+                        objActividadEconomicaId1Ver: actividad1?.name,
                         objRubroActividadPredominante:
                             objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
                       );
                 },
               ),

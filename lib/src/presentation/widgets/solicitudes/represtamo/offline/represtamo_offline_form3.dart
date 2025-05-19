@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,8 @@ class ReprestamoOfflineForm3 extends StatefulWidget {
   State<ReprestamoOfflineForm3> createState() => _ReprestamoOfflineForm3State();
 }
 
-class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
+class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -121,6 +123,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -154,6 +157,9 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               // initialValue: monto ?? '0',
 
               onFieldSubmitted: (value) {
@@ -394,4 +400,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

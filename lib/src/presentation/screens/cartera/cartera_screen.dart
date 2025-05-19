@@ -31,6 +31,8 @@ class _CarteraScreenState extends State<CarteraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isProdMode = bool.fromEnvironment('isProdMode');
+
     final actions = LocalStorage().currentActions;
     final isInternetConnection =
         context.read<InternetConnectionCubit>().state.isConnected;
@@ -76,20 +78,22 @@ class _CarteraScreenState extends State<CarteraScreen> {
               //   ),
               // ),
               // TODO: CAMBIAR ESTO CUANDO SALGA SOLICITUDES
-              // _Card(
-              //   onTap: () {
-              //     context.push('/solicitudes');
-              //   },
-              //   title: 'Solicitudes',
-              //   subtitle: 'Modulo Solicitudes de Credito',
-              //   firstColor: AppColors.blueIndigo,
-              //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              //   icon: const Icon(
-              //     Icons.description,
-              //     color: AppColors.white,
-              //     size: 35,
-              //   ),
-              // ),
+              // TODO: QUITAR ESTA VALIDACION CUANDO SALGA SOLICITUDES
+              if (!isProdMode)
+                _Card(
+                  onTap: () {
+                    context.push('/solicitudes');
+                  },
+                  title: 'Solicitudes',
+                  subtitle: 'Modulo Solicitudes de Credito',
+                  firstColor: AppColors.blueIndigo,
+                  secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.description,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
+                ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 _Card(
                   onTap: () async {

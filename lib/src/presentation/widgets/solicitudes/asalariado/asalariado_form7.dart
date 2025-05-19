@@ -336,14 +336,20 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
                             isDone: !isConnected,
 
                             // objFrecuenciaIdVer: frecuenciaDePago?.name,
-                            // tasaInteres: tasaInteres,
-                            // fechaDesembolso:
-                            //     fechaDesembolso?.toUtc().toIso8601String(),
+                            tasaInteres: tasaInteres,
+                            montoMaximo: montoMaximo?.toInt(),
+                            montoMinimo: montoMinimo,
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda?.value,
+                            objMonedaIdVer: moneda?.name,
                             monto: double.tryParse(monto ?? '0'),
                             objPropositoId: proposito?.value,
+                            objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
+                            objProductoIdVer: producto?.name,
                             objFrecuenciaId: frecuenciaDePago?.value,
+                            objFrecuenciaIdVer: frecuenciaDePago?.name,
                             plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),

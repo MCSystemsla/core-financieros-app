@@ -119,7 +119,73 @@ class SolicitudAsalariadoState extends Equatable {
   final String tiempoLaborarConyugue;
   final double totalIngresoMes;
   final double totalIngresoMesConyugue;
+  final String fechaDesembolso;
+  final double tasaInteres;
+  final int montoMinimo;
+  final int montoMaximo;
+  final String objOrigenSolicitudIdVer;
+  final String objPaisEmisorCedulaVer;
+  final String objMunicipioCasaIdVer;
+  final String objDepartamentoCasaIdVer;
+  final String objPaisCasaIdVer;
+  final String objCondicionCasaIdVer;
+  final String objMonedaIdVer;
+  final String objPropositoIdVer;
+  final String objFrecuenciaIdVer;
+  final String objSectorIdVer;
+  final String objEstadoCivilIdVer;
+  final String objParentescoBeneficiarioSeguroIdVer;
+  final String objEstadoSolicitudIdVer;
+  final String objOficialCreditoIdVer;
+  final String objProductoIdVer;
+  final String objEscolaridadIdVer;
+  final String objSexoIdVer;
+  final String objPaisNacimientoIdVer;
+  final String objRubroActividadVer;
+  final String objActividadPredominanteVer;
+  final String objTipoDocumentoIdVer;
+  final String objRubroActividad2Ver;
+  final String objRubroActividad3Ver;
+  final String objRubroActividadPredominanteVer;
+  final String objTipoPersonaIdVer;
+  final String objActividadEconomicaIdVer;
+  final String objActividadEconomicaId1Ver;
+  final String objActividadEconomicaId2Ver;
+  final String objParentescoFamiliarCercanoIdVer;
   const SolicitudAsalariadoState({
+    this.objOrigenSolicitudIdVer = '',
+    this.objPaisEmisorCedulaVer = '',
+    this.objMunicipioCasaIdVer = '',
+    this.objDepartamentoCasaIdVer = '',
+    this.objPaisCasaIdVer = '',
+    this.objCondicionCasaIdVer = '',
+    this.objMonedaIdVer = '',
+    this.objPropositoIdVer = '',
+    this.objFrecuenciaIdVer = '',
+    this.objSectorIdVer = '',
+    this.objEstadoCivilIdVer = '',
+    this.objParentescoBeneficiarioSeguroIdVer = '',
+    this.objEstadoSolicitudIdVer = '',
+    this.objOficialCreditoIdVer = '',
+    this.objProductoIdVer = '',
+    this.objEscolaridadIdVer = '',
+    this.objSexoIdVer = '',
+    this.objPaisNacimientoIdVer = '',
+    this.objRubroActividadVer = '',
+    this.objActividadPredominanteVer = '',
+    this.objTipoDocumentoIdVer = '',
+    this.objRubroActividad2Ver = '',
+    this.objRubroActividad3Ver = '',
+    this.objRubroActividadPredominanteVer = '',
+    this.objTipoPersonaIdVer = '',
+    this.objActividadEconomicaIdVer = '',
+    this.objActividadEconomicaId1Ver = '',
+    this.objActividadEconomicaId2Ver = '',
+    this.objParentescoFamiliarCercanoIdVer = '',
+    this.fechaDesembolso = '',
+    this.tasaInteres = 0.0,
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
     this.hasVerified = false,
     this.isOffline = false,
     this.isDone = false,
@@ -241,6 +307,10 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        fechaDesembolso,
+        tasaInteres,
+        montoMinimo,
+        montoMaximo,
         hasVerified,
         isOffline,
         isDone,
@@ -478,6 +548,39 @@ class SolicitudAsalariadoState extends Equatable {
     String? tiempoLaborarConyugue,
     double? totalIngresoMes,
     double? totalIngresoMesConyugue,
+    String? fechaDesembolso,
+    double? tasaInteres,
+    int? montoMinimo,
+    int? montoMaximo,
+    String? objOrigenSolicitudIdVer,
+    String? objPaisEmisorCedulaVer,
+    String? objMunicipioCasaIdVer,
+    String? objDepartamentoCasaIdVer,
+    String? objPaisCasaIdVer,
+    String? objCondicionCasaIdVer,
+    String? objMonedaIdVer,
+    String? objPropositoIdVer,
+    String? objFrecuenciaIdVer,
+    String? objSectorIdVer,
+    String? objEstadoCivilIdVer,
+    String? objParentescoBeneficiarioSeguroIdVer,
+    String? objEstadoSolicitudIdVer,
+    String? objOficialCreditoIdVer,
+    String? objProductoIdVer,
+    String? objEscolaridadIdVer,
+    String? objSexoIdVer,
+    String? objPaisNacimientoIdVer,
+    String? objRubroActividadVer,
+    String? objActividadPredominanteVer,
+    String? objTipoDocumentoIdVer,
+    String? objRubroActividad2Ver,
+    String? objRubroActividad3Ver,
+    String? objRubroActividadPredominanteVer,
+    String? objTipoPersonaIdVer,
+    String? objActividadEconomicaIdVer,
+    String? objActividadEconomicaId1Ver,
+    String? objActividadEconomicaId2Ver,
+    String? objParentescoFamiliarCercanoIdVer,
   }) {
     return SolicitudAsalariadoState(
       hasVerified: hasVerified ?? this.hasVerified,
@@ -621,6 +724,58 @@ class SolicitudAsalariadoState extends Equatable {
       totalIngresoMes: totalIngresoMes ?? this.totalIngresoMes,
       totalIngresoMesConyugue:
           totalIngresoMesConyugue ?? this.totalIngresoMesConyugue,
+      fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
+      tasaInteres: tasaInteres ?? this.tasaInteres,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
+      objOrigenSolicitudIdVer:
+          objOrigenSolicitudIdVer ?? this.objOrigenSolicitudIdVer,
+      objPaisEmisorCedulaVer:
+          objPaisEmisorCedulaVer ?? this.objPaisEmisorCedulaVer,
+      objMunicipioCasaIdVer:
+          objMunicipioCasaIdVer ?? this.objMunicipioCasaIdVer,
+      objDepartamentoCasaIdVer:
+          objDepartamentoCasaIdVer ?? this.objDepartamentoCasaIdVer,
+      objPaisCasaIdVer: objPaisCasaIdVer ?? this.objPaisCasaIdVer,
+      objCondicionCasaIdVer:
+          objCondicionCasaIdVer ?? this.objCondicionCasaIdVer,
+      objMonedaIdVer: objMonedaIdVer ?? this.objMonedaIdVer,
+      objPropositoIdVer: objPropositoIdVer ?? this.objPropositoIdVer,
+      objFrecuenciaIdVer: objFrecuenciaIdVer ?? this.objFrecuenciaIdVer,
+      objSectorIdVer: objSectorIdVer ?? this.objSectorIdVer,
+      objEstadoCivilIdVer: objEstadoCivilIdVer ?? this.objEstadoCivilIdVer,
+      objParentescoBeneficiarioSeguroIdVer:
+          objParentescoBeneficiarioSeguroIdVer ??
+              this.objParentescoBeneficiarioSeguroIdVer,
+      objEstadoSolicitudIdVer:
+          objEstadoSolicitudIdVer ?? this.objEstadoSolicitudIdVer,
+      objOficialCreditoIdVer:
+          objOficialCreditoIdVer ?? this.objOficialCreditoIdVer,
+      objProductoIdVer: objProductoIdVer ?? this.objProductoIdVer,
+      objEscolaridadIdVer: objEscolaridadIdVer ?? this.objEscolaridadIdVer,
+      objSexoIdVer: objSexoIdVer ?? this.objSexoIdVer,
+      objPaisNacimientoIdVer:
+          objPaisNacimientoIdVer ?? this.objPaisNacimientoIdVer,
+      objRubroActividadVer: objRubroActividadVer ?? this.objRubroActividadVer,
+      objActividadPredominanteVer:
+          objActividadPredominanteVer ?? this.objActividadPredominanteVer,
+      objTipoDocumentoIdVer:
+          objTipoDocumentoIdVer ?? this.objTipoDocumentoIdVer,
+      objRubroActividad2Ver:
+          objRubroActividad2Ver ?? this.objRubroActividad2Ver,
+      objRubroActividad3Ver:
+          objRubroActividad3Ver ?? this.objRubroActividad3Ver,
+      objRubroActividadPredominanteVer: objRubroActividadPredominanteVer ??
+          this.objRubroActividadPredominanteVer,
+      objTipoPersonaIdVer: objTipoPersonaIdVer ?? this.objTipoPersonaIdVer,
+      objActividadEconomicaIdVer:
+          objActividadEconomicaIdVer ?? this.objActividadEconomicaIdVer,
+      objActividadEconomicaId1Ver:
+          objActividadEconomicaId1Ver ?? this.objActividadEconomicaId1Ver,
+      objActividadEconomicaId2Ver:
+          objActividadEconomicaId2Ver ?? this.objActividadEconomicaId2Ver,
+      objParentescoFamiliarCercanoIdVer: objParentescoFamiliarCercanoIdVer ??
+          this.objParentescoFamiliarCercanoIdVer,
     );
   }
 }

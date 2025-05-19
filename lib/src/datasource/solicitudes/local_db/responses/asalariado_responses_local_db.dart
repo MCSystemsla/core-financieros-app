@@ -119,7 +119,73 @@ class AsalariadoResponsesLocalDb {
   bool? isDone;
   bool? isOffline;
   bool? hasVerified;
+  DateTime? fechaDesembolso;
+  double? tasaInteres;
+  int? montoMinimo;
+  int? montoMaximo;
+  String? objOrigenSolicitudIdVer;
+  String? objPaisEmisorCedulaVer;
+  String? objMunicipioCasaIdVer;
+  String? objDepartamentoCasaIdVer;
+  String? objPaisCasaIdVer;
+  String? objCondicionCasaIdVer;
+  String? objMonedaIdVer;
+  String? objPropositoIdVer;
+  String? objFrecuenciaIdVer;
+  String? objSectorIdVer;
+  String? objEstadoCivilIdVer;
+  String? objParentescoBeneficiarioSeguroIdVer;
+  String? objEstadoSolicitudIdVer;
+  String? objOficialCreditoIdVer;
+  String? objProductoIdVer;
+  String? objEscolaridadIdVer;
+  String? objSexoIdVer;
+  String? objPaisNacimientoIdVer;
+  String? objRubroActividadVer;
+  String? objActividadPredominanteVer;
+  String? objTipoDocumentoIdVer;
+  String? objRubroActividad2Ver;
+  String? objRubroActividad3Ver;
+  String? objRubroActividadPredominanteVer;
+  String? objTipoPersonaIdVer;
+  String? objActividadEconomicaIdVer;
+  String? objActividadEconomicaId1Ver;
+  String? objActividadEconomicaId2Ver;
+  String? objParentescoFamiliarCercanoIdVer;
   AsalariadoResponsesLocalDb({
+    this.objOrigenSolicitudIdVer,
+    this.objPaisEmisorCedulaVer,
+    this.objMunicipioCasaIdVer,
+    this.objDepartamentoCasaIdVer,
+    this.objPaisCasaIdVer,
+    this.objCondicionCasaIdVer,
+    this.objMonedaIdVer,
+    this.objPropositoIdVer,
+    this.objFrecuenciaIdVer,
+    this.objSectorIdVer,
+    this.objEstadoCivilIdVer,
+    this.objParentescoBeneficiarioSeguroIdVer,
+    this.objEstadoSolicitudIdVer,
+    this.objOficialCreditoIdVer,
+    this.objProductoIdVer,
+    this.objEscolaridadIdVer,
+    this.objSexoIdVer,
+    this.objPaisNacimientoIdVer,
+    this.objRubroActividadVer,
+    this.objActividadPredominanteVer,
+    this.objTipoDocumentoIdVer,
+    this.objRubroActividad2Ver,
+    this.objRubroActividad3Ver,
+    this.objRubroActividadPredominanteVer,
+    this.objTipoPersonaIdVer,
+    this.objActividadEconomicaIdVer,
+    this.objActividadEconomicaId1Ver,
+    this.objActividadEconomicaId2Ver,
+    this.objParentescoFamiliarCercanoIdVer,
+    this.fechaDesembolso,
+    this.tasaInteres,
+    this.montoMinimo,
+    this.montoMaximo,
     this.hasVerified,
     this.isOffline,
     this.errorMsg,

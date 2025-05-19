@@ -27,7 +27,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
     with AutomaticKeepAliveClientMixin {
   String? nombreFamiliarCercano;
   String? telefonoFamiliarCercano;
-  String? parentescoFamiliarCercano;
+  Item? parentescoFamiliarCercano;
   String? direccionDomicilioFamiiiar;
   String? nombreConyuge;
   String? nacionalidadConyuge;
@@ -91,7 +91,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
             SearchDropdownWidget(
               codigo: 'PARENTESCO',
               onChanged: (item) {
-                parentescoFamiliarCercano = item?.value;
+                parentescoFamiliarCercano = item;
                 setState(() {});
               },
               title: 'Parentesco',
@@ -267,7 +267,9 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                         nombreFamiliarCercano: nombreFamiliarCercano,
                         telefonoFamiliarCercano: telefonoFamiliarCercano,
                         objParentescoFamiliarCercanoId:
-                            parentescoFamiliarCercano,
+                            parentescoFamiliarCercano?.value,
+                        objParentescoFamiliarCercanoIdVer:
+                            parentescoFamiliarCercano?.name,
                         direccionFamiliarCercano: direccionDomicilioFamiiiar,
                         nombreConyugue: nombreConyuge,
                         nacionalidadConyugue: nacionalidadConyuge,
