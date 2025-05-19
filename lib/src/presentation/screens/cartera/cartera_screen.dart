@@ -31,7 +31,7 @@ class _CarteraScreenState extends State<CarteraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isProdMode = bool.fromEnvironment('isProdMode');
+    const isProdMode = bool.fromEnvironment('isProdMode');
 
     final actions = LocalStorage().currentActions;
     final isInternetConnection =
