@@ -34,7 +34,7 @@ class HomeBannerWidget extends StatelessWidget {
               ImageAsset.loader,
             ),
             image: const NetworkImage(
-              'https://res.cloudinary.com/dfp17v5ve/image/upload/v1739570777/miCredito/carrusel/dxbqzolkeru5dy04uaza.jpg',
+              'https://res.cloudinary.com/dfp17v5ve/image/upload/v1731341051/micredito/carrusel/d1053f76-cabb-4e5f-9b1d-f2d80025a794.jpg',
             ),
           ),
         ),

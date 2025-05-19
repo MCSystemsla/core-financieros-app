@@ -196,7 +196,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
               title: 'Monto',
               hintText: monto ?? 'Ingresa Monto',
               textInputType: TextInputType.number,
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) => ClassValidator.validateRequired(monto),
               isValid: null,
               onChange: (value) {
                 monto = value;

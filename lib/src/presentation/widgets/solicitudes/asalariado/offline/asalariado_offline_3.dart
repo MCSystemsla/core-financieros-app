@@ -117,7 +117,7 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3> {
             CatalogoValorNacionalidad(
               codigo: 'MUN',
               title: 'Municipio',
-              hintText: depCasa?.value ?? '',
+              hintText: depCasa?.name ?? '',
               onChanged: (item) {
                 munCasa = Item(
                   name: item?.nombre ?? '',
