@@ -565,8 +565,9 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   }
 
   @override
-  Future<(bool, String)> sendCodigoVerificacion(
-      {required String codigo}) async {
+  Future<(bool, String)> sendCodigoVerificacion({
+    required String codigo,
+  }) async {
     final endpoint = CodigoVerificationEndpoint(codigo: codigo);
     try {
       final resp = await _api.request(endpoint: endpoint);

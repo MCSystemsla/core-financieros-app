@@ -75,12 +75,12 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
             : TypeSigner.cliente,
       );
       if (!isOk) {
-        emit(state.copyWith(status: Status.error));
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
         return;
       }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
-      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
 }
