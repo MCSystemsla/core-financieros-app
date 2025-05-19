@@ -95,7 +95,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
           route: widget.solicitud.producto ?? '',
           solicitudId: widget.solicitud.solicitudId ?? '0',
           nombre: widget.solicitud.nombre ?? '',
-          numero: widget.solicitud.nombre ?? '',
+          numero: widget.solicitud.numero ?? '',
           motivoAnterior: widget.solicitud.motivoAnterior ??
               'Motivo Anterior no registrado',
         );

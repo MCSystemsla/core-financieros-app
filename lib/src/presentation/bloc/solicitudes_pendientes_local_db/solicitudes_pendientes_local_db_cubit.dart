@@ -125,6 +125,8 @@ class SolicitudesPendientesLocalDbCubit
           .filter()
           .isSendedEqualTo(false)
           .findAll();
+      // final solicitudes =
+      //     await state.isar!.solicitudesPendientes.where().findAll();
       emit(state.copyWith(status: Status.done, solicitudes: solicitudes));
     } catch (e) {
       _logger.e(e);
