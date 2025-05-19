@@ -8,13 +8,11 @@ class NoVpnPopUpOnKiva extends OdsDialog {
   final BuildContext context;
   final String info;
   final String header;
-  final bool isVpnConnected;
   const NoVpnPopUpOnKiva({
     super.key,
     required this.context,
     required this.info,
     required this.header,
-    required this.isVpnConnected,
   }) : super(
           title: header,
           subtitle:

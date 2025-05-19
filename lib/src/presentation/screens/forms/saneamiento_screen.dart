@@ -389,47 +389,32 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              context
-                                  .read<SolicitudesPendientesLocalDbCubit>()
-                                  .saveImagesLocal(
-                                    imageModel: ImageModel()
-                                      ..typeSigner = typeSigner.name
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                  );
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveAnswersOnLocalDB(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<RecurrenteAguaYSaneamientoCubit>()
-                                      .sendAnswers();
+
+                              await saveAnswersOnLocalDB(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                !isConnected.isCorrectNetwork
+                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<RecurrenteAguaYSaneamientoCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -466,8 +451,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -498,13 +483,13 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -738,45 +723,30 @@ class _EstandarSignState extends State<EstandarSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              context
-                                  .read<SolicitudesPendientesLocalDbCubit>()
-                                  .saveImagesLocal(
-                                    imageModel: ImageModel()
-                                      ..typeSigner = typeSigner.name
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                  );
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveOfflineResponses(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context.read<EstandarCubit>().sendAnswers();
+
+                              await saveOfflineResponses(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                !isConnected.isCorrectNetwork
+                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context.read<EstandarCubit>().sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -813,8 +783,8 @@ class _EstandarSignState extends State<EstandarSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -840,13 +810,13 @@ class _EstandarSignState extends State<EstandarSign> {
             ..publicitarNegocio = state.publicitarNegocio
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -1467,31 +1437,32 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                             .solicitudId,
                                       ),
                                   );
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveAnswersOnLocalDB(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<AguaYSaneamientoCubit>()
-                                      .sendAnswers();
+
+                              await saveAnswersOnLocalDB(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                !isConnected.isCorrectNetwork
+                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<AguaYSaneamientoCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -1528,8 +1499,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
     ImageModel imageModel,
     String msgDialog,
   ) async {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1560,13 +1531,13 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -1815,31 +1786,33 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                             .solicitudId,
                                       ),
                                   );
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveMejoraViviendaForm(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<MejoraViviendaCubit>()
-                                      .sendAnswers();
+
+                              await saveMejoraViviendaForm(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                !isConnected.isCorrectNetwork
+                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
+                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                              );
+
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<MejoraViviendaCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -1877,8 +1850,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
     String msgDialog,
   ) async {
     if (!context.mounted) return;
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1904,12 +1877,12 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }

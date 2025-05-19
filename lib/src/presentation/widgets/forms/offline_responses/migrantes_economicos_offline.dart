@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/migrantes_ecomicos.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
@@ -28,6 +29,7 @@ class MigranteEconomicoOffline extends StatefulWidget {
 }
 
 class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
+  ImageModel? imageModel;
   @override
   void initState() {
     initFunctions();
@@ -38,7 +40,8 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
     await solicitudesProvider.getMigranteEconomico(widget.solicitudId);
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -57,15 +60,15 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    typeSigner: state.imageModel?.typeSigner ?? '',
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,

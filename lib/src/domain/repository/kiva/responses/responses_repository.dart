@@ -574,7 +574,6 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       if (resp['statusCode'] != 201) {
         return (false, 'Codigo Verificacion Incorrecto');
       }
-      _logger.e(resp);
       return (true, 'Codigo verificacion correcto');
     } catch (e) {
       _logger.e(e);

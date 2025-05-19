@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/recurrente_micredi_estudio_model.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/micredi_estudio/micredi_estudio_cubit.dart';
@@ -32,6 +33,7 @@ class MicrediEstudioForm extends StatefulWidget {
 }
 
 class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
+  ImageModel? imageModel;
   @override
   void initState() {
     initFunctions();
@@ -41,8 +43,9 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getMiCrediEstudio(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -62,15 +65,15 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    typeSigner: state.imageModel?.typeSigner ?? '',
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,
@@ -425,6 +428,7 @@ class MiCrediEstudioRecurrenteForm extends StatefulWidget {
 
 class _MiCrediEstudioRecurrenteFormState
     extends State<MiCrediEstudioRecurrenteForm> {
+  ImageModel? imageModel;
   @override
   void initState() {
     initFunctions();
@@ -434,8 +438,9 @@ class _MiCrediEstudioRecurrenteFormState
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getRecurrentMiCrediEstudio(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -456,15 +461,15 @@ class _MiCrediEstudioRecurrenteFormState
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    typeSigner: state.imageModel?.typeSigner ?? '',
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
                     formularioKiva:
                         context.read<KivaRouteCubit>().state.currentRoute,

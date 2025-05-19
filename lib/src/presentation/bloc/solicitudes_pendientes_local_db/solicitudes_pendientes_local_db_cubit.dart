@@ -121,8 +121,10 @@ class SolicitudesPendientesLocalDbCubit
   Future<void> getSolicitudes() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final solicitudes =
-          await state.isar!.solicitudesPendientes.where().findAll();
+      final solicitudes = await state.isar!.solicitudesPendientes
+          .filter()
+          .isSendedEqualTo(false)
+          .findAll();
       emit(state.copyWith(status: Status.done, solicitudes: solicitudes));
     } catch (e) {
       _logger.e(e);

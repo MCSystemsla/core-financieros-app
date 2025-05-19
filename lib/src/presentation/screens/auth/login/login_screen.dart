@@ -1,6 +1,7 @@
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/no_internet_connection_snackbar.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -45,7 +46,7 @@ class LoginScreen extends StatelessWidget {
             UpdateAppDialog(
               apkUrl: state.apkVersion,
               context: context,
-              title: 'Debes actualiar la app para poder continuar',
+              title: 'Para continuar, es necesario actualizar la aplicación.',
               versionName: state.apkVersionName,
             ).showDialog(context);
           }
@@ -64,29 +65,10 @@ class LoginScreen extends StatelessWidget {
                         child: LoginScreen(),
                       ),
                       Image(
-                          height: 200,
-                          image: AssetImage(
-                            'assets/images/logo_original.png',
-                          )),
-                      // BlocBuilder<LogoCubit, LogoState>(
-                      //   builder: (context, state) {
-                      //     if (state is OnLogoSuccess) {
-                      //       return Image(
-                      //           height: 200,
-                      //           image: NetworkImage(
-                      //             state.imgUrl,
-                      //           ));
-                      //     }
-                      //     if (state is OnLogoLoading) {
-                      //       return const CircularProgressIndicator();
-                      //     }
-                      //     if (state is OnLogoError) {
-                      //       return const Text('error');
-                      //     }
-                      //     return const SizedBox();
-                      //   },
-                      // ),
-                      // const Gap(10),
+                        height: 200,
+                        image: AssetImage(ImageAsset.logoNi),
+                      ),
+                      Gap(10),
                       Expanded(
                         flex: 5,
                         child: LoginFormWidget(),
