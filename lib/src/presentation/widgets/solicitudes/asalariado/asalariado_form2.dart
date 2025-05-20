@@ -27,6 +27,7 @@ class AsalariadoForm2 extends StatefulWidget {
 
 class _AsalariadoForm2State extends State<AsalariadoForm2>
     with AutomaticKeepAliveClientMixin {
+  String telefonoCodeBeneficiario = '+503';
   String? beneficiarioSeguro;
   Item? parentesco;
   String? cedula;
@@ -91,6 +92,9 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
             ),
             const Gap(30),
             CountryInput(
+              onCountryCodeChange: (value) {
+                telefonoCodeBeneficiario = value?.dialCode ?? '';
+              },
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -262,7 +266,8 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                         objParentescoBeneficiarioSeguroId: parentesco?.value,
                         objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                         cedulaBeneficiarioSeguro: cedula,
-                        telefonoBeneficiario: telefono,
+                        telefonoBeneficiario: telefonoCodeBeneficiario +
+                            telefono!.trim().replaceAll('-', ''),
                         espeps: esPeps == 'input.yes'.tr(),
                         nombreDeEntidadPeps: nombreEntidad,
                         paisPeps: paisPeps,

@@ -40,6 +40,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
   String? observaciones;
   String? nombreDelaEmpresaConyuge;
   String? telefonoOficinaConyuge;
+  String telefonoOficinaCodeConyuge = '+503';
   String? direccionTrabajoConyugue;
   String? tiempoLaborarConyugue;
   final formKey = GlobalKey<FormState>();
@@ -237,6 +238,9 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
               ),
               const Gap(30),
               CountryInput(
+                onCountryCodeChange: (value) {
+                  telefonoOficinaCodeConyuge = value?.dialCode ?? '+503';
+                },
                 textInputType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -284,7 +288,8 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                             double.tryParse(totalIngresosMesConyuge ?? '0'),
                         observacion: observaciones,
                         trabajoConyugue: nombreDelaEmpresaConyuge,
-                        telefonoTrabajoConyugue: telefonoOficinaConyuge,
+                        telefonoTrabajoConyugue: telefonoOficinaCodeConyuge +
+                            (telefonoOficinaConyuge ?? '').replaceAll('-', ''),
                       );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

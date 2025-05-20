@@ -321,21 +321,19 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago!.name,
+                    formadePago: frecuenciaDePago?.name ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
                   await CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudAsalariadoCubit>().saveAnswers(
                             ubicacion: ubicacion,
                             isOffline: !isConnected,
                             isDone: !isConnected,
-
-                            // objFrecuenciaIdVer: frecuenciaDePago?.name,
                             tasaInteres: tasaInteres,
                             montoMaximo: montoMaximo?.toInt(),
                             montoMinimo: montoMinimo,
@@ -358,42 +356,38 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
                             observacion: observacion,
                           );
 
-                      // widget.controller.nextPage(
-                      //   duration: const Duration(milliseconds: 300),
-                      //   curve: Curves.easeIn,
-                      // );
                       context.pop();
+                      if (!context.mounted) return;
+                      if (!isConnected) {
+                        context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                              errorMsg:
+                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value: context.read<SolicitudAsalariadoCubit>(),
+                            child: AsalariadoSendingForm(
+                              solicitudId: context
+                                  .read<SolicitudAsalariadoCubit>()
+                                  .state
+                                  .idLocalResponse,
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   ).showDialog(context);
-
-                  if (!context.mounted) return;
-                  if (!isConnected) {
-                    context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                          errorMsg:
-                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                        );
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                      onDone: () => context.pushReplacement('/solicitudes'),
-                    ).showDialog(context, dialogType: DialogType.infoReverse);
-                    return;
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => BlocProvider.value(
-                        value: context.read<SolicitudAsalariadoCubit>(),
-                        child: AsalariadoSendingForm(
-                          solicitudId: context
-                              .read<SolicitudAsalariadoCubit>()
-                              .state
-                              .idLocalResponse,
-                        ),
-                      ),
-                    ),
-                  );
                 },
               ),
             ),

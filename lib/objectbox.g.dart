@@ -908,7 +908,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 4280151073531314887),
       name: 'ReprestamoResponsesLocalDb',
-      lastPropertyId: const obx_int.IdUid(60, 1785096795156890895),
+      lastPropertyId: const obx_int.IdUid(79, 4550301742323606250),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -1205,6 +1205,101 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(60, 1785096795156890895),
             name: 'isOffline',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(61, 5275660433681229922),
+            name: 'objOrigenSolicitudIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(62, 3609296184298992694),
+            name: 'objMonedaIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(63, 510827665412834740),
+            name: 'objPropositoIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(64, 4358291215128931311),
+            name: 'objFrecuenciaIdVer2',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(65, 2015643542642308930),
+            name: 'objActividadIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(66, 5458914049213139433),
+            name: 'objActividadId1Ver',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(67, 1128247547073742496),
+            name: 'objActividadId2Ver',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(68, 3839176645968618352),
+            name: 'objSectorIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(69, 3328922099016459619),
+            name: 'objParentescoBeneficiarioSeguroIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(70, 8148838107004405111),
+            name: 'objProductoIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(71, 3335861199007295853),
+            name: 'objRubroActividadVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(72, 657334716259292976),
+            name: 'objActividadPredominanteVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(73, 3667144353879641179),
+            name: 'objTipoDocumentoIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(74, 9196940998306405943),
+            name: 'objRubroActividad2Ver',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(75, 6709932072685735250),
+            name: 'objRubroActividad3Ver',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(76, 1057929372345304723),
+            name: 'objRubroActividadPredominanteVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(77, 3211765206829959865),
+            name: 'objTipoPersonaIdVer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(78, 2711673113260757773),
+            name: 'parentescoFamiliar',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(79, 4550301742323606250),
+            name: 'parentescoFamiliarVer',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -3483,7 +3578,73 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : fbb.writeString(object.objFrecuenciaIdVer!);
           final cedulaOffset =
               object.cedula == null ? null : fbb.writeString(object.cedula!);
-          fbb.startTable(61);
+          final objOrigenSolicitudIdVerOffset =
+              object.objOrigenSolicitudIdVer == null
+                  ? null
+                  : fbb.writeString(object.objOrigenSolicitudIdVer!);
+          final objMonedaIdVerOffset = object.objMonedaIdVer == null
+              ? null
+              : fbb.writeString(object.objMonedaIdVer!);
+          final objPropositoIdVerOffset = object.objPropositoIdVer == null
+              ? null
+              : fbb.writeString(object.objPropositoIdVer!);
+          final objFrecuenciaIdVer2Offset = object.objFrecuenciaIdVer2 == null
+              ? null
+              : fbb.writeString(object.objFrecuenciaIdVer2!);
+          final objActividadIdVerOffset = object.objActividadIdVer == null
+              ? null
+              : fbb.writeString(object.objActividadIdVer!);
+          final objActividadId1VerOffset = object.objActividadId1Ver == null
+              ? null
+              : fbb.writeString(object.objActividadId1Ver!);
+          final objActividadId2VerOffset = object.objActividadId2Ver == null
+              ? null
+              : fbb.writeString(object.objActividadId2Ver!);
+          final objSectorIdVerOffset = object.objSectorIdVer == null
+              ? null
+              : fbb.writeString(object.objSectorIdVer!);
+          final objParentescoBeneficiarioSeguroIdVerOffset = object
+                      .objParentescoBeneficiarioSeguroIdVer ==
+                  null
+              ? null
+              : fbb.writeString(object.objParentescoBeneficiarioSeguroIdVer!);
+          final objProductoIdVerOffset = object.objProductoIdVer == null
+              ? null
+              : fbb.writeString(object.objProductoIdVer!);
+          final objRubroActividadVerOffset = object.objRubroActividadVer == null
+              ? null
+              : fbb.writeString(object.objRubroActividadVer!);
+          final objActividadPredominanteVerOffset =
+              object.objActividadPredominanteVer == null
+                  ? null
+                  : fbb.writeString(object.objActividadPredominanteVer!);
+          final objTipoDocumentoIdVerOffset =
+              object.objTipoDocumentoIdVer == null
+                  ? null
+                  : fbb.writeString(object.objTipoDocumentoIdVer!);
+          final objRubroActividad2VerOffset =
+              object.objRubroActividad2Ver == null
+                  ? null
+                  : fbb.writeString(object.objRubroActividad2Ver!);
+          final objRubroActividad3VerOffset =
+              object.objRubroActividad3Ver == null
+                  ? null
+                  : fbb.writeString(object.objRubroActividad3Ver!);
+          final objRubroActividadPredominanteVerOffset =
+              object.objRubroActividadPredominanteVer == null
+                  ? null
+                  : fbb.writeString(object.objRubroActividadPredominanteVer!);
+          final objTipoPersonaIdVerOffset = object.objTipoPersonaIdVer == null
+              ? null
+              : fbb.writeString(object.objTipoPersonaIdVer!);
+          final parentescoFamiliarOffset = object.parentescoFamiliar == null
+              ? null
+              : fbb.writeString(object.parentescoFamiliar!);
+          final parentescoFamiliarVerOffset =
+              object.parentescoFamiliarVer == null
+                  ? null
+                  : fbb.writeString(object.parentescoFamiliarVer!);
+          fbb.startTable(80);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, usernameOffset);
           fbb.addOffset(2, userIpOffset);
@@ -3544,6 +3705,25 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(57, objFrecuenciaIdVerOffset);
           fbb.addOffset(58, cedulaOffset);
           fbb.addBool(59, object.isOffline);
+          fbb.addOffset(60, objOrigenSolicitudIdVerOffset);
+          fbb.addOffset(61, objMonedaIdVerOffset);
+          fbb.addOffset(62, objPropositoIdVerOffset);
+          fbb.addOffset(63, objFrecuenciaIdVer2Offset);
+          fbb.addOffset(64, objActividadIdVerOffset);
+          fbb.addOffset(65, objActividadId1VerOffset);
+          fbb.addOffset(66, objActividadId2VerOffset);
+          fbb.addOffset(67, objSectorIdVerOffset);
+          fbb.addOffset(68, objParentescoBeneficiarioSeguroIdVerOffset);
+          fbb.addOffset(69, objProductoIdVerOffset);
+          fbb.addOffset(70, objRubroActividadVerOffset);
+          fbb.addOffset(71, objActividadPredominanteVerOffset);
+          fbb.addOffset(72, objTipoDocumentoIdVerOffset);
+          fbb.addOffset(73, objRubroActividad2VerOffset);
+          fbb.addOffset(74, objRubroActividad3VerOffset);
+          fbb.addOffset(75, objRubroActividadPredominanteVerOffset);
+          fbb.addOffset(76, objTipoPersonaIdVerOffset);
+          fbb.addOffset(77, parentescoFamiliarOffset);
+          fbb.addOffset(78, parentescoFamiliarVerOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -3556,6 +3736,63 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 106);
           final fechaDesembolsoValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 116);
+          final objOrigenSolicitudIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 124);
+          final objMonedaIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 126);
+          final objPropositoIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 128);
+          final objFrecuenciaIdVer2Param =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 130);
+          final objActividadIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 132);
+          final objActividadId1VerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 134);
+          final objActividadId2VerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 136);
+          final objSectorIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 138);
+          final objParentescoBeneficiarioSeguroIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 140);
+          final objProductoIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 142);
+          final objRubroActividadVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 144);
+          final objActividadPredominanteVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 146);
+          final objTipoDocumentoIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 148);
+          final objRubroActividad2VerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 150);
+          final objRubroActividad3VerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 152);
+          final objRubroActividadPredominanteVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 154);
+          final objTipoPersonaIdVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 156);
+          final parentescoFamiliarParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 158);
+          final parentescoFamiliarVerParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 160);
           final isOfflineParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 122);
           final objFrecuenciaIdVerParam =
@@ -3714,6 +3951,27 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final hasVerifiedParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 112);
           final object = ReprestamoResponsesLocalDb(
+              objOrigenSolicitudIdVer: objOrigenSolicitudIdVerParam,
+              objMonedaIdVer: objMonedaIdVerParam,
+              objPropositoIdVer: objPropositoIdVerParam,
+              objFrecuenciaIdVer2: objFrecuenciaIdVer2Param,
+              objActividadIdVer: objActividadIdVerParam,
+              objActividadId1Ver: objActividadId1VerParam,
+              objActividadId2Ver: objActividadId2VerParam,
+              objSectorIdVer: objSectorIdVerParam,
+              objParentescoBeneficiarioSeguroIdVer:
+                  objParentescoBeneficiarioSeguroIdVerParam,
+              objProductoIdVer: objProductoIdVerParam,
+              objRubroActividadVer: objRubroActividadVerParam,
+              objActividadPredominanteVer: objActividadPredominanteVerParam,
+              objTipoDocumentoIdVer: objTipoDocumentoIdVerParam,
+              objRubroActividad2Ver: objRubroActividad2VerParam,
+              objRubroActividad3Ver: objRubroActividad3VerParam,
+              objRubroActividadPredominanteVer:
+                  objRubroActividadPredominanteVerParam,
+              objTipoPersonaIdVer: objTipoPersonaIdVerParam,
+              parentescoFamiliar: parentescoFamiliarParam,
+              parentescoFamiliarVer: parentescoFamiliarVerParam,
               isOffline: isOfflineParam,
               objFrecuenciaIdVer: objFrecuenciaIdVerParam,
               username: usernameParam,
@@ -5862,6 +6120,101 @@ class ReprestamoResponsesLocalDb_ {
   /// See [ReprestamoResponsesLocalDb.isOffline].
   static final isOffline = obx.QueryBooleanProperty<ReprestamoResponsesLocalDb>(
       _entities[7].properties[58]);
+
+  /// See [ReprestamoResponsesLocalDb.objOrigenSolicitudIdVer].
+  static final objOrigenSolicitudIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[59]);
+
+  /// See [ReprestamoResponsesLocalDb.objMonedaIdVer].
+  static final objMonedaIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[60]);
+
+  /// See [ReprestamoResponsesLocalDb.objPropositoIdVer].
+  static final objPropositoIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[61]);
+
+  /// See [ReprestamoResponsesLocalDb.objFrecuenciaIdVer2].
+  static final objFrecuenciaIdVer2 =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[62]);
+
+  /// See [ReprestamoResponsesLocalDb.objActividadIdVer].
+  static final objActividadIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[63]);
+
+  /// See [ReprestamoResponsesLocalDb.objActividadId1Ver].
+  static final objActividadId1Ver =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[64]);
+
+  /// See [ReprestamoResponsesLocalDb.objActividadId2Ver].
+  static final objActividadId2Ver =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[65]);
+
+  /// See [ReprestamoResponsesLocalDb.objSectorIdVer].
+  static final objSectorIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[66]);
+
+  /// See [ReprestamoResponsesLocalDb.objParentescoBeneficiarioSeguroIdVer].
+  static final objParentescoBeneficiarioSeguroIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[67]);
+
+  /// See [ReprestamoResponsesLocalDb.objProductoIdVer].
+  static final objProductoIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[68]);
+
+  /// See [ReprestamoResponsesLocalDb.objRubroActividadVer].
+  static final objRubroActividadVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[69]);
+
+  /// See [ReprestamoResponsesLocalDb.objActividadPredominanteVer].
+  static final objActividadPredominanteVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[70]);
+
+  /// See [ReprestamoResponsesLocalDb.objTipoDocumentoIdVer].
+  static final objTipoDocumentoIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[71]);
+
+  /// See [ReprestamoResponsesLocalDb.objRubroActividad2Ver].
+  static final objRubroActividad2Ver =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[72]);
+
+  /// See [ReprestamoResponsesLocalDb.objRubroActividad3Ver].
+  static final objRubroActividad3Ver =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[73]);
+
+  /// See [ReprestamoResponsesLocalDb.objRubroActividadPredominanteVer].
+  static final objRubroActividadPredominanteVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[74]);
+
+  /// See [ReprestamoResponsesLocalDb.objTipoPersonaIdVer].
+  static final objTipoPersonaIdVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[75]);
+
+  /// See [ReprestamoResponsesLocalDb.parentescoFamiliar].
+  static final parentescoFamiliar =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[76]);
+
+  /// See [ReprestamoResponsesLocalDb.parentescoFamiliarVer].
+  static final parentescoFamiliarVer =
+      obx.QueryStringProperty<ReprestamoResponsesLocalDb>(
+          _entities[7].properties[77]);
 }
 
 /// [AsalariadoResponsesLocalDb] entity fields to define ObjectBox queries.

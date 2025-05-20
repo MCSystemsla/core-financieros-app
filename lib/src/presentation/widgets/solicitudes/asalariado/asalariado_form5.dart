@@ -30,6 +30,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
   String? lugarTrabajoAnterior;
   String? fuenteOtrosIngresos;
   String? telefonoOficina;
+  String telefonoCodeOficina = '+503';
   String? salarioNetoMensual;
   String? tiempoDeTrabajar;
   String? direccionEmpresa;
@@ -109,6 +110,9 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             CountryInput(
+              onCountryCodeChange: (value) {
+                telefonoCodeOficina = value?.dialCode ?? '+503';
+              },
               maxLength: 15,
               isRequired: false,
               inputFormatters: [
@@ -183,7 +187,8 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
                         cargo: cargo,
                         lugarTrabajoAnterior: lugarTrabajoAnterior,
                         fuenteOtrosIngresos: fuenteOtrosIngresos,
-                        telefonoTrabajo: telefonoOficina,
+                        telefonoTrabajo: telefonoCodeOficina +
+                            telefonoOficina!.replaceAll('-', ''),
                         salarioNetoCordoba:
                             double.tryParse(salarioNetoMensual ?? '0'),
                         tiempoLaborar: tiempoDeTrabajar,

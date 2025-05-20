@@ -225,16 +225,27 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   );
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
                         objRubroActividad: rubroActividad?.value,
+                        objRubroActividadVer: rubroActividad?.name,
                         objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad2Ver: rubroActividad2?.name,
                         objRubroActividad3: rubroActividad3?.value,
+                        objRubroActividad3Ver: rubroActividad3?.name,
                         objActividadId2: actividadEconomica2?.value,
+                        objActividadId2Ver: actividadEconomica2?.name,
                         objSectorId: sectorEconomico?.value,
+                        objSectorIdVer: sectorEconomico?.name,
                         // sectorEconomico: sectorEconomico2,
                         objActividadId: actividad?.value,
+                        objActividadIdVer: actividad?.name,
                         objActividadId1: actividad1?.value,
+                        objActividadId1Ver: actividad1?.name,
                         objRubroActividadPredominante:
                             objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
                       );
                 },
               ),

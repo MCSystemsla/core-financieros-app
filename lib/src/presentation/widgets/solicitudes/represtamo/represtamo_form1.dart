@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -66,7 +67,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   String? departamentoEmisor;
 
   String? tipoPersonaCredito;
-  String? tipoDocumento;
+  Item? tipoDocumento;
   String? tipoPersonaCreditoVer;
   String? celularReprestamo;
   String? locationLatitude;
@@ -75,6 +76,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
 
   @override
   void initState() {
+    super.initState();
     cedula = widget.cedula;
     GeolocationService(context: context).getCurrentLocation().then(
       (value) {
@@ -83,8 +85,6 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
         locationLongitude = value.longitude.toString();
       },
     );
-
-    super.initState();
   }
 
   final formKey = GlobalKey<FormState>();
@@ -120,7 +120,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
-                tipoDocumento = item.value;
+                tipoDocumento = item;
               },
               title: 'Tipo de Documento',
               validator: (value) =>
@@ -234,7 +234,9 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,
-                        objTipoDocumentoId: tipoDocumento,
+                        objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                        objTipoDocumentoId: tipoDocumento?.value,
+                        objTipoDocumentoIdVer: tipoDocumento?.name,
                         ubicacion: ubicacion,
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,

@@ -129,7 +129,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
     tasaInteres = solicitud?.tasaInteres;
     montoMinimo = solicitud?.montoMinimo;
     montoMaximo = solicitud?.montoMaximo?.toDouble();
-
+    montoController.text = solicitud?.monto.toString() ?? '0';
     super.initState();
   }
 
@@ -353,7 +353,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
                   await CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudAsalariadoCubit>().saveAnswers(
                             ubicacion: ubicacion,
@@ -382,37 +382,37 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
                           );
 
                       context.pop();
+                      if (!context.mounted) return;
+                      if (!isConnected) {
+                        context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                              errorMsg:
+                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value: context.read<SolicitudAsalariadoCubit>(),
+                            child: AsalariadoSendingForm(
+                              solicitudId: context
+                                  .read<SolicitudAsalariadoCubit>()
+                                  .state
+                                  .idLocalResponse,
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   ).showDialog(context);
-
-                  if (!context.mounted) return;
-                  if (!isConnected) {
-                    context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                          errorMsg:
-                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                        );
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                      onDone: () => context.pushReplacement('/solicitudes'),
-                    ).showDialog(context, dialogType: DialogType.infoReverse);
-                    return;
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => BlocProvider.value(
-                        value: context.read<SolicitudAsalariadoCubit>(),
-                        child: AsalariadoSendingForm(
-                          solicitudId: context
-                              .read<SolicitudAsalariadoCubit>()
-                              .state
-                              .idLocalResponse,
-                        ),
-                      ),
-                    ),
-                  );
                 },
               ),
             ),

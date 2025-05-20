@@ -37,6 +37,8 @@ class AsalariadoForm1 extends StatefulWidget {
 
 class _AsalariadoForm1State extends State<AsalariadoForm1>
     with AutomaticKeepAliveClientMixin {
+  String telefonoDatoPersonal = '+503';
+  String celularDatoPersonal = '+503';
   String? locationLatitude;
   String? locationLongitude;
 
@@ -256,14 +258,6 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
               codigo: 'PAIS',
               title: 'País de nacimiento',
             ),
-            // const Gap(30),
-            // OutlineTextfieldWidget(
-            //   onChange: (value) {
-            //     edad = value;
-            //   },
-            //   title: 'Edad',
-            //   icon: const Icon(Icons.cake),
-            // ),
             const Gap(30),
             SearchDropdownWidget(
               validator: (value) =>
@@ -356,6 +350,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
             const Gap(30),
             CountryInput(
               isRequired: false,
+              onCountryCodeChange: (value) {
+                telefonoDatoPersonal = value?.dialCode ?? '';
+              },
               onChange: (value) {
                 telefono = value;
               },
@@ -371,6 +368,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
             ),
             const Gap(30),
             CountryInput(
+              onCountryCodeChange: (value) {
+                celularDatoPersonal = value?.dialCode ?? '';
+              },
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -396,14 +396,6 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
               title: 'Email',
               icon: const Icon(Icons.email),
             ),
-            // const Gap(30),
-            // OutlineTextfieldWidget(
-            //   onChange: (value) {
-            //     totalDependientes = value;
-            //   },
-            //   title: 'Total dependientes',
-            //   icon: const Icon(Icons.people),
-            // ),
             const Gap(30),
             OutlineTextfieldWidget(
               textInputType: TextInputType.number,
@@ -471,19 +463,20 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                         objSexoId: sexo,
                         fechaNacimiento:
                             fechaNacimiento?.toUtc().toIso8601String(),
-                        // edad: edad,
                         fechaEmisionCedula:
                             fechaEmisionCedula?.toUtc().toIso8601String(),
                         fechaVencimientoCedula:
                             fechaVencimientoCedula?.toUtc().toIso8601String(),
                         ocupacion: ocupacion,
-                        telefono: telefono,
-                        celular: celular,
+                        celular: celularDatoPersonal +
+                            celular!.trim().replaceAll('-', ''),
                         email: email,
                         // totalDependientes: totalDependientes,
                         cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
                         objEscolaridadId: escolaridad,
                         profesion: profesion,
+                        telefono: telefonoDatoPersonal +
+                            telefono!.trim().replaceAll('-', ''),
                       );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

@@ -12,9 +12,9 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +65,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
   String? departamentoEmisor;
 
   String? tipoPersonaCredito;
-  String? tipoDocumento;
+  Item? tipoDocumento;
   String? tipoPersonaCreditoVer;
   String? celularReprestamo;
   String? locationLatitude;
@@ -76,7 +76,11 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
   @override
   void initState() {
     tipoPersonaCredito = widget.solicitud.objTipoPersonaId;
-    tipoDocumento = widget.solicitud.objTipoDocumentoId;
+    tipoPersonaCreditoVer = widget.solicitud.objTipoPersonaIdVer;
+    tipoDocumento = Item(
+      name: widget.solicitud.objTipoDocumentoIdVer ?? '',
+      value: widget.solicitud.objTipoDocumentoId,
+    );
     celularReprestamo = widget.solicitud.celularReprestamo;
     cedula = widget.solicitud.cedula;
     ubicacion = widget.solicitud.ubicacion;
@@ -126,7 +130,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
             ],
             const Gap(30),
             SearchDropdownWidget(
-              hintText: tipoPersonaCredito ?? 'Tipo de Persona',
+              hintText: tipoPersonaCreditoVer ?? 'Tipo de Persona',
               // initialValue: '',
               codigo: 'TIPOSPERSONACREDITO',
               onChanged: (item) {
@@ -140,12 +144,12 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
             ),
             const Gap(30),
             SearchDropdownWidget(
-              hintText: tipoDocumento ?? 'Tipo de Documento',
+              hintText: tipoDocumento?.name ?? 'Tipo de Documento',
               // initialValue: '',
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
-                tipoDocumento = item.value;
+                tipoDocumento = item;
               },
               title: 'Tipo de Documento',
               validator: (value) =>
@@ -169,38 +173,8 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 setState(() {});
               },
             ),
-            // OutlineTextfieldWidget(
-            //   onTap: () => selectDate(context),
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.calendar_today,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   title: 'Fecha Emision Cedula',
-            //   isRequired: true,
-            //   hintText: 'Selecciona Fecha',
-            //   isValid: null,
-            // ),
-            // const Gap(30),
-            // OutlineTextfieldWidget(
-            //   validator: (value) => ClassValidator.validateRequired(
-            //     _selectedDate?.selectorFormat(),
-            //   ),
-            //   hintText: _selectedDate?.selectorFormat() ??
-            //       'Ingrese Fecha Vencimiento',
-            //   // initialValue: _selectedDate?.selectorFormat() ?? '',
-            //   icon: Icon(
-            //     Icons.calendar_today,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   title: 'Fecha Vencimiento Cedula',
-            //   isValid: null,
-            //   isRequired: true,
-            //   readOnly: true,
-            //   onTap: () => selectDate(context),
-            // ),
             const Gap(30),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: celularReprestamo!,
               maxLength: 40,
               icon: Icon(
@@ -219,7 +193,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
               hintText: 'Ingresa Celular Represtamo',
               isValid: null,
               isRequired: true,
-              // validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -238,7 +211,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
               hintText: 'Ingresa Ubicacion',
               isValid: null,
               isRequired: true,
-              // validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             Container(
@@ -261,11 +233,12 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                         idLocalResponse: widget.solicitud.id,
                         tipoPersona: tipoPersonaCredito,
                         objTipoPersonaId: tipoPersonaCredito,
-                        objTipoDocumentoId: tipoDocumento,
+                        objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                        objTipoDocumentoId: tipoDocumento?.value,
+                        objTipoDocumentoIdVer: tipoDocumento?.name,
                         ubicacion: ubicacion,
                         ubicacionLatitud: locationLatitude,
                         ubicacionLongitud: locationLongitude,
-                        // objClienteId: widget.objClienteId,
                         celularReprestamo: celularReprestamo == null
                             ? ''
                             : celularCode +

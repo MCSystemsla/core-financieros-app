@@ -51,6 +51,7 @@ class LoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return const Scaffold(
+            resizeToAvoidBottomInset: true,
             body: PopScope(
               canPop: false,
               child: SafeArea(
@@ -239,6 +240,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   text: 'button.login'.tr(),
                   color: Colors.black,
                   onPressed: () async {
+                    FocusScope.of(context).unfocus();
+
                     // await internetConectionProvider
                     //     .getInternetStatusConnection();
                     // if (!mounted) return;

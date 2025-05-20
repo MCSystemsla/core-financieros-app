@@ -51,30 +51,38 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               title: 'País',
               onChanged: (item) {
                 paisCasa = Item(name: item?.nombre ?? '', value: item?.valor);
+                depCasa = Item(name: item!.nombre, value: item.valor);
                 setState(() {});
               },
               hintText: 'Ingresa Pais',
             ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              codigo: 'DEP',
-              title: 'Departamento',
-              hintText: 'Ingresa Departamento',
-              onChanged: (item) {
-                depCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                setState(() {});
-              },
-            ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              codigo: 'MUN',
-              title: 'Municipio',
-              hintText: 'Ingresa Municipio',
-              onChanged: (item) {
-                munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                setState(() {});
-              },
-            ),
+            if (paisCasa?.value != null) ...[
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                where: depCasa?.value,
+                codigo: 'DEP',
+                title: 'Departamento',
+                hintText: 'Ingresa Departamento',
+                onChanged: (item) {
+                  depCasa = Item(name: item?.nombre ?? '', value: item?.valor);
+                  munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
+                  setState(() {});
+                },
+              ),
+            ],
+            if (depCasa?.value != null) ...[
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                where: munCasa?.value,
+                codigo: 'MUN',
+                title: 'Municipio',
+                hintText: 'Ingresa Municipio',
+                onChanged: (item) {
+                  munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
+                  setState(() {});
+                },
+              ),
+            ],
             const Gap(30),
             SearchDropdownWidget(
               codigo: 'TIPOVIVIENDA',

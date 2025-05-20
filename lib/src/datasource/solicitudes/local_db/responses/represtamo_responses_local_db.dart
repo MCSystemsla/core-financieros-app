@@ -64,7 +64,45 @@ class ReprestamoResponsesLocalDb {
   String? errorMsg;
   bool? hasVerified;
   bool? isOffline;
+  String? objOrigenSolicitudIdVer;
+  String? objMonedaIdVer;
+  String? objPropositoIdVer;
+  String? objFrecuenciaIdVer2;
+  String? objActividadIdVer;
+  String? objActividadId1Ver;
+  String? objActividadId2Ver;
+  String? objSectorIdVer;
+  String? objParentescoBeneficiarioSeguroIdVer;
+  String? objProductoIdVer;
+  String? objRubroActividadVer;
+  String? objActividadPredominanteVer;
+  String? objTipoDocumentoIdVer;
+  String? objRubroActividad2Ver;
+  String? objRubroActividad3Ver;
+  String? objRubroActividadPredominanteVer;
+  String? objTipoPersonaIdVer;
+  String? parentescoFamiliar;
+  String? parentescoFamiliarVer;
   ReprestamoResponsesLocalDb({
+    this.objOrigenSolicitudIdVer,
+    this.objMonedaIdVer,
+    this.objPropositoIdVer,
+    this.objFrecuenciaIdVer2,
+    this.objActividadIdVer,
+    this.objActividadId1Ver,
+    this.objActividadId2Ver,
+    this.objSectorIdVer,
+    this.objParentescoBeneficiarioSeguroIdVer,
+    this.objProductoIdVer,
+    this.objRubroActividadVer,
+    this.objActividadPredominanteVer,
+    this.objTipoDocumentoIdVer,
+    this.objRubroActividad2Ver,
+    this.objRubroActividad3Ver,
+    this.objRubroActividadPredominanteVer,
+    this.objTipoPersonaIdVer,
+    this.parentescoFamiliar,
+    this.parentescoFamiliarVer,
     this.isOffline = false,
     this.objFrecuenciaIdVer,
     this.username,

@@ -12,7 +12,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/sending/represtamo_sending_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,13 +47,13 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
   void initState() {
     final solicitud = widget.solicitud;
     sector = Item(
-      name: solicitud.objSectorId!,
+      name: solicitud.objSectorIdVer!,
       value: solicitud.objSectorId,
     );
     beneficiarioSeguro = solicitud.beneficiarioSeguro;
     cedulaBeneficiarioSeguro = solicitud.cedulaBeneficiarioSeguro;
     parentesco = Item(
-      name: solicitud.objParentescoBeneficiarioSeguroId!,
+      name: solicitud.objParentescoBeneficiarioSeguroIdVer!,
       value: solicitud.objParentescoBeneficiarioSeguroId,
     );
     telefonoBeneficiario = solicitud.telefonoBeneficiario;
@@ -124,12 +123,8 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               },
             ),
             const Gap(20),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: telefonoBeneficiario,
-              onCountryCodeChange: (value) {
-                if (value == null) return;
-                telefonoBeneficiarioCode = value.dialCode!;
-              },
               isRequired: false,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -159,15 +154,12 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco?.value,
-                        telefonoBeneficiario: telefonoBeneficiario == null
-                            ? ''
-                            : telefonoBeneficiarioCode +
-                                (telefonoBeneficiario ?? '')
-                                    .trim()
-                                    .replaceAll('-', ''),
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
+                        telefonoBeneficiario: telefonoBeneficiario,
                         isDone: !isConnected,
                         isOffline: true,
                       );

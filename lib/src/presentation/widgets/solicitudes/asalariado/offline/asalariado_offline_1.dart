@@ -15,7 +15,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -395,7 +394,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
               title: 'Estado civil',
             ),
             const Gap(30),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: telefono,
               isRequired: false,
               onChange: (value) {
@@ -412,7 +411,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
               icon: const Icon(Icons.phone),
             ),
             const Gap(30),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: celular,
               textInputType: TextInputType.number,
               inputFormatters: [

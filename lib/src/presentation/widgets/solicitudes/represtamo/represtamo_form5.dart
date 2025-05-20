@@ -135,9 +135,11 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                         telefonoBeneficiario: telefonoBeneficiario == null
                             ? ''
                             : telefonoBeneficiarioCode +

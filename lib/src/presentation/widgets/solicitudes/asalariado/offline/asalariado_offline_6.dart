@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,7 +101,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6> {
               icon: const Icon(Icons.person_outline),
             ),
             const Gap(30),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: telefonoFamiliarCercano,
               onChange: (value) {
                 telefonoFamiliarCercano = value;
@@ -282,7 +281,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6> {
                 icon: const Icon(Icons.business_outlined),
               ),
               const Gap(30),
-              CountryInput(
+              OutlineTextfieldWidget(
                 initialValue: telefonoOficinaConyuge,
                 textInputType: TextInputType.phone,
                 inputFormatters: [

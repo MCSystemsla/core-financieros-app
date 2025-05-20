@@ -11,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -139,7 +138,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
               icon: const Icon(Icons.badge),
             ),
             const Gap(30),
-            CountryInput(
+            OutlineTextfieldWidget(
               initialValue: telefono,
               textInputType: TextInputType.number,
               inputFormatters: [
@@ -207,9 +206,6 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
                   setState(() {});
                 },
                 codigo: 'PAIS',
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
               ),
               const Gap(30),
               OutlineTextfieldWidget(

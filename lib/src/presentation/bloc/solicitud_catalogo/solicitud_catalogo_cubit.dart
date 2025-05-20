@@ -55,6 +55,8 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         .build();
     query.remove();
     for (var item in data.data) {
+      log(item.interes.toString());
+      log(item.nombre.toString());
       _objectBoxService.catalogoBox.put(CatalogoLocalDb(
         valor: item.valor,
         nombre: item.nombre,

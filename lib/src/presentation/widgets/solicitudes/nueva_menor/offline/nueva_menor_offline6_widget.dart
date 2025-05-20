@@ -353,7 +353,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} $monedaVer',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} $monedaVer',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             montoMaximo: montoMaximo?.toInt(),
@@ -365,11 +365,11 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                             objMonedaIdVer: monedaVer,
                             objPropositoIdVer: propositoVer,
                             objMonedaId: moneda,
-                            monto: int.tryParse(monto!),
+                            monto: int.tryParse(monto ?? '0'),
                             objPropositoId: proposito,
                             objProductoId: producto,
                             objFrecuenciaId: frecuenciaDePago,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),
                             cuota: calcularCuotaProvider

@@ -168,7 +168,7 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3> {
               onChange: (value) {
                 anosResidir = value;
               },
-              title: 'Anos de residir',
+              title: 'Años de residir',
               icon: const Icon(Icons.house),
             ),
             const Gap(30),

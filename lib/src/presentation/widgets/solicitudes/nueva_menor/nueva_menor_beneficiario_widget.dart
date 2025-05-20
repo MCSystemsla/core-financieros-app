@@ -166,7 +166,6 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 monto = value;
               },
             ),
-
             OutlineTextfieldWidget(
               initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
@@ -182,7 +181,6 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PRODUCTO',
@@ -241,23 +239,6 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
                 Icons.remove_red_eye,
@@ -311,15 +292,15 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!.name,
-                    saldoPrincipal: double.parse(monto ?? ''),
-                    tasaInteresMensual: tasaInteres!,
+                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                    formadePago: frecuenciaDePago?.name ?? '',
+                    saldoPrincipal: double.parse(monto ?? '0'),
+                    tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toInt().toCurrencyFormat} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             montoMaximo: montoMaximo?.toInt(),
