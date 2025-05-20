@@ -364,9 +364,7 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {
@@ -696,9 +694,7 @@ class _SignSignatureState extends State<_SignSignature> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {

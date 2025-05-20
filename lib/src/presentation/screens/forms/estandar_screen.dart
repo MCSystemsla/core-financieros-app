@@ -252,8 +252,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       }
                       if (state.status == Status.done) {
                         if (!context.mounted) return;
-                        if (isConnected.isConnected &&
-                            isConnected.isCorrectNetwork) {
+                        if (isConnected.isConnected) {
                           context.read<UploadUserFileCubit>().uploadUserFiles(
                                 typeSigner: typeSigner,
                                 cedula:
@@ -393,9 +392,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                         .solicitudId,
                                   ),
                                 size,
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {

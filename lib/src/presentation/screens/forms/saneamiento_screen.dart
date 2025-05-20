@@ -405,9 +405,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {
@@ -739,9 +737,7 @@ class _EstandarSignState extends State<EstandarSign> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {
@@ -1453,9 +1449,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
                               if (!context.mounted) return;
                               if (isConnected.isConnected) {
@@ -1802,9 +1796,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                         .state
                                         .solicitudId,
                                   ),
-                                !isConnected.isCorrectNetwork
-                                    ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                    : 'Formulario Kiva Guardado Exitosamente!!',
+                                '',
                               );
 
                               if (!context.mounted) return;

@@ -16,6 +16,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   /// - En producción (`isProdMode == true`), revisa si hay acceso a Internet y que este en modo Produccion,
   ///   el tipo de conectividad y si la red es válida.
   Future<void> getInternetStatusConnection() async {
+    emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
     final isConnected = await InternetConnectionChecker().hasConnection;
 
     final connectivityResult = await Connectivity().checkConnectivity();
@@ -25,8 +26,8 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       if (_isValidPhoneConnection(connections: connectivityResult)) {
         emit(state.copyWith(
           isConnected: isConnected,
-          isCorrectNetwork: true,
           currentIp: 'Unknown IP',
+          connectionStatus: ConnectionStatus.connected,
         ));
         return;
       }
@@ -34,7 +35,10 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
 
     // Si no hay conexión o es una red inválida, actualiza el estado
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      emit(state.copyWith(isConnected: false, isCorrectNetwork: false));
+      emit(state.copyWith(
+        isConnected: false,
+        connectionStatus: ConnectionStatus.disconnected,
+      ));
     }
   }
 

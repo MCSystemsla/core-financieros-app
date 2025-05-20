@@ -1,5 +1,4 @@
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
-import 'package:core_financiero_app/src/config/helpers/snackbar/no_internet_connection_snackbar.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -7,7 +6,6 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
@@ -103,7 +101,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final internetConectionProvider = context.read<InternetConnectionCubit>();
+    // final internetConectionProvider = context.read<InternetConnectionCubit>();
     final TurnstileOptions options = TurnstileOptions(
       size: TurnstileSize.flexible,
       theme: TurnstileTheme.light,
@@ -241,18 +239,18 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   text: 'button.login'.tr(),
                   color: Colors.black,
                   onPressed: () async {
-                    await internetConectionProvider
-                        .getInternetStatusConnection();
-                    if (!mounted) return;
-                    if (!context.mounted) return;
-                    if (!internetConectionProvider.state.isConnected) {
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        noInternetConnectionSnackbar(),
-                      );
-                      context.pushReplacement('/');
-                      return;
-                    }
+                    // await internetConectionProvider
+                    //     .getInternetStatusConnection();
+                    // if (!mounted) return;
+                    // if (!context.mounted) return;
+                    // if (!internetConectionProvider.state.isConnected) {
+                    //   if (!context.mounted) return;
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     noInternetConnectionSnackbar(),
+                    //   );
+                    //   context.pushReplacement('/');
+                    //   return;
+                    // }
                     if (captchaToken == null) {
                       CustomAlertDialog(
                         context: context,

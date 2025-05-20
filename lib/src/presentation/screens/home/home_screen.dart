@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isConnected = context.read<InternetConnectionCubit>().state;
     final shouldSync = CatalogoSync.needToSync();
-    if (shouldSync && isConnected.isConnected && isConnected.isCorrectNetwork) {
+    if (shouldSync && isConnected.isConnected) {
       return DownsloadingCatalogosWidget(
         onDownloadComplete: () {
           global<BiometricCubit>().authenticate(context);
@@ -53,22 +53,21 @@ class _HomeScreenState extends State<HomeScreen> {
         return PopScope(
           canPop: false,
           child: Scaffold(
-            floatingActionButton:
-                isConnected.isConnected && isConnected.isCorrectNetwork
-                    ? FloatingActionButton.extended(
-                        label: const Row(
-                          children: [
-                            Icon(Icons.update_rounded),
-                            Gap(5),
-                            Text('Sincronizar'),
-                          ],
-                        ),
-                        onPressed: () => {
-                          context.pushTransparentRoute(
-                              const DownsloadingCatalogosWidget()),
-                        },
-                      )
-                    : const SizedBox(),
+            floatingActionButton: isConnected.isConnected
+                ? FloatingActionButton.extended(
+                    label: const Row(
+                      children: [
+                        Icon(Icons.update_rounded),
+                        Gap(5),
+                        Text('Sincronizar'),
+                      ],
+                    ),
+                    onPressed: () => {
+                      context.pushTransparentRoute(
+                          const DownsloadingCatalogosWidget()),
+                    },
+                  )
+                : const SizedBox(),
             body: const Column(
               children: [
                 HomeBannerWidget(),

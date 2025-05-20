@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/skeleton_loading_widget.dart';
@@ -261,8 +260,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final isNetworkConnected =
-        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
     // bool isMatching = numSolicitud == int.tryParse(widget.solicitud.id);
 
     return ListTile(
@@ -270,17 +267,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
           '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
         context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
-        if (!isNetworkConnected) {
-          CustomAlertDialog(
-            context: context,
-            title: 'No estas en el Rango de la VPN',
-            onDone: () {
-              context.pop();
-            },
-          ).showDialog(context);
-          return;
-        }
 
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
