@@ -11,22 +11,17 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   InternetConnectionCubit() : super(InternetConnectionInitial());
 
   /// Verifica el estado de la conexión a Internet.
-  ///
-  /// - En modo desarrollo (`isProdMode == false`), simula una conexión válida.
-  /// - En producción (`isProdMode == true`), revisa si hay acceso a Internet y que este en modo Produccion,
-  ///   el tipo de conectividad y si la red es válida.
   Future<void> getInternetStatusConnection() async {
     emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
+    await Future.delayed(const Duration(seconds: 3));
     final isConnected = await InternetConnectionChecker().hasConnection;
 
     final connectivityResult = await Connectivity().checkConnectivity();
-    // final info = NetworkInfo();
 
     if (isConnected) {
       if (_isValidPhoneConnection(connections: connectivityResult)) {
         emit(state.copyWith(
           isConnected: isConnected,
-          currentIp: 'Unknown IP',
           connectionStatus: ConnectionStatus.connected,
         ));
         return;

@@ -1,4 +1,5 @@
 abstract class ImageAsset {
+  static const String icon = 'assets/images/app_icon.png';
   static const String logo = 'assets/images/logo.png';
   static const String logoNi = 'assets/images/logo_original.png';
   static const String homeLangESUrl = 'assets/images/bandera_espanol.svg';

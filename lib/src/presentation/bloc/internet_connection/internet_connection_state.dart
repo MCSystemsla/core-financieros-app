@@ -5,29 +5,24 @@ enum ConnectionStatus { checking, connected, disconnected }
 
 class InternetConnectionState extends Equatable {
   final bool isConnected;
-  final String currentIp;
   final ConnectionStatus connectionStatus;
   const InternetConnectionState({
     this.isConnected = false,
-    this.currentIp = 'N/A',
     this.connectionStatus = ConnectionStatus.checking,
   });
 
   @override
   List<Object> get props => [
         isConnected,
-        currentIp,
         connectionStatus,
       ];
 
   InternetConnectionState copyWith({
     bool? isConnected,
-    String? currentIp,
     ConnectionStatus? connectionStatus,
   }) {
     return InternetConnectionState(
       isConnected: isConnected ?? this.isConnected,
-      currentIp: currentIp ?? this.currentIp,
       connectionStatus: connectionStatus ?? this.connectionStatus,
     );
   }
