@@ -309,12 +309,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
     const url = '$protocol://$apiUrl/kiva/subir-imagenes';
 
-    final currentProduct = setCurrentProdut(product: formularioKiva);
+    // final currentProduct = setCurrentProdut(product: formularioKiva);
     final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = currentProduct;
+      request.fields['formularioKiva'] = formularioKiva;
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
@@ -460,7 +460,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String cedula,
     required TypeSigner typeSigner,
   }) async {
-    final currentProduct = setCurrentProdut(product: formularioKiva);
+    // final currentProduct = setCurrentProdut(product: formularioKiva);
     final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
@@ -470,7 +470,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = currentProduct;
+      request.fields['formularioKiva'] = formularioKiva;
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;

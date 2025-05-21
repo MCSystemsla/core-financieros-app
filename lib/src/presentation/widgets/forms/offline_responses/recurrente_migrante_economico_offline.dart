@@ -74,8 +74,10 @@ class _RecurrenteMigranteEconomicoOfflineState
                     solicitudId: widget.solicitudId,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()

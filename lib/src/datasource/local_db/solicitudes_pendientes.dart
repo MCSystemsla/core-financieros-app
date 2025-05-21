@@ -20,4 +20,5 @@ class SolicitudesPendientes {
   int? cantidadHijos;
   String? cedula;
   bool? isSended = false;
+  String? nombreFormulario;
 }

@@ -307,7 +307,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -637,7 +637,7 @@ class _EstandarSignState extends State<EstandarSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -1335,7 +1335,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -1682,7 +1682,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,

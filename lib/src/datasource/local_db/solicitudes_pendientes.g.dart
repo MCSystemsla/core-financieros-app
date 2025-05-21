@@ -68,28 +68,33 @@ const SolicitudesPendientesSchema = CollectionSchema(
       name: r'nombre',
       type: IsarType.string,
     ),
-    r'numero': PropertySchema(
+    r'nombreFormulario': PropertySchema(
       id: 10,
+      name: r'nombreFormulario',
+      type: IsarType.string,
+    ),
+    r'numero': PropertySchema(
+      id: 11,
       name: r'numero',
       type: IsarType.string,
     ),
     r'producto': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'producto',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'solicitudId',
       type: IsarType.string,
     ),
     r'sucursal': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'sucursal',
       type: IsarType.string,
     ),
     r'tipoSolicitud': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'tipoSolicitud',
       type: IsarType.string,
     )
@@ -145,6 +150,12 @@ int _solicitudesPendientesEstimateSize(
     }
   }
   {
+    final value = object.nombreFormulario;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.numero;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -193,11 +204,12 @@ void _solicitudesPendientesSerialize(
   writer.writeDouble(offsets[7], object.monto);
   writer.writeString(offsets[8], object.motivoAnterior);
   writer.writeString(offsets[9], object.nombre);
-  writer.writeString(offsets[10], object.numero);
-  writer.writeString(offsets[11], object.producto);
-  writer.writeString(offsets[12], object.solicitudId);
-  writer.writeString(offsets[13], object.sucursal);
-  writer.writeString(offsets[14], object.tipoSolicitud);
+  writer.writeString(offsets[10], object.nombreFormulario);
+  writer.writeString(offsets[11], object.numero);
+  writer.writeString(offsets[12], object.producto);
+  writer.writeString(offsets[13], object.solicitudId);
+  writer.writeString(offsets[14], object.sucursal);
+  writer.writeString(offsets[15], object.tipoSolicitud);
 }
 
 SolicitudesPendientes _solicitudesPendientesDeserialize(
@@ -218,11 +230,12 @@ SolicitudesPendientes _solicitudesPendientesDeserialize(
   object.monto = reader.readDoubleOrNull(offsets[7]);
   object.motivoAnterior = reader.readStringOrNull(offsets[8]);
   object.nombre = reader.readStringOrNull(offsets[9]);
-  object.numero = reader.readStringOrNull(offsets[10]);
-  object.producto = reader.readStringOrNull(offsets[11]);
-  object.solicitudId = reader.readStringOrNull(offsets[12]);
-  object.sucursal = reader.readStringOrNull(offsets[13]);
-  object.tipoSolicitud = reader.readStringOrNull(offsets[14]);
+  object.nombreFormulario = reader.readStringOrNull(offsets[10]);
+  object.numero = reader.readStringOrNull(offsets[11]);
+  object.producto = reader.readStringOrNull(offsets[12]);
+  object.solicitudId = reader.readStringOrNull(offsets[13]);
+  object.sucursal = reader.readStringOrNull(offsets[14]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[15]);
   return object;
 }
 
@@ -262,6 +275,8 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 13:
       return (reader.readStringOrNull(offset)) as P;
     case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1536,6 +1551,162 @@ extension SolicitudesPendientesQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'nombreFormulario',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'nombreFormulario',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'nombreFormulario',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      nombreFormularioContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'nombreFormulario',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+          QAfterFilterCondition>
+      nombreFormularioMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'nombreFormulario',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'nombreFormulario',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> nombreFormularioIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'nombreFormulario',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
       QAfterFilterCondition> numeroIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2465,6 +2636,20 @@ extension SolicitudesPendientesQuerySortBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNombreFormulario() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'nombreFormulario', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByNombreFormularioDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'nombreFormulario', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       sortByNumero() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.asc);
@@ -2692,6 +2877,20 @@ extension SolicitudesPendientesQuerySortThenBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNombreFormulario() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'nombreFormulario', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByNombreFormularioDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'nombreFormulario', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       thenByNumero() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numero', Sort.asc);
@@ -2836,6 +3035,14 @@ extension SolicitudesPendientesQueryWhereDistinct
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByNombreFormulario({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'nombreFormulario',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
       distinctByNumero({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'numero', caseSensitive: caseSensitive);
@@ -2947,6 +3154,13 @@ extension SolicitudesPendientesQueryProperty on QueryBuilder<
       nombreProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nombre');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, String?, QQueryOperations>
+      nombreFormularioProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'nombreFormulario');
     });
   }
 

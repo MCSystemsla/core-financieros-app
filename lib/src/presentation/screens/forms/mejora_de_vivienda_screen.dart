@@ -288,7 +288,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,

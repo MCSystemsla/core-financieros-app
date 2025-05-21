@@ -181,7 +181,7 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -524,7 +524,7 @@ class _RecurrenteMigrantesFormSignatureState
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,

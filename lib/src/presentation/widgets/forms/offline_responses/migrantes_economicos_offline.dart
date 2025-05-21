@@ -70,8 +70,10 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                     imagen3: imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()

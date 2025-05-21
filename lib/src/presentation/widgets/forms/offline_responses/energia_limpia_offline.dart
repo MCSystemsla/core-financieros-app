@@ -74,8 +74,10 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                     imagen3: imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()
@@ -334,8 +336,10 @@ class _RecurrenteEnergiaLimpiaOfflineState
                     imagen3: imageModel?.imagen3 ?? 'NO PATH',
                     fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()

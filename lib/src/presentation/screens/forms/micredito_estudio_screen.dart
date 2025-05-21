@@ -272,7 +272,7 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -772,7 +772,7 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,

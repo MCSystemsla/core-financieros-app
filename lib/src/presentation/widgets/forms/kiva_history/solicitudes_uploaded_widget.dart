@@ -89,6 +89,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
 
   initFunctions() async {
     context.read<KivaRouteCubit>().setCurrentRouteProduct(
+          nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
           cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
           cedula: widget.solicitud.cedula ?? '',
           tipoSolicitud: widget.solicitud.tipoSolicitud ?? '0',
@@ -206,7 +207,7 @@ class _ExpansionButtonsWidget extends StatelessWidget {
                       solicitudId: int.parse(
                         solicitud.solicitudId ?? '0',
                       ),
-                      formularioKiva: solicitud.producto ?? '',
+                      formularioKiva: solicitud.nombreFormulario ?? '',
                       tipoSolicitud: solicitud.tipoSolicitud ?? '',
                       numero: solicitud.numero ?? '',
                       cedula: solicitud.cedula ?? '',

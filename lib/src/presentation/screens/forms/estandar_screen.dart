@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
@@ -242,13 +243,11 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       if (!context.mounted) return;
                       final status = state.status;
                       if (status == Status.error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            showCloseIcon: true,
-                            content: Text(state.erroMsg),
-                          ),
-                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.erroMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
                       }
                       if (state.status == Status.done) {
                         if (!context.mounted) return;
@@ -273,7 +272,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 formularioKiva: context
                                     .read<KivaRouteCubit>()
                                     .state
-                                    .currentRoute,
+                                    .nombreFormularioKiva,
                               );
                         }
                         await customPopUp(
