@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spa
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/skeleton_loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/kiva_search_delegate.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -133,29 +134,25 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
     super.initState();
   }
 
-  void _filterSolicitudes(String query) {
-    setState(() {
-      if (query.trim().isEmpty) {
-        _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+  // void _filterSolicitudes(String query) {
+  //   setState(() {
+  //     if (query.trim().isEmpty) {
+  //       _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
 
-        return;
-      }
-      _filteredSolicitudes = widget.solicitudesPendienteResponse
-          .where(
-            (solicitud) =>
-                solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
-                solicitud.producto.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
-    });
-  }
+  //       return;
+  //     }
+  //     _filteredSolicitudes = widget.solicitudesPendienteResponse
+  //         .where(
+  //           (solicitud) =>
+  //               solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
+  //               solicitud.producto.toLowerCase().contains(query.toLowerCase()),
+  //         )
+  //         .toList();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (_filteredSolicitudes.isEmpty) {
-      return const _OnSolocitudesEmpty();
-    }
-
     return RefreshIndicator(
       onRefresh: () async {
         context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
@@ -166,13 +163,16 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
             Container(
               margin: const EdgeInsets.all(15),
               child: SearchBarCustom(
-                onItemSelected: (value) {
-                  if (value == null) return;
-                  _filterSolicitudes(value);
+                onTap: () {
+                  showSearch(
+                    context: context,
+                    delegate: KivaSearchDelegate(
+                      solicitudes: widget.solicitudesPendienteResponse,
+                    ),
+                  );
                 },
-                onPressed: () {
-                  _filterSolicitudes('');
-                },
+                onItemSelected: (value) {},
+                onPressed: () {},
               ),
             ),
             const Gap(10),
@@ -204,8 +204,8 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   }
 }
 
-class _OnSolocitudesEmpty extends StatelessWidget {
-  const _OnSolocitudesEmpty();
+class OnSolocitudesEmpty extends StatelessWidget {
+  const OnSolocitudesEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
