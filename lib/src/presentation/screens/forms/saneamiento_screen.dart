@@ -1417,22 +1417,6 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              context
-                                  .read<SolicitudesPendientesLocalDbCubit>()
-                                  .saveImagesLocal(
-                                    imageModel: ImageModel()
-                                      ..typeSigner = typeSigner.name
-                                      ..imagenFirma = localPath
-                                      ..imagen1 = imageProvider.imagen1
-                                      ..imagen2 = imageProvider.imagen2
-                                      ..imagen3 = imageProvider.imagen3
-                                      ..solicitudId = int.tryParse(
-                                        context
-                                            .read<KivaRouteCubit>()
-                                            .state
-                                            .solicitudId,
-                                      ),
-                                  );
 
                               await saveAnswersOnLocalDB(
                                 context,

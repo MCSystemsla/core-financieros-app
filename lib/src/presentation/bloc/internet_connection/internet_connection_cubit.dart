@@ -13,7 +13,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   /// Verifica el estado de la conexión a Internet.
   Future<void> getInternetStatusConnection() async {
     emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 5));
     final isConnected = await InternetConnectionChecker().hasConnection;
 
     final connectivityResult = await Connectivity().checkConnectivity();

@@ -41,9 +41,10 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (ctx) => SolicitudesPendientesCubit(
-                  SolicitudesPendientesRepositoryImpl(),
-                )..getSolicitudesPendientes()),
+          create: (ctx) => SolicitudesPendientesCubit(
+            SolicitudesPendientesRepositoryImpl(),
+          )..getSolicitudesPendientes(),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -54,6 +55,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
+
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(
                 solicitudes: state.solicitudesPendienteResponse.map(

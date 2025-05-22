@@ -21,14 +21,6 @@ class CarteraScreen extends StatefulWidget {
 }
 
 class _CarteraScreenState extends State<CarteraScreen> {
-  // @override
-  // void initState() {
-  //   final isInternetConnectionProvider =
-  //       context.read<InternetConnectionCubit>();
-  //   isInternetConnectionProvider.getInternetStatusConnection();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     const isProdMode = bool.fromEnvironment('isProdMode');

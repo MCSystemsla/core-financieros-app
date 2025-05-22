@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -361,15 +363,17 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       var response = await request.send();
 
       var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
-        return (false, response.reasonPhrase ?? 'Error enviando imagenes kiva');
+        return (false, jsonBody['message'] as String);
       }
       _logger.i(response.reasonPhrase);
-      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
+      return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
@@ -514,16 +518,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       });
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
-        return (false, response.reasonPhrase ?? 'Error enviando imagenes kiva');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
       }
 
       _logger.i(response.reasonPhrase);
-      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
+      return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());

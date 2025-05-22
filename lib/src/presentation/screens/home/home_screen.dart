@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
@@ -54,27 +55,31 @@ class _HomeScreenState extends State<HomeScreen> {
           canPop: false,
           child: Scaffold(
             floatingActionButton: isConnected.isConnected
-                ? FloatingActionButton.extended(
-                    label: const Row(
-                      children: [
-                        Icon(Icons.update_rounded),
-                        Gap(5),
-                        Text('Sincronizar'),
-                      ],
+                ? SlideInUp(
+                    child: FloatingActionButton.extended(
+                      label: const Row(
+                        children: [
+                          Icon(Icons.update_rounded),
+                          Gap(5),
+                          Text('Sincronizar'),
+                        ],
+                      ),
+                      onPressed: () => {
+                        context.pushTransparentRoute(
+                            const DownsloadingCatalogosWidget()),
+                      },
                     ),
-                    onPressed: () => {
-                      context.pushTransparentRoute(
-                          const DownsloadingCatalogosWidget()),
-                    },
                   )
                 : const SizedBox(),
-            body: const Column(
-              children: [
-                HomeBannerWidget(),
-                Expanded(
-                  child: HomeItemsWidget(),
-                ),
-              ],
+            body: FadeIn(
+              child: const Column(
+                children: [
+                  HomeBannerWidget(),
+                  Expanded(
+                    child: HomeItemsWidget(),
+                  ),
+                ],
+              ),
             ),
           ),
         );

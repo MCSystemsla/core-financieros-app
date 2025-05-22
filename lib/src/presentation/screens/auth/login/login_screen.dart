@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
@@ -5,7 +6,6 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/auth/logo/logo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
@@ -34,9 +34,6 @@ class LoginScreen extends StatelessWidget {
             ),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
-        BlocProvider(
-          create: (ctx) => LogoCubit(AuthRepositoryImpl())..getLogo(),
-        ),
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
@@ -50,29 +47,31 @@ class LoginScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return const Scaffold(
+          return Scaffold(
             resizeToAvoidBottomInset: true,
             body: PopScope(
               canPop: false,
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ChangeLangWidget(
-                        child: LoginScreen(),
-                      ),
-                      Image(
-                        height: 200,
-                        image: AssetImage(ImageAsset.logoNi),
-                      ),
-                      Gap(10),
-                      Expanded(
-                        flex: 5,
-                        child: LoginFormWidget(),
-                      ),
-                    ],
+              child: FadeIn(
+                child: const SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ChangeLangWidget(
+                          child: LoginScreen(),
+                        ),
+                        Image(
+                          height: 200,
+                          image: AssetImage(ImageAsset.logoNi),
+                        ),
+                        Gap(10),
+                        Expanded(
+                          flex: 5,
+                          child: LoginFormWidget(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

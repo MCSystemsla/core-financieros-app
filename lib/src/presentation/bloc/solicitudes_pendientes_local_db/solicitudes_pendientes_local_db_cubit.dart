@@ -79,7 +79,6 @@ class SolicitudesPendientesLocalDbCubit
   Future<void> saveSolicitudesPendientes(
       {required List<SolicitudesPendientes> solicitudes}) async {
     emit(state.copyWith(status: Status.inProgress));
-    // await Future.delayed(const Duration(seconds: 3));
     try {
       await state.isar!.writeTxn(() {
         return state.isar!.solicitudesPendientes
@@ -88,10 +87,9 @@ class SolicitudesPendientesLocalDbCubit
             .deleteAll();
       });
 
-      await state.isar!.writeTxn(() {
+      await state.isar?.writeTxn(() {
         return state.isar!.solicitudesPendientes.putAll(solicitudes);
       });
-      // }
       emit(state.copyWith(status: Status.done));
     } catch (e) {
       _logger.e(e);
@@ -100,22 +98,78 @@ class SolicitudesPendientesLocalDbCubit
   }
 
   Future<void> updateIsSendedOnSolicitud({required String solicitudId}) async {
-    // await Future.delayed(const Duration(seconds: 3));
     try {
       // Actualiza el campo isSended en true solo para la solicitud con el id dado
-      await state.isar!.writeTxn(() async {
-        final existing = await state.isar!.solicitudesPendientes
+      await state.isar?.writeTxn(() async {
+        final existing = await state.isar?.solicitudesPendientes
             .filter()
             .solicitudIdEqualTo(solicitudId)
             .findFirst();
         if (existing != null) {
           existing.isSended = true;
-          await state.isar!.solicitudesPendientes.put(existing);
+          existing.dateSended = DateTime.now();
+          // Guarda el objeto actualizado en la base de datos
+          await state.isar?.solicitudesPendientes.put(existing);
         }
       });
     } catch (e) {
       _logger.e(e);
     }
+  }
+
+  Future<void> removeSolicitudWhenDateSendedIsMoreThanDateCreated() async {
+    try {
+      await state.isar?.writeTxn(() async {
+        final solicitudes = await _getSolicitudesEnviadas();
+
+        for (final solicitud in solicitudes) {
+          if (_shouldDeleteSolicitud(solicitud)) {
+            await _deleteSolicitudYAsociada(solicitud);
+          }
+        }
+      });
+    } catch (e) {
+      _logger.e('Error eliminando solicitudes vencidas: $e');
+    }
+  }
+
+  Future<List<SolicitudesPendientes>> _getSolicitudesEnviadas() {
+    return state.isar!.solicitudesPendientes
+        .filter()
+        .isSendedEqualTo(true)
+        .findAll();
+  }
+
+  bool _shouldDeleteSolicitud(SolicitudesPendientes solicitud) {
+    if (solicitud.dateSended == null) return false;
+    final daysPassed = DateTime.now().difference(solicitud.dateSended!).inDays;
+    return daysPassed > 12;
+  }
+
+  Future<void> _deleteSolicitudYAsociada(
+    SolicitudesPendientes solicitud,
+  ) async {
+    final solicitudId = int.tryParse(solicitud.solicitudId ?? '0') ?? 0;
+
+    final image = await state.isar?.imageModels
+        .filter()
+        .solicitudIdEqualTo(solicitudId)
+        .findFirst();
+
+    final solicitudDb = await state.isar?.solicitudesPendientes
+        .filter()
+        .solicitudIdEqualTo(solicitud.solicitudId)
+        .findFirst();
+
+    if (image != null) {
+      await state.isar?.imageModels.delete(image.id);
+    }
+
+    if (solicitudDb != null) {
+      await state.isar?.solicitudesPendientes.delete(solicitudDb.id);
+    }
+
+    log('Solicitud eliminada: ${solicitud.solicitudId}');
   }
 
   Future<void> getSolicitudes() async {
@@ -136,8 +190,10 @@ class SolicitudesPendientesLocalDbCubit
 
   Future<void> getSolicitudesUploaded() async {
     emit(state.copyWith(status: Status.inProgress));
+    await removeSolicitudWhenDateSendedIsMoreThanDateCreated();
+    await Future.delayed(const Duration(seconds: 2));
     try {
-      final solicitudes = await state.isar!.solicitudesPendientes
+      final solicitudes = await state.isar?.solicitudesPendientes
           .filter()
           .isSendedEqualTo(true)
           .findAll();

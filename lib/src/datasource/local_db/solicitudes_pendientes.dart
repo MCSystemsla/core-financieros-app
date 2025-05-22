@@ -21,4 +21,5 @@ class SolicitudesPendientes {
   String? cedula;
   bool? isSended = false;
   String? nombreFormulario;
+  DateTime? dateSended;
 }
