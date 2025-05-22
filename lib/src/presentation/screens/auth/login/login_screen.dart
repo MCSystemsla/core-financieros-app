@@ -27,6 +27,10 @@ class LoginScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+            lazy: false,
+            create: (ctx) =>
+                AutoupdateCubit()..verificarActualizacion(context)),
+        BlocProvider(
           create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
             ..getBranchTeam(
               accessCode: '2wydJKIvNuO41hCZ7Y6',

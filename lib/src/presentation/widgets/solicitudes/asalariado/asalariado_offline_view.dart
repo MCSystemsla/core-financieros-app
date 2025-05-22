@@ -5,7 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/offline/asalariado_offline_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/offline/asalariado_offline_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/offline/asalariado_offline_3.dart';

@@ -22,8 +22,6 @@ class AddUserCedulaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cedulaController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     void showSuccessDialog({
       required UserByCedulaSolicitud userByCedula,
     }) {
@@ -76,71 +74,84 @@ class AddUserCedulaScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              key: formKey,
-              child: Center(
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        height: 200,
-                        ImageAsset.nuevaAddDni,
-                      ),
-                      const Gap(30),
-                      Text(
-                        'Ingresar Usuario a solicitar Solicitud de Credito',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const Gap(10),
-                      Text(
-                        'Ingresa los datos requeridos',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const Gap(20),
-                      OutlineTextfieldWidget(
-                        maxLength: 20,
-                        textEditingController: cedulaController,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        icon: Icon(
-                          Icons.credit_card_outlined,
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        title: '',
-                        hintText: 'Ingresa Cedula, Pasaporte o DNI',
-                      ),
-                      const Gap(20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        width: double.infinity,
-                        child: CustomElevatedButton(
-                          enabled: state is! OnUserByCedulaLoading,
-                          text: state is OnUserByCedulaLoading
-                              ? 'Cargando...'
-                              : 'Enviar',
-                          color: AppColors.greenLatern.withOpacity(0.4),
-                          onPressed: () {
-                            if (!formKey.currentState!.validate()) return;
-                            context.read<UserByCedulaCubit>().getUserByCedula(
-                                  cedula: cedulaController.text.trim(),
-                                );
-                          },
-                        ),
-                      ),
-                    ],
+          return _UserCedulaForm(state: state);
+        },
+      ),
+    );
+  }
+}
+
+class _UserCedulaForm extends StatelessWidget {
+  final UserByCedulaState state;
+  _UserCedulaForm({
+    required this.state,
+  });
+
+  final formKey = GlobalKey<FormState>();
+  final cedulaController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Form(
+        key: formKey,
+        child: Center(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  height: 200,
+                  ImageAsset.nuevaAddDni,
+                ),
+                const Gap(30),
+                Text(
+                  'Ingresar Usuario a solicitar Solicitud de Credito',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(10),
+                Text(
+                  'Ingresa los datos requeridos',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  maxLength: 20,
+                  textEditingController: cedulaController,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  icon: Icon(
+                    Icons.credit_card_outlined,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: '',
+                  hintText: 'Ingresa Cedula, Pasaporte o DNI',
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    enabled: state is! OnUserByCedulaLoading,
+                    text: state is OnUserByCedulaLoading
+                        ? 'Cargando...'
+                        : 'Enviar',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      context.read<UserByCedulaCubit>().getUserByCedula(
+                            cedula: cedulaController.text.trim(),
+                          );
+                    },
                   ),
                 ),
-              ),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

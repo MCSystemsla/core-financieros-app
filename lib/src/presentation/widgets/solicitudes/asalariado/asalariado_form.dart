@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form3.dart';

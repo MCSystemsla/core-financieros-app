@@ -8,11 +8,11 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -291,14 +291,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
               codigo: 'PAIS',
               title: 'País de nacimiento',
             ),
-            // const Gap(30),
-            // OutlineTextfieldWidget(
-            //   onChange: (value) {
-            //     edad = value;
-            //   },
-            //   title: 'Edad',
-            //   icon: const Icon(Icons.cake),
-            // ),
+
             const Gap(30),
             SearchDropdownWidget(
               hintText: sexo ?? 'Selecciona una opcion',

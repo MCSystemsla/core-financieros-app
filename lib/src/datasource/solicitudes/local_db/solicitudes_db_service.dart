@@ -8,7 +8,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:logger/logger.dart';
 
 class ObjectBoxService {

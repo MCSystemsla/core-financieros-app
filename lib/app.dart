@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -73,10 +72,6 @@ class App extends StatelessWidget {
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
         // BlocProvider(create: (ctx) => BiometricCubit(BiometricAuthService())),
-        BlocProvider(
-            lazy: false,
-            create: (ctx) =>
-                AutoupdateCubit()..verificarActualizacion(context)),
       ],
       child: BlocConsumer<LangCubit, LangState>(
         listener: (context, state) async {

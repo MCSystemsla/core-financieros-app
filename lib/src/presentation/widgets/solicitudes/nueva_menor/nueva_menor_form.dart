@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_business_data_widget.dart';
