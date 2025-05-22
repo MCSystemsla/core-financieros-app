@@ -1,9 +1,11 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-SnackBar noInternetConnectionSnackbar() {
+SnackBar customSnackbar({
+  required String title,
+  required Icon icon,
+}) {
   return SnackBar(
-    duration: const Duration(minutes: 5),
     behavior: SnackBarBehavior.floating,
     showCloseIcon: true,
     backgroundColor: AppColors.getPrimaryColor(),
@@ -11,14 +13,14 @@ SnackBar noInternetConnectionSnackbar() {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
     ),
-    content: const Row(
+    content: Row(
       children: [
-        Icon(Icons.wifi_off, color: Colors.white),
-        SizedBox(width: 12),
+        icon,
+        const SizedBox(width: 12),
         Expanded(
           child: Text(
-            'No tienes conexión a internet.\nHas sido redirigido al Modo Offline.',
-            style: TextStyle(
+            title,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),

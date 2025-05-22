@@ -21,6 +21,7 @@ class LoadingScreen extends StatelessWidget {
             ConnectionStatus.connected => const LoginScreen(),
             ConnectionStatus.disconnected => const HomeScreen(),
             ConnectionStatus.checking => const _WidgetLoading(),
+            _ => const _WidgetLoading(),
           };
         },
       ),

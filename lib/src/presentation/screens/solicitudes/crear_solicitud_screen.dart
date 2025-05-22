@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
@@ -55,6 +57,11 @@ class CrearSolicitudScreen extends StatelessWidget {
           create: (ctx) => SolicitudAsalariadoCubit(
             repository,
             localDbProvider,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => GeolocationCubit(
+            GeolocationService(),
           ),
         ),
       ],
