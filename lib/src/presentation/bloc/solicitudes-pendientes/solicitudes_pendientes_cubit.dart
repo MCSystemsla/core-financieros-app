@@ -13,7 +13,6 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
 
   Future<void> getSolicitudesPendientes() async {
     emit(state.copyWith(status: Status.inProgress));
-    await Future.delayed(const Duration(seconds: 2));
     try {
       final data =
           await solicitudesPendientesRepository.getSolicitudesPendientes();

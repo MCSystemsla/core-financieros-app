@@ -354,25 +354,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 log('No se pudo generar la imagen de la firma.');
                                 return;
                               }
-                              if (!context.mounted) return;
-                              // if (isConnected.isConnected) {
-                              //   await saveResponsesOnLocalDb(
-                              //     context,
-                              //     state,
-                              //     ImageModel()
-                              //       ..typeSigner = typeSigner.name
-                              //       ..imagenFirma = localPath
-                              //       ..imagen1 = imageProvider.imagen1
-                              //       ..imagen2 = imageProvider.imagen2
-                              //       ..imagen3 = imageProvider.imagen3
-                              //       ..solicitudId = int.parse(
-                              //         context
-                              //             .read<KivaRouteCubit>()
-                              //             .state
-                              //             .solicitudId,
-                              //       ),
-                              //   );
-                              // }
+
                               if (!context.mounted) return;
 
                               await saveOfflineResponses(

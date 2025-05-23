@@ -838,8 +838,8 @@ class _SaneamientoContentState extends State<SaneamientoContent>
 
   @override
   Widget build(BuildContext context) {
-    final isInternetConnection =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    // final isInternetConnection =
+    //     context.read<InternetConnectionCubit>().state.isConnected;
     final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
     final size = MediaQuery.sizeOf(context);
 
@@ -1087,9 +1087,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                isInternetConnection
-                    ? context.pushReplacement('/cartera/formulario-kiva')
-                    : context.pushReplacement('/cartera/kiva-offline');
+                // isInternetConnection
+                //     ? context.pushReplacement('/cartera/formulario-kiva')
+                //     : context.pushReplacement('/cartera/kiva-offline');
+                context.pop();
               },
               onNextPressed: () async {
                 if (selectedImage == null ||

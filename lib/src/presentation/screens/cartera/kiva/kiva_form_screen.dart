@@ -49,6 +49,12 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.pop();
+            },
+          ),
           title: Text('cartera.title'.tr()),
         ),
         body: BlocConsumer<SolicitudesPendientesCubit,
@@ -117,7 +123,6 @@ class _KIvaFormContent extends StatefulWidget {
 
 class _KIvaFormContentState extends State<_KIvaFormContent>
     with WidgetsBindingObserver {
-  late List<Solicitud> _filteredSolicitudes;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -126,30 +131,6 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
     }
     super.didChangeAppLifecycleState(state);
   }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-    super.initState();
-  }
-
-  // void _filterSolicitudes(String query) {
-  //   setState(() {
-  //     if (query.trim().isEmpty) {
-  //       _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-
-  //       return;
-  //     }
-  //     _filteredSolicitudes = widget.solicitudesPendienteResponse
-  //         .where(
-  //           (solicitud) =>
-  //               solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
-  //               solicitud.producto.toLowerCase().contains(query.toLowerCase()),
-  //         )
-  //         .toList();
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -188,12 +169,12 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: _filteredSolicitudes.length,
+              itemCount: widget.solicitudesPendienteResponse.length,
               separatorBuilder: (BuildContext context, int index) =>
                   const KivaFormSpacing(),
               itemBuilder: (BuildContext context, int index) {
                 return _RequestWidget(
-                  solicitud: _filteredSolicitudes[index],
+                  solicitud: widget.solicitudesPendienteResponse[index],
                 );
               },
             ),
@@ -289,7 +270,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           return;
         }
 
-        context.pushReplacement('/online', extra: widget.solicitud.producto);
+        context.push('/online', extra: widget.solicitud.producto);
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),

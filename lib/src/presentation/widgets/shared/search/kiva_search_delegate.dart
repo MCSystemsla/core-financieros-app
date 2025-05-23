@@ -16,8 +16,9 @@ class KivaSearchDelegate extends SearchDelegate<Solicitud?> {
   final List<Solicitud> solicitudes;
 
   KivaSearchDelegate({
-    super.searchFieldLabel,
-    super.searchFieldStyle,
+    super.searchFieldLabel = 'Buscar solicitud...',
+    super.searchFieldStyle =
+        const TextStyle(fontSize: 15, color: Colors.black87),
     super.searchFieldDecorationTheme,
     super.keyboardType,
     super.textInputAction,
@@ -30,12 +31,19 @@ class KivaSearchDelegate extends SearchDelegate<Solicitud?> {
     return [
       if (query.isNotEmpty)
         IconButton(
-          icon: const Icon(Icons.clear),
+          icon: const Icon(Icons.clear, color: Colors.black87),
           onPressed: () {
             query = '';
             showSuggestions(context);
           },
-        )
+        ),
+      TextButton(
+        onPressed: () => close(context, null),
+        child: const Text(
+          'Cancelar',
+          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+        ),
+      ),
     ];
   }
 
@@ -115,10 +123,12 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
   }
 
   Future<void> _getNumSolicitud() async {
-    final result = await context
-        .read<SolicitudesPendientesLocalDbCubit>()
-        .getItemsRecurrents(typeProduct: widget.solicitud.producto);
-
+    if (!mounted) return;
+    final provider = context.read<SolicitudesPendientesLocalDbCubit>();
+    final result = await provider.getItemsRecurrents(
+        typeProduct: widget.solicitud.producto);
+    if (!mounted) return;
+    if (!context.mounted) return;
     setState(() {
       isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);
     });
