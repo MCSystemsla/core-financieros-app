@@ -2,7 +2,9 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -55,27 +57,21 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     if (!mounted || !context.mounted) return;
 
     final hasPermission = await _requestPermissions();
-    if (!context.mounted) return;
+    if (!context.mounted || !mounted) return;
 
     if (!hasPermission) {
       // Reemplaza por tu propio CustomAlertDialog si quieres
-      showDialog(
+      CustomAlertDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Sin permisos'),
-          content: const Text('No tienes permisos para usar la cámara'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final opened = await openAppSettings();
-                if (!context.mounted) return;
-                if (opened) Navigator.pop(context);
-              },
-              child: const Text('Abrir ajustes'),
-            ),
-          ],
-        ),
-      );
+        title: 'No tienes permisos para usar la camara',
+        onDone: () async {
+          final isOpened = await openAppSettings();
+          if (!context.mounted || !mounted) return;
+          if (isOpened) {
+            context.pop();
+          }
+        },
+      ).showDialog(context, dialogType: DialogType.error);
       return;
     }
 
