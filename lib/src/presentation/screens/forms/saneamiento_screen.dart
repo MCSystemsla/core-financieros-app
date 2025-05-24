@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/bloc/departamentos/departam
 import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
@@ -34,6 +35,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -876,71 +878,78 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () async {
-                if (!mounted) return;
-                if (!context.mounted) return;
-                final hasPermission = await _requestPermissions();
-                if (!context.mounted) return;
-                if (!hasPermission) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'No tienes permisos para usar la camara',
-                    onDone: () async {
-                      final isOpened = await openAppSettings();
-                      if (!context.mounted) return;
-                      if (isOpened) {
-                        context.pop();
-                      }
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                  return;
-                }
-                try {
-                  final photo = await picker.pickImage(
-                    source: ImageSource.camera,
-                    maxHeight: 1080,
-                    maxWidth: 1920,
-                    imageQuality: 45,
-                    preferredCameraDevice: CameraDevice.rear,
-                  );
-                  if (!mounted || photo == null) return;
-                  final appDir = await getApplicationDocumentsDirectory();
-                  final customDir = Directory('${appDir.path}/MyImages');
-
-                  // Crea el directorio si no existe
-                  if (!await customDir.exists()) {
-                    await customDir.create(recursive: true);
-                    log('Directorio creado: ${customDir.path}');
-                  }
-                  // Define la ruta de la imagen en el directorio
-                  final localPath =
-                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                  // Copia la imagen seleccionada al directorio
-                  final imageFile = File(photo.path);
-                  await imageFile.copy(localPath);
-                  if (!mounted) return;
-
+              onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
+                onImageSelected: (image) {
                   setState(() {
-                    selectedImage = photo;
-                    selectedImage1Path = localPath;
+                    selectedImage = image;
+                    selectedImage1Path = image?.path;
                   });
-                } on PlatformException catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.message}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                } catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.toString()}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                }
-              },
+                },
+              )),
+
+              // if (!mounted) return;
+              // if (!context.mounted) return;
+              // final hasPermission = await _requestPermissions();
+              // if (!context.mounted) return;
+              // if (!hasPermission) {
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'No tienes permisos para usar la camara',
+              //     onDone: () async {
+              //       final isOpened = await openAppSettings();
+              //       if (!context.mounted) return;
+              //       if (isOpened) {
+              //         context.pop();
+              //       }
+              //     },
+              //   ).showDialog(context, dialogType: DialogType.error);
+              //   return;
+              // }
+              // try {
+              //   final photo = await picker.pickImage(
+              //     source: ImageSource.camera,
+              //     maxHeight: 1080,
+              //     maxWidth: 1920,
+              //     imageQuality: 45,
+              //     preferredCameraDevice: CameraDevice.rear,
+              //   );
+              //   if (!mounted || photo == null) return;
+              //   final appDir = await getApplicationDocumentsDirectory();
+              //   final customDir = Directory('${appDir.path}/MyImages');
+
+              //   // Crea el directorio si no existe
+              //   if (!await customDir.exists()) {
+              //     await customDir.create(recursive: true);
+              //     log('Directorio creado: ${customDir.path}');
+              //   }
+              //   // Define la ruta de la imagen en el directorio
+              //   final localPath =
+              //       '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+              //   // Copia la imagen seleccionada al directorio
+              //   final imageFile = File(photo.path);
+              //   await imageFile.copy(localPath);
+              //   if (!mounted) return;
+
+              //   setState(() {
+              //     selectedImage = photo;
+              //     selectedImage1Path = localPath;
+              //   });
+              // } on PlatformException catch (e) {
+              //   if (!context.mounted) return;
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'Error al tomar la foto ${e.message}',
+              //     onDone: () => context.pop(),
+              //   ).showDialog(context, dialogType: DialogType.error);
+              // } catch (e) {
+              //   if (!context.mounted) return;
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'Error al tomar la foto ${e.toString()}',
+              //     onDone: () => context.pop(),
+              //   ).showDialog(context, dialogType: DialogType.error);
+              // }
             ),
             const Gap(20),
             UploadImageWidget(
