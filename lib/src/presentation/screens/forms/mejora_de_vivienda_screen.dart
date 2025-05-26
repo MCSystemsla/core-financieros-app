@@ -102,10 +102,6 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
               SaneamientoContent(
                 controller: pageController,
               ),
-              // EntornoSocialWidget(
-              //   controller: pageController,
-              //   isRecurrentForm: isRecurrentForm,
-              // ),
               MejoraViviendaEntornoSocial(
                 pageController: pageController,
                 isRecurrentForm: isRecurrentForm ?? false,
@@ -119,13 +115,9 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
                 isRecurrentForm: isRecurrentForm ?? false,
                 controller: pageController,
               ),
-              // MetasYAspiracionesWidget(
-              //   controller: pageController,
-              // ),
               FormResponses(
                 controller: pageController,
               ),
-
               isRecurrentForm ?? false
                   ? RecurrentSign(
                       controller: pageController,

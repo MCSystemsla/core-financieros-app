@@ -101,57 +101,6 @@ class _MejoraViviendaEntornoSocialState
                         ),
                   ),
                   const Gap(20),
-                  // WhiteCard(
-                  //   padding: const EdgeInsets.all(5),
-                  //   child: JLuxDropdown(
-                  //     validator: (value) {
-                  //       if (value == null) return 'input.input_validator'.tr();
-                  //       return null;
-                  //     },
-                  //     isContainIcon: true,
-                  //     title: '¿Tiene algún trabajo o negocio? ¿Cuál?'.tr(),
-                  //     items: ['input.yes'.tr(), 'input.no'.tr()],
-                  //     onChanged: (item) {
-                  //       if (item == null) return;
-                  //       question1 = item;
-                  //       setState(() {});
-                  //     },
-                  //     toStringItem: (item) {
-                  //       return item;
-                  //     },
-                  //     hintText: 'input.select_option'.tr(),
-                  //   ),
-                  // ),
-                  // const Gap(20),
-                  // if (question1 == 'input.yes'.tr())
-                  //   CommentaryWidget(
-                  //     textEditingController: storeDescription,
-                  //     title: 'Cual?',
-                  //     validator: (value) {
-                  //       if (value == null || value.isEmpty) {
-                  //         return 'input.input_validator'.tr();
-                  //       }
-                  //       return null;
-                  //     },
-                  //   ),
-                  // const Gap(20),
-                  // CommentaryWidget(
-                  //   textEditingController: question2,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'input.input_validator'.tr();
-                  //     }
-                  //     final numero = int.tryParse(value);
-                  //     if (numero == null || numero < 0 || numero >= 255) {
-                  //       return 'Valor no valido'.tr();
-                  //     }
-
-                  //     return null;
-                  //   },
-                  //   title: 'Tiempo de la actividad:* (MESES)',
-                  //   textInputType: TextInputType.number,
-                  // ),
-                  const Gap(20),
                   WhiteCard(
                     padding: const EdgeInsets.all(5),
                     child: JLuxDropdown(

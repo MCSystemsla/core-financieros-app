@@ -190,10 +190,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     ),
               ),
               const Gap(20),
-              // const CommentaryWidget(
-              //   title:
-              //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-              // ),
               const MotivoPrestamoWidget(),
               const Gap(20),
               WhiteCard(
