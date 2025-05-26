@@ -43,6 +43,7 @@ class AddUserCedulaScreen extends StatelessWidget {
 
     void showErrorDialog({required String errorMsg}) {
       AddUserCedulaDialog(
+        typeForm: typeForm,
         context: context,
         title: errorMsg,
       ).showDialog(context, dialogType: DialogType.warning);

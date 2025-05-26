@@ -270,7 +270,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           return;
         }
 
-        context.push('/online', extra: widget.solicitud.producto);
+        context.push('/online', extra: widget.solicitud.nombreFormulario);
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),

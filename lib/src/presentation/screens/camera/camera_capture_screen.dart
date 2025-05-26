@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,8 +43,16 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       orElse: () => cameras.first,
     );
 
-    _controller = CameraController(backCamera, ResolutionPreset.medium);
+    _controller = CameraController(
+      backCamera,
+      ResolutionPreset.veryHigh,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
     await _controller.initialize();
+
+    await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
+
     if (!mounted) return;
     setState(() {
       _isCameraInitialized = true;
@@ -60,7 +71,6 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     if (!context.mounted || !mounted) return;
 
     if (!hasPermission) {
-      // Reemplaza por tu propio CustomAlertDialog si quieres
       CustomAlertDialog(
         context: context,
         title: 'No tienes permisos para usar la camara',
@@ -96,26 +106,30 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
         selectedImage1Path = localPath;
       });
     } on PlatformException catch (e) {
-      _showError('Error al tomar la foto: ${e.message}');
+      CustomAlertDialog(
+        context: context,
+        title: 'Error al tomar la foto: ${e.message}',
+        onDone: () async {
+          final isOpened = await openAppSettings();
+          if (!context.mounted || !mounted) return;
+          if (isOpened) {
+            context.pop();
+          }
+        },
+      ).showDialog(context, dialogType: DialogType.error);
     } catch (e) {
-      _showError('Error inesperado: $e');
+      CustomAlertDialog(
+        context: context,
+        title: 'Error al tomar la foto: $e',
+        onDone: () async {
+          final isOpened = await openAppSettings();
+          if (!context.mounted || !mounted) return;
+          if (isOpened) {
+            context.pop();
+          }
+        },
+      ).showDialog(context, dialogType: DialogType.error);
     }
-  }
-
-  void _showError(String message) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -131,6 +145,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     }
 
     return Scaffold(
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         title: const Text('Tomar foto'),
         centerTitle: true,
@@ -139,8 +154,8 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: SizedBox(
-              width: double.infinity,
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
               child: CameraPreview(
                 _controller,
                 child: CameraWidgets(
@@ -154,26 +169,25 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOut,
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              child: selectedImage1Path != null
-                  ? _PhotoTakedWidget(
-                      onDelete: () {
-                        setState(() {
-                          selectedImage1Path = null;
-                        });
-                      },
-                      onConfirm: () {
-                        setState(() {
-                          widget.onImageSelected(selectedImage);
-                          context.pop();
-                        });
-                      },
-                      selectedImage1Path: selectedImage1Path!,
-                    )
-                  : const SizedBox.shrink(),
-            ),
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                child: _PhotoTakedWidget(
+                  onDelete: () {
+                    setState(() {
+                      selectedImage1Path = null;
+                    });
+                  },
+                  onConfirm: () {
+                    setState(() {
+                      widget.onImageSelected(selectedImage);
+                      context.pop();
+                    });
+                  },
+                  selectedImage1Path: selectedImage1Path,
+                )
+                // : const SizedBox.shrink(),
+                ),
           ),
           const Gap(24),
         ],
@@ -185,12 +199,12 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
 class _PhotoTakedWidget extends StatefulWidget {
   final VoidCallback onDelete;
   final VoidCallback onConfirm;
-  final String selectedImage1Path;
+  final String? selectedImage1Path;
 
   const _PhotoTakedWidget({
     required this.onDelete,
     required this.onConfirm,
-    required this.selectedImage1Path,
+    this.selectedImage1Path,
   });
 
   @override
@@ -206,20 +220,22 @@ class __PhotoTakedWidgetState extends State<_PhotoTakedWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          IconButton(
-            onPressed: widget.onDelete,
-            icon: const Icon(
-              Icons.delete,
-              color: Colors.red,
-              size: 30,
+          if (widget.selectedImage1Path != null)
+            IconButton(
+              onPressed: widget.onDelete,
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+                size: 30,
+              ),
             ),
-          ),
           Column(
             children: [
-              Text(
-                'Foto tomada:',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              if (widget.selectedImage1Path != null)
+                Text(
+                  'Foto tomada:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               const SizedBox(height: 8),
               TweenAnimationBuilder<double>(
                 duration: const Duration(milliseconds: 500),
@@ -231,26 +247,78 @@ class __PhotoTakedWidgetState extends State<_PhotoTakedWidget> {
                     child: child,
                   );
                 },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.file(
-                    File(widget.selectedImage1Path),
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.cover,
+                child: InkWell(
+                  onTap: () {
+                    if (widget.selectedImage1Path == null) return;
+                    context.pushTransparentRoute(
+                      OnImageCaptureTap(
+                        imagePath: widget.selectedImage1Path!,
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: 'selectedImage',
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: widget.selectedImage1Path != null
+                            ? Image.file(
+                                File(widget.selectedImage1Path!),
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              )
+                            : SvgPicture.asset(
+                                ImageAsset.imgForm,
+                                height: 80,
+                              )),
                   ),
                 ),
               ),
             ],
           ),
-          IconButton.filled(
-            onPressed: widget.onConfirm,
-            icon: const Icon(
-              Icons.check,
-              size: 32,
+          if (widget.selectedImage1Path != null)
+            IconButton.filled(
+              onPressed: widget.onConfirm,
+              icon: const Icon(
+                Icons.check,
+                size: 32,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class OnImageCaptureTap extends StatelessWidget {
+  final String imagePath;
+  const OnImageCaptureTap({super.key, required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return DismissiblePage(
+      onDismissed: () {
+        context.pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Foto Tomada'),
+          centerTitle: true,
+        ),
+        backgroundColor: Colors.white,
+        body: Hero(
+          tag: 'selectedImage',
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.file(
+                height: 600,
+                File(imagePath),
+                fit: BoxFit.contain,
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -283,14 +351,14 @@ class _CameraWidgetsState extends State<CameraWidgets> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(10),
                 backgroundColor: Colors.white.withOpacity(0.85),
                 foregroundColor: Colors.black,
               ),
               onPressed: () {
                 // controller.setFlashMode(FlashMode.camw);
               },
-              child: const Icon(Icons.cameraswitch_rounded, size: 32),
+              child: const Icon(Icons.cameraswitch_rounded, size: 30),
             ),
           ),
           Container(
@@ -311,7 +379,7 @@ class _CameraWidgetsState extends State<CameraWidgets> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(10),
                 backgroundColor: Colors.white.withOpacity(0.85),
                 foregroundColor: Colors.black,
               ),
@@ -324,7 +392,7 @@ class _CameraWidgetsState extends State<CameraWidgets> {
               },
               child: Icon(
                 flashMode ? Icons.flash_on : Icons.flash_off,
-                size: 32,
+                size: 30,
               ),
             ),
           ),

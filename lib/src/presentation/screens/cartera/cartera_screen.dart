@@ -73,9 +73,7 @@ class _CarteraContentWidget extends StatelessWidget {
           //     size: 35,
           //   ),
           // ),
-          // TODO: CAMBIAR ESTO CUANDO SALGA SOLICITUDES
-          // TODO: QUITAR ESTA VALIDACION CUANDO SALGA SOLICITUDES
-          if (!isProdMode)
+          if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
             _Card(
               onTap: () {
                 context.push('/solicitudes');

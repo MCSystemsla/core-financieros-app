@@ -99,37 +99,38 @@ final router = GoRouter(
       redirect: (context, state) {
         final String tipoProducto = state.extra.toString();
         log('tipo producto: $tipoProducto');
-        if (tipoProducto == 'MICREDIESTUDIO NUEVO' ||
-            tipoProducto == 'MICREDIESTUDIO RECURRENTE') {
+        if (tipoProducto == 'ScrKivaMiCrediEstudio' ||
+            tipoProducto == 'ScrKivaMiCrediEstudioRecurrente') {
           return '/online/form/micredito-estudio';
         }
-        if (tipoProducto == 'ESTANDAR NUEVO' ||
-            tipoProducto == 'ESTANDAR RECURRENTE') {
+        if (tipoProducto == 'ScrKivaCreditoEstandar' ||
+            tipoProducto == 'ScrKivaCreditoEstandarRecurrente') {
           return '/online/form/estandar';
         }
-        if (tipoProducto == 'VIVIENDA NUEVA' ||
-            tipoProducto == 'VIVIENDA REPRESTAMO') {
+        if (tipoProducto == 'ScrKivaMejoraVivienda' ||
+            tipoProducto == 'ScrKivaMejoraViviendaRecurrente') {
           return '/online/form/mejora-de-vivienda';
         }
 
-        if (tipoProducto == 'AGUA Y SANEAMIENTO NUEVO' ||
-            tipoProducto == 'AGUA Y SANEAMIENTO RECURRENTE') {
+        if (tipoProducto == 'ScrKivaAguaSaneamiento' ||
+            tipoProducto == 'ScrKivaAguaSaneamientoRecurrente') {
           return '/online/form/saneamiento';
         }
         if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
           return '/online/form/energia-limpia';
         }
-        if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
+        if (tipoProducto == 'ScrKivaEnergiaLimpia' ||
+            tipoProducto == 'ScrKivaEnergiaLimpiaRecurrente') {
           return '/online/form/energia-limpia';
         }
-        if (tipoProducto == 'MUJER EMPRENDE NUEVO' ||
-            tipoProducto == 'MUJER EMPRENDE RECURRENTE') {
+        if (tipoProducto == 'ScrKivaMujerEmprende' ||
+            tipoProducto == 'ScrKivaMujerEmprendeRecurrente') {
           return '/online/form/mujer-emprende';
         }
-        if (tipoProducto == 'ESTANDAR COLONES NUEVO MAYOR A MIL' ||
-            tipoProducto == 'ESTANDAR COLONES RECURRENTE MAYOR A MIL' ||
-            tipoProducto == 'ESTANDAR COLONES NUEVO MENOR A MIL' ||
-            tipoProducto == 'ESTANDAR COLONES RECURRENTE MENOR A MIL') {
+        if (tipoProducto == 'ScrKivaMigrantesEconomicos' ||
+            tipoProducto == 'ScrKivaMigrantesEconomicos' ||
+            tipoProducto == 'ScrKivaMigrantesEconomicosRecurrentes' ||
+            tipoProducto == 'ScrKivaMigrantesEconomicosRecurrentes') {
           return '/online/form/migrantes-economicos';
         }
         return null;

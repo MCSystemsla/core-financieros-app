@@ -1,8 +1,10 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
@@ -37,6 +39,11 @@ class AsalariadoOfflineView extends StatelessWidget {
           create: (ctx) => SolicitudAsalariadoCubit(
             SolicitudCreditoRepositoryImpl(),
             localDbProvider,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => GeolocationCubit(
+            GeolocationService(),
           ),
         ),
       ],
