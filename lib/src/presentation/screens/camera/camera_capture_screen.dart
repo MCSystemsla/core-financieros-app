@@ -47,6 +47,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       );
       await _controller.initialize();
       await _controller.setFlashMode(FlashMode.off);
+      await _controller.setFocusMode(FocusMode.auto);
       await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
 
       if (!mounted) return;
