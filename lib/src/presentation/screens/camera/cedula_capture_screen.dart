@@ -1,33 +1,34 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cedula/cedula_capture.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/custom_painter/cedula_frame_painter.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class CameraCaptureScreen extends StatefulWidget {
-  final void Function(XFile? image) onImageSelected;
-  const CameraCaptureScreen({super.key, required this.onImageSelected});
+class CedulaCaptureScreen extends StatefulWidget {
+  const CedulaCaptureScreen({super.key});
 
   @override
-  State<CameraCaptureScreen> createState() => _CameraCaptureScreenState();
+  State<CedulaCaptureScreen> createState() => _CedulaCaptureScreenState();
 }
 
-class _CameraCaptureScreenState extends State<CameraCaptureScreen>
-    with TickerProviderStateMixin {
-  late CameraController _controller;
+class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
+  CameraController? _controller;
   bool _isCameraInitialized = false;
-  XFile? selectedImage;
+  File? selectedImage;
   String? selectedImage1Path;
-
   @override
   void initState() {
-    super.initState();
     _initializeCamera();
+    super.initState();
   }
 
   Future<void> _initializeCamera() async {
@@ -44,10 +45,10 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.jpeg,
       );
-      await _controller.initialize();
-      await _controller.setFlashMode(FlashMode.off);
-      await _controller.setFocusMode(FocusMode.auto);
-      await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
+      await _controller?.initialize();
+      await _controller?.setFlashMode(FlashMode.off);
+      await _controller?.setFocusMode(FocusMode.auto);
+      // await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
 
       if (!mounted) return;
       setState(() {
@@ -87,13 +88,18 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     }
 
     try {
-      final (savedPath, photo) =
-          await CameraService.takeAndsavePhoto(controller: _controller);
       if (!context.mounted || !mounted) return;
+      final (croppedPath, croppedFile) =
+          await CameraService.takeImageAndSaveWithCropped(
+        controller: _controller!,
+      );
       setState(() {
-        selectedImage = photo;
-        selectedImage1Path = savedPath;
+        selectedImage = croppedFile;
+        selectedImage1Path = croppedPath;
       });
+      context.pushTransparentRoute(
+        CedulaCaptureView(cedulaCapturedImage: croppedFile),
+      );
     } on PlatformException catch (e) {
       CustomAlertDialog(
         context: context,
@@ -111,59 +117,49 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_isCameraInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    final previewSize = _controller?.value.previewSize;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
+    final cameraAspectRatio = isPortrait
+        ? (previewSize?.width ?? 0) / (previewSize?.height ?? 0)
+        : (previewSize?.height ?? 0) / (previewSize?.width ?? 0);
+    if (!_isCameraInitialized) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
-      extendBodyBehindAppBar: false,
-      appBar: AppBar(
-        title: const Text('Tomar foto Kiva'),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: CameraPreview(
-                _controller,
-                child: CameraWidgets(
-                  controller: _controller,
-                  onTakePhoto: () => _takePhoto(),
+          AspectRatio(
+            aspectRatio: cameraAspectRatio,
+            child: CameraPreview(
+              _controller!,
+              child: Positioned.fill(
+                child: CustomPaint(
+                  painter: CedulaFramePainter(),
                 ),
               ),
             ),
           ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              child: PhotoTakedWidget(
-                onDelete: () {
-                  setState(() {
-                    selectedImage1Path = null;
-                  });
-                },
-                onConfirm: () {
-                  widget.onImageSelected(selectedImage);
-                  context.pop();
-                },
-                selectedImage1Path: selectedImage1Path,
-              ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: CameraWidgets(
+              onTakePhoto: () => _takePhoto(),
+              controller: _controller!,
             ),
           ),
-          const Gap(24),
+          const CloseCaptureCedulaWidget(),
+          const CaptureCedulaTitle(),
+          const CaptureCedulaDescription(),
         ],
       ),
     );

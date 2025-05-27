@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/screens/camera/cedula_capture_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
@@ -20,17 +21,16 @@ class NuevaMenorForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Navbar(
-          title: 'Crear nueva Solicitud Nueva Menor',
-        ),
+        if (pageController.initialPage != 0)
+          const Navbar(
+            title: 'Crear nueva Solicitud Nueva Menor',
+          ),
         Expanded(
           child: PageView(
             physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
-              // NuevaMenorCreditoWidget(
-              //   pageController: pageController,
-              // ),
+              const CedulaCaptureScreen(),
               NuevaMenorDataClientWidget(
                 controller: pageController,
               ),
