@@ -27,8 +27,8 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
   String? selectedImage1Path;
   @override
   void initState() {
-    _initializeCamera();
     super.initState();
+    _initializeCamera();
   }
 
   Future<void> _initializeCamera() async {
