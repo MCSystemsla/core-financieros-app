@@ -1,14 +1,12 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CameraCaptureScreen extends StatefulWidget {
@@ -25,6 +23,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   bool _isCameraInitialized = false;
   XFile? selectedImage;
   String? selectedImage1Path;
+  bool flashVisible = false;
 
   @override
   void initState() {
@@ -33,26 +32,35 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   }
 
   Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final backCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.back,
-      orElse: () => cameras.first,
-    );
+    try {
+      final cameras = await availableCameras();
+      final backCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.back,
+        orElse: () => cameras.first,
+      );
 
-    _controller = CameraController(
-      backCamera,
-      ResolutionPreset.veryHigh,
-      enableAudio: false,
-      imageFormatGroup: ImageFormatGroup.jpeg,
-    );
-    await _controller.initialize();
+      _controller = CameraController(
+        backCamera,
+        ResolutionPreset.veryHigh,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
+      await _controller.initialize();
 
-    await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
+      await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
+      // await _controller.setFocusPoint(const Offset(0.5, 0.5));
 
-    if (!mounted) return;
-    setState(() {
-      _isCameraInitialized = true;
-    });
+      if (!mounted) return;
+      setState(() {
+        _isCameraInitialized = true;
+      });
+    } catch (e) {
+      CustomAlertDialog(
+        context: context,
+        title: 'Error al inicializar la camara: $e',
+        onDone: () => context.pop(),
+      ).showDialog(context, dialogType: DialogType.error);
+    }
   }
 
   Future<bool> _requestPermissions() async {
@@ -61,11 +69,9 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   }
 
   Future<void> _takePhoto() async {
-    if (!mounted || !context.mounted) return;
-
     final hasPermission = await _requestPermissions();
-    if (!context.mounted || !mounted) return;
 
+    if (!context.mounted || !mounted) return;
     if (!hasPermission) {
       CustomAlertDialog(
         context: context,
@@ -82,24 +88,12 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     }
 
     try {
-      final photo = await _controller.takePicture();
-      final appDir = await getApplicationDocumentsDirectory();
-      final customDir = Directory('${appDir.path}/MyImages');
-
-      if (!await customDir.exists()) {
-        await customDir.create(recursive: true);
-        log('Directorio creado: ${customDir.path}');
-      }
-
-      final localPath =
-          '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final imageFile = File(photo.path);
-      await imageFile.copy(localPath);
-
-      if (!mounted) return;
+      final (savedPath, photo) =
+          await CameraService.takeAndsavePhoto(controller: _controller);
+      if (!context.mounted || !mounted) return;
       setState(() {
         selectedImage = photo;
-        selectedImage1Path = localPath;
+        selectedImage1Path = savedPath;
       });
     } on PlatformException catch (e) {
       CustomAlertDialog(
@@ -131,7 +125,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: AppBar(
-        title: const Text('Tomar foto'),
+        title: const Text('Tomar foto Kiva'),
         centerTitle: true,
       ),
       body: Column(
@@ -153,23 +147,22 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOut,
             child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                switchInCurve: Curves.easeInOut,
-                switchOutCurve: Curves.easeInOut,
-                child: PhotoTakedWidget(
-                  onDelete: () {
-                    setState(() {
-                      selectedImage1Path = null;
-                    });
-                  },
-                  onConfirm: () {
-                    setState(() {
-                      widget.onImageSelected(selectedImage);
-                      context.pop();
-                    });
-                  },
-                  selectedImage1Path: selectedImage1Path,
-                )),
+              duration: const Duration(milliseconds: 400),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              child: PhotoTakedWidget(
+                onDelete: () {
+                  setState(() {
+                    selectedImage1Path = null;
+                  });
+                },
+                onConfirm: () {
+                  widget.onImageSelected(selectedImage);
+                  context.pop();
+                },
+                selectedImage1Path: selectedImage1Path,
+              ),
+            ),
           ),
           const Gap(24),
         ],
