@@ -46,9 +46,8 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
         imageFormatGroup: ImageFormatGroup.jpeg,
       );
       await _controller.initialize();
-
+      await _controller.setFlashMode(FlashMode.off);
       await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
-      // await _controller.setFocusPoint(const Offset(0.5, 0.5));
 
       if (!mounted) return;
       setState(() {
