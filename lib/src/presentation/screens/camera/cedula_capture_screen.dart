@@ -14,7 +14,11 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CedulaCaptureScreen extends StatefulWidget {
-  const CedulaCaptureScreen({super.key});
+  final String title;
+  const CedulaCaptureScreen({
+    super.key,
+    required this.title,
+  });
 
   @override
   State<CedulaCaptureScreen> createState() => _CedulaCaptureScreenState();
@@ -158,7 +162,9 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
             ),
           ),
           const CloseCaptureCedulaWidget(),
-          const CaptureCedulaTitle(),
+          CaptureCedulaTitle(
+            title: widget.title,
+          ),
           const CaptureCedulaDescription(),
         ],
       ),

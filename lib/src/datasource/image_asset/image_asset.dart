@@ -44,4 +44,7 @@ abstract class ImageAsset {
 
   // REPRESTAMO
   static const String represtamoBg = 'assets/images/represtamo.webp';
+
+  // CEDULA
+  static const String cedulaPhoto = 'assets/images/document.svg';
 }

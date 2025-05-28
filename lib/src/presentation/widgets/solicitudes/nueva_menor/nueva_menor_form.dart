@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/screens/camera/cedula_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_actividad_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/nueva_menor_beneficiario_widget.dart';
@@ -30,7 +30,9 @@ class NuevaMenorForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
-              const CedulaCaptureScreen(),
+              AddCedulaPhotosScreen(
+                controller: pageController,
+              ),
               NuevaMenorDataClientWidget(
                 controller: pageController,
               ),
