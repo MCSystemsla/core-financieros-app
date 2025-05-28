@@ -1,8 +1,11 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/photo_user_cedula/photo_user_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/photos_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
@@ -12,12 +15,9 @@ class AddCedulaPhotosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Validacion de Identidad'),
-      ),
-      body: _ValidationIdentidadCard(
+    return BlocProvider(
+      create: (ctx) => PhotoUserCedulaCubit(),
+      child: _ValidationIdentidadCard(
         controller: controller,
       ),
     );
@@ -79,10 +79,10 @@ class _CardValidationContent extends StatelessWidget {
           const Gap(30),
           CustomElevatedButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PhotosCedulaScreen(
+              context.pushTransparentRoute(
+                BlocProvider.value(
+                  value: context.read<PhotoUserCedulaCubit>(),
+                  child: PhotosCedulaScreen(
                     controller: controller,
                   ),
                 ),

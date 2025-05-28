@@ -1,15 +1,19 @@
 import 'dart:io';
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/photos_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class CedulaCaptureView extends StatelessWidget {
+  final void Function(String imagePath) onImageTaken;
   final File cedulaCapturedImage;
-  const CedulaCaptureView({super.key, required this.cedulaCapturedImage});
+  const CedulaCaptureView({
+    super.key,
+    required this.cedulaCapturedImage,
+    required this.onImageTaken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +51,9 @@ class CedulaCaptureView extends StatelessWidget {
                   Expanded(
                     child: CustomElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const PhotosCedulaScreen(),
-                          ),
-                        );
+                        onImageTaken(cedulaCapturedImage.path);
+                        context.pop();
+                        context.pop();
                       },
                       text: 'Aceptar',
                       color: AppColors.getPrimaryColor(),

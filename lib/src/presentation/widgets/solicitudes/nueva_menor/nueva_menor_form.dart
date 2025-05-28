@@ -21,10 +21,9 @@ class NuevaMenorForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (pageController.initialPage != 0)
-          const Navbar(
-            title: 'Crear nueva Solicitud Nueva Menor',
-          ),
+        const Navbar(
+          title: 'Crear nueva Solicitud Nueva Menor',
+        ),
         Expanded(
           child: PageView(
             physics: const NeverScrollableScrollPhysics(),

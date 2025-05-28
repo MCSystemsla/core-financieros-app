@@ -14,10 +14,12 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CedulaCaptureScreen extends StatefulWidget {
+  final void Function(String imagePath) onImageTaken;
   final String title;
   const CedulaCaptureScreen({
     super.key,
     required this.title,
+    required this.onImageTaken,
   });
 
   @override
@@ -102,7 +104,10 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
         selectedImage1Path = croppedPath;
       });
       context.pushTransparentRoute(
-        CedulaCaptureView(cedulaCapturedImage: croppedFile),
+        CedulaCaptureView(
+          cedulaCapturedImage: croppedFile,
+          onImageTaken: widget.onImageTaken,
+        ),
       );
     } on PlatformException catch (e) {
       CustomAlertDialog(

@@ -1,8 +1,12 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/photo_user_cedula/photo_user_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/cedula_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class CedulaItem {
   final String title;
@@ -15,11 +19,12 @@ class CedulaItem {
 }
 
 class PhotosCedulaScreen extends StatelessWidget {
-  final PageController? controller;
-  const PhotosCedulaScreen({super.key, this.controller});
+  final PageController controller;
+  const PhotosCedulaScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final photoCedulaProvider = context.watch<PhotoUserCedulaCubit>().state;
     return Scaffold(
       appBar: AppBar(
         title: const Text('¡Comencemos!'),
@@ -28,8 +33,13 @@ class PhotosCedulaScreen extends StatelessWidget {
       body: Column(
         children: [
           CedulaItemsWidget(
+            onImageTaken: (image) {
+              context.read<PhotoUserCedulaCubit>().savePhotosPath(
+                    cedulaFrontPath: image,
+                  );
+            },
             cedulaCaptureTitle: 'Captura de identificacion frontal',
-            isCedulaTaken: true,
+            isCedulaTaken: photoCedulaProvider.cedulaFrontPath.isNotEmpty,
             index: 1,
             cedulaItem: CedulaItem(
               title: 'Captura de cedula frontal',
@@ -39,7 +49,12 @@ class PhotosCedulaScreen extends StatelessWidget {
           ),
           const Gap(10),
           CedulaItemsWidget(
-            isCedulaTaken: false,
+            onImageTaken: (image) {
+              context.read<PhotoUserCedulaCubit>().savePhotosPath(
+                    cedulaBackPath: image,
+                  );
+            },
+            isCedulaTaken: photoCedulaProvider.cedulaBackPath.isNotEmpty,
             cedulaCaptureTitle: 'Captura de identificacion por detras',
             index: 2,
             cedulaItem: CedulaItem(
@@ -52,7 +67,18 @@ class PhotosCedulaScreen extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomElevatedButton(
               onPressed: () {
-                controller?.nextPage(
+                if (photoCedulaProvider.cedulaBackPath.isEmpty ||
+                    photoCedulaProvider.cedulaBackPath.isEmpty) {
+                  CustomAlertDialog(
+                    context: context,
+                    title:
+                        'Debes capturar ambas imágenes de la cédula para continuar',
+                    onDone: () => context.pop(),
+                  ).showDialog(context);
+                  return;
+                }
+                context.pop();
+                controller.nextPage(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeIn,
                 );
@@ -69,6 +95,7 @@ class PhotosCedulaScreen extends StatelessWidget {
 }
 
 class CedulaItemsWidget extends StatelessWidget {
+  final void Function(String image) onImageTaken;
   final CedulaItem cedulaItem;
   final int index;
   final bool isCedulaTaken;
@@ -79,6 +106,7 @@ class CedulaItemsWidget extends StatelessWidget {
     required this.cedulaItem,
     required this.isCedulaTaken,
     required this.cedulaCaptureTitle,
+    required this.onImageTaken,
   });
 
   @override
@@ -95,6 +123,7 @@ class CedulaItemsWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => CedulaCaptureScreen(
+                onImageTaken: onImageTaken,
                 title: cedulaCaptureTitle,
               ),
             ),
