@@ -11,7 +11,15 @@ import 'package:gap/gap.dart';
 
 class AddCedulaPhotosScreen extends StatelessWidget {
   final PageController controller;
-  const AddCedulaPhotosScreen({super.key, required this.controller});
+  final void Function(String imagePath) onCedulaFrontTaken;
+  final void Function(String imagePath) onCedulaBackTaken;
+
+  const AddCedulaPhotosScreen({
+    super.key,
+    required this.controller,
+    required this.onCedulaFrontTaken,
+    required this.onCedulaBackTaken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +27,8 @@ class AddCedulaPhotosScreen extends StatelessWidget {
       create: (ctx) => PhotoUserCedulaCubit(),
       child: _ValidationIdentidadCard(
         controller: controller,
+        onCedulaFrontTaken: onCedulaFrontTaken,
+        onCedulaBackTaken: onCedulaBackTaken,
       ),
     );
   }
@@ -26,8 +36,14 @@ class AddCedulaPhotosScreen extends StatelessWidget {
 
 class _ValidationIdentidadCard extends StatelessWidget {
   final PageController controller;
+  final void Function(String imagePath) onCedulaFrontTaken;
+  final void Function(String imagePath) onCedulaBackTaken;
 
-  const _ValidationIdentidadCard({required this.controller});
+  const _ValidationIdentidadCard({
+    required this.controller,
+    required this.onCedulaFrontTaken,
+    required this.onCedulaBackTaken,
+  });
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -41,6 +57,8 @@ class _ValidationIdentidadCard extends StatelessWidget {
           ),
           child: _CardValidationContent(
             controller: controller,
+            onCedulaFrontTaken: onCedulaFrontTaken,
+            onCedulaBackTaken: onCedulaBackTaken,
           ),
         ),
       ),
@@ -50,8 +68,14 @@ class _ValidationIdentidadCard extends StatelessWidget {
 
 class _CardValidationContent extends StatelessWidget {
   final PageController controller;
+  final void Function(String imagePath) onCedulaFrontTaken;
+  final void Function(String imagePath) onCedulaBackTaken;
 
-  const _CardValidationContent({required this.controller});
+  const _CardValidationContent({
+    required this.controller,
+    required this.onCedulaBackTaken,
+    required this.onCedulaFrontTaken,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -83,8 +107,9 @@ class _CardValidationContent extends StatelessWidget {
                 BlocProvider.value(
                   value: context.read<PhotoUserCedulaCubit>(),
                   child: PhotosCedulaScreen(
-                    controller: controller,
-                  ),
+                      controller: controller,
+                      onCedulaBackTaken: onCedulaBackTaken,
+                      onCedulaFrontTaken: onCedulaFrontTaken),
                 ),
               );
             },

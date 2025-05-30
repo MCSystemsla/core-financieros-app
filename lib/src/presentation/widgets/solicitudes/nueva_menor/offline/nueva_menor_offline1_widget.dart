@@ -536,6 +536,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objPaisNacimientoIdVer: paisNacimientoVer,
                         objSexoIdVer: sexoVer,

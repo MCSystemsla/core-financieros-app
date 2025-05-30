@@ -20,6 +20,7 @@ import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.d
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_parentesco.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -2052,6 +2053,40 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(14, 2204147813567248477),
+      name: 'CedulaClientDb',
+      lastPropertyId: const obx_int.IdUid(5, 6161684469045987705),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 7723517095752855841),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1062384254671524930),
+            name: 'typeSolicitud',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 764247032203055214),
+            name: 'cedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 4326895209011077460),
+            name: 'imageFrontCedula',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 6161684469045987705),
+            name: 'imageBackCedula',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -2090,14 +2125,15 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(12, 4888282068940134747),
+      lastEntityId: const obx_int.IdUid(14, 2204147813567248477),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [
         9202958733338752880,
         5684422469629762898,
-        1674317648935978538
+        1674317648935978538,
+        6197423073581509946
       ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
@@ -2113,7 +2149,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         4231670949194548259,
         8381761593523512187,
         7187538665278236547,
-        8084697961678830896
+        8084697961678830896,
+        6717536506724646995,
+        5241726981624098284,
+        5277984502301491261,
+        7837008714213204574,
+        4320082503448628342
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -5161,6 +5202,58 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    CedulaClientDb: obx_int.EntityDefinition<CedulaClientDb>(
+        model: _entities[9],
+        toOneRelations: (CedulaClientDb object) => [],
+        toManyRelations: (CedulaClientDb object) => {},
+        getId: (CedulaClientDb object) => object.id,
+        setId: (CedulaClientDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (CedulaClientDb object, fb.Builder fbb) {
+          final typeSolicitudOffset = object.typeSolicitud == null
+              ? null
+              : fbb.writeString(object.typeSolicitud!);
+          final cedulaOffset =
+              object.cedula == null ? null : fbb.writeString(object.cedula!);
+          final imageFrontCedulaOffset = object.imageFrontCedula == null
+              ? null
+              : fbb.writeString(object.imageFrontCedula!);
+          final imageBackCedulaOffset = object.imageBackCedula == null
+              ? null
+              : fbb.writeString(object.imageBackCedula!);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, typeSolicitudOffset);
+          fbb.addOffset(2, cedulaOffset);
+          fbb.addOffset(3, imageFrontCedulaOffset);
+          fbb.addOffset(4, imageBackCedulaOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final typeSolicitudParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 6);
+          final cedulaParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final imageFrontCedulaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 10);
+          final imageBackCedulaParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 12);
+          final object = CedulaClientDb(
+              typeSolicitud: typeSolicitudParam,
+              cedula: cedulaParam,
+              imageFrontCedula: imageFrontCedulaParam,
+              imageBackCedula: imageBackCedulaParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -6932,4 +7025,27 @@ class AsalariadoResponsesLocalDb_ {
   static final objParentescoFamiliarCercanoIdVer =
       obx.QueryStringProperty<AsalariadoResponsesLocalDb>(
           _entities[8].properties[147]);
+}
+
+/// [CedulaClientDb] entity fields to define ObjectBox queries.
+class CedulaClientDb_ {
+  /// See [CedulaClientDb.id].
+  static final id =
+      obx.QueryIntegerProperty<CedulaClientDb>(_entities[9].properties[0]);
+
+  /// See [CedulaClientDb.typeSolicitud].
+  static final typeSolicitud =
+      obx.QueryStringProperty<CedulaClientDb>(_entities[9].properties[1]);
+
+  /// See [CedulaClientDb.cedula].
+  static final cedula =
+      obx.QueryStringProperty<CedulaClientDb>(_entities[9].properties[2]);
+
+  /// See [CedulaClientDb.imageFrontCedula].
+  static final imageFrontCedula =
+      obx.QueryStringProperty<CedulaClientDb>(_entities[9].properties[3]);
+
+  /// See [CedulaClientDb.imageBackCedula].
+  static final imageBackCedula =
+      obx.QueryStringProperty<CedulaClientDb>(_entities[9].properties[4]);
 }

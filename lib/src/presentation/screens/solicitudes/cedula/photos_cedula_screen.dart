@@ -20,7 +20,14 @@ class CedulaItem {
 
 class PhotosCedulaScreen extends StatelessWidget {
   final PageController controller;
-  const PhotosCedulaScreen({super.key, required this.controller});
+  final void Function(String imagePath) onCedulaFrontTaken;
+  final void Function(String imagePath) onCedulaBackTaken;
+  const PhotosCedulaScreen({
+    super.key,
+    required this.controller,
+    required this.onCedulaFrontTaken,
+    required this.onCedulaBackTaken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +44,7 @@ class PhotosCedulaScreen extends StatelessWidget {
               context.read<PhotoUserCedulaCubit>().savePhotosPath(
                     cedulaFrontPath: image,
                   );
+              onCedulaFrontTaken(image);
             },
             cedulaCaptureTitle: 'Captura de identificacion frontal',
             isCedulaTaken: photoCedulaProvider.cedulaFrontPath.isNotEmpty,
@@ -53,6 +61,7 @@ class PhotosCedulaScreen extends StatelessWidget {
               context.read<PhotoUserCedulaCubit>().savePhotosPath(
                     cedulaBackPath: image,
                   );
+              onCedulaBackTaken(image);
             },
             isCedulaTaken: photoCedulaProvider.cedulaBackPath.isNotEmpty,
             cedulaCaptureTitle: 'Captura de identificacion por detras',

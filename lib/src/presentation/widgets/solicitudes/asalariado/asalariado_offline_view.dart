@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/so
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/offline/asalariado_offline_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/offline/asalariado_offline_2.dart';
@@ -59,6 +60,11 @@ class AsalariadoOfflineView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: controller,
                 children: [
+                  AddCedulaPhotosScreen(
+                    controller: controller,
+                    onCedulaBackTaken: (imagePath) {},
+                    onCedulaFrontTaken: (imagePath) {},
+                  ),
                   AsalariadoOffline1(
                     controller: controller,
                     asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,

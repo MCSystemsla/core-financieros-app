@@ -70,6 +70,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
     cedula = solicitud?.cedula;
     primerNombre = solicitud?.nombre1;
@@ -96,8 +97,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
     nacionalidad = solicitud?.nacionalidad;
     estadoCivil = solicitud?.objEstadoCivilId;
     context.read<GeolocationCubit>().getCurrentLocation();
-
-    super.initState();
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -21,6 +22,7 @@ class ObjectBoxService {
   late final Box<ResponseLocalDb> solicitudesResponsesBox;
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
+  late final Box<CedulaClientDb> cedulaClientBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -34,7 +36,8 @@ class ObjectBoxService {
         _store.box<ReprestamoResponsesLocalDb>();
     solicitudesAsalariadoResponsesBox =
         _store.box<AsalariadoResponsesLocalDb>();
-    // solicitudesReprestamoResponsesBox.removeAll();
+    cedulaClientBox = _store.box<CedulaClientDb>();
+    // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
   }
 
@@ -226,6 +229,18 @@ class ObjectBoxService {
         }
     }
     return [];
+  }
+
+  CedulaClientDb saveCedulaClient({required CedulaClientDb cedulaClient}) {
+    try {
+      cedulaClient.id = 0;
+      cedulaClientBox.put(cedulaClient);
+      _logger.i('Creando nueva cedula');
+      return cedulaClient;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
   }
 
   ResponseLocalDb saveSolicitudesNuevaMenorResponses({

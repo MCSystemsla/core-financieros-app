@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/so
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/offline/nueva_menor_offline1_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/offline/nueva_menor_offline2_widget.dart';
@@ -53,6 +54,19 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
+                  AddCedulaPhotosScreen(
+                    controller: pageController,
+                    onCedulaFrontTaken: (imagePath) {
+                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            cedulaFrontPath: imagePath,
+                          );
+                    },
+                    onCedulaBackTaken: (imagePath) {
+                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            cedulaBackPath: imagePath,
+                          );
+                    },
+                  ),
                   NuevaMenorOffline1(
                     responseLocalDb: responseLocalDb,
                     pageController: pageController,

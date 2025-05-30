@@ -1,9 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
@@ -608,6 +611,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
 
   @override
   Widget build(BuildContext context) {
+    final localDpProvider = global<ObjectBoxService>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -909,6 +913,16 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  final cedulaPath =
+                      context.read<SolicitudNuevaMenorCubit>().state;
+                  localDpProvider.saveCedulaClient(
+                    cedulaClient: CedulaClientDb(
+                      typeSolicitud: 'NUEVA_MENOR',
+                      cedula: cedulaController.text.trim(),
+                      imageFrontCedula: cedulaPath.cedulaFrontPath,
+                      imageBackCedula: cedulaPath.cedulaBackPath,
+                    ),
+                  );
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objPaisNacimientoIdVer: paisNacimiento?.name,
                         objSexoIdVer: sexo?.name,
