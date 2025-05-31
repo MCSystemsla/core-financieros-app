@@ -1,2 +1,0 @@
-C:/Users/Reyes/Desktop/core_financiero_app/android/app/.cxx/RelWithDebInfo/1p1e2e2d/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/Reyes/Desktop/core_financiero_app/android/app/.cxx/RelWithDebInfo/1p1e2e2d/arm64-v8a/CMakeFiles/rebuild_cache.dir

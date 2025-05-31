@@ -1,2 +1,0 @@
-C:/Users/Reyes/Desktop/core_financiero_app/android/app/.cxx/Debug/3b6m46m2/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/Reyes/Desktop/core_financiero_app/android/app/.cxx/Debug/3b6m46m2/armeabi-v7a/CMakeFiles/rebuild_cache.dir
