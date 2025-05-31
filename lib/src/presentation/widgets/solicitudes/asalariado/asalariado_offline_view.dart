@@ -34,8 +34,10 @@ class AsalariadoOfflineView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
-    final imagesCedula =
-        localDbProvider.getCedula(cedula: asalariadoResponsesLocalDb.cedula!);
+    final imagesCedula = localDbProvider.getCedula(
+      cedula: asalariadoResponsesLocalDb.cedula!,
+      tipoSolicitud: 'ASALARIADO',
+    );
 
     final controller = PageController();
     return MultiBlocProvider(

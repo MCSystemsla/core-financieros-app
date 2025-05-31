@@ -29,8 +29,10 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
-    final imagesCedula =
-        localDbProvider.getCedula(cedula: responseLocalDb.cedula!);
+    final imagesCedula = localDbProvider.getCedula(
+      cedula: responseLocalDb.cedula!,
+      tipoSolicitud: 'NUEVA_MENOR',
+    );
     final pageController = PageController();
 
     return MultiBlocProvider(
