@@ -100,11 +100,14 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime eighteenYearsAgo =
+        DateTime(now.year - 18, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
       firstDate: DateTime(1930),
-      lastDate: DateTime(2101),
+      lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaNacimiento) {
@@ -114,6 +117,15 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isBefore(eighteenYearsAgo) ||
+          picked.isAtSameMomentAs(eighteenYearsAgo)) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La edad no puede ser menor a 18 años',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }

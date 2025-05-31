@@ -552,11 +552,16 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   String celularCountyCode = '+505';
   String telefonoCountryCode = '+505';
   Future<void> selectDate(BuildContext context) async {
+    final DateTime minFechaVencimiento = DateTime(
+      fechaEmisionCedula!.year + 10,
+      fechaEmisionCedula!.month,
+      fechaEmisionCedula!.day,
+    );
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       keyboardType: TextInputType.datetime,
-      firstDate: DateTime(1930),
+      firstDate: minFechaVencimiento,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -570,9 +575,26 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (!_validarVencimiento(picked)) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'Fecha de vencimiento debe ser como mínimo 10 años después de la fecha de emisión',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       _selectedDate = picked;
       setState(() {});
     }
+  }
+
+  bool _validarVencimiento(DateTime vencimiento) {
+    if (fechaEmisionCedula == null) return false;
+    final minValida = DateTime(fechaEmisionCedula!.year + 10,
+        fechaEmisionCedula!.month, fechaEmisionCedula!.day);
+    return vencimiento.isAtSameMomentAs(minValida) ||
+        vencimiento.isAfter(minValida);
   }
 
   Future<void> selectEmisionFecha(BuildContext context) async {
@@ -590,11 +612,15 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime eighteenYearsAgo =
+        DateTime(now.year - 18, now.month, now.day);
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
       firstDate: DateTime(1930),
-      lastDate: DateTime(2101),
+      lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaNacimiento) {
@@ -604,6 +630,15 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isBefore(eighteenYearsAgo) ||
+          picked.isAtSameMomentAs(eighteenYearsAgo)) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La edad no puede ser menor a 18 años',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
