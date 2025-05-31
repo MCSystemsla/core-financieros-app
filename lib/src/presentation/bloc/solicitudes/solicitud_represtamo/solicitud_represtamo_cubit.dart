@@ -169,9 +169,13 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     String? fechaDesembolso,
     double? tasaInteres,
     bool? isOffline,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     emit(
       state.copyWith(
+        cedulaBackPath: cedulaBackPath,
+        cedulaFrontPath: cedulaFrontPath,
         objOrigenSolicitudIdVer: objOrigenSolicitudIdVer,
         objMonedaIdVer: objMonedaIdVer,
         objPropositoIdVer: objPropositoIdVer,

@@ -5,11 +5,20 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PhotoCedulaClientWidget extends StatelessWidget {
+  final XFile? fotoCedulaFrontal;
+  final VoidCallback onCedulaFrontalPressed;
+  final XFile? fotoCedulaTrasera;
+  final VoidCallback onCedulaTraseraPressed;
   const PhotoCedulaClientWidget({
     super.key,
     required this.controller,
+    this.fotoCedulaFrontal,
+    this.fotoCedulaTrasera,
+    required this.onCedulaFrontalPressed,
+    required this.onCedulaTraseraPressed,
   });
 
   final PageController controller;
@@ -21,14 +30,15 @@ class PhotoCedulaClientWidget extends StatelessWidget {
         children: [
           const Gap(30),
           UploadImageWidget(
-            // selectedImage: ,
-            onPressed: () {},
+            selectedImage: fotoCedulaFrontal,
+            onPressed: onCedulaFrontalPressed,
             title: 'Foto Cedula Frontal',
           ),
           const Gap(30),
           UploadImageWidget(
+            selectedImage: fotoCedulaTrasera,
             title: 'Foto Cedula Trasera',
-            onPressed: () {},
+            onPressed: onCedulaTraseraPressed,
           ),
           const Gap(30),
           Container(

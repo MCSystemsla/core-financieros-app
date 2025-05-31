@@ -305,9 +305,13 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
     double? totalIngresoMes,
     double? totalIngresoMesConyugue,
     int? idLocalResponse,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     emit(
       state.copyWith(
+        cedulaFrontPath: cedulaFrontPath,
+        cedulaBackPath: cedulaBackPath,
         objOrigenSolicitudIdVer: objOrigenSolicitudIdVer,
         objPaisEmisorCedulaVer: objPaisEmisorCedulaVer,
         objMunicipioCasaIdVer: objMunicipioCasaIdVer,

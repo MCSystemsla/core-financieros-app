@@ -33,6 +33,8 @@ class ReprestamoForm extends StatelessWidget {
             children: [
               PhotoCedulaClientWidget(
                 controller: controller,
+                onCedulaFrontalPressed: () {},
+                onCedulaTraseraPressed: () {},
               ),
               ReprestamoForm1(
                 controller: controller,

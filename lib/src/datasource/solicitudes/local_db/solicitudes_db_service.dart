@@ -243,6 +243,26 @@ class ObjectBoxService {
     }
   }
 
+  CedulaClientDb? getCedula({required String cedula}) {
+    try {
+      final query =
+          cedulaClientBox.query(CedulaClientDb_.cedula.equals(cedula)).build();
+      final result = query.findFirst();
+      query.close();
+
+      if (result != null) {
+        _logger.i('Cedula encontrada: ${result.cedula}');
+      } else {
+        _logger.i('Cedula no encontrada');
+      }
+
+      return result;
+    } catch (e) {
+      _logger.e('Error al obtener la cédula: $e');
+      rethrow;
+    }
+  }
+
   ResponseLocalDb saveSolicitudesNuevaMenorResponses({
     required ResponseLocalDb responseLocalDb,
   }) {

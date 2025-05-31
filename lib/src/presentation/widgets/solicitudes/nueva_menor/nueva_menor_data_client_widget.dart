@@ -94,6 +94,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
     super.build(context);
     return BlocBuilder<UserByCedulaCubit, UserByCedulaState>(
       builder: (context, state) {
@@ -433,6 +434,16 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
+                        final cedulaPath =
+                            context.read<SolicitudNuevaMenorCubit>().state;
+                        localDbProvider.saveCedulaClient(
+                          cedulaClient: CedulaClientDb(
+                            typeSolicitud: 'NUEVA_MENOR',
+                            cedula: state.userCedulaResponse.cedula,
+                            imageFrontCedula: cedulaPath.cedulaFrontPath,
+                            imageBackCedula: cedulaPath.cedulaBackPath,
+                          ),
+                        );
                         context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                               objPaisNacimientoIdVer: paisNacimientoVer,
                               objSexoIdVer: sexoVer,

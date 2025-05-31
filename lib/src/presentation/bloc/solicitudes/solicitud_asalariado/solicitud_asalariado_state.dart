@@ -152,7 +152,11 @@ class SolicitudAsalariadoState extends Equatable {
   final String objActividadEconomicaId1Ver;
   final String objActividadEconomicaId2Ver;
   final String objParentescoFamiliarCercanoIdVer;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   const SolicitudAsalariadoState({
+    this.cedulaFrontPath = '',
+    this.cedulaBackPath = '',
     this.objOrigenSolicitudIdVer = '',
     this.objPaisEmisorCedulaVer = '',
     this.objMunicipioCasaIdVer = '',
@@ -307,6 +311,8 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaFrontPath,
+        cedulaBackPath,
         fechaDesembolso,
         tasaInteres,
         montoMinimo,
@@ -581,6 +587,8 @@ class SolicitudAsalariadoState extends Equatable {
     String? objActividadEconomicaId1Ver,
     String? objActividadEconomicaId2Ver,
     String? objParentescoFamiliarCercanoIdVer,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     return SolicitudAsalariadoState(
       hasVerified: hasVerified ?? this.hasVerified,
@@ -776,6 +784,8 @@ class SolicitudAsalariadoState extends Equatable {
           objActividadEconomicaId2Ver ?? this.objActividadEconomicaId2Ver,
       objParentescoFamiliarCercanoIdVer: objParentescoFamiliarCercanoIdVer ??
           this.objParentescoFamiliarCercanoIdVer,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
     );
   }
 }

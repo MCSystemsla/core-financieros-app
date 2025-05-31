@@ -1,10 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
@@ -159,6 +162,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
     super.build(context);
     return BlocConsumer<GeolocationCubit, GeolocationState>(
       listener: (context, state) {
@@ -468,6 +472,16 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
                       if (!formKey.currentState!.validate()) return;
+                      final cedulaPath =
+                          context.read<SolicitudAsalariadoCubit>().state;
+                      localDbProvider.saveCedulaClient(
+                        cedulaClient: CedulaClientDb(
+                          typeSolicitud: 'ASALARIADO',
+                          cedula: cedula,
+                          imageFrontCedula: cedulaPath.cedulaFrontPath,
+                          imageBackCedula: cedulaPath.cedulaBackPath,
+                        ),
+                      );
                       final Position? position =
                           state is OnGeolocationSuccess ? state.position : null;
 

@@ -81,7 +81,11 @@ class SolicitudReprestamoState extends Equatable {
   final String objTipoPersonaIdVer;
   final String parentescoFamiliar;
   final String parentescoFamiliarVer;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   const SolicitudReprestamoState({
+    this.cedulaBackPath = '',
+    this.cedulaFrontPath = '',
     this.objOrigenSolicitudIdVer = '',
     this.objMonedaIdVer = '',
     this.objPropositoIdVer = '',
@@ -165,6 +169,8 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaBackPath,
+        cedulaFrontPath,
         objOrigenSolicitudIdVer,
         objMonedaIdVer,
         objPropositoIdVer,
@@ -324,6 +330,8 @@ class SolicitudReprestamoState extends Equatable {
     String? objTipoPersonaIdVer,
     String? parentescoFamiliar,
     String? parentescoFamiliarVer,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -420,6 +428,8 @@ class SolicitudReprestamoState extends Equatable {
       parentescoFamiliar: parentescoFamiliar ?? this.parentescoFamiliar,
       parentescoFamiliarVer:
           parentescoFamiliarVer ?? this.parentescoFamiliarVer,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
     );
   }
 }

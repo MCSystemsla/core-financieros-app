@@ -1,4 +1,6 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form2.dart';
@@ -8,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalari
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form7.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserByCedulaSolicitud {
   final String primerNombre;
@@ -56,6 +59,19 @@ class AsalariadoForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: controller,
             children: [
+              AddCedulaPhotosScreen(
+                controller: controller,
+                onCedulaFrontTaken: (imagePath) {
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        cedulaFrontPath: imagePath,
+                      );
+                },
+                onCedulaBackTaken: (imagePath) {
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        cedulaBackPath: imagePath,
+                      );
+                },
+              ),
               AsalariadoForm1(
                 userByCedulaSolicitud: userByCedulaSolicitud,
                 controller: controller,
