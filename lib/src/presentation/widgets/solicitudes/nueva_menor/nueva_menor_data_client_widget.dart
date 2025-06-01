@@ -633,15 +633,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isBefore(eighteenYearsAgo) ||
-          picked.isAtSameMomentAs(eighteenYearsAgo)) {
-        CustomAlertDialog(
-          onDone: () => context.pop(),
-          context: context,
-          title: 'La edad no puede ser menor a 18 años',
-        ).showDialog(context, dialogType: DialogType.warning);
-        return;
-      }
+
       fechaNacimiento = picked;
       setState(() {});
     }
