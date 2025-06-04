@@ -117,16 +117,16 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
   bool isMatching = false;
   @override
   void initState() {
+    super.initState();
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
-    super.initState();
   }
 
   Future<void> _getNumSolicitud() async {
     if (!mounted) return;
     final provider = context.read<SolicitudesPendientesLocalDbCubit>();
     final result = await provider.getItemsRecurrents(
-        typeProduct: widget.solicitud.producto);
+        typeProduct: widget.solicitud.nombreFormulario);
     if (!mounted) return;
     if (!context.mounted) return;
     setState(() {
@@ -162,7 +162,7 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
 
         context.pushReplacement(
           '/online',
-          extra: widget.solicitud.producto,
+          extra: widget.solicitud.nombreFormulario,
         );
       },
       subtitle: Text(

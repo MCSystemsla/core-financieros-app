@@ -49,7 +49,7 @@ class EnergiaLimpiaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct == 'ASER RECURRENTE';
+    final isRecurrentForm = typeProduct == 'ScrKivaEnergiaLimpiaRecurrente';
     final pageController = PageController();
     final responseRepository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -324,9 +324,8 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -664,9 +663,8 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override

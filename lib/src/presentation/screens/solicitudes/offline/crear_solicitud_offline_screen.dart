@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_c
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CrearSolicitudOfflineScreen extends StatelessWidget {
@@ -140,17 +141,22 @@ class PhotoCedulaImagePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Hero(
-          transitionOnUserGestures: true,
-          tag: 'cedulaFrontal',
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.file(imagesCedula),
+    return DismissiblePage(
+      onDismissed: () {
+        context.pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Hero(
+            transitionOnUserGestures: true,
+            tag: 'cedulaFrontal',
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.file(imagesCedula),
+              ),
             ),
           ),
         ),

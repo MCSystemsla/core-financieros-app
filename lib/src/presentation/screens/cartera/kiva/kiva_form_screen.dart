@@ -33,8 +33,8 @@ class KivaFormScreen extends StatefulWidget {
 class _KivaFormScreenState extends State<KivaFormScreen> {
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -227,15 +227,15 @@ class _RequestWidgetState extends State<_RequestWidget> {
   bool isMatching = false;
   @override
   void initState() {
+    super.initState();
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
-    super.initState();
   }
 
   Future<void> _getNumSolicitud() async {
     final result = await context
         .read<SolicitudesPendientesLocalDbCubit>()
-        .getItemsRecurrents(typeProduct: widget.solicitud.producto);
+        .getItemsRecurrents(typeProduct: widget.solicitud.nombreFormulario);
 
     setState(() {
       isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);

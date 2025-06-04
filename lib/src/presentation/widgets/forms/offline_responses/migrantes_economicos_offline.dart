@@ -32,8 +32,8 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

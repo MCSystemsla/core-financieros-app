@@ -35,8 +35,8 @@ class _RecurrenteMigranteEconomicoOfflineState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

@@ -53,7 +53,7 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
   @override
   void initState() {
     super.initState();
-    isRecurrentForm = widget.typeProducto == 'VIVIENDA REPRESTAMO';
+    isRecurrentForm = widget.typeProducto == 'ScrKivaMejoraViviendaRecurrente';
     log(isRecurrentForm.toString());
   }
 
@@ -145,9 +145,8 @@ class _RecurrentSignState extends State<RecurrentSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override

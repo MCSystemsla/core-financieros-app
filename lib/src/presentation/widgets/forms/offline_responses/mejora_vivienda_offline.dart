@@ -37,8 +37,8 @@ class _ViviendaNuevaOfflineResponseState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -284,8 +284,8 @@ class _RecurrenteViviendaOfflineResponseState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

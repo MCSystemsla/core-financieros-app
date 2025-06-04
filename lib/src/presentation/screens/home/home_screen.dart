@@ -22,13 +22,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    super.initState();
     final bioProvider = global<BiometricCubit>();
 
     if (!bioProvider.state.isAuthenticated) {
       bioProvider.authenticate(context);
     }
-
-    super.initState();
   }
 
   @override

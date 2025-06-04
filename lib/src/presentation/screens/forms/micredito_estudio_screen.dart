@@ -47,7 +47,7 @@ class MiCreditoEstudioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct == 'MICREDIESTUDIO RECURRENTE';
+    final isRecurrentForm = typeProduct == 'ScrKivaMiCrediEstudioRecurrente';
     final PageController pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -137,9 +137,8 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -638,9 +637,8 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -1000,12 +998,12 @@ class _EntornoSocialEstudioWidgetState
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final solicitudesProvider =
           context.read<SolicitudesPendientesLocalDbCubit>();
       await solicitudesProvider.getDepartamentos();
     });
-    super.initState();
   }
 
   @override

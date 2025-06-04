@@ -54,7 +54,6 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
       await _controller?.initialize();
       await _controller?.setFlashMode(FlashMode.off);
       await _controller?.setFocusMode(FocusMode.auto);
-      // await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
 
       if (!mounted) return;
       setState(() {
@@ -148,13 +147,15 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          AspectRatio(
-            aspectRatio: cameraAspectRatio,
-            child: CameraPreview(
-              _controller!,
-              child: Positioned.fill(
-                child: CustomPaint(
-                  painter: CedulaFramePainter(),
+          SafeArea(
+            child: AspectRatio(
+              aspectRatio: cameraAspectRatio,
+              child: CameraPreview(
+                _controller!,
+                child: Positioned.fill(
+                  child: CustomPaint(
+                    painter: CedulaFramePainter(),
+                  ),
                 ),
               ),
             ),

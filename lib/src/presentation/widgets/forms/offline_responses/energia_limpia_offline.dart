@@ -35,8 +35,8 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -297,8 +297,8 @@ class _RecurrenteEnergiaLimpiaOfflineState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

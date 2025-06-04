@@ -44,7 +44,7 @@ class MujerEmprenderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final repository = ResponsesRepositoryImpl();
-    final isRecurrentForm = typeProduct == 'MUJER EMPRENDE RECURRENTE';
+    final isRecurrentForm = typeProduct == 'ScrKivaMujerEmprendeRecurrente';
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
@@ -131,9 +131,8 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -462,9 +461,8 @@ class _SignSignatureState extends State<_SignSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override

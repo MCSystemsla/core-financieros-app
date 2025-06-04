@@ -547,70 +547,70 @@ class SolicitudesPendientesLocalDbCubit
   }
 
   Future<List<int?>> getItemsRecurrents({required String typeProduct}) async {
-    // emit(state.copyWith(status: Status.inProgress));
     try {
       switch (typeProduct) {
-        case 'MICREDIESTUDIO RECURRENTE':
+        case 'ScrKivaMiCrediEstudioRecurrente':
           return await state.isar!.recurrenteMiCrediEstudioDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'MICREDIESTUDIO NUEVO':
+        case 'ScrKivaMiCrediEstudio':
           return await state.isar!.miCrediEstudioDbLocals
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
-        case 'ESTANDAR RECURRENTE':
+        case 'ScrKivaCreditoEstandarRecurrente':
           return await state.isar!.recurrenteEstandarDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'ESTANDAR NUEVO':
+
+        case 'ScrKivaCreditoEstandar':
           return await state.isar!.estandarDbLocals
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
-        case 'VIVIENDA REPRESTAMO':
+        case 'ScrKivaMejoraViviendaRecurrente':
           return await state.isar!.recurrenteMejoraViviendaDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'VIVIENDA NUEVA':
+        case 'ScrKivaMejoraVivienda':
           return await state.isar!.mejoraViviendaDbLocals
               .where()
               .solicitudNuevamenorIdProperty()
               .findAll();
-        case 'AGUA Y SANEAMIENTO RECURRENTE':
+        case 'ScrKivaAguaSaneamientoRecurrente':
           return await state.isar!.recurrenteSaneamientoDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'AGUA Y SANEAMIENTO NUEVO':
+        case 'ScrKivaAguaSaneamiento':
           return await state.isar!.saneamientoDbLocals
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
-        case 'ASER RECURRENTE':
+        case 'ScrKivaEnergiaLimpiaRecurrente':
           return await state.isar!.recurrenteEnergiaLimpiaDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'ASER NUEVO':
+        case 'ScrKivaEnergiaLimpia':
           return await state.isar!.energiaLimpiaDbLocals
               .where()
               .solicitudNuevamenorIdProperty()
               .findAll();
-        case 'MUJER EMPRENDE RECURRENTE':
+        case 'ScrKivaMujerEmprendeRecurrente':
           return await state.isar!.recurrenteMujerEmprendeDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()
               .findAll();
-        case 'MUJER EMPRENDE NUEVO':
+        case 'ScrKivaMujerEmprende':
           return await state.isar!.mujerEmprendeDbLocals
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
-        case 'ESTANDAR COLONES NUEVO MAYOR A MIL':
+        case 'ScrKivaMigrantesEconomicos':
           return await state.isar!.migranteEconomicoDbLocals
               .where()
               .objSolicitudNuevamenorIdProperty()
@@ -620,7 +620,7 @@ class SolicitudesPendientesLocalDbCubit
               .where()
               .objSolicitudNuevamenorIdProperty()
               .findAll();
-        case 'ESTANDAR COLONES RECURRENTE MAYOR A MIL':
+        case 'ScrKivaMigrantesEconomicosRecurrentes':
           return await state.isar!.recurrenteMigranteEconomicoDbLocals
               .where()
               .objSolicitudRecurrenteIdProperty()

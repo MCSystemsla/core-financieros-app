@@ -124,9 +124,9 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } on AppException catch (e) {
-      emit(SolicitudCatalogoError(error: e.optionalMsg));
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.optionalMsg}'));
     } catch (e) {
-      emit(SolicitudCatalogoError(error: e.toString()));
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
   }
 

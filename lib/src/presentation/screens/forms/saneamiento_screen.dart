@@ -64,8 +64,8 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   late DateTime _selectedDate;
   @override
   void initState() {
-    _selectedDate = DateTime.now();
     super.initState();
+    _selectedDate = DateTime.now();
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -86,7 +86,7 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   Widget build(BuildContext context) {
     final repository = ResponsesRepositoryImpl();
     final isRecurrentForm =
-        widget.typeProduct == 'AGUA Y SANEAMIENTO RECURRENTE';
+        widget.typeProduct == 'ScrKivaAguaSaneamientoRecurrente';
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -172,9 +172,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -503,9 +502,8 @@ class _EstandarSignState extends State<EstandarSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -838,8 +836,6 @@ class _SaneamientoContentState extends State<SaneamientoContent>
 
   @override
   Widget build(BuildContext context) {
-    // final isInternetConnection =
-    //     context.read<InternetConnectionCubit>().state.isConnected;
     final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
     final size = MediaQuery.sizeOf(context);
 
@@ -1226,9 +1222,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -1556,9 +1551,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override

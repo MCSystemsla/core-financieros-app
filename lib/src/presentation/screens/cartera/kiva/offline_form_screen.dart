@@ -135,8 +135,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
   bool isMatching = false;
   @override
   void initState() {
-    _getNumSolicitud();
     super.initState();
+    _getNumSolicitud();
   }
 
   @override

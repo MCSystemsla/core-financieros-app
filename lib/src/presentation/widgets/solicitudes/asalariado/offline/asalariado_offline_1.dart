@@ -38,7 +38,8 @@ class AsalariadoOffline1 extends StatefulWidget {
   State<AsalariadoOffline1> createState() => _AsalariadoOffline1State();
 }
 
-class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
+class _AsalariadoOffline1State extends State<AsalariadoOffline1>
+    with AutomaticKeepAliveClientMixin {
   String? locationLatitude;
   String? locationLongitude;
 
@@ -183,6 +184,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocConsumer<GeolocationCubit, GeolocationState>(
       listener: (context, state) {
         if (state is OnGeolocationPermissionDenied) {
@@ -585,4 +587,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

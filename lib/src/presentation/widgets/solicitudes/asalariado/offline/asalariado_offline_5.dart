@@ -28,7 +28,8 @@ class AsalariadoOffline5 extends StatefulWidget {
   State<AsalariadoOffline5> createState() => _AsalariadoOffline5State();
 }
 
-class _AsalariadoOffline5State extends State<AsalariadoOffline5> {
+class _AsalariadoOffline5State extends State<AsalariadoOffline5>
+    with AutomaticKeepAliveClientMixin {
   String? nombreEmpresa;
   String? barrioEmpresa;
   String? otrosIngresos;
@@ -42,6 +43,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5> {
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
     nombreEmpresa = solicitud.nombreTrabajo;
     barrioEmpresa = solicitud.barrioTrabajo;
@@ -53,12 +55,11 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5> {
     salarioNetoMensual = solicitud.salarioNetoCordoba.toString();
     tiempoDeTrabajar = solicitud.tiempoLaborar;
     direccionEmpresa = solicitud.direccionTrabajo;
-
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -253,4 +254,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

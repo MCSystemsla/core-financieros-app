@@ -39,7 +39,8 @@ class AsalariadoOffline7 extends StatefulWidget {
   State<AsalariadoOffline7> createState() => _AsalariadoOffline7State();
 }
 
-class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
+class _AsalariadoOffline7State extends State<AsalariadoOffline7>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -105,6 +106,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
   final montoController = TextEditingController();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
     moneda = Item(
         name: solicitud?.objMonedaIdVer ?? '', value: solicitud?.objMonedaId);
@@ -130,11 +132,11 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
     montoMinimo = solicitud?.montoMinimo;
     montoMaximo = solicitud?.montoMaximo?.toDouble();
     montoController.text = solicitud?.monto.toString() ?? '0';
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
@@ -437,4 +439,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

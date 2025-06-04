@@ -75,6 +75,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    super.initState();
     final userByCedula = widget.userByCedulaSolicitud;
     cedula = userByCedula?.cedula;
     primerNombre = userByCedula?.primerNombre;
@@ -86,8 +87,6 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
     fechaNacimiento = userByCedula?.fechaNacimiento;
     tipoDocumento = userByCedula?.tipoDocumento;
     context.read<GeolocationCubit>().getCurrentLocation();
-
-    super.initState();
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
@@ -111,15 +110,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isBefore(eighteenYearsAgo) ||
-          picked.isAtSameMomentAs(eighteenYearsAgo)) {
-        CustomAlertDialog(
-          onDone: () => context.pop(),
-          context: context,
-          title: 'La edad no puede ser menor a 18 años',
-        ).showDialog(context, dialogType: DialogType.warning);
-        return;
-      }
+
       fechaNacimiento = picked;
       setState(() {});
     }
@@ -149,10 +140,15 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
   }
 
   Future<void> selectFechaVencimientoCedula(BuildContext context) async {
+    final DateTime minFechaVencimiento = DateTime(
+      fechaEmisionCedula!.year + 10,
+      fechaEmisionCedula!.month,
+      fechaEmisionCedula!.day,
+    );
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaVencimientoCedula,
-      firstDate: DateTime(1930),
+      firstDate: minFechaVencimiento,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );

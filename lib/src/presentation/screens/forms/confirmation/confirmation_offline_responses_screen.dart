@@ -121,57 +121,57 @@ class _CurrentForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (typeProduct) {
-      'ESTANDAR RECURRENTE' => EstandarOfflineForm(
+      'ScrKivaCreditoEstandarRecurrente' => EstandarOfflineForm(
           typeProduct: typeProduct,
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ESTANDAR NUEVO' => EstandarForm(
+      'ScrKivaCreditoEstandar' => EstandarForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'MICREDIESTUDIO NUEVO' => MicrediEstudioForm(
+      'ScrKivaMiCrediEstudio' => MicrediEstudioForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'MICREDIESTUDIO RECURRENTE' => MiCrediEstudioRecurrenteForm(
+      'ScrKivaMiCrediEstudioRecurrente' => MiCrediEstudioRecurrenteForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'VIVIENDA NUEVA' => ViviendaNuevaOfflineResponse(
+      'ScrKivaMejoraVivienda' => ViviendaNuevaOfflineResponse(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'VIVIENDA REPRESTAMO' => RecurrenteViviendaOfflineResponse(
+      'ScrKivaMejoraViviendaRecurrente' => RecurrenteViviendaOfflineResponse(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'AGUA Y SANEAMIENTO NUEVO' => AguaSaneamientoOffline(
+      'ScrKivaAguaSaneamiento' => AguaSaneamientoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'AGUA Y SANEAMIENTO RECURRENTE' => RecurrenteSaneamientoOffline(
+      'ScrKivaAguaSaneamientoRecurrente' => RecurrenteSaneamientoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ASER NUEVO' => EnergiaLImpiaOffline(
+      'ScrKivaEnergiaLimpia' => EnergiaLImpiaOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ASER RECURRENTE' => RecurrenteEnergiaLimpiaOffline(
+      'ScrKivaEnergiaLimpiaRecurrente' => RecurrenteEnergiaLimpiaOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'MUJER EMPRENDE NUEVO' => MujerEmprendeOffline(
+      'ScrKivaMujerEmprende' => MujerEmprendeOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'MUJER EMPRENDE RECURRENTE' => RecurrenteMujerEmprendeOffline(
+      'ScrKivaMujerEmprendeRecurrente' => RecurrenteMujerEmprendeOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ESTANDAR COLONES NUEVO MAYOR A MIL' => MigranteEconomicoOffline(
+      'ScrKivaMigrantesEconomicos' => MigranteEconomicoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ESTANDAR COLONES NUEVO MENOR A MIL' => MigranteEconomicoOffline(
-          solicitudId: int.tryParse(solicitudId) ?? 0,
-        ),
-      'ESTANDAR COLONES RECURRENTE MAYOR A MIL' =>
+      // 'ScrKivaMigrantesEconomicos' => MigranteEconomicoOffline(
+      //     solicitudId: int.tryParse(solicitudId) ?? 0,
+      //   ),
+      'ScrKivaMigrantesEconomicosRecurrentes' =>
         RecurrenteMigranteEconomicoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
         ),
-      'ESTANDAR COLONES RECURRENTE MENOR A MIL' =>
-        RecurrenteMigranteEconomicoOffline(
-          solicitudId: int.tryParse(solicitudId) ?? 0,
-        ),
+      // 'ESTANDAR COLONES RECURRENTE MENOR A MIL' =>
+      //   RecurrenteMigranteEconomicoOffline(
+      //     solicitudId: int.tryParse(solicitudId) ?? 0,
+      //   ),
       _ => const SizedBox(),
     };
   }

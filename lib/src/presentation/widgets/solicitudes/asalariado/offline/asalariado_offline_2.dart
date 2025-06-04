@@ -30,7 +30,8 @@ class AsalariadoOffline2 extends StatefulWidget {
   State<AsalariadoOffline2> createState() => _AsalariadoOffline2State();
 }
 
-class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
+class _AsalariadoOffline2State extends State<AsalariadoOffline2>
+    with AutomaticKeepAliveClientMixin {
   String? beneficiarioSeguro;
 
   Item? parentesco;
@@ -66,6 +67,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
     beneficiarioSeguro = solicitud?.beneficiarioSeguro;
     parentesco = Item(
@@ -89,11 +91,11 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
     nombreEntidadPeps = solicitud?.nombreEntidadPeps2;
     periodoFamiliarPeps = solicitud?.periodoPeps;
     paisPepsFamiliar = solicitud?.paisPeps2;
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -121,7 +123,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
             const Gap(30),
             SearchDropdownWidget(
               onChanged: (item) {
-                parentesco = item?.value;
+                parentesco = item;
                 setState(() {});
               },
               codigo: 'PARENTESCO',
@@ -360,4 +362,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

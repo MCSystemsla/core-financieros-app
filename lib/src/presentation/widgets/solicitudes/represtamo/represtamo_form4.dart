@@ -67,10 +67,9 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
               title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividad?.value,
+                );
                 actividad = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -84,10 +83,9 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividad1?.value,
+                );
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -99,10 +97,9 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
               title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividadEconomica2?.value,
+                );
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});

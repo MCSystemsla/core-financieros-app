@@ -35,8 +35,8 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -348,8 +348,8 @@ class _RecurrenteSaneamientoOfflineState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

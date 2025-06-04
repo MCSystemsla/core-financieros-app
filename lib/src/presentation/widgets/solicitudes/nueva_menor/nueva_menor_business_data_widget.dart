@@ -199,10 +199,9 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividad?.value,
+                );
                 actividad = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -210,16 +209,13 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividad1?.value,
+                );
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -231,10 +227,10 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.value == actividadEconomica2?.value,
+                );
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -375,6 +371,10 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             CatalogoValorNacionalidad(
+              where: context
+                  .read<SolicitudNuevaMenorCubit>()
+                  .state
+                  .objDepartamentoCasaId,
               hintText: 'Ingresa Municipio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),

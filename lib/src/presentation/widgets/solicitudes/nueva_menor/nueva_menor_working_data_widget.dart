@@ -50,8 +50,8 @@ class _NuevaMenorWorkingDataWidgetState
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    context.read<GeolocationCubit>().getCurrentLocation();
     super.initState();
+    context.read<GeolocationCubit>().getCurrentLocation();
   }
 
   @override

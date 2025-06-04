@@ -22,7 +22,7 @@ final router = GoRouter(
             path: 'form/saneamiento',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
               return SaneamientoScreen(
                 typeProduct: typeProduct,
               );
@@ -31,7 +31,7 @@ final router = GoRouter(
           path: 'form/mejora-de-vivienda',
           builder: (context, state) {
             final typeProduct =
-                context.read<KivaRouteCubit>().state.currentRoute;
+                context.read<KivaRouteCubit>().state.nombreFormularioKiva;
 
             return MejoraDeViviendaScreen(
               typeProducto: typeProduct,
@@ -46,7 +46,7 @@ final router = GoRouter(
             path: 'form/migrantes-economicos',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
               return MigrantesEconomicosScreen(
                 typeProduct: typeProduct,
               );
@@ -55,7 +55,7 @@ final router = GoRouter(
             path: 'form/micredito-estudio',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
               return MiCreditoEstudioScreen(
                 typeProduct: typeProduct,
               );
@@ -64,7 +64,7 @@ final router = GoRouter(
             path: 'form/mujer-emprende',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
               return MujerEmprenderScreen(
                 typeProduct: typeProduct,
               );
@@ -73,7 +73,7 @@ final router = GoRouter(
             path: 'form/energia-limpia',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
 
               return EnergiaLimpiaScreen(
                 typeProduct: typeProduct,
@@ -83,7 +83,7 @@ final router = GoRouter(
             path: 'form/estandar',
             builder: (context, state) {
               final typeProduct =
-                  context.read<KivaRouteCubit>().state.currentRoute;
+                  context.read<KivaRouteCubit>().state.nombreFormularioKiva;
               return EstandarScreen(typeProduct: typeProduct);
             }),
         GoRoute(
@@ -92,7 +92,7 @@ final router = GoRouter(
               final typeProduct = context.watch<KivaRouteCubit>().state;
 
               return ConfirmationOfflineResponsesScreen(
-                typeProduct: typeProduct.currentRoute,
+                typeProduct: typeProduct.nombreFormularioKiva,
               );
             }),
       ],
@@ -116,9 +116,7 @@ final router = GoRouter(
             tipoProducto == 'ScrKivaAguaSaneamientoRecurrente') {
           return '/online/form/saneamiento';
         }
-        if (tipoProducto == 'ASER NUEVO' || tipoProducto == 'ASER RECURRENTE') {
-          return '/online/form/energia-limpia';
-        }
+
         if (tipoProducto == 'ScrKivaEnergiaLimpia' ||
             tipoProducto == 'ScrKivaEnergiaLimpiaRecurrente') {
           return '/online/form/energia-limpia';

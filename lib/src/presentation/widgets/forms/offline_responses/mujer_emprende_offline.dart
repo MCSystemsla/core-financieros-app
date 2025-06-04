@@ -35,8 +35,8 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -339,8 +339,8 @@ class _RecurrenteMujerEmprendeOfflineState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

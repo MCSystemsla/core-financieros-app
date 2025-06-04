@@ -36,8 +36,8 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -433,8 +433,8 @@ class _MiCrediEstudioRecurrenteFormState
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

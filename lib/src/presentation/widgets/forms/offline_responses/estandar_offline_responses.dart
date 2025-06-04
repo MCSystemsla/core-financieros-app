@@ -38,8 +38,8 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
@@ -357,8 +357,8 @@ class _EstandarFormState extends State<EstandarForm> {
   ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

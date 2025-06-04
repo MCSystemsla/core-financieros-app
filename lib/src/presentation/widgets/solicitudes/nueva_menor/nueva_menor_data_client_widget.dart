@@ -227,6 +227,20 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     title: 'Tipo Documento',
                   ),
                   const Gap(30),
+                  CatalogoValorNacionalidad(
+                    hintText: 'Selecciona Pais Emisor',
+                    // hintText: state.userCedulaResponse.pais,
+                    title: 'Pais Emisor',
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      paisEmisor = item.valor;
+                      paisEmisorVer = item.nombre;
+                      setState(() {});
+                    },
+                    codigo: 'PAIS',
+                    // initialValue: paisEmisor ?? '',
+                  ),
+                  const Gap(30),
                   OutlineTextfieldWidget.withCounter(
                     maxLength: 18,
                     readOnly: true,
@@ -242,20 +256,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                  ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais Emisor',
-                    // hintText: state.userCedulaResponse.pais,
-                    title: 'Pais Emisor',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      paisEmisor = item.valor;
-                      paisEmisorVer = item.nombre;
-                      setState(() {});
-                    },
-                    codigo: 'PAIS',
-                    // initialValue: paisEmisor ?? '',
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -760,6 +760,19 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               title: 'Tipo Documento',
             ),
             const Gap(30),
+            CatalogoValorNacionalidad(
+              hintText: 'Selecciona Pais Emisor',
+              // hintText: state.userCedulaResponse.pais,
+              title: 'Pais Emisor',
+              onChanged: (item) {
+                if (item == null || !mounted) return;
+                paisEmisor = Item(name: item.nombre, value: item.valor);
+                setState(() {});
+              },
+              codigo: 'PAIS',
+              // initialValue: paisEmisor ?? '',
+            ),
+            const Gap(30),
             OutlineTextfieldWidget(
               maxLength: 18,
               icon: Icon(
@@ -773,19 +786,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               isValid: null,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
-            ),
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais Emisor',
-              // hintText: state.userCedulaResponse.pais,
-              title: 'Pais Emisor',
-              onChanged: (item) {
-                if (item == null || !mounted) return;
-                paisEmisor = Item(name: item.nombre, value: item.valor);
-                setState(() {});
-              },
-              codigo: 'PAIS',
-              // initialValue: paisEmisor ?? '',
             ),
             const Gap(30),
             OutlineTextfieldWidget(

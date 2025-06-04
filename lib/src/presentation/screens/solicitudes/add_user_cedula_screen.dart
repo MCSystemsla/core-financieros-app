@@ -121,7 +121,7 @@ class _UserCedulaForm extends StatelessWidget {
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  maxLength: 20,
+                  maxLength: 13,
                   textEditingController: cedulaController,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(

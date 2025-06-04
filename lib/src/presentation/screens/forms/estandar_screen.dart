@@ -44,7 +44,8 @@ class EstandarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct.trim() == 'ESTANDAR RECURRENTE';
+    final isRecurrentForm =
+        typeProduct.trim() == 'ScrKivaCreditoEstandarRecurrente';
     final pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -134,9 +135,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
