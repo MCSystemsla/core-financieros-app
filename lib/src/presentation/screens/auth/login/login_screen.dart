@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+// TODO: Rediseno LoginScreen
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -56,25 +58,25 @@ class LoginScreen extends StatelessWidget {
             body: PopScope(
               canPop: false,
               child: FadeIn(
-                child: const SafeArea(
+                child: const CustomBackground(
                   child: Padding(
                     padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ChangeLangWidget(
-                          child: LoginScreen(),
-                        ),
-                        Image(
-                          height: 200,
-                          image: AssetImage(ImageAsset.logoNi),
-                        ),
-                        Gap(10),
-                        Expanded(
-                          flex: 5,
-                          child: LoginFormWidget(),
-                        ),
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SafeArea(
+                            child: ChangeLangWidget(
+                              child: LoginScreen(),
+                            ),
+                          ),
+                          Image(
+                            height: 160,
+                            image: AssetImage(ImageAsset.logoNi),
+                          ),
+                          LoginFormWidget(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -105,7 +107,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // final internetConectionProvider = context.read<InternetConnectionCubit>();
     final TurnstileOptions options = TurnstileOptions(
       size: TurnstileSize.flexible,
       theme: TurnstileTheme.light,
@@ -115,168 +116,185 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       refreshTimeout: TurnstileRefreshTimeout.manual,
     );
 
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          children: [
-            const Gap(20),
-            InputSimple(
-              title: 'auth.user'.tr(),
-              activeColor: true,
-              hintText: 'Ejem: DGALEAS',
-              enabled: true,
-              onChanged: (value) {
-                username = value;
-                setState(() {});
-              },
-              textFieldSettings: TextFieldSettings(
-                keyboardType: TextInputType.name,
-                textCapitalization: TextCapitalization.characters,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'auth.errors.username'.tr();
-                  }
-                  return null;
-                },
-              ),
-            ),
-            const Gap(25),
-            InputSimple(
-              title: 'auth.password'.tr(),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isPasswordVisible
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: AppColors.grey,
+    return Container(
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(17),
+      ),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            children: [
+              const Gap(20),
+              InputSimple(
+                icon: const Icon(
+                  Icons.person_2,
+                  size: 20,
                 ),
-                onPressed: () {
-                  setState(() {
-                    isPasswordVisible = !isPasswordVisible;
-                  });
+                title: 'auth.user'.tr(),
+                activeColor: true,
+                hintText: 'Ejem: DGALEAS',
+                enabled: true,
+                onChanged: (value) {
+                  username = value;
+                  setState(() {});
                 },
-              ),
-              activeColor: true,
-              hintText: '****',
-              isPasswordField: !isPasswordVisible,
-              enabled: true,
-              textFieldSettings: TextFieldSettings(
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'auth.errors.password'.tr();
-                  }
-                  return null;
-                },
-              ),
-              onChanged: (value) {
-                password = value;
-                setState(() {});
-              },
-            ),
-            const Gap(25),
-            BlocBuilder<BranchteamCubit, BranchteamState>(
-              builder: (context, state) {
-                return JLuxDropdown(
-                  isContainIcon: true,
-                  isLoading: state.status == Status.inProgress,
+                textFieldSettings: TextFieldSettings(
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.characters,
                   validator: (value) {
-                    if (value == null) return 'auth.errors.branchTeam'.tr();
-
+                    if (value == null || value.isEmpty) {
+                      return 'auth.errors.username'.tr();
+                    }
                     return null;
                   },
-                  title: 'auth.branch'.tr(),
-                  items: state.branchTeams,
-                  onChanged: (item) {
-                    if (item == null) return;
-                    branchTeam = item.nombreDb;
-                    setState(() {});
+                ),
+              ),
+              const Gap(25),
+              InputSimple(
+                title: 'auth.password'.tr(),
+                icon: const Icon(
+                  Icons.security_outlined,
+                  size: 20,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: AppColors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
                   },
-                  toStringItem: (item) {
-                    return item.nombre;
+                ),
+                activeColor: true,
+                hintText: '****',
+                isPasswordField: !isPasswordVisible,
+                enabled: true,
+                textFieldSettings: TextFieldSettings(
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'auth.errors.password'.tr();
+                    }
+                    return null;
                   },
-                  hintText: 'auth.select_branch'.tr(),
-                );
-              },
-            ),
-            const VersionControlWidget(),
-            const Gap(10),
-            CloudflareTurnstile(
-              options: options,
-              siteKey: const String.fromEnvironment('CFAccessSiteKey'),
-              baseUrl: 'http://localhost/',
-              onTokenReceived: (token) {
-                captchaToken = token;
-                setState(() {});
-              },
-            ),
-            const Gap(14),
-            BlocConsumer<AuthCubit, AuthState>(
-              listener: (context, state) async {
-                final status = state.status;
-                if (status == Status.error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                      content: Text(state.errorMsg),
-                    ),
-                  );
-                }
-                if (state.status == Status.done) {
-                  if (!context.mounted) return;
-                  context.pushReplacement('/');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                      content: Text('auth.logged'.tr()),
-                    ),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return CustomElevatedButton(
-                  enabled: state.status != Status.inProgress,
-                  text: 'button.login'.tr(),
-                  color: Colors.black,
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
+                ),
+                onChanged: (value) {
+                  password = value;
+                  setState(() {});
+                },
+              ),
+              const Gap(25),
+              BlocBuilder<BranchteamCubit, BranchteamState>(
+                builder: (context, state) {
+                  return JLuxDropdown(
+                    isContainIcon: true,
+                    isLoading: state.status == Status.inProgress,
+                    validator: (value) {
+                      if (value == null) return 'auth.errors.branchTeam'.tr();
 
-                    // await internetConectionProvider
-                    //     .getInternetStatusConnection();
-                    // if (!mounted) return;
-                    // if (!context.mounted) return;
-                    // if (!internetConectionProvider.state.isConnected) {
-                    //   if (!context.mounted) return;
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     noInternetConnectionSnackbar(),
-                    //   );
-                    //   context.pushReplacement('/');
-                    //   return;
-                    // }
-                    if (captchaToken == null) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Por favor verifica que eres un humano',
-                        onDone: () => context.pop(),
-                      ).showDialog(context);
-                      return;
-                    }
-                    if (_formKey.currentState?.validate() ?? false) {
-                      context.read<AuthCubit>().login(
-                            userName: username!.toUpperCase().trim(),
-                            password: password!.trim(),
-                            dbName: branchTeam!,
-                          );
-                    }
-                  },
-                );
-              },
-            )
-          ],
+                      return null;
+                    },
+                    title: 'auth.branch'.tr(),
+                    items: state.branchTeams,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      branchTeam = item.nombreDb;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item.nombre;
+                    },
+                    hintText: 'auth.select_branch'.tr(),
+                  );
+                },
+              ),
+              const VersionControlWidget(),
+              const Gap(10),
+              CloudflareTurnstile(
+                options: options,
+                siteKey: const String.fromEnvironment('CFAccessSiteKey'),
+                baseUrl: 'http://localhost/',
+                onTokenReceived: (token) {
+                  captchaToken = token;
+                  setState(() {});
+                },
+              ),
+              const Gap(14),
+              BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) async {
+                  final status = state.status;
+                  if (status == Status.error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        showCloseIcon: true,
+                        content: Text(state.errorMsg),
+                      ),
+                    );
+                  }
+                  if (state.status == Status.done) {
+                    if (!context.mounted) return;
+                    context.pushReplacement('/');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        showCloseIcon: true,
+                        content: Text('auth.logged'.tr()),
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return CustomElevatedButton(
+                    enabled: state.status != Status.inProgress,
+                    text: 'button.login'.tr(),
+                    color: Colors.black,
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+
+                      // await internetConectionProvider
+                      //     .getInternetStatusConnection();
+                      // if (!mounted) return;
+                      // if (!context.mounted) return;
+                      // if (!internetConectionProvider.state.isConnected) {
+                      //   if (!context.mounted) return;
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     noInternetConnectionSnackbar(),
+                      //   );
+                      //   context.pushReplacement('/');
+                      //   return;
+                      // }
+                      if (captchaToken == null) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: 'Por favor verifica que eres un humano',
+                          onDone: () => context.pop(),
+                        ).showDialog(context);
+                        return;
+                      }
+                      if (_formKey.currentState?.validate() ?? false) {
+                        context.read<AuthCubit>().login(
+                              userName: username!.toUpperCase().trim(),
+                              password: password!.trim(),
+                              dbName: branchTeam!,
+                            );
+                      }
+                    },
+                  );
+                },
+              ),
+              const Gap(5),
+            ],
+          ),
         ),
       ),
     );

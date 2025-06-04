@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class InputSimple extends StatefulWidget {
   final String title;
@@ -11,6 +12,7 @@ class InputSimple extends StatefulWidget {
   final TextFieldSettings? textFieldSettings;
   final bool isPasswordField;
   final Widget? suffixIcon;
+  final Icon? icon;
 
   const InputSimple({
     required this.title,
@@ -23,6 +25,7 @@ class InputSimple extends StatefulWidget {
     super.key,
     this.isPasswordField = false,
     this.suffixIcon,
+    this.icon,
   });
 
   @override
@@ -35,11 +38,17 @@ class InputSimpleState extends State<InputSimple> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: 5),
         widget.title != ''
-            ? Text(
-                widget.title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+            ? Row(
+                children: [
+                  widget.icon != null ? widget.icon! : const SizedBox(),
+                  const Gap(5),
+                  Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+                  ),
+                ],
               )
             : const SizedBox(),
         widget.title != '' ? const SizedBox(height: 10) : const SizedBox(),
@@ -68,6 +77,12 @@ class InputSimpleState extends State<InputSimple> {
               color: AppColors.borderGrey,
             ),
             decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: AppColors.getPrimaryColor(),
+                ),
+              ),
               suffixIcon: widget.suffixIcon,
               fillColor: widget.activeColor ? AppColors.white : AppColors.grey,
               hintText: widget.hintText,
