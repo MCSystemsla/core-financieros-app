@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solici
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
@@ -33,6 +34,7 @@ abstract class SolicitudesCreditoRepository {
   Future<ReprestamoUserCedula> getUserReprestamoByCedula({
     required String cedula,
   });
+  Future<ParametroValor> getParametroByName({required String nombre});
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -206,6 +208,19 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       _logger.e(e);
       _logger.i(endpoint.body);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<ParametroValor> getParametroByName({required String nombre}) async {
+    final endpoint = ObtenerParametrosEndpoint(nombre: nombre);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = ParametroValor.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

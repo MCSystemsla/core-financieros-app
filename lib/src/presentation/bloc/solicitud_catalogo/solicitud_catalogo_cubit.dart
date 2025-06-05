@@ -7,6 +7,7 @@ import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -121,6 +122,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
       await getandSaveProductos();
       log('Productos guardados');
+      await getAndSaveParametros();
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } on AppException catch (e) {
@@ -128,6 +130,23 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     } catch (e) {
       emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
+  }
+
+  Future<void> getAndSaveParametros() async {
+    final edadMinima =
+        await _repository.getParametroByName(nombre: 'EDADMINIMACLIENTE');
+    final edadMaxima =
+        await _repository.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+    final query = _objectBoxService.catalogoParametroBox.query().build();
+    query.remove();
+    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+      valor: edadMinima.data.valor,
+      type: 'EDADMINIMACLIENTE',
+    ));
+    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+      valor: edadMaxima.data.valor,
+      type: 'EDADMAXIMACLIENTE',
+    ));
   }
 
   Future<void> _saveToDatabase({

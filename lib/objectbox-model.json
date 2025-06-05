@@ -2062,9 +2062,33 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "15:4887399996025464567",
+      "lastPropertyId": "3:2003242826777116512",
+      "name": "CatalogoParametroLocalDb",
+      "properties": [
+        {
+          "id": "1:270400689911366720",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:112254981300384954",
+          "name": "valor",
+          "type": 9
+        },
+        {
+          "id": "3:2003242826777116512",
+          "name": "type",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "14:2204147813567248477",
+  "lastEntityId": "15:4887399996025464567",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
@@ -23,6 +24,7 @@ class ObjectBoxService {
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   late final Box<CedulaClientDb> cedulaClientBox;
+  late final Box<CatalogoParametroLocalDb> catalogoParametroBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -37,6 +39,7 @@ class ObjectBoxService {
     solicitudesAsalariadoResponsesBox =
         _store.box<AsalariadoResponsesLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
+    catalogoParametroBox = _store.box<CatalogoParametroLocalDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
   }
@@ -448,6 +451,21 @@ class ObjectBoxService {
       }
     } catch (e) {
       _logger.e(e.toString());
+    }
+  }
+
+  CatalogoParametroLocalDb? getParametroByName({required String nombre}) {
+    try {
+      final query = catalogoParametroBox
+          .query(CatalogoParametroLocalDb_.type.equals(nombre))
+          .build();
+      final result = query.findFirst();
+
+      query.close();
+      return result;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
     }
   }
 }

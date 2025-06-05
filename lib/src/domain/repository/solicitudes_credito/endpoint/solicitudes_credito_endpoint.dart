@@ -152,3 +152,22 @@ class SolicitudAsalariadoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => solicitudAsalariado.toJson();
 }
+
+class ObtenerParametrosEndpoint extends Endpoint {
+  final String nombre;
+  ObtenerParametrosEndpoint({required this.nombre});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/catalogo/obtener-parametro';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'nombre': nombre,
+      };
+}

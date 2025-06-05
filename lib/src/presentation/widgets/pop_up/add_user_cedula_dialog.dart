@@ -12,11 +12,13 @@ class AddUserCedulaDialog extends OdsDialog {
   // ignore: overridden_fields
   final String title;
   final TypeForm typeForm;
+  final String? cedula;
   const AddUserCedulaDialog({
     super.key,
     required this.context,
     required this.title,
     required this.typeForm,
+    this.cedula,
   }) : super(
           title: title,
         );
@@ -36,6 +38,7 @@ class AddUserCedulaDialog extends OdsDialog {
               MaterialPageRoute(
                 builder: ((context) => CrearSolicitudScreen(
                       typeForm: typeForm,
+                      cedula: cedula,
                     )),
               ),
             );

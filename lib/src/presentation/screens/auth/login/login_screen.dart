@@ -20,7 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-// TODO: Rediseno LoginScreen
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 

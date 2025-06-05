@@ -18,6 +18,7 @@ import 'src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
+import 'src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/catalogo_parentesco.dart';
 import 'src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
@@ -2087,6 +2088,30 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(15, 4887399996025464567),
+      name: 'CatalogoParametroLocalDb',
+      lastPropertyId: const obx_int.IdUid(3, 2003242826777116512),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 270400689911366720),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 112254981300384954),
+            name: 'valor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 2003242826777116512),
+            name: 'type',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -2125,7 +2150,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(14, 2204147813567248477),
+      lastEntityId: const obx_int.IdUid(15, 4887399996025464567),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -5254,7 +5279,40 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
-        })
+        }),
+    CatalogoParametroLocalDb:
+        obx_int.EntityDefinition<CatalogoParametroLocalDb>(
+            model: _entities[10],
+            toOneRelations: (CatalogoParametroLocalDb object) => [],
+            toManyRelations: (CatalogoParametroLocalDb object) => {},
+            getId: (CatalogoParametroLocalDb object) => object.id,
+            setId: (CatalogoParametroLocalDb object, int id) {
+              object.id = id;
+            },
+            objectToFB: (CatalogoParametroLocalDb object, fb.Builder fbb) {
+              final valorOffset = fbb.writeString(object.valor);
+              final typeOffset = fbb.writeString(object.type);
+              fbb.startTable(4);
+              fbb.addInt64(0, object.id);
+              fbb.addOffset(1, valorOffset);
+              fbb.addOffset(2, typeOffset);
+              fbb.finish(fbb.endTable());
+              return object.id;
+            },
+            objectFromFB: (obx.Store store, ByteData fbData) {
+              final buffer = fb.BufferContext(fbData);
+              final rootOffset = buffer.derefObject(0);
+              final valorParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, '');
+              final typeParam = const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+              final object = CatalogoParametroLocalDb(
+                  valor: valorParam, type: typeParam)
+                ..id =
+                    const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+              return object;
+            })
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -7048,4 +7106,19 @@ class CedulaClientDb_ {
   /// See [CedulaClientDb.imageBackCedula].
   static final imageBackCedula =
       obx.QueryStringProperty<CedulaClientDb>(_entities[9].properties[4]);
+}
+
+/// [CatalogoParametroLocalDb] entity fields to define ObjectBox queries.
+class CatalogoParametroLocalDb_ {
+  /// See [CatalogoParametroLocalDb.id].
+  static final id = obx.QueryIntegerProperty<CatalogoParametroLocalDb>(
+      _entities[10].properties[0]);
+
+  /// See [CatalogoParametroLocalDb.valor].
+  static final valor = obx.QueryStringProperty<CatalogoParametroLocalDb>(
+      _entities[10].properties[1]);
+
+  /// See [CatalogoParametroLocalDb.type].
+  static final type = obx.QueryStringProperty<CatalogoParametroLocalDb>(
+      _entities[10].properties[2]);
 }

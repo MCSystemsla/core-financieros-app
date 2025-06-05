@@ -29,11 +29,15 @@ class ClassValidator {
     return null;
   }
 
-  static String? validateMinLength(String? value, int length) {
-    if (value == null || value.isEmpty) {
+  static String? validateMinLength(
+    String? value,
+    int length, {
+    bool isRequired = true,
+  }) {
+    if (isRequired && value == null && value!.isEmpty) {
       return 'input.input_validator'.tr();
     }
-    if (value.length < length) {
+    if (isRequired && value!.length < length) {
       return 'Este campo debe tener al menos $length caracteres';
     }
     return null;

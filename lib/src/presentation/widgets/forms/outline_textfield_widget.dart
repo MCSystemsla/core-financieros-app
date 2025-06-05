@@ -22,7 +22,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final TextInputType? textInputType;
   final TextCapitalization? textCapitalization;
   final bool? readOnly;
-  final bool? isValid; // Cambiado a `bool?` para manejar nulo
+  final bool? isValid;
   final Icon? icon;
   final bool isRequired;
   final VoidCallback? onTap;
@@ -39,7 +39,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.onChange,
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
+    this.textCapitalization = TextCapitalization.characters,
     this.readOnly = false,
     this.isValid,
     this.icon, // Permitir nulo como estado inicial
@@ -60,7 +60,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.onChange,
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
+    this.textCapitalization = TextCapitalization.characters,
     this.readOnly = false,
     this.isValid,
     this.icon,
