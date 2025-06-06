@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -9,9 +11,11 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -106,9 +110,25 @@ class _UserCedulaForm extends StatefulWidget {
 
 class _UserCedulaFormState extends State<_UserCedulaForm> {
   Item? tipoDocumento;
+  Item? paisEmisorDocumento;
   final formKey = GlobalKey<FormState>();
 
   final cedulaController = TextEditingController();
+
+  int determineDocumentoLength({
+    String? tipoDocumento,
+    String? paisEmisor,
+  }) {
+    return switch ((tipoDocumento, paisEmisor)) {
+      ('CEDULAIDENTIDAD', 'HON') => 13,
+      ('CEDULAIDENTIDAD', 'NIC') => 14,
+      ('PASAPORTE', 'NIC') => 9,
+      ('PASAPORTE', 'HON') => 7,
+      ('RTN', 'HON') => 14,
+      ('CARNETRESIDENCIA', 'HON') => 8,
+      _ => 0
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,27 +161,56 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 const Gap(20),
                 SearchDropdownWidget(
                   // initialValue: '',
+                  hintText: 'input.select_option'.tr(),
                   codigo: 'TIPODOCUMENTOPERSONA',
                   onChanged: (item) {
                     tipoDocumento = item;
+                    log(item?.value);
                     setState(() {});
                   },
                   title: 'Tipo Documento',
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                 ),
-                OutlineTextfieldWidget(
-                  maxLength: 13,
-                  textEditingController: cedulaController,
+                const Gap(20),
+                CatalogoValorNacionalidad(
+                  hintText: 'input.select_option'.tr(),
+                  // hintText: state.userCedulaResponse.pais,
+                  title: 'País Emisor',
                   validator: (value) =>
-                      ClassValidator.validateMinLength(value, 13),
-                  icon: Icon(
-                    Icons.credit_card_outlined,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                  title: '',
-                  hintText: 'Ingresa Documento',
+                      ClassValidator.validateRequired(value.valor),
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    paisEmisorDocumento = Item(
+                      name: item.nombre,
+                      value: item.valor,
+                    );
+                    log(item.valor);
+
+                    setState(() {});
+                  },
+                  codigo: 'PAIS',
                 ),
+                if (tipoDocumento != null && paisEmisorDocumento != null) ...[
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textEditingController: cedulaController,
+                    validator: (value) =>
+                        ClassValidator.validateMaxIntValueAndMinValue(
+                      value,
+                      determineDocumentoLength(
+                        tipoDocumento: tipoDocumento?.value ?? '',
+                        paisEmisor: paisEmisorDocumento?.value ?? '',
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.credit_card_outlined,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: '',
+                    hintText: 'Ingresa Documento',
+                  ),
+                ],
                 const Gap(20),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -50,4 +50,20 @@ class ClassValidator {
     }
     return null;
   }
+
+  static String? validateMaxIntValueAndMinValue(
+    String? value,
+    int length, {
+    bool isRequired = true,
+  }) {
+    if (isRequired && value == null && value!.isEmpty) {
+      return 'input.input_validator'.tr();
+    }
+    if (isRequired && value!.length < length ||
+        isRequired && value!.length > length) {
+      return 'Este campo debe tener como maximo $length caracteres';
+    }
+
+    return null;
+  }
 }

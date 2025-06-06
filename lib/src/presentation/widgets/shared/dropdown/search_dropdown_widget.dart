@@ -25,7 +25,7 @@ class SearchDropdownWidget extends StatelessWidget {
     this.isRequired = false,
     required this.onChanged,
     this.validator,
-    this.hintText = 'Selecciona una opcion',
+    this.hintText = 'Selecciona una opción',
     this.enabled = true,
   });
 
