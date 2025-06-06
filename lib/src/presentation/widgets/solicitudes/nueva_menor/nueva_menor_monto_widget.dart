@@ -70,8 +70,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   if (item == null) return;
                   nacionalidadConyuge = item.valor;
                 },
-                hintText: 'Ingresa Nacionalidad Conyuge',
-                title: 'Nacionalidad Conyuge',
+                hintText: 'Ingresa Nacionalidad Cónyuge',
+                title: 'Nacionalidad Cónyuge',
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -80,8 +80,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   Icons.woman,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Nombre Conyuge',
-                hintText: 'Ingresa nombre conyuge',
+                title: 'Nombre Cónyuge',
+                hintText: 'Ingresa Nombre Cónyuge',
                 onChange: (value) {
                   nombreConyuge = value;
                 },
@@ -94,7 +94,7 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                 child: JLuxDropdown(
                   dropdownColor: Colors.white,
                   isContainIcon: true,
-                  title: 'Trabaja su conyuge',
+                  title: '¿Trabaja su cónyuge?',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
@@ -113,8 +113,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   Icons.woman_2,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Trabajo de Conyuge',
-                hintText: 'Ingresa el Trabajo de Conyuge',
+                title: 'Trabajo de Cónyuge',
+                hintText: 'Ingresa el Trabajo de Cónyuge',
                 isValid: null,
                 onChange: (value) {
                   trabajoConyuge = value;
@@ -127,8 +127,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   Icons.woman_2,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Direccion Trabajo Conyuge',
-                hintText: 'Ingresa el Trabajo de Conyuge',
+                title: 'Dirección Trabajo Cónyuge',
+                hintText: 'Ingresa Dirección Trabajo Cónyuge',
                 isValid: null,
                 onChange: (value) {
                   direccionTrabajoConyuge = value;
@@ -141,8 +141,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   Icons.phone,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Telefono Trabajo Conyuge',
-                hintText: 'Ingresa el Telefono de Conyuge',
+                title: 'Teléfono Trabajo Cónyuge',
+                hintText: 'Ingresa el Teléfono Trabajo Cónyuge',
                 textInputType: TextInputType.phone,
                 isValid: null,
                 onChange: (value) {
@@ -155,8 +155,8 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
                   Icons.phone,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cantidad Hijos',
-                hintText: 'Ingresa Cantida de Hijos',
+                title: 'Cantidad de Hijos',
+                hintText: 'Ingresa Cantidad de Hijos',
                 textInputType: TextInputType.number,
                 isValid: null,
                 onChange: (value) {

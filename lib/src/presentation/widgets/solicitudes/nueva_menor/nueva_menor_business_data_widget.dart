@@ -117,8 +117,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.work,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Profesion',
-              hintText: 'Ingresa Profesion',
+              title: 'Profesión',
+              hintText: 'Ingresa Profesión',
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -132,8 +132,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.person_sharp,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Ocupacion',
-              hintText: 'Ingresa Ocupacion',
+              title: 'Ocupación',
+              hintText: 'Ingresa Ocupación',
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -162,7 +162,7 @@ class _NuevaMenorBusinessDataWidgetState
                 if (item == null) return;
                 condicionNegocio = Item(name: item.name, value: item.value);
               },
-              title: 'Condicion Negocio',
+              title: 'Condición del Negocio',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
@@ -172,8 +172,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.access_time,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Tiempo Funcionamiento de Negocio (Años)',
-              hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
+              title: 'Tiempo de Funcionamiento del Negocio (años)',
+              hintText: 'Ingresa Tiempo de Funcionamiento del Negocio (años)',
               textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
@@ -189,7 +189,7 @@ class _NuevaMenorBusinessDataWidgetState
                 if (item == null) return;
                 sectorEconomico = item;
               },
-              title: 'Sector Economico',
+              title: 'Sector Económico',
             ),
             const Gap(20),
             SearchDropdownWidget(
@@ -266,7 +266,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad',
+                title: 'Rubro de Actividad',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad = item;
@@ -281,7 +281,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 2',
+                title: 'Rubro de Actividad 2',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad2 = item;
@@ -296,7 +296,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 3',
+                title: 'Rubro de Actividad 3',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad3 = item;
@@ -406,8 +406,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.location_on_rounded,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Direccion de Negocio',
-              hintText: 'Ingresa Direccion de Negocio',
+              title: 'Dirección de Negocio',
+              hintText: 'Ingresa Dirección de Negocio',
               isValid: null,
               onChange: (value) {
                 direccionNegocio = value;

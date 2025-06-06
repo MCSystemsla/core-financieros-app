@@ -114,7 +114,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'DESTINOCREDITO',
-              title: 'Proposito',
+              title: 'Propósito',
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
@@ -173,7 +173,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Desembolso',
+              title: 'Fecha de Desembolso',
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
@@ -233,7 +233,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 Icons.payment,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha de Primer Pago Solicitud',
+              title: 'Fecha del Primer Pago de la Solicitud',
               hintText: fechaPrimerPago?.selectorFormat() ??
                   'Ingresar fecha primer pago',
               isValid: null,
@@ -244,8 +244,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Observacion',
-              hintText: 'Ingresa Observacion',
+              title: 'Observación',
+              hintText: 'Ingresa Observación',
               isValid: null,
               onChange: (value) {
                 observacion = value;

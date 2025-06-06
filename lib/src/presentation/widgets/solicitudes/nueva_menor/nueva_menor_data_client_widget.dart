@@ -214,7 +214,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.person_2_rounded,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre Publico',
+                    title: 'Nombre Público',
                     textCapitalization: TextCapitalization.words,
                     hintText: 'Ingresa tu nombre publico',
                     isValid: null,
@@ -236,9 +236,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais Emisor',
+                    hintText: 'Selecciona País Emisor',
                     // hintText: state.userCedulaResponse.pais,
-                    title: 'Pais Emisor',
+                    title: 'País Emisor',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisEmisor = item.valor;
@@ -273,7 +273,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Emision Cedula',
+                    title: 'Fecha Emisión Cédula',
                     isRequired: true,
 
                     hintText:
@@ -292,7 +292,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Vencimiento Cedula',
+                    title: 'Fecha Vencimiento Cédula',
                     isValid: null,
                     isRequired: true,
                     readOnly: true,
@@ -331,8 +331,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais de Nacimiento',
-                    title: 'Pais de Nacimiento',
+                    hintText: 'Selecciona País de Nacimiento',
+                    title: 'País de Nacimiento',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisNacimiento = item.valor;
@@ -372,7 +372,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Telefono',
+                    title: 'Teléfono',
                     hintText: 'Ingresa Telefono',
                     textInputType: TextInputType.phone,
                     isValid: null,
@@ -777,7 +777,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.person_2_rounded,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Nombre Publico',
+              title: 'Nombre Público',
               textCapitalization: TextCapitalization.words,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
@@ -798,9 +798,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais Emisor',
+              hintText: 'Selecciona País Emisor',
               // hintText: state.userCedulaResponse.pais,
-              title: 'Pais Emisor',
+              title: 'País Emisor',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisEmisor = Item(name: item.nombre, value: item.valor);
@@ -837,10 +837,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Emision Cedula',
+              title: 'Fecha Emisión Cédula',
               isRequired: true,
               hintText: fechaEmisionCedula?.selectorFormat() ??
-                  'Fecha Emision Cedula',
+                  'Fecha Emisión Cédula',
               isValid: null,
             ),
             const Gap(30),
@@ -854,7 +854,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Vencimiento Cedula',
+              title: 'Fecha Vencimiento Cédula',
               isValid: null,
               isRequired: true,
               readOnly: true,
@@ -891,8 +891,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais de Nacimiento',
-              title: 'Pais de Nacimiento',
+              hintText: 'Selecciona País de Nacimiento',
+              title: 'País de Nacimiento',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisNacimiento = Item(name: item.nombre, value: item.valor);
@@ -928,8 +928,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Telefono',
-              hintText: 'Ingresa Telefono',
+              title: 'Teléfono',
+              hintText: 'Ingresa Teléfono',
               textInputType: TextInputType.phone,
               isValid: null,
               isRequired: false,

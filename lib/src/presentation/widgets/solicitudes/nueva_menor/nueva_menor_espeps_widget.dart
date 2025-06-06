@@ -101,7 +101,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                   Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cargo Oficial PEPs',
+                title: 'Cargo Oficial PEPS',
                 hintText: 'Ingresa Cargo Oficial PEPS',
                 isValid: null,
                 onChange: (value) {
@@ -114,8 +114,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                   Icons.calendar_today,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Periodo Familiar PEPS',
-                hintText: 'Periodo Familiar PEPS ',
+                title: 'Período Familiar PEPS',
+                hintText: 'Período Familiar PEPS ',
                 isValid: null,
                 onChange: (value) {
                   periodoPeps = value;
@@ -128,7 +128,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 child: JLuxDropdown(
                   dropdownColor: Colors.white,
                   isContainIcon: true,
-                  title: 'Tiene Familiar PEPs',
+                  title: '¿Tiene Familiar PEPS?	',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
@@ -183,7 +183,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.business,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Nombre Entidad PEPS',
+                  title: 'Nombre de la Entidad PEPS',
                   hintText: 'Ingresa Nombre Entidad PEPS',
                   isValid: null,
                   onChange: (value) {
@@ -196,7 +196,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Periodo PEPS 2',
+                  title: 'Período PEPS 2',
                   hintText: 'Ingresa Periodo PEPS 2',
                   isValid: null,
                   onChange: (value) {

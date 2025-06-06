@@ -66,7 +66,7 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Beneficiario Seguro 1',
+              title: 'Beneficiario del Seguro 1',
               hintText: 'Ingresa Beneficiario Seguro 1',
               isValid: null,
               onChange: (value) {
@@ -80,7 +80,7 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Cedula Beneficiario Seguro 1',
+              title: 'Cédula del Beneficiario 1',
               hintText: 'Ingresa Cedula Beneficiario Seguro 1',
               isValid: null,
               validator: (value) => ClassValidator.validateMinLength(
@@ -95,7 +95,7 @@ class _NuevaMenorBeneficiarioWidgetState
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PARENTESCO',
-              title: 'Parentesco Beneficiario Seguro 1',
+              title: 'Parentesco del Beneficiario 1',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
@@ -109,7 +109,7 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.security,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Beneficiario Seguro 2',
+              title: 'Beneficiario del Seguro 2',
               hintText: 'Ingresa Beneficiario Seguro 2',
               isValid: null,
               onChange: (value) {
@@ -123,7 +123,7 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Cedula Beneficiario Seguro 2',
+              title: 'Cédula del Beneficiario 2',
               validator: (value) => ClassValidator.validateMinLength(
                 value,
                 13,

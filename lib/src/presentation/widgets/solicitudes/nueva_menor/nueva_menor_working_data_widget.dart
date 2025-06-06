@@ -102,7 +102,7 @@ class _NuevaMenorWorkingDataWidgetState
                 const Gap(30),
                 CatalogoValorNacionalidad(
                   hintText: 'Selecciona Pais de Casa',
-                  title: 'Pais Domicilio',
+                  title: 'País Domicilio',
                   onChanged: (item) {
                     if (item == null) return;
                     paisDomicilio = Item(name: item.nombre, value: item.valor);
@@ -159,8 +159,8 @@ class _NuevaMenorWorkingDataWidgetState
                     Icons.house,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Direccion Casa',
-                  hintText: 'Ingresa Direccion Casa',
+                  title: 'Dirección Casa',
+                  hintText: 'Ingresa Dirección Casa',
                   onChange: (value) {
                     direccionCasa = value;
                   },
@@ -184,7 +184,7 @@ class _NuevaMenorWorkingDataWidgetState
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  title: 'Condicion Casa',
+                  title: 'Condición Casa',
                   codigo: 'TIPOVIVIENDA',
                   onChanged: (item) {
                     if (item == null) return;
@@ -216,7 +216,7 @@ class _NuevaMenorWorkingDataWidgetState
                   child: JLuxDropdown(
                     dropdownColor: Colors.white,
                     isContainIcon: true,
-                    title: 'Ubicacion',
+                    title: 'Ubicación',
                     items: Origin.comunidades,
                     onChanged: (item) {
                       if (item == null) return;
