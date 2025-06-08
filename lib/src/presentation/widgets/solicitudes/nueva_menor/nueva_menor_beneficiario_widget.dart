@@ -164,6 +164,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               isValid: null,
               onChange: (value) {
                 monto = value;
+                setState(() {});
               },
             ),
             OutlineTextfieldWidget(
@@ -313,7 +314,7 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
                             fechaDesembolso:
                                 fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda?.value,
-                            monto: int.tryParse(monto!),
+                            monto: int.tryParse(monto ?? '0'),
                             objPropositoId: proposito?.value,
                             objProductoId: producto?.value,
                             objFrecuenciaId: frecuenciaDePago?.value,

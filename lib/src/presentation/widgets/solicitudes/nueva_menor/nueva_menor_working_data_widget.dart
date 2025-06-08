@@ -70,7 +70,13 @@ class _NuevaMenorWorkingDataWidgetState
           CustomAlertDialog(
             context: context,
             title: 'Gps de dispositivo desactivado',
-            onDone: () => context.pop(),
+            onDone: () async {
+              final isOpen = await Geolocator.openLocationSettings();
+              if (!context.mounted) return;
+              if (isOpen) {
+                context.pop();
+              }
+            },
           ).showDialog(context);
         }
         if (state is OnGeolocationServiceError) {
@@ -233,12 +239,33 @@ class _NuevaMenorWorkingDataWidgetState
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: CustomElevatedButton(
+                    enabled: state is! OnGeolocationLoading,
                     text: 'Siguiente',
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
+                      if (state is OnGeolocationServiceDisabled) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'Necesitas activar el servicio de GPS para poder continuar',
+                          onDone: () async {
+                            final isOpen =
+                                await Geolocator.openLocationSettings();
+                            if (!context.mounted) return;
+                            if (isOpen) {
+                              context.pop();
+                            }
+                          },
+                        ).showDialog(context);
+                      }
                       if (!formKey.currentState!.validate()) return;
                       final Position? position =
                           state is OnGeolocationSuccess ? state.position : null;
+                      if (position == null) {
+                        context.read<GeolocationCubit>().getCurrentLocation();
+                        return;
+                      }
+
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                             objCondicionCasaIdVer: condicionCasa?.name,
                             objMunicipioCasaIdVer: municipioDomicilio?.name,
@@ -251,10 +278,10 @@ class _NuevaMenorWorkingDataWidgetState
                             objMunicipioCasaId: municipioDomicilio?.value,
                             objCondicionCasaId: condicionCasa?.value,
                             anosResidirCasa:
-                                int.tryParse(anosResidirCasa ?? ''),
+                                int.tryParse(anosResidirCasa ?? '0'),
                             ubicacion: comunidad,
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
+                            ubicacionLatitud: position.latitude.toString(),
+                            ubicacionLongitud: position.longitude.toString(),
                             direccionCasa: direccionCasa,
                           );
                       widget.controller.nextPage(

@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
@@ -127,6 +129,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
 
   @override
   Widget build(BuildContext context) {
+    log(monto.toString());
     super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     montoController.value =
@@ -153,39 +156,40 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              textEditingController: montoController,
+              initialValue: monto,
+              // onFieldSubmitted: (value) {
+              //   String formattedValue =
+              //       FormatField.formatMonto(montoController.text);
+              //   montoController.value = TextEditingValue(
+              //     text: formattedValue,
+              //     selection:
+              //         TextSelection.collapsed(offset: formattedValue.length),
+              //   );
+              // },
+              // onTapOutside: (event) {
+              //   String formattedValue =
+              //       FormatField.formatMonto(montoController.text);
+              //   montoController.value = TextEditingValue(
+              //     text: formattedValue,
+              //     selection:
+              //         TextSelection.collapsed(offset: formattedValue.length),
+              //   );
+              // },
+              // textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Monto',
-              hintText: monto ?? 'Ingresa Monto',
+              hintText: 'Ingresa Monto',
               textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(monto),
               isValid: null,
               onChange: (value) {
                 monto = value;
+                setState(() {});
               },
             ),
-
             OutlineTextfieldWidget(
               initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
@@ -274,23 +278,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               initialValue: observacion,
               icon: Icon(

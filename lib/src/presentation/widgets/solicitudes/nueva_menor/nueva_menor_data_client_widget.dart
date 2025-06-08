@@ -273,7 +273,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Emisión Cédula',
+                    title: 'Fecha Emisión Documento',
                     isRequired: true,
 
                     hintText:
@@ -292,7 +292,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Vencimiento Cédula',
+                    title: 'Fecha Vencimiento Documento',
                     isValid: null,
                     isRequired: true,
                     readOnly: true,
