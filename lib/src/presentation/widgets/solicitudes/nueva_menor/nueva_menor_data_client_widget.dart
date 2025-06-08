@@ -837,10 +837,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Emisión Cédula',
+              title: 'Fecha Emisión Documento',
               isRequired: true,
               hintText: fechaEmisionCedula?.selectorFormat() ??
-                  'Fecha Emisión Cédula',
+                  'Fecha Emisión Documento',
               isValid: null,
             ),
             const Gap(30),
@@ -848,13 +848,13 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               validator: (_) => ClassValidator.validateRequired(
                 _selectedDate?.selectorFormat(),
               ),
-              hintText: _selectedDate?.selectorFormat() ??
-                  'Ingrese Fecha Vencimiento',
+              hintText:
+                  _selectedDate?.selectorFormat() ?? 'Ingrese Fecha Documento',
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Vencimiento Cédula',
+              title: 'Fecha Vencimiento Documento',
               isValid: null,
               isRequired: true,
               readOnly: true,

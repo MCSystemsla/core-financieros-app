@@ -16,7 +16,10 @@ class GeolocationService {
         return null;
       }
 
-      return await Geolocator.getCurrentPosition();
+      return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 10),
+      );
     } catch (e) {
       return null;
     }

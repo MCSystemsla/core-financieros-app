@@ -51,7 +51,9 @@ class _NuevaMenorWorkingDataWidgetState
   @override
   void initState() {
     super.initState();
-    context.read<GeolocationCubit>().getCurrentLocation();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<GeolocationCubit>().getCurrentLocation();
+    });
   }
 
   @override
