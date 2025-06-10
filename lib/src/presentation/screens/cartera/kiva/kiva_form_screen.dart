@@ -212,6 +212,8 @@ class OnSolocitudesEmpty extends StatelessWidget {
   }
 }
 
+enum KivaStatusForm { matching, notMatching }
+
 class _RequestWidget extends StatefulWidget {
   final Solicitud solicitud;
   const _RequestWidget({
@@ -225,6 +227,7 @@ class _RequestWidget extends StatefulWidget {
 class _RequestWidgetState extends State<_RequestWidget> {
   int? numSolicitud;
   bool isMatching = false;
+  KivaStatusForm statusForm = KivaStatusForm.notMatching;
   @override
   void initState() {
     super.initState();
@@ -239,6 +242,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
 
     setState(() {
       isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);
+      statusForm =
+          isMatching ? KivaStatusForm.matching : KivaStatusForm.notMatching;
     });
   }
 
@@ -290,7 +295,10 @@ class _RequestWidgetState extends State<_RequestWidget> {
         ],
       ),
       leading: CircleAvatar(
-        backgroundColor: isMatching ? Colors.yellow : Colors.green,
+        backgroundColor: switch (statusForm) {
+          KivaStatusForm.matching => Colors.yellow,
+          KivaStatusForm.notMatching => Colors.green,
+        },
         child: const Icon(Icons.wallet),
       ),
     );

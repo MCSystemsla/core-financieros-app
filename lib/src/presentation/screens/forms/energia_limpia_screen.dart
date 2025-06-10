@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_adtional_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
@@ -444,28 +445,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                         await file.writeAsBytes(signatureImage!);
 
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .nombreFormularioKiva,
-                            );
+
                         await customPopUp(
                           context: context,
                           dismissOnTouchOutside: false,
@@ -477,8 +457,53 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                           buttonAcept: true,
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
-                            context.pushReplacement('/');
+                          onPressedAccept: () async {
+                            if (!context.mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -777,28 +802,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                         final file = File(filePath);
                         await file.writeAsBytes(signatureImage!);
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .nombreFormularioKiva,
-                            );
+
                         await customPopUp(
                           context: context,
                           size: size,
@@ -810,7 +814,52 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            if (!context.mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }

@@ -117,6 +117,26 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<void> updateIsImagesSendedOnSolicitud(
+      {required String solicitudId}) async {
+    try {
+      // Actualiza el campo isSended en true solo para la solicitud con el id dado
+      await state.isar?.writeTxn(() async {
+        final existing = await state.isar?.solicitudesPendientes
+            .filter()
+            .solicitudIdEqualTo(solicitudId)
+            .findFirst();
+        if (existing != null) {
+          existing.imagesSended = true;
+          // Guarda el objeto actualizado en la base de datos
+          await state.isar?.solicitudesPendientes.put(existing);
+        }
+      });
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
   Future<void> removeSolicitudWhenDateSendedIsMoreThanDateCreated() async {
     try {
       await state.isar?.writeTxn(() async {
@@ -195,6 +215,26 @@ class SolicitudesPendientesLocalDbCubit
     try {
       final solicitudes = await state.isar?.solicitudesPendientes
           .filter()
+          .isSendedEqualTo(true)
+          .findAll();
+
+      emit(state.copyWith(
+        solicitudes: solicitudes,
+        status: Status.done,
+      ));
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  Future<void> getSolicitudesFailed() async {
+    emit(state.copyWith(status: Status.inProgress));
+    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final solicitudes = await state.isar?.solicitudesPendientes
+          .filter()
+          .imagesSendedEqualTo(false)
+          .and()
           .isSendedEqualTo(true)
           .findAll();
 

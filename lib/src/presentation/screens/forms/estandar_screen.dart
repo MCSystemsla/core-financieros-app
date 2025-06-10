@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_aditional_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
@@ -252,44 +253,67 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       if (state.status == Status.done) {
                         if (!context.mounted) return;
                         if (isConnected.isConnected) {
-                          context.read<UploadUserFileCubit>().uploadUserFiles(
-                                typeSigner: typeSigner,
-                                cedula:
-                                    context.read<KivaRouteCubit>().state.cedula,
-                                numero:
-                                    context.read<KivaRouteCubit>().state.numero,
-                                tipoSolicitud: context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .tipoSolicitud,
-                                fotoFirma: file.path,
-                                solicitudId: int.parse(
-                                  context
-                                      .read<KivaRouteCubit>()
-                                      .state
-                                      .solicitudId,
+                          await customPopUp(
+                            context: context,
+                            dismissOnTouchOutside: false,
+                            size: size,
+                            title: 'Formulario Kiva Enviado exitosamente!!',
+                            subtitle:
+                                'Las respuestas se han enviado Exitosamente',
+                            dialogType: DialogType.success,
+                            buttonAcept: true,
+                            textButtonAcept: 'Ok',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () {
+                              if (!context.mounted) return;
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => BlocProvider.value(
+                                    value: context.read<UploadUserFileCubit>(),
+                                    child: KivaImageSending(
+                                      solicitudId: context
+                                          .read<KivaRouteCubit>()
+                                          .state
+                                          .solicitudId,
+                                      onRetry: () {
+                                        context
+                                            .read<UploadUserFileCubit>()
+                                            .uploadUserFiles(
+                                              typeSigner: typeSigner,
+                                              cedula: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .cedula,
+                                              numero: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .numero,
+                                              tipoSolicitud: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .tipoSolicitud,
+                                              fotoFirma: file.path,
+                                              solicitudId: int.parse(
+                                                context
+                                                    .read<KivaRouteCubit>()
+                                                    .state
+                                                    .solicitudId,
+                                              ),
+                                              formularioKiva: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .nombreFormularioKiva,
+                                            );
+                                      },
+                                    ),
+                                  ),
                                 ),
-                                formularioKiva: context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .nombreFormularioKiva,
                               );
+                            },
+                          );
                         }
-                        await customPopUp(
-                          context: context,
-                          dismissOnTouchOutside: false,
-                          size: size,
-                          title: 'Formulario Kiva Enviado exitosamente!!',
-                          subtitle:
-                              'Las respuestas se han enviado Exitosamente',
-                          dialogType: DialogType.success,
-                          buttonAcept: true,
-                          textButtonAcept: 'Ok',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
-                            context.pushReplacement('/');
-                          },
-                        );
                       }
                     },
                     builder: (context, state) {

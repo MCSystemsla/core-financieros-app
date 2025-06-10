@@ -48,58 +48,63 @@ const SolicitudesPendientesSchema = CollectionSchema(
       name: r'idAsesor',
       type: IsarType.long,
     ),
-    r'isSended': PropertySchema(
+    r'imagesSended': PropertySchema(
       id: 6,
+      name: r'imagesSended',
+      type: IsarType.bool,
+    ),
+    r'isSended': PropertySchema(
+      id: 7,
       name: r'isSended',
       type: IsarType.bool,
     ),
     r'moneda': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'moneda',
       type: IsarType.string,
     ),
     r'monto': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'monto',
       type: IsarType.double,
     ),
     r'motivoAnterior': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'motivoAnterior',
       type: IsarType.string,
     ),
     r'nombre': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'nombre',
       type: IsarType.string,
     ),
     r'nombreFormulario': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'nombreFormulario',
       type: IsarType.string,
     ),
     r'numero': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'numero',
       type: IsarType.string,
     ),
     r'producto': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'producto',
       type: IsarType.string,
     ),
     r'solicitudId': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'solicitudId',
       type: IsarType.string,
     ),
     r'sucursal': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'sucursal',
       type: IsarType.string,
     ),
     r'tipoSolicitud': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'tipoSolicitud',
       type: IsarType.string,
     )
@@ -205,17 +210,18 @@ void _solicitudesPendientesSerialize(
   writer.writeString(offsets[3], object.estado);
   writer.writeDateTime(offsets[4], object.fecha);
   writer.writeLong(offsets[5], object.idAsesor);
-  writer.writeBool(offsets[6], object.isSended);
-  writer.writeString(offsets[7], object.moneda);
-  writer.writeDouble(offsets[8], object.monto);
-  writer.writeString(offsets[9], object.motivoAnterior);
-  writer.writeString(offsets[10], object.nombre);
-  writer.writeString(offsets[11], object.nombreFormulario);
-  writer.writeString(offsets[12], object.numero);
-  writer.writeString(offsets[13], object.producto);
-  writer.writeString(offsets[14], object.solicitudId);
-  writer.writeString(offsets[15], object.sucursal);
-  writer.writeString(offsets[16], object.tipoSolicitud);
+  writer.writeBool(offsets[6], object.imagesSended);
+  writer.writeBool(offsets[7], object.isSended);
+  writer.writeString(offsets[8], object.moneda);
+  writer.writeDouble(offsets[9], object.monto);
+  writer.writeString(offsets[10], object.motivoAnterior);
+  writer.writeString(offsets[11], object.nombre);
+  writer.writeString(offsets[12], object.nombreFormulario);
+  writer.writeString(offsets[13], object.numero);
+  writer.writeString(offsets[14], object.producto);
+  writer.writeString(offsets[15], object.solicitudId);
+  writer.writeString(offsets[16], object.sucursal);
+  writer.writeString(offsets[17], object.tipoSolicitud);
 }
 
 SolicitudesPendientes _solicitudesPendientesDeserialize(
@@ -232,17 +238,18 @@ SolicitudesPendientes _solicitudesPendientesDeserialize(
   object.fecha = reader.readDateTimeOrNull(offsets[4]);
   object.id = id;
   object.idAsesor = reader.readLongOrNull(offsets[5]);
-  object.isSended = reader.readBoolOrNull(offsets[6]);
-  object.moneda = reader.readStringOrNull(offsets[7]);
-  object.monto = reader.readDoubleOrNull(offsets[8]);
-  object.motivoAnterior = reader.readStringOrNull(offsets[9]);
-  object.nombre = reader.readStringOrNull(offsets[10]);
-  object.nombreFormulario = reader.readStringOrNull(offsets[11]);
-  object.numero = reader.readStringOrNull(offsets[12]);
-  object.producto = reader.readStringOrNull(offsets[13]);
-  object.solicitudId = reader.readStringOrNull(offsets[14]);
-  object.sucursal = reader.readStringOrNull(offsets[15]);
-  object.tipoSolicitud = reader.readStringOrNull(offsets[16]);
+  object.imagesSended = reader.readBool(offsets[6]);
+  object.isSended = reader.readBoolOrNull(offsets[7]);
+  object.moneda = reader.readStringOrNull(offsets[8]);
+  object.monto = reader.readDoubleOrNull(offsets[9]);
+  object.motivoAnterior = reader.readStringOrNull(offsets[10]);
+  object.nombre = reader.readStringOrNull(offsets[11]);
+  object.nombreFormulario = reader.readStringOrNull(offsets[12]);
+  object.numero = reader.readStringOrNull(offsets[13]);
+  object.producto = reader.readStringOrNull(offsets[14]);
+  object.solicitudId = reader.readStringOrNull(offsets[15]);
+  object.sucursal = reader.readStringOrNull(offsets[16]);
+  object.tipoSolicitud = reader.readStringOrNull(offsets[17]);
   return object;
 }
 
@@ -266,13 +273,13 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 8:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 9:
       return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
@@ -286,6 +293,8 @@ P _solicitudesPendientesDeserializeProp<P>(
     case 15:
       return (reader.readStringOrNull(offset)) as P;
     case 16:
+      return (reader.readStringOrNull(offset)) as P;
+    case 17:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1049,6 +1058,16 @@ extension SolicitudesPendientesQueryFilter on QueryBuilder<
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes,
+      QAfterFilterCondition> imagesSendedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imagesSended',
+        value: value,
       ));
     });
   }
@@ -2663,6 +2682,20 @@ extension SolicitudesPendientesQuerySortBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByImagesSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagesSended', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      sortByImagesSendedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagesSended', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       sortByIsSended() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSended', Sort.asc);
@@ -2918,6 +2951,20 @@ extension SolicitudesPendientesQuerySortThenBy
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByImagesSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagesSended', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
+      thenByImagesSendedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'imagesSended', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QAfterSortBy>
       thenByIsSended() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSended', Sort.asc);
@@ -3117,6 +3164,13 @@ extension SolicitudesPendientesQueryWhereDistinct
   }
 
   QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
+      distinctByImagesSended() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'imagesSended');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, SolicitudesPendientes, QDistinct>
       distinctByIsSended() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isSended');
@@ -3244,6 +3298,13 @@ extension SolicitudesPendientesQueryProperty on QueryBuilder<
       idAsesorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'idAsesor');
+    });
+  }
+
+  QueryBuilder<SolicitudesPendientes, bool, QQueryOperations>
+      imagesSendedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'imagesSended');
     });
   }
 

@@ -573,7 +573,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       .getParametroByName(nombre: 'EDADMINIMACLIENTE');
   final edadMaximaCliente = global<ObjectBoxService>()
       .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-  Future<void> selectDate(BuildContext context) async {
+
+  Future<void> selectDate(BuildContext context, String tipoDocumeto) async {
     final DateTime minFechaVencimiento = DateTime(
       fechaEmisionCedula!.year + 10,
       fechaEmisionCedula!.month,
@@ -583,7 +584,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       context: context,
       initialDate: _selectedDate,
       keyboardType: TextInputType.datetime,
-      firstDate: minFechaVencimiento,
+      firstDate: tipoDocumeto != 'CEDULAIDENTIDAD'
+          ? DateTime(1930)
+          : minFechaVencimiento,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -597,26 +600,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (!_validarVencimiento(picked)) {
-        CustomAlertDialog(
-          onDone: () => context.pop(),
-          context: context,
-          title:
-              'Fecha de vencimiento debe ser como mínimo 10 años después de la fecha de emisión',
-        ).showDialog(context, dialogType: DialogType.warning);
-        return;
-      }
+
       _selectedDate = picked;
       setState(() {});
     }
-  }
-
-  bool _validarVencimiento(DateTime vencimiento) {
-    if (fechaEmisionCedula == null) return false;
-    final minValida = DateTime(fechaEmisionCedula!.year + 10,
-        fechaEmisionCedula!.month, fechaEmisionCedula!.day);
-    return vencimiento.isAtSameMomentAs(minValida) ||
-        vencimiento.isAfter(minValida);
   }
 
   Future<void> selectEmisionFecha(BuildContext context) async {
@@ -858,7 +845,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               isValid: null,
               isRequired: true,
               readOnly: true,
-              onTap: () => selectDate(context),
+              onTap: () => selectDate(context, tipoDocumento?.value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(

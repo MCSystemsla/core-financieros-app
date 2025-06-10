@@ -22,4 +22,5 @@ class SolicitudesPendientes {
   bool? isSended = false;
   String? nombreFormulario;
   DateTime? dateSended;
+  bool imagesSended = false;
 }

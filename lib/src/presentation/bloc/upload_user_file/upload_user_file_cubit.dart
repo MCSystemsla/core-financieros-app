@@ -30,19 +30,32 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String cedula,
     required TypeSigner typeSigner,
   }) async {
-    await repository.uploadUserFiles(
-      imagen1: state.imagen1,
-      imagen2: state.imagen2,
-      imagen3: state.imagen3,
-      fotoFirma: fotoFirma,
-      solicitudId: solicitudId,
-      formularioKiva: formularioKiva,
-      database: LocalStorage().database,
-      tipoSolicitud: tipoSolicitud,
-      numero: numero,
-      cedula: cedula,
-      typeSigner: typeSigner,
-    );
+    emit(state.copyWith(
+      status: Status.inProgress,
+      imageRetryAttempts: state.imageRetryAttempts + 1,
+    ));
+    try {
+      final (isOk, msg) = await repository.uploadUserFiles(
+        imagen1: state.imagen1,
+        imagen2: state.imagen2,
+        imagen3: state.imagen3,
+        fotoFirma: fotoFirma,
+        solicitudId: solicitudId,
+        formularioKiva: formularioKiva,
+        database: LocalStorage().database,
+        tipoSolicitud: tipoSolicitud,
+        numero: numero,
+        cedula: cedula,
+        typeSigner: typeSigner,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
   }
 
   Future<void> uploadUserFilesOffline({
