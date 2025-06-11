@@ -71,7 +71,6 @@ class App extends StatelessWidget {
           create: (ctx) => UserByCedulaCubit(SolicitudCreditoRepositoryImpl()),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
-        // BlocProvider(create: (ctx) => BiometricCubit(BiometricAuthService())),
       ],
       child: BlocConsumer<LangCubit, LangState>(
         listener: (context, state) async {

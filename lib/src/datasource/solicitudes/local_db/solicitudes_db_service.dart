@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
@@ -12,6 +15,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ObjectBoxService {
   late final Store _store;
@@ -45,8 +49,29 @@ class ObjectBoxService {
   }
 
   static Future<ObjectBoxService> init() async {
-    final store = await openStore(); // .
-    return ObjectBoxService._create(store);
+    try {
+      final store = await openStore();
+
+      return ObjectBoxService._create(store);
+    } on ObjectBoxException catch (e) {
+      final isEntityIdError = e.message.contains("DB's last entity ID");
+
+      if (isEntityIdError) {
+        log('⚠️ Error de modelo detectado. Borrando base de datos...');
+
+        final dir = await getApplicationDocumentsDirectory();
+        final dbDir = Directory('${dir.path}/objectbox');
+
+        if (await dbDir.exists()) {
+          await dbDir.delete(recursive: true);
+          log('⚠️ Base de datos borrada.');
+        }
+      }
+      final store = await openStore();
+      return ObjectBoxService._create(store);
+    } catch (e) {
+      throw Exception('Error Inesperado BD Local: $e');
+    }
   }
 
   void close() {
@@ -61,23 +86,6 @@ class ObjectBoxService {
         .remove();
   }
 
-  // List<dynamic> sendSolicitudWhenIsDone({required TypeForm typeForm}) {
-  //   try {
-  //     return switch (typeForm) {
-  //       TypeForm.nueva => solicitudesResponsesBox
-  //           .query(ResponseLocalDb_.isDone
-  //               .equals(true)
-  //               .and(ResponseLocalDb_.hasVerified.equals(false)))
-  //           .build()
-  //           .find(),
-  //       TypeForm.represtamo => sendSolicitudReprestamoWhenIsDone(),
-  //       _ => [],
-  //     };
-  //   } catch (e) {
-  //     _logger.e(e.toString());
-  //     rethrow;
-  //   }
-  // }
   List<dynamic> sendSolicitudesWhenIsDone() {
     try {
       final nuevas = solicitudesResponsesBox
@@ -127,6 +135,7 @@ class ObjectBoxService {
     }
   }
 
+  // * Catalgos
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
     final query = catalogoBox.query(CatalogoLocalDb_.type.equals(type)).build();
 

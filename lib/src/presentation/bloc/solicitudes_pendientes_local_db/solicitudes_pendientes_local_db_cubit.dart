@@ -65,14 +65,11 @@ class SolicitudesPendientesLocalDbCubit
         directory: dir.path,
       );
 
-      // Si la base de datos está abierta, actualiza el estado
       emit(state.copyWith(isar: isar));
       _logger.i('La base de datos Isar está activa.');
     } catch (e) {
       _logger.e('Error al inicializar la base de datos Isar: $e');
-
-      // Inicializa una instancia "dummy" o limitada para evitar nulls
-      _logger.w('Se ha inicializado una instancia limitada de Isar.');
+      throw Exception('Error Inesperado BD Local: $e');
     }
   }
 
