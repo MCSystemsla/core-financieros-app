@@ -50,7 +50,7 @@ class _EstandarDescripciondelNegocioState
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -89,7 +89,7 @@ class _EstandarDescripciondelNegocioState
                   ),
                   const Gap(20),
                   DatesWidget(
-                    title: '¿Cuenténos cómo inició su negocio?*',
+                    title: '¿Cuenténos cuando inició su negocio?*',
                     onSelectedDate: () => selectDate(context),
                     selectedDate: _selectedDate,
                   ),
@@ -180,6 +180,8 @@ class _EstandarDescripciondelNegocioState
                               inicioNegocio: _selectedDate.toString(),
                               cuantosApoyan: apoyanNegocio,
                               publicitarNegocio: publicitarNegocio.text.trim(),
+                              apoyanNegocio:
+                                  coincideRespuesta == 'input.yes'.tr(),
                               negocioProximosAnios:
                                   negocioProximosAnios.text.trim(),
                             );
@@ -187,7 +189,7 @@ class _EstandarDescripciondelNegocioState
                           responses: [
                             Response(
                               index: widget.pageController.page?.toInt() ?? 0,
-                              question: '¿Cuenténos cómo inició su negocio?*',
+                              question: '¿Cuenténos cuando inició su negocio?*',
                               response: _selectedDate.formatDate(),
                             ),
                             Response(

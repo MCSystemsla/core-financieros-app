@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 
 class EstandarModel {
   final String tipoSolicitud;
@@ -58,8 +59,7 @@ class EstandarModel {
         'objOrigenUbicacionGeograficaId': objOrigenCatalogoValorId,
         'EdadHijos': edadHijos,
         'TipoEstudioHijos': tipoEstudioHijos,
-        'InicioNegocio':
-            "${inicioNegocio.year.toString().padLeft(4, '0')}-${inicioNegocio.month.toString().padLeft(2, '0')}-${inicioNegocio.day.toString().padLeft(2, '0')}",
+        'InicioNegocio': inicioNegocio.selectorFormat(),
         'ApoyanNegocio': apoyanNegocio,
         'CuantosApoyan': cuantosApoyan,
         'PublicitarNegocio': publicitarNegocio,
