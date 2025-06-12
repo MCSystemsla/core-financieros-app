@@ -75,7 +75,7 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 16,
+              maxLength: 13,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),

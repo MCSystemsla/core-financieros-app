@@ -584,7 +584,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       context: context,
       initialDate: _selectedDate,
       keyboardType: TextInputType.datetime,
-      firstDate: tipoDocumeto != 'CEDULAIDENTIDAD'
+      firstDate: tipoDocumeto != 'CEDULAIDENTIDAD' && paisEmisor?.value != 'NIC'
           ? DateTime(1930)
           : minFechaVencimiento,
       lastDate: DateTime(2101),

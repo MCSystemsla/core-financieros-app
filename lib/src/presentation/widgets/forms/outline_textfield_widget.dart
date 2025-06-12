@@ -20,8 +20,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final String? initialValue;
   final double? marginTop;
   final TextInputType? textInputType;
-  final TextCapitalization? textCapitalization;
-  final bool? readOnly;
+  final TextCapitalization textCapitalization;
+  final bool readOnly;
   final bool? isValid;
   final Icon? icon;
   final bool isRequired;
@@ -117,9 +117,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
                     maxLength: maxLength,
                     maxLines: null,
                     onChanged: onChange,
-                    textCapitalization:
-                        textCapitalization ?? TextCapitalization.none,
-                    readOnly: readOnly ?? false,
+                    textCapitalization: textCapitalization,
+                    readOnly: readOnly,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
