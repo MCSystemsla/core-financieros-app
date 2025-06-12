@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_adtional_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
@@ -49,7 +50,7 @@ class EnergiaLimpiaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct == 'ASER RECURRENTE';
+    final isRecurrentForm = typeProduct == 'ScrKivaEnergiaLimpiaRecurrente';
     final pageController = PageController();
     final responseRepository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -324,9 +325,8 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -427,6 +427,14 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                         ).showDialog(context, dialogType: DialogType.error);
                       }
                       if (state.status == Status.done) {
+                        context
+                            .read<SolicitudesPendientesLocalDbCubit>()
+                            .updateIsSendedOnSolicitud(
+                              solicitudId: context
+                                  .read<KivaRouteCubit>()
+                                  .state
+                                  .solicitudId,
+                            );
                         final signatureImage = await controller.toPngBytes();
                         final directory =
                             await getApplicationDocumentsDirectory();
@@ -437,28 +445,7 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                         await file.writeAsBytes(signatureImage!);
 
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .currentRoute,
-                            );
+
                         await customPopUp(
                           context: context,
                           dismissOnTouchOutside: false,
@@ -470,8 +457,53 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                           buttonAcept: true,
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
-                            context.pushReplacement('/');
+                          onPressedAccept: () async {
+                            if (!context.mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -502,6 +534,14 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -531,30 +571,30 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveEnergiaLimpiaAnswers(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<RecurrenteEnergiaLimpiaCubit>()
-                                      .sendAnswers();
+
+                              await saveEnergiaLimpiaAnswers(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
+                              if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<RecurrenteEnergiaLimpiaCubit>()
+                                    .sendAnswers();
+                              }
                               if (!context.mounted) return;
                               context.pop();
                             },
@@ -593,8 +633,8 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -626,13 +666,13 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-
-    NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -648,9 +688,8 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -763,28 +802,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                         final file = File(filePath);
                         await file.writeAsBytes(signatureImage!);
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .currentRoute,
-                            );
+
                         await customPopUp(
                           context: context,
                           size: size,
@@ -796,7 +814,52 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            if (!context.mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -827,6 +890,14 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -856,31 +927,30 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveEnergiaLocalDB(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<EnergiaLimpiaCubit>()
-                                      .sendAnswers();
+
+                              await saveEnergiaLocalDB(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<EnergiaLimpiaCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -917,8 +987,8 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     ctx.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -945,13 +1015,13 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
             ..problemasEnergiaDescripcion = state.problemasEnergiaDescripcion
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
     // context.pushReplacement('/');
   }
 }

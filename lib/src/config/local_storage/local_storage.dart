@@ -35,6 +35,10 @@ class LocalStorage {
     return prefs.getInt('lastUpdate') ?? 0;
   }
 
+  String get currentUserName {
+    return prefs.getString('currentUserName') ?? '';
+  }
+
   Future<void> setLanguage(String value) async {
     await prefs.setString('lang', value);
   }
@@ -61,5 +65,9 @@ class LocalStorage {
 
   Future<void> setLastUpdate(int lastUpdate) async {
     await prefs.setInt('lastUpdate', lastUpdate);
+  }
+
+  Future<void> setCurrentUsername(String currentUserName) async {
+    await prefs.setString('currentUserName', currentUserName);
   }
 }

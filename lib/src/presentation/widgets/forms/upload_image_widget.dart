@@ -62,7 +62,11 @@ class _UploadImageWidgetState extends State<UploadImageWidget> {
                   child: widget.selectedImage != null
                       ? FadeInImage(
                           placeholder: const AssetImage(ImageAsset.loader),
-                          image: FileImage(File(widget.selectedImage!.path)))
+                          image: Image.file(
+                            File(widget.selectedImage?.path ?? ''),
+                            cacheWidth: 400,
+                          ).image,
+                        )
                       : SvgPicture.asset(
                           ImageAsset.imgForm,
                         ),

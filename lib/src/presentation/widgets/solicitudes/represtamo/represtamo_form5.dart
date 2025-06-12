@@ -135,9 +135,11 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   if (!formKey.currentState!.validate()) return;
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
                         beneficiarioSeguro: beneficiarioSeguro,
                         cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                         objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                         telefonoBeneficiario: telefonoBeneficiario == null
                             ? ''
                             : telefonoBeneficiarioCode +
@@ -148,6 +150,10 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                         isOffline: !isConnected,
                       );
                   if (!isConnected) {
+                    context.read<SolicitudReprestamoCubit>().saveAnswers(
+                          errorMsg:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        );
                     CustomAlertDialog(
                       context: context,
                       title:

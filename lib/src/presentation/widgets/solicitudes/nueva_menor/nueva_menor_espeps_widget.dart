@@ -3,10 +3,10 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -58,7 +58,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 dropdownColor: Colors.white,
                 validator: (value) => ClassValidator.validateRequired(value),
                 isContainIcon: true,
-                title: 'Es Peps',
+                title: 'Es PEPS',
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
@@ -78,7 +78,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                   Icons.business,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Nombre de Entidad PEPs',
+                title: 'Nombre de Entidad PEPS',
                 hintText: 'Ingresa Nombre de Entidad PEPs',
                 isValid: null,
                 onChange: (value) {
@@ -87,7 +87,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Selecciona Pais Peps',
+                hintText: 'Selecciona Pais PEPS',
                 title: 'País PEPs',
                 onChanged: (item) {
                   if (item == null || !mounted) return;
@@ -101,11 +101,24 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                   Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cargo Oficial PEPs',
-                hintText: 'Ingresa Cargo Oficial PEPs',
+                title: 'Cargo Oficial PEPS',
+                hintText: 'Ingresa Cargo Oficial PEPS',
                 isValid: null,
                 onChange: (value) {
                   cargoOficialPeps = value;
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                title: 'Período Familiar PEPS',
+                hintText: 'Período Familiar PEPS ',
+                isValid: null,
+                onChange: (value) {
+                  periodoPeps = value;
                 },
               ),
               const Gap(20),
@@ -115,7 +128,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 child: JLuxDropdown(
                   dropdownColor: Colors.white,
                   isContainIcon: true,
-                  title: 'Tiene Familiar PEPs',
+                  title: '¿Tiene Familiar PEPS?	',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
@@ -135,8 +148,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.person,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Nombre Familiar PEPs 2',
-                  hintText: 'Ingresa Nombre Familiar PEPs 2',
+                  title: 'Nombre Familiar PEPS',
+                  hintText: 'Ingresa Nombre Familiar PEPS',
                   isValid: null,
                   onChange: (value) {
                     nombreFamiliarPeps2 = value;
@@ -149,7 +162,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     if (item == null) return;
                     parentesco = item.value;
                   },
-                  title: 'Parentesco Familiar PEPs 2',
+                  title: 'Parentesco Familiar PEPS',
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
@@ -157,8 +170,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.work,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Cargo Familiar PEPs 2',
-                  hintText: 'Ingresa Cargo Familiar PEPs 2',
+                  title: 'Cargo Familiar PEPS',
+                  hintText: 'Ingresa Cargo Familiar',
                   isValid: null,
                   onChange: (value) {
                     cargoParentesco = value;
@@ -170,8 +183,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.business,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Nombre Entidad PEPs 2',
-                  hintText: 'Ingresa Nombre Entidad PEPs 2',
+                  title: 'Nombre de la Entidad PEPS',
+                  hintText: 'Ingresa Nombre Entidad PEPS',
                   isValid: null,
                   onChange: (value) {
                     nombreEntidadPeps2 = value;
@@ -183,21 +196,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                     Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Periodo PEPs',
-                  hintText: 'Ingresa Periodo PEPs ',
-                  isValid: null,
-                  onChange: (value) {
-                    periodoPeps = value;
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                  title: 'Periodo PEPs 2',
-                  hintText: 'Ingresa Periodo PEPs 2',
+                  title: 'Período PEPS 2',
+                  hintText: 'Ingresa Periodo PEPS 2',
                   isValid: null,
                   onChange: (value) {
                     periodoPeps2 = value;
@@ -205,8 +205,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 ),
                 const Gap(20),
                 CatalogoValorNacionalidad(
-                  title: 'País PEPs 2',
-                  hintText: 'Selecciona País PEPs 2',
+                  title: 'País Familiar PEPS ',
+                  hintText: 'Selecciona Familiar País PEPS',
                   onChanged: (item) {
                     if (item == null) return;
                     paisPeps2 = item.valor;

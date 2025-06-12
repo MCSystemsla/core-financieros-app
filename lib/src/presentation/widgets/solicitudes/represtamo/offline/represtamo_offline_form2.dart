@@ -4,10 +4,10 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -28,7 +28,8 @@ class ReprestamoOfflineForm2 extends StatefulWidget {
   State<ReprestamoOfflineForm2> createState() => _ReprestamoOfflineForm2State();
 }
 
-class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2> {
+class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? familiarEmpleado;
   String? familiarEntidad;
@@ -78,6 +79,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -401,4 +403,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

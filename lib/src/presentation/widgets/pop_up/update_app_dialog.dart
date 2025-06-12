@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
@@ -44,8 +42,6 @@ class UpdateAppDialog extends OdsDialog {
           );
           AzhonAppUpdate.update(model).then((value) {
             debugPrint('Resultado de la actualización: $value');
-          }).catchError((error) {
-            log('Error al intentar actualizar: $error');
           });
 
           Navigator.push(

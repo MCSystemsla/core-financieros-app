@@ -29,11 +29,15 @@ class ClassValidator {
     return null;
   }
 
-  static String? validateMinLength(String? value, int length) {
-    if (value == null || value.isEmpty) {
+  static String? validateMinLength(
+    String? value,
+    int length, {
+    bool isRequired = true,
+  }) {
+    if (isRequired && value == null && value!.isEmpty) {
       return 'input.input_validator'.tr();
     }
-    if (value.length < length) {
+    if (isRequired && value!.length < length) {
       return 'Este campo debe tener al menos $length caracteres';
     }
     return null;
@@ -44,6 +48,22 @@ class ClassValidator {
     if (numero == null || numero < 0 || numero > length) {
       return 'El valor no puede ser mayor a $length o menor a 0'.tr();
     }
+    return null;
+  }
+
+  static String? validateMaxIntValueAndMinValue(
+    String? value,
+    int length, {
+    bool isRequired = true,
+  }) {
+    if (isRequired && value == null && value!.isEmpty) {
+      return 'input.input_validator'.tr();
+    }
+    if (isRequired && value!.length < length ||
+        isRequired && value!.length > length) {
+      return 'Este campo debe tener como maximo $length caracteres';
+    }
+
     return null;
   }
 }

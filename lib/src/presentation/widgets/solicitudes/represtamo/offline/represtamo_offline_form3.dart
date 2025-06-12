@@ -18,7 +18,9 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +35,8 @@ class ReprestamoOfflineForm3 extends StatefulWidget {
   State<ReprestamoOfflineForm3> createState() => _ReprestamoOfflineForm3State();
 }
 
-class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
+class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -98,13 +101,14 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
   @override
   void initState() {
     final solicitud = widget.solicitud;
-    proposito =
-        Item(name: solicitud.objPropositoId!, value: solicitud.objPropositoId);
-    moneda = Item(name: solicitud.objMonedaId!, value: solicitud.objMonedaId!);
+    proposito = Item(
+        name: solicitud.objPropositoIdVer!, value: solicitud.objPropositoId);
+    moneda =
+        Item(name: solicitud.objMonedaIdVer!, value: solicitud.objMonedaId!);
     monto = solicitud.monto.toString();
     fechaDesembolso = solicitud.fechaDesembolso;
     producto = Item(
-      name: solicitud.objProductoId!,
+      name: solicitud.objProductoIdVer!,
       value: solicitud.objProductoId,
       // montoMaximo: solicitud.montoMaximo,
       // montoMinimo: solicitud.montoMinimo,
@@ -121,6 +125,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -154,8 +159,9 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              // initialValue: monto ?? '0',
-
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               onFieldSubmitted: (value) {
                 String formattedValue =
                     FormatField.formatMonto(montoController.text);
@@ -204,7 +210,6 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
             const Gap(20),
             SearchDropdownWidget(
               hintText: producto?.name ?? 'Seleccionar Producto',
@@ -265,23 +270,6 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               initialValue: observacion,
               icon: Icon(
@@ -335,15 +323,15 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!.name,
-                    saldoPrincipal: double.parse(monto ?? ''),
-                    tasaInteresMensual: tasaInteres!,
+                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                    formadePago: frecuenciaDePago?.name ?? '0',
+                    saldoPrincipal: double.parse(monto ?? '0'),
+                    tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudReprestamoCubit>().saveAnswers(
                             objFrecuenciaIdVer: frecuenciaDePago?.name,
@@ -351,11 +339,15 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
                             fechaDesembolso:
                                 fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda?.value,
-                            monto: int.tryParse(monto!),
+                            objMonedaIdVer: moneda?.name,
+                            monto: int.tryParse(monto ?? '0'),
                             objPropositoId: proposito?.value,
+                            objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
+                            objProductoIdVer: producto?.name,
                             objFrecuenciaId: frecuenciaDePago?.value,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            objFrecuenciaIdVer2: frecuenciaDePago?.name,
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),
                             cuota: calcularCuotaProvider
@@ -394,4 +386,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

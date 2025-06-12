@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
@@ -21,20 +22,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    super.initState();
     final bioProvider = global<BiometricCubit>();
 
     if (!bioProvider.state.isAuthenticated) {
       bioProvider.authenticate(context);
     }
-
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final isConnected = context.read<InternetConnectionCubit>().state;
     final shouldSync = CatalogoSync.needToSync();
-    if (shouldSync && isConnected.isConnected && isConnected.isCorrectNetwork) {
+    if (shouldSync && isConnected.isConnected) {
       return DownsloadingCatalogosWidget(
         onDownloadComplete: () {
           global<BiometricCubit>().authenticate(context);
@@ -50,10 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          floatingActionButton:
-              isConnected.isConnected && isConnected.isCorrectNetwork
-                  ? FloatingActionButton.extended(
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            floatingActionButton: isConnected.isConnected
+                ? SlideInUp(
+                    child: FloatingActionButton.extended(
                       label: const Row(
                         children: [
                           Icon(Icons.update_rounded),
@@ -65,15 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         context.pushTransparentRoute(
                             const DownsloadingCatalogosWidget()),
                       },
-                    )
-                  : const SizedBox(),
-          body: const Column(
-            children: [
-              HomeBannerWidget(),
-              Expanded(
-                child: HomeItemsWidget(),
+                    ),
+                  )
+                : const SizedBox(),
+            body: FadeIn(
+              child: const Column(
+                children: [
+                  HomeBannerWidget(),
+                  Expanded(
+                    child: HomeItemsWidget(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },

@@ -23,7 +23,9 @@ import 'package:core_financiero_app/src/presentation/bloc/departamentos/departam
 import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
@@ -34,8 +36,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -45,7 +47,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:signature/signature.dart';
 // import 'package:path/path.dart' as path; // Para manejar nombres de archivo
 
@@ -64,8 +65,8 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   late DateTime _selectedDate;
   @override
   void initState() {
-    _selectedDate = DateTime.now();
     super.initState();
+    _selectedDate = DateTime.now();
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -86,7 +87,7 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
   Widget build(BuildContext context) {
     final repository = ResponsesRepositoryImpl();
     final isRecurrentForm =
-        widget.typeProduct == 'AGUA Y SANEAMIENTO RECURRENTE';
+        widget.typeProduct == 'ScrKivaAguaSaneamientoRecurrente';
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -172,9 +173,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -287,28 +287,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                         final file = File(filePath);
                         await file.writeAsBytes(signatureImage!);
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .currentRoute,
-                            );
+
                         await customPopUp(
                           context: context,
                           dismissOnTouchOutside: false,
@@ -321,7 +300,50 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -352,6 +374,14 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -381,31 +411,30 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveAnswersOnLocalDB(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<RecurrenteAguaYSaneamientoCubit>()
-                                      .sendAnswers();
+
+                              await saveAnswersOnLocalDB(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<RecurrenteAguaYSaneamientoCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -442,8 +471,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -474,13 +503,13 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -496,9 +525,8 @@ class _EstandarSignState extends State<EstandarSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -630,7 +658,7 @@ class _EstandarSignState extends State<EstandarSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -644,7 +672,52 @@ class _EstandarSignState extends State<EstandarSign> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            if (!context.mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -676,6 +749,14 @@ class _EstandarSignState extends State<EstandarSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               FocusScope.of(context).unfocus();
                               final directory =
                                   await getApplicationDocumentsDirectory();
@@ -706,29 +787,28 @@ class _EstandarSignState extends State<EstandarSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveOfflineResponses(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context.read<EstandarCubit>().sendAnswers();
+
+                              await saveOfflineResponses(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context.read<EstandarCubit>().sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -765,8 +845,8 @@ class _EstandarSignState extends State<EstandarSign> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -792,13 +872,13 @@ class _EstandarSignState extends State<EstandarSign> {
             ..publicitarNegocio = state.publicitarNegocio
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -824,8 +904,6 @@ class _SaneamientoContentState extends State<SaneamientoContent>
 
   @override
   Widget build(BuildContext context) {
-    final isInternetConnection =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
     final size = MediaQuery.sizeOf(context);
 
@@ -862,254 +940,245 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             UploadImageWidget(
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () async {
-                if (!mounted) return;
-                if (!context.mounted) return;
-                final hasPermission = await _requestPermissions();
-                if (!context.mounted) return;
-                if (!hasPermission) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'No tienes permisos para usar la camara',
-                    onDone: () async {
-                      final isOpened = await openAppSettings();
-                      if (!context.mounted) return;
-                      if (isOpened) {
-                        context.pop();
-                      }
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                  return;
-                }
-                try {
-                  final photo = await picker.pickImage(
-                    source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
-                  );
-                  if (!mounted || photo == null) return;
-                  final appDir = await getApplicationDocumentsDirectory();
-                  final customDir = Directory('${appDir.path}/MyImages');
-
-                  // Crea el directorio si no existe
-                  if (!await customDir.exists()) {
-                    await customDir.create(recursive: true);
-                    log('Directorio creado: ${customDir.path}');
-                  }
-                  // Define la ruta de la imagen en el directorio
-                  final localPath =
-                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                  // Copia la imagen seleccionada al directorio
-                  final imageFile = File(photo.path);
-                  await imageFile.copy(localPath);
-                  if (!mounted) return;
-
+              onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
+                onImageSelected: (image) {
                   setState(() {
-                    selectedImage = photo;
-                    selectedImage1Path = localPath;
+                    selectedImage = image;
+                    selectedImage1Path = image?.path;
                   });
-                } on PlatformException catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.message}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                } catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.toString()}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                }
-              },
+                },
+              )),
+
+              // if (!mounted) return;
+              // if (!context.mounted) return;
+              // final hasPermission = await _requestPermissions();
+              // if (!context.mounted) return;
+              // if (!hasPermission) {
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'No tienes permisos para usar la camara',
+              //     onDone: () async {
+              //       final isOpened = await openAppSettings();
+              //       if (!context.mounted) return;
+              //       if (isOpened) {
+              //         context.pop();
+              //       }
+              //     },
+              //   ).showDialog(context, dialogType: DialogType.error);
+              //   return;
+              // }
+              // try {
+              //   final photo = await picker.pickImage(
+              //     source: ImageSource.camera,
+              //     maxHeight: 1080,
+              //     maxWidth: 1920,
+              //     imageQuality: 45,
+              //     preferredCameraDevice: CameraDevice.rear,
+              //   );
+              //   if (!mounted || photo == null) return;
+              //   final appDir = await getApplicationDocumentsDirectory();
+              //   final customDir = Directory('${appDir.path}/MyImages');
+
+              //   // Crea el directorio si no existe
+              //   if (!await customDir.exists()) {
+              //     await customDir.create(recursive: true);
+              //     log('Directorio creado: ${customDir.path}');
+              //   }
+              //   // Define la ruta de la imagen en el directorio
+              //   final localPath =
+              //       '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+              //   // Copia la imagen seleccionada al directorio
+              //   final imageFile = File(photo.path);
+              //   await imageFile.copy(localPath);
+              //   if (!mounted) return;
+
+              //   setState(() {
+              //     selectedImage = photo;
+              //     selectedImage1Path = localPath;
+              //   });
+              // } on PlatformException catch (e) {
+              //   if (!context.mounted) return;
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'Error al tomar la foto ${e.message}',
+              //     onDone: () => context.pop(),
+              //   ).showDialog(context, dialogType: DialogType.error);
+              // } catch (e) {
+              //   if (!context.mounted) return;
+              //   CustomAlertDialog(
+              //     context: context,
+              //     title: 'Error al tomar la foto ${e.toString()}',
+              //     onDone: () => context.pop(),
+              //   ).showDialog(context, dialogType: DialogType.error);
+              // }
             ),
             const Gap(20),
             UploadImageWidget(
               selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () async {
-                if (!mounted) return;
-                final hasPermission = await _requestPermissions();
-                if (!context.mounted) return;
-                if (!hasPermission) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'No tienes permisos para usar la camara',
-                    onDone: () async {
-                      final isOpened = await openAppSettings();
-                      if (!context.mounted) return;
-                      if (isOpened) {
-                        context.pop();
-                      }
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                  return;
-                }
-                try {
-                  final photo = await picker.pickImage(
-                    source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
-                  );
-                  if (!mounted || photo == null) return;
-                  final appDir = await getApplicationDocumentsDirectory();
-                  final customDir = Directory('${appDir.path}/MyImages');
-
-                  // Crea el directorio si no existe
-                  if (!await customDir.exists()) {
-                    await customDir.create(recursive: true);
-                    log('Directorio creado: ${customDir.path}');
-                  }
-                  // Define la ruta de la imagen en el directorio
-                  final localPath =
-                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-                  // Copia la imagen seleccionada al directorio
-                  final imageFile = File(photo.path);
-                  await imageFile.copy(localPath);
-                  if (!mounted) return;
+              onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
+                onImageSelected: (image) {
                   setState(() {
-                    selectedImage2 = photo;
-                    selectedImage2Path = localPath;
+                    selectedImage2 = image;
+                    selectedImage2Path = image?.path;
                   });
-                } on PlatformException catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.code}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                } catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.toString()}',
-                    onDone: () async {
-                      final isOpened = await openAppSettings();
-                      if (!context.mounted) return;
-                      if (isOpened) {
-                        context.pop();
-                      }
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                }
-              },
+                },
+              )),
+              //   if (!mounted) return;
+              //   final hasPermission = await _requestPermissions();
+              //   if (!context.mounted) return;
+              //   if (!hasPermission) {
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'No tienes permisos para usar la camara',
+              //       onDone: () async {
+              //         final isOpened = await openAppSettings();
+              //         if (!context.mounted) return;
+              //         if (isOpened) {
+              //           context.pop();
+              //         }
+              //       },
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //     return;
+              //   }
+              //   try {
+              //     final photo = await picker.pickImage(
+              //       source: ImageSource.camera,
+              //       maxHeight: 1080,
+              //       maxWidth: 1920,
+              //       imageQuality: 45,
+              //       preferredCameraDevice: CameraDevice.rear,
+              //     );
+              //     if (!mounted || photo == null) return;
+              //     final appDir = await getApplicationDocumentsDirectory();
+              //     final customDir = Directory('${appDir.path}/MyImages');
+
+              //     // Crea el directorio si no existe
+              //     if (!await customDir.exists()) {
+              //       await customDir.create(recursive: true);
+              //       log('Directorio creado: ${customDir.path}');
+              //     }
+              //     // Define la ruta de la imagen en el directorio
+              //     final localPath =
+              //         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+              //     // Copia la imagen seleccionada al directorio
+              //     final imageFile = File(photo.path);
+              //     await imageFile.copy(localPath);
+              //     if (!mounted) return;
+              //     setState(() {
+              //       selectedImage2 = photo;
+              //       selectedImage2Path = localPath;
+              //     });
+              //   } on PlatformException catch (e) {
+              //     if (!context.mounted) return;
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'Error al tomar la foto ${e.message}',
+              //       onDone: () => context.pop(),
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //   } catch (e) {
+              //     if (!context.mounted) return;
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'Error al tomar la foto ${e.toString()}',
+              //       onDone: () async {
+              //         final isOpened = await openAppSettings();
+              //         if (!context.mounted) return;
+              //         if (isOpened) {
+              //           context.pop();
+              //         }
+              //       },
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //   }
+              // },
             ),
             const Gap(15),
             UploadImageWidget(
               selectedImage: selectedImage3,
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
-              onPressed: () async {
-                if (!mounted) return;
-                final hasPermission = await _requestPermissions();
-                if (!context.mounted) return;
-                if (!hasPermission) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'No tienes permisos para usar la camara',
-                    onDone: () async {
-                      final isOpened = await openAppSettings();
-                      if (!context.mounted) return;
-                      if (isOpened) {
-                        context.pop();
-                      }
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                  return;
-                }
-                try {
-                  final photo = await picker.pickImage(
-                    source: ImageSource.camera,
-                    maxHeight: 600,
-                    maxWidth: 600,
-                    imageQuality: 85,
-                  );
-                  if (!mounted || photo == null) return;
-                  final appDir = await getApplicationDocumentsDirectory();
-                  final customDir = Directory('${appDir.path}/MyImages');
+              onPressed: () => context.pushTransparentRoute(
+                CameraCaptureScreen(
+                  onImageSelected: (image) {
+                    setState(() {
+                      selectedImage3 = image;
+                      selectedImage3Path = image?.path;
+                    });
+                  },
+                ),
+              ),
+              // onPressed: () async {
+              //   if (!mounted) return;
+              //   final hasPermission = await _requestPermissions();
+              //   if (!context.mounted) return;
+              //   if (!hasPermission) {
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'No tienes permisos para usar la camara',
+              //       onDone: () async {
+              //         final isOpened = await openAppSettings();
+              //         if (!context.mounted) return;
+              //         if (isOpened) {
+              //           context.pop();
+              //         }
+              //       },
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //     return;
+              //   }
+              //   try {
+              //     final photo = await picker.pickImage(
+              //       source: ImageSource.camera,
+              //       maxHeight: 1080,
+              //       maxWidth: 1920,
+              //       imageQuality: 45,
+              //       preferredCameraDevice: CameraDevice.rear,
+              //     );
+              //     if (!mounted || photo == null) return;
+              //     final appDir = await getApplicationDocumentsDirectory();
+              //     final customDir = Directory('${appDir.path}/MyImages');
 
-                  // Crea el directorio si no existe
-                  if (!await customDir.exists()) {
-                    await customDir.create(recursive: true);
-                    log('Directorio creado: ${customDir.path}');
-                  }
-                  // Define la ruta de la imagen en el directorio
-                  final localPath =
-                      '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+              //     // Crea el directorio si no existe
+              //     if (!await customDir.exists()) {
+              //       await customDir.create(recursive: true);
+              //       log('Directorio creado: ${customDir.path}');
+              //     }
+              //     // Define la ruta de la imagen en el directorio
+              //     final localPath =
+              //         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-                  // Copia la imagen seleccionada al directorio
-                  final imageFile = File(photo.path);
-                  await imageFile.copy(localPath);
-                  if (!mounted) return;
-                  setState(() {
-                    selectedImage3 = photo;
-                    selectedImage3Path = localPath;
-                  });
-                } on PlatformException catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.message}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                } catch (e) {
-                  if (!context.mounted) return;
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Error al tomar la foto ${e.toString()}',
-                    onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
-                }
-              },
+              //     // Copia la imagen seleccionada al directorio
+              //     final imageFile = File(photo.path);
+              //     await imageFile.copy(localPath);
+              //     if (!mounted) return;
+              //     setState(() {
+              //       selectedImage3 = photo;
+              //       selectedImage3Path = localPath;
+              //     });
+              //   } on PlatformException catch (e) {
+              //     if (!context.mounted) return;
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'Error al tomar la foto ${e.message}',
+              //       onDone: () => context.pop(),
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //   } catch (e) {
+              //     if (!context.mounted) return;
+              //     CustomAlertDialog(
+              //       context: context,
+              //       title: 'Error al tomar la foto ${e.toString()}',
+              //       onDone: () => context.pop(),
+              //     ).showDialog(context, dialogType: DialogType.error);
+              //   }
+              // },
             ),
-            // UploadImageWidget(
-            //   selectedImage: selectedImage4,
-            //   title: '4-  ${'Agregar foto de cedula'.tr()}',
-            //   onPressed: () async {
-            //     await picker
-            //         .pickImage(
-            //       source: ImageSource.camera,
-            //       maxHeight: 600,
-            //       maxWidth: 600,
-            //       imageQuality: 85,
-            //     )
-            //         .then(
-            //       (XFile? photo) async {
-            //         if (photo != null) {
-            //           final appDir = await getApplicationDocumentsDirectory();
-            //           final customDir = Directory('${appDir.path}/MyImages');
-
-            //           // Crea el directorio si no existe
-            //           if (!await customDir.exists()) {
-            //             await customDir.create(recursive: true);
-            //             log('Directorio creado: ${customDir.path}');
-            //           }
-            //           // Define la ruta de la imagen en el directorio
-            //           final localPath =
-            //               '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-            //           // Copia la imagen seleccionada al directorio
-            //           final imageFile = File(photo.path);
-            //           await imageFile.copy(localPath);
-            //           selectedImage4 = photo;
-            //           selectedImage4Path = localPath;
-            //           setState(() {});
-            //         }
-            //       },
-            //     );
-            //   },
-            // ),
             const Gap(20),
             ButtonActionsWidget(
               onPreviousPressed: () {
-                isInternetConnection
-                    ? context.push('/cartera/formulario-kiva')
-                    : context.push('/cartera/kiva-offline');
+                // isInternetConnection
+                //     ? context.pushReplacement('/cartera/formulario-kiva')
+                //     : context.pushReplacement('/cartera/kiva-offline');
+                context.pop();
               },
               onNextPressed: () async {
                 if (selectedImage == null ||
@@ -1154,10 +1223,10 @@ class _SaneamientoContentState extends State<SaneamientoContent>
     );
   }
 
-  Future<bool> _requestPermissions() async {
-    final cameraStatus = await Permission.camera.request();
-    return cameraStatus.isGranted;
-  }
+  // Future<bool> _requestPermissions() async {
+  //   final cameraStatus = await Permission.camera.request();
+  //   return cameraStatus.isGranted;
+  // }
 
   @override
   bool get wantKeepAlive => true;
@@ -1221,9 +1290,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -1355,7 +1423,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                               formularioKiva: context
                                   .read<KivaRouteCubit>()
                                   .state
-                                  .currentRoute,
+                                  .nombreFormularioKiva,
                             );
                         await customPopUp(
                           context: context,
@@ -1369,7 +1437,50 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -1400,6 +1511,14 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -1429,31 +1548,30 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveAnswersOnLocalDB(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<AguaYSaneamientoCubit>()
-                                      .sendAnswers();
+
+                              await saveAnswersOnLocalDB(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<AguaYSaneamientoCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -1490,8 +1608,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
     ImageModel imageModel,
     String msgDialog,
   ) async {
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1522,13 +1640,13 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }
 
@@ -1544,9 +1662,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -1659,28 +1776,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                         final file = File(filePath);
                         await file.writeAsBytes(signatureImage!);
                         if (!context.mounted) return;
-                        context.read<UploadUserFileCubit>().uploadUserFiles(
-                              typeSigner: typeSigner,
-                              cedula:
-                                  context.read<KivaRouteCubit>().state.cedula,
-                              numero:
-                                  context.read<KivaRouteCubit>().state.numero,
-                              tipoSolicitud: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .tipoSolicitud,
-                              fotoFirma: file.path,
-                              solicitudId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
-                              formularioKiva: context
-                                  .read<KivaRouteCubit>()
-                                  .state
-                                  .currentRoute,
-                            );
+
                         await customPopUp(
                           context: context,
                           dismissOnTouchOutside: false,
@@ -1693,7 +1789,50 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                           textButtonAcept: 'Ok',
                           colorButtonAcept: AppColors.getPrimaryColor(),
                           onPressedAccept: () {
-                            context.pushReplacement('/');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: context.read<UploadUserFileCubit>(),
+                                  child: KivaImageSending(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                    onRetry: () {
+                                      context
+                                          .read<UploadUserFileCubit>()
+                                          .uploadUserFiles(
+                                            typeSigner: typeSigner,
+                                            cedula: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .cedula,
+                                            numero: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .numero,
+                                            tipoSolicitud: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .tipoSolicitud,
+                                            fotoFirma: file.path,
+                                            solicitudId: int.parse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId,
+                                            ),
+                                            formularioKiva: context
+                                                .read<KivaRouteCubit>()
+                                                .state
+                                                .nombreFormularioKiva,
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -1724,6 +1863,14 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -1753,31 +1900,47 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                 return;
                               }
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveMejoraViviendaForm(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<MejoraViviendaCubit>()
-                                      .sendAnswers();
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .saveImagesLocal(
+                                    imageModel: ImageModel()
+                                      ..typeSigner = typeSigner.name
+                                      ..imagenFirma = localPath
+                                      ..imagen1 = imageProvider.imagen1
+                                      ..imagen2 = imageProvider.imagen2
+                                      ..imagen3 = imageProvider.imagen3
+                                      ..solicitudId = int.tryParse(
+                                        context
+                                            .read<KivaRouteCubit>()
+                                            .state
+                                            .solicitudId,
+                                      ),
+                                  );
+
+                              await saveMejoraViviendaForm(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                '',
+                              );
+
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<MejoraViviendaCubit>()
+                                    .sendAnswers();
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -1815,8 +1978,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
     String msgDialog,
   ) async {
     if (!context.mounted) return;
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -1842,12 +2005,12 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
             ..username = '',
         );
-
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
   }
 }

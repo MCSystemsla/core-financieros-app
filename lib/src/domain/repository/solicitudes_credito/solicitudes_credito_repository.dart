@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
@@ -20,6 +22,9 @@ abstract class SolicitudesCreditoRepository {
   Future<(bool, String)> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   });
+  Future<(bool, String)> createSolicitudAsalariado({
+    required SolicitudAsalariado solicitudAsalariado,
+  });
   Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
   Future<CatalogoNacionalidad> getNacionalidadByCodigo({
     required String codigo,
@@ -29,6 +34,7 @@ abstract class SolicitudesCreditoRepository {
   Future<ReprestamoUserCedula> getUserReprestamoByCedula({
     required String cedula,
   });
+  Future<ParametroValor> getParametroByName({required String nombre});
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -46,12 +52,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
 
-        return (false, '${resp['message'] as String} ${endpoint.body}');
+        return (false, (resp.toString()));
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
 
-        return (false, '${resp['message'] as String} ${endpoint.body}');
+        return (false, (resp.toString()));
       }
 
       _logger.i(resp);
@@ -173,6 +179,44 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         throw AppException(optionalMsg: resp['message']);
       }
       final data = ReprestamoUserCedula.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, String)> createSolicitudAsalariado({
+    required SolicitudAsalariado solicitudAsalariado,
+  }) async {
+    final endpoint = SolicitudAsalariadoEndpoint(
+      solicitudAsalariado: solicitudAsalariado,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.e(resp);
+        _logger.i(endpoint.body);
+        return (false, resp['message'] as String);
+      }
+      _logger.i(resp);
+      _logger.i(endpoint.body);
+
+      return (true, resp['message'] as String);
+    } catch (e) {
+      _logger.e(e);
+      _logger.i(endpoint.body);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<ParametroValor> getParametroByName({required String nombre}) async {
+    final endpoint = ObtenerParametrosEndpoint(nombre: nombre);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = ParametroValor.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

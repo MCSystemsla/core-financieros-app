@@ -9,6 +9,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
   KivaRouteCubit() : super(KivaRouteInitial());
 
   void setCurrentRouteProduct({
+    int? tableRowId,
     required String route,
     required String solicitudId,
     required String nombre,
@@ -17,6 +18,7 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
     required String numero,
     required int cantidadHijos,
     required String cedula,
+    required String nombreFormularioKiva,
   }) {
     emit(state.copyWith(
       currentRoute: route,
@@ -27,7 +29,10 @@ class KivaRouteCubit extends Cubit<KivaRouteState> {
       numero: numero,
       cantidadHijos: cantidadHijos,
       cedula: cedula,
+      nombreFormularioKiva: nombreFormularioKiva,
     ));
     log('Solicitud ${state.solicitudId} - Route ${state.currentRoute}');
+    log('CEDULA ${state.cedula} - Route ${state.currentRoute}');
+    log('Nombre formulario Kiva${state.nombreFormularioKiva} - Route ${state.currentRoute}');
   }
 }

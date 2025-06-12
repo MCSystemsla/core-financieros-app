@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InputIcon extends StatefulWidget {
-  final String image;
   final String item;
   final String? suffixIcon;
   final String? hintText;
   final String? errorText;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final String? Function(String?) validator;
   final bool? obscureText;
   final Function(String)? onChanged;
@@ -18,11 +17,10 @@ class InputIcon extends StatefulWidget {
 
   final bool? hasError;
   const InputIcon({
-    required this.image,
-    required this.controller,
-    required this.focusNode,
-    required this.item,
     required this.validator,
+    this.controller,
+    this.focusNode,
+    required this.item,
     this.inputFormatters,
     this.errorText,
     this.onTapIcon,

@@ -45,7 +45,6 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
   @override
   void initState() {
     super.initState();
-    // context.read<InternetConnectionCubit>().getInternetStatusConnection();
     parentescoVer =
         widget.responseLocalDb.objParentescoBeneficiarioSeguroId1Ver;
     beneficiarioSeguro = widget.responseLocalDb.beneficiarioSeguro;

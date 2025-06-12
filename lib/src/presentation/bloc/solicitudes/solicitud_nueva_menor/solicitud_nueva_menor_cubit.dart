@@ -270,9 +270,13 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     bool? hasVerified,
     int? montoMinimo,
     int? montoMaximo,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     emit(
       state.copyWith(
+          cedulaFrontPath: cedulaFrontPath,
+          cedulaBackPath: cedulaBackPath,
           prestamoInteres: prestamoInteres,
           hasVerified: hasVerified,
           isDone: isDone,

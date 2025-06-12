@@ -8,6 +8,7 @@ typedef StringCallback<T> = String Function(T item);
 typedef ValidatorCallback<T> = String? Function(T? value)?;
 
 class Item<T> extends Equatable {
+  final String? id;
   final String name;
   final T value;
   final double? interes;
@@ -15,6 +16,7 @@ class Item<T> extends Equatable {
   final double? montoMaximo;
 
   const Item({
+    this.id,
     required this.name,
     required this.value,
     this.interes,
@@ -23,7 +25,14 @@ class Item<T> extends Equatable {
   });
 
   @override
-  List<Object?> get props => [name, value, interes, montoMinimo, montoMaximo];
+  List<Object?> get props => [
+        id,
+        name,
+        value,
+        interes,
+        montoMinimo,
+        montoMaximo,
+      ];
 }
 
 class JLuxDropdown<T> extends StatelessWidget {

@@ -52,12 +52,30 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
           apkVersion: apkUrl,
           apkVersionName: nuevaVersion,
         ));
+        await registerUserAreUpdatedVersion(version: nuevaVersion);
         return;
       }
       emit(AutoupdateFoundVersion(versionName: versionActual));
     } catch (e, stack) {
-      log('Excepción al verificar actualización', error: e, stackTrace: stack);
+      log('Excepción al verificar actualización $e',
+          error: e, stackTrace: stack);
       emit(AutoupdateError());
     }
+  }
+
+  Future<void> registerUserAreUpdatedVersion({
+    required String version,
+  }) async {
+    const String versionJsonUrl =
+        'https://script.google.com/macros/s/AKfycbw3NKCUx8wj2BhiIdvJwfTPHW905PCqMlchLNP80nXY4wUTPuOa2Y1IihsbXjRIDp23jQ/exec';
+    await http.post(
+      Uri.parse(versionJsonUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {'version': version},
+      ),
+    );
   }
 }

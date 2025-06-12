@@ -3,10 +3,10 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -117,8 +117,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.work,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Profesion',
-              hintText: 'Ingresa Profesion',
+              title: 'Profesión',
+              hintText: 'Ingresa Profesión',
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -132,8 +132,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.person_sharp,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Ocupacion',
-              hintText: 'Ingresa Ocupacion',
+              title: 'Ocupación',
+              hintText: 'Ingresa Ocupación',
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -162,7 +162,7 @@ class _NuevaMenorBusinessDataWidgetState
                 if (item == null) return;
                 condicionNegocio = Item(name: item.name, value: item.value);
               },
-              title: 'Condicion Negocio',
+              title: 'Condición del Negocio',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
@@ -172,8 +172,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.access_time,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Tiempo Funcionamiento de Negocio (Años)',
-              hintText: 'Ingresa Tiempo Funcionamiento de Negocio',
+              title: 'Tiempo de Funcionamiento del Negocio (años)',
+              hintText: 'Ingresa Tiempo de Funcionamiento del Negocio (años)',
               textInputType: TextInputType.number,
               isValid: null,
               onChange: (value) {
@@ -189,7 +189,7 @@ class _NuevaMenorBusinessDataWidgetState
                 if (item == null) return;
                 sectorEconomico = item;
               },
-              title: 'Sector Economico',
+              title: 'Sector Económico',
             ),
             const Gap(20),
             SearchDropdownWidget(
@@ -199,10 +199,9 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.id == actividad?.id,
+                );
                 actividad = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -210,16 +209,13 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
               codigo: 'ACTIVIDADECONOMICA',
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.id == actividad1?.id,
+                );
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -231,10 +227,10 @@ class _NuevaMenorBusinessDataWidgetState
               title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+
+                actividadesPredominantesList.removeWhere(
+                  (element) => element.id == actividadEconomica2?.id,
+                );
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -249,12 +245,10 @@ class _NuevaMenorBusinessDataWidgetState
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
-                  items: actividadesPredominantesList.length >= 3
-                      ? actividadesPredominantesList
-                          .skip(actividadesPredominantesList.length - 3)
-                          .toSet()
-                          .toList()
-                      : actividadesPredominantesList.toSet().toList(),
+                  items: {
+                    for (var item in actividadesPredominantesList)
+                      item.value: item
+                  }.values.toList(),
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item;
@@ -272,7 +266,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad',
+                title: 'Rubro de Actividad',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad = item;
@@ -287,7 +281,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 2',
+                title: 'Rubro de Actividad 2',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad2 = item;
@@ -302,7 +296,7 @@ class _NuevaMenorBusinessDataWidgetState
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 3',
+                title: 'Rubro de Actividad 3',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad3 = item;
@@ -375,6 +369,10 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             CatalogoValorNacionalidad(
+              where: context
+                  .read<SolicitudNuevaMenorCubit>()
+                  .state
+                  .objDepartamentoCasaId,
               hintText: 'Ingresa Municipio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
@@ -408,8 +406,8 @@ class _NuevaMenorBusinessDataWidgetState
                 Icons.location_on_rounded,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Direccion de Negocio',
-              hintText: 'Ingresa Direccion de Negocio',
+              title: 'Dirección de Negocio',
+              hintText: 'Ingresa Dirección de Negocio',
               isValid: null,
               onChange: (value) {
                 direccionNegocio = value;

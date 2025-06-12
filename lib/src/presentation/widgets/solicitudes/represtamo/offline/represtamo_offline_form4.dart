@@ -23,7 +23,8 @@ class ReprestamoOfflineForm4 extends StatefulWidget {
   State<ReprestamoOfflineForm4> createState() => _ReprestamoOfflineForm4State();
 }
 
-class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
+class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
+    with AutomaticKeepAliveClientMixin {
   List<Item> actividadesPredominantesList = [];
   List<Item> rubrosActividadesPredominanteList = [];
   String? profesion;
@@ -55,35 +56,35 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
   void initState() {
     final solicitud = widget.solicitud;
     actividad = Item(
-      name: solicitud.objActividadId!,
+      name: solicitud.objActividadIdVer!,
       value: solicitud.objActividadId,
     );
     actividad1 = Item(
-      name: solicitud.objActividadId1!,
+      name: solicitud.objActividadId1Ver!,
       value: solicitud.objActividadId1,
     );
     actividadEconomica2 = Item(
-      name: solicitud.objActividadId2!,
+      name: solicitud.objActividadId2Ver!,
       value: solicitud.objActividadId2,
     );
     actividadPredominante = Item(
-      name: solicitud.objActividadPredominante!,
+      name: solicitud.objActividadPredominanteVer!,
       value: solicitud.objActividadPredominante,
     );
     rubroActividad = Item(
-      name: solicitud.objRubroActividad!,
+      name: solicitud.objRubroActividadVer!,
       value: solicitud.objRubroActividad,
     );
     rubroActividad2 = Item(
-      name: solicitud.objRubroActividad2!,
+      name: solicitud.objRubroActividad2Ver!,
       value: solicitud.objRubroActividad2,
     );
     rubroActividad3 = Item(
-      name: solicitud.objRubroActividad3!,
+      name: solicitud.objRubroActividad3Ver!,
       value: solicitud.objRubroActividad3,
     );
     objRubroActividadPredominante = Item(
-      name: solicitud.objRubroActividadPredominante!,
+      name: solicitud.objRubroActividadPredominanteVer!,
       value: solicitud.objRubroActividadPredominante,
     );
 
@@ -92,6 +93,7 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -298,16 +300,26 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
                   );
                   context.read<SolicitudReprestamoCubit>().saveAnswers(
                         objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
                         objRubroActividad: rubroActividad?.value,
+                        objRubroActividadVer: rubroActividad?.name,
                         objRubroActividad2: rubroActividad2?.value,
+                        objRubroActividad2Ver: rubroActividad2?.name,
                         objRubroActividad3: rubroActividad3?.value,
+                        objRubroActividad3Ver: rubroActividad3?.name,
                         objActividadId2: actividadEconomica2?.value,
+                        objActividadId2Ver: actividadEconomica2?.name,
                         objSectorId: sectorEconomico?.value,
-                        // sectorEconomico: sectorEconomico2,
+                        objSectorIdVer: sectorEconomico?.name,
                         objActividadId: actividad?.value,
+                        objActividadIdVer: actividad?.name,
                         objActividadId1: actividad1?.value,
+                        objActividadId1Ver: actividad1?.name,
                         objRubroActividadPredominante:
                             objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
                       );
                 },
               ),
@@ -333,4 +345,7 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

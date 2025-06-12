@@ -6,12 +6,11 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/exceptions/vpn_no_found/vpn_no_found.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/skeleton_loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/kiva_search_delegate.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -34,28 +33,28 @@ class KivaFormScreen extends StatefulWidget {
 class _KivaFormScreenState extends State<KivaFormScreen> {
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isCorrectNetwork =
-        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
-    if (!isCorrectNetwork) {
-      return const VpnNoFound(
-        routeIsVpnConnected: '/cartera/formulario-kiva',
-      );
-    }
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (ctx) => SolicitudesPendientesCubit(
-                  SolicitudesPendientesRepositoryImpl(),
-                )..getSolicitudesPendientes()),
+          create: (ctx) => SolicitudesPendientesCubit(
+            SolicitudesPendientesRepositoryImpl(),
+          )..getSolicitudesPendientes(),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.pop();
+            },
+          ),
           title: Text('cartera.title'.tr()),
         ),
         body: BlocConsumer<SolicitudesPendientesCubit,
@@ -63,6 +62,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
+
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(
                 solicitudes: state.solicitudesPendienteResponse.map(
@@ -73,7 +73,9 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                       ..moneda = e.moneda
                       ..numero = e.numero
                       ..producto = e.producto
+                      ..nombreFormulario = e.nombreFormulario
                       ..solicitudId = e.id
+                      ..cedula = e.cedula
                       ..sucursal = LocalStorage().database
                       ..nombre = e.nombre
                       ..monto = double.tryParse(e.monto.toString()) ?? 0.00
@@ -121,7 +123,6 @@ class _KIvaFormContent extends StatefulWidget {
 
 class _KIvaFormContentState extends State<_KIvaFormContent>
     with WidgetsBindingObserver {
-  late List<Solicitud> _filteredSolicitudes;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -132,35 +133,7 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   }
 
   @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-    super.initState();
-  }
-
-  void _filterSolicitudes(String query) {
-    setState(() {
-      if (query.trim().isEmpty) {
-        _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-
-        return;
-      }
-      _filteredSolicitudes = widget.solicitudesPendienteResponse
-          .where(
-            (solicitud) =>
-                solicitud.nombre.toLowerCase().contains(query.toLowerCase()) ||
-                solicitud.producto.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_filteredSolicitudes.isEmpty) {
-      return const _OnSolocitudesEmpty();
-    }
-
     return RefreshIndicator(
       onRefresh: () async {
         context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
@@ -171,13 +144,16 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
             Container(
               margin: const EdgeInsets.all(15),
               child: SearchBarCustom(
-                onItemSelected: (value) {
-                  if (value == null) return;
-                  _filterSolicitudes(value);
+                onTap: () {
+                  showSearch(
+                    context: context,
+                    delegate: KivaSearchDelegate(
+                      solicitudes: widget.solicitudesPendienteResponse,
+                    ),
+                  );
                 },
-                onPressed: () {
-                  _filterSolicitudes('');
-                },
+                onItemSelected: (value) {},
+                onPressed: () {},
               ),
             ),
             const Gap(10),
@@ -193,12 +169,12 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: _filteredSolicitudes.length,
+              itemCount: widget.solicitudesPendienteResponse.length,
               separatorBuilder: (BuildContext context, int index) =>
                   const KivaFormSpacing(),
               itemBuilder: (BuildContext context, int index) {
                 return _RequestWidget(
-                  solicitud: _filteredSolicitudes[index],
+                  solicitud: widget.solicitudesPendienteResponse[index],
                 );
               },
             ),
@@ -209,8 +185,8 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
   }
 }
 
-class _OnSolocitudesEmpty extends StatelessWidget {
-  const _OnSolocitudesEmpty();
+class OnSolocitudesEmpty extends StatelessWidget {
+  const OnSolocitudesEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +212,8 @@ class _OnSolocitudesEmpty extends StatelessWidget {
   }
 }
 
+enum KivaStatusForm { matching, notMatching }
+
 class _RequestWidget extends StatefulWidget {
   final Solicitud solicitud;
   const _RequestWidget({
@@ -249,27 +227,28 @@ class _RequestWidget extends StatefulWidget {
 class _RequestWidgetState extends State<_RequestWidget> {
   int? numSolicitud;
   bool isMatching = false;
+  KivaStatusForm statusForm = KivaStatusForm.notMatching;
   @override
   void initState() {
+    super.initState();
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
-    super.initState();
   }
 
   Future<void> _getNumSolicitud() async {
     final result = await context
         .read<SolicitudesPendientesLocalDbCubit>()
-        .getItemsRecurrents(typeProduct: widget.solicitud.producto);
+        .getItemsRecurrents(typeProduct: widget.solicitud.nombreFormulario);
 
     setState(() {
       isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);
+      statusForm =
+          isMatching ? KivaStatusForm.matching : KivaStatusForm.notMatching;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isNetworkConnected =
-        context.watch<InternetConnectionCubit>().state.isCorrectNetwork;
     // bool isMatching = numSolicitud == int.tryParse(widget.solicitud.id);
 
     return ListTile(
@@ -278,18 +257,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
       onTap: () async {
         context.read<InternetConnectionCubit>().getInternetStatusConnection();
 
-        if (!isNetworkConnected) {
-          CustomAlertDialog(
-            context: context,
-            title: 'No estas en el Rango de la VPN',
-            onDone: () {
-              context.pop();
-            },
-          ).showDialog(context);
-          return;
-        }
-
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
+              nombreFormularioKiva: widget.solicitud.nombreFormulario,
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
               cedula: widget.solicitud.cedula ?? '',
               tipoSolicitud: widget.solicitud.tipoSolicitud,
@@ -306,7 +275,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           return;
         }
 
-        context.pushReplacement('/online', extra: widget.solicitud.producto);
+        context.push('/online', extra: widget.solicitud.nombreFormulario);
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),
@@ -326,7 +295,10 @@ class _RequestWidgetState extends State<_RequestWidget> {
         ],
       ),
       leading: CircleAvatar(
-        backgroundColor: isMatching ? Colors.yellow : Colors.green,
+        backgroundColor: switch (statusForm) {
+          KivaStatusForm.matching => Colors.yellow,
+          KivaStatusForm.notMatching => Colors.green,
+        },
         child: const Icon(Icons.wallet),
       ),
     );

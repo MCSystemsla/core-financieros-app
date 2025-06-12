@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
@@ -19,8 +20,11 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
       final solicitudesOffline = objectBoxService.getSolicitudesResponse();
       final solicitudesOfflineReprestamo =
           objectBoxService.getSolicitudesReprestamoResponse();
+      final solicitudesAsalariadoOffline =
+          objectBoxService.getSolicitudesAsalariadoResponse();
       emit(
         OnSolicitudesOfflineSuccess(
+          solicitudesAsalariado: solicitudesAsalariadoOffline,
           solicitudesOffline: solicitudesOffline.reversed.toList(),
           solicitudesOfflineReprestamo:
               solicitudesOfflineReprestamo.reversed.toList(),

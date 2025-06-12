@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -34,6 +35,7 @@ class EstandarOfflineForm extends StatefulWidget {
 }
 
 class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
+  ImageModel? imageModel;
   @override
   void initState() {
     super.initState();
@@ -43,8 +45,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getRecurrentEstandar(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -64,27 +67,29 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
             }
             if (state.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    typeSigner: resp.imageModel?.typeSigner ?? '',
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: resp.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: resp.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: resp.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: resp.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
 
               if (!context.mounted) return;
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    widget.typeProduct,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       widget.typeProduct,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -349,17 +354,19 @@ class EstandarForm extends StatefulWidget {
 }
 
 class _EstandarFormState extends State<EstandarForm> {
+  ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getEstandar(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -380,25 +387,27 @@ class _EstandarFormState extends State<EstandarForm> {
             }
             if (stateEstandar.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                    typeSigner: state.imageModel?.typeSigner ?? '',
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

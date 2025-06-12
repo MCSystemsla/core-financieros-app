@@ -1,43 +1,43 @@
 {
   "upload_image": {
-    "title": "Selecciona una Opcion",
-    "camera": "Camara",
-    "gallery": "Galeria"
+    "title": "Selecciona una Opción",
+    "camera": "Cámara",
+    "gallery": "Galería"
   },
-   "button": {
-    "login": "Iniciar Sesion",
+  "button": {
+    "login": "Iniciar Sesión",
     "previous": "Anterior",
     "next": "Siguiente",
     "signed": "Firmar",
     "send": "Enviar",
     "exit": "Salir"
-   },
-   "input": {
+  },
+  "input": {
     "placeholder": "Ingresa tu texto",
-    "select_option": "Selecciona una opcion",
+    "select_option": "Selecciona una opción",
     "input_validator": "Este campo es obligatorio",
-    "yes": "Si",
+    "yes": "Sí",
     "no": "No",
     "form_response": "Resumen de respuestas completadas en el formulario",
     "select_department": "Selecciona un Departamento"
-   },
-   "home": {
-    "item1": "Tesoreria",
+  },
+  "home": {
+    "item1": "Tesorería",
     "item2": "Ahorro",
     "item3": "PLA",
     "item4": "Requerimientos",
     "item5": "Cartera"
-   },
-   "auth": {
+  },
+  "auth": {
     "user": "Usuario",
     "password": "Contraseña",
     "branch": "Sucursal",
     "select_branch": "Selecciona una Sucursal",
     "logged": "Usuario Logueado exitosamente",
-    "errors" : {
+    "errors": {
       "username": "Usuario es obligatorio",
       "password": "Contraseña es obligatoria",
-      "branchTeam": "La Sucural es obligatorio"
+      "branchTeam": "La Sucursal es obligatoria"
     }
   },
   "forms": {
@@ -50,19 +50,19 @@
       "title": "Entorno Familiar",
       "person_origin": "¿De dónde es originario?",
       "childs_age": "¿Qué edades tienen sus hijos?",
-      "childs_education": "¿Qué tipo de estudios reciben sus hijos?¿Porqué?",
+      "childs_education": "¿Qué tipo de estudios reciben sus hijos? ¿Por qué?",
       "question1": "¿Qué le inspiró a escoger esta carrera?",
-      "question2": "¿Sentís que te estas realizando profesionalmente? ¿Por qué?",
+      "question2": "¿Sentís que te estás realizando profesionalmente? ¿Por qué?",
       "question3": "¿Quién o quiénes te apoyan en tus estudios?",
-      "question4": "¿En quá trabaja o qué negocio tienen tus padres o tutores?",
+      "question4": "¿En qué trabaja o qué negocio tienen tus padres o tutores?",
       "question5": "¿Tienes otros ingresos?",
       "question6": "¿Cuáles son?"
     },
     "develpment_and_description": {
       "title": "Descripción y desarrollo del financiamiento",
-      "aboutCredit": "¿Cuéntenos que le impulsó a optar por este tipo de crédito?",
+      "aboutCredit": "¿Cuéntenos qué le impulsó a optar por este tipo de crédito?",
       "who_support": "¿Quién o quiénes lo apoyarán a cumplir lo que se ha propuesto con este financiamiento?",
-      "about_future": "¿Cree usted que con este crédito va poder cumplir este proyecto?",
+      "about_future": "¿Cree usted que con este crédito va a poder cumplir este proyecto?",
       "have_othe_invertion": "¿Tiene otros ingresos? ¿Cuáles?"
     },
     "impacto_social_kiva": {
@@ -99,10 +99,10 @@
       "question5": "Otros datos relevantes o interesantes del cliente"
     },
     "migrantes_economicos": {
-      "title": "Migrantes Economicos",
+      "title": "Migrantes Económicos",
       "primer_prestamo": {
-        "title": "Primer Prestamo",
-        "question1": "¿Para que utilizó su primer préstamo?",
+        "title": "Primer Préstamo",
+        "question1": "¿Para qué utilizó su primer préstamo?",
         "question2": "¿De qué manera le ayudó este préstamo KIVA?"
       },
       "impacto_social": {
@@ -114,7 +114,7 @@
     },
     "miCredi_estudio": {
       "question1": "¿Para qué solicitó el préstamo?",
-      "question2": "¿Cómo estima usted que este crédito le ayudará crecer profesionalmente?",
+      "question2": "¿Cómo estima usted que este crédito le ayudará a crecer profesionalmente?",
       "question3": "¿Cuáles son sus planes en los próximos 10 años?",
       "question4": "¿Piensa optar a otro estudio superior? ¿Cuál?",
       "question5": "¿Qué aspira laboralmente?",
@@ -122,11 +122,11 @@
     }
   },
   "cartera": {
-    "title": "Solicitudes en Tramite",
-    "description": "Ingresa una opcion de cartera",
-    "credit": "Creditos",
-    "credit_title": "Modulo de Credito",
+    "title": "Solicitudes en Trámite",
+    "description": "Ingresa una opción de cartera",
+    "credit": "Créditos",
+    "credit_title": "Módulo de Crédito",
     "kiva": "Formularios KIVA",
-    "kiva_description": "Modulo de Formularios Kiva"
+    "kiva_description": "Módulo de Formularios Kiva"
   }
 }

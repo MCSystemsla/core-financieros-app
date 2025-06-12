@@ -1,14 +1,21 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ObjectBoxService {
   late final Store _store;
@@ -19,6 +26,9 @@ class ObjectBoxService {
   late final Box<DepartmentsLocalDb> departmentsBox;
   late final Box<ResponseLocalDb> solicitudesResponsesBox;
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
+  late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
+  late final Box<CedulaClientDb> cedulaClientBox;
+  late final Box<CatalogoParametroLocalDb> catalogoParametroBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -30,12 +40,38 @@ class ObjectBoxService {
     solicitudesResponsesBox = _store.box<ResponseLocalDb>();
     solicitudesReprestamoResponsesBox =
         _store.box<ReprestamoResponsesLocalDb>();
-    // solicitudesReprestamoResponsesBox.removeAll();
+    solicitudesAsalariadoResponsesBox =
+        _store.box<AsalariadoResponsesLocalDb>();
+    cedulaClientBox = _store.box<CedulaClientDb>();
+    catalogoParametroBox = _store.box<CatalogoParametroLocalDb>();
+    // cedulaClientBox.removeAll();
+    // solicitudesAsalariadoResponsesBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
-    final store = await openStore(); // .
-    return ObjectBoxService._create(store);
+    try {
+      final store = await openStore();
+
+      return ObjectBoxService._create(store);
+    } on ObjectBoxException catch (e) {
+      final isEntityIdError = e.message.contains("DB's last entity ID");
+
+      if (isEntityIdError) {
+        log('⚠️ Error de modelo detectado. Borrando base de datos...');
+
+        final dir = await getApplicationDocumentsDirectory();
+        final dbDir = Directory('${dir.path}/objectbox');
+
+        if (await dbDir.exists()) {
+          await dbDir.delete(recursive: true);
+          log('⚠️ Base de datos borrada.');
+        }
+      }
+      final store = await openStore();
+      return ObjectBoxService._create(store);
+    } catch (e) {
+      throw Exception('Error Inesperado BD Local: $e');
+    }
   }
 
   void close() {
@@ -50,23 +86,6 @@ class ObjectBoxService {
         .remove();
   }
 
-  // List<dynamic> sendSolicitudWhenIsDone({required TypeForm typeForm}) {
-  //   try {
-  //     return switch (typeForm) {
-  //       TypeForm.nueva => solicitudesResponsesBox
-  //           .query(ResponseLocalDb_.isDone
-  //               .equals(true)
-  //               .and(ResponseLocalDb_.hasVerified.equals(false)))
-  //           .build()
-  //           .find(),
-  //       TypeForm.represtamo => sendSolicitudReprestamoWhenIsDone(),
-  //       _ => [],
-  //     };
-  //   } catch (e) {
-  //     _logger.e(e.toString());
-  //     rethrow;
-  //   }
-  // }
   List<dynamic> sendSolicitudesWhenIsDone() {
     try {
       final nuevas = solicitudesResponsesBox
@@ -77,8 +96,9 @@ class ObjectBoxService {
           .find();
 
       final represtamos = sendSolicitudReprestamoWhenIsDone();
+      final asalariados = sendSolicitudAsalariadoWhenIsDone();
 
-      return [...nuevas, ...represtamos];
+      return [...nuevas, ...represtamos, ...asalariados];
     } catch (e) {
       _logger.e(e.toString());
       rethrow;
@@ -100,6 +120,22 @@ class ObjectBoxService {
     }
   }
 
+  List<AsalariadoResponsesLocalDb> sendSolicitudAsalariadoWhenIsDone() {
+    try {
+      final solicitudes = solicitudesAsalariadoResponsesBox
+          .query(AsalariadoResponsesLocalDb_.isDone
+              .equals(true)
+              .and(AsalariadoResponsesLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+      return solicitudes;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  // * Catalgos
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
     final query = catalogoBox.query(CatalogoLocalDb_.type.equals(type)).build();
 
@@ -207,6 +243,43 @@ class ObjectBoxService {
     return [];
   }
 
+  CedulaClientDb saveCedulaClient({required CedulaClientDb cedulaClient}) {
+    try {
+      cedulaClient.id = 0;
+      cedulaClientBox.put(cedulaClient);
+      _logger.i('Creando nueva cedula');
+      return cedulaClient;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  CedulaClientDb? getCedula(
+      {required String cedula, required String tipoSolicitud}) {
+    try {
+      final query = cedulaClientBox
+          .query(CedulaClientDb_.cedula
+              .equals(cedula)
+              .and(CedulaClientDb_.typeSolicitud.equals(tipoSolicitud)))
+          .build();
+
+      final result = query.findFirst();
+      query.close();
+
+      if (result != null) {
+        _logger.i('Cedula encontrada: ${result.cedula}');
+      } else {
+        _logger.i('Cedula no encontrada');
+      }
+
+      return result;
+    } catch (e) {
+      _logger.e('Error al obtener la cédula: $e');
+      rethrow;
+    }
+  }
+
   ResponseLocalDb saveSolicitudesNuevaMenorResponses({
     required ResponseLocalDb responseLocalDb,
   }) {
@@ -229,6 +302,20 @@ class ObjectBoxService {
       solicitudesReprestamoResponsesBox.put(responseReprestamoLocalDb);
       _logger.i('Creado');
       return responseReprestamoLocalDb;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  AsalariadoResponsesLocalDb saveSolicitudesAsalariadoResponses({
+    required AsalariadoResponsesLocalDb responseAsalariadoLocalDb,
+  }) {
+    try {
+      responseAsalariadoLocalDb.id = 0;
+      solicitudesAsalariadoResponsesBox.put(responseAsalariadoLocalDb);
+      _logger.i('Creado');
+      return responseAsalariadoLocalDb;
     } catch (e) {
       _logger.e(e.toString());
       rethrow;
@@ -269,6 +356,24 @@ class ObjectBoxService {
     }
   }
 
+  void updateSolicitudAsalariadoById({
+    required int id,
+    required AsalariadoResponsesLocalDb asalariadoResponsesLocalDb,
+  }) {
+    try {
+      asalariadoResponsesLocalDb.id = id;
+      final solicitud =
+          solicitudesAsalariadoResponsesBox.get(asalariadoResponsesLocalDb.id);
+      if (solicitud != null) {
+        solicitudesAsalariadoResponsesBox.put(asalariadoResponsesLocalDb,
+            mode: PutMode.update);
+      }
+      _logger.i('Actualizando');
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
   List<ResponseLocalDb> getSolicitudesResponse() {
     try {
       final resp = solicitudesResponsesBox.getAll();
@@ -289,10 +394,20 @@ class ObjectBoxService {
     }
   }
 
+  List<AsalariadoResponsesLocalDb> getSolicitudesAsalariadoResponse() {
+    try {
+      final resp = solicitudesAsalariadoResponsesBox.getAll();
+      return resp;
+    } catch (e) {
+      _logger.e(e.toString());
+      throw AppException.toAppException(e);
+    }
+  }
+
   void removeSolicitudWhenisUploaded({required int solicitudId}) {
     try {
       solicitudesResponsesBox.remove(solicitudId);
-      solicitudesReprestamoResponsesBox.remove(solicitudId);
+      // solicitudesReprestamoResponsesBox.remove(solicitudId);
     } catch (e) {
       _logger.e(e.toString());
     }
@@ -306,12 +421,22 @@ class ObjectBoxService {
     }
   }
 
+  void removeSolicitudAsalariadoWhenisUploaded({required int solicitudId}) {
+    try {
+      solicitudesAsalariadoResponsesBox.remove(solicitudId);
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
   void updateWhenSolicitdIsFailed(
       {required int solicitudId, String? errorMsg}) {
     try {
       final solicitud = solicitudesResponsesBox.get(solicitudId);
       final solicitudReprestamo =
           solicitudesReprestamoResponsesBox.get(solicitudId);
+      final solicitudAsalariado =
+          solicitudesAsalariadoResponsesBox.get(solicitudId);
       if (solicitud != null) {
         solicitud.hasVerified = true;
         solicitud.errorMsg = errorMsg;
@@ -325,8 +450,31 @@ class ObjectBoxService {
         solicitudesReprestamoResponsesBox.put(solicitudReprestamo,
             mode: PutMode.update);
       }
+      if (solicitudAsalariado != null) {
+        solicitudAsalariado.hasVerified = true;
+        solicitudAsalariado.errorMsg = errorMsg;
+        solicitudesAsalariadoResponsesBox.put(
+          solicitudAsalariado,
+          mode: PutMode.update,
+        );
+      }
     } catch (e) {
       _logger.e(e.toString());
+    }
+  }
+
+  CatalogoParametroLocalDb? getParametroByName({required String nombre}) {
+    try {
+      final query = catalogoParametroBox
+          .query(CatalogoParametroLocalDb_.type.equals(nombre))
+          .build();
+      final result = query.findFirst();
+
+      query.close();
+      return result;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
     }
   }
 }

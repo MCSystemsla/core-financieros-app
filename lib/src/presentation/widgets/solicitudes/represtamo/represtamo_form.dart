@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form3.dart';
@@ -30,6 +31,11 @@ class ReprestamoForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: controller,
             children: [
+              PhotoCedulaClientWidget(
+                controller: controller,
+                onCedulaFrontalPressed: () {},
+                onCedulaTraseraPressed: () {},
+              ),
               ReprestamoForm1(
                 controller: controller,
                 cedula: cedula,

@@ -3,10 +3,10 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -309,12 +309,14 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                         esPeps: espeps == 'input.yes'.tr(),
                         nombreDeEntidadPeps: nombreDeEntidadPeps,
                         paisPeps: paisPeps?.value,
+                        // paisPepsVe: paisPeps?.value,
                         periodoPeps: periodoPeps,
                         cargoOficialPeps: cargoOficialPeps,
                         tieneFamiliarPeps:
                             tieneFamiliarPeps == 'input.yes'.tr(),
                         nombreFamiliarPeps2: nombreFamiliarPeps2,
                         parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                        // parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
                         cargoFamiliarPeps2: cargoFamiliarPeps2,
                         nombreEntidadPeps2: nombreEntidadPeps2,
                         periodoPeps2: periodoPeps2,

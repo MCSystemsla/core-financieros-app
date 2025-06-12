@@ -19,10 +19,12 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/mejora_de_vivienda_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_aditional_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_impacto_social.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
@@ -43,7 +45,8 @@ class EstandarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRecurrentForm = typeProduct.trim() == 'ESTANDAR RECURRENTE';
+    final isRecurrentForm =
+        typeProduct.trim() == 'ScrKivaCreditoEstandarRecurrente';
     final pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -133,9 +136,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
   TypeSigner typeSigner = TypeSigner.ninguno;
   @override
   void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
   }
 
   @override
@@ -242,56 +244,76 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                       if (!context.mounted) return;
                       final status = state.status;
                       if (status == Status.error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            showCloseIcon: true,
-                            content: Text(state.erroMsg),
-                          ),
-                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.erroMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
                       }
                       if (state.status == Status.done) {
                         if (!context.mounted) return;
-                        if (isConnected.isConnected &&
-                            isConnected.isCorrectNetwork) {
-                          context.read<UploadUserFileCubit>().uploadUserFiles(
-                                typeSigner: typeSigner,
-                                cedula:
-                                    context.read<KivaRouteCubit>().state.cedula,
-                                numero:
-                                    context.read<KivaRouteCubit>().state.numero,
-                                tipoSolicitud: context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .tipoSolicitud,
-                                fotoFirma: file.path,
-                                solicitudId: int.parse(
-                                  context
-                                      .read<KivaRouteCubit>()
-                                      .state
-                                      .solicitudId,
+                        if (isConnected.isConnected) {
+                          await customPopUp(
+                            context: context,
+                            dismissOnTouchOutside: false,
+                            size: size,
+                            title: 'Formulario Kiva Enviado exitosamente!!',
+                            subtitle:
+                                'Las respuestas se han enviado Exitosamente',
+                            dialogType: DialogType.success,
+                            buttonAcept: true,
+                            textButtonAcept: 'Ok',
+                            colorButtonAcept: AppColors.getPrimaryColor(),
+                            onPressedAccept: () {
+                              if (!context.mounted) return;
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => BlocProvider.value(
+                                    value: context.read<UploadUserFileCubit>(),
+                                    child: KivaImageSending(
+                                      solicitudId: context
+                                          .read<KivaRouteCubit>()
+                                          .state
+                                          .solicitudId,
+                                      onRetry: () {
+                                        context
+                                            .read<UploadUserFileCubit>()
+                                            .uploadUserFiles(
+                                              typeSigner: typeSigner,
+                                              cedula: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .cedula,
+                                              numero: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .numero,
+                                              tipoSolicitud: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .tipoSolicitud,
+                                              fotoFirma: file.path,
+                                              solicitudId: int.parse(
+                                                context
+                                                    .read<KivaRouteCubit>()
+                                                    .state
+                                                    .solicitudId,
+                                              ),
+                                              formularioKiva: context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .nombreFormularioKiva,
+                                            );
+                                      },
+                                    ),
+                                  ),
                                 ),
-                                formularioKiva: context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .currentRoute,
                               );
+                            },
+                          );
                         }
-                        await customPopUp(
-                          context: context,
-                          dismissOnTouchOutside: false,
-                          size: size,
-                          title: 'Formulario Kiva Enviado exitosamente!!',
-                          subtitle:
-                              'Las respuestas se han enviado Exitosamente',
-                          dialogType: DialogType.success,
-                          buttonAcept: true,
-                          textButtonAcept: 'Ok',
-                          colorButtonAcept: AppColors.getPrimaryColor(),
-                          onPressedAccept: () {
-                            context.pushReplacement('/');
-                          },
-                        );
                       }
                     },
                     builder: (context, state) {
@@ -320,6 +342,14 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                             textButtonCancel: 'Cancelar',
                             colorButtonAcept: AppColors.getPrimaryColor(),
                             onPressedAccept: () async {
+                              context
+                                  .read<SolicitudesPendientesLocalDbCubit>()
+                                  .updateIsSendedOnSolicitud(
+                                    solicitudId: context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  );
                               final directory =
                                   await getApplicationDocumentsDirectory();
                               final customDir =
@@ -348,33 +378,34 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                 log('No se pudo generar la imagen de la firma.');
                                 return;
                               }
+
                               if (!context.mounted) return;
-                              !isConnected.isConnected ||
-                                      !isConnected.isCorrectNetwork
-                                  ? await saveOfflineResponses(
-                                      context,
-                                      state,
-                                      ImageModel()
-                                        ..typeSigner = typeSigner.name
-                                        ..imagenFirma = localPath
-                                        ..imagen1 = imageProvider.imagen1
-                                        ..imagen2 = imageProvider.imagen2
-                                        ..imagen3 = imageProvider.imagen3
-                                        ..solicitudId = int.tryParse(
-                                          context
-                                              .read<KivaRouteCubit>()
-                                              .state
-                                              .solicitudId,
-                                        ),
-                                      size,
-                                      !isConnected.isCorrectNetwork
-                                          ? 'Se ha perdido conexion a VPN, Se ha guardado el formulario de Manera Local'
-                                          : 'Formulario Kiva Guardado Exitosamente!!',
-                                    )
-                                  : context
-                                      .read<RecurrenteEstandartCubit>()
-                                      .sendAnswers();
+
+                              await saveOfflineResponses(
+                                context,
+                                state,
+                                ImageModel()
+                                  ..typeSigner = typeSigner.name
+                                  ..imagenFirma = localPath
+                                  ..imagen1 = imageProvider.imagen1
+                                  ..imagen2 = imageProvider.imagen2
+                                  ..imagen3 = imageProvider.imagen3
+                                  ..solicitudId = int.parse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ),
+                                size,
+                                '',
+                              );
                               if (!context.mounted) return;
+                              if (isConnected.isConnected) {
+                                context
+                                    .read<RecurrenteEstandartCubit>()
+                                    .sendAnswers();
+                                if (!context.mounted) return;
+                              }
                               context.pop();
                             },
                             onPressedCancel: () => context.pop(),
@@ -413,8 +444,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     String msgDialog,
   ) async {
     if (!context.mounted) return;
-    final isVpnConnected =
-        context.read<InternetConnectionCubit>().state.isCorrectNetwork;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
 
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -442,12 +473,47 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..siguientePaso = state.siguientePaso
             ..personasCargo = state.personasCargo,
         );
+    if (!isConnected) {
+      return NoVpnPopUpOnKiva(
+        context: context,
+        info: msgDialog,
+        header: '',
+      ).showDialog(context, dialogType: DialogType.info);
+    }
+  }
 
-    return NoVpnPopUpOnKiva(
-      context: context,
-      info: msgDialog,
-      header: '',
-      isVpnConnected: isVpnConnected,
-    ).showDialog(context, dialogType: DialogType.info);
+  saveResponsesOnLocalDb(
+    BuildContext context,
+    RecurrenteEstandartState state,
+    ImageModel imageModel,
+  ) async {
+    if (!context.mounted) return;
+
+    context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
+          imageModel: imageModel,
+        );
+
+    context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
+          recurrenteEstandarModel: RecurrenteEstandarDbLocal()
+            ..apoyanNegocio = state.apoyanNegocio
+            ..tipoSolicitud = state.tipoSolitud
+            ..coincideRespuesta = state.coincideRespuesta
+            ..comoFortalece = state.comoFortalece
+            ..comoMejoraEntorno = state.comoMejoraEntorno
+            ..cuantosApoyan = state.cuantosApoyan
+            ..database = state.database
+            ..edadHijos = state.edadHijos
+            ..explicacionInversion = state.explicacionInversion
+            ..motivoPrestamo = state.motivoPrestamo
+            ..numeroHijos = state.numeroHijos
+            ..objSolicitudRecurrenteId =
+                int.tryParse(context.read<KivaRouteCubit>().state.solicitudId)
+            ..otrosIngresos = state.otrosIngresos
+            ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
+            ..personaAutoSuficiente = state.personaAutoSuficiente
+            ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..siguientePaso = state.siguientePaso
+            ..personasCargo = state.personasCargo,
+        );
   }
 }

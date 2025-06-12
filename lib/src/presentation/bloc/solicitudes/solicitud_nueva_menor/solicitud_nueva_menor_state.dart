@@ -141,7 +141,11 @@ class SolicitudNuevaMenorState extends Equatable {
   final bool isDone;
   final int montoMinimo;
   final int montoMaximo;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   const SolicitudNuevaMenorState({
+    this.cedulaFrontPath = '',
+    this.cedulaBackPath = '',
     this.montoMinimo = 0,
     this.montoMaximo = 0,
     this.onSuccessMsg = '',
@@ -285,6 +289,8 @@ class SolicitudNuevaMenorState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaFrontPath,
+        cedulaBackPath,
         onSuccessMsg,
         hasVerified,
         idLocalResponse,
@@ -564,6 +570,8 @@ class SolicitudNuevaMenorState extends Equatable {
     bool? isDone,
     int? montoMinimo,
     int? montoMaximo,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     return SolicitudNuevaMenorState(
       onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
@@ -742,6 +750,8 @@ class SolicitudNuevaMenorState extends Equatable {
       isDone: isDone ?? this.isDone,
       montoMinimo: montoMinimo ?? this.montoMinimo,
       montoMaximo: montoMaximo ?? this.montoMaximo,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
     );
   }
 }

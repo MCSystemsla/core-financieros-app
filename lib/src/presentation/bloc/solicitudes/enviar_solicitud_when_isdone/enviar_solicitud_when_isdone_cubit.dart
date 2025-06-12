@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
@@ -57,6 +59,11 @@ class EnviarSolicitudWhenIsdoneCubit
             solicitudId: solicitud.id,
           );
         }
+        if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
+          objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
+            solicitudId: solicitud.id,
+          );
+        }
         solicitudesSent.add('Solicitud ID ${solicitud.cedula}');
         hasAnySent = true;
       }
@@ -108,6 +115,10 @@ class EnviarSolicitudWhenIsdoneCubit
       ReprestamoResponsesLocalDb() =>
         await repository.createSolicitudReprestamo(
           solicitudReprestamo: _mapToSolicitudReprestamo(solicitud),
+        ),
+      AsalariadoResponsesLocalDb() =>
+        await repository.createSolicitudAsalariado(
+          solicitudAsalariado: _mapToSolicitudAsalariado(solicitud),
         ),
       _ => throw UnsupportedError(
           'Solicitud de tipo ${solicitud.runtimeType} no soportado en el envío automático.',
@@ -278,6 +289,127 @@ class EnviarSolicitudWhenIsdoneCubit
       celularReprestamo: solicitud.celularReprestamo ?? '',
       fechaPrimerPagoSolicitud:
           DateTime.tryParse(solicitud.fechaPrimerPagoSolicitud.toString()),
+    );
+  }
+
+  SolicitudAsalariado _mapToSolicitudAsalariado(
+    AsalariadoResponsesLocalDb solicitud,
+  ) {
+    return SolicitudAsalariado(
+      isOffline: solicitud.isOffline ?? false,
+      objOrigenSolicitudId: solicitud.objOrigenSolicitudId ?? '',
+      database: solicitud.database ?? '',
+      nombre1: solicitud.nombre1 ?? '',
+      nombre2: solicitud.nombre2 ?? '',
+      apellido1: solicitud.apellido1 ?? '',
+      apellido2: solicitud.apellido2 ?? '',
+      cedula: solicitud.cedula ?? '',
+      objPaisEmisorCedula: solicitud.objPaisEmisorCedula ?? '',
+      fechaEmisionCedula: solicitud.fechaEmisionCedula?.toUtc(),
+      fechaVencimientoCedula: solicitud.fechaVencimientoCedula?.toUtc(),
+      fechaNacimiento: solicitud.fechaNacimiento?.toUtc(),
+      telefono: solicitud.telefono ?? '',
+      celular: solicitud.celular ?? '',
+      direccionCasa: solicitud.direccionCasa ?? '',
+      barrioCasa: solicitud.barrioCasa ?? '',
+      objMunicipioCasaId: solicitud.objMunicipioCasaId ?? '',
+      objDepartamentoCasaId: solicitud.objDepartamentoCasaId ?? '',
+      objPaisCasaId: solicitud.objPaisCasaId ?? '',
+      profesion: solicitud.profesion ?? '',
+      ocupacion: solicitud.ocupacion ?? '',
+      nacionalidad: solicitud.nacionalidad ?? '',
+      objCondicionCasaId: solicitud.objCondicionCasaId ?? '',
+      anosResidirCasa: solicitud.anosResidirCasa ?? 0,
+      email: solicitud.email ?? '',
+      monto: solicitud.monto ?? 0,
+      objMonedaId: solicitud.objMonedaId ?? '',
+      objPropositoId: solicitud.objPropositoId ?? '',
+      objFrecuenciaId: solicitud.objFrecuenciaId ?? '',
+      cuota: solicitud.cuota ?? 0,
+      objSectorId: solicitud.objSectorId ?? '',
+      personasACargo: solicitud.personasACargo ?? 0,
+      objEstadoCivilId: solicitud.objEstadoCivilId ?? '',
+      nombreConyugue: solicitud.nombreConyugue ?? '',
+      trabajaConyugue: solicitud.trabajaConyugue ?? false,
+      trabajoConyugue: solicitud.trabajoConyugue ?? '',
+      direccionTrabajoConyugue: solicitud.direccionTrabajoConyugue ?? '',
+      telefonoTrabajoConyugue: solicitud.telefonoTrabajoConyugue ?? '',
+      beneficiarioSeguro: solicitud.beneficiarioSeguro ?? '',
+      cedulaBeneficiarioSeguro: solicitud.cedulaBeneficiarioSeguro ?? '',
+      objParentescoBeneficiarioSeguroId:
+          solicitud.objParentescoBeneficiarioSeguroId ?? '',
+      objEstadoSolicitudId: solicitud.objEstadoSolicitudId ?? '',
+      objOficialCreditoId: solicitud.objOficialCreditoId ?? '',
+      objProductoId: solicitud.objProductoId ?? '',
+      observacion: solicitud.observacion ?? '',
+      sucursal: solicitud.sucursal ?? '',
+      ubicacionLongitud: solicitud.ubicacionLongitud ?? '',
+      ubicacionLatitud: solicitud.ubicacionLatitud ?? '',
+      ubicacionGradosLongitud: solicitud.ubicacionGradosLongitud ?? '',
+      ubicacionGradosLatitud: solicitud.ubicacionGradosLatitud ?? '',
+      objEscolaridadId: solicitud.objEscolaridadId ?? '',
+      cantidadHijos: solicitud.cantidadHijos ?? 0,
+      nombrePublico: solicitud.nombrePublico ?? '',
+      objSexoId: solicitud.objSexoId ?? '',
+      objPaisNacimientoId: solicitud.objPaisNacimientoId ?? '',
+      nacionalidadConyugue: solicitud.nacionalidadConyugue ?? '',
+      ubicacion: solicitud.ubicacion ?? '',
+      espeps: solicitud.espeps ?? false,
+      nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps ?? '',
+      paisPeps: solicitud.paisPeps ?? '',
+      periodoPeps: solicitud.periodoPeps ?? '',
+      cargoOficialPeps: solicitud.cargoOficialPeps ?? '',
+      tieneFamiliarPeps: solicitud.tieneFamiliarPeps ?? false,
+      nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2 ?? '',
+      parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2 ?? '',
+      cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2 ?? '',
+      nombreEntidadPeps2: solicitud.nombreEntidadPeps2 ?? '',
+      periodoPeps2: solicitud.periodoPeps2 ?? '',
+      paisPeps2: solicitud.paisPeps2 ?? '',
+      objRubroActividad: solicitud.objRubroActividad ?? '',
+      objActividadPredominante: solicitud.objActividadPredominante ?? '',
+      esFamiliarEmpleado: solicitud.esFamiliarEmpleado ?? false,
+      nombreFamiliar: solicitud.nombreFamiliar ?? '',
+      cedulaFamiliar: solicitud.cedulaFamiliar ?? '',
+      objTipoDocumentoId: solicitud.objTipoDocumentoId ?? '',
+      objRubroActividad2: solicitud.objRubroActividad2 ?? '',
+      objRubroActividad3: solicitud.objRubroActividad3 ?? '',
+      objRubroActividadPredominante:
+          solicitud.objRubroActividadPredominante ?? '',
+      tipoPersona: solicitud.tipoPersona ?? '',
+      objTipoPersonaId: solicitud.objTipoPersonaId ?? '',
+      telefonoBeneficiario: solicitud.telefonoBeneficiario ?? '',
+      codigoRed: solicitud.codigoRed ?? '',
+      plazoSolicitud: solicitud.plazoSolicitud ?? 0,
+      fechaPrimerPagoSolicitud: solicitud.fechaPrimerPagoSolicitud?.toUtc(),
+      nombreTrabajo: solicitud.nombreTrabajo ?? '',
+      direccionTrabajo: solicitud.direccionTrabajo ?? '',
+      barrioTrabajo: solicitud.barrioTrabajo ?? '',
+      objActividadEconomicaId: solicitud.objActividadEconomicaId ?? '',
+      objActividadEconomicaId1: solicitud.objActividadEconomicaId1 ?? '',
+      objActividadEconomicaId2: solicitud.objActividadEconomicaId2 ?? '',
+      cargo: solicitud.cargo ?? '',
+      direccionFamiliarCercano: solicitud.direccionFamiliarCercano ?? '',
+      duenoVivienda: solicitud.duenoVivienda ?? '',
+      fechaVenceAvaluoAsalariado: solicitud.fechaVenceAvaluoAsalariado,
+      fuenteOtrosIngresos: solicitud.fuenteOtrosIngresos ?? '',
+      fuenteOtrosIngresosConyugue: solicitud.fuenteOtrosIngresosConyugue ?? '',
+      lugarTrabajoAnterior: solicitud.lugarTrabajoAnterior ?? '',
+      nombreFamiliarCercano: solicitud.nombreFamiliarCercano ?? '',
+      objParentescoFamiliarCercanoId:
+          solicitud.objParentescoFamiliarCercanoId ?? '',
+      otrosIngresosConyugue: solicitud.otrosIngresosConyugue ?? 0,
+      otrosIngresosCordoba: solicitud.otrosIngresosCordoba ?? 0,
+      pagoAlquiler: solicitud.pagoAlquiler ?? 0,
+      profesionConyugue: solicitud.profesionConyugue ?? '',
+      salarioNetoCordoba: solicitud.salarioNetoCordoba ?? 0,
+      sueldoMesConyugue: solicitud.sueldoMesConyugue ?? 0,
+      telefonoFamiliarCercano: solicitud.telefonoFamiliarCercano ?? '',
+      telefonoTrabajo: solicitud.telefonoTrabajo ?? '',
+      tiempoLaborar: solicitud.tiempoLaborar ?? '',
+      tiempoLaborarConyugue: solicitud.tiempoLaborarConyugue ?? '',
+      totalIngresoMes: solicitud.totalIngresoMes ?? 0,
+      totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue ?? 0,
     );
   }
 }

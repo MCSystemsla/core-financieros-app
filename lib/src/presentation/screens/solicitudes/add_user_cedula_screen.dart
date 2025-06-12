@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -7,9 +9,13 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,29 +27,39 @@ class AddUserCedulaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cedulaController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     void showSuccessDialog({
-      required String firstName,
-      required String lastName,
+      required UserByCedulaSolicitud userByCedula,
     }) {
       CustomAlertDialog(
         context: context,
-        title: '$firstName $lastName listo para crear solicitud!!',
-        onDone: () => Navigator.push(
+        title:
+            '${userByCedula.primerNombre} ${userByCedula.primerApellido} listo para crear solicitud!!',
+        onDone: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: ((context) => CrearSolicitudScreen(typeForm: typeForm)),
+            builder: ((context) => CrearSolicitudScreen(
+                  typeForm: typeForm,
+                  userByCedulaSolicitud: userByCedula,
+                )),
           ),
         ),
       ).showDialog(context, dialogType: DialogType.success);
     }
 
-    void showErrorDialog({required String errorMsg}) {
-      AddUserCedulaDialog(
-        context: context,
-        title: errorMsg,
-      ).showDialog(context, dialogType: DialogType.warning);
+    void showErrorDialog({
+      required String cedula,
+      required Item tipoDocumento,
+    }) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => CrearSolicitudScreen(
+                typeForm: typeForm,
+                cedula: cedula,
+                tipoDocumento: tipoDocumento,
+              )),
+        ),
+      );
     }
 
     return Scaffold(
@@ -53,81 +69,171 @@ class AddUserCedulaScreen extends StatelessWidget {
       body: BlocConsumer<UserByCedulaCubit, UserByCedulaState>(
         listener: (context, state) {
           if (state is OnUserByCedulaError) {
-            showErrorDialog(errorMsg: state.errorMsg);
+            showErrorDialog(
+              cedula: state.cedula,
+              tipoDocumento: state.tipoDocumento,
+            );
           }
           if (state is OnUserByCedulaSuccess) {
             showSuccessDialog(
-              firstName: state.userCedulaResponse.primerNombre,
-              lastName: state.userCedulaResponse.primerApellido,
+              userByCedula: UserByCedulaSolicitud(
+                segundoApellido: state.userCedulaResponse.segundoApellido,
+                segundoNombre: state.userCedulaResponse.segundoNombre,
+                primerNombre: state.userCedulaResponse.primerNombre,
+                primerApellido: state.userCedulaResponse.primerApellido,
+                cedula: state.userCedulaResponse.cedula,
+                fechaEmision: state.userCedulaResponse.fechaEmision,
+                fechaVencimiento: state.userCedulaResponse.fechaExpira,
+                fechaNacimiento: state.userCedulaResponse.fechaNacimiento,
+                tipoDocumento: state.userCedulaResponse.tipoDocumento,
+              ),
             );
           }
         },
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              key: formKey,
-              child: Center(
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        height: 200,
-                        ImageAsset.nuevaAddDni,
+          return _UserCedulaForm(state: state);
+        },
+      ),
+    );
+  }
+}
+
+class _UserCedulaForm extends StatefulWidget {
+  final UserByCedulaState state;
+  const _UserCedulaForm({
+    required this.state,
+  });
+
+  @override
+  State<_UserCedulaForm> createState() => _UserCedulaFormState();
+}
+
+class _UserCedulaFormState extends State<_UserCedulaForm> {
+  Item? tipoDocumento;
+  Item? paisEmisorDocumento;
+  final formKey = GlobalKey<FormState>();
+
+  final cedulaController = TextEditingController();
+
+  int determineDocumentoLength({
+    String? tipoDocumento,
+    String? paisEmisor,
+  }) {
+    return switch ((tipoDocumento, paisEmisor)) {
+      ('CEDULAIDENTIDAD', 'HON') => 13,
+      ('CEDULAIDENTIDAD', 'NIC') => 14,
+      ('PASAPORTE', 'NIC') => 9,
+      ('PASAPORTE', 'HON') => 7,
+      ('RTN', 'HON') => 14,
+      ('CARNETRESIDENCIA', 'HON') => 8,
+      _ => 0
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Form(
+        key: formKey,
+        child: Center(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  height: 200,
+                  ImageAsset.nuevaAddDni,
+                ),
+                const Gap(30),
+                Text(
+                  'Ingresar Usuario a solicitar Solicitud de Credito',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(10),
+                Text(
+                  'Ingresa los datos requeridos',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  // initialValue: '',
+                  hintText: 'input.select_option'.tr(),
+                  codigo: 'TIPODOCUMENTOPERSONA',
+                  onChanged: (item) {
+                    tipoDocumento = item;
+                    log(item?.value);
+                    setState(() {});
+                  },
+                  title: 'Tipo Documento',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                ),
+                const Gap(20),
+                CatalogoValorNacionalidad(
+                  hintText: 'input.select_option'.tr(),
+                  // hintText: state.userCedulaResponse.pais,
+                  title: 'País Emisor',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value.valor),
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    paisEmisorDocumento = Item(
+                      name: item.nombre,
+                      value: item.valor,
+                    );
+                    log(item.valor);
+
+                    setState(() {});
+                  },
+                  codigo: 'PAIS',
+                ),
+                if (tipoDocumento != null && paisEmisorDocumento != null) ...[
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textEditingController: cedulaController,
+                    validator: (value) =>
+                        ClassValidator.validateMaxIntValueAndMinValue(
+                      value,
+                      determineDocumentoLength(
+                        tipoDocumento: tipoDocumento?.value ?? '',
+                        paisEmisor: paisEmisorDocumento?.value ?? '',
                       ),
-                      const Gap(30),
-                      Text(
-                        'Ingresar Usuario a solicitar Solicitud de Credito',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const Gap(10),
-                      Text(
-                        'Ingresa los datos requeridos',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const Gap(20),
-                      OutlineTextfieldWidget(
-                        maxLength: 20,
-                        textEditingController: cedulaController,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        icon: Icon(
-                          Icons.credit_card_outlined,
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        title: '',
-                        hintText: 'Ingresa Cedula, Pasaporte o DNI',
-                      ),
-                      const Gap(20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        width: double.infinity,
-                        child: CustomElevatedButton(
-                          enabled: state is! OnUserByCedulaLoading,
-                          text: state is OnUserByCedulaLoading
-                              ? 'Cargando...'
-                              : 'Enviar',
-                          color: AppColors.greenLatern.withOpacity(0.4),
-                          onPressed: () {
-                            if (!formKey.currentState!.validate()) return;
-                            context.read<UserByCedulaCubit>().getUserByCedula(
-                                  cedula: cedulaController.text.trim(),
-                                );
-                          },
-                        ),
-                      ),
-                    ],
+                    ),
+                    icon: Icon(
+                      Icons.credit_card_outlined,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: '',
+                    hintText: 'Ingresa Documento',
+                  ),
+                ],
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    enabled: widget.state is! OnUserByCedulaLoading,
+                    text: widget.state is OnUserByCedulaLoading
+                        ? 'Cargando...'
+                        : 'Enviar',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      context.read<UserByCedulaCubit>().getUserByCedula(
+                            cedula: cedulaController.text.trim(),
+                            tipoDocumento: tipoDocumento!,
+                          );
+                    },
                   ),
                 ),
-              ),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

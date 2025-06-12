@@ -299,15 +299,15 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePago!.name,
-                    saldoPrincipal: double.parse(monto ?? ''),
+                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                    formadePago: frecuenciaDePago?.name ?? '',
+                    saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres!,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} ${moneda?.name}',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrincipalPrimeraCuota} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudReprestamoCubit>().saveAnswers(
                             objFrecuenciaIdVer: frecuenciaDePago?.name,
@@ -315,10 +315,14 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                             fechaDesembolso:
                                 fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda?.value,
+                            objMonedaIdVer: moneda?.name,
                             monto: int.tryParse(monto!),
                             objPropositoId: proposito?.value,
+                            objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
+                            objProductoIdVer: producto?.name,
                             objFrecuenciaId: frecuenciaDePago?.value,
+                            objFrecuenciaIdVer2: frecuenciaDePago?.name,
                             plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),

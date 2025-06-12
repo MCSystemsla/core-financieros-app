@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -60,13 +61,13 @@ class _NuevaMenorBeneficiarioWidgetState
           children: [
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 50,
+              maxLength: 15,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Beneficiario Seguro',
-              hintText: 'Ingresa Beneficiario Seguro',
+              title: 'Beneficiario del Seguro 1',
+              hintText: 'Ingresa Beneficiario Seguro 1',
               isValid: null,
               onChange: (value) {
                 beneficiarioSeguro = value;
@@ -74,14 +75,19 @@ class _NuevaMenorBeneficiarioWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 16,
+              maxLength: 13,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Cedula Beneficiario Seguro',
-              hintText: 'Ingresa Cedula Beneficiario Seguro',
+              title: 'Cédula del Beneficiario 1',
+              hintText: 'Ingresa Cedula Beneficiario Seguro 1',
               isValid: null,
+              validator: (value) => ClassValidator.validateMinLength(
+                value,
+                13,
+                isRequired: false,
+              ),
               onChange: (value) {
                 cedulaBeneficiarioSeguro = value;
               },
@@ -89,7 +95,7 @@ class _NuevaMenorBeneficiarioWidgetState
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PARENTESCO',
-              title: 'Parentesco Beneficiario Seguro',
+              title: 'Parentesco del Beneficiario 1',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
               onChanged: (item) {
                 if (item == null) return;
@@ -103,8 +109,8 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.security,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Beneficiario Seguro 1',
-              hintText: 'Ingresa Beneficiario Seguro 1',
+              title: 'Beneficiario del Seguro 2',
+              hintText: 'Ingresa Beneficiario Seguro 2',
               isValid: null,
               onChange: (value) {
                 beneficiarioSeguro1 = value;
@@ -117,8 +123,13 @@ class _NuevaMenorBeneficiarioWidgetState
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Cedula Beneficiario Seguro 1',
-              hintText: 'Ingresa Cedula Beneficiario Seguro 1',
+              title: 'Cédula del Beneficiario 2',
+              validator: (value) => ClassValidator.validateMinLength(
+                value,
+                13,
+                isRequired: false,
+              ),
+              hintText: 'Ingresa Cedula Beneficiario Seguro 2',
               isValid: null,
               onChange: (value) {
                 cedulaBeneficiarioSeguro1 = value;
@@ -127,7 +138,7 @@ class _NuevaMenorBeneficiarioWidgetState
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'PARENTESCO',
-              title: 'Parentesco Beneficiario Seguro 1',
+              title: 'Parentesco Beneficiario Seguro 2',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
               onChanged: (item) {
                 if (item == null) return;
@@ -144,6 +155,7 @@ class _NuevaMenorBeneficiarioWidgetState
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
+                LengthLimitingTextInputFormatter(15),
               ],
               maxLength: 16,
               icon: Icon(

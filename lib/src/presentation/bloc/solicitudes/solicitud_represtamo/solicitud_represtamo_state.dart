@@ -62,7 +62,49 @@ class SolicitudReprestamoState extends Equatable {
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
   final bool isOffline;
+  final String objOrigenSolicitudIdVer;
+  final String objMonedaIdVer;
+  final String objPropositoIdVer;
+  final String objFrecuenciaIdVer2;
+  final String objActividadIdVer;
+  final String objActividadId1Ver;
+  final String objActividadId2Ver;
+  final String objSectorIdVer;
+  final String objParentescoBeneficiarioSeguroIdVer;
+  final String objProductoIdVer;
+  final String objRubroActividadVer;
+  final String objActividadPredominanteVer;
+  final String objTipoDocumentoIdVer;
+  final String objRubroActividad2Ver;
+  final String objRubroActividad3Ver;
+  final String objRubroActividadPredominanteVer;
+  final String objTipoPersonaIdVer;
+  final String parentescoFamiliar;
+  final String parentescoFamiliarVer;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   const SolicitudReprestamoState({
+    this.cedulaBackPath = '',
+    this.cedulaFrontPath = '',
+    this.objOrigenSolicitudIdVer = '',
+    this.objMonedaIdVer = '',
+    this.objPropositoIdVer = '',
+    this.objFrecuenciaIdVer2 = '',
+    this.objActividadIdVer = '',
+    this.objActividadId1Ver = '',
+    this.objActividadId2Ver = '',
+    this.objSectorIdVer = '',
+    this.objParentescoBeneficiarioSeguroIdVer = '',
+    this.objProductoIdVer = '',
+    this.objRubroActividadVer = '',
+    this.objActividadPredominanteVer = '',
+    this.objTipoDocumentoIdVer = '',
+    this.objRubroActividad2Ver = '',
+    this.objRubroActividad3Ver = '',
+    this.objRubroActividadPredominanteVer = '',
+    this.objTipoPersonaIdVer = '',
+    this.parentescoFamiliar = '',
+    this.parentescoFamiliarVer = '',
     this.objFrecuenciaIdVer = '',
     this.isOffline = false,
     this.hasVerified = false,
@@ -127,6 +169,27 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaBackPath,
+        cedulaFrontPath,
+        objOrigenSolicitudIdVer,
+        objMonedaIdVer,
+        objPropositoIdVer,
+        objFrecuenciaIdVer2,
+        objActividadIdVer,
+        objActividadId1Ver,
+        objActividadId2Ver,
+        objSectorIdVer,
+        objParentescoBeneficiarioSeguroIdVer,
+        objProductoIdVer,
+        objRubroActividadVer,
+        objActividadPredominanteVer,
+        objTipoDocumentoIdVer,
+        objRubroActividad2Ver,
+        objRubroActividad3Ver,
+        objRubroActividadPredominanteVer,
+        objTipoPersonaIdVer,
+        parentescoFamiliar,
+        parentescoFamiliarVer,
         objFrecuenciaIdVer,
         isOffline,
         hasVerified,
@@ -248,6 +311,27 @@ class SolicitudReprestamoState extends Equatable {
     int? plazoSolicitud,
     String? fechaPrimerPagoSolicitud,
     bool? isOffline,
+    String? objOrigenSolicitudIdVer,
+    String? objMonedaIdVer,
+    String? objPropositoIdVer,
+    String? objFrecuenciaIdVer2,
+    String? objActividadIdVer,
+    String? objActividadId1Ver,
+    String? objActividadId2Ver,
+    String? objSectorIdVer,
+    String? objParentescoBeneficiarioSeguroIdVer,
+    String? objProductoIdVer,
+    String? objRubroActividadVer,
+    String? objActividadPredominanteVer,
+    String? objTipoDocumentoIdVer,
+    String? objRubroActividad2Ver,
+    String? objRubroActividad3Ver,
+    String? objRubroActividadPredominanteVer,
+    String? objTipoPersonaIdVer,
+    String? parentescoFamiliar,
+    String? parentescoFamiliarVer,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -316,6 +400,36 @@ class SolicitudReprestamoState extends Equatable {
       fechaPrimerPagoSolicitud:
           fechaPrimerPagoSolicitud ?? this.fechaPrimerPagoSolicitud,
       isOffline: isOffline ?? this.isOffline,
+      objOrigenSolicitudIdVer:
+          objOrigenSolicitudIdVer ?? this.objOrigenSolicitudIdVer,
+      objMonedaIdVer: objMonedaIdVer ?? this.objMonedaIdVer,
+      objPropositoIdVer: objPropositoIdVer ?? this.objPropositoIdVer,
+      objFrecuenciaIdVer2: objFrecuenciaIdVer2 ?? this.objFrecuenciaIdVer2,
+      objActividadIdVer: objActividadIdVer ?? this.objActividadIdVer,
+      objActividadId1Ver: objActividadId1Ver ?? this.objActividadId1Ver,
+      objActividadId2Ver: objActividadId2Ver ?? this.objActividadId2Ver,
+      objSectorIdVer: objSectorIdVer ?? this.objSectorIdVer,
+      objParentescoBeneficiarioSeguroIdVer:
+          objParentescoBeneficiarioSeguroIdVer ??
+              this.objParentescoBeneficiarioSeguroIdVer,
+      objProductoIdVer: objProductoIdVer ?? this.objProductoIdVer,
+      objRubroActividadVer: objRubroActividadVer ?? this.objRubroActividadVer,
+      objActividadPredominanteVer:
+          objActividadPredominanteVer ?? this.objActividadPredominanteVer,
+      objTipoDocumentoIdVer:
+          objTipoDocumentoIdVer ?? this.objTipoDocumentoIdVer,
+      objRubroActividad2Ver:
+          objRubroActividad2Ver ?? this.objRubroActividad2Ver,
+      objRubroActividad3Ver:
+          objRubroActividad3Ver ?? this.objRubroActividad3Ver,
+      objRubroActividadPredominanteVer: objRubroActividadPredominanteVer ??
+          this.objRubroActividadPredominanteVer,
+      objTipoPersonaIdVer: objTipoPersonaIdVer ?? this.objTipoPersonaIdVer,
+      parentescoFamiliar: parentescoFamiliar ?? this.parentescoFamiliar,
+      parentescoFamiliarVer:
+          parentescoFamiliarVer ?? this.parentescoFamiliarVer,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
     );
   }
 }
