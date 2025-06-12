@@ -57,6 +57,7 @@ class _NuevaMenorBusinessDataWidgetState
   TimeOfDay? horarioVisita;
   TimeOfDay? horarioVisitaEndtime;
   Item? objRubroActividadPredominante;
+  Item? departamentoNegocio;
 
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
@@ -257,6 +258,8 @@ class _NuevaMenorBusinessDataWidgetState
                     return item.name;
                   },
                   hintText: 'input.select_option'.tr(),
+                  // validator: (value) =>
+                  //     ClassValidator.validateRequired(value?.value),
                 ),
               ),
             ],
@@ -369,10 +372,22 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             CatalogoValorNacionalidad(
-              where: context
-                  .read<SolicitudNuevaMenorCubit>()
-                  .state
-                  .objDepartamentoCasaId,
+              where:
+                  context.read<SolicitudNuevaMenorCubit>().state.objPaisCasaId,
+              hintText: 'Ingresa Departamento Negocio',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              title: 'Municipio de Negocio',
+              onChanged: (item) {
+                if (item == null) return;
+                departamentoNegocio =
+                    Item(name: item.nombre, value: item.valor);
+              },
+              codigo: 'DEP',
+            ),
+            const Gap(20),
+            CatalogoValorNacionalidad(
+              where: departamentoNegocio?.value,
               hintText: 'Ingresa Municipio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
@@ -449,9 +464,9 @@ class _NuevaMenorBusinessDataWidgetState
                         objSectorId: sectorEconomico?.value,
                         // sectorEconomico: sectorEconomico2,
                         horarioTrabajo:
-                            '${horarioTrabajo!.format(context)} - ${horarioTrabajoEndtime!.format(context)}',
+                            '${horarioTrabajo?.format(context)} - ${horarioTrabajoEndtime?.format(context)}',
                         horarioVisita:
-                            '${horarioVisita!.format(context)} - ${horarioVisitaEndtime!.format(context)}',
+                            '${horarioVisita?.format(context)} - ${horarioVisitaEndtime?.format(context)}',
                         objMunicipioNegocioId: municipioNegocio?.value,
                         barrioNegocio: barrioNegocio,
                         direccionNegocio: direccionNegocio,

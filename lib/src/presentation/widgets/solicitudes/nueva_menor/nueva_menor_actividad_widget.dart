@@ -103,6 +103,31 @@ class _NuevaMenorBeneficiarioWidgetState
               },
             ),
             const Gap(20),
+            CountryInput(
+              onCountryCodeChange: (value) {
+                if (value == null) return;
+                telefonoBeneficiarioCode = value.dialCode!;
+              },
+              isRequired: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                DashFormatter(),
+                LengthLimitingTextInputFormatter(15),
+              ],
+              maxLength: 16,
+              icon: Icon(
+                Icons.phone,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Telefono Beneficiario 1',
+              textInputType: TextInputType.phone,
+              hintText: 'Ingresa Telefono Beneficiario 1',
+              isValid: null,
+              onChange: (value) {
+                telefonoBeneficiario = value;
+              },
+            ),
+            const Gap(20),
             OutlineTextfieldWidget(
               maxLength: 50,
               icon: Icon(
@@ -143,31 +168,6 @@ class _NuevaMenorBeneficiarioWidgetState
               onChanged: (item) {
                 if (item == null) return;
                 parentescoBeneficiarioSeguro1 = item.value;
-              },
-            ),
-            const Gap(20),
-            CountryInput(
-              onCountryCodeChange: (value) {
-                if (value == null) return;
-                telefonoBeneficiarioCode = value.dialCode!;
-              },
-              isRequired: false,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                DashFormatter(),
-                LengthLimitingTextInputFormatter(15),
-              ],
-              maxLength: 16,
-              icon: Icon(
-                Icons.phone,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Telefono Beneficiario',
-              textInputType: TextInputType.phone,
-              hintText: 'Ingresa Telefono Beneficiario',
-              isValid: null,
-              onChange: (value) {
-                telefonoBeneficiario = value;
               },
             ),
             const Gap(20),
