@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -50,6 +51,9 @@ class DefaultAPIRepository implements APIRepository {
     var headers = {
       HttpHeaders.acceptHeader: '*/*',
       HttpHeaders.contentTypeHeader: 'application/json',
+      'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+      'CF-Access-Client-Secret':
+          const String.fromEnvironment('CFAccessClientSecret'),
     };
     headers.addAll(endpoint.headers);
     try {
@@ -110,7 +114,7 @@ class DefaultAPIRepository implements APIRepository {
         headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
   }
 
-  Map<String, dynamic> _handleResponse(Response response) {
+  Future<Map<String, dynamic>> _handleResponse(Response response) async {
     _logger.d('Response - statusCode: ${response.statusCode}');
     final decodedBody = json.decode(response.body);
     // if (response.headers.containsKey('authorization')) {
@@ -140,6 +144,11 @@ class DefaultAPIRepository implements APIRepository {
     // } catch (_) {}
 
     _logger.d('Response error ${response.body}');
+    await registerError(
+      errorMessage: decodedBody.toString(),
+      statusCode: response.statusCode.toString(),
+      username: LocalStorage().currentUserName,
+    );
     var map = cast<Map<String, dynamic>>(decodedBody);
     if (map != null) {
       map.addAll({'statusCode': response.statusCode});
@@ -244,4 +253,26 @@ class AddFileModel {
         'key': key,
         'path': path,
       };
+}
+
+Future<void> registerError({
+  required String errorMessage,
+  required String statusCode,
+  required String username,
+}) async {
+  const String versionJsonUrl =
+      'https://script.google.com/macros/s/AKfycbxpIJY3jGk85c7LIrlFZulfvrl9bLz6o-PV4xk13RYlZ1bgja8_mXtRnzY_ijgcWfU/exec';
+  await http.post(
+    Uri.parse(versionJsonUrl),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(
+      {
+        'error': errorMessage,
+        'usuario': username,
+        'statusCode': statusCode,
+      },
+    ),
+  );
 }

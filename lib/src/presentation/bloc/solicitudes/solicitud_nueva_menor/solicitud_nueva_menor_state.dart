@@ -2,6 +2,8 @@
 part of 'solicitud_nueva_menor_cubit.dart';
 
 class SolicitudNuevaMenorState extends Equatable {
+  final String onSuccessMsg;
+  final bool hasVerified;
   final int idLocalResponse;
   final String errorMsg;
   final Status status;
@@ -137,7 +139,17 @@ class SolicitudNuevaMenorState extends Equatable {
   final String fechaDesembolso;
   final String createdAt;
   final bool isDone;
+  final int montoMinimo;
+  final int montoMaximo;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   const SolicitudNuevaMenorState({
+    this.cedulaFrontPath = '',
+    this.cedulaBackPath = '',
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
+    this.onSuccessMsg = '',
+    this.hasVerified = false,
     this.isDone = false,
     this.idLocalResponse = 0,
     this.createdAt = '',
@@ -277,6 +289,10 @@ class SolicitudNuevaMenorState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaFrontPath,
+        cedulaBackPath,
+        onSuccessMsg,
+        hasVerified,
         idLocalResponse,
         errorMsg,
         status,
@@ -415,6 +431,8 @@ class SolicitudNuevaMenorState extends Equatable {
       ];
 
   SolicitudNuevaMenorState copyWith({
+    String? onSuccessMsg,
+    bool? hasVerified,
     int? idLocalResponse,
     String? errorMsg,
     Status? status,
@@ -550,8 +568,14 @@ class SolicitudNuevaMenorState extends Equatable {
     String? fechaDesembolso,
     String? createdAt,
     bool? isDone,
+    int? montoMinimo,
+    int? montoMaximo,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
   }) {
     return SolicitudNuevaMenorState(
+      onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
+      hasVerified: hasVerified ?? this.hasVerified,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       errorMsg: errorMsg ?? this.errorMsg,
       status: status ?? this.status,
@@ -724,6 +748,10 @@ class SolicitudNuevaMenorState extends Equatable {
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
       createdAt: createdAt ?? this.createdAt,
       isDone: isDone ?? this.isDone,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
     );
   }
 }

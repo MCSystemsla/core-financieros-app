@@ -19,4 +19,8 @@ class SolicitudesPendientes {
   String? motivoAnterior;
   int? cantidadHijos;
   String? cedula;
+  bool? isSended = false;
+  String? nombreFormulario;
+  DateTime? dateSended;
+  bool imagesSended = false;
 }

@@ -36,6 +36,7 @@ abstract class OdsDialog<T> extends StatefulWidget {
     Widget? customHeader,
   }) async {
     final response = await AwesomeDialog(
+      dismissOnTouchOutside: false,
       headerAnimationLoop: false,
       context: context,
       animType: animType,

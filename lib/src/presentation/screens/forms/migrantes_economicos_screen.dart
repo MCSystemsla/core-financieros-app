@@ -23,8 +23,7 @@ class MigrantesEconomicosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isRecurrentForm =
-        typeProduct == 'ESTANDAR COLONES RECURRENTE MAYOR A MIL' ||
-            typeProduct == 'ESTANDAR COLONES RECURRENTE MENOR A MIL';
+        typeProduct == 'ScrKivaMigrantesEconomicosRecurrentes';
 
     final pageController = PageController();
 

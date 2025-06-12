@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'upload_user_file_state.dart';
@@ -27,19 +28,34 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
-    await repository.uploadUserFiles(
-      imagen1: state.imagen1,
-      imagen2: state.imagen2,
-      imagen3: state.imagen3,
-      fotoFirma: fotoFirma,
-      solicitudId: solicitudId,
-      formularioKiva: formularioKiva,
-      database: LocalStorage().database,
-      tipoSolicitud: tipoSolicitud,
-      numero: numero,
-      cedula: cedula,
-    );
+    emit(state.copyWith(
+      status: Status.inProgress,
+      imageRetryAttempts: state.imageRetryAttempts + 1,
+    ));
+    try {
+      final (isOk, msg) = await repository.uploadUserFiles(
+        imagen1: state.imagen1,
+        imagen2: state.imagen2,
+        imagen3: state.imagen3,
+        fotoFirma: fotoFirma,
+        solicitudId: solicitudId,
+        formularioKiva: formularioKiva,
+        database: LocalStorage().database,
+        tipoSolicitud: tipoSolicitud,
+        numero: numero,
+        cedula: cedula,
+        typeSigner: typeSigner,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
   }
 
   Future<void> uploadUserFilesOffline({
@@ -52,18 +68,32 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required String typeSigner,
   }) async {
-    await repository.uploadUserFilesOffline(
-      imagen1: imagen1,
-      imagen2: imagen2,
-      imagen3: imagen3,
-      fotoFirma: fotoFirma,
-      solicitudId: solicitudId,
-      formularioKiva: formularioKiva,
-      database: LocalStorage().database,
-      tipoSolicitud: tipoSolicitud,
-      numero: numero,
-      cedula: cedula,
-    );
+    try {
+      emit(state.copyWith(status: Status.inProgress));
+      final (isOk, msg) = await repository.uploadUserFilesOffline(
+        imagen1: imagen1,
+        imagen2: imagen2,
+        imagen3: imagen3,
+        fotoFirma: fotoFirma,
+        solicitudId: solicitudId,
+        formularioKiva: formularioKiva,
+        database: LocalStorage().database,
+        tipoSolicitud: tipoSolicitud,
+        numero: numero,
+        cedula: cedula,
+        typeSigner: typeSigner == TypeSigner.asesor.name
+            ? TypeSigner.asesor
+            : TypeSigner.cliente,
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMsg: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+    }
   }
 }

@@ -1,15 +1,21 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
@@ -21,8 +27,16 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class NuevaMenorDataClientWidget extends StatefulWidget {
+  final String cedula;
   final PageController controller;
-  const NuevaMenorDataClientWidget({super.key, required this.controller});
+  final Item tipoDocumento;
+
+  const NuevaMenorDataClientWidget({
+    super.key,
+    required this.controller,
+    required this.cedula,
+    required this.tipoDocumento,
+  });
 
   @override
   State<NuevaMenorDataClientWidget> createState() =>
@@ -59,6 +73,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
       initialDate: _selectedDate,
       firstDate: DateTime(1930),
       lastDate: DateTime(2101),
+      keyboardType: TextInputType.datetime,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != _selectedDate) {
@@ -80,13 +95,15 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
   final telefonoController = TextEditingController();
   final celularController = TextEditingController();
   final emailController = TextEditingController();
-  final nacionalidadController = TextEditingController();
+  Item? nacionalidadController;
   final formKey = GlobalKey<FormState>();
   String countryCode = '+505';
   String celularCode = '+505';
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<ObjectBoxService>();
+
     super.build(context);
     return BlocBuilder<UserByCedulaCubit, UserByCedulaState>(
       builder: (context, state) {
@@ -149,7 +166,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     hintText: 'Ingresa Nombre2',
                     textCapitalization: TextCapitalization.words,
                     isValid: null,
-                    isRequired: true,
                     onChange: (value) {
                       nombre2 = value;
                       setState(() {});
@@ -187,7 +203,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     hintText: 'Ingresa Apellido2',
                     textCapitalization: TextCapitalization.words,
                     isValid: null,
-                    isRequired: true,
                     onChange: (value) {
                       apellido2 = value;
                       setState(() {});
@@ -199,7 +214,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.person_2_rounded,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre Publico',
+                    title: 'Nombre Público',
                     textCapitalization: TextCapitalization.words,
                     hintText: 'Ingresa tu nombre publico',
                     isValid: null,
@@ -208,6 +223,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   SearchDropdownWidget(
+                    enabled: false,
                     // initialValue: '',
                     codigo: 'TIPODOCUMENTOPERSONA',
                     onChanged: (item) {
@@ -219,27 +235,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     title: 'Tipo Documento',
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget.withCounter(
-                    maxLength: 18,
-                    readOnly: true,
-                    initialValue: state.userCedulaResponse.cedula,
-                    icon: Icon(
-                      Icons.credit_card,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    title: 'Cedula',
-                    hintText: 'Ingresa Cedula',
-                    textInputType: TextInputType.text,
-                    isValid: null,
-                    isRequired: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                  ),
-                  const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais Emisor',
+                    hintText: 'Selecciona País Emisor',
                     // hintText: state.userCedulaResponse.pais,
-                    title: 'Pais Emisor',
+                    title: 'País Emisor',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisEmisor = item.valor;
@@ -250,6 +249,23 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     // initialValue: paisEmisor ?? '',
                   ),
                   const Gap(30),
+                  OutlineTextfieldWidget.withCounter(
+                    maxLength: 18,
+                    readOnly: true,
+                    initialValue: state.userCedulaResponse.cedula,
+                    icon: Icon(
+                      Icons.credit_card,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: 'Documento',
+                    hintText: 'Ingresa Documento',
+                    textInputType: TextInputType.text,
+                    isValid: null,
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                  ),
+                  const Gap(30),
                   OutlineTextfieldWidget(
                     // onTap: () => selectDate(context),
                     readOnly: true,
@@ -257,7 +273,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Emision Cedula',
+                    title: 'Fecha Emisión Documento',
                     isRequired: true,
 
                     hintText:
@@ -276,7 +292,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Fecha Vencimiento Cedula',
+                    title: 'Fecha Vencimiento Documento',
                     isValid: null,
                     isRequired: true,
                     readOnly: true,
@@ -299,24 +315,24 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     isRequired: true,
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
-                    maxLength: 50,
-                    icon: Icon(
-                      Icons.flag,
-                      color: AppColors.getPrimaryColor(),
-                    ),
+                  CatalogoValorNacionalidad(
+                    codigo: 'PAIS',
+                    onChanged: (item) {
+                      nacionalidadController = Item(
+                        name: item?.nombre ?? '',
+                        value: item?.valor,
+                      );
+                      setState(() {});
+                    },
                     title: 'Nacionalidad',
                     hintText: 'Ingresa Nacionalidad',
-                    isValid: null,
-                    textEditingController: nacionalidadController,
-                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais de Nacimiento',
-                    title: 'Pais de Nacimiento',
+                    hintText: 'Selecciona País de Nacimiento',
+                    title: 'País de Nacimiento',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisNacimiento = item.valor;
@@ -356,14 +372,14 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Telefono',
+                    title: 'Teléfono',
                     hintText: 'Ingresa Telefono',
                     textInputType: TextInputType.phone,
                     isValid: null,
                     textEditingController: telefonoController,
-                    isRequired: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
+                    isRequired: false,
+                    // validator: (value) =>
+                    //     ClassValidator.validateRequired(value),
                   ),
                   const Gap(30),
                   CountryInput(
@@ -385,7 +401,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     textInputType: TextInputType.phone,
                     isValid: null,
                     textEditingController: celularController,
-                    isRequired: true,
+                    isRequired: false,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                   ),
@@ -426,6 +442,16 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
+                        final cedulaPath =
+                            context.read<SolicitudNuevaMenorCubit>().state;
+                        localDbProvider.saveCedulaClient(
+                          cedulaClient: CedulaClientDb(
+                            typeSolicitud: 'NUEVA_MENOR',
+                            cedula: state.userCedulaResponse.cedula,
+                            imageFrontCedula: cedulaPath.cedulaFrontPath,
+                            imageBackCedula: cedulaPath.cedulaBackPath,
+                          ),
+                        );
                         context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                               objPaisNacimientoIdVer: paisNacimientoVer,
                               objSexoIdVer: sexoVer,
@@ -452,7 +478,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                               fechaNacimiento: state
                                   .userCedulaResponse.fechaNacimiento
                                   .toIso8601String(),
-                              nacionalidad: nacionalidadController.text.trim(),
+                              nacionalidad: nacionalidadController?.value,
                               objPaisNacimientoId: paisNacimiento,
                               objSexoId: state.userCedulaResponse.sexo,
                               telefono: countryCode +
@@ -493,7 +519,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
           );
         }
         return IsCedulaUserNotExistsForm(
+          cedula: widget.cedula,
           controller: widget.controller,
+          tipoDocumento: widget.tipoDocumento,
         );
       },
     );
@@ -505,7 +533,15 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
 
 class IsCedulaUserNotExistsForm extends StatefulWidget {
   final PageController controller;
-  const IsCedulaUserNotExistsForm({super.key, required this.controller});
+  final String cedula;
+  final Item tipoDocumento;
+
+  const IsCedulaUserNotExistsForm({
+    super.key,
+    required this.controller,
+    required this.cedula,
+    required this.tipoDocumento,
+  });
 
   @override
   State<IsCedulaUserNotExistsForm> createState() =>
@@ -533,11 +569,24 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   DateTime? fechaNacimiento;
   String celularCountyCode = '+505';
   String telefonoCountryCode = '+505';
-  Future<void> selectDate(BuildContext context) async {
+  final edadMinimaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+  final edadMaximaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+
+  Future<void> selectDate(BuildContext context, String tipoDocumeto) async {
+    final DateTime minFechaVencimiento = DateTime(
+      fechaEmisionCedula!.year + 10,
+      fechaEmisionCedula!.month,
+      fechaEmisionCedula!.day,
+    );
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(1930),
+      keyboardType: TextInputType.datetime,
+      firstDate: tipoDocumeto != 'CEDULAIDENTIDAD' && paisEmisor?.value != 'NIC'
+          ? DateTime(1930)
+          : minFechaVencimiento,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -551,6 +600,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+
       _selectedDate = picked;
       setState(() {});
     }
@@ -571,11 +621,23 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime eighteenYearsAgo = DateTime(
+      now.year - int.parse(edadMinimaCliente?.valor ?? ''),
+      now.month,
+      now.day,
+    );
+    final DateTime maxAgeClient = DateTime(
+      now.year - int.parse(edadMaximaCliente?.valor ?? ''),
+      now.month,
+      now.day,
+    );
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2101),
+      firstDate: maxAgeClient,
+      lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaNacimiento) {
@@ -588,21 +650,31 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+
       fechaNacimiento = picked;
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tipoDocumento = widget.tipoDocumento;
+    cedulaController = widget.cedula;
   }
 
   final nombrePublicoController = TextEditingController();
   final telefonoController = TextEditingController();
   final celularController = TextEditingController();
   final emailController = TextEditingController();
-  final nacionalidadController = TextEditingController();
-  final cedulaController = TextEditingController();
+  Item? nacionalidadController;
+  String? cedulaController;
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final localDpProvider = global<ObjectBoxService>();
+
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -649,7 +721,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               hintText: 'Ingresa Nombre2',
               textCapitalization: TextCapitalization.words,
               isValid: null,
-              isRequired: true,
               onChange: (value) {
                 nombre2 = value;
                 setState(() {});
@@ -682,7 +753,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               hintText: 'Ingresa Apellido2',
               textCapitalization: TextCapitalization.words,
               isValid: null,
-              isRequired: true,
               onChange: (value) {
                 apellido2 = value;
                 setState(() {});
@@ -694,16 +764,17 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.person_2_rounded,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Nombre Publico',
+              title: 'Nombre Público',
               textCapitalization: TextCapitalization.words,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
               textEditingController: nombrePublicoController,
-              isRequired: true,
             ),
             const Gap(30),
             SearchDropdownWidget(
+              enabled: false,
               // initialValue: '',
+              hintText: tipoDocumento?.name ?? '',
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -713,25 +784,10 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               title: 'Tipo Documento',
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
-              maxLength: 18,
-              icon: Icon(
-                Icons.credit_card,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cedula',
-              hintText: 'Ingresa Cedula',
-              textInputType: TextInputType.number,
-              textEditingController: cedulaController,
-              isValid: null,
-              isRequired: true,
-              validator: (value) => ClassValidator.validateRequired(value),
-            ),
-            const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais Emisor',
+              hintText: 'Selecciona País Emisor',
               // hintText: state.userCedulaResponse.pais,
-              title: 'Pais Emisor',
+              title: 'País Emisor',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisEmisor = Item(name: item.nombre, value: item.valor);
@@ -742,16 +798,36 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              maxLength: 18,
+              readOnly: true,
+              icon: Icon(
+                Icons.credit_card,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Documento',
+              hintText: 'Ingresa Documento',
+              textInputType: TextInputType.text,
+              // textEditingController: cedulaController,
+              onChange: (value) {
+                cedulaController = value;
+              },
+              initialValue: cedulaController,
+              isValid: null,
+              isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(value),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
               onTap: () => selectEmisionFecha(context),
               readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Emision Cedula',
+              title: 'Fecha Emisión Documento',
               isRequired: true,
               hintText: fechaEmisionCedula?.selectorFormat() ??
-                  'Fecha Emision Cedula',
+                  'Fecha Emisión Documento',
               isValid: null,
             ),
             const Gap(30),
@@ -759,17 +835,17 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               validator: (_) => ClassValidator.validateRequired(
                 _selectedDate?.selectorFormat(),
               ),
-              hintText: _selectedDate?.selectorFormat() ??
-                  'Ingrese Fecha Vencimiento',
+              hintText:
+                  _selectedDate?.selectorFormat() ?? 'Ingrese Fecha Documento',
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Fecha Vencimiento Cedula',
+              title: 'Fecha Vencimiento Documento',
               isValid: null,
               isRequired: true,
               readOnly: true,
-              onTap: () => selectDate(context),
+              onTap: () => selectDate(context, tipoDocumento?.value),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -786,22 +862,24 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               isRequired: true,
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
-              icon: Icon(
-                Icons.flag,
-                color: AppColors.getPrimaryColor(),
-              ),
+            CatalogoValorNacionalidad(
+              codigo: 'PAIS',
+              onChanged: (item) {
+                nacionalidadController = Item(
+                  name: item?.nombre ?? '',
+                  value: item?.valor,
+                );
+                setState(() {});
+              },
               title: 'Nacionalidad',
               hintText: 'Ingresa Nacionalidad',
-              isValid: null,
-              textEditingController: nacionalidadController,
-              isRequired: true,
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: 'Selecciona Pais de Nacimiento',
-              title: 'Pais de Nacimiento',
+              hintText: 'Selecciona País de Nacimiento',
+              title: 'País de Nacimiento',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 paisNacimiento = Item(name: item.nombre, value: item.valor);
@@ -809,7 +887,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               codigo: 'PAIS',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
-              // initialValue: paisEmisor ?? '',
             ),
             const Gap(30),
             SearchDropdownWidget(
@@ -838,13 +915,13 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Telefono',
-              hintText: 'Ingresa Telefono',
+              title: 'Teléfono',
+              hintText: 'Ingresa Teléfono',
               textInputType: TextInputType.phone,
               isValid: null,
+              isRequired: false,
               textEditingController: telefonoController,
-              isRequired: true,
-              validator: (value) => ClassValidator.validateRequired(value),
+              // validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
             CountryInput(
@@ -866,7 +943,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               textInputType: TextInputType.phone,
               isValid: null,
               textEditingController: celularController,
-              isRequired: true,
+              isRequired: false,
               validator: (value) => ClassValidator.validateRequired(value),
             ),
             const Gap(30),
@@ -904,6 +981,16 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  final cedulaPath =
+                      context.read<SolicitudNuevaMenorCubit>().state;
+                  localDpProvider.saveCedulaClient(
+                    cedulaClient: CedulaClientDb(
+                      typeSolicitud: 'NUEVA_MENOR',
+                      cedula: cedulaController?.trim(),
+                      imageFrontCedula: cedulaPath.cedulaFrontPath,
+                      imageBackCedula: cedulaPath.cedulaBackPath,
+                    ),
+                  );
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objPaisNacimientoIdVer: paisNacimiento?.name,
                         objSexoIdVer: sexo?.name,
@@ -918,7 +1005,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                         tipoPersona: tipoPersonaCredito?.value,
                         objTipoPersonaId: tipoPersonaCredito?.value,
                         objTipoDocumentoId: tipoDocumento?.value,
-                        cedula: cedulaController.text.trim(),
+                        cedula: cedulaController?.trim(),
                         nombrePublico: nombrePublicoController.text.trim(),
                         objPaisEmisorCedula: paisEmisor?.value,
                         fechaEmisionCedula:
@@ -927,7 +1014,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                             _selectedDate?.toUtc().toIso8601String(),
                         fechaNacimiento:
                             fechaNacimiento?.toUtc().toIso8601String(),
-                        nacionalidad: nacionalidadController.text.trim(),
+                        nacionalidad: nacionalidadController?.value,
                         objPaisNacimientoId: paisNacimiento?.value,
                         objSexoId: sexo?.value,
                         telefono: telefonoCountryCode +

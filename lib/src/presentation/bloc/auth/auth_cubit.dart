@@ -36,6 +36,7 @@ class AuthCubit extends Cubit<AuthState> {
       await LocalStorage().setJWT(resp['accessToken']);
       await LocalStorage().setDatabase(dbName);
       await LocalStorage().setUserId(resp['usuarioId']);
+      await LocalStorage().setCurrentUsername(resp['username']);
       final haveToSync = CatalogoSync.needToSync();
       if (!haveToSync) {
         await LocalStorage()

@@ -34,8 +34,8 @@ android {
     ndkVersion = '25.1.8937393'
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
      signingConfigs {
         release {
@@ -52,7 +52,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
         ndk { 
@@ -65,8 +65,40 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
+            // signingConfig = signingConfigs.release
             minifyEnabled true
-            shrinkResources false
+            shrinkResources true
+        }
+    }
+    flavorDimensions "country"
+    productFlavors {
+        micreditoQA {
+            dimension "country"
+            resValue "string", "app_name", "MiCrédito QA"
+            // versionNameSuffix ".ni"
+            applicationId "com.mcsystem.core_financiero_app.qa"
+            signingConfig signingConfigs.debug
+        }
+        micreditoNicaragua {
+            dimension "country"
+            resValue "string", "app_name", "MiCrédito"
+            // versionNameSuffix ".ni"
+            applicationId "com.mcsystem.core_financiero_app.ni"
+            signingConfig signingConfigs.debug
+        }
+        micreditoHonduras {
+            dimension "country"
+            resValue "string", "app_name", "MiCrédito Honduras"
+            // versionNameSuffix ".hn"
+            applicationId "com.mcsystem.core_financiero_app.hn"
+            signingConfig signingConfigs.debug
+        }
+        micreditoCostaRica {
+            dimension "country"
+            resValue "string", "app_name", "MiCrédito Costa Rica"
+            // versionNameSuffix ".cr"
+            applicationId "com.mcsystem.core_financiero_app.cr"
+            signingConfig signingConfigs.debug
         }
     }
 }

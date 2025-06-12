@@ -135,8 +135,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
   bool isMatching = false;
   @override
   void initState() {
-    _getNumSolicitud();
     super.initState();
+    _getNumSolicitud();
   }
 
   @override
@@ -161,6 +161,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           '${widget.solicitud.numero} - ${widget.solicitud.nombre!.capitalizeAll}'),
       onTap: () async {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
+              nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
               cedula: widget.solicitud.cedula ?? '',
               tipoSolicitud: widget.solicitud.tipoSolicitud ?? 'N/A',
@@ -181,7 +182,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
           ).showDialog(context);
           return;
         }
-        await context.push('/online', extra: widget.solicitud.producto);
+        await context.push('/online', extra: widget.solicitud.nombreFormulario);
       },
       subtitle: Text(
         widget.solicitud.fecha?.formatDateV2() ?? '',

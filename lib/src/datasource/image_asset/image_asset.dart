@@ -1,5 +1,7 @@
 abstract class ImageAsset {
+  static const String icon = 'assets/images/app_icon.png';
   static const String logo = 'assets/images/logo.png';
+  static const String logoNi = 'assets/images/logo_original.png';
   static const String homeLangESUrl = 'assets/images/bandera_espanol.svg';
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
   static const String loader = 'assets/images/loader.gif';
@@ -39,4 +41,10 @@ abstract class ImageAsset {
       'assets/images/success2_catalogo.json';
   static const String enviarSolicitudOfflines =
       'assets/images/enviar_solicitud_offline.json';
+
+  // REPRESTAMO
+  static const String represtamoBg = 'assets/images/represtamo.webp';
+
+  // CEDULA
+  static const String cedulaPhoto = 'assets/images/document.svg';
 }

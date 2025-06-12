@@ -59,18 +59,6 @@ class _MejoraViviendaCreditoDescripState
                     ),
               ),
               const Gap(20),
-              // CommentaryWidget(
-              //   textEditingController: question1,
-              //   validator: (value) {
-              //     // if (value == null || value.isEmpty) {
-              //     //   return 'input.input_validator'.tr();
-              //     // }
-
-              //     return null;
-              //   },
-              //   title:
-              //       '¿Para que utilizó el crédito anterior ?* (autorellenará con la respuesta del crédito anterior)',
-              // ),
               const MotivoPrestamoWidget(),
               const Gap(20),
               WhiteCard(

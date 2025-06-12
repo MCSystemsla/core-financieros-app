@@ -1,3 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
@@ -13,6 +17,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +36,8 @@ class NuevaMenorOffline6Widget extends StatefulWidget {
       _NuevaMenorOffline6WidgetState();
 }
 
-class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
+class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
+    with AutomaticKeepAliveClientMixin {
   String? moneda;
   String? monedaVer;
   String? monto;
@@ -46,6 +53,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
   DateTime? fechaPrimerPago;
   DateTime? fechaDesembolso;
   double? tasaInteres;
+  int? montoMinimo;
+  double? montoMaximo;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -112,12 +121,16 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
     fechaDesembolso =
         DateTime.tryParse(widget.responseLocalDb.fechaDesembolso ?? '');
     tasaInteres = widget.responseLocalDb.prestamoInteres;
+    montoMinimo = widget.responseLocalDb.montoMinimo;
+    montoMaximo = widget.responseLocalDb.montoMaximo?.toDouble();
   }
 
   final montoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    log(monto.toString());
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     montoController.value =
         TextEditingValue(text: FormatField.formatMonto(monto ?? ''));
@@ -143,39 +156,40 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              textEditingController: montoController,
+              initialValue: monto,
+              // onFieldSubmitted: (value) {
+              //   String formattedValue =
+              //       FormatField.formatMonto(montoController.text);
+              //   montoController.value = TextEditingValue(
+              //     text: formattedValue,
+              //     selection:
+              //         TextSelection.collapsed(offset: formattedValue.length),
+              //   );
+              // },
+              // onTapOutside: (event) {
+              //   String formattedValue =
+              //       FormatField.formatMonto(montoController.text);
+              //   montoController.value = TextEditingValue(
+              //     text: formattedValue,
+              //     selection:
+              //         TextSelection.collapsed(offset: formattedValue.length),
+              //   );
+              // },
+              // textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Monto',
-              hintText: monto ?? 'Ingresa Monto',
+              hintText: 'Ingresa Monto',
               textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(monto),
               isValid: null,
               onChange: (value) {
                 monto = value;
+                setState(() {});
               },
             ),
-
             OutlineTextfieldWidget(
               initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
@@ -204,6 +218,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
             ),
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               hintText: productoVer ?? 'Selecciona una opcion',
               codigo: 'PRODUCTO',
               title: 'Producto',
@@ -212,6 +228,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                 producto = item.value;
                 productoVer = item.name;
                 tasaInteres = item.interes;
+                montoMinimo = item.montoMinimo;
+                montoMaximo = item.montoMaximo;
               },
             ),
             const Gap(20),
@@ -260,23 +278,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               initialValue: observacion,
               icon: Icon(
@@ -308,6 +309,26 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
+                  if (double.tryParse(monto ?? '0')! <
+                      montoMinimo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if (double.tryParse(monto ?? '0')! >
+                      montoMaximo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
@@ -319,25 +340,30 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+\.)'), (Match match) => '${match[1]},')} $monedaVer',
+                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} $monedaVer',
                     onDone: () {
                       context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                            montoMaximo: montoMaximo?.toInt(),
+                            montoMinimo: montoMinimo?.toInt(),
+                            fechaDesembolso:
+                                fechaDesembolso?.toUtc().toIso8601String(),
                             objFrecuenciaIdVer: frecuenciaDePagoVer,
                             objProductoIdVer: productoVer,
                             objMonedaIdVer: monedaVer,
                             objPropositoIdVer: propositoVer,
                             objMonedaId: moneda,
-                            monto: int.tryParse(monto!),
+                            monto: int.tryParse(monto ?? '0'),
                             objPropositoId: proposito,
                             objProductoId: producto,
                             objFrecuenciaId: frecuenciaDePago,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),
                             cuota: calcularCuotaProvider
                                 .state.montoPrincipalPrimeraCuota
                                 .toInt(),
                             observacion: observacion,
+                            prestamoInteres: tasaInteres,
                           );
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
@@ -370,4 +396,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

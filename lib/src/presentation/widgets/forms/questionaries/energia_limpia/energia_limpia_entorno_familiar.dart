@@ -169,23 +169,7 @@ class _EnergiaLimpiaEntornoFamiliarState
                       textEditingController: problemasEnergiaDescripcion,
                       title: 'Explique cual es el problema',
                     ),
-                  // const Gap(20),
-                  // CommentaryWidget(
-                  //   title: 'Número de personas a cargo:*',
-                  //   textEditingController: personasCargo,
-                  //   textInputType: TextInputType.number,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'input.input_validator'.tr();
-                  //     }
-                  //     final numero = int.tryParse(value);
-                  //     if (numero == null || numero < 0 || numero >= 255) {
-                  //       return 'Valor no valido'.tr();
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
-                  // const Gap(20),
+                  const Gap(20),
                   CommentaryWidget(
                     title: 'Cantidad de hijos:',
                     readOnly: true,

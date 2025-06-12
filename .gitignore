@@ -46,4 +46,10 @@ api-key-local.json
 api-key.json
 api-key-prod.json
 
-.vscode
+
+# Version control environment file
+version.json
+version-prod.json
+
+# Android generated files
+android/app/.cxx/

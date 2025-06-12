@@ -1,8 +1,10 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -10,7 +12,8 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class DownsloadingCatalogosWidget extends StatefulWidget {
-  const DownsloadingCatalogosWidget({super.key});
+  final VoidCallback? onDownloadComplete;
+  const DownsloadingCatalogosWidget({super.key, this.onDownloadComplete});
 
   @override
   State<DownsloadingCatalogosWidget> createState() =>
@@ -22,6 +25,10 @@ class _DownsloadingCatalogosWidgetState
   @override
   void initState() {
     context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+          isConnected:
+              context.read<InternetConnectionCubit>().state.isConnected,
+        );
+    context.read<CatologoNacionalidadCubit>().saveAllCatalogos(
           isConnected:
               context.read<InternetConnectionCubit>().state.isConnected,
         );
@@ -38,13 +45,25 @@ class _DownsloadingCatalogosWidgetState
                 lottieAsset: ImageAsset.downloadCatalogoLoading,
                 text: 'Sincronizando...',
               ),
-            SolicitudCatalogoSuccess() => const DownloadCatalogoLoading(
+            SolicitudCatalogoSuccess() => DownloadCatalogoLoading(
                 lottieAsset: ImageAsset.downloadCatalogosSuccess,
                 text: 'Sincronización completada con éxito.',
                 repeat: false,
                 isSucess: true,
+                onDownloadComplete: widget.onDownloadComplete,
               ),
-            SolicitudCatalogoError() => Text('Error: ${state.error}'),
+            SolicitudCatalogoError() => OnErrorWidget(
+                onPressed: () {
+                  context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+                        isConnected: context
+                            .read<InternetConnectionCubit>()
+                            .state
+                            .isConnected,
+                      );
+                },
+                btnTitle: 'Intentar de nuevo',
+                errorMsg: state.error,
+              ),
             _ => const SizedBox(),
           };
         },
@@ -59,6 +78,7 @@ class DownloadCatalogoLoading extends StatelessWidget {
   final bool? repeat;
   final bool? isSucess;
   final bool isUploadingForms;
+  final VoidCallback? onDownloadComplete;
   const DownloadCatalogoLoading({
     super.key,
     required this.lottieAsset,
@@ -66,6 +86,7 @@ class DownloadCatalogoLoading extends StatelessWidget {
     this.repeat = true,
     this.isSucess = false,
     this.isUploadingForms = false,
+    this.onDownloadComplete,
   });
 
   @override
@@ -98,13 +119,14 @@ class DownloadCatalogoLoading extends StatelessWidget {
                 child: CustomElevatedButton(
                   color: AppColors.getPrimaryColor(),
                   text: 'OK',
-                  onPressed: () {
-                    if (isUploadingForms) {
-                      return context.pushReplacement('/');
-                    }
-                    if (context.canPop()) return context.pop();
-                    context.push('/');
-                  },
+                  onPressed: onDownloadComplete ??
+                      () {
+                        if (isUploadingForms) {
+                          return context.pushReplacement('/');
+                        }
+                        if (context.canPop()) return context.pop();
+                        context.push('/');
+                      },
                 ),
               )
             ]

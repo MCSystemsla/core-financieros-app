@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -19,6 +20,8 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoin
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
+
+enum TypeSigner { asesor, cliente, ambos, ninguno }
 
 abstract class ResponsesRepository {
   Future<(bool, String)> mejoraViviendaAnswer({
@@ -71,6 +74,7 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   });
   Future<(bool, String)> uploadUserFilesOffline({
     required String imagen1,
@@ -83,12 +87,16 @@ abstract class ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   });
   Future<(bool, String)> migrantesEconomicos({
     required MigrantesEconomicos migrantesEconmicos,
   });
   Future<(bool, String)> migrantesEconomicosRecurrente({
     required MigrantesEconomicosRecurrente migrantesEconmicos,
+  });
+  Future<(bool, String)> sendCodigoVerificacion({
+    required String codigo,
   });
 }
 
@@ -295,17 +303,19 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
 
     const url = '$protocol://$apiUrl/kiva/subir-imagenes';
 
-    final currentProduct = setCurrentProdut(product: formularioKiva);
+    // final currentProduct = setCurrentProdut(product: formularioKiva);
+    final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = currentProduct;
+      request.fields['formularioKiva'] = formularioKiva;
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
@@ -333,43 +343,50 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigital',
+        typeSignerString,
         fotoFirma,
         filename: fotoFirma,
         contentType: MediaType('image', 'png'),
       ));
 
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoCedula',
-      //   fotoCedula,
-      //   filename: fotoCedula,
-      //   contentType: MediaType('image', 'jpeg'),
-      // ));
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoFirmaDigitalAsesor',
-      //   fotoAsesorFirma,
-      //   filename: fotoAsesorFirma,
-      //   contentType: MediaType('image', 'png'),
-      // ));
-      request.headers.addAll({
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      });
+      request.headers.addAll(
+        {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${LocalStorage().jwt}',
+          'CF-Access-Client-Id':
+              const String.fromEnvironment('CFAccessClientId'),
+          'CF-Access-Client-Secret':
+              const String.fromEnvironment('CFAccessClientSecret'),
+        },
+      );
       var response = await request.send();
 
       var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (false, jsonBody['message'] as String);
       }
       _logger.i(response.reasonPhrase);
-      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
+      return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
     }
+  }
+
+  String setFirmaByTypeSigner({
+    required TypeSigner typeSigner,
+  }) {
+    return switch (typeSigner) {
+      TypeSigner.asesor => 'fotoFirmaDigitalAsesor',
+      TypeSigner.cliente => 'fotoFirmaDigital',
+      _ => 'N/A',
+    };
   }
 
   String setCurrentProdut({required String product}) {
@@ -444,8 +461,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     required String tipoSolicitud,
     required String numero,
     required String cedula,
+    required TypeSigner typeSigner,
   }) async {
-    final currentProduct = setCurrentProdut(product: formularioKiva);
+    // final currentProduct = setCurrentProdut(product: formularioKiva);
+    final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
 
@@ -454,7 +473,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
-      request.fields['formularioKiva'] = currentProduct;
+      request.fields['formularioKiva'] = formularioKiva;
       request.fields['database'] = LocalStorage().database;
       request.fields['tipoSolicitud'] = tipoSolicitud;
       request.fields['numeroSolicitud'] = numero;
@@ -482,40 +501,37 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       ));
 
       request.files.add(await http.MultipartFile.fromPath(
-        'fotoFirmaDigital',
+        typeSignerString,
         fotoFirma,
         filename: fotoFirma,
         contentType: MediaType('image', 'png'),
       ));
 
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoCedula',
-      //   fotoCedula,
-      //   filename: fotoCedula,
-      //   contentType: MediaType('image', 'jpg'),
-      // ));
-      // request.files.add(await http.MultipartFile.fromPath(
-      //   'fotoFirmaDigitalAsesor',
-      //   imagenAsesor,
-      //   filename: imagenAsesor,
-      //   contentType: MediaType('image', 'png'),
-      // ));
       request.headers.addAll({
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
       });
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagen enviada exitosamente: ${responseBody.body}');
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
       }
 
       _logger.i(response.reasonPhrase);
-      return (true, response.reasonPhrase ?? 'Imagenes Enviadas exitosamente!');
+      return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
@@ -553,6 +569,23 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     } catch (e) {
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> sendCodigoVerificacion({
+    required String codigo,
+  }) async {
+    final endpoint = CodigoVerificationEndpoint(codigo: codigo);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        return (false, 'Codigo Verificacion Incorrecto');
+      }
+      return (true, 'Codigo verificacion correcto');
+    } catch (e) {
+      _logger.e(e);
+      return (false, 'Codigo Verificacion Incorrecto');
     }
   }
 }

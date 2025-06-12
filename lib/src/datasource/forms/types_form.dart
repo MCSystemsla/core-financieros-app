@@ -1,4 +1,4 @@
-enum TypeForm {
+enum TypeForm2 {
   origen,
   departamento,
   comentario,

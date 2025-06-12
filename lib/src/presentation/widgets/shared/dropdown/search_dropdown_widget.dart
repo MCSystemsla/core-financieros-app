@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -5,6 +7,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:uuid/uuid.dart';
 
 class SearchDropdownWidget extends StatelessWidget {
   final String codigo;
@@ -13,6 +16,7 @@ class SearchDropdownWidget extends StatelessWidget {
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
   final String hintText;
+  final bool enabled;
 
   const SearchDropdownWidget({
     super.key,
@@ -21,20 +25,26 @@ class SearchDropdownWidget extends StatelessWidget {
     this.isRequired = false,
     required this.onChanged,
     this.validator,
-    this.hintText = 'Selecciona una opcion',
+    this.hintText = 'Selecciona una opción',
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final uuid = const Uuid().v4();
+
     final FocusNode dropdownFocus = FocusNode();
 
     final localDbProvider = global<ObjectBoxService>();
     final items =
         localDbProvider.findParentescosByNombre(type: codigo).map((e) {
       return Item(
+        id: uuid,
         value: e.valor,
         name: e.nombre,
         interes: e.interes ?? 0,
+        montoMaximo: e.montoMaximo ?? 0,
+        montoMinimo: e.montoMinimo ?? 0,
       );
     }).toList();
     return Padding(
@@ -65,6 +75,7 @@ class SearchDropdownWidget extends StatelessWidget {
               ],
             ),
             child: DropdownSearch<Item>(
+              enabled: enabled,
               validator: validator,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(

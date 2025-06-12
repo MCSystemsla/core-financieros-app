@@ -1,9 +1,10 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-typedef ValidatorCallback<T> = String? Function(T? value)?;
+// typedef ValidatorCallback<T> = String? Function(T? value)?;
 typedef OnChangeCallback<T> = Function(T? value)?;
 
 class OutlineTextfieldWidget extends StatelessWidget {
@@ -19,9 +20,9 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final String? initialValue;
   final double? marginTop;
   final TextInputType? textInputType;
-  final TextCapitalization? textCapitalization;
-  final bool? readOnly;
-  final bool? isValid; // Cambiado a `bool?` para manejar nulo
+  final TextCapitalization textCapitalization;
+  final bool readOnly;
+  final bool? isValid;
   final Icon? icon;
   final bool isRequired;
   final VoidCallback? onTap;
@@ -38,7 +39,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.onChange,
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
+    this.textCapitalization = TextCapitalization.characters,
     this.readOnly = false,
     this.isValid,
     this.icon, // Permitir nulo como estado inicial
@@ -59,7 +60,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.onChange,
     this.marginTop = 10,
     this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
+    this.textCapitalization = TextCapitalization.characters,
     this.readOnly = false,
     this.isValid,
     this.icon,
@@ -116,9 +117,8 @@ class OutlineTextfieldWidget extends StatelessWidget {
                     maxLength: maxLength,
                     maxLines: null,
                     onChanged: onChange,
-                    textCapitalization:
-                        textCapitalization ?? TextCapitalization.none,
-                    readOnly: readOnly ?? false,
+                    textCapitalization: textCapitalization,
+                    readOnly: readOnly,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,

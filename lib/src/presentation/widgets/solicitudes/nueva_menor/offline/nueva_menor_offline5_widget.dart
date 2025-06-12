@@ -1,11 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -24,7 +26,8 @@ class NuevaMenorOffline5Widget extends StatefulWidget {
       _NuevaMenorOffline5WidgetState();
 }
 
-class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget> {
+class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
+    with AutomaticKeepAliveClientMixin {
   String? esPeps;
   String? nombreEntidadPeps;
   String? paisPeps;
@@ -62,6 +65,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -308,4 +312,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

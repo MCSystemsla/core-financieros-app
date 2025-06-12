@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
+import 'package:core_financiero_app/src/config/helpers/greeting/greeting.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
@@ -7,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_scr
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeItemsWidget extends StatelessWidget {
@@ -19,7 +23,7 @@ class HomeItemsWidget extends StatelessWidget {
     final actions = LocalStorage().currentActions;
 
     List<HomeItemCard> homeItemData = [
-      if (actions.contains('MENUCARTERA'))
+      if (actions.contains('MENUCARTERAMOVIL'))
         HomeItemCard(
           title: 'home.item5'.tr(),
           subtitle: 'Descripcion'.tr(),
@@ -86,20 +90,69 @@ class HomeItemsWidget extends StatelessWidget {
     ];
 
     return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.all(5),
-        child: GridView.builder(
-          padding: const EdgeInsets.all(2),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _GreetingsWidget(),
+          Container(
+            margin: const EdgeInsets.all(5),
+            child: GridView.builder(
+              padding: const EdgeInsets.all(2),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: homeItemData.length,
+              itemBuilder: (BuildContext context, int index) => _ItemWidget(
+                homeItemCard: homeItemData[index],
+              ),
+            ),
           ),
-          itemCount: homeItemData.length,
-          itemBuilder: (BuildContext context, int index) => _ItemWidget(
-            homeItemCard: homeItemData[index],
+        ],
+      ),
+    );
+  }
+}
+
+class _GreetingsWidget extends StatelessWidget {
+  const _GreetingsWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final (greeting, icon) = getGreetings();
+    final currentUserName = LocalStorage().currentUserName;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const Gap(10),
+          Text(
+            '$greeting,',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
           ),
-        ),
+          const Gap(5),
+          Text(
+            currentUserName,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.getPrimaryColor(),
+            ),
+          ),
+        ],
       ),
     );
   }

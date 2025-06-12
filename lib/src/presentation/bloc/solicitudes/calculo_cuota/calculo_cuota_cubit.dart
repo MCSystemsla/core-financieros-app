@@ -14,8 +14,12 @@ class CalculoCuotaCubit extends Cubit<CalculoCuotaState> {
     required double saldoPrincipal,
     required double tasaInteresMensual,
   }) {
-    final diasFormaDePago = getDaysByFormaDePago(frecuenciaPago: formadePago);
-    final cantidadCuotas = (plazoSolicitud / diasFormaDePago);
+    // final diasFormaDePago = getDaysByFormaDePago(frecuenciaPago: formadePago);
+    // final cantidadCuotas = (plazoSolicitud / diasFormaDePago);
+    // final cantidadCuotas = plazoSolicitud * diasFormaDePago;
+    final cantidadCuotas = plazoSolicitud;
+    // final plazoEnDias = cantidadCuotas * diasFormaDePago;
+
     final diasTranscurridos =
         fechaPrimeraCuota.difference(fechaDesembolso).inDays;
     final montoInteresPrimeraCuota =
@@ -27,7 +31,7 @@ class CalculoCuotaCubit extends Cubit<CalculoCuotaState> {
         montoPrincipalPrimeraCuota + montoInteresPrimeraCuota;
 
     emit(state.copyWith(
-      cantidadCuotas: cantidadCuotas.toInt(),
+      cantidadCuotas: cantidadCuotas,
       diasTranscurridos: diasTranscurridos,
       montoInteresPrimeraCuota: montoInteresPrimeraCuota,
       montoPrincipalPrimeraCuota: montoPrincipalPrimeraCuota,

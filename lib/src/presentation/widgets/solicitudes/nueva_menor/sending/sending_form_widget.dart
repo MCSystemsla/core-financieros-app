@@ -42,12 +42,13 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
                 lottieAsset: ImageAsset.nuevaMenorUploading,
                 text: 'Enviando solicitud a servidor...',
               ),
-            Status.done => const Padding(
-                padding: EdgeInsets.all(10),
+            Status.done => Padding(
+                padding: const EdgeInsets.all(10),
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Solicitud enviada exitosamente!!',
+                  text:
+                      'Solicitud enviada exitosamente!!\n\n${state.onSuccessMsg}',
                   repeat: false,
                   isUploadingForms: true,
                 ),

@@ -303,6 +303,25 @@ class MigrantesEconomicosEndpointRecurrente extends Endpoint {
   Map<String, dynamic> get body => migrantesEconomicosRecurrente.toJson();
 }
 
+class CodigoVerificationEndpoint extends Endpoint {
+  final String codigo;
+  CodigoVerificationEndpoint({required this.codigo});
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/kiva/validar-codigo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'codigo': codigo,
+      };
+}
+
 class FileEndpoint extends Endpoint {
   final int numSolicitud;
   final String formularioKiva;

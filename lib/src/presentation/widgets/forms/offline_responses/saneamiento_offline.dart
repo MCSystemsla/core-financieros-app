@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -31,17 +32,19 @@ class AguaSaneamientoOffline extends StatefulWidget {
 }
 
 class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
+  ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getSaneamientoNueva(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -61,24 +64,27 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
             }
             if (status.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -339,17 +345,19 @@ class RecurrenteSaneamientoOffline extends StatefulWidget {
 
 class _RecurrenteSaneamientoOfflineState
     extends State<RecurrenteSaneamientoOffline> {
+  ImageModel? imageModel;
   @override
   void initState() {
-    initFunctions();
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getImagesModel(widget.solicitudId);
+    imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
     await solicitudesProvider.getSaneamientoRecurrente(widget.solicitudId);
+    setState(() {});
   }
 
   @override
@@ -370,24 +378,27 @@ class _RecurrenteSaneamientoOfflineState
             }
             if (resp.status == Status.done) {
               context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                    typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
-                    numero: context.read<KivaRouteCubit>().state.tipoSolicitud,
+                    numero: context.read<KivaRouteCubit>().state.numero,
                     tipoSolicitud:
                         context.read<KivaRouteCubit>().state.tipoSolicitud,
-                    imagen1: state.imageModel?.imagen1 ?? 'NO PATH',
-                    imagen2: state.imageModel?.imagen2 ?? 'NO PATH',
-                    imagen3: state.imageModel?.imagen3 ?? 'NO PATH',
-                    fotoFirma: state.imageModel?.imagenFirma ?? 'NO PATH',
+                    imagen1: imageModel?.imagen1 ?? 'NO PATH',
+                    imagen2: imageModel?.imagen2 ?? 'NO PATH',
+                    imagen3: imageModel?.imagen3 ?? 'NO PATH',
+                    fotoFirma: imageModel?.imagenFirma ?? 'NO PATH',
                     solicitudId: widget.solicitudId,
-                    formularioKiva:
-                        context.read<KivaRouteCubit>().state.currentRoute,
+                    formularioKiva: context
+                        .read<KivaRouteCubit>()
+                        .state
+                        .nombreFormularioKiva,
                   );
-              context
-                  .read<SolicitudesPendientesLocalDbCubit>()
-                  .removeWhenFormIsUpload(
-                    widget.solicitudId,
-                    context.read<KivaRouteCubit>().state.currentRoute,
-                  );
+              // context
+              //     .read<SolicitudesPendientesLocalDbCubit>()
+              //     .removeWhenFormIsUpload(
+              //       widget.solicitudId,
+              //       context.read<KivaRouteCubit>().state.currentRoute,
+              //     );
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,

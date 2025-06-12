@@ -1,15 +1,19 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +34,8 @@ class NuevaMenorOffline1 extends StatefulWidget {
   State<NuevaMenorOffline1> createState() => _NuevaMenorOffline1State();
 }
 
-class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
+class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
+    with AutomaticKeepAliveClientMixin {
   String? initialValue;
   String? departamentoEmisor;
   DateTime? _selectedDate;
@@ -60,6 +65,34 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
   // String? objPaisNacimientoId;
 
   Future<void> selectDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime eighteenYearsAgo =
+        DateTime(now.year - 18, now.month, now.day);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1930),
+      lastDate: eighteenYearsAgo,
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+
+      _selectedDate = picked;
+      fechaNacimiento = picked.toIso8601String();
+      setState(() {});
+    }
+  }
+
+  Future<void> selectFechaEmisionDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
@@ -78,7 +111,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
         return;
       }
       _selectedDate = picked;
-      fechaNacimiento = picked.toIso8601String();
+      fechaEmisionCedula = picked.toIso8601String();
       setState(() {});
     }
   }
@@ -150,13 +183,34 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
         key: formKey,
         child: Column(
           children: [
-            const Gap(30),
+            if (widget.responseLocalDb.errorMsg!.isNotEmpty) ...[
+              const Gap(30),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: ExpansionTitleCustom(
+                  title: Text(
+                    'Motivo de error de la solicitud',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  finalStep: true,
+                  children: [
+                    Text(widget.responseLocalDb.errorMsg ?? ''),
+                  ],
+                ),
+              ),
+            ],
+            const Gap(10),
             SearchDropdownWidget(
               hintText: tipoPersonaCreditoVer ?? 'input.select_option'.tr(),
               codigo: 'TIPOSPERSONACREDITO',
@@ -284,7 +338,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               ),
               title: 'Cedula',
               hintText: 'Ingresa Cedula',
-              textInputType: TextInputType.number,
+              textInputType: TextInputType.text,
               isValid: null,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
@@ -312,7 +366,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              onTap: () => selectDate(context),
+              onTap: () => selectFechaEmisionDate(context),
               readOnly: true,
               icon: Icon(
                 Icons.calendar_today,
@@ -321,8 +375,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               title: 'Fecha Emision Cedula',
               isRequired: true,
               // initialValue: fechaEmisionCedula,
-              hintText: DateTime.tryParse(fechaNacimiento!)?.selectorFormat() ??
-                  'Ingrese fecha de nacimiento',
+              hintText:
+                  DateTime.tryParse(fechaEmisionCedula!)?.selectorFormat() ??
+                      'Ingrese fecha de Emision',
               isValid: null,
             ),
             const Gap(30),
@@ -347,9 +402,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
             const Gap(30),
             OutlineTextfieldWidget(
               onTap: () => selectDate(context),
-              onChange: (value) {
-                fechaNacimiento = value;
-              },
               readOnly: true,
               icon: Icon(
                 Icons.calendar_month,
@@ -488,6 +540,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+
                   context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                         objPaisNacimientoIdVer: paisNacimientoVer,
                         objSexoIdVer: sexoVer,
@@ -538,7 +591,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  context
+                      .pushReplacement('/solicitudes/solicitudes-pendientes');
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,
@@ -551,4 +605,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

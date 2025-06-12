@@ -1,6 +1,6 @@
 # CORE FINANCIERO APP
 
-_El presente repositorio almacena el código frontend del proyecto MICREDITO, la cual, es una aplicación móvil multiplataforma con la cual se usa para el core fianciero  dado por la empresa **MC SYSTEM** la cual la aplicacion consta para usos financieros._
+_El presente repositorio almacena el código frontend del proyecto **MICRÉDITO**, la cual, es una aplicación móvil multiplataforma con la cual se usa para el core fianciero  dado por la empresa **MCSYSTEM** la cual la aplicacion consta para usos financieros._
 
 ## Comenzando 🚀
 
@@ -12,7 +12,7 @@ En **Deployment** se pueden obtener mas detalles de como desplegar el proyecto d
 
 _Que cosas necesitas para instalar el software y como instalarlas_
 
-- Instalar Flutter (3.22.3) en la máquina: https://docs.flutter.dev/get-started/install, importante seguir todos los pasos dependiendo de la maquina a utilizar, preferible un Mac para que la aplicación se pueda pobrar en IOS y Android
+- Instalar Flutter _(3.29.3)_ en la máquina: https://docs.flutter.dev/get-started/install, importante seguir todos los pasos dependiendo de la maquina a utilizar, preferible un Mac para que la aplicación se pueda pobrar en IOS y Android
 
 - Configurar un editor: https://docs.flutter.dev/get-started/editor, se recomienda VSCode
 
@@ -22,10 +22,10 @@ _Paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrol
 
 0. Tener descargado el proyecto e instalado flutter
 
-1. Correr el siguiente comando para instalar las librerias
+1. Correr el siguiente comando para instalar las librerias y inicializar las BD Locales
 
 ```
-flutter pub get
+dart run tool/build_script.dart
 ```
 
 2. Correr los siguientes comandos para instalar las librerias de ios (solo en MAC)
@@ -53,7 +53,7 @@ _En la carpeta .vscode se encuentra los diferentes tipos de lanzamiento de la ap
 
 Instrucciones para generar las versiones de prueba o de producción de la app.
 
-- Crear archivos api-key-local.json, api-key.json y api-key-prod.json, usando como referencia el archivo api-key.json.tpl, que necesita los siguientes atributos en el archivo.
+- Crear archivos `api-key-local.json, api-key.json y api-key-prod.json`, usando como referencia el archivo `api-key.json.tpl`, que necesita los siguientes atributos en el archivo.
 
 #### Android
 
@@ -62,19 +62,19 @@ Instrucciones para generar las versiones de prueba o de producción de la app.
 CORE FINANCIERO
 
 ```
-flutter build apk --dart-define-from-file=api-key.json --target=lib/main.dart --release --obfuscate --split-debug-info=../
+flutter build apk --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 
 ó
 
-si se quiere generar un archivo .apk para compartir o para subir a tiendas como la de AppGallery
+si se quiere generar un archivo `.apk` para compartir o para subir a tiendas como la de AppGallery
 
 3. Ejecutar:
 
 CORE FINANCIERO
 
 ```
-flutter build appbundle --dart-define-from-file=api-key-prod.json --target=lib/main.dart --release --obfuscate --split-debug-info=../
+flutter build appbundle --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 si se quiere generar un archivo .aab para subir a la tienda de google
 
@@ -88,15 +88,17 @@ si se quiere generar un archivo .aab para subir a la tienda de google
 CORE FINANCIERO
 
 ```
-flutter build ipa --dart-define-from-file=api-key.json --target=lib/main.dart  --release --obfuscate --split-debug-info=../
+flutter build ipa --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 
 ## Debug
 Instrucciones para compilar la app.
 
+- Crear archivos `api-key-local.json, api-key.json y api-key-prod.json`, usando como referencia el archivo `api-key.json.tpl`, que necesita los siguientes atributos en el archivo.
+
 Ejecutar:
 ```
-flutter run --dart-define-from-file=api-key.json --target=lib/main.dart
+flutter run --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart
 ```
 
 ### Notas importantes 🔑
