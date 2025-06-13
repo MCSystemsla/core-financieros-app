@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:core_financiero_app/objectbox.g.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
@@ -70,6 +72,11 @@ class ObjectBoxService {
       final store = await openStore();
       return ObjectBoxService._create(store);
     } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error Inesperado BD Local: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       throw Exception('Error Inesperado BD Local: $e');
     }
   }
