@@ -53,3 +53,7 @@ version-prod.json
 
 # Android generated files
 android/app/.cxx/
+
+# ISAR
+*.g.dart
+*.isar.dart

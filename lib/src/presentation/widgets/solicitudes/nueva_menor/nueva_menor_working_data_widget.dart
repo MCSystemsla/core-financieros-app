@@ -245,7 +245,14 @@ class _NuevaMenorWorkingDataWidgetState
                     text: 'Siguiente',
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
-                      if (state is OnGeolocationServiceDisabled) {
+                      if (!formKey.currentState!.validate()) return;
+                      final Position? position =
+                          state is OnGeolocationSuccess ? state.position : null;
+                      if (position == null) {
+                        context.read<GeolocationCubit>().getCurrentLocation();
+                      }
+                      if (state is OnGeolocationServiceDisabled ||
+                          state is OnGeolocationPermissionDenied) {
                         CustomAlertDialog(
                           context: context,
                           title:
@@ -259,12 +266,6 @@ class _NuevaMenorWorkingDataWidgetState
                             }
                           },
                         ).showDialog(context);
-                      }
-                      if (!formKey.currentState!.validate()) return;
-                      final Position? position =
-                          state is OnGeolocationSuccess ? state.position : null;
-                      if (position == null) {
-                        context.read<GeolocationCubit>().getCurrentLocation();
                         return;
                       }
 
@@ -282,8 +283,8 @@ class _NuevaMenorWorkingDataWidgetState
                             anosResidirCasa:
                                 int.tryParse(anosResidirCasa ?? '0'),
                             ubicacion: comunidad,
-                            ubicacionLatitud: position.latitude.toString(),
-                            ubicacionLongitud: position.longitude.toString(),
+                            ubicacionLatitud: position?.latitude.toString(),
+                            ubicacionLongitud: position?.longitude.toString(),
                             direccionCasa: direccionCasa,
                           );
                       widget.controller.nextPage(

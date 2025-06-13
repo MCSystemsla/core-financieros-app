@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
@@ -144,7 +145,7 @@ class DefaultAPIRepository implements APIRepository {
     // } catch (_) {}
 
     _logger.d('Response error ${response.body}');
-    await registerError(
+    await ErrorReporter.registerError(
       errorMessage: decodedBody.toString(),
       statusCode: response.statusCode.toString(),
       username: LocalStorage().currentUserName,
@@ -253,26 +254,4 @@ class AddFileModel {
         'key': key,
         'path': path,
       };
-}
-
-Future<void> registerError({
-  required String errorMessage,
-  required String statusCode,
-  required String username,
-}) async {
-  const String versionJsonUrl =
-      'https://script.google.com/macros/s/AKfycbxpIJY3jGk85c7LIrlFZulfvrl9bLz6o-PV4xk13RYlZ1bgja8_mXtRnzY_ijgcWfU/exec';
-  await http.post(
-    Uri.parse(versionJsonUrl),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(
-      {
-        'error': errorMessage,
-        'usuario': username,
-        'statusCode': statusCode,
-      },
-    ),
-  );
 }

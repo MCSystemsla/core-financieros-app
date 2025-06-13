@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/local_db/actions/actions_model_db.dart';
 import 'package:core_financiero_app/src/datasource/local_db/comunidades/comunidades_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/departamentos/departamentos_db_local.dart';
@@ -69,6 +71,11 @@ class SolicitudesPendientesLocalDbCubit
       _logger.i('La base de datos Isar está activa.');
     } catch (e) {
       _logger.e('Error al inicializar la base de datos Isar: $e');
+      await ErrorReporter.registerError(
+        errorMessage: 'Error Inesperado BD Local: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       throw Exception('Error Inesperado BD Local: $e');
     }
   }

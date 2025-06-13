@@ -159,20 +159,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                   textAlign: TextAlign.center,
                 ),
                 const Gap(20),
-                SearchDropdownWidget(
-                  // initialValue: '',
-                  hintText: 'input.select_option'.tr(),
-                  codigo: 'TIPODOCUMENTOPERSONA',
-                  onChanged: (item) {
-                    tipoDocumento = item;
-                    log(item?.value);
-                    setState(() {});
-                  },
-                  title: 'Tipo Documento',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                ),
-                const Gap(20),
                 CatalogoValorNacionalidad(
                   hintText: 'input.select_option'.tr(),
                   // hintText: state.userCedulaResponse.pais,
@@ -191,6 +177,21 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                   },
                   codigo: 'PAIS',
                 ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  // initialValue: '',
+                  hintText: 'input.select_option'.tr(),
+                  codigo: 'TIPODOCUMENTOPERSONA',
+                  onChanged: (item) {
+                    tipoDocumento = item;
+                    log(item?.value);
+                    setState(() {});
+                  },
+                  title: 'Tipo Documento',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                ),
+                const Gap(20),
                 if (tipoDocumento != null && paisEmisorDocumento != null) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
