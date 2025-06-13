@@ -1,4 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/autupdate/autoupdate_screen.dart';
@@ -42,8 +44,14 @@ class UpdateAppDialog extends OdsDialog {
           );
           AzhonAppUpdate.update(model).then((value) {
             debugPrint('Resultado de la actualización: $value');
+          }).catchError((e) async {
+            debugPrint('Error de la actualización de la aplicación: $e');
+            await ErrorReporter.registerError(
+              errorMessage: 'Error de la actualización de la aplicación: $e',
+              statusCode: '400',
+              username: LocalStorage().currentUserName,
+            );
           });
-
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const AutoupdateScreen()),
