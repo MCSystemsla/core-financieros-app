@@ -57,13 +57,13 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
 
-        return (false, (resp['message'] as String));
+        return (false, resp.toString());
       }
 
       _logger.i(resp);
       _logger.i(endpoint.body);
 
-      return (true, resp['message'] as String);
+      return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);

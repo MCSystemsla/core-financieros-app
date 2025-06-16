@@ -93,8 +93,8 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cedula',
-                hintText: 'Ingresa Cedula del empleado',
+                title: 'Cédula',
+                hintText: 'Ingresa Cédula del empleado',
                 isValid: null,
                 onChange: (value) {
                   cedulaEmpleado = value;
@@ -108,7 +108,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 dropdownColor: Colors.white,
                 isContainIcon: true,
                 title:
-                    'Has desempeñado un cargo publico y/o figura publica de alto nivel en los ultimos 10 años?'
+                    '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años?'
                         .tr(),
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
@@ -177,7 +177,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo oficial',
-                hintText: 'Ingrese Cargo oficial',
+                hintText: 'Ingrese cargo oficial',
                 isValid: null,
                 onChange: (value) {
                   cargoOficialPeps = value;
@@ -191,7 +191,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 dropdownColor: Colors.white,
                 isContainIcon: true,
                 title:
-                    'Eres familia de una persona que a desempeñado un cargo publico o figura publica de alto nivel?'
+                    '¿Eres familia de una persona que ha desempeñado un cargo público o figura pública de alto nivel?'
                         .tr(),
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
@@ -230,7 +230,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo Familiar',
-                hintText: 'Ingrese Cargo Familiar',
+                hintText: 'Ingrese cargo familiar',
                 isValid: null,
                 onChange: (value) {
                   cargoFamiliarPeps2 = value;
@@ -243,7 +243,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre de la entidad',
-                hintText: 'Ingrese Nombre de la entidad',
+                hintText: 'Ingrese nombre de la entidad',
                 isValid: null,
                 onChange: (value) {
                   nombreEntidadPeps2 = value;
@@ -259,7 +259,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 },
                 codigo: 'PARENTESCO',
                 title: 'Parentesco',
-                hintText: 'Ingrese Parentesco',
+                hintText: 'Ingrese parentesco',
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -268,7 +268,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',
-                hintText: 'Ingrese Periodo',
+                hintText: 'Ingrese período',
                 isValid: null,
                 onChange: (value) {
                   periodoPeps2 = value;
@@ -276,8 +276,8 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa Pais',
-                title: 'Pais',
+                hintText: 'Ingresa País',
+                title: 'País',
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);

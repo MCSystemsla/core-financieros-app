@@ -168,9 +168,9 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     Icons.edit_document,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Cedula',
+                  title: 'Documento',
                   isRequired: true,
-                  hintText: 'Ingresa Cedula',
+                  hintText: 'Ingresa Documento',
                   isValid: null,
                   onChange: (value) {
                     cedula = value;
@@ -184,7 +184,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Fecha Emision Cedula',
+                  title: 'Fecha Emisión Documento',
                   isRequired: true,
                   hintText:
                       _selectedDate?.selectorFormat() ?? 'Selecciona Fecha',
@@ -213,7 +213,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   textInputType: TextInputType.phone,
                   maxLength: 40,
                   icon: Icon(
-                    Icons.person,
+                    Icons.phone,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Celular',
@@ -237,13 +237,13 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     Icons.location_on,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  title: 'Ubicacion',
+                  title: 'Ubicación',
                   textCapitalization: TextCapitalization.words,
                   onChange: (value) {
                     ubicacion = value;
                     setState(() {});
                   },
-                  hintText: 'Ingresa Ubicacion',
+                  hintText: 'Ingresa Ubicación',
                   isValid: null,
                   isRequired: true,
                   // validator: (value) => ClassValidator.validateRequired(value),
@@ -259,6 +259,27 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                       if (!formKey.currentState!.validate()) return;
                       final Position? position =
                           state is OnGeolocationSuccess ? state.position : null;
+                      if (position == null) {
+                        context.read<GeolocationCubit>().getCurrentLocation();
+                      }
+                      if (state is OnGeolocationServiceDisabled ||
+                          state is OnGeolocationPermissionDenied) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'Necesitas activar el servicio de GPS para poder continuar',
+                          onDone: () async {
+                            final isOpen =
+                                await Geolocator.openLocationSettings();
+                            if (!context.mounted) return;
+                            if (isOpen) {
+                              context.pop();
+                            }
+                          },
+                        ).showDialog(context);
+                        return;
+                      }
+
                       context.read<SolicitudReprestamoCubit>().saveAnswers(
                             tipoPersona: tipoPersonaCredito,
                             objTipoPersonaId: tipoPersonaCredito,
