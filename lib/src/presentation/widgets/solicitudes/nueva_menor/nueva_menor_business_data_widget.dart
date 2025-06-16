@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -113,6 +115,9 @@ class _NuevaMenorBusinessDataWidgetState
           children: [
             const Gap(20),
             OutlineTextfieldWidget.withCounter(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 70,
               icon: Icon(
                 Icons.work,
@@ -128,6 +133,9 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 70,
               icon: Icon(
                 Icons.person_sharp,
@@ -143,6 +151,9 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 50,
               icon: Icon(
                 Icons.business,
@@ -164,9 +175,15 @@ class _NuevaMenorBusinessDataWidgetState
                 condicionNegocio = Item(name: item.name, value: item.value);
               },
               title: 'Condición del Negocio',
+              validator: (value) =>
+                  ClassValidator.validateRequired(condicionNegocio?.value),
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
@@ -377,7 +394,7 @@ class _NuevaMenorBusinessDataWidgetState
               hintText: 'Ingresa Departamento Negocio',
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
-              title: 'Municipio de Negocio',
+              title: 'Departamento de Negocio',
               onChanged: (item) {
                 if (item == null) return;
                 departamentoNegocio =
@@ -400,6 +417,9 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
@@ -415,6 +435,9 @@ class _NuevaMenorBusinessDataWidgetState
             ),
             const Gap(20),
             OutlineTextfieldWidget.withCounter(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(

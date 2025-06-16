@@ -49,6 +49,7 @@ class AddUserCedulaScreen extends StatelessWidget {
     void showErrorDialog({
       required String cedula,
       required Item tipoDocumento,
+      required Item paisEmisor,
     }) {
       Navigator.pushReplacement(
         context,
@@ -57,6 +58,7 @@ class AddUserCedulaScreen extends StatelessWidget {
                 typeForm: typeForm,
                 cedula: cedula,
                 tipoDocumento: tipoDocumento,
+                paisEmiror: paisEmisor,
               )),
         ),
       );
@@ -72,6 +74,7 @@ class AddUserCedulaScreen extends StatelessWidget {
             showErrorDialog(
               cedula: state.cedula,
               tipoDocumento: state.tipoDocumento,
+              paisEmisor: state.paisEmisor,
             );
           }
           if (state is OnUserByCedulaSuccess) {
@@ -227,6 +230,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                       context.read<UserByCedulaCubit>().getUserByCedula(
                             cedula: cedulaController.text.trim(),
                             tipoDocumento: tipoDocumento!,
+                            paisEmisor: paisEmisorDocumento!,
                           );
                     },
                   ),

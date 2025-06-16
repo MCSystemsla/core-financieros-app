@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
@@ -30,12 +31,14 @@ class NuevaMenorDataClientWidget extends StatefulWidget {
   final String cedula;
   final PageController controller;
   final Item tipoDocumento;
+  final Item paisEmisor;
 
   const NuevaMenorDataClientWidget({
     super.key,
     required this.controller,
     required this.cedula,
     required this.tipoDocumento,
+    required this.paisEmisor,
   });
 
   @override
@@ -236,8 +239,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona País Emisor',
+                    hintText: widget.paisEmisor.name,
+                    enabled: false,
                     // hintText: state.userCedulaResponse.pais,
+
                     title: 'País Emisor',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -522,6 +527,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
           cedula: widget.cedula,
           controller: widget.controller,
           tipoDocumento: widget.tipoDocumento,
+          paisEmisor: widget.paisEmisor,
         );
       },
     );
@@ -535,12 +541,14 @@ class IsCedulaUserNotExistsForm extends StatefulWidget {
   final PageController controller;
   final String cedula;
   final Item tipoDocumento;
+  final Item paisEmisor;
 
   const IsCedulaUserNotExistsForm({
     super.key,
     required this.controller,
     required this.cedula,
     required this.tipoDocumento,
+    required this.paisEmisor,
   });
 
   @override
@@ -661,6 +669,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
     super.initState();
     tipoDocumento = widget.tipoDocumento;
     cedulaController = widget.cedula;
+    paisEmisor = widget.paisEmisor;
   }
 
   final nombrePublicoController = TextEditingController();
@@ -708,6 +717,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               },
               hintText: 'Ingresa Nombre1',
               isValid: null,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
             ),
@@ -720,6 +732,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               title: 'Nombre2',
               hintText: 'Ingresa Nombre2',
               textCapitalization: TextCapitalization.words,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               isValid: null,
               onChange: (value) {
                 nombre2 = value;
@@ -738,6 +753,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               isRequired: true,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               onChange: (value) {
                 apellido1 = value;
                 setState(() {});
@@ -752,6 +770,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               title: 'Apellido2',
               hintText: 'Ingresa Apellido2',
               textCapitalization: TextCapitalization.words,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               isValid: null,
               onChange: (value) {
                 apellido2 = value;
@@ -768,7 +789,11 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               textCapitalization: TextCapitalization.words,
               hintText: 'Ingresa tu nombre publico',
               isValid: null,
+              validator: (value) => ClassValidator.validateRequired(value),
               textEditingController: nombrePublicoController,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
             ),
             const Gap(30),
             SearchDropdownWidget(
@@ -785,8 +810,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
-              hintText: 'Selecciona País Emisor',
-              // hintText: state.userCedulaResponse.pais,
+              hintText: paisEmisor?.name ?? 'Selecciona País Emisor',
+              enabled: false,
               title: 'País Emisor',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -794,7 +819,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 setState(() {});
               },
               codigo: 'PAIS',
-              // initialValue: paisEmisor ?? '',
             ),
             const Gap(30),
             OutlineTextfieldWidget(
@@ -815,9 +839,15 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               isValid: null,
               isRequired: true,
               validator: (value) => ClassValidator.validateRequired(value),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               onTap: () => selectEmisionFecha(context),
               readOnly: true,
               icon: Icon(
@@ -832,6 +862,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               validator: (_) => ClassValidator.validateRequired(
                 _selectedDate?.selectorFormat(),
               ),
@@ -849,6 +882,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               icon: Icon(
                 Icons.calendar_month,
                 color: AppColors.getPrimaryColor(),
@@ -860,6 +896,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               onTap: () => selectFechaNacimiento(context),
               isValid: null,
               isRequired: true,
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaNacimiento?.selectorFormat()),
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
@@ -873,8 +911,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               },
               title: 'Nacionalidad',
               hintText: 'Ingresa Nacionalidad',
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+              validator: (value) => ClassValidator.validateRequired(
+                  nacionalidadController?.value),
             ),
             const Gap(30),
             CatalogoValorNacionalidad(
@@ -886,7 +924,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               },
               codigo: 'PAIS',
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
+                  ClassValidator.validateRequired(paisNacimiento?.value),
             ),
             const Gap(30),
             SearchDropdownWidget(
@@ -898,6 +936,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 sexo = item;
               },
               title: 'Sexo',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+
               // initialValue: sexo,
             ),
             const Gap(30),

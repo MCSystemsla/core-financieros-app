@@ -12,7 +12,9 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
   UserByCedulaCubit(this._repository) : super(UserByCedulaInitial());
 
   Future<void> getUserByCedula(
-      {required String cedula, required Item tipoDocumento}) async {
+      {required String cedula,
+      required Item tipoDocumento,
+      required Item paisEmisor}) async {
     try {
       emit(OnUserByCedulaLoading());
       final resp = await _repository.getUserByCedula(cedula: cedula);
@@ -22,12 +24,14 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
         errorMsg: e.optionalMsg,
         cedula: cedula,
         tipoDocumento: tipoDocumento,
+        paisEmisor: paisEmisor,
       ));
     } catch (e) {
       emit(OnUserByCedulaError(
         errorMsg: e.toString(),
         cedula: cedula,
         tipoDocumento: tipoDocumento,
+        paisEmisor: paisEmisor,
       ));
     }
   }

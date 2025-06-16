@@ -23,12 +23,14 @@ final class OnUserByCedulaError extends UserByCedulaState {
   final String errorMsg;
   final String cedula;
   final Item tipoDocumento;
+  final Item paisEmisor;
 
   const OnUserByCedulaError({
     required this.errorMsg,
     required this.cedula,
     required this.tipoDocumento,
+    required this.paisEmisor,
   });
   @override
-  List<Object> get props => [errorMsg, cedula, tipoDocumento];
+  List<Object> get props => [errorMsg, cedula, tipoDocumento, paisEmisor];
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -74,6 +76,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
             if (esPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                key: const ValueKey('nombreEntidadPeps'),
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.business,
                   color: AppColors.getPrimaryColor(),
@@ -88,6 +95,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               const Gap(20),
               CatalogoValorNacionalidad(
                 hintText: 'Selecciona Pais PEPS',
+                validator: (value) => ClassValidator.validateRequired(paisPeps),
                 title: 'País PEPs',
                 onChanged: (item) {
                   if (item == null || !mounted) return;
@@ -97,6 +105,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('cargoOficialPeps'),
                 icon: Icon(
                   Icons.work,
                   color: AppColors.getPrimaryColor(),
@@ -110,6 +123,13 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('periodoPeps'),
                 icon: Icon(
                   Icons.calendar_today,
                   color: AppColors.getPrimaryColor(),
@@ -145,6 +165,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('nombreFamiliarPeps2'),
                 icon: Icon(
                   Icons.person,
                   color: AppColors.getPrimaryColor(),
@@ -158,6 +183,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(parentesco),
                 codigo: 'PARENTESCO',
                 onChanged: (item) {
                   if (item == null) return;
@@ -167,6 +194,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('cargoParentesco'),
                 icon: Icon(
                   Icons.work,
                   color: AppColors.getPrimaryColor(),
@@ -180,6 +212,11 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('nombreEntidadPeps2'),
                 icon: Icon(
                   Icons.business,
                   color: AppColors.getPrimaryColor(),
@@ -193,6 +230,13 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                key: const ValueKey('periodoPeps2'),
                 icon: Icon(
                   Icons.calendar_today,
                   color: AppColors.getPrimaryColor(),
@@ -206,6 +250,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
+                validator: (value) =>
+                    ClassValidator.validateRequired(paisPeps2),
                 title: 'País Familiar PEPS',
                 hintText: 'Selecciona Familiar País PEPS',
                 onChanged: (item) {

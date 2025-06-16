@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -115,6 +117,8 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             SearchDropdownWidget(
               codigo: 'DESTINOCREDITO',
               title: 'Propósito',
+              validator: (value) =>
+                  ClassValidator.validateRequired(proposito?.value),
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
@@ -211,6 +215,10 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3),
+              ],
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -241,6 +249,9 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               icon: Icon(
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),

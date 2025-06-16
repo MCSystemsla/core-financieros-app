@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
@@ -16,6 +17,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
@@ -120,8 +122,7 @@ class _NuevaMenorWorkingDataWidgetState
                   },
                   codigo: 'PAIS',
                   validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  // initialValue: paisEmisor ?? '',
+                      ClassValidator.validateRequired(paisDomicilio?.value),
                 ),
                 if (paisDomicilio != null) ...[
                   const Gap(30),
@@ -138,8 +139,8 @@ class _NuevaMenorWorkingDataWidgetState
                     },
                     codigo: 'DEP',
                     where: depWhereClause,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
+                    validator: (value) => ClassValidator.validateRequired(
+                        departamentoDomicilio?.value),
                   ),
                 ],
                 if (munWhereClause != null) ...[
@@ -148,8 +149,8 @@ class _NuevaMenorWorkingDataWidgetState
                     where: munWhereClause,
                     hintText: 'Selecciona Municipio de Casa',
                     title: 'Municipio Domicilio',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
+                    validator: (value) => ClassValidator.validateRequired(
+                        municipioDomicilio?.value),
 
                     onChanged: (item) {
                       if (item == null) return;
@@ -162,6 +163,9 @@ class _NuevaMenorWorkingDataWidgetState
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   maxLength: 50,
                   icon: Icon(
                     Icons.house,
@@ -177,6 +181,9 @@ class _NuevaMenorWorkingDataWidgetState
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(
                     Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
@@ -198,9 +205,15 @@ class _NuevaMenorWorkingDataWidgetState
                     if (item == null) return;
                     condicionCasa = Item(name: item.name, value: item.value);
                   },
+                  validator: (value) =>
+                      ClassValidator.validateRequired(condicionCasa?.value),
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
                   icon: Icon(
                     Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
@@ -234,6 +247,8 @@ class _NuevaMenorWorkingDataWidgetState
                       return item.nombre;
                     },
                     hintText: 'input.select_option'.tr(),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
                   ),
                 ),
                 const Gap(20),
@@ -250,6 +265,7 @@ class _NuevaMenorWorkingDataWidgetState
                           state is OnGeolocationSuccess ? state.position : null;
                       if (position == null) {
                         context.read<GeolocationCubit>().getCurrentLocation();
+                        return;
                       }
                       if (state is OnGeolocationServiceDisabled ||
                           state is OnGeolocationPermissionDenied) {
@@ -283,8 +299,8 @@ class _NuevaMenorWorkingDataWidgetState
                             anosResidirCasa:
                                 int.tryParse(anosResidirCasa ?? '0'),
                             ubicacion: comunidad,
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
+                            ubicacionLatitud: position.latitude.toString(),
+                            ubicacionLongitud: position.longitude.toString(),
                             direccionCasa: direccionCasa,
                           );
                       widget.controller.nextPage(

@@ -24,6 +24,7 @@ class CrearSolicitudScreen extends StatelessWidget {
   final TypeForm? typeForm;
   final String? cedula;
   final Item? tipoDocumento;
+  final Item? paisEmiror;
   final UserByCedulaSolicitud? userByCedulaSolicitud;
 
   const CrearSolicitudScreen({
@@ -32,6 +33,7 @@ class CrearSolicitudScreen extends StatelessWidget {
     this.cedula,
     this.userByCedulaSolicitud,
     this.tipoDocumento,
+    this.paisEmiror,
   });
 
   @override
@@ -74,6 +76,7 @@ class CrearSolicitudScreen extends StatelessWidget {
               pageController: pageController,
               cedula: cedula ?? '',
               tipoDocumento: tipoDocumento!,
+              paisEmisor: paisEmiror!,
             ),
           TypeForm.asalariado => AsalariadoForm(
               controller: pageController,

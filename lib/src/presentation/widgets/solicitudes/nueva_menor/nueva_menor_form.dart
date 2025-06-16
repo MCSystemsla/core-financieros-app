@@ -15,11 +15,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NuevaMenorForm extends StatelessWidget {
   final String cedula;
   final Item tipoDocumento;
+  final Item paisEmisor;
+
   const NuevaMenorForm({
     super.key,
     required this.pageController,
     required this.cedula,
     required this.tipoDocumento,
+    required this.paisEmisor,
   });
 
   final PageController pageController;
@@ -53,6 +56,7 @@ class NuevaMenorForm extends StatelessWidget {
                 cedula: cedula,
                 controller: pageController,
                 tipoDocumento: tipoDocumento,
+                paisEmisor: paisEmisor,
               ),
               NuevaMenorWorkingDataWidget(
                 controller: pageController,
