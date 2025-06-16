@@ -399,6 +399,7 @@ class _NuevaMenorBusinessDataWidgetState
                 if (item == null) return;
                 departamentoNegocio =
                     Item(name: item.nombre, value: item.valor);
+                setState(() {});
               },
               codigo: 'DEP',
             ),
