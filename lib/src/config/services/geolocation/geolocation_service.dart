@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:geolocator/geolocator.dart';
 
 ///  Clase que se encarga de obtener la ubicación actual del usuario.
@@ -21,6 +23,11 @@ class GeolocationService {
         timeLimit: const Duration(seconds: 10),
       );
     } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error obteniendo la ubicación del usuario: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       return null;
     }
   }
