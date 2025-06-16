@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
@@ -367,6 +368,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
+        await ErrorReporter.registerError(
+          errorMessage:
+              'Error enviando imagenes KIVA online: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
         return (false, jsonBody['message'] as String);
@@ -374,6 +381,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       _logger.i(response.reasonPhrase);
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagenes KIVA online: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       _logger.e(e);
       return (false, e.toString());
     }
@@ -522,6 +534,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
+        await ErrorReporter.registerError(
+          errorMessage:
+              'Error enviando imagenes KIVA offline: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
         return (
@@ -533,6 +551,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       _logger.i(response.reasonPhrase);
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagenes KIVA offline: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       _logger.e(e);
       return (false, e.toString());
     }
