@@ -30,6 +30,27 @@ class NuevaMenorMontoWidget extends StatefulWidget {
 
 class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      pageController: widget.pageController,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController pageController;
+  const _FormContent({required this.pageController});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   Item? estadoCivil;
   String? nacionalidadConyuge;
   String? nombreConyuge;
@@ -45,7 +66,6 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -325,7 +345,4 @@ class _NuevaMenorMontoWidgetState extends State<NuevaMenorMontoWidget>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

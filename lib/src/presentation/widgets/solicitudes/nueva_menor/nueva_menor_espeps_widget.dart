@@ -30,6 +30,27 @@ class NuevaMenorEsPepsWidget extends StatefulWidget {
 
 class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      controller: widget.pageController,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   String? esPeps;
   String? nombreEntidadPeps;
   String? paisPeps;
@@ -44,9 +65,9 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
   String? paisPeps2;
   String? nombreFamiliarPeps2;
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -262,8 +283,8 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 },
                 codigo: 'PAIS',
               ),
-              const Gap(20),
             ],
+            const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
@@ -288,7 +309,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                         paisPeps2: paisPeps2,
                         nombreEntidadPeps2: nombreEntidadPeps2,
                       );
-                  widget.pageController.nextPage(
+                  widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
@@ -300,7 +321,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  widget.pageController.previousPage(
+                  widget.controller.previousPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
@@ -316,7 +337,4 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

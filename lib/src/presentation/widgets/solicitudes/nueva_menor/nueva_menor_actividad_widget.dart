@@ -37,6 +37,27 @@ class NuevaMenorBeneficiarioWidget extends StatefulWidget {
 class _NuevaMenorBeneficiarioWidgetState
     extends State<NuevaMenorBeneficiarioWidget>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      controller: widget.pageController,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   Item? parentesco;
@@ -53,7 +74,6 @@ class _NuevaMenorBeneficiarioWidgetState
   Widget build(BuildContext context) {
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -276,7 +296,7 @@ class _NuevaMenorBeneficiarioWidgetState
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  widget.pageController.previousPage(
+                  widget.controller.previousPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
@@ -292,7 +312,4 @@ class _NuevaMenorBeneficiarioWidgetState
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

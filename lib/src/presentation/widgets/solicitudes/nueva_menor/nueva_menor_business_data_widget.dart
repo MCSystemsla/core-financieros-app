@@ -32,6 +32,27 @@ class NuevaMenorBusinessDataWidget extends StatefulWidget {
 class _NuevaMenorBusinessDataWidgetState
     extends State<NuevaMenorBusinessDataWidget>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      controller: widget.pageController,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   List<Item> actividadesPredominantesList = [];
   List<Item> rubrosActividadesPredominanteList = [];
   String? profesion;
@@ -106,7 +127,6 @@ class _NuevaMenorBusinessDataWidgetState
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -499,7 +519,7 @@ class _NuevaMenorBusinessDataWidgetState
                         objRubroActividadPredominante:
                             objRubroActividadPredominante?.value,
                       );
-                  widget.pageController.nextPage(
+                  widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
@@ -511,7 +531,7 @@ class _NuevaMenorBusinessDataWidgetState
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  widget.pageController.previousPage(
+                  widget.controller.previousPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
@@ -527,7 +547,4 @@ class _NuevaMenorBusinessDataWidgetState
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

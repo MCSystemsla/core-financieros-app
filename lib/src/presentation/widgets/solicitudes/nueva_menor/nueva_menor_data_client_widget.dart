@@ -580,6 +580,13 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       .getParametroByName(nombre: 'EDADMINIMACLIENTE');
   final edadMaximaCliente = global<ObjectBoxService>()
       .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+  @override
+  void initState() {
+    super.initState();
+    tipoDocumento = widget.tipoDocumento;
+    cedulaController = widget.cedula;
+    paisEmisor = widget.paisEmisor;
+  }
 
   Future<void> selectDate(BuildContext context, String tipoDocumeto) async {
     final DateTime minFechaVencimiento = DateTime(
@@ -591,9 +598,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       context: context,
       initialDate: _selectedDate,
       keyboardType: TextInputType.datetime,
-      firstDate: tipoDocumeto != 'CEDULAIDENTIDAD' && paisEmisor?.value != 'NIC'
-          ? DateTime(1930)
-          : minFechaVencimiento,
+      firstDate: tipoDocumeto == 'CEDULAIDENTIDAD' && paisEmisor?.value == 'NIC'
+          ? minFechaVencimiento
+          : DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -661,14 +668,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       fechaNacimiento = picked;
       setState(() {});
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    tipoDocumento = widget.tipoDocumento;
-    cedulaController = widget.cedula;
-    paisEmisor = widget.paisEmisor;
   }
 
   final nombrePublicoController = TextEditingController();
