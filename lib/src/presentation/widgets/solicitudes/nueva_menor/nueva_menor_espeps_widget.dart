@@ -123,6 +123,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                   FilteringTextInputFormatter.digitsOnly,
@@ -230,6 +231,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                   FilteringTextInputFormatter.digitsOnly,
@@ -260,6 +262,7 @@ class _NuevaMenorEsPepsWidgetState extends State<NuevaMenorEsPepsWidget>
                 },
                 codigo: 'PAIS',
               ),
+              const Gap(20),
             ],
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),

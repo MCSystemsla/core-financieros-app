@@ -145,13 +145,13 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre1',
+                    title: 'Primer Nombre',
                     textCapitalization: TextCapitalization.words,
                     onChange: (value) {
                       nombre1 = value;
                       setState(() {});
                     },
-                    hintText: 'Ingresa Nombre1',
+                    hintText: 'Ingresa Primer Nombre',
                     isValid: null,
                     isRequired: true,
                     validator: (value) =>
@@ -164,9 +164,9 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre2',
+                    title: 'Segundo Nombre',
                     initialValue: nombre2,
-                    hintText: 'Ingresa Nombre2',
+                    hintText: 'Ingresa Segundo Nombre',
                     textCapitalization: TextCapitalization.words,
                     isValid: null,
                     onChange: (value) {
@@ -182,9 +182,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.badge,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Apellido1',
-                    hintText: 'Ingresa Apellido1',
-                    textCapitalization: TextCapitalization.words,
+                    title: 'Primer Apellido',
+                    hintText: 'Ingresa Primer Apellido',
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     isValid: null,
@@ -202,9 +201,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       Icons.badge,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Apellido2',
-                    hintText: 'Ingresa Apellido2',
-                    textCapitalization: TextCapitalization.words,
+                    title: 'Segundo Apellido',
+                    hintText: 'Ingresa Segundo Apellido',
                     isValid: null,
                     onChange: (value) {
                       apellido2 = value;
@@ -421,6 +419,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     title: 'Email',
                     hintText: 'Ingresa Email',
                     textInputType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.none,
                     isValid: null,
                     validator: (value) => ClassValidator.validateEmail(value),
                   ),
@@ -709,13 +708,12 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.person,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Nombre1',
-              textCapitalization: TextCapitalization.words,
+              title: 'Primer Nombre',
               onChange: (value) {
                 nombre1 = value;
                 setState(() {});
               },
-              hintText: 'Ingresa Nombre1',
+              hintText: 'Ingresa Primer Nombre',
               isValid: null,
               inputFormatters: [
                 UpperCaseTextFormatter(),
@@ -729,9 +727,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.person,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Nombre2',
-              hintText: 'Ingresa Nombre2',
-              textCapitalization: TextCapitalization.words,
+              title: 'Segundo Nombre',
+              hintText: 'Ingresa Segundo Nombre',
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -747,9 +744,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.badge,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Apellido1',
-              hintText: 'Ingresa Apellido1',
-              textCapitalization: TextCapitalization.words,
+              title: 'Primer Apellido',
+              hintText: 'Ingresa Primer Apellido',
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               isRequired: true,
@@ -767,9 +763,8 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 Icons.badge,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Apellido2',
-              hintText: 'Ingresa Apellido2',
-              textCapitalization: TextCapitalization.words,
+              title: 'Segundo Apellido',
+              hintText: 'Ingresa Segundo Apellido',
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -997,6 +992,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
               title: 'Email',
               hintText: 'Ingresa Email',
               textInputType: TextInputType.emailAddress,
+              textCapitalization: TextCapitalization.none,
               isValid: null,
               validator: (value) => ClassValidator.validateEmail(value),
             ),

@@ -182,12 +182,14 @@ class _NuevaMenorCreditoWidgetState extends State<NuevaMenorCreditoWidget>
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
+                  fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(producto?.value),
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
