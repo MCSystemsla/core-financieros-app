@@ -84,8 +84,8 @@ dependencies:
 
 
   # Intl
-  intl: ^0.19.0
-  flutter_translate: ^4.1.0
+  intl: 0.20.2
+  flutter_translate: ^3.1.0
 
   # Firebase
   # firebase_core: ^3.3.0
