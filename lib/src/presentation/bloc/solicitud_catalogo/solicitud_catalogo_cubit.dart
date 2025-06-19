@@ -101,38 +101,15 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       return;
     }
 
+    emit(SolicitudCatalogoLoading());
     try {
-      emit(SolicitudCatalogoLoading());
       await getAndSaveDepartamentos();
 
-      const codigos = [
-        'PARENTESCO',
-        'TIPOVIVIENDA',
-        'MONEDA',
-        'DESTINOCREDITO',
-        'FRECUENCIAPAGO',
-        'SECTORECONOMICO',
-        'ESTADOCIVIL',
-        'ESTADOSOLICITUDCREDITO',
-        'ESCOLARIDAD',
-        'SEXO',
-        'RUBROACTIVIDAD',
-        'TIPOSPERSONACREDITO',
-        'ACTIVIDADECONOMICA',
-        'TIPODOCUMENTOPERSONA',
-      ];
+      await saveCatalogosSolicitudesCreditoToLocalDb(isConnected: isConnected);
 
-      for (final codigo in codigos) {
-        await getCatalogoByCodigo(codigo: codigo, isConnected: isConnected);
-      }
-      log('Catalogos guardados');
-
-      await getandSaveProductos();
-      log('Productos guardados');
-      await getAndSaveParametros();
       if (!context.mounted) return;
       await saveKIVAPendingRequestsToLocalDb(context: context);
-      log('Solicitudes KIVA guardadas');
+
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } on AppException catch (e) {
@@ -140,6 +117,38 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     } catch (e) {
       emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
+  }
+
+  Future<void> saveCatalogosSolicitudesCreditoToLocalDb({
+    required bool isConnected,
+  }) async {
+    final actions = LocalStorage().currentActions;
+    if (!actions.contains('LLENARSOLICITUDESMOVIL')) return;
+    const codigos = [
+      'PARENTESCO',
+      'TIPOVIVIENDA',
+      'MONEDA',
+      'DESTINOCREDITO',
+      'FRECUENCIAPAGO',
+      'SECTORECONOMICO',
+      'ESTADOCIVIL',
+      'ESTADOSOLICITUDCREDITO',
+      'ESCOLARIDAD',
+      'SEXO',
+      'RUBROACTIVIDAD',
+      'TIPOSPERSONACREDITO',
+      'ACTIVIDADECONOMICA',
+      'TIPODOCUMENTOPERSONA',
+    ];
+
+    for (final codigo in codigos) {
+      await getCatalogoByCodigo(codigo: codigo, isConnected: isConnected);
+    }
+    log('Catalogos guardados');
+
+    await getandSaveProductos();
+    log('Productos guardados');
+    await getAndSaveParametros();
   }
 
   Future<void> saveKIVAPendingRequestsToLocalDb({
@@ -174,6 +183,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveSolicitudesPendientes(
           solicitudes: solicitudes,
         );
+    log('Solicitudes KIVA guardadas');
   }
 
   Future<void> getAndSaveParametros() async {

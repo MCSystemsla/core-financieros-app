@@ -85,6 +85,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
+              validator: (value) => ClassValidator.validateRequired(value),
               maxLength: 50,
               icon: Icon(
                 Icons.family_restroom,
@@ -113,7 +114,7 @@ class __FormContentState extends State<_FormContent> {
               validator: (value) => ClassValidator.validateMinLength(
                 value,
                 16,
-                isRequired: false,
+                isRequired: true,
               ),
               onChange: (value) {
                 cedulaBeneficiarioSeguro = value;
@@ -123,7 +124,8 @@ class __FormContentState extends State<_FormContent> {
             SearchDropdownWidget(
               codigo: 'PARENTESCO',
               title: 'Parentesco del Beneficiario 1',
-              // hintText: 'Ingresa Parentesco Beneficiario Seguro',
+              validator: (value) =>
+                  ClassValidator.validateRequired(parentesco?.value),
               onChanged: (item) {
                 if (item == null) return;
                 parentesco = item;
@@ -139,7 +141,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(16),
               ],
               maxLength: 16,
               icon: Icon(

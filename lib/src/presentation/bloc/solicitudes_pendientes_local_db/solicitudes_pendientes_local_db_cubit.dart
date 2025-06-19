@@ -121,8 +121,9 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
-  Future<void> updateIsImagesSendedOnSolicitud(
-      {required String solicitudId}) async {
+  Future<void> updateIsImagesSendedOnSolicitud({
+    required String solicitudId,
+  }) async {
     try {
       // Actualiza el campo isSended en true solo para la solicitud con el id dado
       await state.isar?.writeTxn(() async {
