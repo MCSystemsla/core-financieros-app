@@ -85,7 +85,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              maxLength: 15,
+              maxLength: 50,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
@@ -102,7 +102,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              maxLength: 13,
+              maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -112,7 +112,7 @@ class __FormContentState extends State<_FormContent> {
               isValid: null,
               validator: (value) => ClassValidator.validateMinLength(
                 value,
-                13,
+                16,
                 isRequired: false,
               ),
               onChange: (value) {
@@ -184,7 +184,7 @@ class __FormContentState extends State<_FormContent> {
               title: 'Cédula del Beneficiario 2',
               validator: (value) => ClassValidator.validateMinLength(
                 value,
-                13,
+                16,
                 isRequired: false,
               ),
               hintText: 'Ingresa Cedula Beneficiario Seguro 2',
@@ -212,7 +212,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(16),
               ],
               isRequired: false,
               maxLength: 16,

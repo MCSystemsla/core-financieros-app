@@ -178,7 +178,7 @@ class __FormContentState extends State<_FormContent> {
                     UpperCaseTextFormatter(),
                   ],
                   key: const ValueKey('telefonoTrabajoConyuge'),
-                  maxLength: 15,
+                  maxLength: 16,
                   icon: Icon(
                     Icons.phone,
                     color: AppColors.getPrimaryColor(),
@@ -237,6 +237,7 @@ class __FormContentState extends State<_FormContent> {
             if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -255,6 +256,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 16,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],

@@ -97,6 +97,7 @@ class __FormContentState extends State<_FormContent> {
             if (esPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -126,6 +127,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -187,6 +189,7 @@ class __FormContentState extends State<_FormContent> {
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -216,6 +219,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -234,6 +238,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                maxLength: 50,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],

@@ -184,6 +184,10 @@ class __FormContentState extends State<_FormContent> {
               title: 'Monto',
               hintText: 'Ingresa Monto',
               textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
@@ -271,6 +275,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              maxLength: 50,
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],

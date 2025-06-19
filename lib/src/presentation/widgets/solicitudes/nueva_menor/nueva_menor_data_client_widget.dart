@@ -126,7 +126,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                 children: [
                   const Gap(30),
                   SearchDropdownWidget(
-                    // initialValue: '',
                     codigo: 'TIPOSPERSONACREDITO',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -211,6 +210,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    maxLength: 40,
                     icon: Icon(
                       Icons.person_2_rounded,
                       color: AppColors.getPrimaryColor(),
@@ -370,7 +370,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       countryCode = value.dialCode!;
                     },
                     haveCounter: true,
-                    maxLength: 15,
+                    maxLength: 16,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -394,7 +394,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       if (value == null) return;
                       celularCode = value.dialCode!;
                     },
-                    maxLength: 15,
+                    maxLength: 16,
                     icon: Icon(
                       Icons.phone_android,
                       color: AppColors.getPrimaryColor(),

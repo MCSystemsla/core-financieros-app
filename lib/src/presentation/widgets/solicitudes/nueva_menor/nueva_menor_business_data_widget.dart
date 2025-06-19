@@ -138,7 +138,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              maxLength: 70,
+              maxLength: 50,
               icon: Icon(
                 Icons.work,
                 color: AppColors.getPrimaryColor(),
@@ -156,7 +156,7 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              maxLength: 70,
+              maxLength: 50,
               icon: Icon(
                 Icons.person_sharp,
                 color: AppColors.getPrimaryColor(),
@@ -202,9 +202,8 @@ class __FormContentState extends State<_FormContent> {
             OutlineTextfieldWidget(
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(2),
+                LengthLimitingTextInputFormatter(3),
               ],
-              maxLength: 50,
               validator: (value) => ClassValidator.validateRequired(value),
               icon: Icon(
                 Icons.access_time,
