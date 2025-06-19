@@ -24,7 +24,9 @@ class _DownsloadingCatalogosWidgetState
     extends State<DownsloadingCatalogosWidget> {
   @override
   void initState() {
+    super.initState();
     context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+          context: context,
           isConnected:
               context.read<InternetConnectionCubit>().state.isConnected,
         );
@@ -32,7 +34,6 @@ class _DownsloadingCatalogosWidgetState
           isConnected:
               context.read<InternetConnectionCubit>().state.isConnected,
         );
-    super.initState();
   }
 
   @override
@@ -55,6 +56,7 @@ class _DownsloadingCatalogosWidgetState
             SolicitudCatalogoError() => OnErrorWidget(
                 onPressed: () {
                   context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
+                        context: context,
                         isConnected: context
                             .read<InternetConnectionCubit>()
                             .state

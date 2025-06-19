@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
@@ -12,8 +12,12 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'solicitud_catalogo_state.dart';
 
@@ -21,11 +25,13 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
   final SolicitudesCreditoRepository _repository;
   final ObjectBoxService _objectBoxService;
   final DepartamentoRepository departamentoRepository;
+  final SolicitudesPendientesRepository solicitudesPendientesRepository;
 
   SolicitudCatalogoCubit(
     this._repository,
     this._objectBoxService,
     this.departamentoRepository,
+    this.solicitudesPendientesRepository,
   ) : super(SolicitudCatalogoInitial());
 
   Future<void> getCatalogoByCodigo({
@@ -56,8 +62,6 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         .build();
     query.remove();
     for (var item in data.data) {
-      log(item.interes.toString());
-      log(item.nombre.toString());
       _objectBoxService.catalogoBox.put(CatalogoLocalDb(
         valor: item.valor,
         nombre: item.nombre,
@@ -88,7 +92,10 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     }
   }
 
-  Future<void> saveAllCatalogos({required bool isConnected}) async {
+  Future<void> saveAllCatalogos({
+    required bool isConnected,
+    required BuildContext context,
+  }) async {
     if (!isConnected) {
       emit(SolicitudCatalogoSuccess());
       return;
@@ -123,6 +130,9 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       await getandSaveProductos();
       log('Productos guardados');
       await getAndSaveParametros();
+      if (!context.mounted) return;
+      await saveKIVAPendingRequestsToLocalDb(context: context);
+      log('Solicitudes KIVA guardadas');
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
     } on AppException catch (e) {
@@ -130,6 +140,40 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     } catch (e) {
       emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
+  }
+
+  Future<void> saveKIVAPendingRequestsToLocalDb({
+    required BuildContext context,
+  }) async {
+    final actions = LocalStorage().currentActions;
+
+    if (!actions.contains('LLENARKIVAMOVIL')) return;
+
+    final solicitudesKiva =
+        await solicitudesPendientesRepository.getSolicitudesPendientes();
+    if (!context.mounted) return;
+
+    final solicitudes = solicitudesKiva.solicitudes.map((e) {
+      return SolicitudesPendientes()
+        ..estado = e.estado
+        ..fecha = e.fecha
+        ..moneda = e.moneda
+        ..numero = e.numero
+        ..producto = e.producto
+        ..nombreFormulario = e.nombreFormulario
+        ..solicitudId = e.id
+        ..cedula = e.cedula
+        ..sucursal = LocalStorage().database
+        ..nombre = e.nombre
+        ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+        ..tipoSolicitud = e.tipoSolicitud
+        ..idAsesor = int.tryParse(LocalStorage().userId)
+        ..motivoAnterior = e.motivoAnterior;
+    }).toList();
+
+    context.read<SolicitudesPendientesLocalDbCubit>().saveSolicitudesPendientes(
+          solicitudes: solicitudes,
+        );
   }
 
   Future<void> getAndSaveParametros() async {
