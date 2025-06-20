@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -66,39 +67,50 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 beneficiarioSeguro = value;
               },
-              title: 'Nombre y Apellido',
+              title: 'Nombre y Apellido Beneficiario del Seguro',
               icon: const Icon(Icons.person),
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 parentesco = item;
                 setState(() {});
               },
               codigo: 'PARENTESCO',
-              title: 'Parentesco',
-              hintText: 'Ingrese Parentesco',
+              title: 'Parentesco del beneficiario del Seguro',
+              hintText: 'input.select_option'.tr(),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 cedula = value;
               },
-              title: 'Cedula',
+              title: 'Cedula Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),
             const Gap(30),
             CountryInput(
+              validator: (value) => ClassValidator.validateRequired(value),
               onCountryCodeChange: (value) {
                 telefonoCodeBeneficiario = value?.dialCode ?? '';
               },
-              textInputType: TextInputType.number,
+              textInputType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(16),
                 DashFormatter(),
               ],
               onChange: (value) {
@@ -107,7 +119,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
               isRequired: false,
               hintText: 'Ingresa Telefono',
               maxLength: 15,
-              title: 'Telefono',
+              title: 'Telefono Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),
             const Gap(30),
@@ -126,7 +138,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 dropdownColor: Colors.white,
                 isContainIcon: true,
                 title:
-                    '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años?',
+                    '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años? (PEPS)',
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   esPeps = item;
@@ -140,54 +152,65 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
             if (esPeps == 'input.yes'.tr()) ...[
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   nombreEntidad = value;
                 },
-                title: 'Nombre de la Entidad',
+                title: 'Nombre de la Entidad PEPS',
                 icon: const Icon(Icons.account_balance),
               ),
               const Gap(30),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa Pais',
-                title: 'Pais',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
+                hintText: 'input.select_option'.tr(),
+                title: 'Pais PEPS',
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = item.valor;
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
 
                   setState(() {});
                 },
                 codigo: 'PAIS',
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   periodoPeps = value;
                 },
-                title: 'Periodo',
+                title: 'Periodo PEPS',
                 icon: const Icon(Icons.date_range),
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   cargoOficialPeps = value;
                 },
-                title: 'Cargo Oficial',
+                title: 'Cargo Oficial PEPS',
                 icon: const Icon(Icons.work),
               ),
               const Gap(30),
             ],
+            const Gap(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: JLuxDropdown(
                 dropdownColor: Colors.white,
                 isContainIcon: true,
                 title:
-                    '¿Eres familia de una persona que ha desempeñado un cargo público o figura pública de alto nivel?',
+                    '¿Eres familia de una persona que ha desempeñado un cargo público o figura pública de alto nivel? (PEPS)',
 
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
@@ -197,6 +220,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 // validator: (value) {},
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
+                validator: (value) => ClassValidator.validateRequired(value),
               ),
             ),
             if (familiarPeps == 'input.yes'.tr()) ...[
@@ -205,47 +229,66 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 onChange: (value) {
                   nombreFamiliarPeps = value;
                 },
-                title: 'Nombre del Familiar',
+                title: 'Nombre del Familiar PEPS',
                 icon: const Icon(Icons.person),
+                validator: (value) => ClassValidator.validateRequired(value),
               ),
               const Gap(30),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                hintText: 'input.select_option'.tr(),
                 onChanged: (item) {
                   parentescoFamiliarPeps = item?.value;
                   setState(() {});
                 },
                 codigo: 'PARENTESCO',
-                title: 'Parentesco',
+                title: 'Parentesco familiar PEPS',
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 onChange: (value) {
                   cargoFamiliarPeps = value;
                 },
-                title: 'Cargo del Familiar',
+                title: 'Cargo del Familiar PEPS',
                 icon: const Icon(Icons.work),
+                validator: (value) => ClassValidator.validateRequired(value),
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   nombreEntidadPeps = value;
                 },
-                title: 'Nombre de la Entidad',
+                title: 'Nombre de la Entidad familiar PEPS',
                 icon: const Icon(Icons.account_balance),
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   periodoFamiliarPeps = value;
                 },
-                title: 'Periodo',
+                title: 'Periodo familiar PEPS',
                 icon: const Icon(Icons.date_range),
               ),
               const Gap(30),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa Pais',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
+                hintText: 'input.select_option'.tr(),
                 codigo: 'PAIS',
-                title: 'País',
+                title: 'País familiar PEPS',
                 onChanged: (item) {
                   paisPepsFamiliar = item?.valor;
                 },

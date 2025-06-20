@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
@@ -43,6 +46,8 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
   String telefonoOficinaCodeConyuge = '+503';
   String? direccionTrabajoConyugue;
   String? tiempoLaborarConyugue;
+  String? estadoCivil;
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -65,196 +70,266 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 nombreFamiliarCercano = value;
               },
-              title: 'Nombre',
+              title: 'Nombre y Apellido del familiar no cercano',
               icon: const Icon(Icons.person_outline),
             ),
             const Gap(30),
             CountryInput(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 telefonoFamiliarCercano = value;
               },
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(16),
                 DashFormatter(),
               ],
-              maxLength: 15,
+              maxLength: 16,
               isRequired: false,
-              hintText: 'Ingresa Telefono',
-              title: 'Telefono',
+              hintText: 'Ingresa Telefono de la persona no cercana',
+              title: 'Telefono del familiar no cercano',
               icon: const Icon(Icons.phone_outlined),
               textInputType: TextInputType.phone,
             ),
             const Gap(30),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'PARENTESCO',
               onChanged: (item) {
                 parentescoFamiliarCercano = item;
                 setState(() {});
               },
-              title: 'Parentesco',
+              title: 'Parentesco del familiar no cercano',
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 direccionDomicilioFamiiiar = value;
               },
-              title: 'Dirección Domicilio',
+              title: 'Dirección Domicilio del familiar no cercano',
               icon: const Icon(Icons.location_on_outlined),
             ),
-            const Gap(30),
+            const Divider(),
+            const Gap(20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Text(
-                'Datos de conyugue',
+                'Datos Civil del solicitante',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreConyuge = value;
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              hintText: 'input.select_option'.tr(),
+              onChanged: (item) {
+                estadoCivil = item?.value;
+                setState(() {});
               },
-              title: 'Nombre y Apellido',
-              icon: const Icon(Icons.badge_outlined),
+              codigo: 'ESTADOCIVIL',
+              title: 'Estado civil ',
             ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                nacionalidadConyuge = value;
-              },
-              title: 'Nacionalidad del conyugue',
-              icon: const Icon(Icons.flag_outlined),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                profesionConyuge = value;
-              },
-              title: 'Profesión',
-              icon: const Icon(Icons.work_outline),
-            ),
-            const Gap(30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: JLuxDropdown(
-                dropdownColor: Colors.white,
-                isContainIcon: true,
-                title: '¿Trabaja?:',
-                items: ['input.yes'.tr(), 'input.no'.tr()],
+            if (estadoCivil == 'CAS' || estadoCivil == 'UNI') ...[
+              const Gap(30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Text(
+                  'Datos de conyugue',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              const Gap(30),
+              OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                onChange: (value) {
+                  nombreConyuge = value;
+                },
+                title: 'Nombre y Apellido del conyugue',
+                icon: const Icon(Icons.badge_outlined),
+              ),
+              const Gap(30),
+              CatalogoValorNacionalidad(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
+                codigo: 'PAIS',
+                title: 'Nacionalidad del conyugue',
                 onChanged: (item) {
-                  trabajaConyuge = item;
+                  nacionalidadConyuge = item?.valor;
                   setState(() {});
                 },
-                // validator: (value) {},
-                toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
-            ),
-            if (trabajaConyuge == 'input.yes'.tr()) ...[
               const Gap(30),
               OutlineTextfieldWidget(
-                onChange: (value) {
-                  direccionTrabajoConyugue = value;
-                },
-                title: 'Direccion de la Empresa',
-                icon: const Icon(Icons.badge_outlined),
-              ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                textInputType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(2),
+                  UpperCaseTextFormatter(),
                 ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
-                  tiempoLaborarConyugue = value;
+                  profesionConyuge = value;
                 },
-                title: 'Tiempo de laborar',
-                icon: const Icon(Icons.badge_outlined),
+                title: 'Profesión del conyugue',
+                icon: const Icon(Icons.work_outline),
               ),
               const Gap(30),
-              OutlineTextfieldWidget(
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  salarioNetoMensualConyuge = value;
-                },
-                title: 'Salario Neto Mensual (C\$)',
-                icon: const Icon(Icons.attach_money_outlined),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: JLuxDropdown(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  dropdownColor: Colors.white,
+                  isContainIcon: true,
+                  title: '¿Trabaja su conyugue?:',
+                  items: ['input.yes'.tr(), 'input.no'.tr()],
+                  onChanged: (item) {
+                    trabajaConyuge = item;
+                    setState(() {});
+                  },
+                  // validator: (value) {},
+                  toStringItem: (item) => item,
+                  hintText: 'input.select_option'.tr(),
+                ),
               ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  otrosIngresosConyuge = value;
-                },
-                title: 'Otros ingresos (C\$)',
-                icon: const Icon(Icons.money_off_csred_outlined),
-              ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                onChange: (value) {
-                  fuenteOtrosIngresosConyuge = value;
-                },
-                title: 'Fuentes otros ingresos',
-                icon: const Icon(Icons.source_outlined),
-              ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  totalIngresosMesConyuge = value;
-                },
-                title: 'Total ingresos mes (C\$)',
-                icon: const Icon(Icons.calculate_outlined),
-              ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                onChange: (value) {
-                  observaciones = value;
-                },
-                title: 'Observaciones',
-                icon: const Icon(Icons.note_alt_outlined),
-              ),
-              const Gap(30),
-              OutlineTextfieldWidget(
-                onChange: (value) {
-                  nombreDelaEmpresaConyuge = value;
-                },
-                title: 'Nombres de la empresa',
-                icon: const Icon(Icons.business_outlined),
-              ),
-              const Gap(30),
-              CountryInput(
-                onCountryCodeChange: (value) {
-                  telefonoOficinaCodeConyuge = value?.dialCode ?? '+503';
-                },
-                textInputType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(15),
-                  DashFormatter(),
-                ],
-                onChange: (value) {
-                  telefonoOficinaConyuge = value;
-                },
-                maxLength: 15,
-                isRequired: false,
-                title: 'Teléfono Oficina',
-                icon: const Icon(Icons.phone_iphone_outlined),
-              ),
+              if (trabajaConyuge == 'input.yes'.tr()) ...[
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    nombreDelaEmpresaConyuge = value;
+                  },
+                  title: 'Nombre de la empresa donde trabaja su conyugue',
+                  icon: const Icon(Icons.business_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    direccionTrabajoConyugue = value;
+                  },
+                  title: 'Direccion de la Empresa donde trabaja su conyugue',
+                  icon: const Icon(Icons.badge_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  onChange: (value) {
+                    tiempoLaborarConyugue = value;
+                  },
+                  title: 'Tiempo de laborar su conyugue',
+                  icon: const Icon(Icons.badge_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    salarioNetoMensualConyuge = value;
+                  },
+                  title: 'Salario Neto Mensual conyugue (C\$)',
+                  icon: const Icon(Icons.attach_money_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    otrosIngresosConyuge = value;
+                  },
+                  title: 'Otros ingresos conyugue (C\$)',
+                  icon: const Icon(Icons.money_off_csred_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    fuenteOtrosIngresosConyuge = value;
+                  },
+                  title: 'Fuentes otros ingresos conyugue',
+                  icon: const Icon(Icons.source_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  onChange: (value) {
+                    totalIngresosMesConyuge = value;
+                  },
+                  title: 'Total ingresos mes conyugue (C\$)',
+                  icon: const Icon(Icons.calculate_outlined),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    observaciones = value;
+                  },
+                  title: 'Observaciones del conyugue',
+                  icon: const Icon(Icons.note_alt_outlined),
+                ),
+                const Gap(30),
+                CountryInput(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  onCountryCodeChange: (value) {
+                    telefonoOficinaCodeConyuge = value?.dialCode ?? '+503';
+                  },
+                  textInputType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
+                    DashFormatter(),
+                  ],
+                  onChange: (value) {
+                    telefonoOficinaConyuge = value;
+                  },
+                  maxLength: 15,
+                  isRequired: false,
+                  title: 'Teléfono Oficina',
+                  icon: const Icon(Icons.phone_iphone_outlined),
+                ),
+              ],
             ],
             const Gap(20),
             Container(
@@ -290,6 +365,8 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                         trabajoConyugue: nombreDelaEmpresaConyuge,
                         telefonoTrabajoConyugue: telefonoOficinaCodeConyuge +
                             (telefonoOficinaConyuge ?? '').replaceAll('-', ''),
+                        objEstadoCivilId: estadoCivil,
+                        objEstadoCivilIdVer: estadoCivil,
                       );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

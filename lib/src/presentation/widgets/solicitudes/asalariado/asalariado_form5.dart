@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -55,6 +56,9 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 nombreEmpresa = value;
@@ -64,6 +68,21 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              onChange: (value) {
+                direccionEmpresa = value;
+              },
+              title: 'Dirección de la empresa',
+              icon: const Icon(Icons.location_on),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 barrioEmpresa = value;
@@ -78,7 +97,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
               },
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
               ],
               textInputType: TextInputType.number,
               title: 'Otros ingresos (C\$)',
@@ -86,6 +105,10 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               onChange: (value) {
                 cargo = value;
               },
@@ -94,6 +117,9 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               onChange: (value) {
                 lugarTrabajoAnterior = value;
               },
@@ -102,6 +128,9 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               onChange: (value) {
                 fuenteOtrosIngresos = value;
               },
@@ -113,11 +142,11 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
               onCountryCodeChange: (value) {
                 telefonoCodeOficina = value?.dialCode ?? '+503';
               },
-              maxLength: 15,
+              maxLength: 16,
               isRequired: false,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(16),
                 DashFormatter(),
               ],
               onChange: (value) {
@@ -134,7 +163,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
               ],
               title: 'Salario Neto Mensual (C\$)',
               icon: const Icon(Icons.money),
@@ -144,13 +173,14 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
               ],
               title: 'Total ingresos mes (C\$)',
               icon: const Icon(Icons.summarize),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 tiempoDeTrabajar = value;
               },
@@ -161,14 +191,6 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
               ],
               title: 'Tiempo de Trabajar',
               icon: const Icon(Icons.schedule),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                direccionEmpresa = value;
-              },
-              title: 'Dirección de la empresa',
-              icon: const Icon(Icons.location_on),
             ),
             const Gap(20),
             Container(

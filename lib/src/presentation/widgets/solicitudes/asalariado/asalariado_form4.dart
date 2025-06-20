@@ -49,6 +49,7 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
   TimeOfDay? horarioVisita;
   TimeOfDay? horarioVisitaEndtime;
   Item? objRubroActividadPredominante;
+  Item? sector;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,18 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
         key: formKey,
         child: Column(
           children: [
+            const Gap(30),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'SECTORECONOMICO',
+              title: 'Sector Económico',
+              hintText: 'input.select_option'.tr(),
+              onChanged: (item) {
+                sector = item;
+                setState(() {});
+              },
+            ),
             const Gap(20),
             SearchDropdownWidget(
               validator: (value) =>
@@ -151,8 +164,8 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
             if (actividad1?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.value),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad 2',
                 onChanged: (item) {
@@ -166,8 +179,8 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
             if (actividadEconomica2?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.value),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad 3',
                 onChanged: (item) {
@@ -232,9 +245,8 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
                         objRubroActividad3Ver: rubroActividad3?.name,
                         objActividadEconomicaId2: actividadEconomica2?.value,
                         objActividadEconomicaId2Ver: actividadEconomica2?.name,
-                        objSectorId: sectorEconomico?.value,
-                        objSectorIdVer: sectorEconomico?.name,
-                        // sectorEconomico: sectorEconomico2,
+                        objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
                         objActividadEconomicaId: actividad?.value,
                         objActividadEconomicaIdVer: actividad?.name,
                         objActividadEconomicaId1: actividad1?.value,

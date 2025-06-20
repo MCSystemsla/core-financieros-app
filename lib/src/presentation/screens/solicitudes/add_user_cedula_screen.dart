@@ -206,6 +206,8 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         tipoDocumento: tipoDocumento?.value ?? '',
                         paisEmisor: paisEmisorDocumento?.value ?? '',
                       ),
+                      isNicaraguaCedula: paisEmisorDocumento?.value == 'NIC' &&
+                          tipoDocumento?.value == 'CEDULAIDENTIDAD',
                     ),
                     icon: Icon(
                       Icons.credit_card_outlined,

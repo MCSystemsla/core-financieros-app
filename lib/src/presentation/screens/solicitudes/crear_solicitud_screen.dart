@@ -80,7 +80,12 @@ class CrearSolicitudScreen extends StatelessWidget {
             ),
           TypeForm.asalariado => AsalariadoForm(
               controller: pageController,
-              userByCedulaSolicitud: userByCedulaSolicitud,
+              userByCedulaSolicitud: userByCedulaSolicitud ??
+                  UserByCedulaSolicitud(
+                    cedula: cedula!,
+                    tipoDocumento: tipoDocumento?.value,
+                    paisEmisor: paisEmiror,
+                  ),
             ),
           TypeForm.represtamo => ReprestamoForm(
               cedula: cedula ?? '',

@@ -5,6 +5,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
@@ -16,10 +17,12 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,13 +69,16 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
   String? escolaridad;
   String? profesion;
   String? sexo;
-  String? paisEmisor;
+  Item? paisEmisor;
   String? paisNacimiento;
   String? tipoDocumento;
   String? tipoPersona;
   String? nacionalidad;
-  String? estadoCivil;
   final formKey = GlobalKey<FormState>();
+  final edadMinimaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+  final edadMaximaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
   @override
   void initState() {
     super.initState();
@@ -86,17 +92,27 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
     fechaVencimientoCedula = userByCedula?.fechaVencimiento;
     fechaNacimiento = userByCedula?.fechaNacimiento;
     tipoDocumento = userByCedula?.tipoDocumento;
+    paisEmisor = userByCedula?.paisEmisor;
     context.read<GeolocationCubit>().getCurrentLocation();
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime eighteenYearsAgo =
-        DateTime(now.year - 18, now.month, now.day);
+    final DateTime eighteenYearsAgo = DateTime(
+      now.year - int.parse(edadMinimaCliente?.valor ?? ''),
+      now.month,
+      now.day,
+    );
+    final DateTime maxAgeClient = DateTime(
+      now.year - int.parse(edadMaximaCliente?.valor ?? ''),
+      now.month,
+      now.day,
+    );
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
-      firstDate: DateTime(1930),
+      firstDate: maxAgeClient,
       lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -224,17 +240,61 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                   ),
                 ),
                 const Gap(30),
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'TIPOSPERSONACREDITO',
+                  onChanged: (item) {
+                    tipoPersona = item?.value;
+                    setState(() {});
+                  },
+                  title: 'Tipo de Persona',
+                ),
+                const Gap(30),
+                SearchDropdownWidget(
+                  enabled: false,
+                  hintText: tipoDocumento ?? '',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(tipoDocumento),
+                  codigo: 'TIPODOCUMENTOPERSONA',
+                  onChanged: (item) {
+                    tipoDocumento = item?.value;
+                    setState(() {});
+                  },
+                  title: 'Tipo de Documento',
+                ),
+                const Gap(30),
+                CatalogoValorNacionalidad(
+                  enabled: false,
+                  validator: (value) =>
+                      ClassValidator.validateRequired(paisEmisor?.value),
+                  hintText: paisEmisor?.name ?? 'input.select_option'.tr(),
+                  onChanged: (item) {
+                    paisEmisor = Item(
+                      name: item?.nombre ?? '',
+                      value: item?.valor,
+                    );
+                    setState(() {});
+                  },
+                  codigo: 'PAIS',
+                  title: 'País emisor Documento',
+                ),
+                const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   initialValue: cedula,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     cedula = value;
                   },
-                  title: 'Cedula Identidad',
+                  title: 'Documento de Identidad',
                   icon: const Icon(Icons.badge),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: primerNombre,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
@@ -245,6 +305,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: segundoNombre,
                   onChange: (value) {
                     segundoNombre = value;
@@ -254,6 +317,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: primerApellido,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
@@ -264,6 +330,9 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: segundoApellido,
                   onChange: (value) {
                     segundoApellido = value;
@@ -273,6 +342,10 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     nombrePublico = value;
                   },
@@ -294,7 +367,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 CatalogoValorNacionalidad(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
-                  hintText: 'Ingresa Pais',
+                  hintText: 'input.select_option'.tr(),
                   onChanged: (item) {
                     paisNacimiento = item?.valor;
                     setState(() {});
@@ -304,8 +377,7 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
+                  validator: (value) => ClassValidator.validateRequired(sexo),
                   codigo: 'SEXO',
                   onChanged: (item) {
                     sexo = item?.value;
@@ -315,6 +387,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaEmisionCedula?.selectorFormat()),
                   initialValue: fechaEmisionCedula?.selectorFormat(),
                   onTap: () => selectFechaEmisionCedula(context),
                   hintText: fechaEmisionCedula?.selectorFormat(),
@@ -324,6 +398,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaVencimientoCedula?.selectorFormat()),
                   hintText: fechaVencimientoCedula?.selectorFormat(),
                   readOnly: true,
                   onTap: () => selectFechaVencimientoCedula(context),
@@ -332,64 +408,16 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                   icon: const Icon(Icons.calendar_today),
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  onChange: (value) {
-                    ocupacion = value;
-                  },
-                  title: 'Ocupación',
-                  icon: const Icon(Icons.work),
-                ),
-                const Gap(30),
                 CatalogoValorNacionalidad(
-                  hintText: 'Ingresa Pais',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
+                  hintText: 'input.select_option'.tr(),
                   onChanged: (item) {
-                    paisEmisor = item?.valor;
+                    nacionalidad = item?.valor;
                     setState(() {});
                   },
                   codigo: 'PAIS',
-                  title: 'País emisor cédula',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: tipoDocumento ?? '',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'TIPODOCUMENTOPERSONA',
-                  onChanged: (item) {
-                    tipoDocumento = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Documento',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'TIPOSPERSONACREDITO',
-                  onChanged: (item) {
-                    tipoPersona = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Persona',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  onChange: (value) {
-                    nacionalidad = value;
-                  },
                   title: 'Nacionalidad',
-                  icon: const Icon(Icons.flag_circle),
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  onChanged: (item) {
-                    estadoCivil = item?.value;
-                    setState(() {});
-                  },
-                  codigo: 'ESTADOCIVIL',
-                  title: 'Estado civil',
                 ),
                 const Gap(30),
                 CountryInput(
@@ -465,6 +493,20 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    ocupacion = value;
+                  },
+                  title: 'Ocupación',
+                  icon: const Icon(Icons.work),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     profesion = value;
                   },
@@ -502,9 +544,8 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
                             apellido1: primerApellido,
                             apellido2: segundoApellido,
                             nombrePublico: nombrePublico,
-                            objPaisEmisorCedula: paisEmisor,
+                            objPaisEmisorCedula: paisEmisor?.value,
                             objPaisNacimientoId: paisNacimiento,
-                            objEstadoCivilId: estadoCivil,
                             objTipoDocumentoId: tipoDocumento,
                             tipoPersona: tipoPersona,
                             objTipoPersonaId: tipoPersona,

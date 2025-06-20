@@ -55,6 +55,7 @@ class ClassValidator {
     String? value,
     int length, {
     bool isRequired = true,
+    bool isNicaraguaCedula = false,
   }) {
     if (isRequired && value == null && value!.isEmpty) {
       return 'input.input_validator'.tr();
@@ -63,7 +64,12 @@ class ClassValidator {
         isRequired && value!.length > length) {
       return 'Este campo debe tener como maximo $length caracteres';
     }
-
+    if (isNicaraguaCedula) {
+      final endsWithLetter = RegExp(r'[A-Za-z]$');
+      if (!endsWithLetter.hasMatch(value!)) {
+        return 'La cédula nicaragüense debe terminar con una letra';
+      }
+    }
     return null;
   }
 }

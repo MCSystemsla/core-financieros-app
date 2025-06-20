@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -9,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,22 +51,26 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
           children: [
             const Gap(30),
             CatalogoValorNacionalidad(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
               codigo: 'PAIS',
-              title: 'País',
+              title: 'País de residencia',
               onChanged: (item) {
                 paisCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                 depCasa = Item(name: item!.nombre, value: item.valor);
                 setState(() {});
               },
-              hintText: 'Ingresa Pais',
+              hintText: 'input.select_option'.tr(),
             ),
             if (paisCasa?.value != null) ...[
               const Gap(30),
               CatalogoValorNacionalidad(
                 where: depCasa?.value,
                 codigo: 'DEP',
-                title: 'Departamento',
-                hintText: 'Ingresa Departamento',
+                title: 'Departamento de residencia',
+                hintText: 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
                 onChanged: (item) {
                   depCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                   munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
@@ -75,8 +83,10 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               CatalogoValorNacionalidad(
                 where: munCasa?.value,
                 codigo: 'MUN',
-                title: 'Municipio',
-                hintText: 'Ingresa Municipio',
+                title: 'Municipio de residencia',
+                hintText: 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
                 onChanged: (item) {
                   munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
                   setState(() {});
@@ -87,29 +97,50 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
             SearchDropdownWidget(
               codigo: 'TIPOVIVIENDA',
               title: 'Condicion Casa',
+              hintText: 'input.select_option'.tr(),
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 condicionCasa = item;
+                log(condicionCasa?.value);
                 setState(() {});
               },
             ),
+            if (condicionCasa?.value == 'ALQ') ...[
+              const Gap(30),
+              OutlineTextfieldWidget(
+                key: const Key('pago_alquiler'),
+                validator: (value) => ClassValidator.validateRequired(value),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ],
+                onChange: (value) {
+                  pagoAlquiler = value;
+                },
+                title: 'Pago de alquiler',
+                icon: const Icon(Icons.money),
+              ),
+            ],
+            if (condicionCasa?.value != 'ALQ') ...[
+              const Gap(30),
+              OutlineTextfieldWidget(
+                key: const Key('nombre_dueno_casa'),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  nombreDuenoCasa = value;
+                },
+                title: 'Nombre del dueño de la casa',
+                icon: const Icon(Icons.person),
+              ),
+            ],
             const Gap(30),
             OutlineTextfieldWidget(
-              onChange: (value) {
-                nombreDuenoCasa = value;
-              },
-              title: 'Nombre dueno de casa',
-              icon: const Icon(Icons.person),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              onChange: (value) {
-                pagoAlquiler = value;
-              },
-              title: 'Pago de alquiler',
-              icon: const Icon(Icons.money),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
+              key: const Key('anos_residir'),
+              validator: (value) => ClassValidator.validateRequired(value),
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -118,11 +149,15 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               onChange: (value) {
                 anosResidir = value;
               },
-              title: 'Anos de residir',
+              title: 'Años de residencia',
               icon: const Icon(Icons.house),
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              key: const Key('direccion_domicilio'),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 direccionDomicilio = value;
@@ -132,21 +167,16 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              key: const Key('barrio'),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 barrio = value;
               },
-              title: 'Barrio',
+              title: 'Barrio de domicilio',
               icon: const Icon(Icons.house),
-            ),
-            const Gap(30),
-            SearchDropdownWidget(
-              codigo: 'SECTORECONOMICO',
-              title: 'Sector',
-              onChanged: (item) {
-                sector = item;
-                setState(() {});
-              },
             ),
             const Gap(20),
             Container(
@@ -171,7 +201,6 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
                         anosResidirCasa: int.tryParse(anosResidir ?? '0'),
                         direccionCasa: direccionDomicilio,
                         barrioCasa: barrio,
-                        objSectorId: sector?.value,
                         objSectorIdVer: sector?.name,
                       );
                   widget.controller.nextPage(

@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalari
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -112,8 +113,11 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'DESTINOCREDITO',
               title: 'Proposito',
+              hintText: 'input.select_option'.tr(),
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
@@ -177,11 +181,10 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
+                  fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
             const Gap(20),
             SearchDropdownWidget(
               validator: (value) =>
@@ -238,23 +241,6 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
                 Icons.remove_red_eye,
@@ -270,7 +256,7 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
             const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
-                Icons.remove_red_eye,
+                Icons.location_city,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Ubicacion',
