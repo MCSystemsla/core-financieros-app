@@ -226,6 +226,9 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
             if (familiarPeps == 'input.yes'.tr()) ...[
               const Gap(30),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 onChange: (value) {
                   nombreFamiliarPeps = value;
                 },

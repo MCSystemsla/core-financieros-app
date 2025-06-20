@@ -139,6 +139,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             CountryInput(
+              validator: (value) => ClassValidator.validateRequired(value),
               onCountryCodeChange: (value) {
                 telefonoCodeOficina = value?.dialCode ?? '+503';
               },
@@ -157,6 +158,7 @@ class _AsalariadoForm5State extends State<AsalariadoForm5>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               onChange: (value) {
                 salarioNetoMensual = value;
               },
