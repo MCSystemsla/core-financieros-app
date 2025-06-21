@@ -45,6 +45,90 @@ class AsalariadoForm1 extends StatefulWidget {
 
 class _AsalariadoForm1State extends State<AsalariadoForm1>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return BlocConsumer<GeolocationCubit, GeolocationState>(
+      listener: (context, state) {
+        if (state is OnGeolocationPermissionDenied) {
+          CustomAlertDialog(
+            context: context,
+            title: 'No se ha concedido el permiso de ubicación',
+            onDone: () async {
+              final isOpen = await Geolocator.openLocationSettings();
+              if (!context.mounted) return;
+              if (isOpen) {
+                context.pop();
+              }
+            },
+          ).showDialog(context);
+        }
+        if (state is OnGeolocationServiceDisabled) {
+          CustomAlertDialog(
+            context: context,
+            title: 'Gps de dispositivo desactivado',
+            onDone: () async {
+              final isOpen = await Geolocator.openLocationSettings();
+              if (!context.mounted) return;
+              if (isOpen) {
+                context.pop();
+              }
+            },
+          ).showDialog(context);
+        }
+        if (state is OnGeolocationServiceError) {
+          CustomAlertDialog(
+            context: context,
+            title: state.errorMsg,
+            onDone: () => context.pop(),
+          ).showDialog(context, dialogType: DialogType.error);
+        }
+        if (state is OnGeolocationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            customSnackbar(
+              icon: const Icon(
+                Icons.location_pin,
+                color: Colors.white,
+              ),
+              title: 'Ubicacion registrada exitosamente',
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return _FormContent(
+          controller: widget.controller,
+          userByCedulaSolicitud: widget.userByCedulaSolicitud,
+          state: state,
+          position: state is OnGeolocationSuccess ? state.position : null,
+        );
+      },
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final UserByCedulaSolicitud? userByCedulaSolicitud;
+  final PageController controller;
+  final GeolocationState state;
+  final Position? position;
+  const _FormContent({
+    this.userByCedulaSolicitud,
+    required this.controller,
+    required this.state,
+    this.position,
+  });
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
+  final localDbProvider = global<ObjectBoxService>();
+
   String telefonoDatoPersonal = '+503';
   String celularDatoPersonal = '+503';
   String? locationLatitude;
@@ -186,416 +270,380 @@ class _AsalariadoForm1State extends State<AsalariadoForm1>
 
   @override
   Widget build(BuildContext context) {
-    final localDbProvider = global<ObjectBoxService>();
-    super.build(context);
-    return BlocConsumer<GeolocationCubit, GeolocationState>(
-      listener: (context, state) {
-        if (state is OnGeolocationPermissionDenied) {
-          CustomAlertDialog(
-            context: context,
-            title: 'No se ha concedido el permiso de ubicación',
-            onDone: () => context.pop(),
-          ).showDialog(context);
-        }
-        if (state is OnGeolocationServiceDisabled) {
-          CustomAlertDialog(
-            context: context,
-            title: 'Gps de dispositivo desactivado',
-            onDone: () => context.pop(),
-          ).showDialog(context);
-        }
-        if (state is OnGeolocationServiceError) {
-          CustomAlertDialog(
-            context: context,
-            title: state.errorMsg,
-            onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
-        }
-        if (state is OnGeolocationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnackbar(
-              icon: const Icon(
-                Icons.location_pin,
-                color: Colors.white,
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Gap(30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                'Datos Personales y Seguro',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              title: 'Ubicacion registrada exitosamente',
             ),
-          );
-        }
-      },
-      builder: (context, state) {
-        return SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Text(
-                    'Datos Personales y Seguro',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'TIPOSPERSONACREDITO',
-                  onChanged: (item) {
-                    tipoPersona = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Persona',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  enabled: false,
-                  hintText: tipoDocumento ?? '',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(tipoDocumento),
-                  codigo: 'TIPODOCUMENTOPERSONA',
-                  onChanged: (item) {
-                    tipoDocumento = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Documento',
-                ),
-                const Gap(30),
-                CatalogoValorNacionalidad(
-                  enabled: false,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(paisEmisor?.value),
-                  hintText: paisEmisor?.name ?? 'input.select_option'.tr(),
-                  onChanged: (item) {
-                    paisEmisor = Item(
-                      name: item?.nombre ?? '',
-                      value: item?.valor,
-                    );
-                    setState(() {});
-                  },
-                  codigo: 'PAIS',
-                  title: 'País emisor Documento',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  readOnly: true,
-                  initialValue: cedula,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    cedula = value;
-                  },
-                  title: 'Documento de Identidad',
-                  icon: const Icon(Icons.badge),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  initialValue: primerNombre,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    primerNombre = value;
-                  },
-                  title: 'Primer Nombre',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  initialValue: segundoNombre,
-                  onChange: (value) {
-                    segundoNombre = value;
-                  },
-                  title: 'Segundo Nombre',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  initialValue: primerApellido,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    primerApellido = value;
-                  },
-                  title: 'Primer Apellido',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  initialValue: segundoApellido,
-                  onChange: (value) {
-                    segundoApellido = value;
-                  },
-                  title: 'Segundo Apellido',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    nombrePublico = value;
-                  },
-                  title: 'Nombre público',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaNacimiento?.selectorFormat()),
-                  initialValue: fechaNacimiento?.selectorFormat(),
-                  onTap: () => selectFechaNacimiento(context),
-                  hintText: fechaNacimiento?.selectorFormat(),
-                  readOnly: true,
-                  title: 'Fecha de nacimiento',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                CatalogoValorNacionalidad(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  hintText: 'input.select_option'.tr(),
-                  onChanged: (item) {
-                    paisNacimiento = item?.valor;
-                    setState(() {});
-                  },
-                  codigo: 'PAIS',
-                  title: 'País de nacimiento',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) => ClassValidator.validateRequired(sexo),
-                  codigo: 'SEXO',
-                  onChanged: (item) {
-                    sexo = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Sexo',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaEmisionCedula?.selectorFormat()),
-                  initialValue: fechaEmisionCedula?.selectorFormat(),
-                  onTap: () => selectFechaEmisionCedula(context),
-                  hintText: fechaEmisionCedula?.selectorFormat(),
-                  readOnly: true,
-                  title: 'Fecha emisión documento',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaVencimientoCedula?.selectorFormat()),
-                  hintText: fechaVencimientoCedula?.selectorFormat(),
-                  readOnly: true,
-                  onTap: () => selectFechaVencimientoCedula(context),
-                  initialValue: fechaVencimientoCedula?.selectorFormat(),
-                  title: 'Fecha Vencimiento documento',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                CatalogoValorNacionalidad(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  hintText: 'input.select_option'.tr(),
-                  onChanged: (item) {
-                    nacionalidad = item?.valor;
-                    setState(() {});
-                  },
-                  codigo: 'PAIS',
-                  title: 'Nacionalidad',
-                ),
-                const Gap(30),
-                CountryInput(
-                  isRequired: false,
-                  onCountryCodeChange: (value) {
-                    telefonoDatoPersonal = value?.dialCode ?? '';
-                  },
-                  onChange: (value) {
-                    telefono = value;
-                  },
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
-                    DashFormatter(),
-                  ],
-                  maxLength: 15,
-                  title: 'Teléfono',
-                  icon: const Icon(Icons.phone),
-                ),
-                const Gap(30),
-                CountryInput(
-                  onCountryCodeChange: (value) {
-                    celularDatoPersonal = value?.dialCode ?? '';
-                  },
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
-                    DashFormatter(),
-                  ],
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    celular = value;
-                  },
-                  isRequired: false,
-                  maxLength: 15,
-                  title: 'Celular',
-                  icon: const Icon(Icons.smartphone),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  onChange: (value) {
-                    email = value;
-                  },
-                  textInputType: TextInputType.emailAddress,
-                  validator: (value) => ClassValidator.validateEmail(value),
-                  title: 'Email',
-                  icon: const Icon(Icons.email),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  onChange: (value) {
-                    cantidadHijos = value;
-                  },
-                  title: 'Cantidad de hijos',
-                  icon: const Icon(Icons.child_care),
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'ESCOLARIDAD',
-                  onChanged: (item) {
-                    escolaridad = item?.value;
-                  },
-                  title: 'Escolaridad',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    ocupacion = value;
-                  },
-                  title: 'Ocupación',
-                  icon: const Icon(Icons.work),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    profesion = value;
-                  },
-                  title: 'Profesión',
-                  icon: const Icon(Icons.work_outline),
-                ),
-                const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Siguiente',
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () async {
-                      if (!formKey.currentState!.validate()) return;
-                      final cedulaPath =
-                          context.read<SolicitudAsalariadoCubit>().state;
-                      localDbProvider.saveCedulaClient(
-                        cedulaClient: CedulaClientDb(
-                          typeSolicitud: 'ASALARIADO',
-                          cedula: cedula,
-                          imageFrontCedula: cedulaPath.cedulaFrontPath,
-                          imageBackCedula: cedulaPath.cedulaBackPath,
-                        ),
-                      );
-                      final Position? position =
-                          state is OnGeolocationSuccess ? state.position : null;
-
-                      context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
-                            cedula: cedula,
-                            nombre1: primerNombre,
-                            nombre2: segundoNombre,
-                            apellido1: primerApellido,
-                            apellido2: segundoApellido,
-                            nombrePublico: nombrePublico,
-                            objPaisEmisorCedula: paisEmisor?.value,
-                            objPaisNacimientoId: paisNacimiento,
-                            objTipoDocumentoId: tipoDocumento,
-                            tipoPersona: tipoPersona,
-                            objTipoPersonaId: tipoPersona,
-                            nacionalidad: nacionalidad,
-                            objSexoId: sexo,
-                            fechaNacimiento:
-                                fechaNacimiento?.toUtc().toIso8601String(),
-                            fechaEmisionCedula:
-                                fechaEmisionCedula?.toUtc().toIso8601String(),
-                            fechaVencimientoCedula: fechaVencimientoCedula
-                                ?.toUtc()
-                                .toIso8601String(),
-                            ocupacion: ocupacion,
-                            celular: celularDatoPersonal +
-                                celular!.trim().replaceAll('-', ''),
-                            email: email,
-                            cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
-                            objEscolaridadId: escolaridad,
-                            profesion: profesion,
-                            telefono: telefonoDatoPersonal +
-                                telefono!.trim().replaceAll('-', ''),
-                          );
-                      widget.controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                  ),
-                ),
-                const Gap(10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CustomOutLineButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    text: 'Salir',
-                    textColor: AppColors.red,
-                    color: AppColors.red,
-                  ),
-                ),
-                const Gap(20),
+            const Gap(30),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'TIPOSPERSONACREDITO',
+              onChanged: (item) {
+                tipoPersona = item?.value;
+                setState(() {});
+              },
+              title: 'Tipo de Persona',
+            ),
+            const Gap(30),
+            SearchDropdownWidget(
+              enabled: false,
+              hintText: tipoDocumento ?? '',
+              validator: (value) =>
+                  ClassValidator.validateRequired(tipoDocumento),
+              codigo: 'TIPODOCUMENTOPERSONA',
+              onChanged: (item) {
+                tipoDocumento = item?.value;
+                setState(() {});
+              },
+              title: 'Tipo de Documento',
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              enabled: false,
+              validator: (value) =>
+                  ClassValidator.validateRequired(paisEmisor?.value),
+              hintText: paisEmisor?.name ?? 'input.select_option'.tr(),
+              onChanged: (item) {
+                paisEmisor = Item(
+                  name: item?.nombre ?? '',
+                  value: item?.valor,
+                );
+                setState(() {});
+              },
+              codigo: 'PAIS',
+              title: 'País emisor Documento',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              readOnly: true,
+              initialValue: cedula,
+              validator: (value) => ClassValidator.validateRequired(value),
+              onChange: (value) {
+                cedula = value;
+              },
+              title: 'Documento de Identidad',
+              icon: const Icon(Icons.badge),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
               ],
+              initialValue: primerNombre,
+              validator: (value) => ClassValidator.validateRequired(value),
+              onChange: (value) {
+                primerNombre = value;
+              },
+              title: 'Primer Nombre',
+              icon: const Icon(Icons.person),
             ),
-          ),
-        );
-      },
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              initialValue: segundoNombre,
+              onChange: (value) {
+                segundoNombre = value;
+              },
+              title: 'Segundo Nombre',
+              icon: const Icon(Icons.person),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              initialValue: primerApellido,
+              validator: (value) => ClassValidator.validateRequired(value),
+              onChange: (value) {
+                primerApellido = value;
+              },
+              title: 'Primer Apellido',
+              icon: const Icon(Icons.person),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              initialValue: segundoApellido,
+              onChange: (value) {
+                segundoApellido = value;
+              },
+              title: 'Segundo Apellido',
+              icon: const Icon(Icons.person),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              onChange: (value) {
+                nombrePublico = value;
+              },
+              title: 'Nombre público',
+              icon: const Icon(Icons.person),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaNacimiento?.selectorFormat()),
+              initialValue: fechaNacimiento?.selectorFormat(),
+              onTap: () => selectFechaNacimiento(context),
+              hintText: fechaNacimiento?.selectorFormat(),
+              readOnly: true,
+              title: 'Fecha de nacimiento',
+              icon: const Icon(Icons.calendar_today),
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              hintText: 'input.select_option'.tr(),
+              onChanged: (item) {
+                paisNacimiento = item?.valor;
+                setState(() {});
+              },
+              codigo: 'PAIS',
+              title: 'País de nacimiento',
+            ),
+            const Gap(30),
+            SearchDropdownWidget(
+              validator: (value) => ClassValidator.validateRequired(sexo),
+              codigo: 'SEXO',
+              onChanged: (item) {
+                sexo = item?.value;
+                setState(() {});
+              },
+              title: 'Sexo',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaEmisionCedula?.selectorFormat()),
+              initialValue: fechaEmisionCedula?.selectorFormat(),
+              onTap: () => selectFechaEmisionCedula(context),
+              hintText: fechaEmisionCedula?.selectorFormat(),
+              readOnly: true,
+              title: 'Fecha emisión documento',
+              icon: const Icon(Icons.calendar_today),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaVencimientoCedula?.selectorFormat()),
+              hintText: fechaVencimientoCedula?.selectorFormat(),
+              readOnly: true,
+              onTap: () => selectFechaVencimientoCedula(context),
+              initialValue: fechaVencimientoCedula?.selectorFormat(),
+              title: 'Fecha Vencimiento documento',
+              icon: const Icon(Icons.calendar_today),
+            ),
+            const Gap(30),
+            CatalogoValorNacionalidad(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.valor),
+              hintText: 'input.select_option'.tr(),
+              onChanged: (item) {
+                nacionalidad = item?.valor;
+                setState(() {});
+              },
+              codigo: 'PAIS',
+              title: 'Nacionalidad',
+            ),
+            const Gap(30),
+            CountryInput(
+              isRequired: false,
+              onCountryCodeChange: (value) {
+                telefonoDatoPersonal = value?.dialCode ?? '';
+              },
+              onChange: (value) {
+                telefono = value;
+              },
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
+              maxLength: 15,
+              title: 'Teléfono',
+              icon: const Icon(Icons.phone),
+            ),
+            const Gap(30),
+            CountryInput(
+              onCountryCodeChange: (value) {
+                celularDatoPersonal = value?.dialCode ?? '';
+              },
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+                DashFormatter(),
+              ],
+              validator: (value) => ClassValidator.validateRequired(value),
+              onChange: (value) {
+                celular = value;
+              },
+              isRequired: false,
+              maxLength: 15,
+              title: 'Celular',
+              icon: const Icon(Icons.smartphone),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              onChange: (value) {
+                email = value;
+              },
+              textInputType: TextInputType.emailAddress,
+              validator: (value) => ClassValidator.validateEmail(value),
+              title: 'Email',
+              icon: const Icon(Icons.email),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
+              onChange: (value) {
+                cantidadHijos = value;
+              },
+              title: 'Cantidad de hijos',
+              icon: const Icon(Icons.child_care),
+            ),
+            const Gap(30),
+            SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              codigo: 'ESCOLARIDAD',
+              onChanged: (item) {
+                escolaridad = item?.value;
+              },
+              title: 'Escolaridad',
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              onChange: (value) {
+                ocupacion = value;
+              },
+              title: 'Ocupación',
+              icon: const Icon(Icons.work),
+            ),
+            const Gap(30),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              onChange: (value) {
+                profesion = value;
+              },
+              title: 'Profesión',
+              icon: const Icon(Icons.work_outline),
+            ),
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: CustomElevatedButton(
+                enabled: widget.state is! OnGeolocationLoading,
+                text: 'Siguiente',
+                color: AppColors.greenLatern.withOpacity(0.4),
+                onPressed: () async {
+                  if (!formKey.currentState!.validate()) return;
+
+                  if (widget.position == null) {
+                    context.read<GeolocationCubit>().getCurrentLocation();
+                    return;
+                  }
+
+                  final cedulaPath =
+                      context.read<SolicitudAsalariadoCubit>().state;
+                  localDbProvider.saveCedulaClient(
+                    cedulaClient: CedulaClientDb(
+                      typeSolicitud: 'ASALARIADO',
+                      cedula: cedula,
+                      imageFrontCedula: cedulaPath.cedulaFrontPath,
+                      imageBackCedula: cedulaPath.cedulaBackPath,
+                    ),
+                  );
+
+                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                        ubicacionLatitud: widget.position?.latitude.toString(),
+                        ubicacionLongitud:
+                            widget.position?.longitude.toString(),
+                        cedula: cedula,
+                        nombre1: primerNombre,
+                        nombre2: segundoNombre,
+                        apellido1: primerApellido,
+                        apellido2: segundoApellido,
+                        nombrePublico: nombrePublico,
+                        objPaisEmisorCedula: paisEmisor?.value,
+                        objPaisNacimientoId: paisNacimiento,
+                        objTipoDocumentoId: tipoDocumento,
+                        tipoPersona: tipoPersona,
+                        objTipoPersonaId: tipoPersona,
+                        nacionalidad: nacionalidad,
+                        objSexoId: sexo,
+                        fechaNacimiento:
+                            fechaNacimiento?.toUtc().toIso8601String(),
+                        fechaEmisionCedula:
+                            fechaEmisionCedula?.toUtc().toIso8601String(),
+                        fechaVencimientoCedula:
+                            fechaVencimientoCedula?.toUtc().toIso8601String(),
+                        ocupacion: ocupacion,
+                        celular: celularDatoPersonal +
+                            celular!.trim().replaceAll('-', ''),
+                        email: email,
+                        cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                        objEscolaridadId: escolaridad,
+                        profesion: profesion,
+                        telefono: (telefono != null)
+                            ? telefonoDatoPersonal +
+                                telefono!.trim().replaceAll('-', '')
+                            : '',
+                      );
+                  widget.controller.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                },
+              ),
+            ),
+            const Gap(10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutLineButton(
+                onPressed: () {
+                  context.pop();
+                },
+                text: 'Salir',
+                textColor: AppColors.red,
+                color: AppColors.red,
+              ),
+            ),
+            const Gap(20),
+          ],
+        ),
+      ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
