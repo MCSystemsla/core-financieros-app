@@ -96,7 +96,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
             const Gap(30),
             SearchDropdownWidget(
               codigo: 'TIPOVIVIENDA',
-              title: 'Condicion Casa',
+              title: 'Condición Casa',
               hintText: 'input.select_option'.tr(),
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -162,7 +162,7 @@ class _AsalariadoForm3State extends State<AsalariadoForm3>
               onChange: (value) {
                 direccionDomicilio = value;
               },
-              title: 'Direccion Domicilio',
+              title: 'Dirección Domicilio',
               icon: const Icon(Icons.house),
             ),
             const Gap(30),

@@ -93,8 +93,8 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
               ],
               maxLength: 16,
               isRequired: false,
-              hintText: 'Ingresa Telefono de la persona no cercana',
-              title: 'Telefono del familiar no cercano',
+              hintText: 'Ingresa Teléfono de la persona no cercana',
+              title: 'Teléfono del familiar no cercano',
               icon: const Icon(Icons.phone_outlined),
               textInputType: TextInputType.phone,
             ),
@@ -147,7 +147,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Text(
-                  'Datos de conyugue',
+                  'Datos de Cónyuge',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -160,7 +160,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                 onChange: (value) {
                   nombreConyuge = value;
                 },
-                title: 'Nombre y Apellido del conyugue',
+                title: 'Nombre y Apellido del Cónyuge',
                 icon: const Icon(Icons.badge_outlined),
               ),
               const Gap(30),
@@ -168,7 +168,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 codigo: 'PAIS',
-                title: 'Nacionalidad del conyugue',
+                title: 'Nacionalidad del Cónyuge',
                 onChanged: (item) {
                   nacionalidadConyuge = item?.valor;
                   setState(() {});
@@ -184,7 +184,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                 onChange: (value) {
                   profesionConyuge = value;
                 },
-                title: 'Profesión del conyugue',
+                title: 'Profesión del Cónyuge',
                 icon: const Icon(Icons.work_outline),
               ),
               const Gap(30),
@@ -195,7 +195,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   validator: (value) => ClassValidator.validateRequired(value),
                   dropdownColor: Colors.white,
                   isContainIcon: true,
-                  title: '¿Trabaja su conyugue?:',
+                  title: '¿Trabaja su Cónyuge?:',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     trabajaConyuge = item;
@@ -216,7 +216,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     nombreDelaEmpresaConyuge = value;
                   },
-                  title: 'Nombre de la empresa donde trabaja su conyugue',
+                  title: 'Nombre de la empresa donde trabaja su Cónyuge',
                   icon: const Icon(Icons.business_outlined),
                 ),
                 const Gap(30),
@@ -228,7 +228,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     direccionTrabajoConyugue = value;
                   },
-                  title: 'Direccion de la Empresa donde trabaja su conyugue',
+                  title: 'Dirección de la Empresa donde trabaja su Cónyuge',
                   icon: const Icon(Icons.badge_outlined),
                 ),
                 const Gap(30),
@@ -242,7 +242,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     tiempoLaborarConyugue = value;
                   },
-                  title: 'Tiempo de laborar su conyugue',
+                  title: 'Tiempo de laborar su Cónyuge',
                   icon: const Icon(Icons.badge_outlined),
                 ),
                 const Gap(30),
@@ -255,7 +255,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     salarioNetoMensualConyuge = value;
                   },
-                  title: 'Salario Neto Mensual conyugue (C\$)',
+                  title: 'Salario Neto Mensual Cónyuge (C\$)',
                   icon: const Icon(Icons.attach_money_outlined),
                 ),
                 const Gap(30),
@@ -268,7 +268,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     otrosIngresosConyuge = value;
                   },
-                  title: 'Otros ingresos conyugue (C\$)',
+                  title: 'Otros ingresos Cónyuge (C\$)',
                   icon: const Icon(Icons.money_off_csred_outlined),
                 ),
                 const Gap(30),
@@ -280,7 +280,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     fuenteOtrosIngresosConyuge = value;
                   },
-                  title: 'Fuentes otros ingresos conyugue',
+                  title: 'Fuentes otros ingresos Cónyuge',
                   icon: const Icon(Icons.source_outlined),
                 ),
                 const Gap(30),
@@ -294,7 +294,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     totalIngresosMesConyuge = value;
                   },
-                  title: 'Total ingresos mes conyugue (C\$)',
+                  title: 'Total ingresos mes Cónyuge (C\$)',
                   icon: const Icon(Icons.calculate_outlined),
                 ),
                 const Gap(30),
@@ -306,7 +306,7 @@ class _AsalariadoForm6State extends State<AsalariadoForm6>
                   onChange: (value) {
                     observaciones = value;
                   },
-                  title: 'Observaciones del conyugue',
+                  title: 'Observaciones del Cónyuge',
                   icon: const Icon(Icons.note_alt_outlined),
                 ),
                 const Gap(30),

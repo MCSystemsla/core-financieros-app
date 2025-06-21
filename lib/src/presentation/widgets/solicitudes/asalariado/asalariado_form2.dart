@@ -86,7 +86,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 setState(() {});
               },
               codigo: 'PARENTESCO',
-              title: 'Parentesco del beneficiario del Seguro',
+              title: 'Paréntesco  del beneficiario del Seguro',
               hintText: 'input.select_option'.tr(),
             ),
             const Gap(30),
@@ -98,7 +98,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
               onChange: (value) {
                 cedula = value;
               },
-              title: 'Cedula Beneficiario del Seguro',
+              title: 'Cédula Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),
             const Gap(30),
@@ -117,16 +117,16 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 telefono = value;
               },
               isRequired: false,
-              hintText: 'Ingresa Telefono',
+              hintText: 'Ingresa Teléfono ',
               maxLength: 15,
-              title: 'Telefono Beneficiario del Seguro',
+              title: 'Teléfono Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),
             const Gap(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Text(
-                'Informacion Adicional',
+                'Información Adicional',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -167,7 +167,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 hintText: 'input.select_option'.tr(),
-                title: 'Pais PEPS',
+                title: 'País PEPS',
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = item.valor;
@@ -186,7 +186,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 onChange: (value) {
                   periodoPeps = value;
                 },
-                title: 'Periodo PEPS',
+                title: 'Período PEPS',
                 icon: const Icon(Icons.date_range),
               ),
               const Gap(30),
@@ -282,7 +282,7 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
                 onChange: (value) {
                   periodoFamiliarPeps = value;
                 },
-                title: 'Periodo familiar PEPS',
+                title: 'Período familiar PEPS',
                 icon: const Icon(Icons.date_range),
               ),
               const Gap(30),

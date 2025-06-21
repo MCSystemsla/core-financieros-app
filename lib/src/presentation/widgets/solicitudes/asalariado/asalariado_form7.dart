@@ -116,7 +116,7 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               codigo: 'DESTINOCREDITO',
-              title: 'Proposito',
+              title: 'Propósito',
               hintText: 'input.select_option'.tr(),
               onChanged: (item) {
                 if (item == null) return;
@@ -246,8 +246,8 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Observacion',
-              hintText: 'Ingresa Observacion',
+              title: 'Observación',
+              hintText: 'Ingresa Observación',
               isValid: null,
               onChange: (value) {
                 observacion = value;
@@ -259,8 +259,8 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
                 Icons.location_city,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Ubicacion',
-              hintText: 'Ingresa Ubicacion',
+              title: 'Ubicación',
+              hintText: 'Ingresa Ubicación',
               isValid: null,
               onChange: (value) {
                 ubicacion = value;
