@@ -28,6 +28,27 @@ class AsalariadoForm2 extends StatefulWidget {
 
 class _AsalariadoForm2State extends State<AsalariadoForm2>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      controller: widget.controller,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   String telefonoCodeBeneficiario = '+503';
   String? beneficiarioSeguro;
   Item? parentesco;
@@ -46,10 +67,8 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
   String? periodoFamiliarPeps;
   String? paisPepsFamiliar;
   final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -355,7 +374,4 @@ class _AsalariadoForm2State extends State<AsalariadoForm2>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

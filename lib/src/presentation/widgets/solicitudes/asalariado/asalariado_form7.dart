@@ -35,6 +35,24 @@ class AsalariadoForm7 extends StatefulWidget {
 
 class _AsalariadoForm7State extends State<AsalariadoForm7>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(controller: widget.controller);
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -100,11 +118,9 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -398,7 +414,4 @@ class _AsalariadoForm7State extends State<AsalariadoForm7>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

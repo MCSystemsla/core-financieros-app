@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
@@ -31,6 +32,7 @@ class ObjectBoxService {
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   late final Box<CedulaClientDb> cedulaClientBox;
   late final Box<CatalogoParametroLocalDb> catalogoParametroBox;
+  late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -46,6 +48,7 @@ class ObjectBoxService {
         _store.box<AsalariadoResponsesLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
     catalogoParametroBox = _store.box<CatalogoParametroLocalDb>();
+    catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
   }

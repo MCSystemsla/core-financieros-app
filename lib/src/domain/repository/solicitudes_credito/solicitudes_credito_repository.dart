@@ -5,6 +5,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/parametro/parametro_valor.dart';
@@ -35,6 +36,7 @@ abstract class SolicitudesCreditoRepository {
     required String cedula,
   });
   Future<ParametroValor> getParametroByName({required String nombre});
+  Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago();
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -217,6 +219,19 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       final data = ParametroValor.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago() async {
+    final endpoint = CatalogoFrecuenciaPagoEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final data = CatalogoFrecuenciaPago.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

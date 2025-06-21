@@ -6,6 +6,7 @@ import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
@@ -148,7 +149,25 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
     await getandSaveProductos();
     log('Productos guardados');
+
     await getAndSaveParametros();
+    log('Parámetros guardados');
+
+    await saveCatalogoFrecuenciaPago();
+    log('Frecuencia de Pago guardados');
+  }
+
+  Future<void> saveCatalogoFrecuenciaPago() async {
+    final data = await _repository.getCatalogoFrecuenciaPago();
+    final query = _objectBoxService.catalogoParametroBox.query().build();
+    query.remove();
+    for (var item in data.catalogo) {
+      _objectBoxService.catalogoFrecuenciaPagoBox.put(CatalogoFrecuenciaPagoDb(
+        valor: item.valor,
+        meses: item.meses,
+        nombre: item.nombre,
+      ));
+    }
   }
 
   Future<void> saveKIVAPendingRequestsToLocalDb({

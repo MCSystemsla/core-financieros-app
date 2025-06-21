@@ -22,6 +22,27 @@ class AsalariadoForm4 extends StatefulWidget {
 
 class _AsalariadoForm4State extends State<AsalariadoForm4>
     with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _FormContent(
+      controller: widget.controller,
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  const _FormContent({required this.controller});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
   List<Item> actividadesPredominantesList = [];
   List<Item> rubrosActividadesPredominanteList = [];
   String? profesion;
@@ -53,7 +74,6 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -279,7 +299,4 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

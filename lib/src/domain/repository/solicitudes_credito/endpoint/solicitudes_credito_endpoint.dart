@@ -171,3 +171,20 @@ class ObtenerParametrosEndpoint extends Endpoint {
         'nombre': nombre,
       };
 }
+
+class CatalogoFrecuenciaPagoEndpoint extends Endpoint {
+  CatalogoFrecuenciaPagoEndpoint();
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-frecuencia-pago';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
