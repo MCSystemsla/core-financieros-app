@@ -52,6 +52,9 @@ class NuevaMenorForm extends StatelessWidget {
                       );
                 },
               ),
+              NuevaMenorWorkingDataWidget(
+                controller: pageController,
+              ),
               NuevaMenorDataClientWidget(
                 cedula: cedula,
                 controller: pageController,

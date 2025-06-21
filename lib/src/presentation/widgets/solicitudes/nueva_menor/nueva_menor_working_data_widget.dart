@@ -55,7 +55,13 @@ class _NuevaMenorWorkingDataWidgetState
           CustomAlertDialog(
             context: context,
             title: 'No se ha concedido el permiso de ubicación',
-            onDone: () => context.pop(),
+            onDone: () async {
+              final isOpen = await Geolocator.openLocationSettings();
+              if (!context.mounted) return;
+              if (isOpen) {
+                context.pop();
+              }
+            },
           ).showDialog(context);
         }
         if (state is OnGeolocationServiceDisabled) {
@@ -293,22 +299,6 @@ class __FormContentState extends State<_FormContent> {
 
                   if (widget.position == null) {
                     context.read<GeolocationCubit>().getCurrentLocation();
-                    return;
-                  }
-                  if (widget.state is OnGeolocationServiceDisabled ||
-                      widget.state is OnGeolocationPermissionDenied) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'Necesitas activar el servicio de GPS para poder continuar',
-                      onDone: () async {
-                        final isOpen = await Geolocator.openLocationSettings();
-                        if (!context.mounted) return;
-                        if (isOpen) {
-                          context.pop();
-                        }
-                      },
-                    ).showDialog(context);
                     return;
                   }
 
