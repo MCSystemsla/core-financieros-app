@@ -4,7 +4,7 @@ CatalogoFrecuenciaPago catalogoFrecuenciaPagoFromJson(String str) =>
     CatalogoFrecuenciaPago.fromJson(json.decode(str));
 
 class CatalogoFrecuenciaPago {
-  final List<Catalogo> catalogo;
+  final List<CatalogoFrecuenciaItem> catalogo;
 
   CatalogoFrecuenciaPago({
     required this.catalogo,
@@ -12,23 +12,24 @@ class CatalogoFrecuenciaPago {
 
   factory CatalogoFrecuenciaPago.fromJson(Map<String, dynamic> json) =>
       CatalogoFrecuenciaPago(
-        catalogo: List<Catalogo>.from(
-            json['Catalogo'].map((x) => Catalogo.fromJson(x))),
+        catalogo: List<CatalogoFrecuenciaItem>.from(
+            json['Catalogo'].map((x) => CatalogoFrecuenciaItem.fromJson(x))),
       );
 }
 
-class Catalogo {
+class CatalogoFrecuenciaItem {
   final String valor;
   final String nombre;
   final String meses;
 
-  Catalogo({
+  CatalogoFrecuenciaItem({
     required this.valor,
     required this.nombre,
     required this.meses,
   });
 
-  factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
+  factory CatalogoFrecuenciaItem.fromJson(Map<String, dynamic> json) =>
+      CatalogoFrecuenciaItem(
         valor: json['valor'],
         nombre: json['nombre'],
         meses: json['meses'],

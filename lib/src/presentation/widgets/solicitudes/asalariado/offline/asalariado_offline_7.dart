@@ -348,7 +348,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '',
+                    frecuenciaPago: frecuenciaDePago?.name ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );

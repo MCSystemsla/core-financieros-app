@@ -155,6 +155,15 @@ class ObjectBoxService {
     return results;
   }
 
+  List<CatalogoFrecuenciaPagoDb> getCatalogoFrecuenciaPago() {
+    final query = catalogoFrecuenciaPagoBox.query().build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
   List<ItemNacionalidad> getNacionalidadesDep({required String valor}) {
     final query = catalogoNacionalidadDepBox
         .query(CatalogoNacionalidadDepDb_.relacion.equals(valor))

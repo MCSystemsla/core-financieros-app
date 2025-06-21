@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_d
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/sending/asalariado_sending_form.dart';
@@ -57,7 +59,7 @@ class __FormContentState extends State<_FormContent> {
   String? monto;
   Item? proposito;
   Item? producto;
-  Item? frecuenciaDePago;
+  CatalogoFrecuenciaItem? frecuenciaDePago;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -216,14 +218,13 @@ class __FormContentState extends State<_FormContent> {
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
+            CatalogoFrecuenciaPagoDropdown(
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+                  ClassValidator.validateRequired(value?.valor),
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item;
               },
-              codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
@@ -323,7 +324,7 @@ class __FormContentState extends State<_FormContent> {
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '',
+                    frecuenciaPago: frecuenciaDePago?.meses ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
@@ -348,8 +349,8 @@ class __FormContentState extends State<_FormContent> {
                             objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
                             objProductoIdVer: producto?.name,
-                            objFrecuenciaId: frecuenciaDePago?.value,
-                            objFrecuenciaIdVer: frecuenciaDePago?.name,
+                            objFrecuenciaId: frecuenciaDePago?.valor,
+                            objFrecuenciaIdVer: frecuenciaDePago?.nombre,
                             plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),

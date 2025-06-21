@@ -333,7 +333,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    formadePago: frecuenciaDePagoVer!,
+                    frecuenciaPago: frecuenciaDePagoVer!,
                     saldoPrincipal: double.tryParse(monto ?? '0') ?? 0,
                     tasaInteresMensual: tasaInteres ?? 0,
                   );

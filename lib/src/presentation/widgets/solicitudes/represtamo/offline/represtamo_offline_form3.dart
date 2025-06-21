@@ -324,7 +324,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '0',
+                    frecuenciaPago: frecuenciaDePago?.name ?? '0',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );

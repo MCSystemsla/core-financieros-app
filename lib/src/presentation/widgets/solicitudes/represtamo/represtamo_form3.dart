@@ -300,7 +300,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '',
+                    frecuenciaPago: frecuenciaDePago?.name ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres!,
                   );

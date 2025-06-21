@@ -8,20 +8,18 @@ class CalculoCuotaCubit extends Cubit<CalculoCuotaState> {
 
   void calcularCantidadCuotas({
     required int plazoSolicitud,
-    required String formadePago,
+    required String frecuenciaPago,
     required DateTime fechaPrimeraCuota,
     required DateTime fechaDesembolso,
     required double saldoPrincipal,
     required double tasaInteresMensual,
   }) {
-    // final diasFormaDePago = getDaysByFormaDePago(frecuenciaPago: formadePago);
-    // final cantidadCuotas = (plazoSolicitud / diasFormaDePago);
-    // final cantidadCuotas = plazoSolicitud * diasFormaDePago;
-    final cantidadCuotas = plazoSolicitud;
-    // final plazoEnDias = cantidadCuotas * diasFormaDePago;
+    final cantidadCuotas =
+        (plazoSolicitud / double.parse(frecuenciaPago)).floor();
 
     final diasTranscurridos =
         fechaPrimeraCuota.difference(fechaDesembolso).inDays;
+
     final montoInteresPrimeraCuota =
         (saldoPrincipal * (tasaInteresMensual / 100) * diasTranscurridos) / 30;
 
@@ -37,26 +35,5 @@ class CalculoCuotaCubit extends Cubit<CalculoCuotaState> {
       montoPrincipalPrimeraCuota: montoPrincipalPrimeraCuota,
       montoPrimeraCuota: montoPrimeraCuota,
     ));
-  }
-
-  int getDaysByFormaDePago({required String frecuenciaPago}) {
-    return switch (frecuenciaPago) {
-      'Mensual' => 30,
-      'Bimensual' => 60,
-      'Trimestral' => 90,
-      'Semestral' => 180,
-      'Anual' => 365,
-      'Diario' => 1,
-      'Semanal' => 7,
-      'Quincenal' => 15,
-      'Catorcenal' => 14,
-      'Cuatrimestral' => 120,
-      'Veintiocho dias' => 28,
-      'Nueve meses' => 270,
-      'Quince meses' => 450,
-      'Dieciocho meses' => 540,
-      'Otras' => 0,
-      _ => 0,
-    };
   }
 }
