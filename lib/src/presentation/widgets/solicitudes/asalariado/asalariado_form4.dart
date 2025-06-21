@@ -81,10 +81,11 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
               onChanged: (item) {
                 if (item == null) return;
                 actividadesPredominantesList.removeWhere(
-                  (element) => element.value == actividad?.value,
+                  (element) => element.id == actividad?.id,
                 );
                 actividad = item;
                 actividadesPredominantesList.add(item);
+                setState(() {});
                 setState(() {});
               },
             ),
@@ -97,7 +98,7 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
               onChanged: (item) {
                 if (item == null) return;
                 actividadesPredominantesList.removeWhere(
-                  (element) => element.value == actividad1?.value,
+                  (element) => element.id == actividad1?.id,
                 );
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
@@ -111,7 +112,7 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
               onChanged: (item) {
                 if (item == null) return;
                 actividadesPredominantesList.removeWhere(
-                  (element) => element.value == actividadEconomica2?.value,
+                  (element) => element.id == actividadEconomica2?.id,
                 );
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
@@ -129,12 +130,10 @@ class _AsalariadoForm4State extends State<AsalariadoForm4>
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
-                  items: actividadesPredominantesList.length >= 3
-                      ? actividadesPredominantesList
-                          .skip(actividadesPredominantesList.length - 3)
-                          .toSet()
-                          .toList()
-                      : actividadesPredominantesList.toSet().toList(),
+                  items: {
+                    for (var item in actividadesPredominantesList)
+                      item.value: item
+                  }.values.toList(),
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item;
