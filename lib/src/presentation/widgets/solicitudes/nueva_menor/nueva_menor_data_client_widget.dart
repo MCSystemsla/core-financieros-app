@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -576,16 +579,20 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   DateTime? fechaNacimiento;
   String celularCountyCode = '+505';
   String telefonoCountryCode = '+505';
-  final edadMinimaCliente = global<ObjectBoxService>()
-      .getParametroByName(nombre: 'EDADMINIMACLIENTE');
-  final edadMaximaCliente = global<ObjectBoxService>()
-      .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+  CatalogoLocalDb? edadMinima;
+  CatalogoLocalDb? edadMaxima;
+
   @override
   void initState() {
     super.initState();
     tipoDocumento = widget.tipoDocumento;
     cedulaController = widget.cedula;
     paisEmisor = widget.paisEmisor;
+    edadMinima = global<ObjectBoxService>()
+        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+    edadMaxima = global<ObjectBoxService>()
+        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+    log('Edad minima: ${edadMinima?.valor}, Edad maxima: ${edadMaxima?.valor}');
   }
 
   Future<void> selectDate(BuildContext context, String tipoDocumeto) async {
@@ -637,12 +644,12 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime eighteenYearsAgo = DateTime(
-      now.year - int.parse(edadMinimaCliente?.valor ?? ''),
+      now.year - int.parse(edadMinima?.valor ?? '0'),
       now.month,
       now.day,
     );
     final DateTime maxAgeClient = DateTime(
-      now.year - int.parse(edadMaximaCliente?.valor ?? ''),
+      now.year - int.parse(edadMaxima?.valor ?? '0'),
       now.month,
       now.day,
     );
@@ -654,7 +661,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
-    if (picked != null && picked != fechaNacimiento) {
+    if (picked != null) {
       if (!context.mounted) return;
       if (picked.isAfter(DateTime.now())) {
         CustomAlertDialog(

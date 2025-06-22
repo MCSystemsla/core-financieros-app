@@ -8,7 +8,6 @@ import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendient
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -159,7 +158,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
   Future<void> saveCatalogoFrecuenciaPago() async {
     final data = await _repository.getCatalogoFrecuenciaPago();
-    final query = _objectBoxService.catalogoParametroBox.query().build();
+    final query = _objectBoxService.catalogoFrecuenciaPagoBox.query().build();
     query.remove();
     for (var item in data.catalogo) {
       _objectBoxService.catalogoFrecuenciaPagoBox.put(CatalogoFrecuenciaPagoDb(
@@ -210,15 +209,17 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         await _repository.getParametroByName(nombre: 'EDADMINIMACLIENTE');
     final edadMaxima =
         await _repository.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-    final query = _objectBoxService.catalogoParametroBox.query().build();
-    query.remove();
-    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+    log('Guardando parámetros de edad: ${edadMinima.data.valor} - ${edadMaxima.data.valor}');
+
+    _objectBoxService.catalogoBox.put(CatalogoLocalDb(
       valor: edadMinima.data.valor,
+      nombre: 'EDADMINIMACLIENTE',
       type: 'EDADMINIMACLIENTE',
     ));
-    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+    _objectBoxService.catalogoBox.put(CatalogoLocalDb(
       valor: edadMaxima.data.valor,
       type: 'EDADMAXIMACLIENTE',
+      nombre: 'EDADMAXIMACLIENTE',
     ));
   }
 

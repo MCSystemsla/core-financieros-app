@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
@@ -31,7 +30,6 @@ class ObjectBoxService {
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   late final Box<CedulaClientDb> cedulaClientBox;
-  late final Box<CatalogoParametroLocalDb> catalogoParametroBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   final _logger = Logger();
 
@@ -47,10 +45,10 @@ class ObjectBoxService {
     solicitudesAsalariadoResponsesBox =
         _store.box<AsalariadoResponsesLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
-    catalogoParametroBox = _store.box<CatalogoParametroLocalDb>();
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
+    // catalogoParametroBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
@@ -482,14 +480,13 @@ class ObjectBoxService {
     }
   }
 
-  CatalogoParametroLocalDb? getParametroByName({required String nombre}) {
+  CatalogoLocalDb? getParametroByName({required String nombre}) {
     try {
-      final query = catalogoParametroBox
-          .query(CatalogoParametroLocalDb_.type.equals(nombre))
-          .build();
-      final result = query.findFirst();
+      final result = catalogoBox
+          .query(CatalogoLocalDb_.type.equals(nombre, caseSensitive: false))
+          .build()
+          .findFirst();
 
-      query.close();
       return result;
     } catch (e) {
       _logger.e(e.toString());
