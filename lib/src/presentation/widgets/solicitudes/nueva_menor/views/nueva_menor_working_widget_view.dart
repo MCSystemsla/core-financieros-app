@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -81,16 +82,19 @@ class __FormContentState extends State<_FormContent> {
             if (estadoCivil?.value == 'UNI' || estadoCivil?.value == 'CAS') ...[
               const Gap(20),
               CatalogoValorNacionalidad(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value.valor),
                 codigo: 'PAIS',
                 onChanged: (item) {
                   if (item == null) return;
                   nacionalidadConyuge = item.valor;
                 },
-                hintText: 'Ingresa Nacionalidad Cónyuge',
                 title: 'Nacionalidad Cónyuge',
+                hintText: 'input.select_option'.tr(),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
                 ],
@@ -113,6 +117,7 @@ class __FormContentState extends State<_FormContent> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
                   dropdownColor: Colors.white,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   isContainIcon: true,
                   title: '¿Trabaja su cónyuge?',
                   items: ['input.yes'.tr(), 'input.no'.tr()],
@@ -169,7 +174,9 @@ class __FormContentState extends State<_FormContent> {
                 const Gap(20),
                 OutlineTextfieldWidget(
                   inputFormatters: [
-                    UpperCaseTextFormatter(),
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                    DashFormatter(),
                   ],
                   key: const ValueKey('telefonoTrabajoConyuge'),
                   maxLength: 16,
@@ -261,7 +268,13 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 title: 'Cedula familiar de empleado',
                 hintText: 'Ingresa la cedula de empleado',
-                validator: (value) => ClassValidator.validateRequired(value),
+                validator: (value) =>
+                    ClassValidator.validateMaxIntValueAndMinValue(
+                  value,
+                  14,
+                  isNicaraguaCedula: true,
+                  isRequired: true,
+                ),
                 isValid: null,
                 onChange: (value) {
                   cedulaFamiliarEmpleado = value;

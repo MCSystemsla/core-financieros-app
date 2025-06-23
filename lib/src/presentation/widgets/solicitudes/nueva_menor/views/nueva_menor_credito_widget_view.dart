@@ -92,6 +92,15 @@ class __FormContentState extends State<_FormContent> {
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaPrimerPago = picked;
       setState(() {});
     }
@@ -112,6 +121,15 @@ class __FormContentState extends State<_FormContent> {
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -155,24 +173,6 @@ class __FormContentState extends State<_FormContent> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
               textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
@@ -182,13 +182,16 @@ class __FormContentState extends State<_FormContent> {
               hintText: 'Ingresa Monto',
               textInputType: TextInputType.number,
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
+                CurrencyInputFormatter(),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+
+                // FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(10),
               ],
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
-                monto = value;
+                monto = value.replaceAll(',', '');
                 setState(() {});
               },
             ),

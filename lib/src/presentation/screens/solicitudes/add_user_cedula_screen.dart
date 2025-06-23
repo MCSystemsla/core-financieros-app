@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
@@ -198,6 +199,9 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 if (tipoDocumento != null && paisEmisorDocumento != null) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     textEditingController: cedulaController,
                     validator: (value) =>
                         ClassValidator.validateMaxIntValueAndMinValue(

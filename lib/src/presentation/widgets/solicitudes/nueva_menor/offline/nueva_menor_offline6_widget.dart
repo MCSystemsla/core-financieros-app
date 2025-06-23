@@ -4,7 +4,6 @@ import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -132,8 +131,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     log(monto.toString());
     super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-    montoController.value =
-        TextEditingValue(text: FormatField.formatMonto(monto ?? ''));
+    // montoController.value =
+    //     TextEditingValue(text: FormatField.formatMonto(monto ?? ''));
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(

@@ -105,8 +105,12 @@ class __FormContentState extends State<_FormContent> {
               title: 'Cédula del Beneficiario 1',
               hintText: 'Ingresa Cedula Beneficiario Seguro 1',
               isValid: null,
-              validator: (value) => ClassValidator.validateRequired(
+              validator: (value) =>
+                  ClassValidator.validateMaxIntValueAndMinValue(
                 value,
+                14,
+                isNicaraguaCedula: true,
+                isRequired: true,
               ),
               onChange: (value) {
                 cedulaBeneficiarioSeguro = value;
@@ -176,9 +180,11 @@ class __FormContentState extends State<_FormContent> {
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Cédula del Beneficiario 2',
-              validator: (value) => ClassValidator.validateMinLength(
+              validator: (value) =>
+                  ClassValidator.validateMaxIntValueAndMinValue(
                 value,
-                16,
+                14,
+                isNicaraguaCedula: true,
                 isRequired: false,
               ),
               hintText: 'Ingresa Cedula Beneficiario Seguro 2',

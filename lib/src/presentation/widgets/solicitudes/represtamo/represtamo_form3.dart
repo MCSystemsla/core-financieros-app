@@ -127,24 +127,9 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
+              inputFormatters: [
+                CurrencyInputFormatter(),
+              ],
               textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,

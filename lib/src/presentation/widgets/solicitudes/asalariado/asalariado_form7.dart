@@ -155,25 +155,10 @@ class __FormContentState extends State<_FormContent> {
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
               textEditingController: montoController,
+              inputFormatters: [
+                CurrencyInputFormatter(),
+              ],
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),

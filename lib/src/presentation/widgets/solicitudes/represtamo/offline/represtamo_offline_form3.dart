@@ -160,26 +160,9 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             const Gap(20),
             OutlineTextfieldWidget(
               inputFormatters: [
+                CurrencyInputFormatter(),
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
               textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
