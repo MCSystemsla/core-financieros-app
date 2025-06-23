@@ -139,7 +139,7 @@ class __FormContentState extends State<_FormContent> {
                 setState(() {});
               },
             ),
-            if (actividadesPredominantesList.isNotEmpty) ...[
+            if (actividadesPredominantesList.length > 1) ...[
               const Gap(20),
               Container(
                 padding:
@@ -221,12 +221,10 @@ class __FormContentState extends State<_FormContent> {
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Rubro actividad Predominante',
-                  items: rubrosActividadesPredominanteList.length >= 3
-                      ? rubrosActividadesPredominanteList
-                          .skip(rubrosActividadesPredominanteList.length - 3)
-                          .toSet()
-                          .toList()
-                      : rubrosActividadesPredominanteList.toSet().toList(),
+                  items: {
+                    for (var item in rubrosActividadesPredominanteList)
+                      item.value: item
+                  }.values.toList(),
                   onChanged: (item) {
                     if (item == null) return;
                     objRubroActividadPredominante = item;
