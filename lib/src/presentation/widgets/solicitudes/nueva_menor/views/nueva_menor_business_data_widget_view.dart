@@ -76,19 +76,43 @@ class __FormContentState extends State<_FormContent> {
   Item? objRubroActividadPredominante;
   Item? departamentoNegocio;
 
-  Future<TimeOfDay?> _selectTime(
-      BuildContext context, TimeOfDay? initialTime) async {
+  Future<TimeOfDay?> _selectTime({
+    required BuildContext context,
+    required String helpText,
+    TimeOfDay? initialTime,
+  }) async {
     return await showTimePicker(
       context: context,
       initialTime: initialTime ?? TimeOfDay.now(),
+      helpText: helpText,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: false,
+          ),
+          child: Localizations.override(
+            context: context,
+            locale: const Locale('en', 'US'),
+            child: child!,
+          ),
+        );
+      },
     );
   }
 
   void _pickTimeRange() async {
-    TimeOfDay? start = await _selectTime(context, horarioTrabajo);
+    TimeOfDay? start = await _selectTime(
+      context: context,
+      initialTime: horarioTrabajo,
+      helpText: 'Selecciona horario de entrada',
+    );
     if (start != null) {
       if (!context.mounted || !mounted) return;
-      TimeOfDay? end = await _selectTime(context, horarioTrabajoEndtime);
+      TimeOfDay? end = await _selectTime(
+        context: context,
+        initialTime: horarioTrabajoEndtime,
+        helpText: 'Selecciona horario de salida',
+      );
       if (end != null) {
         setState(() {
           horarioTrabajo = start;
@@ -99,10 +123,18 @@ class __FormContentState extends State<_FormContent> {
   }
 
   void _pickHorarioVisita() async {
-    TimeOfDay? start = await _selectTime(context, horarioVisita);
+    TimeOfDay? start = await _selectTime(
+      context: context,
+      initialTime: horarioVisita,
+      helpText: 'Selecciona horario de visita',
+    );
     if (start != null) {
       if (!context.mounted || !mounted) return;
-      TimeOfDay? end = await _selectTime(context, horarioVisitaEndtime);
+      TimeOfDay? end = await _selectTime(
+        context: context,
+        initialTime: horarioVisitaEndtime,
+        helpText: 'Selecciona horario de visita final',
+      );
       if (end != null) {
         setState(() {
           horarioVisita = start;

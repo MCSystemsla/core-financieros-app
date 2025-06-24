@@ -39,9 +39,6 @@ class NuevaMenorForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
-              NuevaMenorCreditoWidget(
-                pageController: pageController,
-              ),
               AddCedulaPhotosScreen(
                 controller: pageController,
                 onCedulaFrontTaken: (imagePath) {
