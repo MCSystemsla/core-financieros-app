@@ -250,7 +250,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 },
                 codigo: 'PARENTESCO',
                 title: 'Parentesco',
-                hintText: 'Ingrese parentesco',
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -268,7 +267,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa País',
+                hintText: 'input.select_option'.tr(),
                 title: 'País',
                 onChanged: (item) {
                   if (item == null) return;

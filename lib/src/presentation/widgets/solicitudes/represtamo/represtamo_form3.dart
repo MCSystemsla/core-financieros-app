@@ -144,7 +144,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
-                monto = value;
+                monto = value.replaceAll(',', '');
+                setState(() {});
               },
             ),
             const Gap(20),
