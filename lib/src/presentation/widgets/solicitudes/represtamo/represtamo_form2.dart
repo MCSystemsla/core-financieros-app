@@ -63,12 +63,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   familiarEmpleado = item;
                   setState(() {});
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
+                validator: (value) => ClassValidator.validateRequired(value),
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
@@ -76,6 +71,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (familiarEmpleado == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.person,
                   color: AppColors.getPrimaryColor(),
@@ -89,11 +85,12 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cédula',
+                title: 'Cédula del empleado',
                 hintText: 'Ingresa Cédula del empleado',
                 isValid: null,
                 onChange: (value) {
@@ -111,16 +108,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                     '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años?'
                         .tr(),
                 items: ['input.yes'.tr(), 'input.no'.tr()],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChanged: (item) {
                   if (item == null) return;
                   espeps = item;
                   setState(() {});
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
                 },
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
@@ -129,6 +121,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (espeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -147,18 +140,15 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
-
                   setState(() {});
                 },
                 codigo: 'PAIS',
                 validator: (value) =>
-                    ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
+                    ClassValidator.validateRequired(value.valor),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -172,6 +162,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -199,12 +190,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   tieneFamiliarPeps = item;
                   setState(() {});
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
+                validator: (value) => ClassValidator.validateRequired(value),
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
@@ -212,6 +198,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -225,6 +212,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -238,6 +226,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -251,6 +240,8 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 onChanged: (item) {
                   if (item == null) return;
                   parentescoFamiliarPeps2 =
@@ -263,6 +254,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -281,8 +273,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
 
                   setState(() {});
                 },

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -54,6 +55,8 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
           children: [
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'SECTORECONOMICO',
               title: 'Sector',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
@@ -64,7 +67,8 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 50,
+              validator: (value) => ClassValidator.validateRequired(value),
+              maxLength: 40,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
@@ -78,7 +82,14 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              maxLength: 16,
+              validator: (value) =>
+                  ClassValidator.validateMaxIntValueAndMinValue(
+                value,
+                14,
+                isNicaraguaCedula: true,
+                isRequired: true,
+              ),
+              maxLength: 14,
               icon: Icon(
                 Icons.credit_card,
                 color: AppColors.getPrimaryColor(),
@@ -92,6 +103,8 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
             ),
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'PARENTESCO',
               title: 'Parentesco Beneficiario Seguro',
               // hintText: 'Ingresa Parentesco Beneficiario Seguro',
@@ -109,9 +122,10 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
               isRequired: false,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
                 DashFormatter(),
               ],
-              maxLength: 16,
+              maxLength: 15,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),

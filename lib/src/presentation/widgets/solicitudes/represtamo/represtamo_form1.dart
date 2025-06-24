@@ -75,6 +75,9 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   String? locationLatitude;
   String? locationLongitude;
   String? cedula;
+  final formKey = GlobalKey<FormState>();
+  String countryCode = '+505';
+  String celularCode = '+505';
 
   @override
   void initState() {
@@ -83,9 +86,6 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
     context.read<GeolocationCubit>().getCurrentLocation();
   }
 
-  final formKey = GlobalKey<FormState>();
-  String countryCode = '+505';
-  String celularCode = '+505';
   @override
   Widget build(BuildContext context) {
     final isConnected =
@@ -162,7 +162,6 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: cedula,
-                  // onTap: () => selectDate(context),
                   readOnly: isConnected,
                   icon: Icon(
                     Icons.edit_document,
@@ -190,28 +189,10 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                       _selectedDate?.selectorFormat() ?? 'Selecciona Fecha',
                   isValid: null,
                 ),
-                // const Gap(30),
-                // OutlineTextfieldWidget(
-                //   validator: (value) => ClassValidator.validateRequired(
-                //     _selectedDate?.selectorFormat(),
-                //   ),
-                //   hintText: _selectedDate?.selectorFormat() ??
-                //       'Ingrese Fecha Vencimiento',
-                //   // initialValue: _selectedDate?.selectorFormat() ?? '',
-                //   icon: Icon(
-                //     Icons.calendar_today,
-                //     color: AppColors.getPrimaryColor(),
-                //   ),
-                //   title: 'Fecha Vencimiento Cedula',
-                //   isValid: null,
-                //   isRequired: true,
-                //   readOnly: true,
-                //   onTap: () => selectDate(context),
-                // ),
                 const Gap(30),
                 CountryInput(
                   textInputType: TextInputType.phone,
-                  maxLength: 40,
+                  maxLength: 15,
                   icon: Icon(
                     Icons.phone,
                     color: AppColors.getPrimaryColor(),
@@ -219,6 +200,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   title: 'Celular',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
                     DashFormatter(),
                   ],
                   onChange: (value) {

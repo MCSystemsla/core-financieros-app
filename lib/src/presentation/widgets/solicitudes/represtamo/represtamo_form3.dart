@@ -18,6 +18,7 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -107,6 +108,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'DESTINOCREDITO',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               title: 'Proposito',
               onChanged: (item) {
                 if (item == null) return;
@@ -156,13 +159,14 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
+                  fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
@@ -186,6 +190,10 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -215,23 +223,6 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
               icon: Icon(
                 Icons.remove_red_eye,
