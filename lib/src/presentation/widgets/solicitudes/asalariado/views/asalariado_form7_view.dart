@@ -188,7 +188,7 @@ class __FormContentState extends State<_FormContent> {
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
-                monto = value;
+                monto = value.replaceAll(',', '');
               },
             ),
             const Gap(20),

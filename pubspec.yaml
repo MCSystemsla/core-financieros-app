@@ -67,8 +67,6 @@ dependencies:
   image_picker: 0.8.7+5
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0+1
-  internet_connection_checker: ^1.0.0+1
-  connectivity_plus: ^6.1.0
   geolocator: ^12.0.0
   cloudflare_turnstile: ^3.2.1
   change_app_package_name: ^1.4.0

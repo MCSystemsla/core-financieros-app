@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
@@ -7,6 +8,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
@@ -18,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AsalariadoForm6View extends StatefulWidget {
   final PageController controller;
@@ -291,14 +294,13 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  // validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    fuenteOtrosIngresosConyuge = value.replaceAll(',', '');
+                    fuenteOtrosIngresosConyuge = value;
                   },
-                  textInputType: TextInputType.number,
                   title: 'Fuentes otros ingresos Cónyuge',
                   icon: const Icon(Icons.source_outlined),
                 ),
@@ -359,6 +361,22 @@ class __FormContentState extends State<_FormContent> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  final totalIngresosConyugueNumber =
+                      (double.tryParse(totalIngresosMesConyuge ?? '0') ?? 0);
+
+                  final salarioNetoConyugueNumber =
+                      (double.tryParse(totalIngresosMesConyuge ?? '0') ?? 0);
+
+                  if (totalIngresosConyugueNumber < salarioNetoConyugueNumber) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El total ingresos del mes no puede ser menor al salario neto mensual',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+
                   context.read<SolicitudAsalariadoCubit>().saveAnswers(
                         direccionTrabajoConyugue: direccionTrabajoConyugue,
                         tiempoLaborarConyugue: tiempoLaborarConyugue,

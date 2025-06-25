@@ -113,7 +113,8 @@ class __FormContentState extends State<_FormContent> {
               const Gap(20),
               CatalogoValorNacionalidad(
                 hintText: 'Selecciona Pais PEPS',
-                validator: (value) => ClassValidator.validateRequired(paisPeps),
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
                 title: 'País PEPs',
                 onChanged: (item) {
                   if (item == null || !mounted) return;
@@ -169,7 +170,7 @@ class __FormContentState extends State<_FormContent> {
               child: JLuxDropdown(
                 dropdownColor: Colors.white,
                 isContainIcon: true,
-                title: '¿Tiene Familiar PEPS?	',
+                title: '¿Tiene Familiar PEPS?',
                 items: ['input.yes'.tr(), 'input.no'.tr()],
                 onChanged: (item) {
                   if (item == null) return;
@@ -204,8 +205,9 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(20),
               SearchDropdownWidget(
+                hintText: 'input.select_option'.tr(),
                 validator: (value) =>
-                    ClassValidator.validateRequired(parentesco),
+                    ClassValidator.validateRequired(value?.value),
                 codigo: 'PARENTESCO',
                 onChanged: (item) {
                   if (item == null) return;
@@ -275,9 +277,9 @@ class __FormContentState extends State<_FormContent> {
               const Gap(20),
               CatalogoValorNacionalidad(
                 validator: (value) =>
-                    ClassValidator.validateRequired(paisPeps2),
+                    ClassValidator.validateRequired(value?.valor),
                 title: 'País Familiar PEPS',
-                hintText: 'Selecciona Familiar País PEPS',
+                hintText: 'input.select_option'.tr(),
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = item.valor;
@@ -303,7 +305,7 @@ class __FormContentState extends State<_FormContent> {
                         tieneFamiliarPeps:
                             tieneFamiliarPeps == 'input.yes'.tr(),
                         nombreFamiliar: nombreFamiliarPeps,
-                        parentescoFamiliarPeps2: nombreFamiliarPeps,
+                        parentescoFamiliarPeps2: parentesco,
                         cargoFamiliarPeps2: cargoParentesco,
                         nombreFamiliarPeps2: nombreFamiliarPeps2,
                         periodoPeps2: periodoPeps2,

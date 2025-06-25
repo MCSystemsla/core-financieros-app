@@ -140,10 +140,12 @@ class OnImageCaptureTap extends StatelessWidget {
 class CameraWidgets extends StatefulWidget {
   final VoidCallback onTakePhoto;
   final CameraController controller;
+  final bool isLoading;
   const CameraWidgets({
     super.key,
     required this.onTakePhoto,
     required this.controller,
+    required this.isLoading,
   });
 
   @override
@@ -183,7 +185,7 @@ class _CameraWidgetsState extends State<CameraWidgets> {
                 backgroundColor: Colors.white.withOpacity(0.85),
                 foregroundColor: Colors.black,
               ),
-              onPressed: widget.onTakePhoto,
+              onPressed: widget.isLoading ? null : widget.onTakePhoto,
               child: const Icon(Icons.camera_alt, size: 32),
             ),
           ),
