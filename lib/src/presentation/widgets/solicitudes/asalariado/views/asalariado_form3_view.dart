@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'dart:developer';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -116,7 +116,6 @@ class __FormContentState extends State<_FormContent> {
                   ClassValidator.validateRequired(value?.value),
               onChanged: (item) {
                 condicionCasa = item;
-                log(condicionCasa?.value);
                 setState(() {});
               },
             ),
@@ -127,11 +126,11 @@ class __FormContentState extends State<_FormContent> {
                 validator: (value) => ClassValidator.validateRequired(value),
                 textInputType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
+                  CurrencyInputFormatter(),
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                 ],
                 onChange: (value) {
-                  pagoAlquiler = value;
+                  pagoAlquiler = value.replaceAll(',', '');
                 },
                 title: 'Pago de alquiler',
                 icon: const Icon(Icons.money),

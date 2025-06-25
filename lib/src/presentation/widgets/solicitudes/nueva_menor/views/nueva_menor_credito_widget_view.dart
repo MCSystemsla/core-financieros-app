@@ -107,6 +107,8 @@ class __FormContentState extends State<_FormContent> {
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
@@ -116,7 +118,7 @@ class __FormContentState extends State<_FormContent> {
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,

@@ -472,10 +472,10 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
                 DashFormatter(),
               ],
-              maxLength: 15,
+              maxLength: 10,
               title: 'Teléfono',
               icon: const Icon(Icons.phone),
             ),
@@ -487,7 +487,7 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(10),
                 DashFormatter(),
               ],
               validator: (value) => ClassValidator.validateRequired(value),
@@ -495,7 +495,7 @@ class __FormContentState extends State<_FormContent> {
                 celular = value;
               },
               isRequired: false,
-              maxLength: 15,
+              maxLength: 10,
               title: 'Celular',
               icon: const Icon(Icons.smartphone),
             ),
@@ -534,6 +534,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(value),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],

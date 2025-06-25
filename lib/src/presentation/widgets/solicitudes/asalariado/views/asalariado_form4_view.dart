@@ -100,7 +100,6 @@ class __FormContentState extends State<_FormContent> {
                 actividad = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
-                setState(() {});
               },
             ),
             const Gap(20),

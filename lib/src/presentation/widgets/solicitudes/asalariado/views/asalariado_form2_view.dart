@@ -111,7 +111,13 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) =>
+                  ClassValidator.validateMaxIntValueAndMinValue(
+                value,
+                14,
+                isNicaraguaCedula: true,
+                isRequired: true,
+              ),
               onChange: (value) {
                 cedula = value;
               },
@@ -127,15 +133,15 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
+                LengthLimitingTextInputFormatter(10),
                 DashFormatter(),
               ],
               onChange: (value) {
                 telefono = value;
               },
               isRequired: false,
-              hintText: 'Ingresa Teléfono ',
-              maxLength: 15,
+              hintText: 'Ingresa Teléfono',
+              maxLength: 10,
               title: 'Teléfono Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),
@@ -195,6 +201,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(2),
@@ -291,6 +298,7 @@ class __FormContentState extends State<_FormContent> {
               ),
               const Gap(30),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(2),

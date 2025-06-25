@@ -137,9 +137,9 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
-                LengthLimitingTextInputFormatter(16),
+                LengthLimitingTextInputFormatter(15),
               ],
-              maxLength: 16,
+              maxLength: 15,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -180,13 +180,13 @@ class __FormContentState extends State<_FormContent> {
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Cédula del Beneficiario 2',
-              validator: (value) =>
-                  ClassValidator.validateMaxIntValueAndMinValue(
-                value,
-                14,
-                isNicaraguaCedula: true,
-                isRequired: false,
-              ),
+              // validator: (value) =>
+              //     ClassValidator.validateMaxIntValueAndMinValue(
+              //   value,
+              //   14,
+              //   isNicaraguaCedula: true,
+              //   isRequired: false,
+              // ),
               hintText: 'Ingresa Cedula Beneficiario Seguro 2',
               isValid: null,
               onChange: (value) {
@@ -215,13 +215,13 @@ class __FormContentState extends State<_FormContent> {
                 LengthLimitingTextInputFormatter(16),
               ],
               isRequired: false,
-              maxLength: 16,
+              maxLength: 15,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
               ),
-              title: 'Telefono Beneficiario 1',
-              hintText: 'Ingresa Telefono Beneficiario 1',
+              title: 'Telefono Beneficiario 2',
+              hintText: 'Ingresa Telefono Beneficiario 2',
               textInputType: TextInputType.phone,
               isValid: null,
               onChange: (value) {

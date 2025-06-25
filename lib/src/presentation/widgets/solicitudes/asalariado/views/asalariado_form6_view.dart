@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -103,10 +104,10 @@ class __FormContentState extends State<_FormContent> {
               },
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
+                LengthLimitingTextInputFormatter(10),
                 DashFormatter(),
               ],
-              maxLength: 16,
+              maxLength: 10,
               isRequired: false,
               hintText: 'Ingresa Teléfono de la persona no cercana',
               title: 'Teléfono del familiar no cercano',
@@ -265,23 +266,25 @@ class __FormContentState extends State<_FormContent> {
                   validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
+                    CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   onChange: (value) {
-                    salarioNetoMensualConyuge = value;
+                    salarioNetoMensualConyuge = value.replaceAll(',', '');
                   },
                   title: 'Salario Neto Mensual Cónyuge (C\$)',
                   icon: const Icon(Icons.attach_money_outlined),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  // validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
+                    CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   onChange: (value) {
-                    otrosIngresosConyuge = value;
+                    otrosIngresosConyuge = value.replaceAll(',', '');
                   },
                   title: 'Otros ingresos Cónyuge (C\$)',
                   icon: const Icon(Icons.money_off_csred_outlined),
@@ -293,8 +296,9 @@ class __FormContentState extends State<_FormContent> {
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    fuenteOtrosIngresosConyuge = value;
+                    fuenteOtrosIngresosConyuge = value.replaceAll(',', '');
                   },
+                  textInputType: TextInputType.number,
                   title: 'Fuentes otros ingresos Cónyuge',
                   icon: const Icon(Icons.source_outlined),
                 ),
@@ -303,18 +307,18 @@ class __FormContentState extends State<_FormContent> {
                   validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
+                    CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   onChange: (value) {
-                    totalIngresosMesConyuge = value;
+                    totalIngresosMesConyuge = value.replaceAll(',', '');
                   },
                   title: 'Total ingresos mes Cónyuge (C\$)',
                   icon: const Icon(Icons.calculate_outlined),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  // validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -333,13 +337,13 @@ class __FormContentState extends State<_FormContent> {
                   textInputType: TextInputType.phone,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(10),
                     DashFormatter(),
                   ],
                   onChange: (value) {
                     telefonoOficinaConyuge = value;
                   },
-                  maxLength: 15,
+                  maxLength: 10,
                   isRequired: false,
                   title: 'Teléfono Oficina',
                   icon: const Icon(Icons.phone_iphone_outlined),
@@ -359,7 +363,8 @@ class __FormContentState extends State<_FormContent> {
                         direccionTrabajoConyugue: direccionTrabajoConyugue,
                         tiempoLaborarConyugue: tiempoLaborarConyugue,
                         nombreFamiliarCercano: nombreFamiliarCercano,
-                        telefonoFamiliarCercano: telefonoFamiliarCercano,
+                        telefonoFamiliarCercano:
+                            telefonoFamiliarCercano?.replaceAll('-', ''),
                         objParentescoFamiliarCercanoId:
                             parentescoFamiliarCercano?.value,
                         objParentescoFamiliarCercanoIdVer:

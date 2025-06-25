@@ -373,7 +373,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       countryCode = value.dialCode!;
                     },
                     haveCounter: true,
-                    maxLength: 16,
+                    maxLength: 15,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -397,7 +397,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       if (value == null) return;
                       celularCode = value.dialCode!;
                     },
-                    maxLength: 16,
+                    maxLength: 15,
                     icon: Icon(
                       Icons.phone_android,
                       color: AppColors.getPrimaryColor(),
@@ -636,6 +636,15 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaEmisionCedula) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaEmisionCedula = picked;
       setState(() {});
     }
@@ -948,7 +957,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
               ],
-              maxLength: 10,
+              maxLength: 15,
               onCountryCodeChange: (value) {
                 if (value == null) return;
                 telefonoCountryCode = value.dialCode!;
@@ -975,7 +984,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 if (value == null) return;
                 celularCountyCode = value.dialCode!;
               },
-              maxLength: 10,
+              maxLength: 15,
               icon: Icon(
                 Icons.phone_android,
                 color: AppColors.getPrimaryColor(),
