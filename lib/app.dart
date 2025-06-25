@@ -33,6 +33,11 @@ class App extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ));
+
     var localizationDelegate = LocalizedApp.of(context).delegate;
     return MultiBlocProvider(
       providers: [
