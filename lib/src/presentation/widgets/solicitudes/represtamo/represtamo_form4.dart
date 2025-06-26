@@ -114,12 +114,10 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
-                  items: actividadesPredominantesList.length >= 3
-                      ? actividadesPredominantesList
-                          .skip(actividadesPredominantesList.length - 3)
-                          .toSet()
-                          .toList()
-                      : actividadesPredominantesList.toSet().toList(),
+                  items: {
+                    for (var item in actividadesPredominantesList)
+                      item.value: item
+                  }.values.toList(),
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item;
@@ -187,12 +185,10 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Rubro actividad Predominante',
-                  items: rubrosActividadesPredominanteList.length >= 3
-                      ? rubrosActividadesPredominanteList
-                          .skip(rubrosActividadesPredominanteList.length - 3)
-                          .toSet()
-                          .toList()
-                      : rubrosActividadesPredominanteList.toSet().toList(),
+                  items: {
+                    for (var item in rubrosActividadesPredominanteList)
+                      item.value: item
+                  }.values.toList(),
                   onChanged: (item) {
                     if (item == null) return;
                     objRubroActividadPredominante = item;

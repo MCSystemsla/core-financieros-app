@@ -133,7 +133,7 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(9),
                 DashFormatter(),
               ],
               onChange: (value) {
@@ -141,7 +141,7 @@ class __FormContentState extends State<_FormContent> {
               },
               isRequired: false,
               hintText: 'Ingresa Teléfono',
-              maxLength: 10,
+              maxLength: 9,
               title: 'Teléfono Beneficiario del Seguro',
               icon: const Icon(Icons.badge),
             ),

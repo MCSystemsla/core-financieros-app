@@ -175,11 +175,11 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(9),
                     DashFormatter(),
                   ],
                   key: const ValueKey('telefonoTrabajoConyuge'),
-                  maxLength: 15,
+                  maxLength: 9,
                   icon: Icon(
                     Icons.phone,
                     color: AppColors.getPrimaryColor(),

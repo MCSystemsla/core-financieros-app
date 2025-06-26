@@ -165,11 +165,11 @@ class __FormContentState extends State<_FormContent> {
               onCountryCodeChange: (value) {
                 telefonoCodeOficina = value?.dialCode ?? '+503';
               },
-              maxLength: 10,
+              maxLength: 9,
               isRequired: false,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(9),
                 DashFormatter(),
               ],
               onChange: (value) {

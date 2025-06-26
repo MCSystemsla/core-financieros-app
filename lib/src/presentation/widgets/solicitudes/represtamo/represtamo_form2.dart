@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -85,7 +86,13 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                validator: (value) => ClassValidator.validateRequired(value),
+                validator: (value) =>
+                    ClassValidator.validateMaxIntValueAndMinValue(
+                  value,
+                  14,
+                  isNicaraguaCedula: true,
+                  isRequired: true,
+                ),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -148,9 +155,14 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.perm_identity_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',
@@ -250,9 +262,15 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 },
                 codigo: 'PARENTESCO',
                 title: 'Parentesco',
+                hintText: 'input.select_option'.tr(),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -278,7 +296,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 codigo: 'PAIS',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
               ),
             ],
             const Gap(20),

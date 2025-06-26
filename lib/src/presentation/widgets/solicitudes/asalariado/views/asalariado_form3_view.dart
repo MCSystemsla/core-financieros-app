@@ -139,6 +139,7 @@ class __FormContentState extends State<_FormContent> {
             if (condicionCasa?.value != 'ALQ') ...[
               const Gap(30),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 key: const Key('nombre_dueno_casa'),
                 inputFormatters: [
                   UpperCaseTextFormatter(),

@@ -192,7 +192,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 const Gap(30),
                 CountryInput(
                   textInputType: TextInputType.phone,
-                  maxLength: 15,
+                  maxLength: 9,
                   icon: Icon(
                     Icons.phone,
                     color: AppColors.getPrimaryColor(),
@@ -200,7 +200,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   title: 'Celular',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(9),
                     DashFormatter(),
                   ],
                   onChange: (value) {

@@ -137,9 +137,9 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
-                LengthLimitingTextInputFormatter(15),
+                LengthLimitingTextInputFormatter(9),
               ],
-              maxLength: 15,
+              maxLength: 9,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -212,10 +212,10 @@ class __FormContentState extends State<_FormContent> {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
-                LengthLimitingTextInputFormatter(16),
+                LengthLimitingTextInputFormatter(9),
               ],
               isRequired: false,
-              maxLength: 15,
+              maxLength: 9,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),

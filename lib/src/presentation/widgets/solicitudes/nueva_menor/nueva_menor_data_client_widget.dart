@@ -365,6 +365,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   const Gap(30),
                   CountryInput(
                     inputFormatters: [
+                      LengthLimitingTextInputFormatter(9),
                       FilteringTextInputFormatter.digitsOnly,
                       DashFormatter(),
                     ],
@@ -373,7 +374,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       countryCode = value.dialCode!;
                     },
                     haveCounter: true,
-                    maxLength: 15,
+                    maxLength: 9,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -390,6 +391,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   const Gap(30),
                   CountryInput(
                     inputFormatters: [
+                      LengthLimitingTextInputFormatter(9),
                       FilteringTextInputFormatter.digitsOnly,
                       DashFormatter(),
                     ],
@@ -397,7 +399,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                       if (value == null) return;
                       celularCode = value.dialCode!;
                     },
-                    maxLength: 15,
+                    maxLength: 9,
                     icon: Icon(
                       Icons.phone_android,
                       color: AppColors.getPrimaryColor(),
@@ -954,10 +956,11 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             const Gap(30),
             CountryInput(
               inputFormatters: [
+                LengthLimitingTextInputFormatter(9),
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
               ],
-              maxLength: 15,
+              maxLength: 9,
               onCountryCodeChange: (value) {
                 if (value == null) return;
                 telefonoCountryCode = value.dialCode!;
@@ -977,6 +980,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
             const Gap(30),
             CountryInput(
               inputFormatters: [
+                LengthLimitingTextInputFormatter(9),
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
               ],
@@ -984,7 +988,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 if (value == null) return;
                 celularCountyCode = value.dialCode!;
               },
-              maxLength: 15,
+              maxLength: 9,
               icon: Icon(
                 Icons.phone_android,
                 color: AppColors.getPrimaryColor(),

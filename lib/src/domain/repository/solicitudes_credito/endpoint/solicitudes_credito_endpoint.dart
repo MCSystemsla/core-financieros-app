@@ -36,7 +36,6 @@ class CatalogoSolicitudEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
         'codigo': codigo,
       };
@@ -57,7 +56,6 @@ class NacionalidadEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
         'codigo': codigo,
       };
@@ -77,7 +75,6 @@ class ProductosEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
       };
 }

@@ -107,10 +107,10 @@ class __FormContentState extends State<_FormContent> {
               },
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(9),
                 DashFormatter(),
               ],
-              maxLength: 10,
+              maxLength: 9,
               isRequired: false,
               hintText: 'Ingresa Teléfono de la persona no cercana',
               title: 'Teléfono del familiar no cercano',
@@ -339,13 +339,13 @@ class __FormContentState extends State<_FormContent> {
                   textInputType: TextInputType.phone,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
+                    LengthLimitingTextInputFormatter(9),
                     DashFormatter(),
                   ],
                   onChange: (value) {
                     telefonoOficinaConyuge = value;
                   },
-                  maxLength: 10,
+                  maxLength: 9,
                   isRequired: false,
                   title: 'Teléfono Oficina',
                   icon: const Icon(Icons.phone_iphone_outlined),
@@ -365,7 +365,7 @@ class __FormContentState extends State<_FormContent> {
                       (double.tryParse(totalIngresosMesConyuge ?? '0') ?? 0);
 
                   final salarioNetoConyugueNumber =
-                      (double.tryParse(totalIngresosMesConyuge ?? '0') ?? 0);
+                      (double.tryParse(salarioNetoMensualConyuge ?? '0') ?? 0);
 
                   if (totalIngresosConyugueNumber < salarioNetoConyugueNumber) {
                     CustomAlertDialog(

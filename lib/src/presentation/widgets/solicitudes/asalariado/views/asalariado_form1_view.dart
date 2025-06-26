@@ -178,12 +178,12 @@ class __FormContentState extends State<_FormContent> {
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime eighteenYearsAgo = DateTime(
-      now.year - int.parse(edadMinimaCliente?.valor ?? ''),
+      now.year - int.parse(edadMinimaCliente?.valor ?? '0'),
       now.month,
       now.day,
     );
     final DateTime maxAgeClient = DateTime(
-      now.year - int.parse(edadMaximaCliente?.valor ?? ''),
+      now.year - int.parse(edadMaximaCliente?.valor ?? '0'),
       now.month,
       now.day,
     );
@@ -472,10 +472,10 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(9),
                 DashFormatter(),
               ],
-              maxLength: 10,
+              maxLength: 9,
               title: 'Teléfono',
               icon: const Icon(Icons.phone),
             ),
@@ -487,7 +487,7 @@ class __FormContentState extends State<_FormContent> {
               textInputType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(9),
                 DashFormatter(),
               ],
               validator: (value) => ClassValidator.validateRequired(value),
@@ -495,7 +495,7 @@ class __FormContentState extends State<_FormContent> {
                 celular = value;
               },
               isRequired: false,
-              maxLength: 10,
+              maxLength: 9,
               title: 'Celular',
               icon: const Icon(Icons.smartphone),
             ),

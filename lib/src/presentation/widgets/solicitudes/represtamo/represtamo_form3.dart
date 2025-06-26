@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_d
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -37,7 +39,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   String? monto;
   Item? proposito;
   Item? producto;
-  Item? frecuenciaDePago;
+  CatalogoFrecuenciaItem? frecuenciaDePago;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -132,6 +134,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             OutlineTextfieldWidget(
               inputFormatters: [
                 CurrencyInputFormatter(),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
               ],
               textEditingController: montoController,
               icon: Icon(
@@ -179,14 +182,13 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
+            CatalogoFrecuenciaPagoDropdown(
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+                  ClassValidator.validateRequired(value?.valor),
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item;
               },
-              codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
@@ -277,7 +279,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    frecuenciaPago: frecuenciaDePago?.name ?? '',
+                    frecuenciaPago: frecuenciaDePago?.meses ?? '',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres!,
                   );
@@ -287,7 +289,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrincipalPrimeraCuota} ${moneda?.name}',
                     onDone: () {
                       context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            objFrecuenciaIdVer: frecuenciaDePago?.name,
+                            objFrecuenciaIdVer: frecuenciaDePago?.nombre,
                             tasaInteres: tasaInteres,
                             fechaDesembolso:
                                 fechaDesembolso?.toUtc().toIso8601String(),
@@ -298,9 +300,9 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                             objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,
                             objProductoIdVer: producto?.name,
-                            objFrecuenciaId: frecuenciaDePago?.value,
-                            objFrecuenciaIdVer2: frecuenciaDePago?.name,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
+                            objFrecuenciaId: frecuenciaDePago?.valor,
+                            objFrecuenciaIdVer2: frecuenciaDePago?.nombre,
+                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                             fechaPrimerPagoSolicitud:
                                 fechaPrimerPago?.toUtc().toIso8601String(),
                             cuota: calcularCuotaProvider
