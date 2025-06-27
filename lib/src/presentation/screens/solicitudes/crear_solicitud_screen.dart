@@ -75,15 +75,15 @@ class CrearSolicitudScreen extends StatelessWidget {
           TypeForm.nueva => NuevaMenorForm(
               pageController: pageController,
               cedula: cedula ?? '',
-              tipoDocumento: tipoDocumento!,
-              paisEmisor: paisEmiror!,
+              tipoDocumento: tipoDocumento ?? const Item(name: '', value: ''),
+              paisEmisor: paisEmiror ?? const Item(name: '', value: ''),
             ),
           TypeForm.asalariado => AsalariadoForm(
               controller: pageController,
               userByCedulaSolicitud: userByCedulaSolicitud ??
                   UserByCedulaSolicitud(
-                    cedula: cedula!,
-                    tipoDocumento: tipoDocumento?.value,
+                    cedula: cedula ?? '',
+                    tipoDocumento: tipoDocumento?.value ?? '',
                     paisEmisor: paisEmiror,
                   ),
             ),
