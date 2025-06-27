@@ -90,6 +90,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) =>
                     ClassValidator.validateMaxIntValueAndMinValue(
                   value,

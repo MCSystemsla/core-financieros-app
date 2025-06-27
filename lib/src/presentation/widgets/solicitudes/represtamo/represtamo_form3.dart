@@ -303,7 +303,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    frecuenciaPago: frecuenciaDePago?.meses ?? '',
+                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres!,
                   );
@@ -319,7 +319,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                                 fechaDesembolso?.toUtc().toIso8601String(),
                             objMonedaId: moneda?.value,
                             objMonedaIdVer: moneda?.name,
-                            monto: int.tryParse(monto!),
+                            monto: int.tryParse(monto ?? '0'),
                             objPropositoId: proposito?.value,
                             objPropositoIdVer: proposito?.name,
                             objProductoId: producto?.value,

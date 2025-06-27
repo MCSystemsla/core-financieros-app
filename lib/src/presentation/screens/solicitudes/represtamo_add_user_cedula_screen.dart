@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,6 +73,14 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
                   tipoDocumento:
                       state.represtamoUserCedula.tipoDocumento ?? 'N/A',
                   tipoPersona: state.represtamoUserCedula.tipoPersona,
+                  fechaEmision:
+                      state.represtamoUserCedula.fechaEmisionDocumento,
+                  fechaVencimiento:
+                      state.represtamoUserCedula.fechaVencimientoDocumento,
+                  paisEmisor: Item(
+                    name: state.represtamoUserCedula.paisEmisorDocumento,
+                    value: state.represtamoUserCedula.paisEmisorDocumento,
+                  ),
                 ),
               );
             }

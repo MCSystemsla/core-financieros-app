@@ -55,7 +55,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
     );
     if (picked != null && picked != _selectedDate) {
       if (!context.mounted) return;
-      if (picked.isAfter(DateTime.now())) {
+      if (picked.isBefore(DateTime.now())) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -69,6 +69,8 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   }
 
   String? initialValue;
+  String? paisEmisorDocumento;
+  DateTime? fechaVencimiento;
   String? departamentoEmisor;
 
   String? tipoPersonaCredito;
@@ -87,6 +89,9 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
     super.initState();
     cedula = widget.userByCedulaSolicitud.cedula;
     tipoPersonaCredito = widget.userByCedulaSolicitud.tipoPersona;
+    _selectedDate = widget.userByCedulaSolicitud.fechaEmision;
+    fechaVencimiento = widget.userByCedulaSolicitud.fechaVencimiento;
+    paisEmisorDocumento = widget.userByCedulaSolicitud.paisEmisor?.value;
     context.read<GeolocationCubit>().getCurrentLocation();
   }
 
@@ -184,12 +189,24 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Documento',
-                  isRequired: true,
+                  isRequired: false,
                   hintText: 'Ingresa Documento',
                   isValid: null,
                   onChange: (value) {
                     cedula = value;
                   },
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  initialValue: paisEmisorDocumento,
+                  readOnly: true,
+                  icon: Icon(
+                    Icons.map,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Pais Emisor Documento',
+                  isRequired: false,
+                  isValid: null,
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -200,13 +217,25 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Emisión Documento',
-                  isRequired: true,
-                  hintText:
-                      _selectedDate?.selectorFormat() ?? 'Selecciona Fecha',
+                  isRequired: false,
+                  initialValue: _selectedDate?.selectorFormat(),
+                  isValid: null,
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  readOnly: true,
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Fecha Vencimiento Documento',
+                  isRequired: false,
+                  initialValue: fechaVencimiento?.selectorFormat(),
                   isValid: null,
                 ),
                 const Gap(30),
                 CountryInput(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.phone,
                   maxLength: 9,
                   icon: Icon(
@@ -225,8 +254,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   },
                   hintText: 'Ingresa Celular Represtamo',
                   isValid: null,
-                  isRequired: true,
-                  // validator: (value) => ClassValidator.validateRequired(value),
+                  isRequired: false,
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -246,7 +274,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   },
                   hintText: 'Ingresa Ubicación',
                   isValid: null,
-                  isRequired: true,
+                  isRequired: false,
                   validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
