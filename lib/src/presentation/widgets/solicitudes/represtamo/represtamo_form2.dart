@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -72,6 +73,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (familiarEmpleado == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.person,
@@ -128,6 +132,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (espeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -174,6 +181,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -210,6 +220,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -224,6 +237,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -238,6 +254,9 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
@@ -290,7 +309,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);
-
                   setState(() {});
                 },
                 codigo: 'PAIS',

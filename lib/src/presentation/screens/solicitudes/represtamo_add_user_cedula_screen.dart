@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,20 +23,17 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void showSuccessDialog({
-      required String firstName,
-      required String cedula,
-    }) {
+    void showSuccessDialog({required UserByCedulaSolicitud userByCedula}) {
       CustomAlertDialog(
         context: context,
-        title: '$firstName listo para crear solicitud!!',
+        title: '${userByCedula.primerNombre} listo para crear solicitud!!',
         onDone: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: ((_) => CrearSolicitudScreen(
                     typeForm: typeForm,
-                    cedula: cedula,
+                    userByCedulaSolicitud: userByCedula,
                   )),
             ),
           );
@@ -67,8 +65,14 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
             }
             if (state is OnReprestaUserByCedulaSuccess) {
               showSuccessDialog(
-                cedula: state.represtamoUserCedula.cedula,
-                firstName: state.represtamoUserCedula.nombreCompleto,
+                userByCedula: UserByCedulaSolicitud(
+                  cedula: state.represtamoUserCedula.cedula,
+                  primerNombre: state.represtamoUserCedula.nombreCompleto,
+                  segundoApellido: state.represtamoUserCedula.nombreCompleto,
+                  tipoDocumento:
+                      state.represtamoUserCedula.tipoDocumento ?? 'N/A',
+                  tipoPersona: state.represtamoUserCedula.tipoPersona,
+                ),
               );
             }
           },

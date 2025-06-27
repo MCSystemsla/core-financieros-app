@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -16,7 +17,9 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,11 +29,11 @@ import 'package:go_router/go_router.dart';
 
 class ReprestamoForm1 extends StatefulWidget {
   final PageController controller;
-  final String cedula;
+  final UserByCedulaSolicitud userByCedulaSolicitud;
   const ReprestamoForm1({
     super.key,
     required this.controller,
-    required this.cedula,
+    required this.userByCedulaSolicitud,
   });
 
   @override
@@ -82,7 +85,8 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   @override
   void initState() {
     super.initState();
-    cedula = widget.cedula;
+    cedula = widget.userByCedulaSolicitud.cedula;
+    tipoPersonaCredito = widget.userByCedulaSolicitud.tipoPersona;
     context.read<GeolocationCubit>().getCurrentLocation();
   }
 
@@ -132,10 +136,22 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
           child: Form(
             key: formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(30),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: Text(
+                    'Nombre del cliente: ${widget.userByCedulaSolicitud.primerNombre}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                const Gap(10),
                 SearchDropdownWidget(
+                  enabled: false,
                   // initialValue: '',
+                  hintText: tipoPersonaCredito ?? 'input.select_option'.tr(),
                   codigo: 'TIPOSPERSONACREDITO',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -214,7 +230,10 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  maxLength: 50,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  maxLength: 40,
                   icon: Icon(
                     Icons.location_on,
                     color: AppColors.getPrimaryColor(),
@@ -228,7 +247,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                   hintText: 'Ingresa Ubicación',
                   isValid: null,
                   isRequired: true,
-                  // validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
                 Container(

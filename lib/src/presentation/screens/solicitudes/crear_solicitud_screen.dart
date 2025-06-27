@@ -88,7 +88,7 @@ class CrearSolicitudScreen extends StatelessWidget {
                   ),
             ),
           TypeForm.represtamo => ReprestamoForm(
-              cedula: cedula ?? '',
+              userByCedulaSolicitud: userByCedulaSolicitud!,
               controller: pageController,
             ),
           _ => const SizedBox(),

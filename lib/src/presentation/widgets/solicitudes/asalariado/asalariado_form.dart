@@ -23,6 +23,7 @@ class UserByCedulaSolicitud {
   final DateTime? fechaVencimiento;
   final DateTime? fechaNacimiento;
   final String tipoDocumento;
+  final String? tipoPersona;
   final Item? paisEmisor;
 
   UserByCedulaSolicitud({
@@ -36,6 +37,7 @@ class UserByCedulaSolicitud {
     this.fechaNacimiento,
     required this.tipoDocumento,
     this.paisEmisor,
+    this.tipoPersona,
   });
 }
 

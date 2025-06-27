@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form2.dart';
@@ -10,12 +11,12 @@ import 'package:flutter/material.dart';
 
 class ReprestamoForm extends StatelessWidget {
   final PageController controller;
-  final String cedula;
+  final UserByCedulaSolicitud userByCedulaSolicitud;
 
   const ReprestamoForm({
     super.key,
     required this.controller,
-    required this.cedula,
+    required this.userByCedulaSolicitud,
   });
 
   @override
@@ -38,7 +39,7 @@ class ReprestamoForm extends StatelessWidget {
               ),
               ReprestamoForm1(
                 controller: controller,
-                cedula: cedula,
+                userByCedulaSolicitud: userByCedulaSolicitud,
               ),
               ReprestamoForm2(controller: controller),
               ReprestamoForm3(controller: controller),
