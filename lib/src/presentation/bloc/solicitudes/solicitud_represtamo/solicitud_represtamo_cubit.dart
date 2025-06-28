@@ -92,6 +92,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   }
 
   void saveAnswers({
+    String? nombreCompletoCliente,
     String? objOrigenSolicitudIdVer,
     String? objMonedaIdVer,
     String? objPropositoIdVer,
@@ -174,6 +175,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   }) {
     emit(
       state.copyWith(
+        nombreCompletoCliente: nombreCompletoCliente,
         cedulaBackPath: cedulaBackPath,
         cedulaFrontPath: cedulaFrontPath,
         objOrigenSolicitudIdVer: objOrigenSolicitudIdVer,
@@ -265,6 +267,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       localDbProvider.updateSolicitudReprestamoById(
         id: state.idLocalResponse,
         responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+          nombreCompletoCliente: state.nombreCompletoCliente,
           objOrigenSolicitudIdVer: state.objOrigenSolicitudIdVer,
           objMonedaIdVer: state.objMonedaIdVer,
           objPropositoIdVer: state.objPropositoIdVer,
@@ -350,6 +353,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesReprestamoResponses(
       responseReprestamoLocalDb: ReprestamoResponsesLocalDb(
+        nombreCompletoCliente: state.nombreCompletoCliente,
         objOrigenSolicitudIdVer: state.objOrigenSolicitudIdVer,
         objMonedaIdVer: state.objMonedaIdVer,
         objPropositoIdVer: state.objPropositoIdVer,

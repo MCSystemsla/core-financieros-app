@@ -83,6 +83,7 @@ class ReprestamoResponsesLocalDb {
   String? objTipoPersonaIdVer;
   String? parentescoFamiliar;
   String? parentescoFamiliarVer;
+  String? nombreCompletoCliente;
   ReprestamoResponsesLocalDb({
     this.objOrigenSolicitudIdVer,
     this.objMonedaIdVer,
@@ -161,5 +162,6 @@ class ReprestamoResponsesLocalDb {
     this.isDone = false,
     this.errorMsg = '',
     this.hasVerified = false,
+    this.nombreCompletoCliente,
   });
 }

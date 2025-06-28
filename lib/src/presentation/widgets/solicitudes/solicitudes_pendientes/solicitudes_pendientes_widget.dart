@@ -151,8 +151,8 @@ class SolicitudesPendientesWidget extends StatelessWidget {
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
                 .capitalizeAll,
-        location: solicitud.cedula?.dashFormat ?? 'N/A',
-        dateToStart: solicitud.email ?? 'N/A',
+        location: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.telefono,
         dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
             ?.selectorFormat(),
         percentage: (solicitud.isDone ?? false)
@@ -251,10 +251,10 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
             ),
           );
         },
-        title: '${solicitud.cedula}'.toUpperCase(),
-        location: solicitud.celularReprestamo ?? 'N/A',
-        dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
-        dateToEnd: 'Fecha',
+        title: solicitud.nombreCompletoCliente ?? 'N/A',
+        location: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.celularReprestamo,
+        dateToEnd: 'N/A',
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),
@@ -417,7 +417,7 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
                 .capitalizeAll,
         location: solicitud.cedula ?? 'N/A',
         dateToEnd: solicitud.fechaNacimiento?.selectorFormat() ?? 'N/A',
-        dateToStart: solicitud.email ?? 'N/A',
+        dateToStart: solicitud.telefono,
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),
@@ -483,7 +483,7 @@ class AdvanceCardState extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Email: ${dateToStart ?? "--/--/----"}',
+                    'Telefono: ${dateToStart ?? "--------"}',
                     style: const TextStyle(
                       color: AppColors.grey,
                     ),
