@@ -505,6 +505,7 @@ class __FormContentState extends State<_FormContent> {
                 email = value;
               },
               textInputType: TextInputType.emailAddress,
+              textCapitalization: TextCapitalization.none,
               validator: (value) => ClassValidator.validateEmail(value),
               title: 'Email',
               icon: const Icon(Icons.email),

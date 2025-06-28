@@ -83,6 +83,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
   final formKey = GlobalKey<FormState>();
   String countryCode = '+505';
   String celularCode = '+505';
+  String? nombreCliente;
 
   @override
   void initState() {
@@ -92,6 +93,7 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
     _selectedDate = widget.userByCedulaSolicitud.fechaEmision;
     fechaVencimiento = widget.userByCedulaSolicitud.fechaVencimiento;
     paisEmisorDocumento = widget.userByCedulaSolicitud.paisEmisor?.value;
+    nombreCliente = widget.userByCedulaSolicitud.primerNombre;
     context.read<GeolocationCubit>().getCurrentLocation();
   }
 
@@ -144,17 +146,24 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(30),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: Text(
-                    'Nombre del cliente: ${widget.userByCedulaSolicitud.primerNombre}',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  initialValue: nombreCliente,
+                  readOnly: isConnected,
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
                   ),
+                  title: 'Nombre del cliente',
+                  isRequired: false,
+                  isValid: null,
                 ),
                 const Gap(10),
                 SearchDropdownWidget(
-                  enabled: false,
+                  enabled: !isConnected,
                   // initialValue: '',
                   hintText: tipoPersonaCredito ?? 'input.select_option'.tr(),
                   codigo: 'TIPOSPERSONACREDITO',
@@ -196,43 +205,45 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                     cedula = value;
                   },
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: paisEmisorDocumento,
-                  readOnly: true,
-                  icon: Icon(
-                    Icons.map,
-                    color: AppColors.getPrimaryColor(),
+                if (isConnected) ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    initialValue: paisEmisorDocumento,
+                    readOnly: true,
+                    icon: Icon(
+                      Icons.map,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: 'Pais Emisor Documento',
+                    isRequired: false,
+                    isValid: null,
                   ),
-                  title: 'Pais Emisor Documento',
-                  isRequired: false,
-                  isValid: null,
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  onTap: () => selectDate(context),
-                  readOnly: true,
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: AppColors.getPrimaryColor(),
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    onTap: () => selectDate(context),
+                    readOnly: true,
+                    icon: Icon(
+                      Icons.calendar_today,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: 'Fecha Emisión Documento',
+                    isRequired: false,
+                    initialValue: _selectedDate?.selectorFormat(),
+                    isValid: null,
                   ),
-                  title: 'Fecha Emisión Documento',
-                  isRequired: false,
-                  initialValue: _selectedDate?.selectorFormat(),
-                  isValid: null,
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  readOnly: true,
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: AppColors.getPrimaryColor(),
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    readOnly: true,
+                    icon: Icon(
+                      Icons.calendar_today,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    title: 'Fecha Vencimiento Documento',
+                    isRequired: false,
+                    initialValue: fechaVencimiento?.selectorFormat(),
+                    isValid: null,
                   ),
-                  title: 'Fecha Vencimiento Documento',
-                  isRequired: false,
-                  initialValue: fechaVencimiento?.selectorFormat(),
-                  isValid: null,
-                ),
+                ],
                 const Gap(30),
                 CountryInput(
                   validator: (value) => ClassValidator.validateRequired(value),

@@ -93,11 +93,7 @@ class __FormContentState extends State<_FormContent> {
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: false,
           ),
-          child: Localizations.override(
-            context: context,
-            locale: const Locale('en', 'US'),
-            child: child!,
-          ),
+          child: child!,
         );
       },
     );

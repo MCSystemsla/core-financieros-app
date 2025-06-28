@@ -44,184 +44,200 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
   String telefonoBeneficiarioCode = '+505';
   String telefonoBeneficiario1Code = '+505';
   Item? sector;
+
+  @override
+  void initState() {
+    super.initState();
+    initFunctions();
+  }
+
+  initFunctions() async {
+    await context.read<InternetConnectionCubit>().getInternetStatusConnection();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'SECTORECONOMICO',
-              title: 'Sector',
-              // hintText: 'Ingresa Parentesco Beneficiario Seguro',
-              onChanged: (item) {
-                if (item == null) return;
-                sector = item;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              validator: (value) => ClassValidator.validateRequired(value),
-              maxLength: 40,
-              icon: Icon(
-                Icons.family_restroom,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Nombre Beneficiario Seguro',
-              hintText: 'Ingresa Nombre Beneficiario Seguro',
-              isValid: null,
-              onChange: (value) {
-                beneficiarioSeguro = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              validator: (value) =>
-                  ClassValidator.validateMaxIntValueAndMinValue(
-                value,
-                14,
-                isNicaraguaCedula: true,
-                isRequired: true,
-              ),
-              maxLength: 14,
-              icon: Icon(
-                Icons.credit_card,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cedula Beneficiario Seguro',
-              hintText: 'Ingresa Cedula Beneficiario Seguro',
-              isValid: null,
-              onChange: (value) {
-                cedulaBeneficiarioSeguro = value;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'PARENTESCO',
-              title: 'Parentesco Beneficiario Seguro',
-              // hintText: 'Ingresa Parentesco Beneficiario Seguro',
-              onChanged: (item) {
-                if (item == null) return;
-                parentesco = item;
-              },
-            ),
-            const Gap(20),
-            CountryInput(
-              onCountryCodeChange: (value) {
-                if (value == null) return;
-                telefonoBeneficiarioCode = value.dialCode!;
-              },
-              isRequired: false,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(9),
-                DashFormatter(),
-              ],
-              maxLength: 9,
-              icon: Icon(
-                Icons.phone,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Telefono Beneficiario',
-              textInputType: TextInputType.phone,
-              hintText: 'Ingresa Telefono Beneficiario',
-              isValid: null,
-              onChange: (value) {
-                telefonoBeneficiario = value;
-              },
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Enviar Solicitud',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        objSectorId: sector?.value,
-                        objSectorIdVer: sector?.name,
-                        beneficiarioSeguro: beneficiarioSeguro,
-                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco?.value,
-                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
-                        telefonoBeneficiario: telefonoBeneficiario == null
-                            ? ''
-                            : telefonoBeneficiarioCode +
-                                (telefonoBeneficiario ?? '')
-                                    .trim()
-                                    .replaceAll('-', ''),
-                        isDone: !isConnected,
-                        isOffline: !isConnected,
-                      );
-                  if (!isConnected) {
-                    context.read<SolicitudReprestamoCubit>().saveAnswers(
-                          errorMsg:
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: 'input.select_option'.tr(),
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'SECTORECONOMICO',
+                  title: 'Sector',
+                  // hintText: 'Ingresa Parentesco Beneficiario Seguro',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    sector = item;
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  maxLength: 40,
+                  icon: Icon(
+                    Icons.family_restroom,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Nombre Beneficiario Seguro',
+                  hintText: 'Ingresa Nombre Beneficiario Seguro',
+                  isValid: null,
+                  onChange: (value) {
+                    beneficiarioSeguro = value;
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  validator: (value) =>
+                      ClassValidator.validateMaxIntValueAndMinValue(
+                    value,
+                    14,
+                    isNicaraguaCedula: true,
+                    isRequired: true,
+                  ),
+                  maxLength: 14,
+                  icon: Icon(
+                    Icons.credit_card,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Cedula Beneficiario Seguro',
+                  hintText: 'Ingresa Cedula Beneficiario Seguro',
+                  isValid: null,
+                  onChange: (value) {
+                    cedulaBeneficiarioSeguro = value;
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'PARENTESCO',
+                  title: 'Parentesco Beneficiario Seguro',
+                  // hintText: 'Ingresa Parentesco Beneficiario Seguro',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    parentesco = item;
+                  },
+                ),
+                const Gap(20),
+                CountryInput(
+                  onCountryCodeChange: (value) {
+                    if (value == null) return;
+                    telefonoBeneficiarioCode = value.dialCode!;
+                  },
+                  isRequired: false,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(9),
+                    DashFormatter(),
+                  ],
+                  maxLength: 9,
+                  icon: Icon(
+                    Icons.phone,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Telefono Beneficiario',
+                  textInputType: TextInputType.phone,
+                  hintText: 'Ingresa Telefono Beneficiario',
+                  isValid: null,
+                  onChange: (value) {
+                    telefonoBeneficiario = value;
+                  },
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Enviar Solicitud',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      context.read<SolicitudReprestamoCubit>().saveAnswers(
+                            objSectorId: sector?.value,
+                            objSectorIdVer: sector?.name,
+                            beneficiarioSeguro: beneficiarioSeguro,
+                            cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                            objParentescoBeneficiarioSeguroId:
+                                parentesco?.value,
+                            objParentescoBeneficiarioSeguroIdVer:
+                                parentesco?.name,
+                            telefonoBeneficiario: telefonoBeneficiario == null
+                                ? ''
+                                : telefonoBeneficiarioCode +
+                                    (telefonoBeneficiario ?? '')
+                                        .trim()
+                                        .replaceAll('-', ''),
+                            isDone: !state.isConnected,
+                            isOffline: !state.isConnected,
+                          );
+                      if (!state.isConnected) {
+                        context.read<SolicitudReprestamoCubit>().saveAnswers(
+                              errorMsg:
+                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
                               'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                        );
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                      onDone: () => context.pushReplacement('/solicitudes'),
-                    ).showDialog(context, dialogType: DialogType.infoReverse);
-                    return;
-                  }
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => BlocProvider.value(
-                        value: context.read<SolicitudReprestamoCubit>(),
-                        child: ReprestamoSendingWidget(
-                          solicitudId: context
-                              .read<SolicitudReprestamoCubit>()
-                              .state
-                              .idLocalResponse,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value: context.read<SolicitudReprestamoCubit>(),
+                            child: ReprestamoSendingWidget(
+                              solicitudId: context
+                                  .read<SolicitudReprestamoCubit>()
+                                  .state
+                                  .idLocalResponse,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
