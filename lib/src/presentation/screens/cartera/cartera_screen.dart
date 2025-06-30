@@ -6,14 +6,30 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_forms_failded_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class CarteraScreen extends StatelessWidget {
+class CarteraScreen extends StatefulWidget {
   const CarteraScreen({super.key});
+
+  @override
+  State<CarteraScreen> createState() => _CarteraScreenState();
+}
+
+class _CarteraScreenState extends State<CarteraScreen> {
+  @override
+  void initState() {
+    super.initState();
+    initFunctions();
+  }
+
+  initFunctions() async {
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +39,19 @@ class CarteraScreen extends StatelessWidget {
           context.push('/');
         }
       },
-      child: Scaffold(
-        body: _CarteraContentWidget(),
+      child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+        builder: (context, state) {
+          return switch (state.connectionStatus) {
+            ConnectionStatus.checking => const _LoadingWidget(),
+            ConnectionStatus.connected => Scaffold(
+                body: _CarteraContentWidget(),
+              ),
+            ConnectionStatus.disconnected => Scaffold(
+                body: _CarteraContentWidget(),
+              ),
+            _ => const SizedBox(),
+          };
+        },
       ),
     );
   }
@@ -36,98 +63,90 @@ class _CarteraContentWidget extends StatelessWidget {
     const isProdMode = bool.fromEnvironment('isProdMode');
 
     final actions = LocalStorage().currentActions;
-    final isInternetConnection =
-        context.read<InternetConnectionCubit>().state.isConnected;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomBannerWidget(
-            icon: const Icon(
-              Icons.wallet_rounded,
-              color: AppColors.white,
-            ),
-            title: 'home.item5'.tr(),
-            image: ImageAsset.carteraBg,
-          ),
-          const Gap(20),
-          Container(
-            margin: const EdgeInsets.all(18),
-            child: Text(
-              'cartera.description'.tr(),
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: 19,
+
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomBannerWidget(
+                icon: const Icon(
+                  Icons.wallet_rounded,
+                  color: AppColors.white,
+                ),
+                title: 'home.item5'.tr(),
+                image: ImageAsset.carteraBg,
+              ),
+              const Gap(20),
+              Container(
+                margin: const EdgeInsets.all(18),
+                child: Text(
+                  'cartera.description'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontSize: 19,
+                      ),
+                ),
+              ),
+              if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
+                _Card(
+                  onTap: () {
+                    context.push('/solicitudes');
+                  },
+                  title: 'Solicitudes',
+                  subtitle: 'Modulo Solicitudes de Credito',
+                  firstColor: AppColors.blueIndigo,
+                  secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.description,
+                    color: AppColors.white,
+                    size: 35,
                   ),
-            ),
-          ),
-          // _Card(
-          //   onTap: () => context.push('/credito'),
-          //   title: 'cartera.credit'.tr(),
-          //   subtitle: 'cartera.credit_title'.tr(),
-          //   firstColor: AppColors.getSecondaryColor(),
-          //   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-          //   icon: const Icon(
-          //     Icons.credit_card,
-          //     color: AppColors.white,
-          //     size: 35,
-          //   ),
-          // ),
-          if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
-            _Card(
-              onTap: () {
-                context.push('/solicitudes');
-              },
-              title: 'Solicitudes',
-              subtitle: 'Modulo Solicitudes de Credito',
-              firstColor: AppColors.blueIndigo,
-              secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.description,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
-          if (actions.contains('LLENARKIVAMOVIL'))
-            _Card(
-              onTap: () async {
-                if (!context.mounted) return;
-                isInternetConnection
-                    ? context.push('/cartera/formulario-kiva')
-                    : context.push('/cartera/kiva-offline');
-              },
-              title: 'cartera.kiva'.tr(),
-              subtitle: 'cartera.kiva_description'.tr(),
-              firstColor: AppColors.blueIndigo,
-              secondColor:
-                  AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-              icon: const Icon(
-                Icons.dynamic_form_outlined,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
-          if (isInternetConnection && actions.contains('LLENARKIVAMOVIL'))
-            _Card(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const KivaFormsFaildedScreen(),
+                ),
+              if (actions.contains('LLENARKIVAMOVIL'))
+                _Card(
+                  onTap: () async {
+                    if (!context.mounted) return;
+                    state.connectionStatus == ConnectionStatus.connected
+                        ? context.push('/cartera/formulario-kiva')
+                        : context.push('/cartera/kiva-offline');
+                  },
+                  title: 'cartera.kiva'.tr(),
+                  subtitle: 'cartera.kiva_description'.tr(),
+                  firstColor: AppColors.blueIndigo,
+                  secondColor:
+                      AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.dynamic_form_outlined,
+                    color: AppColors.white,
+                    size: 35,
                   ),
-                );
-              },
-              title: 'KIVA Histórico',
-              subtitle: 'Modulo Solicitudes Kiva Enviadas',
-              firstColor: AppColors.blueIndigo,
-              secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
-              icon: const Icon(
-                Icons.send_to_mobile_rounded,
-                color: AppColors.white,
-                size: 35,
-              ),
-            ),
-        ],
-      ),
+                ),
+              if (state.connectionStatus == ConnectionStatus.connected &&
+                  actions.contains('LLENARKIVAMOVIL'))
+                _Card(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const KivaFormsFaildedScreen(),
+                      ),
+                    );
+                  },
+                  title: 'KIVA Histórico',
+                  subtitle: 'Modulo Solicitudes Kiva Enviadas',
+                  firstColor: AppColors.blueIndigo,
+                  secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
+                  icon: const Icon(
+                    Icons.send_to_mobile_rounded,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -233,6 +252,24 @@ class _Card extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _LoadingWidget extends StatelessWidget {
+  const _LoadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LoadingWidget(),
+          Gap(20),
+          Text('Validando conexión a internet...'),
+        ],
       ),
     );
   }

@@ -11,22 +11,24 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   final _logger = Logger();
 
   Future<void> getInternetStatusConnection() async {
+    emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
     try {
-      emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
       final isReachable = await _hasValidInternetAccess();
 
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 3));
 
       if (!isReachable) {
         emit(state.copyWith(
           isConnected: false,
           connectionStatus: ConnectionStatus.disconnected,
+          lastCheck: DateTime.now().toIso8601String(),
         ));
         return;
       }
       emit(state.copyWith(
         isConnected: true,
         connectionStatus: ConnectionStatus.connected,
+        lastCheck: DateTime.now().toIso8601String(),
       ));
       return;
     } catch (e) {
@@ -34,6 +36,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       emit(state.copyWith(
         isConnected: false,
         connectionStatus: ConnectionStatus.disconnected,
+        lastCheck: DateTime.now().toIso8601String(),
       ));
     }
   }
