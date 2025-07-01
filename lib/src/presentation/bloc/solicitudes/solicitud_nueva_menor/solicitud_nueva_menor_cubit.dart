@@ -157,6 +157,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     return ResponseLocalDb(
       id: state.idLocalResponse,
       uuid: state.uuid,
+      frecuenciaPagoMeses: state.frecuenciaPagoMeses,
       montoMaximo: state.montoMaximo,
       montoMinimo: state.montoMinimo,
       hasVerified: state.hasVerified,

@@ -280,6 +280,7 @@ class __FormContentState extends State<_FormContent> {
                       () => cubit.state.copyWith(
                         objFrecuenciaIdVer: item.nombre,
                         objFrecuenciaId: item.valor,
+                        frecuenciaPagoMeses: item.meses,
                       ),
                     );
                   },
@@ -296,8 +297,8 @@ class __FormContentState extends State<_FormContent> {
                     color: AppColors.getPrimaryColor(),
                   ),
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Plazo Solicitud',
-                  hintText: 'Ingresa Plazo Solicitud',
+                  title: 'Plazo Solicitud (meses)',
+                  hintText: 'Ingresa Plazo Solicitud (meses)',
                   textInputType: TextInputType.number,
                   isValid: null,
                   onChange: (value) {
@@ -376,6 +377,20 @@ class __FormContentState extends State<_FormContent> {
                           context: context,
                           title:
                               'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      final plazoSolicitudMount =
+                          (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                      final frecuenciaPagoMeses =
+                          (double.tryParse(frecuenciaDePago?.meses ?? '0') ??
+                              0);
+                      if (plazoSolicitudMount < frecuenciaPagoMeses) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
                           onDone: () => context.pop(),
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;

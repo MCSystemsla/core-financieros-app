@@ -3,6 +3,7 @@ part of 'solicitud_nueva_menor_cubit.dart';
 
 class SolicitudNuevaMenorState extends Equatable {
   final String? uuid;
+  final String frecuenciaPagoMeses;
   final String onSuccessMsg;
   final bool hasVerified;
   final int idLocalResponse;
@@ -145,6 +146,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String cedulaFrontPath;
   final String cedulaBackPath;
   const SolicitudNuevaMenorState({
+    this.frecuenciaPagoMeses = '0',
     this.uuid,
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
@@ -292,6 +294,7 @@ class SolicitudNuevaMenorState extends Equatable {
   @override
   List<Object> get props => [
         // uuid!,
+        frecuenciaPagoMeses,
         cedulaFrontPath,
         cedulaBackPath,
         onSuccessMsg,
@@ -435,6 +438,7 @@ class SolicitudNuevaMenorState extends Equatable {
 
   SolicitudNuevaMenorState copyWith({
     String? uuid,
+    String? frecuenciaPagoMeses,
     String? onSuccessMsg,
     bool? hasVerified,
     int? idLocalResponse,
@@ -579,6 +583,7 @@ class SolicitudNuevaMenorState extends Equatable {
   }) {
     return SolicitudNuevaMenorState(
       uuid: uuid ?? this.uuid,
+      frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
       onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
       hasVerified: hasVerified ?? this.hasVerified,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,

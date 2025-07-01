@@ -189,7 +189,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "138:5577417764548015081",
+      "lastPropertyId": "139:8357879240830722985",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -881,6 +881,11 @@
         {
           "id": "138:5577417764548015081",
           "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "139:8357879240830722985",
+          "name": "frecuenciaPagoMeses",
           "type": 9
         }
       ],

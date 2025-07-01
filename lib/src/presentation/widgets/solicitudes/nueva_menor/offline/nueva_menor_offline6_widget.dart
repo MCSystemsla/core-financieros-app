@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_d
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
@@ -53,6 +54,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   double? tasaInteres;
   int? montoMinimo;
   double? montoMaximo;
+  String? frecuenciaPagoMeses;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -121,6 +123,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     tasaInteres = widget.responseLocalDb.prestamoInteres;
     montoMinimo = widget.responseLocalDb.montoMinimo;
     montoMaximo = widget.responseLocalDb.montoMaximo?.toDouble();
+    frecuenciaPagoMeses = widget.responseLocalDb.frecuenciaPagoMeses;
   }
 
   final montoController = TextEditingController();
@@ -155,25 +158,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
             const Gap(20),
             OutlineTextfieldWidget(
               initialValue: monto,
-              // onFieldSubmitted: (value) {
-              //   String formattedValue =
-              //       FormatField.formatMonto(montoController.text);
-              //   montoController.value = TextEditingValue(
-              //     text: formattedValue,
-              //     selection:
-              //         TextSelection.collapsed(offset: formattedValue.length),
-              //   );
-              // },
-              // onTapOutside: (event) {
-              //   String formattedValue =
-              //       FormatField.formatMonto(montoController.text);
-              //   montoController.value = TextEditingValue(
-              //     text: formattedValue,
-              //     selection:
-              //         TextSelection.collapsed(offset: formattedValue.length),
-              //   );
-              // },
-              // textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -231,16 +215,16 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
-              hintText: frecuenciaDePagoVer ?? 'input.select_option'.tr(),
+            CatalogoFrecuenciaPagoDropdown(
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+                  ClassValidator.validateRequired(value?.valor),
               onChanged: (item) {
                 if (item == null) return;
-                frecuenciaDePago = item.name;
-                frecuenciaDePagoVer = item.name;
+                frecuenciaDePagoVer = item.nombre;
+                frecuenciaDePago = item.valor;
+                frecuenciaPagoMeses = item.meses;
+                setState(() {});
               },
-              codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
@@ -330,8 +314,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? ''),
-                    frecuenciaPago: frecuenciaDePagoVer!,
+                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                    frecuenciaPago: frecuenciaPagoMeses ?? '0',
                     saldoPrincipal: double.tryParse(monto ?? '0') ?? 0,
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
@@ -340,29 +324,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                     title:
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} $monedaVer',
                     onDone: () {
-                      // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                      //       montoMaximo: montoMaximo?.toInt(),
-                      //       montoMinimo: montoMinimo?.toInt(),
-                      //       fechaDesembolso:
-                      //           fechaDesembolso?.toUtc().toIso8601String(),
-                      //       objFrecuenciaIdVer: frecuenciaDePagoVer,
-                      //       objProductoIdVer: productoVer,
-                      //       objMonedaIdVer: monedaVer,
-                      //       objPropositoIdVer: propositoVer,
-                      //       objMonedaId: moneda,
-                      //       monto: int.tryParse(monto ?? '0'),
-                      //       objPropositoId: proposito,
-                      //       objProductoId: producto,
-                      //       objFrecuenciaId: frecuenciaDePago,
-                      //       plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
-                      //       fechaPrimerPagoSolicitud:
-                      //           fechaPrimerPago?.toUtc().toIso8601String(),
-                      //       cuota: calcularCuotaProvider
-                      //           .state.montoPrincipalPrimeraCuota
-                      //           .toInt(),
-                      //       observacion: observacion,
-                      //       prestamoInteres: tasaInteres,
-                      //     );
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

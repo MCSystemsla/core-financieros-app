@@ -142,6 +142,7 @@ class ResponseLocalDb {
   bool? hasVerified;
   int? montoMinimo;
   int? montoMaximo;
+  String? frecuenciaPagoMeses;
 
   ResponseLocalDb({
     required this.id,
@@ -282,5 +283,6 @@ class ResponseLocalDb {
     this.isDone = false,
     this.hasVerified = false,
     this.errorMsg,
+    this.frecuenciaPagoMeses,
   });
 }
