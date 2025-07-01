@@ -585,7 +585,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   @override
   void initState() {
     super.initState();
-    context.read<SolicitudNuevaMenorCubit>().initAutoSave();
     tipoDocumento = widget.tipoDocumento;
     cedulaController = widget.cedula;
     paisEmisor = widget.paisEmisor;

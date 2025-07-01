@@ -102,6 +102,12 @@ class __FormContentState extends State<_FormContent> {
         return;
       }
       fechaPrimerPago = picked;
+      context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
+            () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                  fechaPrimerPagoSolicitud:
+                      fechaPrimerPago?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -136,6 +142,11 @@ class __FormContentState extends State<_FormContent> {
         return;
       }
       fechaDesembolso = picked;
+      context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
+            () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -144,256 +155,277 @@ class __FormContentState extends State<_FormContent> {
   @override
   Widget build(BuildContext context) {
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'DESTINOCREDITO',
-              title: 'Propósito',
-              validator: (value) =>
-                  ClassValidator.validateRequired(proposito?.value),
-              onChanged: (item) {
-                if (item == null) return;
-                proposito = item;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'MONEDA',
-              onChanged: (item) {
-                if (item == null) return;
-                moneda = item;
-              },
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              title: 'Moneda',
-              isRequired: true,
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              textEditingController: montoController,
-              icon: Icon(
-                Icons.price_change,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Monto',
-              hintText: 'Ingresa Monto',
-              textInputType: TextInputType.number,
-              inputFormatters: [
-                CurrencyInputFormatter(),
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+    return BlocBuilder<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
+      builder: (context, state) {
+        final cubit = context.read<SolicitudNuevaMenorCubit>();
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(20),
+                SearchDropdownWidget(
+                  codigo: 'DESTINOCREDITO',
+                  title: 'Propósito',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(proposito?.value),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    proposito = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objPropositoId: item.value,
+                        objPropositoIdVer: item.name,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  codigo: 'MONEDA',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    moneda = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objMonedaId: item.value,
+                        objMonedaIdVer: item.name,
+                      ),
+                    );
+                  },
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  title: 'Moneda',
+                  isRequired: true,
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  textEditingController: montoController,
+                  icon: Icon(
+                    Icons.price_change,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Monto',
+                  hintText: 'Ingresa Monto',
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
 
-                // FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
-              validator: (value) => ClassValidator.validateRequired(value),
-              isValid: null,
-              onChange: (value) {
-                monto = value.replaceAll(',', '');
-                setState(() {});
-              },
-            ),
-            OutlineTextfieldWidget(
-              initialValue: fechaDesembolso?.selectorFormat(),
-              readOnly: true,
-              icon: Icon(
-                Icons.price_change,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Fecha de Desembolso',
-              hintText: fechaDesembolso?.selectorFormat() ??
-                  'Ingresar fecha desembolso',
-              validator: (value) => ClassValidator.validateRequired(
-                  fechaDesembolso?.selectorFormat()),
-              isValid: null,
-              onTap: () => selectFechaDesembolso(context),
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(producto?.value),
-              codigo: 'PRODUCTO',
-              title: 'Producto',
-              onChanged: (item) {
-                if (item == null) return;
-                producto = item;
-                tasaInteres = item.interes;
-                montoMinimo = item.montoMinimo;
-                montoMaximo = item.montoMaximo;
-                log(item.montoMaximo.toString());
-                log(item.montoMinimo.toString());
-                log(item.interes.toString());
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            CatalogoFrecuenciaPagoDropdown(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
-              onChanged: (item) {
-                if (item == null) return;
-                frecuenciaDePago = item;
-              },
-              title: 'Frecuencia de Pago',
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(3),
-              ],
-              icon: Icon(
-                Icons.price_change,
-                color: AppColors.getPrimaryColor(),
-              ),
-              validator: (value) => ClassValidator.validateRequired(value),
-              title: 'Plazo Solicitud',
-              hintText: 'Ingresa Plazo Solicitud',
-              textInputType: TextInputType.number,
-              isValid: null,
-              onChange: (value) {
-                plazoSolicitud = value;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
-              readOnly: true,
-              onTap: () => selectDate(context),
-              icon: Icon(
-                Icons.payment,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Fecha del Primer Pago de la Solicitud',
-              hintText: fechaPrimerPago?.selectorFormat() ??
-                  'Ingresar fecha primer pago',
-              isValid: null,
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              maxLength: 50,
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              icon: Icon(
-                Icons.remove_red_eye,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Observación',
-              hintText: 'Ingresa Observación',
-              isValid: null,
-              onChange: (value) {
-                observacion = value;
-              },
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  if (double.tryParse(monto ?? '0') == 0) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: 'El monto no puede ser 0',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! <
-                      montoMinimo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! >
-                      montoMaximo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
+                    // FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  isValid: null,
+                  onChange: (value) {
+                    monto = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state
+                          .copyWith(monto: int.tryParse(monto ?? '0') ?? 0),
+                    );
+                    setState(() {});
+                  },
+                ),
+                OutlineTextfieldWidget(
+                  initialValue: fechaDesembolso?.selectorFormat(),
+                  readOnly: true,
+                  icon: Icon(
+                    Icons.price_change,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Fecha de Desembolso',
+                  hintText: fechaDesembolso?.selectorFormat() ??
+                      'Ingresar fecha desembolso',
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaDesembolso?.selectorFormat()),
+                  isValid: null,
+                  onTap: () => selectFechaDesembolso(context),
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(producto?.value),
+                  codigo: 'PRODUCTO',
+                  title: 'Producto',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    producto = item;
+                    tasaInteres = item.interes;
+                    montoMinimo = item.montoMinimo;
+                    montoMaximo = item.montoMaximo;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objProductoId: item.value,
+                        objProductoIdVer: item.name,
+                        prestamoInteres: item.interes,
+                        montoMinimo: item.montoMinimo,
+                        montoMaximo: item.montoMaximo?.toInt(),
+                      ),
+                    );
+                    log(item.montoMaximo.toString());
+                    log(item.montoMinimo.toString());
+                    log(item.interes.toString());
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                CatalogoFrecuenciaPagoDropdown(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    frecuenciaDePago = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objFrecuenciaIdVer: item.nombre,
+                        objFrecuenciaId: item.valor,
+                      ),
+                    );
+                  },
+                  title: 'Frecuencia de Pago',
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(3),
+                  ],
+                  icon: Icon(
+                    Icons.price_change,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  title: 'Plazo Solicitud',
+                  hintText: 'Ingresa Plazo Solicitud',
+                  textInputType: TextInputType.number,
+                  isValid: null,
+                  onChange: (value) {
+                    plazoSolicitud = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                          plazoSolicitud: int.tryParse(plazoSolicitud ?? '0')),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaPrimerPago?.selectorFormat()),
+                  readOnly: true,
+                  onTap: () => selectDate(context),
+                  icon: Icon(
+                    Icons.payment,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Fecha del Primer Pago de la Solicitud',
+                  hintText: fechaPrimerPago?.selectorFormat() ??
+                      'Ingresar fecha primer pago',
+                  isValid: null,
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  maxLength: 50,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  icon: Icon(
+                    Icons.remove_red_eye,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Observación',
+                  hintText: 'Ingresa Observación',
+                  isValid: null,
+                  onChange: (value) {
+                    observacion = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(observacion: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      if (double.tryParse(monto ?? '0') == 0) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: 'El monto no puede ser 0',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      if (double.tryParse(monto ?? '0')! <
+                          montoMinimo!.toDouble()) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      if (double.tryParse(monto ?? '0')! >
+                          montoMaximo!.toDouble()) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
 
-                  calcularCuotaProvider.calcularCantidadCuotas(
-                    fechaDesembolso: fechaDesembolso!,
-                    fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
-                    saldoPrincipal: double.parse(monto ?? '0'),
-                    tasaInteresMensual: tasaInteres ?? 0,
-                  );
-                  CuotaDataDialog(
-                    context: context,
-                    title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
-                    onDone: () {
-                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                            montoMaximo: montoMaximo?.toInt(),
-                            montoMinimo: montoMinimo?.toInt(),
-                            objFrecuenciaIdVer: frecuenciaDePago?.nombre,
-                            objProductoIdVer: producto?.name,
-                            objMonedaIdVer: moneda?.name,
-                            objPropositoIdVer: proposito?.name,
-                            prestamoInteres: tasaInteres,
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
-                            objMonedaId: moneda?.value,
-                            monto: int.tryParse(monto ?? '0'),
-                            objPropositoId: proposito?.value,
-                            objProductoId: producto?.value,
-                            objFrecuenciaId: frecuenciaDePago?.valor,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                            fechaPrimerPagoSolicitud:
-                                fechaPrimerPago?.toUtc().toIso8601String(),
-                            cuota: calcularCuotaProvider
-                                .state.montoPrincipalPrimeraCuota
-                                .toInt(),
-                            observacion: observacion,
+                      calcularCuotaProvider.calcularCantidadCuotas(
+                        fechaDesembolso: fechaDesembolso!,
+                        fechaPrimeraCuota: fechaPrimerPago!,
+                        plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                        frecuenciaPago: frecuenciaDePago?.meses ?? '0',
+                        saldoPrincipal: double.parse(monto ?? '0'),
+                        tasaInteresMensual: tasaInteres ?? 0,
+                      );
+                      CuotaDataDialog(
+                        context: context,
+                        title:
+                            'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                        onDone: () {
+                          cubit.autoSaveHelper.forceSave();
+                          widget.controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
                           );
-                      widget.controller.nextPage(
+                          context.pop();
+                        },
+                      ).showDialog(context);
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
                       );
-                      context.pop();
                     },
-                  ).showDialog(context);
-                },
-              ),
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

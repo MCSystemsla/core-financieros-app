@@ -8,7 +8,6 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -341,29 +340,29 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                     title:
                         'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} $monedaVer',
                     onDone: () {
-                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                            montoMaximo: montoMaximo?.toInt(),
-                            montoMinimo: montoMinimo?.toInt(),
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
-                            objFrecuenciaIdVer: frecuenciaDePagoVer,
-                            objProductoIdVer: productoVer,
-                            objMonedaIdVer: monedaVer,
-                            objPropositoIdVer: propositoVer,
-                            objMonedaId: moneda,
-                            monto: int.tryParse(monto ?? '0'),
-                            objPropositoId: proposito,
-                            objProductoId: producto,
-                            objFrecuenciaId: frecuenciaDePago,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
-                            fechaPrimerPagoSolicitud:
-                                fechaPrimerPago?.toUtc().toIso8601String(),
-                            cuota: calcularCuotaProvider
-                                .state.montoPrincipalPrimeraCuota
-                                .toInt(),
-                            observacion: observacion,
-                            prestamoInteres: tasaInteres,
-                          );
+                      // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      //       montoMaximo: montoMaximo?.toInt(),
+                      //       montoMinimo: montoMinimo?.toInt(),
+                      //       fechaDesembolso:
+                      //           fechaDesembolso?.toUtc().toIso8601String(),
+                      //       objFrecuenciaIdVer: frecuenciaDePagoVer,
+                      //       objProductoIdVer: productoVer,
+                      //       objMonedaIdVer: monedaVer,
+                      //       objPropositoIdVer: propositoVer,
+                      //       objMonedaId: moneda,
+                      //       monto: int.tryParse(monto ?? '0'),
+                      //       objPropositoId: proposito,
+                      //       objProductoId: producto,
+                      //       objFrecuenciaId: frecuenciaDePago,
+                      //       plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
+                      //       fechaPrimerPagoSolicitud:
+                      //           fechaPrimerPago?.toUtc().toIso8601String(),
+                      //       cuota: calcularCuotaProvider
+                      //           .state.montoPrincipalPrimeraCuota
+                      //           .toInt(),
+                      //       observacion: observacion,
+                      //       prestamoInteres: tasaInteres,
+                      //     );
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

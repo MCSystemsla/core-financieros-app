@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -541,43 +540,43 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
 
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objPaisNacimientoIdVer: paisNacimientoVer,
-                        objSexoIdVer: sexoVer,
-                        objEscolaridadIdVer: escolaridadVer,
-                        objPaisEmisorCedulaVer: paisEmisorVer,
-                        objTipoPersonaIdVer: tipoPersonaCreditoVer,
-                        objTipoDocumentoIdVer: tipoDocumentoVer,
-                        localSolicitudId: widget.responseLocalDb.id,
-                        nombre1: nombre1,
-                        nombre2: nombre2,
-                        apellido1: apellido1,
-                        apellido2: apellido2,
-                        tipoPersona: tipoPersonaCredito,
-                        objTipoPersonaId: tipoPersonaCredito,
-                        objTipoDocumentoId: tipoDocumento,
-                        cedula: cedula,
-                        nombrePublico: nombrePublicoController.text.trim(),
-                        objPaisEmisorCedula: paisEmisor,
-                        fechaEmisionCedula:
-                            DateTime.tryParse(fechaEmisionCedula!)!
-                                .toUtc()
-                                .toIso8601String(),
-                        fechaVencimientoCedula:
-                            DateTime.tryParse(fechaVencimientoCedula!)!
-                                .toUtc()
-                                .toIso8601String(),
-                        fechaNacimiento: DateTime.tryParse(fechaNacimiento!)!
-                            .toUtc()
-                            .toIso8601String(),
-                        nacionalidad: nacionalidad,
-                        objPaisNacimientoId: paisNacimiento,
-                        objSexoId: sexo,
-                        telefono: telefonoController.text.trim(),
-                        celular: celularController.text.trim(),
-                        email: emailController.text.trim(),
-                        objEscolaridadId: escolaridad,
-                      );
+                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                  //       objPaisNacimientoIdVer: paisNacimientoVer,
+                  //       objSexoIdVer: sexoVer,
+                  //       objEscolaridadIdVer: escolaridadVer,
+                  //       objPaisEmisorCedulaVer: paisEmisorVer,
+                  //       objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                  //       objTipoDocumentoIdVer: tipoDocumentoVer,
+                  //       localSolicitudId: widget.responseLocalDb.id,
+                  //       nombre1: nombre1,
+                  //       nombre2: nombre2,
+                  //       apellido1: apellido1,
+                  //       apellido2: apellido2,
+                  //       tipoPersona: tipoPersonaCredito,
+                  //       objTipoPersonaId: tipoPersonaCredito,
+                  //       objTipoDocumentoId: tipoDocumento,
+                  //       cedula: cedula,
+                  //       nombrePublico: nombrePublicoController.text.trim(),
+                  //       objPaisEmisorCedula: paisEmisor,
+                  //       fechaEmisionCedula:
+                  //           DateTime.tryParse(fechaEmisionCedula!)!
+                  //               .toUtc()
+                  //               .toIso8601String(),
+                  //       fechaVencimientoCedula:
+                  //           DateTime.tryParse(fechaVencimientoCedula!)!
+                  //               .toUtc()
+                  //               .toIso8601String(),
+                  //       fechaNacimiento: DateTime.tryParse(fechaNacimiento!)!
+                  //           .toUtc()
+                  //           .toIso8601String(),
+                  //       nacionalidad: nacionalidad,
+                  //       objPaisNacimientoId: paisNacimiento,
+                  //       objSexoId: sexo,
+                  //       telefono: telefonoController.text.trim(),
+                  //       celular: celularController.text.trim(),
+                  //       email: emailController.text.trim(),
+                  //       objEscolaridadId: escolaridad,
+                  //     );
 
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

@@ -3,7 +3,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -12,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorOffline5Widget extends StatefulWidget {
@@ -268,22 +266,22 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        espeps: esPeps == 'input.yes'.tr(),
-                        nombreDeEntidadPeps: nombreEntidadPeps,
-                        paisPeps: paisPeps,
-                        periodoPeps: periodoPeps,
-                        cargoOficialPeps: cargoOficialPeps,
-                        tieneFamiliarPeps:
-                            tieneFamiliarPeps == 'input.yes'.tr(),
-                        nombreFamiliar: nombreFamiliarPeps,
-                        parentescoFamiliarPeps2: nombreFamiliarPeps,
-                        cargoFamiliarPeps2: cargoParentesco,
-                        nombreFamiliarPeps2: nombreFamiliarPeps2,
-                        periodoPeps2: periodoPeps2,
-                        paisPeps2: paisPeps2,
-                        nombreEntidadPeps2: nombreEntidadPeps2,
-                      );
+                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                  //       espeps: esPeps == 'input.yes'.tr(),
+                  //       nombreDeEntidadPeps: nombreEntidadPeps,
+                  //       paisPeps: paisPeps,
+                  //       periodoPeps: periodoPeps,
+                  //       cargoOficialPeps: cargoOficialPeps,
+                  //       tieneFamiliarPeps:
+                  //           tieneFamiliarPeps == 'input.yes'.tr(),
+                  //       nombreFamiliar: nombreFamiliarPeps,
+                  //       parentescoFamiliarPeps2: nombreFamiliarPeps,
+                  //       cargoFamiliarPeps2: cargoParentesco,
+                  //       nombreFamiliarPeps2: nombreFamiliarPeps2,
+                  //       periodoPeps2: periodoPeps2,
+                  //       paisPeps2: paisPeps2,
+                  //       nombreEntidadPeps2: nombreEntidadPeps2,
+                  //     );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

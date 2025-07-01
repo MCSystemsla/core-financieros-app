@@ -3,7 +3,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -12,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorOffline3Widget extends StatefulWidget {
@@ -279,22 +277,22 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objEstadoCivilIdVer: objEstadoCivilIdVer,
-                        objEstadoCivilId: estadoCivil,
-                        nacionalidadConyugue: nacionalidadConyuge,
-                        nombreConyugue: nombreConyuge,
-                        trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),
-                        trabajoConyugue: trabajoConyuge,
-                        direccionTrabajoConyugue: direccionTrabajoConyuge,
-                        telefonoTrabajoConyugue: telefonoTrabajoConyuge,
-                        cantidadHijos: int.tryParse(cantidadHijos ?? ''),
-                        esFamiliarEmpleado:
-                            esFamiliarEmpleado == 'input.yes'.tr(),
-                        nombreFamiliar: nombreFamiliarEmpleado,
-                        cedulaFamiliar: cedulaFamiliarEmpleado,
-                        personasACargo: int.tryParse(personasACargo ?? ''),
-                      );
+                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                  //       objEstadoCivilIdVer: objEstadoCivilIdVer,
+                  //       objEstadoCivilId: estadoCivil,
+                  //       nacionalidadConyugue: nacionalidadConyuge,
+                  //       nombreConyugue: nombreConyuge,
+                  //       trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),
+                  //       trabajoConyugue: trabajoConyuge,
+                  //       direccionTrabajoConyugue: direccionTrabajoConyuge,
+                  //       telefonoTrabajoConyugue: telefonoTrabajoConyuge,
+                  //       cantidadHijos: int.tryParse(cantidadHijos ?? ''),
+                  //       esFamiliarEmpleado:
+                  //           esFamiliarEmpleado == 'input.yes'.tr(),
+                  //       nombreFamiliar: nombreFamiliarEmpleado,
+                  //       cedulaFamiliar: cedulaFamiliarEmpleado,
+                  //       personasACargo: int.tryParse(personasACargo ?? ''),
+                  //     );
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

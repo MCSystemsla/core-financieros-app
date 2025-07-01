@@ -300,11 +300,6 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     );
   }
 
-  void onNombreChanged(String value) {
-    emit(state.copyWith(nombre1: value));
-    autoSaveHelper.trigger();
-  }
-
   void onFieldChanged(SolicitudNuevaMenorState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();

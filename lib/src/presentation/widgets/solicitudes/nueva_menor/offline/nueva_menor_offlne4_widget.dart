@@ -3,7 +3,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -12,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorOfflne4Widget extends StatefulWidget {
@@ -554,41 +552,41 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objMunicipioNegocioIdVer: municipioNegocioVer,
-                        objRubroActividadPredominanteVer:
-                            objRubroActividadPredominanteVer,
-                        objRubroActividad3Ver: rubroActividad3Ver,
-                        objRubroActividad2Ver: rubroActividad2Ver,
-                        objRubroActividadVer: rubroActividadVer,
-                        objActividadPredominanteVer: actividadPredominanteVer,
-                        objActividadId2Ver: actividadEconomica2Ver,
-                        objActividadId1Ver: actividad1Ver,
-                        objActividadIdVer: actividadVer,
-                        objSectorIdVer: sectorEconomicoVer,
-                        objCondicionNegocioIdVer: condicionNegocioVer,
-                        profesion: profesion,
-                        ocupacion: ocupacion,
-                        nombreNegocio: nombreNegocio,
-                        objCondicionNegocioId: condicionNegocio,
-                        tiempoFuncionamientoNegocio: funcionamientoNegocio,
-                        objActividadPredominante: actividadPredominante,
-                        objRubroActividad: rubroActividad,
-                        objRubroActividad2: rubroActividad2,
-                        objRubroActividad3: rubroActividad3,
-                        objActividadId2: actividadEconomica2,
-                        objSectorId: sectorEconomico,
-                        // sectorEconomico: sectorEconomico2,
-                        horarioTrabajo: horarioTrabajoString,
-                        horarioVisita: horarioVisitaString,
-                        objMunicipioNegocioId: municipioNegocio,
-                        barrioNegocio: barrioNegocio,
-                        direccionNegocio: direccionNegocio,
-                        objActividadId: actividad,
-                        objActividadId1: actividad1,
-                        objRubroActividadPredominante:
-                            objRubroActividadPredominante,
-                      );
+                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                  //       objMunicipioNegocioIdVer: municipioNegocioVer,
+                  //       objRubroActividadPredominanteVer:
+                  //           objRubroActividadPredominanteVer,
+                  //       objRubroActividad3Ver: rubroActividad3Ver,
+                  //       objRubroActividad2Ver: rubroActividad2Ver,
+                  //       objRubroActividadVer: rubroActividadVer,
+                  //       objActividadPredominanteVer: actividadPredominanteVer,
+                  //       objActividadId2Ver: actividadEconomica2Ver,
+                  //       objActividadId1Ver: actividad1Ver,
+                  //       objActividadIdVer: actividadVer,
+                  //       objSectorIdVer: sectorEconomicoVer,
+                  //       objCondicionNegocioIdVer: condicionNegocioVer,
+                  //       profesion: profesion,
+                  //       ocupacion: ocupacion,
+                  //       nombreNegocio: nombreNegocio,
+                  //       objCondicionNegocioId: condicionNegocio,
+                  //       tiempoFuncionamientoNegocio: funcionamientoNegocio,
+                  //       objActividadPredominante: actividadPredominante,
+                  //       objRubroActividad: rubroActividad,
+                  //       objRubroActividad2: rubroActividad2,
+                  //       objRubroActividad3: rubroActividad3,
+                  //       objActividadId2: actividadEconomica2,
+                  //       objSectorId: sectorEconomico,
+                  //       // sectorEconomico: sectorEconomico2,
+                  //       horarioTrabajo: horarioTrabajoString,
+                  //       horarioVisita: horarioVisitaString,
+                  //       objMunicipioNegocioId: municipioNegocio,
+                  //       barrioNegocio: barrioNegocio,
+                  //       direccionNegocio: direccionNegocio,
+                  //       objActividadId: actividad,
+                  //       objActividadId1: actividad1,
+                  //       objRubroActividadPredominante:
+                  //           objRubroActividadPredominante,
+                  //     );
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

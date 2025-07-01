@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -19,7 +18,6 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 class NuevaMenorOffline2Widget extends StatefulWidget {
@@ -279,25 +277,25 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
                       if (!formKey.currentState!.validate()) return;
-                      final Position? position =
-                          state is OnGeolocationSuccess ? state.position : null;
-                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                            objCondicionCasaIdVer: objCondicionCasaIdVer,
-                            objMunicipioCasaIdVer: objMunicipioCasaIdVer,
-                            objDepartamentoCasaIdVer: objDepartamentoCasaIdVer,
-                            objPaisCasaIdVer: objPaisCasaIdVer,
-                            barrioCasa: barrioCasa,
-                            objPaisCasaId: paisDomicilio,
-                            objDepartamentoCasaId: departamentoDomicilio,
-                            objMunicipioCasaId: municipioDomicilio,
-                            objCondicionCasaId: condicionCasa,
-                            anosResidirCasa:
-                                int.tryParse(anosResidirCasa ?? ''),
-                            ubicacion: comunidad,
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
-                            direccionCasa: direccionCasa,
-                          );
+                      // final Position? position =
+                      //     state is OnGeolocationSuccess ? state.position : null;
+                      // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                      //       objCondicionCasaIdVer: objCondicionCasaIdVer,
+                      //       objMunicipioCasaIdVer: objMunicipioCasaIdVer,
+                      //       objDepartamentoCasaIdVer: objDepartamentoCasaIdVer,
+                      //       objPaisCasaIdVer: objPaisCasaIdVer,
+                      //       barrioCasa: barrioCasa,
+                      //       objPaisCasaId: paisDomicilio,
+                      //       objDepartamentoCasaId: departamentoDomicilio,
+                      //       objMunicipioCasaId: municipioDomicilio,
+                      //       objCondicionCasaId: condicionCasa,
+                      //       anosResidirCasa:
+                      //           int.tryParse(anosResidirCasa ?? ''),
+                      //       ubicacion: comunidad,
+                      //       ubicacionLatitud: position?.latitude.toString(),
+                      //       ubicacionLongitud: position?.longitude.toString(),
+                      //       direccionCasa: direccionCasa,
+                      //     );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

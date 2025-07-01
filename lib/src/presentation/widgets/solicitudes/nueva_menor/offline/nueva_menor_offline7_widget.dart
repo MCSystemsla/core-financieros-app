@@ -195,19 +195,19 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                        objParentescoBeneficiarioSeguroId1Ver: parentescoVer,
-                        beneficiarioSeguro: beneficiarioSeguro,
-                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco,
-                        beneficiarioSeguro1: beneficiarioSeguro1,
-                        cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
-                        objParentescoBeneficiarioSeguroId1:
-                            parentescoBeneficiarioSeguro1,
-                        telefonoBeneficiario: telefonoBeneficiario,
-                        telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
-                        isDone: true,
-                      );
+                  // context.read<SolicitudNuevaMenorCubit>().saveAnswers(
+                  //       objParentescoBeneficiarioSeguroId1Ver: parentescoVer,
+                  //       beneficiarioSeguro: beneficiarioSeguro,
+                  //       cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                  //       objParentescoBeneficiarioSeguroId: parentesco,
+                  //       beneficiarioSeguro1: beneficiarioSeguro1,
+                  //       cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
+                  //       objParentescoBeneficiarioSeguroId1:
+                  //           parentescoBeneficiarioSeguro1,
+                  //       telefonoBeneficiario: telefonoBeneficiario,
+                  //       telefonoBeneficiarioSeguro1: telefonoBeneficiario1,
+                  //       isDone: true,
+                  //     );
                   if (!isConnected) {
                     CustomAlertDialog(
                       context: context,

@@ -36,34 +36,6 @@ class NuevaMenorActividadWidgetView extends StatefulWidget {
 class _NuevaMenorActividadWidgetViewState
     extends State<NuevaMenorActividadWidgetView> {
   @override
-  Widget build(BuildContext context) {
-    return _FormContent(
-      controller: widget.pageController,
-    );
-  }
-}
-
-class _FormContent extends StatefulWidget {
-  final PageController controller;
-  const _FormContent({required this.controller});
-
-  @override
-  State<_FormContent> createState() => __FormContentState();
-}
-
-class __FormContentState extends State<_FormContent> {
-  String? beneficiarioSeguro;
-  String? cedulaBeneficiarioSeguro;
-  Item? parentesco;
-  String? beneficiarioSeguro1;
-  String? cedulaBeneficiarioSeguro1;
-  String? parentescoBeneficiarioSeguro1;
-  String? telefonoBeneficiario;
-  String? telefonoBeneficiario1;
-  final formKey = GlobalKey<FormState>();
-  String telefonoBeneficiarioCode = '+505';
-  String telefonoBeneficiario1Code = '+505';
-  @override
   void initState() {
     super.initState();
     initFunctions();
@@ -77,6 +49,52 @@ class __FormContentState extends State<_FormContent> {
   Widget build(BuildContext context) {
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
+        return _FormContent(
+          controller: widget.pageController,
+          state: state,
+        );
+      },
+    );
+  }
+}
+
+class _FormContent extends StatefulWidget {
+  final PageController controller;
+  final InternetConnectionState state;
+  const _FormContent({required this.controller, required this.state});
+
+  @override
+  State<_FormContent> createState() => __FormContentState();
+}
+
+class __FormContentState extends State<_FormContent> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
+          () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                isDone: !widget.state.isConnected,
+              ),
+        );
+  }
+
+  String? beneficiarioSeguro;
+  String? cedulaBeneficiarioSeguro;
+  Item? parentesco;
+  String? beneficiarioSeguro1;
+  String? cedulaBeneficiarioSeguro1;
+  String? parentescoBeneficiarioSeguro1;
+  String? telefonoBeneficiario;
+  String? telefonoBeneficiario1;
+  final formKey = GlobalKey<FormState>();
+  String telefonoBeneficiarioCode = '+505';
+  String telefonoBeneficiario1Code = '+505';
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
+      builder: (context, state) {
+        final cubit = context.read<SolicitudNuevaMenorCubit>();
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -99,6 +117,9 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     beneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(beneficiarioSeguro: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -123,6 +144,10 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   onChange: (value) {
                     cedulaBeneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () =>
+                          cubit.state.copyWith(cedulaBeneficiarioSeguro: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -134,6 +159,12 @@ class __FormContentState extends State<_FormContent> {
                   onChanged: (item) {
                     if (item == null) return;
                     parentesco = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objParentescoBeneficiarioSeguroId: item.value,
+                        objParentescoBeneficiarioSeguroIdVer: item.name,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -159,6 +190,9 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     telefonoBeneficiario = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(telefonoBeneficiario: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -176,6 +210,9 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     beneficiarioSeguro1 = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(beneficiarioSeguro1: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -193,6 +230,10 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     cedulaBeneficiarioSeguro1 = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state
+                          .copyWith(cedulaBeneficiarioSeguro1: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -202,6 +243,12 @@ class __FormContentState extends State<_FormContent> {
                   onChanged: (item) {
                     if (item == null) return;
                     parentescoBeneficiarioSeguro1 = item.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objParentescoBeneficiarioSeguroId1: item.value,
+                        objParentescoBeneficiarioSeguroId1Ver: item.name,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -227,6 +274,10 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     telefonoBeneficiario1 = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state
+                          .copyWith(telefonoBeneficiarioSeguro1: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -238,34 +289,8 @@ class __FormContentState extends State<_FormContent> {
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                            objParentescoBeneficiarioSeguroId1Ver:
-                                parentesco?.name,
-                            beneficiarioSeguro: beneficiarioSeguro,
-                            cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                            objParentescoBeneficiarioSeguroId:
-                                parentesco?.value,
-                            beneficiarioSeguro1: beneficiarioSeguro1,
-                            cedulaBeneficiarioSeguro1:
-                                cedulaBeneficiarioSeguro1,
-                            objParentescoBeneficiarioSeguroId1:
-                                parentescoBeneficiarioSeguro1,
-                            telefonoBeneficiario: telefonoBeneficiario == null
-                                ? ''
-                                : telefonoBeneficiarioCode +
-                                    (telefonoBeneficiario ?? '')
-                                        .trim()
-                                        .replaceAll('-', ''),
-                            telefonoBeneficiarioSeguro1:
-                                telefonoBeneficiario1 == null
-                                    ? ''
-                                    : telefonoBeneficiario1Code +
-                                        (telefonoBeneficiario1 ?? '')
-                                            .trim()
-                                            .replaceAll('-', ''),
-                            isDone: !state.isConnected,
-                          );
-                      if (state.connectionStatus ==
+
+                      if (widget.state.connectionStatus ==
                           ConnectionStatus.disconnected) {
                         context.read<SolicitudNuevaMenorCubit>().saveAnswers(
                               errorMsg:

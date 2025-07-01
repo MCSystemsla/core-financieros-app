@@ -50,7 +50,7 @@ class CrearSolicitudScreen extends StatelessWidget {
           create: (ctx) => SolicitudNuevaMenorCubit(
             repository,
             localDbProvider,
-          ),
+          )..initAutoSave(),
         ),
         BlocProvider(
           create: (ctx) => SolicitudReprestamoCubit(
