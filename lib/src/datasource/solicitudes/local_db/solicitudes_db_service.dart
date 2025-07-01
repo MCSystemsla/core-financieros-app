@@ -48,6 +48,7 @@ class ObjectBoxService {
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
+    // solicitudesResponsesBox.removeAll();
     // catalogoParametroBox.removeAll();
   }
 

@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -130,6 +131,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             children: [
               const Gap(20),
               InputSimple(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: const Icon(
                   Icons.person_2,
                   size: 20,
@@ -260,18 +264,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
 
-                      // await internetConectionProvider
-                      //     .getInternetStatusConnection();
-                      // if (!mounted) return;
-                      // if (!context.mounted) return;
-                      // if (!internetConectionProvider.state.isConnected) {
-                      //   if (!context.mounted) return;
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     noInternetConnectionSnackbar(),
-                      //   );
-                      //   context.pushReplacement('/');
-                      //   return;
-                      // }
                       if (captchaToken == null) {
                         CustomAlertDialog(
                           context: context,
@@ -282,7 +274,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                       }
                       if (_formKey.currentState?.validate() ?? false) {
                         context.read<AuthCubit>().login(
-                              userName: username!.toUpperCase().trim(),
+                              userName: username!.trim(),
                               password: password!.trim(),
                               dbName: branchTeam!,
                             );

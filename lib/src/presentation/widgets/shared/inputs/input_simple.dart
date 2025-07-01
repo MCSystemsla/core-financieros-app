@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 class InputSimple extends StatefulWidget {
@@ -13,10 +14,12 @@ class InputSimple extends StatefulWidget {
   final bool isPasswordField;
   final Widget? suffixIcon;
   final Icon? icon;
+  final List<TextInputFormatter>? inputFormatters;
 
   const InputSimple({
     required this.title,
     this.initialValue,
+    this.inputFormatters = const [],
     this.activeColor = true,
     this.onChanged,
     this.enabled = false,
@@ -66,6 +69,7 @@ class InputSimpleState extends State<InputSimple> {
             autocorrect: false,
             initialValue: widget.initialValue,
             enabled: widget.enabled,
+            inputFormatters: widget.inputFormatters,
             onTapOutside: (event) {
               setState(() {
                 FocusScope.of(context).unfocus();

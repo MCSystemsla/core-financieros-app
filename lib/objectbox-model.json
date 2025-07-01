@@ -189,7 +189,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "137:5082510137953328148",
+      "lastPropertyId": "138:5577417764548015081",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -877,6 +877,11 @@
           "id": "137:5082510137953328148",
           "name": "montoMaximo",
           "type": 6
+        },
+        {
+          "id": "138:5577417764548015081",
+          "name": "uuid",
+          "type": 9
         }
       ],
       "relations": []

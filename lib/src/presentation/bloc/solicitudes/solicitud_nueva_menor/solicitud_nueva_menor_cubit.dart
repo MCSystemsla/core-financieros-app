@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/autosave/autosave_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 part 'solicitud_nueva_menor_state.dart';
 
@@ -15,6 +17,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
   final ObjectBoxService localDbProvider;
   SolicitudNuevaMenorCubit(this.repository, this.localDbProvider)
       : super(SolicitudNuevaMenorInitial());
+  late final AutoSaveResponseLocalDb autoSaveHelper;
 
   Future<void> createSolicitudNuevaMenor() async {
     try {
@@ -131,6 +134,186 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       saveAnswers(errorMsg: e.toString());
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void initAutoSave() {
+    final uuid = const Uuid().v4();
+    emit(state.copyWith(uuid: uuid));
+
+    autoSaveHelper = AutoSaveResponseLocalDb(
+      box: localDbProvider.solicitudesResponsesBox,
+      buildModel: _buildModel,
+      uuid: uuid,
+      onSaved: (m) {
+        emit(state.copyWith(
+          idLocalResponse: m.id,
+          uuid: m.uuid,
+        ));
+      },
+    );
+  }
+
+  ResponseLocalDb _buildModel() {
+    return ResponseLocalDb(
+      id: state.idLocalResponse,
+      uuid: state.uuid,
+      montoMaximo: state.montoMaximo,
+      montoMinimo: state.montoMinimo,
+      hasVerified: state.hasVerified,
+      errorMsg: state.errorMsg,
+      isDone: state.isDone,
+      createdAt: DateTime.now(),
+      objOrigenSolicitudId: state.objOrigenSolicitudId,
+      horarioTrabajo: state.horarioTrabajo,
+      horarioVisita: state.horarioVisita,
+      personasACargo: state.personasACargo,
+      objEstadoCivilId: state.objEstadoCivilId,
+      nombreConyugue: state.nombreConyugue,
+      trabajaConyugue: state.trabajaConyugue,
+      trabajoConyugue: state.trabajoConyugue,
+      direccionTrabajoConyugue: state.direccionTrabajoConyugue,
+      telefonoTrabajoConyugue: state.telefonoTrabajoConyugue,
+      beneficiarioSeguro: state.beneficiarioSeguro,
+      cedulaBeneficiarioSeguro: state.cedulaBeneficiarioSeguro,
+      objParentescoBeneficiarioSeguroId:
+          state.objParentescoBeneficiarioSeguroId,
+      beneficiarioSeguro1: state.beneficiarioSeguro1,
+      cedulaBeneficiarioSeguro1: state.cedulaBeneficiarioSeguro1,
+      objParentescoBeneficiarioSeguroId1:
+          state.objParentescoBeneficiarioSeguroId1,
+      objEstadoSolicitudId: state.objEstadoSolicitudId,
+      objOficialCreditoId: state.objOficialCreditoId,
+      objProductoId: state.objProductoId,
+      observacion: state.observacion,
+      sucursal: state.sucursal,
+      ubicacionLongitud: state.ubicacionLongitud,
+      ubicacionLatitud: state.ubicacionLatitud,
+      ubicacionGradosLongitud: state.ubicacionGradosLongitud,
+      ubicacionGradosLatitud: state.ubicacionGradosLatitud,
+      objEscolaridadId: state.objEscolaridadId,
+      cantidadHijos: state.cantidadHijos,
+      nombrePublico: state.nombrePublico,
+      objSexoId: state.objSexoId,
+      objPaisNacimientoId: state.objPaisNacimientoId,
+      nacionalidadConyugue: state.nacionalidadConyugue,
+      database: state.database,
+      ubicacion: state.ubicacion,
+      espeps: state.espeps,
+      nombreDeEntidadPeps: state.nombreDeEntidadPeps,
+      paisPeps: state.paisPeps,
+      periodoPeps: state.periodoPeps,
+      cargoOficialPeps: state.cargoOficialPeps,
+      tieneFamiliarPeps: state.tieneFamiliarPeps,
+      nombreFamiliarPeps2: state.nombreFamiliarPeps2,
+      parentescoFamiliarPeps2: state.parentescoFamiliarPeps2,
+      cargoFamiliarPeps2: state.cargoFamiliarPeps2,
+      nombreEntidadPeps2: state.nombreEntidadPeps2,
+      periodoPeps2: state.periodoPeps2,
+      paisPeps2: state.paisPeps2,
+      objRubroActividad: state.objRubroActividad,
+      objActividadPredominante: state.objActividadPredominante,
+      esFamiliarEmpleado: state.esFamiliarEmpleado,
+      nombreFamiliar: state.nombreFamiliar,
+      cedulaFamiliar: state.cedulaFamiliar,
+      objTipoDocumentoId: state.objTipoDocumentoId,
+      objRubroActividad2: state.objRubroActividad2,
+      objRubroActividad3: state.objRubroActividad3,
+      objRubroActividadPredominante: state.objRubroActividadPredominante,
+      tipoPersona: state.tipoPersona,
+      objTipoPersonaId: state.objTipoPersonaId,
+      telefonoBeneficiario: state.telefonoBeneficiario,
+      telefonoBeneficiarioSeguro1: state.telefonoBeneficiarioSeguro1,
+      plazoSolicitud: state.plazoSolicitud,
+      fechaPrimerPagoSolicitud: state.fechaPrimerPagoSolicitud,
+      nombre1: state.nombre1,
+      nombre2: state.nombre2,
+      apellido1: state.apellido1,
+      apellido2: state.apellido2,
+      cedula: state.cedula,
+      objPaisEmisorCedula: state.objPaisEmisorCedula,
+      fechaEmisionCedula: state.fechaEmisionCedula,
+      fechaVencimientoCedula: state.fechaVencimientoCedula,
+      fechaNacimiento: state.fechaNacimiento,
+      telefono: state.telefono,
+      celular: state.celular,
+      direccionCasa: state.direccionCasa,
+      barrioCasa: state.barrioCasa,
+      objMunicipioCasaId: state.objMunicipioCasaId,
+      objDepartamentoCasaId: state.objDepartamentoCasaId,
+      objPaisCasaId: state.objPaisCasaId,
+      profesion: state.profesion,
+      ocupacion: state.ocupacion,
+      nacionalidad: state.nacionalidad,
+      objCondicionCasaId: state.objCondicionCasaId,
+      anosResidirCasa: state.anosResidirCasa,
+      email: state.email,
+      monto: state.monto,
+      objMonedaId: state.objMonedaId,
+      objPropositoId: state.objPropositoId,
+      objFrecuenciaId: state.objFrecuenciaId,
+      cuota: state.cuota,
+      objActividadId: state.objActividadId,
+      objActividadId1: state.objActividadId1,
+      objActividadId2: state.objActividadId2,
+      objSectorId: state.objSectorId,
+      nombreNegocio: state.nombreNegocio,
+      tiempoFuncionamientoNegocio: state.tiempoFuncionamientoNegocio,
+      direccionNegocio: state.direccionNegocio,
+      barrioNegocio: state.barrioNegocio,
+      objMunicipioNegocioId: state.objMunicipioNegocioId,
+      objCondicionNegocioId: state.objCondicionNegocioId,
+      fechaDesembolso: state.fechaDesembolso,
+      prestamoInteres: state.prestamoInteres,
+      objOrigenSolicitudIdVer: state.objOrigenSolicitudIdVer,
+      objPaisEmisorCedulaVer: state.objPaisEmisorCedulaVer,
+      objMunicipioCasaIdVer: state.objMunicipioCasaIdVer,
+      objDepartamentoCasaIdVer: state.objDepartamentoCasaIdVer,
+      objPaisCasaIdVer: state.objPaisCasaIdVer,
+      objCondicionCasaIdVer: state.objCondicionCasaIdVer,
+      objMonedaIdVer: state.objMonedaIdVer,
+      objPropositoIdVer: state.objPropositoIdVer,
+      objFrecuenciaIdVer: state.objFrecuenciaIdVer,
+      objActividadIdVer: state.objActividadIdVer,
+      objActividadId1Ver: state.objActividadId1Ver,
+      objActividadId2Ver: state.objActividadId2Ver,
+      objSectorIdVer: state.objSectorIdVer,
+      objMunicipioNegocioIdVer: state.objMunicipioNegocioIdVer,
+      objCondicionNegocioIdVer: state.objCondicionNegocioIdVer,
+      objEstadoCivilIdVer: state.objEstadoCivilIdVer,
+      objParentescoBeneficiarioSeguroIdVer:
+          state.objParentescoBeneficiarioSeguroIdVer,
+      objParentescoBeneficiarioSeguroId1Ver:
+          state.objParentescoBeneficiarioSeguroId1Ver,
+      objEstadoSolicitudIdVer: state.objEstadoSolicitudIdVer,
+      objOficialCreditoIdVer: state.objOficialCreditoIdVer,
+      objProductoIdVer: state.objProductoIdVer,
+      objEscolaridadIdVer: state.objEscolaridadIdVer,
+      objSexoIdVer: state.objSexoIdVer,
+      objPaisNacimientoIdVer: state.objPaisNacimientoIdVer,
+      objRubroActividadVer: state.objRubroActividadVer,
+      objActividadPredominanteVer: state.objActividadPredominanteVer,
+      objTipoDocumentoIdVer: state.objTipoDocumentoIdVer,
+      objRubroActividad2Ver: state.objRubroActividad2Ver,
+      objRubroActividad3Ver: state.objRubroActividad3Ver,
+      objRubroActividadPredominanteVer: state.objRubroActividadPredominanteVer,
+      objTipoPersonaIdVer: state.objTipoPersonaIdVer,
+    );
+  }
+
+  void onNombreChanged(String value) {
+    emit(state.copyWith(nombre1: value));
+    autoSaveHelper.trigger();
+  }
+
+  void onFieldChanged(SolicitudNuevaMenorState Function() copyWithFn) {
+    emit(copyWithFn());
+    autoSaveHelper.trigger();
+  }
+
+  @override
+  Future<void> close() {
+    autoSaveHelper.dispose();
+    return super.close();
   }
 
   void saveAnswers({
@@ -426,6 +609,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       localDbProvider.updateSolicitudNuevaMenorById(
         id: state.idLocalResponse,
         responseLocalDb: ResponseLocalDb(
+          id: 0,
           montoMaximo: state.montoMaximo,
           montoMinimo: state.montoMinimo,
           hasVerified: state.hasVerified,
@@ -574,6 +758,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     log('Creando uno nuevo');
     final resp = localDbProvider.saveSolicitudesNuevaMenorResponses(
       responseLocalDb: ResponseLocalDb(
+        id: 0,
         montoMaximo: state.montoMaximo,
         montoMinimo: state.montoMinimo,
         hasVerified: state.hasVerified,

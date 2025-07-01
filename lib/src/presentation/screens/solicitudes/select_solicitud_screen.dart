@@ -128,7 +128,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+        context.watch<InternetConnectionCubit>().state.connectionStatus;
     return Row(
       children: [
         const Gap(10),
@@ -137,7 +137,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
             svgPath: ImageAsset.nuevaMenorBg3,
             title: 'Represtamo',
             onPressed: () {
-              if (!isConnected) {
+              if (isConnected != ConnectionStatus.connected) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

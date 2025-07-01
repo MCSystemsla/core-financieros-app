@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isConnected = context.read<InternetConnectionCubit>().state;
+    final isConnected = context.watch<InternetConnectionCubit>().state;
     final shouldSync = CatalogoSync.needToSync();
     if (shouldSync && isConnected.isConnected) {
       return DownsloadingCatalogosWidget(
@@ -53,23 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
         return PopScope(
           canPop: false,
           child: Scaffold(
-            floatingActionButton: isConnected.isConnected
-                ? SlideInUp(
-                    child: FloatingActionButton.extended(
-                      label: const Row(
-                        children: [
-                          Icon(Icons.update_rounded),
-                          Gap(5),
-                          Text('Sincronizar'),
-                        ],
-                      ),
-                      onPressed: () => {
-                        context.pushTransparentRoute(
-                            const DownsloadingCatalogosWidget()),
-                      },
-                    ),
-                  )
-                : const SizedBox(),
+            floatingActionButton:
+                isConnected.connectionStatus == ConnectionStatus.connected
+                    ? SlideInUp(
+                        child: FloatingActionButton.extended(
+                          label: const Row(
+                            children: [
+                              Icon(Icons.update_rounded),
+                              Gap(5),
+                              Text('Sincronizar'),
+                            ],
+                          ),
+                          onPressed: () => {
+                            context.pushTransparentRoute(
+                                const DownsloadingCatalogosWidget()),
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
             body: FadeIn(
               child: const Column(
                 children: [
