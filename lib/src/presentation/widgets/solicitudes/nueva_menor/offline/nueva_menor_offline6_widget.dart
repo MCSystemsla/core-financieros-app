@@ -2,6 +2,8 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -56,6 +58,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   double? montoMaximo;
   String? frecuenciaPagoMeses;
   final formKey = GlobalKey<FormState>();
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -74,8 +77,16 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaPrimerPago = picked;
-
       context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                   fechaPrimerPagoSolicitud:
@@ -87,6 +98,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
@@ -96,7 +109,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -104,10 +117,19 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaDesembolso = picked;
       context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-                  fechaDesembolso: fechaDesembolso?.toIso8601String(),
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -197,6 +219,11 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                    CurrencyInputFormatter(),
+                  ],
                   initialValue: monto,
                   icon: Icon(
                     Icons.price_change,
@@ -234,7 +261,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  hintText: propositoVer ?? 'Selecciona una opcion',
+                  hintText: propositoVer ?? 'input.select_option'.tr(),
                   codigo: 'DESTINOCREDITO',
                   title: 'Proposito',
                   onChanged: (item) {
@@ -254,7 +281,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 SearchDropdownWidget(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: productoVer ?? 'Selecciona una opcion',
+                  hintText: productoVer ?? 'input.select_option'.tr(),
                   codigo: 'PRODUCTO',
                   title: 'Producto',
                   onChanged: (item) {
@@ -342,6 +369,9 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: observacion,
                   icon: Icon(
                     Icons.remove_red_eye,
@@ -398,6 +428,21 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
+
+                      final plazoSolicitudMount =
+                          (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                      final frecuenciaPagoMesesMount =
+                          (double.tryParse(frecuenciaPagoMeses ?? '0') ?? 0);
+                      if (plazoSolicitudMount < frecuenciaPagoMesesMount) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+
                       calcularCuotaProvider.calcularCantidadCuotas(
                         fechaDesembolso: fechaDesembolso!,
                         fechaPrimeraCuota: fechaPrimerPago!,

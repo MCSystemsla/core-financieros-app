@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -232,8 +234,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
               children: [
                 const Gap(20),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: profesion,
-                  maxLength: 70,
+                  maxLength: 40,
                   icon: Icon(
                     Icons.work,
                     color: AppColors.getPrimaryColor(),
@@ -253,8 +258,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: ocupacion,
-                  maxLength: 70,
+                  maxLength: 40,
                   icon: Icon(
                     Icons.person_sharp,
                     color: AppColors.getPrimaryColor(),
@@ -274,8 +282,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: nombreNegocio,
-                  maxLength: 50,
+                  maxLength: 40,
                   icon: Icon(
                     Icons.business,
                     color: AppColors.getPrimaryColor(),
@@ -313,8 +324,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(3),
+                  ],
                   initialValue: funcionamientoNegocio,
-                  maxLength: 50,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(
                     Icons.access_time,
@@ -648,8 +662,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: barrioNegocio,
-                  maxLength: 50,
+                  maxLength: 40,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(
                     Icons.business,
@@ -669,8 +686,11 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: direccionNegocio,
-                  maxLength: 50,
+                  maxLength: 40,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(
                     Icons.location_on_rounded,

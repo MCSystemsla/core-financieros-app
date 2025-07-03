@@ -545,6 +545,7 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
   @override
   void initState() {
     super.initState();
+
     tipoDocumento = widget.tipoDocumento;
     cedulaController = widget.cedula;
     paisEmisor = widget.paisEmisor;
@@ -561,16 +562,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                 objPaisEmisorCedulaVer: paisEmisor?.name,
               ),
         );
-    final localDpProvider = global<ObjectBoxService>();
-    final cedulaPath = context.read<SolicitudNuevaMenorCubit>().state;
-    localDpProvider.saveCedulaClient(
-      cedulaClient: CedulaClientDb(
-        typeSolicitud: 'NUEVA_MENOR',
-        cedula: cedulaController?.trim(),
-        imageFrontCedula: cedulaPath.cedulaFrontPath,
-        imageBackCedula: cedulaPath.cedulaBackPath,
-      ),
-    );
   }
 
   Future<void> selectDate(BuildContext context, String tipoDocumeto) async {
@@ -691,6 +682,9 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
 
   @override
   Widget build(BuildContext context) {
+    final localDpProvider = global<ObjectBoxService>();
+    final cedulaPath = context.read<SolicitudNuevaMenorCubit>().state;
+
     super.build(context);
     return BlocBuilder<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
       builder: (context, state) {
@@ -1100,7 +1094,14 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-
+                      localDpProvider.saveCedulaClient(
+                        cedulaClient: CedulaClientDb(
+                          typeSolicitud: 'NUEVA_MENOR',
+                          cedula: cedulaController?.trim(),
+                          imageFrontCedula: cedulaPath.cedulaFrontPath,
+                          imageBackCedula: cedulaPath.cedulaBackPath,
+                        ),
+                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

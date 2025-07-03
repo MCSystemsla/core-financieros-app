@@ -1297,7 +1297,7 @@
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "148:1220575747707855763",
+      "lastPropertyId": "149:7899239210689346690",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -2039,6 +2039,11 @@
         {
           "id": "148:1220575747707855763",
           "name": "objParentescoFamiliarCercanoIdVer",
+          "type": 9
+        },
+        {
+          "id": "149:7899239210689346690",
+          "name": "uuid",
           "type": 9
         }
       ],

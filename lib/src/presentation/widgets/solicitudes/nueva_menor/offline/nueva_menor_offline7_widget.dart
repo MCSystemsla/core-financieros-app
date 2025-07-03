@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/nueva_menor/sending/sending_form_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -92,6 +95,10 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
               children: [
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: beneficiarioSeguro,
                   maxLength: 50,
                   icon: Icon(
@@ -113,6 +120,10 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: cedulaBeneficiarioSeguro,
                   maxLength: 16,
                   icon: Icon(
@@ -134,6 +145,9 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(parentesco),
+
                   hintText: parentescoVer ?? 'input.select_option'.tr(),
                   codigo: 'PARENTESCO',
                   title: 'Parentesco Beneficiario Seguro',
@@ -153,8 +167,37 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(9),
+                  ],
+                  initialValue: telefonoBeneficiario,
+                  icon: Icon(
+                    Icons.phone,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Telefono Beneficiario',
+                  textInputType: TextInputType.phone,
+                  hintText: 'Ingresa Telefono Beneficiario',
+                  isValid: null,
+                  onChange: (value) {
+                    telefonoBeneficiario = value;
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefonoBeneficiario: telefonoBeneficiario,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: beneficiarioSeguro1,
-                  maxLength: 50,
+                  maxLength: 40,
                   icon: Icon(
                     Icons.security,
                     color: AppColors.getPrimaryColor(),
@@ -174,6 +217,9 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: cedulaBeneficiarioSeguro1,
                   maxLength: 16,
                   icon: Icon(
@@ -214,30 +260,12 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  initialValue: telefonoBeneficiario,
-                  maxLength: 16,
-                  icon: Icon(
-                    Icons.phone,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                  title: 'Telefono Beneficiario',
-                  textInputType: TextInputType.phone,
-                  hintText: 'Ingresa Telefono Beneficiario',
-                  isValid: null,
-                  onChange: (value) {
-                    telefonoBeneficiario = value;
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        telefonoBeneficiario: telefonoBeneficiario,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(9),
+                  ],
                   initialValue: telefonoBeneficiario1,
-                  maxLength: 16,
+                  maxLength: 9,
                   icon: Icon(
                     Icons.phone,
                     color: AppColors.getPrimaryColor(),

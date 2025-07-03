@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -20,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/e
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -42,6 +44,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
   String? initialValue;
   String? departamentoEmisor;
   DateTime? _selectedDate;
+  DateTime? selectedDateFechaVencimiento;
 
   String? tipoPersonaCredito;
   String? tipoPersonaCreditoVer;
@@ -90,7 +93,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
       }
 
       _selectedDate = picked;
-      fechaNacimiento = picked.toIso8601String();
+      fechaNacimiento = picked.toUtc().toIso8601String();
       context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                   fechaNacimiento: fechaNacimiento,
@@ -118,7 +121,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      fechaEmisionCedula = picked.toIso8601String();
+      fechaEmisionCedula = picked.toUtc().toIso8601String();
       context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                   fechaEmisionCedula: fechaEmisionCedula,
@@ -138,14 +141,14 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
     );
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: selectedDateFechaVencimiento,
       firstDate: tipoDocumento == 'CEDULAIDENTIDAD' && paisEmisor == 'NIC'
           ? minFechaVencimiento
           : DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
-    if (picked != null && picked != _selectedDate) {
+    if (picked != null && picked != selectedDateFechaVencimiento) {
       if (!context.mounted) return;
       if (picked.isBefore(DateTime.now())) {
         CustomAlertDialog(
@@ -156,7 +159,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
         return;
       }
       setState(() {
-        fechaVencimientoCedula = picked.toIso8601String();
+        fechaVencimientoCedula = picked.toUtc().toIso8601String();
       });
       context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
@@ -298,6 +301,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 OutlineTextfieldWidget.withCounter(
                   maxLength: 40,
                   initialValue: nombre1,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(
                     Icons.person,
                     color: AppColors.getPrimaryColor(),
@@ -321,6 +327,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   maxLength: 40,
                   icon: Icon(
                     Icons.person,
@@ -344,6 +353,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: apellido1,
                   maxLength: 40,
                   icon: Icon(
@@ -368,6 +380,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: apellido2,
                   maxLength: 40,
                   icon: Icon(
@@ -391,6 +406,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.getPrimaryColor(),
@@ -535,6 +553,9 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   maxLength: 50,
                   icon: Icon(
                     Icons.flag,
@@ -604,6 +625,10 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(9),
+                  ],
                   initialValue: telefonoController,
                   maxLength: 9,
                   icon: Icon(
@@ -627,6 +652,10 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(9),
+                  ],
                   initialValue: celularController,
                   // initialValue: widget.responseLocalDb.celular,
                   maxLength: 9,
@@ -652,6 +681,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   initialValue: emailController,
+                  textCapitalization: TextCapitalization.none,
                   // initialValue: widget.responseLocalDb.email,
                   maxLength: 50,
                   icon: Icon(

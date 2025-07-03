@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -102,7 +104,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     isContainIcon: true,
-                    title: 'Es Peps',
+                    title: 'Es PEPS',
                     items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       if (item == null) return;
@@ -123,13 +125,16 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                 if (esPeps == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: nombreEntidadPeps,
                     icon: Icon(
                       Icons.business,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre de Entidad PEPs',
-                    hintText: 'Ingresa Nombre de Entidad PEPs',
+                    title: 'Nombre de Entidad PEPS',
+                    hintText: 'Ingresa Nombre de Entidad PEPS',
                     isValid: null,
                     onChange: (value) {
                       nombreEntidadPeps = value;
@@ -150,8 +155,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                       relacion: '',
                     ),
                     // initialValue: ,
-                    hintText: paisPeps ?? 'Selecciona Pais Peps',
-                    title: 'País PEPs',
+                    hintText: paisPeps ?? 'Selecciona Pais PEPS',
+                    title: 'País PEPS',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisPeps = item.valor;
@@ -165,13 +170,16 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: cargoOficialPeps,
                     icon: Icon(
                       Icons.work,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Cargo Oficial PEPs',
-                    hintText: 'Ingresa Cargo Oficial PEPs',
+                    title: 'Cargo Oficial PEPS',
+                    hintText: 'Ingresa Cargo Oficial PEPS',
                     isValid: null,
                     onChange: (value) {
                       cargoOficialPeps = value;
@@ -184,13 +192,17 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
                     initialValue: periodoPeps,
                     icon: Icon(
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Periodo PEPs',
-                    hintText: 'Ingresa Periodo PEPs',
+                    title: 'Periodo PEPS',
+                    hintText: 'Ingresa Periodo PEPS',
                     isValid: null,
                     onChange: (value) {
                       periodoPeps = value;
@@ -209,7 +221,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                     initialValue: tieneFamiliarPeps,
                     dropdownColor: Colors.white,
                     isContainIcon: true,
-                    title: 'Tiene Familiar PEPs',
+                    title: 'Tiene Familiar PEPS',
                     items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       if (item == null) return;
@@ -231,13 +243,16 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                 if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: nombreFamiliarPeps2,
                     icon: Icon(
                       Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre Familiar PEPs 2',
-                    hintText: 'Ingresa Nombre Familiar PEPs 2',
+                    title: 'Nombre Familiar PEPS 2',
+                    hintText: 'Ingresa Nombre Familiar PEPS 2',
                     isValid: null,
                     onChange: (value) {
                       nombreFamiliarPeps2 = value;
@@ -261,17 +276,20 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                         ),
                       );
                     },
-                    title: 'Parentesco Familiar PEPs 2',
+                    title: 'Parentesco Familiar PEPS 2',
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: cargoParentesco,
                     icon: Icon(
                       Icons.work,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Cargo Familiar PEPs 2',
-                    hintText: 'Ingresa Cargo Familiar PEPs 2',
+                    title: 'Cargo Familiar PEPS 2',
+                    hintText: 'Ingresa Cargo Familiar PEPS 2',
                     isValid: null,
                     onChange: (value) {
                       cargoParentesco = value;
@@ -284,13 +302,16 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: nombreEntidadPeps2,
                     icon: Icon(
                       Icons.business,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Nombre Entidad PEPs 2',
-                    hintText: 'Ingresa Nombre Entidad PEPs 2',
+                    title: 'Nombre Entidad PEPS 2',
+                    hintText: 'Ingresa Nombre Entidad PEPS 2',
                     isValid: null,
                     onChange: (value) {
                       nombreEntidadPeps2 = value;
@@ -303,13 +324,17 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
                     initialValue: periodoPeps2,
                     icon: Icon(
                       Icons.calendar_today,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    title: 'Periodo PEPs 2',
-                    hintText: 'Ingresa Periodo PEPs 2',
+                    title: 'Periodo PEPS 2',
+                    hintText: 'Ingresa Periodo PEPS 2',
                     isValid: null,
                     onChange: (value) {
                       periodoPeps2 = value;
@@ -328,8 +353,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                       nombre: paisPeps2 ?? '',
                       relacion: '',
                     ),
-                    title: 'País PEPs 2',
-                    hintText: paisPeps ?? 'Selecciona País PEPs 2',
+                    title: 'País PEPS 2',
+                    hintText: paisPeps ?? 'Selecciona País PEPS 2',
                     onChanged: (item) {
                       if (item == null) return;
                       paisPeps2 = item.valor;

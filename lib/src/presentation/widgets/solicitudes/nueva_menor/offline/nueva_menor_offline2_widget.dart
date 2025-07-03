@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -17,6 +18,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -222,6 +224,9 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       initialValue: direccionCasa,
                       maxLength: 50,
                       icon: Icon(
@@ -244,6 +249,9 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       initialValue: barrioCasa,
                       icon: Icon(
                         Icons.calendar_today,
@@ -284,6 +292,10 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
                       initialValue:
                           anosResidirCasa == '0' ? null : anosResidirCasa,
                       icon: Icon(

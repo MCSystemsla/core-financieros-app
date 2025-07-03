@@ -152,7 +152,10 @@ class AsalariadoResponsesLocalDb {
   String? objActividadEconomicaId1Ver;
   String? objActividadEconomicaId2Ver;
   String? objParentescoFamiliarCercanoIdVer;
+  String? uuid;
   AsalariadoResponsesLocalDb({
+    required this.id,
+    this.uuid,
     this.objOrigenSolicitudIdVer,
     this.objPaisEmisorCedulaVer,
     this.objMunicipioCasaIdVer,

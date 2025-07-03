@@ -2,6 +2,7 @@
 part of 'solicitud_asalariado_cubit.dart';
 
 class SolicitudAsalariadoState extends Equatable {
+  final String? uuid;
   final bool hasVerified;
   final bool isOffline;
   final bool isDone;
@@ -155,6 +156,7 @@ class SolicitudAsalariadoState extends Equatable {
   final String cedulaFrontPath;
   final String cedulaBackPath;
   const SolicitudAsalariadoState({
+    this.uuid,
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
     this.objOrigenSolicitudIdVer = '',
@@ -437,6 +439,7 @@ class SolicitudAsalariadoState extends Equatable {
       ];
 
   SolicitudAsalariadoState copyWith({
+    String? uuid,
     bool? hasVerified,
     bool? isOffline,
     bool? isDone,
@@ -591,6 +594,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? cedulaBackPath,
   }) {
     return SolicitudAsalariadoState(
+      uuid: uuid ?? this.uuid,
       hasVerified: hasVerified ?? this.hasVerified,
       isOffline: isOffline ?? this.isOffline,
       isDone: isDone ?? this.isDone,

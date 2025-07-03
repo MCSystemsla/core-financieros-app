@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -50,14 +52,14 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
     super.initState();
     estadoCivil = widget.responseLocalDb.objEstadoCivilId;
     objEstadoCivilIdVer = widget.responseLocalDb.objEstadoCivilIdVer;
-    esFamiliarEmpleado = widget.responseLocalDb.esFamiliarEmpleado!
+    esFamiliarEmpleado = (widget.responseLocalDb.esFamiliarEmpleado ?? false)
         ? 'input.yes'.tr()
         : 'input.no'.tr();
     nombreConyuge = widget.responseLocalDb.nombreConyugue;
     personasACargo = widget.responseLocalDb.personasACargo.toString();
     nacionalidadConyuge = widget.responseLocalDb.nacionalidadConyugue;
     nombreConyuge = widget.responseLocalDb.nombreConyugue;
-    trabajaConyuge = (widget.responseLocalDb.trabajaConyugue!)
+    trabajaConyuge = (widget.responseLocalDb.trabajaConyugue ?? false)
         ? 'input.yes'.tr()
         : 'input.no'.tr();
     trabajoConyuge = widget.responseLocalDb.trabajoConyugue;
@@ -141,6 +143,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: nombreConyuge,
                     maxLength: 50,
                     icon: Icon(
@@ -185,6 +190,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: trabajoConyuge,
                     maxLength: 50,
                     icon: Icon(
@@ -205,6 +213,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: direccionTrabajoConyuge,
                     maxLength: 50,
                     icon: Icon(
@@ -225,6 +236,10 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(9),
+                    ],
                     initialValue: telefonoTrabajoConyuge,
                     maxLength: 15,
                     icon: Icon(
@@ -246,7 +261,11 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
-                    initialValue: cantidadHijos ?? '0',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
+                    initialValue: cantidadHijos,
                     icon: Icon(
                       Icons.phone,
                       color: AppColors.getPrimaryColor(),
@@ -297,6 +316,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: nombreFamiliarEmpleado,
                     icon: Icon(
                       Icons.family_restroom,
@@ -317,6 +339,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     initialValue: cedulaFamiliarEmpleado,
                     icon: Icon(
                       Icons.add_card_sharp,
@@ -338,7 +363,11 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 ],
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  initialValue: personasACargo == '0' ? null : personasACargo,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  initialValue: personasACargo,
                   icon: Icon(
                     Icons.add_card_sharp,
                     color: AppColors.getPrimaryColor(),
