@@ -459,46 +459,6 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                             imageBackCedula: cedulaPath.cedulaBackPath,
                           ),
                         );
-                        context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                              objPaisNacimientoIdVer: paisNacimientoVer,
-                              objSexoIdVer: sexoVer,
-                              objEscolaridadIdVer: escolaridadVer,
-                              objPaisEmisorCedulaVer: paisEmisorVer,
-                              objTipoPersonaIdVer: tipoPersonaCreditoVer,
-                              objTipoDocumentoIdVer: tipoDocumentoVer,
-                              nombre1: nombre1,
-                              nombre2: nombre2,
-                              apellido1: apellido1,
-                              apellido2: apellido2,
-                              tipoPersona: tipoPersonaCredito,
-                              objTipoPersonaId: tipoPersonaCredito,
-                              objTipoDocumentoId: tipoDocumento,
-                              cedula: state.userCedulaResponse.cedula,
-                              nombrePublico:
-                                  nombrePublicoController.text.trim(),
-                              objPaisEmisorCedula: paisEmisor,
-                              fechaEmisionCedula: state
-                                  .userCedulaResponse.fechaEmision
-                                  .toIso8601String(),
-                              fechaVencimientoCedula:
-                                  _selectedDate?.toUtc().toIso8601String(),
-                              fechaNacimiento: state
-                                  .userCedulaResponse.fechaNacimiento
-                                  .toIso8601String(),
-                              nacionalidad: nacionalidadController?.value,
-                              objPaisNacimientoId: paisNacimiento,
-                              objSexoId: state.userCedulaResponse.sexo,
-                              telefono: countryCode +
-                                  telefonoController.text
-                                      .trim()
-                                      .replaceAll('-', ''),
-                              celular: celularCode +
-                                  celularController.text
-                                      .trim()
-                                      .replaceAll('-', ''),
-                              email: emailController.text.trim(),
-                              objEscolaridadId: escolaridad,
-                            );
 
                         widget.controller.nextPage(
                           duration: const Duration(milliseconds: 300),
@@ -1140,7 +1100,6 @@ class _IsCedulaUserNotExistsFormState extends State<IsCedulaUserNotExistsForm>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      cubit.autoSaveHelper.forceSave();
 
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),

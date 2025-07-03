@@ -45,7 +45,7 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
           create: (ctx) => SolicitudNuevaMenorCubit(
             SolicitudCreditoRepositoryImpl(),
             global<ObjectBoxService>(),
-          )..initAutoSave(),
+          ),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

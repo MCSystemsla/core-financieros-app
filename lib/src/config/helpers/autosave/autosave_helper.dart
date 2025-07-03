@@ -1,49 +1,39 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 
 class AutoSaveResponseLocalDb {
   final Box<ResponseLocalDb> box;
-  final ResponseLocalDb Function() buildModel;
-  final void Function(ResponseLocalDb model)? onSaved;
-  final Duration debounceDuration;
+  final String uuid;
+  final ResponseLocalDb Function(ResponseLocalDb? existing) buildModel;
+  final void Function(ResponseLocalDb model) onSaved;
 
   Timer? _debounce;
-  String uuid;
 
   AutoSaveResponseLocalDb({
     required this.box,
-    required this.buildModel,
     required this.uuid,
-    this.onSaved,
-    this.debounceDuration = const Duration(seconds: 1),
+    required this.buildModel,
+    required this.onSaved,
   });
 
   void trigger() {
     _debounce?.cancel();
-    _debounce = Timer(debounceDuration, _save);
-  }
-
-  void forceSave() {
-    _debounce?.cancel();
-    _save();
+    _debounce = Timer(const Duration(milliseconds: 700), _save);
   }
 
   void _save() {
-    final model = buildModel();
-    final existing =
-        box.query(ResponseLocalDb_.uuid.equals(uuid)).build().findFirst();
+    try {
+      final existing =
+          box.query(ResponseLocalDb_.uuid.equals(uuid)).build().findFirst();
 
-    if (existing != null) {
-      model.id = existing.id;
+      final model = buildModel(existing);
+      box.put(model);
+      onSaved(model);
+    } catch (e, s) {
+      log('🔥 Error en autosave: $e\n$s');
     }
-
-    box.put(model);
-    onSaved?.call(model);
-  }
-
-  void dispose() {
-    _debounce?.cancel();
   }
 }

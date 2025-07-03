@@ -331,8 +331,14 @@ class __FormContentState extends State<_FormContent> {
                         context.read<GeolocationCubit>().getCurrentLocation();
                         return;
                       }
-                      cubit.autoSaveHelper.forceSave();
-
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          ubicacionLongitud:
+                              widget.position!.longitude.toString(),
+                          ubicacionLatitud:
+                              widget.position!.latitude.toString(),
+                        ),
+                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

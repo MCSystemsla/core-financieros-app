@@ -630,7 +630,6 @@ class __FormContentState extends State<_FormContent> {
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      cubit.autoSaveHelper.forceSave();
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

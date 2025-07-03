@@ -286,16 +286,24 @@ class __FormContentState extends State<_FormContent> {
                   width: double.infinity,
                   child: CustomElevatedButton(
                     text: 'Enviar Solicitud',
+                    enabled: widget.state.connectionStatus !=
+                        ConnectionStatus.checking,
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          isDone: true,
+                        ),
+                      );
                       if (widget.state.connectionStatus ==
                           ConnectionStatus.disconnected) {
-                        context.read<SolicitudNuevaMenorCubit>().saveAnswers(
-                              errorMsg:
-                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                            );
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            errorMsg:
+                                'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          ),
+                        );
                         CustomAlertDialog(
                           context: context,
                           title:

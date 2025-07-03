@@ -409,7 +409,6 @@ class __FormContentState extends State<_FormContent> {
                         title:
                             'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
                         onDone: () {
-                          cubit.autoSaveHelper.forceSave();
                           widget.controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn,
