@@ -94,248 +94,290 @@ class _AsalariadoOffline4State extends State<AsalariadoOffline4>
       value: solicitud?.objRubroActividadPredominante,
     );
     ocupacion = solicitud?.ocupacion;
+    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                profesion: profesion,
+                objActividadEconomicaIdVer: actividad?.name,
+                objActividadEconomicaId: actividad?.value,
+                objActividadEconomicaId1Ver: actividad1?.name,
+                objActividadEconomicaId1: actividad1?.value,
+                objActividadEconomicaId2Ver: actividadEconomica2?.name,
+                objActividadEconomicaId2: actividadEconomica2?.value,
+                objRubroActividadVer: rubroActividad?.name,
+                objRubroActividad: rubroActividad?.value,
+                objRubroActividad2Ver: rubroActividad2?.name,
+                objRubroActividad2: rubroActividad2?.name,
+                objRubroActividad3Ver: rubroActividad3?.name,
+                objRubroActividad3: rubroActividad3?.name,
+                objActividadPredominanteVer: actividadPredominante?.name,
+                objActividadPredominante: actividadPredominante?.value,
+                objRubroActividadPredominanteVer:
+                    objRubroActividadPredominante?.name,
+                objRubroActividadPredominante:
+                    objRubroActividadPredominante?.value,
+                ocupacion: ocupacion,
+              ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividad?.name ?? '',
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
-              onChanged: (item) {
-                if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
-                actividad = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividad1?.name ?? '',
-              // validator: (value) =>
-              //     ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
-              onChanged: (item) {
-                if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
-                actividad1 = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: actividadEconomica2?.name ?? '',
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 3',
-              onChanged: (item) {
-                if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
-                actividadEconomica2 = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            if (actividadesPredominantesList.isNotEmpty) ...[
-              const Gap(20),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                child: JLuxDropdown(
-                  initialValue: actividadesPredominantesList
-                          .any((item) => item.value == actividadPredominante)
-                      ? actividadesPredominantesList.firstWhere(
-                          (item) => item.value == actividadPredominante,
-                        )
-                      : null,
+    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+      builder: (context, state) {
+        final cubit = context.read<SolicitudAsalariadoCubit>();
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: actividad?.name ?? 'input.select_option'.tr(),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  dropdownColor: Colors.white,
-                  isContainIcon: true,
-                  title: 'Actividad Predominante',
-                  items: actividadesPredominantesList.length >= 3
-                      ? actividadesPredominantesList
-                          .skip(actividadesPredominantesList.length - 3)
-                          .toSet()
-                          .toList()
-                      : actividadesPredominantesList.toSet().toList(),
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 1',
                   onChanged: (item) {
                     if (item == null) return;
-                    actividadPredominante = item;
-                  },
-                  toStringItem: (item) {
-                    return item.name;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-            ],
-            if (actividad?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                hintText: rubroActividad?.name ?? '',
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (actividad1?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                hintText: rubroActividad2?.name ?? '',
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 2',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad2 = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (actividadEconomica2?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                hintText: rubroActividad3?.name ?? '',
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 3',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad3 = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (rubrosActividadesPredominanteList.length > 1) ...[
-              // TODO: Arreglar bug de rubros actividad , hay que agregar las lists a un jsonString
-              const Gap(20),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                child: JLuxDropdown(
-                  initialValue: rubrosActividadesPredominanteList.any((item) =>
-                          item.value == objRubroActividadPredominante?.value)
-                      ? rubrosActividadesPredominanteList.firstWhere(
-                          (item) =>
-                              item.value ==
-                              objRubroActividadPredominante?.value,
-                        )
-                      : null,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  dropdownColor: Colors.white,
-                  isContainIcon: true,
-                  title: 'Rubro actividad Predominante',
-                  items: rubrosActividadesPredominanteList.length >= 3
-                      ? rubrosActividadesPredominanteList
-                          .skip(rubrosActividadesPredominanteList.length - 3)
-                          .toSet()
-                          .toList()
-                      : rubrosActividadesPredominanteList.toSet().toList(),
-                  onChanged: (item) {
-                    if (item == null) return;
-                    objRubroActividadPredominante = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item.name;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-            ],
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                        objActividadPredominante: actividadPredominante?.value,
-                        objActividadPredominanteVer:
-                            actividadPredominante?.name,
-                        objRubroActividad: rubroActividad?.value,
-                        objRubroActividadVer: rubroActividad?.name,
-                        objRubroActividad2: rubroActividad2?.value,
-                        objRubroActividad2Ver: rubroActividad2?.name,
-                        objRubroActividad3: rubroActividad3?.value,
-                        objRubroActividad3Ver: rubroActividad3?.name,
-                        objActividadEconomicaId2: actividadEconomica2?.value,
-                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
-                        objSectorId: sectorEconomico?.value,
-                        objSectorIdVer: sectorEconomico?.name,
-                        // sectorEconomico: sectorEconomico2,
+                    actividad = item;
+                    actividadesPredominantesList.add(item);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objActividadEconomicaId: actividad?.value,
                         objActividadEconomicaIdVer: actividad?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: actividad1?.name ?? '',
+                  // validator: (value) =>
+                  //     ClassValidator.validateRequired(value?.value),
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 2',
+                  onChanged: (item) {
+                    if (item == null) return;
+
+                    actividad1 = item;
+                    actividadesPredominantesList.add(item);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objActividadEconomicaId1: actividad1?.value,
                         objActividadEconomicaId1Ver: actividad1?.name,
-                        objRubroActividadPredominante:
-                            objRubroActividadPredominante?.value,
-                        objRubroActividadPredominanteVer:
-                            objRubroActividadPredominante?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: actividadEconomica2?.name ?? '',
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 3',
+                  onChanged: (item) {
+                    if (item == null) return;
+
+                    actividadEconomica2 = item;
+                    actividadesPredominantesList.add(item);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objActividadEconomicaId2: actividadEconomica2?.value,
+                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                if (actividadesPredominantesList.isNotEmpty) ...[
+                  const Gap(20),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: JLuxDropdown(
+                      initialValue: actividadesPredominantesList.any(
+                              (item) => item.value == actividadPredominante)
+                          ? actividadesPredominantesList.firstWhere(
+                              (item) => item.value == actividadPredominante,
+                            )
+                          : null,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      dropdownColor: Colors.white,
+                      isContainIcon: true,
+                      title: 'Actividad Predominante',
+                      items: actividadesPredominantesList.length >= 3
+                          ? actividadesPredominantesList
+                              .skip(actividadesPredominantesList.length - 3)
+                              .toSet()
+                              .toList()
+                          : actividadesPredominantesList.toSet().toList(),
+                      onChanged: (item) {
+                        if (item == null) return;
+                        actividadPredominante = item;
+                      },
+                      toStringItem: (item) {
+                        return item.name;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                ],
+                if (actividad?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    hintText: rubroActividad?.name ?? '',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad: rubroActividad?.value,
+                          objRubroActividadVer: rubroActividad?.name,
+                        ),
                       );
-                },
-              ),
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (actividad1?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    hintText: rubroActividad2?.name ?? '',
+                    // validator: (value) =>
+                    //     ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad 2',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad2 = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad2: rubroActividad2?.value,
+                          objRubroActividad2Ver: rubroActividad2?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (actividadEconomica2?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    hintText: rubroActividad3?.name ?? '',
+                    // validator: (value) =>
+                    //     ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad 3',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad3 = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad3: rubroActividad3?.value,
+                          objRubroActividad3Ver: rubroActividad3?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (rubrosActividadesPredominanteList.length > 1) ...[
+                  // TODO: Arreglar bug de rubros actividad , hay que agregar las lists a un jsonString
+                  const Gap(20),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: JLuxDropdown(
+                      initialValue: rubrosActividadesPredominanteList.any(
+                              (item) =>
+                                  item.value ==
+                                  objRubroActividadPredominante?.value)
+                          ? rubrosActividadesPredominanteList.firstWhere(
+                              (item) =>
+                                  item.value ==
+                                  objRubroActividadPredominante?.value,
+                            )
+                          : null,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      dropdownColor: Colors.white,
+                      isContainIcon: true,
+                      title: 'Rubro actividad Predominante',
+                      items: rubrosActividadesPredominanteList.length >= 3
+                          ? rubrosActividadesPredominanteList
+                              .skip(
+                                  rubrosActividadesPredominanteList.length - 3)
+                              .toSet()
+                              .toList()
+                          : rubrosActividadesPredominanteList.toSet().toList(),
+                      onChanged: (item) {
+                        if (item == null) return;
+                        objRubroActividadPredominante = item;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objRubroActividadPredominante:
+                                objRubroActividadPredominante?.value,
+                            objRubroActividadPredominanteVer:
+                                objRubroActividadPredominante?.name,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item.name;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                ],
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/asalariado_autosave.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
@@ -284,7 +283,9 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       nacionalidad: _prefer(state.nacionalidad, prev?.nacionalidad),
       objCondicionCasaId:
           _prefer(state.objCondicionCasaId, prev?.objCondicionCasaId),
-      anosResidirCasa: state.anosResidirCasa,
+      anosResidirCasa: state.anosResidirCasa == 0
+          ? (prev?.anosResidirCasa ?? 0)
+          : state.anosResidirCasa,
       email: _prefer(state.email, prev?.email),
       monto: state.monto == 0 ? (prev?.monto ?? 0) : state.monto,
       objMonedaId: _prefer(state.objMonedaId, prev?.objMonedaId),
@@ -423,7 +424,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           _prefer(state.telefonoFamiliarCercano, prev?.telefonoFamiliarCercano),
       telefonoTrabajo: _prefer(state.telefonoTrabajo, prev?.telefonoTrabajo),
       tiempoLaborar: state.tiempoLaborar == '0'
-          ? (prev?.tiempoLaborar)
+          ? (prev?.tiempoLaborar ?? '0')
           : state.tiempoLaborar,
       tiempoLaborarConyugue: state.tiempoLaborarConyugue == '0'
           ? (prev?.tiempoLaborarConyugue ?? '0')
@@ -436,6 +437,8 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           : state.totalIngresoMesConyugue,
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
       isDone: !state.isDone ? (prev?.isDone ?? false) : state.isDone,
+      frecuenciaPagoMeses:
+          _prefer(state.frecuenciaPagoMeses, prev?.frecuenciaPagoMeses),
     );
   }
 

@@ -57,192 +57,244 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(30),
-            CatalogoValorNacionalidad(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.valor),
-              codigo: 'PAIS',
-              title: 'País de residencia',
-              onChanged: (item) {
-                paisCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                depCasa = Item(name: item!.nombre, value: item.valor);
-                setState(() {});
-              },
-              hintText: 'input.select_option'.tr(),
-            ),
-            if (paisCasa?.value != null) ...[
-              const Gap(30),
-              CatalogoValorNacionalidad(
-                where: depCasa?.value,
-                codigo: 'DEP',
-                title: 'Departamento de residencia',
-                hintText: 'input.select_option'.tr(),
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.valor),
-                onChanged: (item) {
-                  depCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                  munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (depCasa?.value != null) ...[
-              const Gap(30),
-              CatalogoValorNacionalidad(
-                where: munCasa?.value,
-                codigo: 'MUN',
-                title: 'Municipio de residencia',
-                hintText: 'input.select_option'.tr(),
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.valor),
-                onChanged: (item) {
-                  munCasa = Item(name: item?.nombre ?? '', value: item?.valor);
-                  setState(() {});
-                },
-              ),
-            ],
-            const Gap(30),
-            SearchDropdownWidget(
-              codigo: 'TIPOVIVIENDA',
-              title: 'Condición Casa',
-              hintText: 'input.select_option'.tr(),
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              onChanged: (item) {
-                condicionCasa = item;
-                setState(() {});
-              },
-            ),
-            if (condicionCasa?.value == 'ALQ') ...[
-              const Gap(30),
-              OutlineTextfieldWidget(
-                key: const Key('pago_alquiler'),
-                validator: (value) => ClassValidator.validateRequired(value),
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  CurrencyInputFormatter(),
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-                ],
-                onChange: (value) {
-                  pagoAlquiler = value.replaceAll(',', '');
-                },
-                title: 'Pago de alquiler',
-                icon: const Icon(Icons.money),
-              ),
-            ],
-            if (condicionCasa?.value != 'ALQ') ...[
-              const Gap(30),
-              OutlineTextfieldWidget(
-                validator: (value) => ClassValidator.validateRequired(value),
-                key: const Key('nombre_dueno_casa'),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  nombreDuenoCasa = value;
-                },
-                title: 'Nombre del dueño de la casa',
-                icon: const Icon(Icons.person),
-              ),
-            ],
-            const Gap(30),
-            OutlineTextfieldWidget(
-              key: const Key('anos_residir'),
-              validator: (value) => ClassValidator.validateRequired(value),
-              textInputType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(2),
-              ],
-              onChange: (value) {
-                anosResidir = value;
-              },
-              title: 'Años de residencia',
-              icon: const Icon(Icons.house),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              key: const Key('direccion_domicilio'),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              validator: (value) => ClassValidator.validateRequired(value),
-              onChange: (value) {
-                direccionDomicilio = value;
-              },
-              title: 'Dirección Domicilio',
-              icon: const Icon(Icons.house),
-            ),
-            const Gap(30),
-            OutlineTextfieldWidget(
-              key: const Key('barrio'),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              validator: (value) => ClassValidator.validateRequired(value),
-              onChange: (value) {
-                barrio = value;
-              },
-              title: 'Barrio de domicilio',
-              icon: const Icon(Icons.house),
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+      builder: (context, state) {
+        final cubit = context.read<SolicitudAsalariadoCubit>();
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(30),
+                CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
+                  codigo: 'PAIS',
+                  title: 'País de residencia',
+                  onChanged: (item) {
+                    paisCasa =
+                        Item(name: item?.nombre ?? '', value: item?.valor);
+                    depCasa = Item(name: item!.nombre, value: item.valor);
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objPaisCasaId: paisCasa?.value,
                         objPaisCasaIdVer: paisCasa?.name,
-                        objDepartamentoCasaId: depCasa?.value,
-                        objDepartamentoCasaIdVer: depCasa?.name,
-                        objMunicipioCasaId: munCasa?.value,
-                        objMunicipioCasaIdVer: munCasa?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  hintText: 'input.select_option'.tr(),
+                ),
+                if (paisCasa?.value != null) ...[
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    where: depCasa?.value,
+                    codigo: 'DEP',
+                    title: 'Departamento de residencia',
+                    hintText: 'input.select_option'.tr(),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
+                    onChanged: (item) {
+                      depCasa =
+                          Item(name: item?.nombre ?? '', value: item?.valor);
+                      munCasa =
+                          Item(name: item?.nombre ?? '', value: item?.valor);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objDepartamentoCasaId: depCasa?.value,
+                          objDepartamentoCasaIdVer: depCasa?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (depCasa?.value != null) ...[
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    where: munCasa?.value,
+                    codigo: 'MUN',
+                    title: 'Municipio de residencia',
+                    hintText: 'input.select_option'.tr(),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
+                    onChanged: (item) {
+                      munCasa =
+                          Item(name: item?.nombre ?? '', value: item?.valor);
+
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objMunicipioCasaId: paisCasa?.value,
+                          objMunicipioCasaIdVer: paisCasa?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                const Gap(30),
+                SearchDropdownWidget(
+                  codigo: 'TIPOVIVIENDA',
+                  title: 'Condición Casa',
+                  hintText: 'input.select_option'.tr(),
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  onChanged: (item) {
+                    condicionCasa = item;
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objCondicionCasaId: condicionCasa?.value,
                         objCondicionCasaIdVer: condicionCasa?.name,
-                        duenoVivienda: nombreDuenoCasa,
-                        pagoAlquiler: int.tryParse(pagoAlquiler ?? '0'),
-                        anosResidirCasa: int.tryParse(anosResidir ?? '0'),
-                        direccionCasa: direccionDomicilio,
-                        barrioCasa: barrio,
-                        objSectorIdVer: sector?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                if (condicionCasa?.value == 'ALQ') ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    key: const Key('pago_alquiler'),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(),
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                    ],
+                    onChange: (value) {
+                      pagoAlquiler = value.replaceAll(',', '');
+
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          pagoAlquiler: int.tryParse(pagoAlquiler ?? '0'),
+                        ),
                       );
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
+                    },
+                    title: 'Pago de alquiler',
+                    icon: const Icon(Icons.money),
+                  ),
+                ],
+                if (condicionCasa?.value != 'ALQ') ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    key: const Key('nombre_dueno_casa'),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    onChange: (value) {
+                      nombreDuenoCasa = value;
+
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          duenoVivienda: nombreDuenoCasa,
+                        ),
+                      );
+                    },
+                    title: 'Nombre del dueño de la casa',
+                    icon: const Icon(Icons.person),
+                  ),
+                ],
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  key: const Key('anos_residir'),
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  onChange: (value) {
+                    anosResidir = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        anosResidirCasa: int.tryParse(anosResidir ?? '0'),
+                      ),
+                    );
+                  },
+                  title: 'Años de residencia',
+                  icon: const Icon(Icons.house),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  key: const Key('direccion_domicilio'),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  onChange: (value) {
+                    direccionDomicilio = value;
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        direccionCasa: direccionDomicilio,
+                      ),
+                    );
+                  },
+                  title: 'Dirección Domicilio',
+                  icon: const Icon(Icons.house),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  key: const Key('barrio'),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  onChange: (value) {
+                    barrio = value;
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        barrioCasa: barrio,
+                      ),
+                    );
+                  },
+                  title: 'Barrio de domicilio',
+                  icon: const Icon(Icons.house),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

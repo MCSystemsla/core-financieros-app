@@ -62,7 +62,7 @@ class CrearSolicitudScreen extends StatelessWidget {
           create: (ctx) => SolicitudAsalariadoCubit(
             repository,
             localDbProvider,
-          ),
+          )..initAutoSave(),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

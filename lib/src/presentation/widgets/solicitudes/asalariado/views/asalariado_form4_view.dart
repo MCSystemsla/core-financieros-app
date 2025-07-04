@@ -68,226 +68,269 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(30),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'SECTORECONOMICO',
-              title: 'Sector Económico',
-              hintText: 'input.select_option'.tr(),
-              onChanged: (item) {
-                sector = item;
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 1',
-              onChanged: (item) {
-                if (item == null) return;
-                actividadesPredominantesList.removeWhere(
-                  (element) => element.id == actividad?.id,
-                );
-                actividad = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              // validator: (value) =>
-              //     ClassValidator.validateRequired(value?.value),
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 2',
-              onChanged: (item) {
-                if (item == null) return;
-                actividadesPredominantesList.removeWhere(
-                  (element) => element.id == actividad1?.id,
-                );
-                actividad1 = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'ACTIVIDADECONOMICA',
-              title: 'Actividad 3',
-              onChanged: (item) {
-                if (item == null) return;
-                actividadesPredominantesList.removeWhere(
-                  (element) => element.id == actividadEconomica2?.id,
-                );
-                actividadEconomica2 = item;
-                actividadesPredominantesList.add(item);
-                setState(() {});
-              },
-            ),
-            if (actividadesPredominantesList.length > 1) ...[
-              const Gap(20),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                child: JLuxDropdown(
+    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+      builder: (context, state) {
+        final cubit = context.read<SolicitudAsalariadoCubit>();
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(30),
+                SearchDropdownWidget(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  dropdownColor: Colors.white,
-                  isContainIcon: true,
-                  title: 'Actividad Predominante',
-                  items: {
-                    for (var item in actividadesPredominantesList)
-                      item.value: item
-                  }.values.toList(),
-                  onChanged: (item) {
-                    if (item == null) return;
-                    actividadPredominante = item;
-                  },
-                  toStringItem: (item) {
-                    return item.name;
-                  },
+                  codigo: 'SECTORECONOMICO',
+                  title: 'Sector Económico',
                   hintText: 'input.select_option'.tr(),
-                ),
-              ),
-            ],
-            if (actividad?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (actividad1?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 2',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad2 = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (actividadEconomica2?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad 3',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad3 = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (rubrosActividadesPredominanteList.length > 1) ...[
-              const Gap(20),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                child: JLuxDropdown(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  dropdownColor: Colors.white,
-                  isContainIcon: true,
-                  title: 'Rubro actividad Predominante',
-                  items: {
-                    for (var item in rubrosActividadesPredominanteList)
-                      item.value: item
-                  }.values.toList(),
                   onChanged: (item) {
-                    if (item == null) return;
-                    objRubroActividadPredominante = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item.name;
-                  },
-                  hintText: 'input.select_option'.tr(),
-                ),
-              ),
-            ],
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                        objActividadPredominante: actividadPredominante?.value,
-                        objActividadPredominanteVer:
-                            actividadPredominante?.name,
-                        objRubroActividad: rubroActividad?.value,
-                        objRubroActividadVer: rubroActividad?.name,
-                        objRubroActividad2: rubroActividad2?.value,
-                        objRubroActividad2Ver: rubroActividad2?.name,
-                        objRubroActividad3: rubroActividad3?.value,
-                        objRubroActividad3Ver: rubroActividad3?.name,
-                        objActividadEconomicaId2: actividadEconomica2?.value,
-                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
+                    sector = item;
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objSectorId: sector?.value,
                         objSectorIdVer: sector?.name,
+                      ),
+                    );
+
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 1',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    actividadesPredominantesList.removeWhere(
+                      (element) => element.id == actividad?.id,
+                    );
+                    actividad = item;
+                    actividadesPredominantesList.add(item);
+
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objActividadEconomicaId: actividad?.value,
-                        objActividadEconomicaIdVer: actividad?.name,
+                        objActividadEconomicaId1Ver: actividad?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  // validator: (value) =>
+                  //     ClassValidator.validateRequired(value?.value),
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 2',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    actividadesPredominantesList.removeWhere(
+                      (element) => element.id == actividad1?.id,
+                    );
+                    actividad1 = item;
+                    actividadesPredominantesList.add(item);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
                         objActividadEconomicaId1: actividad1?.value,
                         objActividadEconomicaId1Ver: actividad1?.name,
-                        objRubroActividadPredominante:
-                            objRubroActividadPredominante?.value,
-                        objRubroActividadPredominanteVer:
-                            objRubroActividadPredominante?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  codigo: 'ACTIVIDADECONOMICA',
+                  title: 'Actividad 3',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    actividadesPredominantesList.removeWhere(
+                      (element) => element.id == actividadEconomica2?.id,
+                    );
+                    actividadEconomica2 = item;
+                    actividadesPredominantesList.add(item);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objActividadEconomicaId2: actividadEconomica2?.value,
+                        objActividadEconomicaId2Ver: actividadEconomica2?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+                if (actividadesPredominantesList.length > 1) ...[
+                  const Gap(20),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: JLuxDropdown(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      dropdownColor: Colors.white,
+                      isContainIcon: true,
+                      title: 'Actividad Predominante',
+                      items: {
+                        for (var item in actividadesPredominantesList)
+                          item.value: item
+                      }.values.toList(),
+                      onChanged: (item) {
+                        if (item == null) return;
+                        actividadPredominante = item;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objActividadPredominante:
+                                actividadPredominante?.value,
+                            objActividadPredominanteVer:
+                                actividadPredominante?.name,
+                          ),
+                        );
+                      },
+                      toStringItem: (item) {
+                        return item.name;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                ],
+                if (actividad?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad: rubroActividad?.value,
+                          objRubroActividadVer: rubroActividad?.name,
+                        ),
                       );
-                },
-              ),
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (actividad1?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad 2',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad2 = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad2: rubroActividad2?.value,
+                          objRubroActividad2Ver: rubroActividad2?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (actividadEconomica2?.value == 'AGRI') ...[
+                  const Gap(20),
+                  SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    codigo: 'RUBROACTIVIDAD',
+                    title: 'Rubro Actividad 3',
+                    onChanged: (item) {
+                      if (item == null) return;
+                      rubroActividad3 = item;
+                      rubrosActividadesPredominanteList.add(item);
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          objRubroActividad3: rubroActividad3?.value,
+                          objRubroActividad3Ver: rubroActividad3?.name,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ],
+                if (rubrosActividadesPredominanteList.length > 1) ...[
+                  const Gap(20),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: JLuxDropdown(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      dropdownColor: Colors.white,
+                      isContainIcon: true,
+                      title: 'Rubro actividad Predominante',
+                      items: {
+                        for (var item in rubrosActividadesPredominanteList)
+                          item.value: item
+                      }.values.toList(),
+                      onChanged: (item) {
+                        if (item == null) return;
+                        objRubroActividadPredominante = item;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objRubroActividadPredominante:
+                                objRubroActividadPredominante?.value,
+                            objRubroActividadPredominanteVer:
+                                objRubroActividadPredominante?.name,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      toStringItem: (item) {
+                        return item.name;
+                      },
+                      hintText: 'input.select_option'.tr(),
+                    ),
+                  ),
+                ],
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

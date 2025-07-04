@@ -58,8 +58,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
+        final errorMessage =
+            resp['message'].toString().contains('ClientException')
+                ? 'Sin conexion a internet, la solicitud se guardo localmente.'
+                : resp.toString();
 
-        return (false, resp.toString());
+        return (false, errorMessage);
       }
 
       _logger.i(resp);
@@ -200,7 +204,11 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.e(resp);
         _logger.i(endpoint.body);
-        return (false, resp.toString());
+        final errorMessage =
+            resp['message'].toString().contains('ClientException')
+                ? 'Sin conexion a internet, la solicitud se guardo localmente.'
+                : resp.toString();
+        return (false, errorMessage);
       }
       _logger.i(resp);
       _logger.i(endpoint.body);
@@ -209,6 +217,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
+
       return (false, e.toString());
     }
   }

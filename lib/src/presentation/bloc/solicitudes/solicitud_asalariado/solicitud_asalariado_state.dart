@@ -155,8 +155,10 @@ class SolicitudAsalariadoState extends Equatable {
   final String objParentescoFamiliarCercanoIdVer;
   final String cedulaFrontPath;
   final String cedulaBackPath;
+  final String frecuenciaPagoMeses;
   const SolicitudAsalariadoState({
     this.uuid,
+    this.frecuenciaPagoMeses = '',
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
     this.objOrigenSolicitudIdVer = '',
@@ -305,7 +307,7 @@ class SolicitudAsalariadoState extends Equatable {
     this.sueldoMesConyugue = 0.0,
     this.telefonoFamiliarCercano = '',
     this.telefonoTrabajo = '',
-    this.tiempoLaborar = '',
+    this.tiempoLaborar = '0',
     this.tiempoLaborarConyugue = '',
     this.totalIngresoMes = 0.0,
     this.totalIngresoMesConyugue = 0.0,
@@ -313,6 +315,7 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        frecuenciaPagoMeses,
         cedulaFrontPath,
         cedulaBackPath,
         fechaDesembolso,
@@ -592,6 +595,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? objParentescoFamiliarCercanoIdVer,
     String? cedulaFrontPath,
     String? cedulaBackPath,
+    String? frecuenciaPagoMeses,
   }) {
     return SolicitudAsalariadoState(
       uuid: uuid ?? this.uuid,
@@ -790,6 +794,7 @@ class SolicitudAsalariadoState extends Equatable {
           this.objParentescoFamiliarCercanoIdVer,
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
+      frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
     );
   }
 }

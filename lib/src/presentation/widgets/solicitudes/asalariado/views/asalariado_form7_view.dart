@@ -96,6 +96,12 @@ class __FormContentState extends State<_FormContent> {
       }
 
       fechaPrimerPago = picked;
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  fechaPrimerPagoSolicitud:
+                      fechaPrimerPago?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -131,6 +137,11 @@ class __FormContentState extends State<_FormContent> {
         return;
       }
       fechaDesembolso = picked;
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -150,8 +161,9 @@ class __FormContentState extends State<_FormContent> {
   @override
   Widget build(BuildContext context) {
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
       builder: (context, state) {
+        final cubit = context.read<SolicitudAsalariadoCubit>();
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -168,6 +180,12 @@ class __FormContentState extends State<_FormContent> {
                   onChanged: (item) {
                     if (item == null) return;
                     proposito = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objPropositoId: item.value,
+                        objPropositoIdVer: item.name,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -176,6 +194,12 @@ class __FormContentState extends State<_FormContent> {
                   onChanged: (item) {
                     if (item == null) return;
                     moneda = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objMonedaId: item.value,
+                        objMonedaIdVer: item.name,
+                      ),
+                    );
                   },
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -199,6 +223,11 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     monto = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        monto: double.tryParse(monto ?? '0'),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -229,6 +258,15 @@ class __FormContentState extends State<_FormContent> {
                     tasaInteres = item.interes;
                     montoMinimo = item.montoMinimo;
                     montoMaximo = item.montoMaximo;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objProductoId: item.value,
+                        objProductoIdVer: item.name,
+                        tasaInteres: item.interes,
+                        montoMinimo: item.montoMinimo,
+                        montoMaximo: item.montoMaximo?.toInt(),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -238,6 +276,13 @@ class __FormContentState extends State<_FormContent> {
                   onChanged: (item) {
                     if (item == null) return;
                     frecuenciaDePago = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objFrecuenciaId: item.valor,
+                        objFrecuenciaIdVer: item.nombre,
+                        frecuenciaPagoMeses: item.meses,
+                      ),
+                    );
                   },
                   title: 'Frecuencia de Pago',
                 ),
@@ -254,6 +299,11 @@ class __FormContentState extends State<_FormContent> {
                   isValid: null,
                   onChange: (value) {
                     plazoSolicitud = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -298,119 +348,95 @@ class __FormContentState extends State<_FormContent> {
                   },
                 ),
                 const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Siguiente',
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () async {
-                      if (!formKey.currentState!.validate()) return;
-                      if (double.tryParse(monto ?? '0') == 0) {
-                        CustomAlertDialog(
-                          context: context,
-                          title: 'El monto no puede ser 0',
-                          onDone: () => context.pop(),
-                        ).showDialog(context, dialogType: DialogType.warning);
-                        return;
-                      }
-                      if (double.tryParse(monto ?? '0')! <
-                          montoMinimo!.toDouble()) {
-                        CustomAlertDialog(
-                          context: context,
-                          title:
-                              'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                          onDone: () => context.pop(),
-                        ).showDialog(context, dialogType: DialogType.warning);
-                        return;
-                      }
-                      if (double.tryParse(monto ?? '0')! >
-                          montoMaximo!.toDouble()) {
-                        CustomAlertDialog(
-                          context: context,
-                          title:
-                              'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                          onDone: () => context.pop(),
-                        ).showDialog(context, dialogType: DialogType.warning);
-                        return;
-                      }
-                      calcularCuotaProvider.calcularCantidadCuotas(
-                        fechaDesembolso: fechaDesembolso!,
-                        fechaPrimeraCuota: fechaPrimerPago!,
-                        plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                        frecuenciaPago: frecuenciaDePago?.meses ?? '0',
-                        saldoPrincipal: double.parse(monto ?? '0'),
-                        tasaInteresMensual: tasaInteres ?? 0,
-                      );
-                      await CuotaDataDialog(
-                        context: context,
-                        title:
-                            'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
-                        onDone: () {
-                          context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                                ubicacion: ubicacion,
-                                isOffline: !state.isConnected,
-                                isDone: !state.isConnected,
-                                tasaInteres: tasaInteres,
-                                montoMaximo: montoMaximo?.toInt(),
-                                montoMinimo: montoMinimo,
-                                fechaDesembolso:
-                                    fechaDesembolso?.toUtc().toIso8601String(),
-                                objMonedaId: moneda?.value,
-                                objMonedaIdVer: moneda?.name,
-                                monto: double.tryParse(monto ?? '0'),
-                                objPropositoId: proposito?.value,
-                                objPropositoIdVer: proposito?.name,
-                                objProductoId: producto?.value,
-                                objProductoIdVer: producto?.name,
-                                objFrecuenciaId: frecuenciaDePago?.valor,
-                                objFrecuenciaIdVer: frecuenciaDePago?.nombre,
-                                plazoSolicitud:
-                                    int.tryParse(plazoSolicitud ?? '0'),
-                                fechaPrimerPagoSolicitud:
-                                    fechaPrimerPago?.toUtc().toIso8601String(),
-                                cuota: calcularCuotaProvider
-                                    .state.montoPrincipalPrimeraCuota,
-                                observacion: observacion,
-                              );
-
-                          context.pop();
-                          if (!context.mounted) return;
-                          if (!state.isConnected) {
-                            context
-                                .read<SolicitudAsalariadoCubit>()
-                                .saveAnswers(
-                                  errorMsg:
-                                      'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                                );
+                BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+                  builder: (context, state) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        text: 'Siguiente',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () async {
+                          if (!formKey.currentState!.validate()) return;
+                          if (double.tryParse(monto ?? '0') == 0) {
+                            CustomAlertDialog(
+                              context: context,
+                              title: 'El monto no puede ser 0',
+                              onDone: () => context.pop(),
+                            ).showDialog(context,
+                                dialogType: DialogType.warning);
+                            return;
+                          }
+                          if (double.tryParse(monto ?? '0')! <
+                              montoMinimo!.toDouble()) {
                             CustomAlertDialog(
                               context: context,
                               title:
-                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                              onDone: () =>
-                                  context.pushReplacement('/solicitudes'),
+                                  'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                              onDone: () => context.pop(),
                             ).showDialog(context,
-                                dialogType: DialogType.infoReverse);
+                                dialogType: DialogType.warning);
                             return;
                           }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => BlocProvider.value(
-                                value: context.read<SolicitudAsalariadoCubit>(),
-                                child: AsalariadoSendingForm(
-                                  solicitudId: context
-                                      .read<SolicitudAsalariadoCubit>()
-                                      .state
-                                      .idLocalResponse,
-                                ),
-                              ),
-                            ),
+                          if (double.tryParse(monto ?? '0')! >
+                              montoMaximo!.toDouble()) {
+                            CustomAlertDialog(
+                              context: context,
+                              title:
+                                  'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                              onDone: () => context.pop(),
+                            ).showDialog(context,
+                                dialogType: DialogType.warning);
+                            return;
+                          }
+                          calcularCuotaProvider.calcularCantidadCuotas(
+                            fechaDesembolso: fechaDesembolso!,
+                            fechaPrimeraCuota: fechaPrimerPago!,
+                            plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                            frecuenciaPago: frecuenciaDePago?.meses ?? '0',
+                            saldoPrincipal: double.parse(monto ?? '0'),
+                            tasaInteresMensual: tasaInteres ?? 0,
                           );
+                          await CuotaDataDialog(
+                            context: context,
+                            title:
+                                'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                            onDone: () {
+                              context.pop();
+                              if (!context.mounted) return;
+                              if (state.connectionStatus ==
+                                  ConnectionStatus.disconnected) {
+                                CustomAlertDialog(
+                                  context: context,
+                                  title:
+                                      'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                                  onDone: () =>
+                                      context.pushReplacement('/solicitudes'),
+                                ).showDialog(context,
+                                    dialogType: DialogType.infoReverse);
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => BlocProvider.value(
+                                    value: context
+                                        .read<SolicitudAsalariadoCubit>(),
+                                    child: AsalariadoSendingForm(
+                                      solicitudId: context
+                                          .read<SolicitudAsalariadoCubit>()
+                                          .state
+                                          .idLocalResponse,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ).showDialog(context);
                         },
-                      ).showDialog(context);
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
                 const Gap(10),
                 Container(
