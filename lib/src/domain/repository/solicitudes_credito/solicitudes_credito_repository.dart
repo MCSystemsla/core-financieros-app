@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
@@ -58,12 +57,9 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final errorMessage =
-            resp['message'].toString().contains('ClientException')
-                ? 'Sin conexion a internet, la solicitud se guardo localmente.'
-                : resp.toString();
+        final errorMsg = getErrorMessage(resp);
 
-        return (false, errorMessage);
+        return (false, errorMsg);
       }
 
       _logger.i(resp);
@@ -87,12 +83,6 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       final data = CatalogoValor.fromJson(resp);
       return data;
-    } on TimeoutException catch (e) {
-      _logger.e('Tiempo de espera agotado: $e');
-      throw AppException(optionalMsg: 'Tiemp de espera agotado');
-    } on SocketException catch (e) {
-      _logger.e('Sin conexión a internet: $e');
-      throw AppException(optionalMsg: 'No hay conexión a internet');
     } catch (e) {
       _logger.e(e);
       rethrow;
@@ -160,8 +150,8 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        AppException(optionalMsg: resp.toString());
-        return (false, resp.toString());
+        final errorMsg = getErrorMessage(resp);
+        return (false, errorMsg);
       }
 
       _logger.i(resp);
@@ -204,11 +194,8 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.e(resp);
         _logger.i(endpoint.body);
-        final errorMessage =
-            resp['message'].toString().contains('ClientException')
-                ? 'Sin conexion a internet, la solicitud se guardo localmente.'
-                : resp.toString();
-        return (false, errorMessage);
+        final errorMsg = getErrorMessage(resp);
+        return (false, errorMsg);
       }
       _logger.i(resp);
       _logger.i(endpoint.body);

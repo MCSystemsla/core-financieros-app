@@ -155,7 +155,13 @@ class __FormContentState extends State<_FormContent> {
   }
 
   initFunctions() async {
-    await context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                objMonedaId: 'DOLAR',
+                objMonedaIdVer: 'DOLAR',
+              ),
+        );
   }
 
   @override
@@ -187,24 +193,6 @@ class __FormContentState extends State<_FormContent> {
                       ),
                     );
                   },
-                ),
-                const Gap(20),
-                SearchDropdownWidget(
-                  codigo: 'MONEDA',
-                  onChanged: (item) {
-                    if (item == null) return;
-                    moneda = item;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objMonedaId: item.value,
-                        objMonedaIdVer: item.name,
-                      ),
-                    );
-                  },
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  title: 'Moneda',
-                  isRequired: true,
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
@@ -400,9 +388,15 @@ class __FormContentState extends State<_FormContent> {
                           await CuotaDataDialog(
                             context: context,
                             title:
-                                'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                                'Estimación de la cuota según los datos Ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                             onDone: () {
                               context.pop();
+                              cubit.onFieldChanged(
+                                () => cubit.state.copyWith(
+                                  cuota: calcularCuotaProvider
+                                      .state.montoPrimeraCuota,
+                                ),
+                              );
                               if (!context.mounted) return;
                               if (state.connectionStatus ==
                                   ConnectionStatus.disconnected) {

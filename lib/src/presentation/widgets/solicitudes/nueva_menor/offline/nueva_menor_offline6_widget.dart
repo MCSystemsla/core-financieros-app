@@ -160,19 +160,20 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     frecuenciaPagoMeses = widget.responseLocalDb.frecuenciaPagoMeses;
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                objPropositoId: proposito,
                 objPropositoIdVer: propositoVer,
-                objMonedaIdVer: monedaVer,
+                objProductoId: producto,
                 objProductoIdVer: productoVer,
                 objFrecuenciaIdVer: frecuenciaDePagoVer,
-                objMonedaId: moneda,
-                monto: int.tryParse(monto ?? '0'),
-                objPropositoId: proposito,
-                objProductoId: producto,
                 objFrecuenciaId: frecuenciaDePago,
+                objMonedaId: moneda,
+                objMonedaIdVer: monedaVer,
+                monto: int.tryParse(monto ?? '0'),
                 plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
-                fechaPrimerPagoSolicitud: fechaPrimerPago?.toIso8601String(),
+                fechaPrimerPagoSolicitud:
+                    fechaPrimerPago?.toUtc().toIso8601String(),
                 observacion: observacion,
-                fechaDesembolso: fechaDesembolso?.toIso8601String(),
+                fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
                 prestamoInteres: tasaInteres ?? 0,
                 montoMinimo: montoMinimo,
                 montoMaximo: montoMaximo?.toInt(),
@@ -196,27 +197,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
             key: formKey,
             child: Column(
               children: [
-                const Gap(20),
-                SearchDropdownWidget(
-                  hintText: monedaVer ?? 'input.select_option'.tr(),
-                  codigo: 'MONEDA',
-                  onChanged: (item) {
-                    if (item == null) return;
-                    moneda = item.value;
-                    monedaVer = item.name;
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objMonedaId: moneda,
-                        objMonedaIdVer: monedaVer,
-                      ),
-                    );
-                  },
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  title: 'Moneda',
-                  isRequired: true,
-                ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   inputFormatters: [
@@ -454,7 +434,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                       CuotaDataDialog(
                         context: context,
                         title:
-                            'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} $monedaVer',
+                            'Estimación de la cuota final según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                         onDone: () {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(

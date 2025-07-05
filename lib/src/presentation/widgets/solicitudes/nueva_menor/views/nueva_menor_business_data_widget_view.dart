@@ -329,8 +329,8 @@ class __FormContentState extends State<_FormContent> {
                     actividadesPredominantesList.add(item);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        objActividadId: item.value,
-                        objActividadIdVer: item.name,
+                        objActividadId: actividad?.value,
+                        objActividadIdVer: actividad?.name,
                       ),
                     );
                     setState(() {});
@@ -349,8 +349,8 @@ class __FormContentState extends State<_FormContent> {
                     actividadesPredominantesList.add(item);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        objActividadId1: item.value,
-                        objActividadId1Ver: item.name,
+                        objActividadId1: actividad1?.value,
+                        objActividadId1Ver: actividad1?.name,
                       ),
                     );
                     setState(() {});
@@ -370,8 +370,8 @@ class __FormContentState extends State<_FormContent> {
                     actividadesPredominantesList.add(item);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        objActividadId2: item.value,
-                        objActividadId2Ver: item.name,
+                        objActividadId2: actividadEconomica2?.value,
+                        objActividadId2Ver: actividadEconomica2?.name,
                       ),
                     );
                     setState(() {});
@@ -422,8 +422,8 @@ class __FormContentState extends State<_FormContent> {
                       rubrosActividadesPredominanteList.add(item);
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objRubroActividad: item.value,
-                          objRubroActividadVer: item.name,
+                          objRubroActividad: rubroActividad?.value,
+                          objRubroActividadVer: rubroActividad?.name,
                         ),
                       );
                       setState(() {});
@@ -443,8 +443,8 @@ class __FormContentState extends State<_FormContent> {
                       rubrosActividadesPredominanteList.add(item);
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objRubroActividad2: item.value,
-                          objRubroActividad2Ver: item.name,
+                          objRubroActividad2: rubroActividad2?.value,
+                          objRubroActividad2Ver: rubroActividad2?.name,
                         ),
                       );
                       setState(() {});
@@ -464,8 +464,8 @@ class __FormContentState extends State<_FormContent> {
                       rubrosActividadesPredominanteList.add(item);
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objRubroActividad3: item.value,
-                          objRubroActividad3Ver: item.name,
+                          objRubroActividad3: rubroActividad3?.value,
+                          objRubroActividad3Ver: rubroActividad3?.name,
                         ),
                       );
                       setState(() {});
@@ -492,8 +492,10 @@ class __FormContentState extends State<_FormContent> {
                         objRubroActividadPredominante = item;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            objRubroActividadPredominante: item.value,
-                            objRubroActividadPredominanteVer: item.name,
+                            objRubroActividadPredominante:
+                                objRubroActividadPredominante?.value,
+                            objRubroActividadPredominanteVer:
+                                objRubroActividadPredominante?.name,
                           ),
                         );
                         setState(() {});

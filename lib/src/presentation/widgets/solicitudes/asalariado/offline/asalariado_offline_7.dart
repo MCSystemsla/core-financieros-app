@@ -209,25 +209,6 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                   },
                 ),
                 const Gap(20),
-                SearchDropdownWidget(
-                  hintText: moneda?.name ?? '',
-                  codigo: 'MONEDA',
-                  onChanged: (item) {
-                    if (item == null) return;
-                    moneda = item;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objMonedaId: item.value,
-                        objMonedaIdVer: item.name,
-                      ),
-                    );
-                  },
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  title: 'Moneda',
-                  isRequired: true,
-                ),
-                const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: montoController,
                   inputFormatters: [
@@ -438,13 +419,16 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                       await CuotaDataDialog(
                         context: context,
                         title:
-                            'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                            'Estimación de la Cuota según los Datos Ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                         onDone: () {
                           context.pop();
+
                           if (!context.mounted) return;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               isDone: true,
+                              cuota:
+                                  calcularCuotaProvider.state.montoPrimeraCuota,
                             ),
                           );
                           if (!isConnected) {

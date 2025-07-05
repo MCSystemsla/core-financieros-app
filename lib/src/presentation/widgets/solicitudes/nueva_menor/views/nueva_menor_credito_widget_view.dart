@@ -1,7 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
@@ -10,6 +7,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
@@ -74,6 +72,18 @@ class __FormContentState extends State<_FormContent> {
   double? montoMaximo;
 
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                objMonedaId: 'DOLAR',
+                objMonedaIdVer: 'DOLAR',
+              ),
+        );
+  }
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -151,7 +161,6 @@ class __FormContentState extends State<_FormContent> {
     }
   }
 
-  final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
@@ -182,26 +191,7 @@ class __FormContentState extends State<_FormContent> {
                   },
                 ),
                 const Gap(20),
-                SearchDropdownWidget(
-                  codigo: 'MONEDA',
-                  onChanged: (item) {
-                    if (item == null) return;
-                    moneda = item;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objMonedaId: item.value,
-                        objMonedaIdVer: item.name,
-                      ),
-                    );
-                  },
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  title: 'Moneda',
-                  isRequired: true,
-                ),
-                const Gap(20),
                 OutlineTextfieldWidget(
-                  textEditingController: montoController,
                   icon: Icon(
                     Icons.price_change,
                     color: AppColors.getPrimaryColor(),
@@ -212,8 +202,6 @@ class __FormContentState extends State<_FormContent> {
                   inputFormatters: [
                     CurrencyInputFormatter(),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-
-                    // FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -222,7 +210,7 @@ class __FormContentState extends State<_FormContent> {
                     monto = value.replaceAll(',', '');
                     cubit.onFieldChanged(
                       () => cubit.state
-                          .copyWith(monto: int.tryParse(monto ?? '0') ?? 0),
+                          .copyWith(monto: int.tryParse(monto ?? '0')),
                     );
                     setState(() {});
                   },
@@ -263,9 +251,6 @@ class __FormContentState extends State<_FormContent> {
                         montoMaximo: item.montoMaximo?.toInt(),
                       ),
                     );
-                    log(item.montoMaximo.toString());
-                    log(item.montoMinimo.toString());
-                    log(item.interes.toString());
                     setState(() {});
                   },
                 ),
@@ -361,7 +346,7 @@ class __FormContentState extends State<_FormContent> {
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      if (double.tryParse(monto ?? '0')! <
+                      if ((double.tryParse(monto ?? '0') ?? 0) <
                           montoMinimo!.toDouble()) {
                         CustomAlertDialog(
                           context: context,
@@ -407,8 +392,15 @@ class __FormContentState extends State<_FormContent> {
                       CuotaDataDialog(
                         context: context,
                         title:
-                            'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                         onDone: () {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cuota: calcularCuotaProvider
+                                  .state.montoPrimeraCuota
+                                  .toInt(),
+                            ),
+                          );
                           widget.controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn,

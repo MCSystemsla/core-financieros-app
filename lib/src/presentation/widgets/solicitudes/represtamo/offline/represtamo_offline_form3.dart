@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/material.dart';
 import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
@@ -19,7 +19,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -100,6 +99,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   final montoController = TextEditingController();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.solicitud;
     proposito = Item(
         name: solicitud.objPropositoIdVer!, value: solicitud.objPropositoId);
@@ -120,7 +120,6 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     fechaPrimerPago = solicitud.fechaPrimerPagoSolicitud;
     observacion = solicitud.observacion;
     montoController.text = solicitud.monto.toString();
-    super.initState();
   }
 
   @override
@@ -145,23 +144,11 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
-              hintText: moneda?.name ?? 'Seleccionar Moneda',
-              codigo: 'MONEDA',
-              onChanged: (item) {
-                if (item == null) return;
-                moneda = item;
-              },
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              title: 'Moneda',
-              isRequired: true,
-            ),
-            const Gap(20),
             OutlineTextfieldWidget(
               inputFormatters: [
                 CurrencyInputFormatter(),
-                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                LengthLimitingTextInputFormatter(10),
               ],
               textEditingController: montoController,
               icon: Icon(
@@ -283,7 +270,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  // if (double.tryParse(monto ?? '0')! <
+                  // if ((double.tryParse(monto ?? '0') ?? 0) <
                   //     montoMinimo!.toDouble()) {
                   //   CustomAlertDialog(
                   //     context: context,
@@ -293,7 +280,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                   //   ).showDialog(context, dialogType: DialogType.warning);
                   //   return;
                   // }
-                  // if (double.tryParse(monto ?? '0')! >
+                  // if ((double.tryParse(monto ?? '0') ?? 0) >
                   //     montoMaximo!.toDouble()) {
                   //   CustomAlertDialog(
                   //     context: context,
@@ -314,7 +301,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                        'Estimación de la Cuota final según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                     onDone: () {
                       context.read<SolicitudReprestamoCubit>().saveAnswers(
                             objFrecuenciaIdVer: frecuenciaDePago?.name,

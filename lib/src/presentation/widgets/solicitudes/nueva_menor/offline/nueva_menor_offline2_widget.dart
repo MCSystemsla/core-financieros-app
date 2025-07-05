@@ -258,7 +258,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Barrio Casa',
-                      maxLength: 50,
+                      maxLength: 40,
                       hintText: 'Ingresa Barrio Casa',
                       onChange: (value) {
                         barrioCasa = value;

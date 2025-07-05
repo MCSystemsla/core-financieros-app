@@ -174,6 +174,15 @@ class __FormContentState extends State<_FormContent> {
     tipoDocumento = userByCedula?.tipoDocumento;
     paisEmisor = userByCedula?.paisEmisor;
     context.read<GeolocationCubit>().getCurrentLocation();
+    final cedulaPath = context.read<SolicitudAsalariadoCubit>().state;
+    localDbProvider.saveCedulaClient(
+      cedulaClient: CedulaClientDb(
+        typeSolicitud: 'ASALARIADO',
+        cedula: cedula,
+        imageFrontCedula: cedulaPath.cedulaFrontPath,
+        imageBackCedula: cedulaPath.cedulaBackPath,
+      ),
+    );
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
                 objTipoDocumentoIdVer: tipoDocumento,
@@ -729,17 +738,6 @@ class __FormContentState extends State<_FormContent> {
                         context.read<GeolocationCubit>().getCurrentLocation();
                         return;
                       }
-
-                      final cedulaPath =
-                          context.read<SolicitudAsalariadoCubit>().state;
-                      localDbProvider.saveCedulaClient(
-                        cedulaClient: CedulaClientDb(
-                          typeSolicitud: 'ASALARIADO',
-                          cedula: cedula,
-                          imageFrontCedula: cedulaPath.cedulaFrontPath,
-                          imageBackCedula: cedulaPath.cedulaBackPath,
-                        ),
-                      );
 
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),

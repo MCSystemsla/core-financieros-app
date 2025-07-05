@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form4.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form5.dart';
-import 'package:flutter/material.dart';
 
 class ReprestamoForm extends StatelessWidget {
   final PageController controller;
@@ -32,10 +32,10 @@ class ReprestamoForm extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: controller,
             children: [
-              PhotoCedulaClientWidget(
+              AddCedulaPhotosScreen(
                 controller: controller,
-                onCedulaFrontalPressed: () {},
-                onCedulaTraseraPressed: () {},
+                onCedulaFrontTaken: (imagePath) {},
+                onCedulaBackTaken: (imagePath) {},
               ),
               ReprestamoForm1(
                 controller: controller,
