@@ -88,7 +88,7 @@ class ObjectBoxService {
   }
 
   void deleteRowsByDeterminateTime() {
-    final now = DateTime.now().subtract(const Duration(hours: 3));
+    final now = DateTime.now().subtract(const Duration(days: 30));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
         .build()

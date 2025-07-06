@@ -276,7 +276,7 @@ class SolicitudAsalariado {
       'objParentescoBeneficiarioSeguroID': objParentescoBeneficiarioSeguroId,
       'objEstadoSolicitudID': objEstadoSolicitudId,
       'objOficialCreditoID': objOficialCreditoId,
-      'objProductoID': objProductoId,
+      'ProductoCodigo': objProductoId,
       'Observacion': observacion,
       'Sucursal': sucursal,
       'UbicacionLongitud': ubicacionLongitud,
@@ -348,7 +348,7 @@ class SolicitudAsalariado {
       'IsOffline': isOffline,
     };
     data.removeWhere(
-      (key, value) => value == null || value == '',
+      (key, value) => value == null || value == '' || value == 0,
     );
     return data;
   }

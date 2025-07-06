@@ -718,7 +718,8 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: CustomOutLineButton(
                         onPressed: () {
-                          context.pop();
+                          context.pushReplacement(
+                              '/solicitudes/solicitudes-pendientes');
                         },
                         text: 'Salir',
                         textColor: AppColors.red,

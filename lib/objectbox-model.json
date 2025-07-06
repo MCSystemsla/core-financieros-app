@@ -1297,7 +1297,7 @@
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "150:6438773522276963689",
+      "lastPropertyId": "151:7270750806661937929",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -2050,6 +2050,11 @@
           "id": "150:6438773522276963689",
           "name": "frecuenciaPagoMeses",
           "type": 9
+        },
+        {
+          "id": "151:7270750806661937929",
+          "name": "createdAt",
+          "type": 10
         }
       ],
       "relations": []

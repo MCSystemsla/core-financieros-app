@@ -187,6 +187,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
       objOrigenSolicitudIdVer:
           _prefer(state.objOrigenSolicitudIdVer, prev?.objOrigenSolicitudIdVer),
+      createdAt: _preferDate(state.createdAt, prev?.createdAt),
       objPaisEmisorCedulaVer:
           _prefer(state.objPaisEmisorCedulaVer, prev?.objPaisEmisorCedulaVer),
       objMunicipioCasaIdVer:
@@ -449,6 +450,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
 
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
+
   DateTime? _preferDate(String? current, DateTime? previous) {
     final parsed = DateTime.tryParse(current ?? '');
     return parsed ?? previous;

@@ -167,7 +167,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       hasVerified: state.hasVerified,
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
       isDone: state.isDone,
-      createdAt: DateTime.now(),
+      createdAt: _preferDate(state.createdAt, prev?.createdAt),
       objOrigenSolicitudId:
           _prefer(state.objOrigenSolicitudId, prev?.objOrigenSolicitudId),
       horarioTrabajo: _prefer(state.horarioTrabajo, prev?.horarioTrabajo),
@@ -406,6 +406,11 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
 
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
+
+  DateTime? _preferDate(String? current, DateTime? previous) {
+    final parsed = DateTime.tryParse(current ?? '');
+    return parsed ?? previous;
+  }
 
   @override
   Future<void> close() {

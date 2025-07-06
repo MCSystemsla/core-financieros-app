@@ -134,7 +134,7 @@ class SolicitudReprestamo {
           objParentescoBeneficiarioSeguroId.isEmpty
               ? null
               : objParentescoBeneficiarioSeguroId,
-      'objProductoID': objProductoId.isEmpty ? null : objProductoId,
+      'ProductoCodigo': objProductoId.isEmpty ? null : objProductoId,
       'Observacion': observacion,
       'UbicacionLongitud': ubicacionLongitud,
       'UbicacionLatitud': ubicacionLatitud,
@@ -174,7 +174,8 @@ class SolicitudReprestamo {
       'FechaPrimerPagoSolicitud':
           fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
     };
-    data.removeWhere((key, value) => value == null || value == '');
+    data.removeWhere(
+        (key, value) => value == null || value == '' || value == 0);
     return data;
   }
 }

@@ -262,7 +262,7 @@ class SolicitudNuevaMenor {
       'objParentescoBeneficiarioSeguroID1': objParentescoBeneficiarioSeguroId1,
       'objEstadoSolicitudID': objEstadoSolicitudId,
       'objOficialCreditoID': objOficialCreditoId,
-      'objProductoID': objProductoId,
+      'ProductoCodigo': objProductoId,
       'Observacion': observacion,
       'Sucursal': sucursal,
       'UbicacionLongitud': ubicacionLongitud,
@@ -307,7 +307,7 @@ class SolicitudNuevaMenor {
       'IsOffline': isOffline,
     };
     data.removeWhere(
-      (key, value) => value == null || value == '',
+      (key, value) => value == null || value == '' || value == 0,
     );
     return data;
   }

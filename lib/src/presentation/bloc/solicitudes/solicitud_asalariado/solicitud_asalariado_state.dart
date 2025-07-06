@@ -156,9 +156,11 @@ class SolicitudAsalariadoState extends Equatable {
   final String cedulaFrontPath;
   final String cedulaBackPath;
   final String frecuenciaPagoMeses;
+  final String createdAt;
   const SolicitudAsalariadoState({
     this.uuid,
     this.frecuenciaPagoMeses = '',
+    this.createdAt = '',
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
     this.objOrigenSolicitudIdVer = '',
@@ -315,6 +317,7 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        createdAt,
         frecuenciaPagoMeses,
         cedulaFrontPath,
         cedulaBackPath,
@@ -596,6 +599,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? cedulaFrontPath,
     String? cedulaBackPath,
     String? frecuenciaPagoMeses,
+    String? createdAt,
   }) {
     return SolicitudAsalariadoState(
       uuid: uuid ?? this.uuid,
@@ -795,6 +799,7 @@ class SolicitudAsalariadoState extends Equatable {
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }
