@@ -30,7 +30,8 @@ abstract class SolicitudesCreditoRepository {
     required String codigo,
   });
   Future<CatalogoValor> getCatalogoProductos();
-  Future<(UserCedulaResponse?, bool)> getUserByCedula({required String cedula});
+  Future<(UserCedulaResponse?, bool, String)> getUserByCedula(
+      {required String cedula});
   Future<ReprestamoUserCedula> getUserReprestamoByCedula({
     required String cedula,
   });
@@ -57,7 +58,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final errorMsg = getErrorMessage(resp);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
 
         return (false, errorMsg);
       }
@@ -118,7 +119,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(UserCedulaResponse?, bool)> getUserByCedula({
+  Future<(UserCedulaResponse?, bool, String)> getUserByCedula({
     required String cedula,
   }) async {
     final endpoint = UserCedulaEndpoint(cedula: cedula);
@@ -126,12 +127,16 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        throw AppException(optionalMsg: resp['message']);
+        final (errorMsg, errorCode) = getErrorMessage(
+          resp,
+          errorMsg: 'Aun puedes seguir creando la solicitud',
+        );
+        throw AppException(optionalMsg: errorMsg);
       }
-      if (resp['data'] == null) return (null, true);
+      if (resp['data'] == null) return (null, true, 'NO_DATA');
       final data = UserCedulaResponse.fromJson(resp);
 
-      return (data, false);
+      return (data, false, 'OK');
     } catch (e) {
       _logger.e(e);
       rethrow;
@@ -154,7 +159,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final errorMsg = getErrorMessage(resp);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
         return (false, errorMsg);
       }
 
@@ -176,7 +181,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        throw AppException(optionalMsg: resp['message']);
+        final (errorMsg, errorCode) = getErrorMessage(
+          resp,
+          errorMsg:
+              'No tienes conexion a internet pero aun puedes seguir creando la solicitud',
+        );
+        throw AppException(optionalMsg: errorMsg);
       }
       final data = ReprestamoUserCedula.fromJson(resp);
       return data;
@@ -198,7 +208,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.e(resp);
         _logger.i(endpoint.body);
-        final errorMsg = getErrorMessage(resp);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
         return (false, errorMsg);
       }
       _logger.i(resp);

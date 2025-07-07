@@ -37,7 +37,7 @@ class AddUserCedulaScreen extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: ((context) => CrearSolicitudScreen(
+            builder: ((_) => CrearSolicitudScreen(
                   typeForm: typeForm,
                   userByCedulaSolicitud: userByCedula,
                 )),
@@ -62,15 +62,27 @@ class AddUserCedulaScreen extends StatelessWidget {
     }
 
     void showErrorDialog({
-      required String cedula,
-      required Item tipoDocumento,
-      required Item paisEmisor,
       required String errorMsg,
+      required UserByCedulaSolicitud userByCedula,
     }) {
       CustomAlertDialog(
         context: context,
         title: errorMsg,
-        onDone: () => context.pop(),
+        onDone: () {
+          if (errorMsg.contains('Sin conexión a internet')) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => CrearSolicitudScreen(
+                      typeForm: typeForm,
+                      userByCedulaSolicitud: userByCedula,
+                    )),
+              ),
+            );
+            return;
+          }
+          context.pop();
+        },
       ).showDialog(context);
     }
 
@@ -83,25 +95,13 @@ class AddUserCedulaScreen extends StatelessWidget {
           if (state is OnUserByCedulaError) {
             showErrorDialog(
               errorMsg: state.errorMsg,
-              cedula: state.cedula,
-              tipoDocumento: state.tipoDocumento,
-              paisEmisor: state.paisEmisor,
+              userByCedula: state.userByCedula,
             );
           }
           if (state is OnUserByCedulaSuccess) {
             showSuccessDialog(
               isNewUserCedula: state.isNewUserCedula,
-              userByCedula: UserByCedulaSolicitud(
-                segundoApellido: state.userByCedula.segundoApellido,
-                segundoNombre: state.userByCedula.segundoNombre,
-                primerNombre: state.userByCedula.primerNombre,
-                primerApellido: state.userByCedula.primerApellido,
-                cedula: state.userByCedula.cedula,
-                fechaEmision: state.userByCedula.fechaEmision,
-                fechaVencimiento: state.userByCedula.fechaVencimiento,
-                fechaNacimiento: state.userByCedula.fechaNacimiento,
-                tipoDocumento: state.userByCedula.tipoDocumento,
-              ),
+              userByCedula: state.userByCedula,
             );
           }
         },

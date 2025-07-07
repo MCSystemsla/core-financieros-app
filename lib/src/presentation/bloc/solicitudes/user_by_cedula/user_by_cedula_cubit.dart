@@ -18,10 +18,10 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
   }) async {
     try {
       emit(OnUserByCedulaLoading());
-      final (resp, isNewUserCedula) =
+      final (resp, isNewUserCedula, code) =
           await _repository.getUserByCedula(cedula: cedula);
 
-      if (!isNewUserCedula) {
+      if (isNewUserCedula) {
         emit(
           OnUserByCedulaSuccess(
             isNewUserCedula: isNewUserCedula,
@@ -52,18 +52,24 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
         ),
       );
     } on AppException catch (e) {
-      emit(OnUserByCedulaError(
-        errorMsg: e.optionalMsg,
-        cedula: cedula,
-        tipoDocumento: tipoDocumento,
-        paisEmisor: paisEmisor,
-      ));
+      emit(
+        OnUserByCedulaError(
+          errorMsg: e.optionalMsg,
+          userByCedula: UserByCedulaSolicitud(
+            cedula: cedula,
+            tipoDocumento: tipoDocumento.value,
+            paisEmisor: paisEmisor,
+          ),
+        ),
+      );
     } catch (e) {
       emit(OnUserByCedulaError(
         errorMsg: e.toString(),
-        cedula: cedula,
-        tipoDocumento: tipoDocumento,
-        paisEmisor: paisEmisor,
+        userByCedula: UserByCedulaSolicitud(
+          cedula: cedula,
+          tipoDocumento: tipoDocumento.value,
+          paisEmisor: paisEmisor,
+        ),
       ));
     }
   }
