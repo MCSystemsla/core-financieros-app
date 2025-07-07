@@ -25,6 +25,7 @@ class UserByCedulaSolicitud {
   final String tipoDocumento;
   final String? tipoPersona;
   final Item? paisEmisor;
+  final String? sexo;
 
   UserByCedulaSolicitud({
     this.primerNombre,
@@ -38,6 +39,7 @@ class UserByCedulaSolicitud {
     required this.tipoDocumento,
     this.paisEmisor,
     this.tipoPersona,
+    this.sexo,
   });
 }
 

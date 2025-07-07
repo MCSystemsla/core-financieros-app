@@ -30,7 +30,7 @@ abstract class SolicitudesCreditoRepository {
     required String codigo,
   });
   Future<CatalogoValor> getCatalogoProductos();
-  Future<(UserCedulaResponse?, bool, String)> getUserByCedula(
+  Future<(UserCedulaData?, bool, String)> getUserByCedula(
       {required String cedula});
   Future<ReprestamoUserCedula> getUserReprestamoByCedula({
     required String cedula,
@@ -119,7 +119,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(UserCedulaResponse?, bool, String)> getUserByCedula({
+  Future<(UserCedulaData?, bool, String)> getUserByCedula({
     required String cedula,
   }) async {
     final endpoint = UserCedulaEndpoint(cedula: cedula);
@@ -134,7 +134,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         throw AppException(optionalMsg: errorMsg);
       }
       if (resp['data'] == null) return (null, true, 'NO_DATA');
-      final data = UserCedulaResponse.fromJson(resp);
+      final data = UserCedulaData.fromJson(resp);
 
       return (data, false, 'OK');
     } catch (e) {

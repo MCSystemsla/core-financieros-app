@@ -118,11 +118,16 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
     paisEmisor = widget.userByCedulaSolicitud.paisEmisor;
     cedulaController = widget.userByCedulaSolicitud.cedula;
     fechaEmisionCedula = widget.userByCedulaSolicitud.fechaEmision;
+    fechaNacimiento = widget.userByCedulaSolicitud.fechaNacimiento;
     _selectedDate = widget.userByCedulaSolicitud.fechaVencimiento;
     nombre1 = widget.userByCedulaSolicitud.primerNombre;
     nombre2 = widget.userByCedulaSolicitud.segundoNombre;
     apellido1 = widget.userByCedulaSolicitud.primerApellido;
     apellido2 = widget.userByCedulaSolicitud.segundoApellido;
+    sexo = Item(
+      name: widget.userByCedulaSolicitud.sexo == 'F' ? 'Femenino' : 'Masculino',
+      value: widget.userByCedulaSolicitud.sexo,
+    );
 
     edadMinima = global<ObjectBoxService>()
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
@@ -130,6 +135,9 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
         .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                objSexoId: sexo?.value,
+                objSexoIdVer: sexo?.name,
+                fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
                 objTipoDocumentoId: tipoDocumento?.value,
                 objTipoDocumentoIdVer: tipoDocumento?.name,
                 cedula: cedulaController,
@@ -471,6 +479,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: fechaEmisionCedula?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -482,20 +491,19 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               ),
               title: 'Fecha Emisión Documento',
               isRequired: true,
-              hintText: fechaEmisionCedula?.selectorFormat() ??
-                  'Fecha Emisión Documento',
+              hintText: 'Fecha Emisión Documento',
               isValid: null,
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              initialValue: _selectedDate?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
               validator: (_) => ClassValidator.validateRequired(
                 _selectedDate?.selectorFormat(),
               ),
-              hintText:
-                  _selectedDate?.selectorFormat() ?? 'Ingrese Fecha Documento',
+              hintText: 'Ingrese Fecha Documento',
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),

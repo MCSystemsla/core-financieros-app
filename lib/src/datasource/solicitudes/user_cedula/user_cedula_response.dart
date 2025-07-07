@@ -1,7 +1,19 @@
 import 'dart:convert';
 
-UserCedulaResponse userCedulaResponseFromJson(String str) =>
-    UserCedulaResponse.fromJson(json.decode(str));
+UserCedulaData userCedulaResponseFromJson(String str) =>
+    UserCedulaData.fromJson(json.decode(str));
+
+class UserCedulaData {
+  final UserCedulaResponse data;
+
+  UserCedulaData({
+    required this.data,
+  });
+
+  factory UserCedulaData.fromJson(Map<String, dynamic> json) => UserCedulaData(
+        data: UserCedulaResponse.fromJson(json['data']),
+      );
+}
 
 class UserCedulaResponse {
   final String cedula;
