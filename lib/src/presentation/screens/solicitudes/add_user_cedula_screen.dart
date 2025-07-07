@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AddUserCedulaScreen extends StatelessWidget {
   final TypeForm typeForm;
@@ -30,7 +31,20 @@ class AddUserCedulaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     void showSuccessDialog({
       required UserByCedulaSolicitud userByCedula,
+      required bool isNewUserCedula,
     }) {
+      if (isNewUserCedula) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => CrearSolicitudScreen(
+                  typeForm: typeForm,
+                  userByCedulaSolicitud: userByCedula,
+                )),
+          ),
+        );
+        return;
+      }
       CustomAlertDialog(
         context: context,
         title:
@@ -51,18 +65,13 @@ class AddUserCedulaScreen extends StatelessWidget {
       required String cedula,
       required Item tipoDocumento,
       required Item paisEmisor,
+      required String errorMsg,
     }) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => CrearSolicitudScreen(
-                typeForm: typeForm,
-                cedula: cedula,
-                tipoDocumento: tipoDocumento,
-                paisEmiror: paisEmisor,
-              )),
-        ),
-      );
+      CustomAlertDialog(
+        context: context,
+        title: errorMsg,
+        onDone: () => context.pop(),
+      ).showDialog(context);
     }
 
     return Scaffold(
@@ -73,6 +82,7 @@ class AddUserCedulaScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is OnUserByCedulaError) {
             showErrorDialog(
+              errorMsg: state.errorMsg,
               cedula: state.cedula,
               tipoDocumento: state.tipoDocumento,
               paisEmisor: state.paisEmisor,
@@ -80,16 +90,17 @@ class AddUserCedulaScreen extends StatelessWidget {
           }
           if (state is OnUserByCedulaSuccess) {
             showSuccessDialog(
+              isNewUserCedula: state.isNewUserCedula,
               userByCedula: UserByCedulaSolicitud(
-                segundoApellido: state.userCedulaResponse.segundoApellido,
-                segundoNombre: state.userCedulaResponse.segundoNombre,
-                primerNombre: state.userCedulaResponse.primerNombre,
-                primerApellido: state.userCedulaResponse.primerApellido,
-                cedula: state.userCedulaResponse.cedula,
-                fechaEmision: state.userCedulaResponse.fechaEmision,
-                fechaVencimiento: state.userCedulaResponse.fechaExpira,
-                fechaNacimiento: state.userCedulaResponse.fechaNacimiento,
-                tipoDocumento: state.userCedulaResponse.tipoDocumento,
+                segundoApellido: state.userByCedula.segundoApellido,
+                segundoNombre: state.userByCedula.segundoNombre,
+                primerNombre: state.userByCedula.primerNombre,
+                primerApellido: state.userByCedula.primerApellido,
+                cedula: state.userByCedula.cedula,
+                fechaEmision: state.userByCedula.fechaEmision,
+                fechaVencimiento: state.userByCedula.fechaVencimiento,
+                fechaNacimiento: state.userByCedula.fechaNacimiento,
+                tipoDocumento: state.userByCedula.tipoDocumento,
               ),
             );
           }

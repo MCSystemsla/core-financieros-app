@@ -12,11 +12,15 @@ final class UserByCedulaInitial extends UserByCedulaState {}
 final class OnUserByCedulaLoading extends UserByCedulaState {}
 
 final class OnUserByCedulaSuccess extends UserByCedulaState {
-  final UserCedulaResponse userCedulaResponse;
+  final bool isNewUserCedula;
+  final UserByCedulaSolicitud userByCedula;
 
-  const OnUserByCedulaSuccess({required this.userCedulaResponse});
+  const OnUserByCedulaSuccess({
+    required this.userByCedula,
+    required this.isNewUserCedula,
+  });
   @override
-  List<Object> get props => [userCedulaResponse];
+  List<Object> get props => [userByCedula, isNewUserCedula];
 }
 
 final class OnUserByCedulaError extends UserByCedulaState {

@@ -112,13 +112,10 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
     return BlocBuilder<UserByCedulaCubit, UserByCedulaState>(
       builder: (context, state) {
         if (state is OnUserByCedulaSuccess) {
-          nombre1 = state.userCedulaResponse.primerNombre;
-          nombre2 = state.userCedulaResponse.segundoNombre;
-          apellido1 = state.userCedulaResponse.primerApellido;
-          apellido2 = state.userCedulaResponse.segundoApellido;
-          sexo = state.userCedulaResponse.sexo;
-          sexoVer =
-              state.userCedulaResponse.sexo == 'M' ? 'Masculino' : 'Femenino';
+          nombre1 = state.userByCedula.primerNombre;
+          nombre2 = state.userByCedula.segundoNombre;
+          apellido1 = state.userByCedula.primerApellido;
+          apellido2 = state.userByCedula.segundoApellido;
           return SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Form(
@@ -256,7 +253,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                   OutlineTextfieldWidget.withCounter(
                     maxLength: 18,
                     readOnly: true,
-                    initialValue: state.userCedulaResponse.cedula,
+                    initialValue: state.userByCedula.cedula,
                     icon: Icon(
                       Icons.credit_card,
                       color: AppColors.getPrimaryColor(),
@@ -280,8 +277,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     title: 'Fecha Emisión Documento',
                     isRequired: true,
 
-                    hintText:
-                        state.userCedulaResponse.fechaEmision.selectorFormat(),
+                    hintText: state.userByCedula.fechaEmision?.selectorFormat(),
                     isValid: null,
                   ),
                   const Gap(30),
@@ -311,8 +307,8 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                     ),
 
                     title: 'Fecha Nacimiento',
-                    hintText: state.userCedulaResponse.fechaNacimiento
-                        .selectorFormat(),
+                    hintText:
+                        state.userByCedula.fechaNacimiento?.selectorFormat(),
                     isValid: null,
 
                     // textEditingController: fechaNacimientoController,
@@ -454,7 +450,7 @@ class _NuevaMenorDataClientWidgetState extends State<NuevaMenorDataClientWidget>
                         localDbProvider.saveCedulaClient(
                           cedulaClient: CedulaClientDb(
                             typeSolicitud: 'NUEVA_MENOR',
-                            cedula: state.userCedulaResponse.cedula,
+                            cedula: state.userByCedula.cedula,
                             imageFrontCedula: cedulaPath.cedulaFrontPath,
                             imageBackCedula: cedulaPath.cedulaBackPath,
                           ),
