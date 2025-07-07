@@ -187,7 +187,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
       objOrigenSolicitudIdVer:
           _prefer(state.objOrigenSolicitudIdVer, prev?.objOrigenSolicitudIdVer),
-      createdAt: _preferDate(state.createdAt, prev?.createdAt),
+      createdAt: prev?.createdAt ?? DateTime.now(),
       objPaisEmisorCedulaVer:
           _prefer(state.objPaisEmisorCedulaVer, prev?.objPaisEmisorCedulaVer),
       objMunicipioCasaIdVer:

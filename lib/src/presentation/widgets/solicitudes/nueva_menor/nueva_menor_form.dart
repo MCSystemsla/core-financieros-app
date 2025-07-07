@@ -42,19 +42,13 @@ class NuevaMenorForm extends StatelessWidget {
               AddCedulaPhotosScreen(
                 controller: pageController,
                 onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
-                        () => context
-                            .read<SolicitudNuevaMenorCubit>()
-                            .state
-                            .copyWith(cedulaFrontPath: imagePath),
+                  context.read<SolicitudNuevaMenorCubit>().saveCedula(
+                        cedulaFrontPath: imagePath,
                       );
                 },
                 onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
-                        () => context
-                            .read<SolicitudNuevaMenorCubit>()
-                            .state
-                            .copyWith(cedulaBackPath: imagePath),
+                  context.read<SolicitudNuevaMenorCubit>().saveCedula(
+                        cedulaBackPath: imagePath,
                       );
                 },
               ),

@@ -45,6 +45,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
   Item? paisPeps2;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -63,6 +64,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   familiarEmpleado = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esFamiliarEmpleado: familiarEmpleado == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
                 validator: (value) => ClassValidator.validateRequired(value),
@@ -86,6 +92,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliar: nombreEmpleado,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -109,6 +120,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   cedulaEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cedulaFamiliar: cedulaEmpleado,
+                    ),
+                  );
                 },
               ),
             ],
@@ -126,6 +142,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   espeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esPeps: espeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
                 toStringItem: (item) => item,
@@ -148,6 +169,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreDeEntidadPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreDeEntidadPeps: nombreDeEntidadPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -157,6 +183,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = Item(name: item.nombre, value: item.valor);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps: paisPeps?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PAIS',
@@ -180,6 +211,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps: periodoPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -197,6 +233,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoOficialPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoOficialPeps: cargoOficialPeps,
+                    ),
+                  );
                 },
               ),
             ],
@@ -213,6 +254,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   tieneFamiliarPeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
                 validator: (value) => ClassValidator.validateRequired(value),
@@ -236,6 +282,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliarPeps2: nombreFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -253,6 +304,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoFamiliarPeps2: cargoFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -270,6 +326,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEntidadPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreEntidadPeps2: nombreEntidadPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -280,6 +341,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   if (item == null) return;
                   parentescoFamiliarPeps2 =
                       Item(name: item.name, value: item.value);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PARENTESCO',
@@ -303,6 +369,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps2: periodoPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -312,6 +383,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps2: paisPeps2?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PAIS',
@@ -328,27 +404,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        esFamiliarEmpleado:
-                            familiarEmpleado == 'input.yes'.tr(),
-                        nombreFamiliar: nombreEmpleado?.trim(),
-                        cedulaFamiliar: cedulaEmpleado?.trim(),
-                        esPeps: espeps == 'input.yes'.tr(),
-                        nombreDeEntidadPeps: nombreDeEntidadPeps,
-                        paisPeps: paisPeps?.value,
-                        // paisPepsVe: paisPeps?.value,
-                        periodoPeps: periodoPeps,
-                        cargoOficialPeps: cargoOficialPeps,
-                        tieneFamiliarPeps:
-                            tieneFamiliarPeps == 'input.yes'.tr(),
-                        nombreFamiliarPeps2: nombreFamiliarPeps2,
-                        parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
-                        // parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
-                        cargoFamiliarPeps2: cargoFamiliarPeps2,
-                        nombreEntidadPeps2: nombreEntidadPeps2,
-                        periodoPeps2: periodoPeps2,
-                        paisPeps2: paisPeps2?.value,
-                      );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

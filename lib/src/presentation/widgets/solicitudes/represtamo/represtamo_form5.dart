@@ -57,6 +57,7 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
@@ -77,6 +78,12 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   onChanged: (item) {
                     if (item == null) return;
                     sector = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objSectorId: sector?.value,
+                        objSectorIdVer: sector?.name,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -95,6 +102,11 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   isValid: null,
                   onChange: (value) {
                     beneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        beneficiarioSeguro: beneficiarioSeguro,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -119,6 +131,11 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   isValid: null,
                   onChange: (value) {
                     cedulaBeneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -131,6 +148,12 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   onChanged: (item) {
                     if (item == null) return;
                     parentesco = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -156,6 +179,11 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                   isValid: null,
                   onChange: (value) {
                     telefonoBeneficiario = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefonoBeneficiario: telefonoBeneficiario,
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -167,29 +195,19 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            objSectorId: sector?.value,
-                            objSectorIdVer: sector?.name,
-                            beneficiarioSeguro: beneficiarioSeguro,
-                            cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                            objParentescoBeneficiarioSeguroId:
-                                parentesco?.value,
-                            objParentescoBeneficiarioSeguroIdVer:
-                                parentesco?.name,
-                            telefonoBeneficiario: telefonoBeneficiario == null
-                                ? ''
-                                : telefonoBeneficiarioCode +
-                                    (telefonoBeneficiario ?? '')
-                                        .trim()
-                                        .replaceAll('-', ''),
-                            isDone: !state.isConnected,
-                            isOffline: !state.isConnected,
-                          );
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          isDone: true,
+                          isOffline: !state.isConnected,
+                        ),
+                      );
                       if (!state.isConnected) {
-                        context.read<SolicitudReprestamoCubit>().saveAnswers(
-                              errorMsg:
-                                  'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                            );
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            errorMsg:
+                                'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          ),
+                        );
                         CustomAlertDialog(
                           context: context,
                           title:

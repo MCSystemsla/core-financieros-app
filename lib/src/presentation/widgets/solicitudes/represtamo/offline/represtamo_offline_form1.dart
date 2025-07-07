@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 class ReprestamoOfflineForm1 extends StatefulWidget {
@@ -77,6 +76,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
 
   @override
   void initState() {
+    super.initState();
     tipoPersonaCredito = widget.solicitud.objTipoPersonaId;
     tipoPersonaCreditoVer = widget.solicitud.objTipoPersonaIdVer;
     tipoDocumento = Item(
@@ -86,9 +86,21 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
     celularReprestamo = widget.solicitud.celularReprestamo;
     cedula = widget.solicitud.cedula;
     ubicacion = widget.solicitud.ubicacion;
-    // _selectedDate = widget.solicitud.fec;
+    context.read<SolicitudReprestamoCubit>().initAutoSave(
+          uuid: widget.solicitud.uuid,
+        );
 
-    super.initState();
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                objTipoPersonaId: tipoPersonaCredito,
+                objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                objTipoDocumentoId: tipoDocumento?.value,
+                objTipoDocumentoIdVer: tipoDocumento?.name,
+                celularReprestamo: celularReprestamo,
+                cedula: cedula,
+                ubicacion: ubicacion,
+              ),
+        );
   }
 
   final formKey = GlobalKey<FormState>();
@@ -133,6 +145,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
         }
       },
       builder: (context, state) {
+        final cubit = context.read<SolicitudReprestamoCubit>();
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -168,6 +181,12 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                     if (item == null || !mounted) return;
                     tipoPersonaCredito = item.value;
                     tipoPersonaCreditoVer = item.name;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objTipoPersonaId: tipoPersonaCredito,
+                        objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                      ),
+                    );
                   },
                   title: 'Tipo de Persona',
                   validator: (value) =>
@@ -181,6 +200,12 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     tipoDocumento = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objTipoDocumentoId: tipoDocumento?.value,
+                        objTipoDocumentoIdVer: tipoDocumento?.name,
+                      ),
+                    );
                   },
                   title: 'Tipo de Documento',
                   validator: (value) =>
@@ -201,6 +226,11 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   isValid: null,
                   onChange: (value) {
                     cedula = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cedula: cedula,
+                      ),
+                    );
                     setState(() {});
                   },
                 ),
@@ -219,6 +249,11 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   ],
                   onChange: (value) {
                     celularReprestamo = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        celularReprestamo: celularReprestamo,
+                      ),
+                    );
                     setState(() {});
                   },
                   hintText: 'Ingresa Celular Represtamo',
@@ -237,6 +272,11 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   textCapitalization: TextCapitalization.words,
                   onChange: (value) {
                     ubicacion = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        ubicacion: ubicacion,
+                      ),
+                    );
                     setState(() {});
                   },
                   hintText: 'Ingresa Ubicacion',
@@ -252,27 +292,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
                       if (!formKey.currentState!.validate()) return;
-                      final Position? position =
-                          state is OnGeolocationSuccess ? state.position : null;
-
-                      context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            cedula: cedula,
-                            idLocalResponse: widget.solicitud.id,
-                            tipoPersona: tipoPersonaCredito,
-                            objTipoPersonaId: tipoPersonaCredito,
-                            objTipoPersonaIdVer: tipoPersonaCreditoVer,
-                            objTipoDocumentoId: tipoDocumento?.value,
-                            objTipoDocumentoIdVer: tipoDocumento?.name,
-                            ubicacion: ubicacion,
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
-                            celularReprestamo: celularReprestamo == null
-                                ? ''
-                                : celularCode +
-                                    (celularReprestamo ?? '')
-                                        .trim()
-                                        .replaceAll('-', ''),
-                          );
 
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),

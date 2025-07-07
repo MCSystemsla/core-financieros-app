@@ -152,17 +152,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        objSectorId: sector?.value,
-                        objSectorIdVer: sector?.name,
-                        beneficiarioSeguro: beneficiarioSeguro,
-                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                        objParentescoBeneficiarioSeguroId: parentesco?.value,
-                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
-                        telefonoBeneficiario: telefonoBeneficiario,
-                        isDone: !isConnected,
-                        isOffline: true,
-                      );
+
                   if (!isConnected) {
                     CustomAlertDialog(
                       context: context,

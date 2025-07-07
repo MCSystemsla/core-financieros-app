@@ -84,7 +84,11 @@ class SolicitudReprestamoState extends Equatable {
   final String cedulaFrontPath;
   final String cedulaBackPath;
   final String nombreCompletoCliente;
+  final String? uuid;
+  final String createdAt;
   const SolicitudReprestamoState({
+    this.createdAt = '',
+    this.uuid,
     this.nombreCompletoCliente = '',
     this.cedulaBackPath = '',
     this.cedulaFrontPath = '',
@@ -336,6 +340,7 @@ class SolicitudReprestamoState extends Equatable {
     String? cedulaFrontPath,
     String? cedulaBackPath,
     String? nombreCompletoCliente,
+    String? uuid,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -436,6 +441,7 @@ class SolicitudReprestamoState extends Equatable {
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       nombreCompletoCliente:
           nombreCompletoCliente ?? this.nombreCompletoCliente,
+      uuid: uuid ?? this.uuid,
     );
   }
 }

@@ -113,28 +113,24 @@ class SolicitudReprestamo {
   });
 
   Map<String, dynamic> toJson() {
-    // 'objClienteID': 35280,
     final Map<String, dynamic> data = {
       'objOrigenSolicitudID': 'APPMOVIL',
       'isOffline': isOffline,
       'database': LocalStorage().database,
       'Cedula': cedula,
       'Monto': monto,
-      'objMonedaID': objMonedaId.isEmpty ? null : objMonedaId,
-      'objPropositoID': objPropositoId.isEmpty ? null : objPropositoId,
-      'objFrecuenciaID': objFrecuenciaId.isEmpty ? null : objFrecuenciaId,
+      'objMonedaID': objMonedaId,
+      'objPropositoID': objPropositoId,
+      'objFrecuenciaID': objFrecuenciaId,
       'Cuota': cuota,
-      'objActividadID': objActividadId.isEmpty ? null : objActividadId,
-      'objActividadID1': objActividadId1.isEmpty ? null : objActividadId1,
-      'objActividadID2': objActividadId2.isEmpty ? null : objActividadId2,
-      'objSectorID': objSectorId.isEmpty ? null : objSectorId,
+      'objActividadID': objActividadId,
+      'objActividadID1': objActividadId1,
+      'objActividadID2': objActividadId2,
+      'objSectorID': objSectorId,
       'BeneficiarioSeguro': beneficiarioSeguro,
       'CedulaBeneficiarioSeguro': cedulaBeneficiarioSeguro,
-      'objParentescoBeneficiarioSeguroID':
-          objParentescoBeneficiarioSeguroId.isEmpty
-              ? null
-              : objParentescoBeneficiarioSeguroId,
-      'ProductoCodigo': objProductoId.isEmpty ? null : objProductoId,
+      'objParentescoBeneficiarioSeguroID': objParentescoBeneficiarioSeguroId,
+      'ProductoCodigo': objProductoId,
       'Observacion': observacion,
       'UbicacionLongitud': ubicacionLongitud,
       'UbicacionLatitud': ubicacionLatitud,
@@ -151,20 +147,14 @@ class SolicitudReprestamo {
       'NombreEntidadPeps2': nombreEntidadPeps2,
       'PeriodoPeps2': periodoPeps2,
       'PaisPeps2': paisPeps2,
-      'objRubroActividad': objRubroActividad.isEmpty ? null : objRubroActividad,
-      'objActividadPredominante':
-          objActividadPredominante.isEmpty ? null : objActividadPredominante,
-      'objTipoDocumentoID':
-          objTipoDocumentoId.isEmpty ? null : objTipoDocumentoId,
-      'objRubroActividad2':
-          objRubroActividad2.isEmpty ? null : objRubroActividad2,
-      'objRubroActividad3':
-          objRubroActividad3.isEmpty ? null : objRubroActividad3,
-      'objRubroActividadPredominante': objRubroActividadPredominante.isEmpty
-          ? null
-          : objRubroActividadPredominante,
+      'objRubroActividad': objRubroActividad,
+      'objActividadPredominante': objActividadPredominante,
+      'objTipoDocumentoID': objTipoDocumentoId,
+      'objRubroActividad2': objRubroActividad2,
+      'objRubroActividad3': objRubroActividad3,
+      'objRubroActividadPredominante': objRubroActividadPredominante,
       'TipoPersona': tipoPersona,
-      'objTipoPersonaID': objTipoPersonaId.isEmpty ? null : objTipoPersonaId,
+      'objTipoPersonaID': objTipoPersonaId,
       'TelefonoBeneficiario': telefonoBeneficiario,
       'EsFamiliarEmpleado': esFamiliarEmpleado,
       'NombreFamiliar': nombreFamiliar,

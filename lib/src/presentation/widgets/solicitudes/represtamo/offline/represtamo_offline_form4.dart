@@ -3,14 +3,12 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ReprestamoOfflineForm4 extends StatefulWidget {
@@ -298,29 +296,6 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        objActividadPredominante: actividadPredominante?.value,
-                        objActividadPredominanteVer:
-                            actividadPredominante?.name,
-                        objRubroActividad: rubroActividad?.value,
-                        objRubroActividadVer: rubroActividad?.name,
-                        objRubroActividad2: rubroActividad2?.value,
-                        objRubroActividad2Ver: rubroActividad2?.name,
-                        objRubroActividad3: rubroActividad3?.value,
-                        objRubroActividad3Ver: rubroActividad3?.name,
-                        objActividadId2: actividadEconomica2?.value,
-                        objActividadId2Ver: actividadEconomica2?.name,
-                        objSectorId: sectorEconomico?.value,
-                        objSectorIdVer: sectorEconomico?.name,
-                        objActividadId: actividad?.value,
-                        objActividadIdVer: actividad?.name,
-                        objActividadId1: actividad1?.value,
-                        objActividadId1Ver: actividad1?.name,
-                        objRubroActividadPredominante:
-                            objRubroActividadPredominante?.value,
-                        objRubroActividadPredominanteVer:
-                            objRubroActividadPredominante?.name,
-                      );
                 },
               ),
             ),

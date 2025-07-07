@@ -242,9 +242,10 @@ class SolicitudAsalariado {
       'Apellido2': apellido2,
       'Cedula': cedula,
       'ObjPaisEmisorCedula': objPaisEmisorCedula,
-      'FechaEmisionCedula': fechaEmisionCedula?.toIso8601String(),
-      'FechaVencimientoCedula': fechaVencimientoCedula?.toIso8601String(),
-      'FechaNacimiento': fechaNacimiento?.toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String(),
+      'FechaVencimientoCedula':
+          fechaVencimientoCedula?.toUtc().toIso8601String(),
+      'FechaNacimiento': fechaNacimiento?.toUtc().toIso8601String(),
       'Telefono': telefono,
       'Celular': celular,
       'DireccionCasa': direccionCasa,
@@ -316,7 +317,8 @@ class SolicitudAsalariado {
       'TelefonoBeneficiario': telefonoBeneficiario,
       'codigoRed': codigoRed,
       'PlazoSolicitud': plazoSolicitud,
-      'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud?.toIso8601String(),
+      'FechaPrimerPagoSolicitud':
+          fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
       'NombreTrabajo': nombreTrabajo,
       'DireccionTrabajo': direccionTrabajo,
       'BarrioTrabajo': barrioTrabajo,
@@ -327,7 +329,7 @@ class SolicitudAsalariado {
       'DireccionFamiliarCercano': direccionFamiliarCercano,
       'DuenoVivienda': duenoVivienda,
       'FechaVenceAvaluoAsalariado':
-          fechaVenceAvaluoAsalariado?.toIso8601String(),
+          fechaVenceAvaluoAsalariado?.toUtc().toIso8601String(),
       'FuenteOtrosIngresos': fuenteOtrosIngresos,
       'FuenteOtrosIngresosConyugue': fuenteOtrosIngresosConyugue,
       'LugarTrabajoAnterior': lugarTrabajoAnterior,

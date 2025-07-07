@@ -84,7 +84,10 @@ class ReprestamoResponsesLocalDb {
   String? parentescoFamiliar;
   String? parentescoFamiliarVer;
   String? nombreCompletoCliente;
+  String? uuid;
   ReprestamoResponsesLocalDb({
+    required this.id,
+    this.uuid,
     this.objOrigenSolicitudIdVer,
     this.objMonedaIdVer,
     this.objPropositoIdVer,

@@ -49,6 +49,7 @@ class ObjectBoxService {
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
     // solicitudesResponsesBox.removeAll();
+    // solicitudesReprestamoResponsesBox.removeAll();
     // catalogoParametroBox.removeAll();
   }
 
@@ -91,6 +92,16 @@ class ObjectBoxService {
     final now = DateTime.now().subtract(const Duration(days: 30));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesReprestamoResponsesBox
+        .query(ReprestamoResponsesLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesAsalariadoResponsesBox
+        .query(AsalariadoResponsesLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
         .build()
         .remove();
   }

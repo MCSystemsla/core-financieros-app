@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
@@ -8,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represt
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form4.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form5.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReprestamoForm extends StatelessWidget {
   final PageController controller;
@@ -34,8 +36,16 @@ class ReprestamoForm extends StatelessWidget {
             children: [
               AddCedulaPhotosScreen(
                 controller: controller,
-                onCedulaFrontTaken: (imagePath) {},
-                onCedulaBackTaken: (imagePath) {},
+                onCedulaFrontTaken: (imagePath) {
+                  context.read<SolicitudReprestamoCubit>().saveCedula(
+                        cedulaFrontPath: imagePath,
+                      );
+                },
+                onCedulaBackTaken: (imagePath) {
+                  context.read<SolicitudReprestamoCubit>().saveCedula(
+                        cedulaBackPath: imagePath,
+                      );
+                },
               ),
               ReprestamoForm1(
                 controller: controller,

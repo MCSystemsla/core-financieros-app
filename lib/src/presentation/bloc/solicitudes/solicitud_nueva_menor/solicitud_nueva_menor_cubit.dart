@@ -167,7 +167,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       hasVerified: state.hasVerified,
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
       isDone: state.isDone,
-      createdAt: _preferDate(state.createdAt, prev?.createdAt),
+      createdAt: prev?.createdAt ?? DateTime.now(),
       objOrigenSolicitudId:
           _prefer(state.objOrigenSolicitudId, prev?.objOrigenSolicitudId),
       horarioTrabajo: _prefer(state.horarioTrabajo, prev?.horarioTrabajo),
@@ -407,14 +407,21 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
 
-  DateTime? _preferDate(String? current, DateTime? previous) {
-    final parsed = DateTime.tryParse(current ?? '');
-    return parsed ?? previous;
-  }
-
   @override
   Future<void> close() {
     // autoSaveHelper.dispose();
     return super.close();
+  }
+
+  void saveCedula({
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
+  }) {
+    emit(
+      state.copyWith(
+        cedulaFrontPath: cedulaFrontPath,
+        cedulaBackPath: cedulaBackPath,
+      ),
+    );
   }
 }

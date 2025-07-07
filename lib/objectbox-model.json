@@ -893,7 +893,7 @@
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "80:3749528793553130488",
+      "lastPropertyId": "81:7806065940968950408",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1290,6 +1290,11 @@
         {
           "id": "80:3749528793553130488",
           "name": "nombreCompletoCliente",
+          "type": 9
+        },
+        {
+          "id": "81:7806065940968950408",
+          "name": "uuid",
           "type": 9
         }
       ],

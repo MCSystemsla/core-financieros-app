@@ -90,6 +90,12 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
         return;
       }
       fechaPrimerPago = picked;
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaPrimerPagoSolicitud:
+                      fechaPrimerPago?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -124,6 +130,12 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
         return;
       }
       fechaDesembolso = picked;
+
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -131,6 +143,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
@@ -149,6 +162,12 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objPropositoId: proposito?.value,
+                    objPropositoIdVer: proposito?.name,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -179,6 +198,16 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                 tasaInteres = item.interes;
                 montoMinimo = item.montoMinimo;
                 montoMaximo = item.montoMaximo;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objProductoId: producto?.value,
+                    objProductoIdVer: producto?.name,
+                    tasaInteres: tasaInteres,
+                    // TODO:: Añadir campos de montoMinimo y montoMaximo A BD LOCAL
+                    // montoMinimo: montoMinimo,
+                    // montoMaximo: montoMaximo,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -188,6 +217,14 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objFrecuenciaId: frecuenciaDePago?.valor,
+                    objFrecuenciaIdVer2: frecuenciaDePago?.nombre,
+                    // TODO:: Añadir campo de frecuenciaPagoMeses A BD LOCAL
+                    // frecuenciaPagoMeses: frecuenciaDePago?.meses,
+                  ),
+                );
               },
               title: 'Frecuencia de Pago',
             ),
@@ -208,6 +245,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
               onChange: (value) {
                 plazoSolicitud = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    plazoSolicitud: int.tryParse(value ?? '0'),
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -239,6 +281,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
               onChange: (value) {
                 observacion = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    observacion: observacion,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -291,28 +338,6 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     title:
                         'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                     onDone: () {
-                      context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            objFrecuenciaIdVer: frecuenciaDePago?.nombre,
-                            tasaInteres: tasaInteres,
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
-                            objMonedaId: moneda?.value,
-                            objMonedaIdVer: moneda?.name,
-                            monto: int.tryParse(monto ?? '0'),
-                            objPropositoId: proposito?.value,
-                            objPropositoIdVer: proposito?.name,
-                            objProductoId: producto?.value,
-                            objProductoIdVer: producto?.name,
-                            objFrecuenciaId: frecuenciaDePago?.valor,
-                            objFrecuenciaIdVer2: frecuenciaDePago?.nombre,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
-                            fechaPrimerPagoSolicitud:
-                                fechaPrimerPago?.toUtc().toIso8601String(),
-                            cuota: calcularCuotaProvider
-                                .state.montoPrincipalPrimeraCuota
-                                .toInt(),
-                            observacion: observacion,
-                          );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

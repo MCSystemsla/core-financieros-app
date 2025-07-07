@@ -52,6 +52,7 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -72,6 +73,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 );
                 actividad = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId: actividad?.value,
+                    objActividadIdVer: actividad?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -86,6 +93,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 );
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId1: actividad1?.value,
+                    objActividadId1Ver: actividad1?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -100,6 +113,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                 );
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId2: actividadEconomica2?.value,
+                    objActividadId2Ver: actividadEconomica2?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -121,6 +140,13 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
+                      ),
+                    );
                   },
                   toStringItem: (item) {
                     return item.name;
@@ -140,6 +166,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   if (item == null) return;
                   rubroActividad = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad: rubroActividad?.value,
+                      objRubroActividadVer: rubroActividad?.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -155,6 +187,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   if (item == null) return;
                   rubroActividad2 = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad2: rubroActividad2?.value,
+                      objRubroActividad2Ver: rubroActividad2?.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -170,6 +208,12 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   if (item == null) return;
                   rubroActividad3 = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad3: rubroActividad3?.value,
+                      objRubroActividad3Ver: rubroActividad3?.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -192,6 +236,14 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                   onChanged: (item) {
                     if (item == null) return;
                     objRubroActividadPredominante = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
+                      ),
+                    );
                     setState(() {});
                   },
                   toStringItem: (item) {
@@ -214,30 +266,6 @@ class _ReprestamoForm4State extends State<ReprestamoForm4>
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        objActividadPredominante: actividadPredominante?.value,
-                        objActividadPredominanteVer:
-                            actividadPredominante?.name,
-                        objRubroActividad: rubroActividad?.value,
-                        objRubroActividadVer: rubroActividad?.name,
-                        objRubroActividad2: rubroActividad2?.value,
-                        objRubroActividad2Ver: rubroActividad2?.name,
-                        objRubroActividad3: rubroActividad3?.value,
-                        objRubroActividad3Ver: rubroActividad3?.name,
-                        objActividadId2: actividadEconomica2?.value,
-                        objActividadId2Ver: actividadEconomica2?.name,
-                        objSectorId: sectorEconomico?.value,
-                        objSectorIdVer: sectorEconomico?.name,
-                        // sectorEconomico: sectorEconomico2,
-                        objActividadId: actividad?.value,
-                        objActividadIdVer: actividad?.name,
-                        objActividadId1: actividad1?.value,
-                        objActividadId1Ver: actividad1?.name,
-                        objRubroActividadPredominante:
-                            objRubroActividadPredominante?.value,
-                        objRubroActividadPredominanteVer:
-                            objRubroActividadPredominante?.name,
-                      );
                 },
               ),
             ),
