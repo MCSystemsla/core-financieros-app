@@ -181,11 +181,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        final (errorMsg, errorCode) = getErrorMessage(
-          resp,
-          errorMsg:
-              'No tienes conexion a internet pero aun puedes seguir creando la solicitud',
-        );
+        final (errorMsg, errorCode) = getErrorMessage(resp, errorMsg: '');
         throw AppException(optionalMsg: errorMsg);
       }
       final data = ReprestamoUserCedula.fromJson(resp);
