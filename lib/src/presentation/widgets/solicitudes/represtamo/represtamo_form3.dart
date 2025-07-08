@@ -140,7 +140,6 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
     }
   }
 
-  final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudReprestamoCubit>();

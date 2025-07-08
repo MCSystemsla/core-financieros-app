@@ -45,12 +45,10 @@ class UserByCedulaSolicitud {
 
 class AsalariadoForm extends StatelessWidget {
   final PageController controller;
-  final UserByCedulaSolicitud? userByCedulaSolicitud;
 
   const AsalariadoForm({
     super.key,
     required this.controller,
-    this.userByCedulaSolicitud,
   });
 
   @override
@@ -80,7 +78,6 @@ class AsalariadoForm extends StatelessWidget {
                 },
               ),
               AsalariadoForm1(
-                userByCedulaSolicitud: userByCedulaSolicitud,
                 controller: controller,
               ),
               AsalariadoForm2(

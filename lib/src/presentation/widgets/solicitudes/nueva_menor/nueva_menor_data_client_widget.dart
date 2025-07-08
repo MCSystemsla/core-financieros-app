@@ -105,6 +105,13 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
   String telefonoCountryCode = '+505';
   CatalogoLocalDb? edadMinima;
   CatalogoLocalDb? edadMaxima;
+  String? nombrePublicoController;
+  String? telefonoController;
+  String? celularController;
+  String? emailController;
+  Item? nacionalidadController;
+  String? cedulaController;
+  final formKey = GlobalKey<FormState>();
   final localDpProvider = global<ObjectBoxService>();
 
   @override
@@ -272,14 +279,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
       setState(() {});
     }
   }
-
-  String? nombrePublicoController;
-  String? telefonoController;
-  String? celularController;
-  String? emailController;
-  Item? nacionalidadController;
-  String? cedulaController;
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

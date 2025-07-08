@@ -199,7 +199,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  // initialValue: '',
                   hintText: 'input.select_option'.tr(),
                   codigo: 'TIPODOCUMENTOPERSONA',
                   onChanged: (item) {

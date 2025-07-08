@@ -2,7 +2,6 @@ import 'package:core_financiero_app/src/config/services/geolocation/geolocation_
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/represtamo_form.dart';
 import 'package:flutter/material.dart';
@@ -21,19 +20,13 @@ enum TypeForm {
 }
 
 class CrearSolicitudScreen extends StatelessWidget {
-  final TypeForm? typeForm;
-  final String? cedula;
-  final Item? tipoDocumento;
-  final Item? paisEmiror;
+  final TypeForm typeForm;
   final UserByCedulaSolicitud? userByCedulaSolicitud;
 
   const CrearSolicitudScreen({
     super.key,
-    this.typeForm,
-    this.cedula,
+    required this.typeForm,
     this.userByCedulaSolicitud,
-    this.tipoDocumento,
-    this.paisEmiror,
   });
 
   @override
@@ -77,23 +70,15 @@ class CrearSolicitudScreen extends StatelessWidget {
             ),
           TypeForm.asalariado => AsalariadoForm(
               controller: pageController,
-              userByCedulaSolicitud: userByCedulaSolicitud ??
-                  UserByCedulaSolicitud(
-                    cedula: cedula ?? '',
-                    tipoDocumento: tipoDocumento?.value ?? '',
-                    paisEmisor: paisEmiror,
-                  ),
             ),
           TypeForm.represtamo => ReprestamoForm(
               userByCedulaSolicitud: userByCedulaSolicitud ??
                   UserByCedulaSolicitud(
-                    cedula: cedula ?? '',
-                    tipoDocumento: tipoDocumento?.value ?? '',
-                    paisEmisor: paisEmiror,
+                    cedula: '',
+                    tipoDocumento: '',
                   ),
               controller: pageController,
             ),
-          _ => const SizedBox(),
         },
       ),
     );

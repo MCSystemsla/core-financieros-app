@@ -36,9 +36,8 @@ class AddUserCedulaDialog extends OdsDialog {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: ((context) => CrearSolicitudScreen(
+                builder: ((_) => CrearSolicitudScreen(
                       typeForm: typeForm,
-                      cedula: cedula,
                     )),
               ),
             );
