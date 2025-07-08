@@ -1,6 +1,6 @@
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/views/represtamo_form_content_view1.dart';
 import 'package:flutter/material.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/views/represtamo_form_content_view1.dart';
 
 class ReprestamoForm1 extends StatefulWidget {
   final PageController controller;
