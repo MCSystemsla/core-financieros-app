@@ -2,12 +2,12 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
@@ -54,8 +54,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   @override
   void initState() {
     super.initState();
-    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
-          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
                 objMonedaId: 'DOLAR',
                 objMonedaIdVer: 'DOLAR',
               ),
@@ -185,6 +185,31 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                   fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                CurrencyInputFormatter(),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                LengthLimitingTextInputFormatter(10),
+              ],
+              icon: Icon(
+                Icons.price_change,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Monto',
+              hintText: 'Ingresa Monto',
+              textInputType: TextInputType.number,
+              validator: (value) => ClassValidator.validateRequired(value),
+              isValid: null,
+              onChange: (value) {
+                monto = value.replaceAll(',', '');
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    monto: int.tryParse(monto ?? '0'),
+                  ),
+                );
+              },
             ),
             const Gap(20),
             SearchDropdownWidget(
@@ -338,6 +363,12 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     title:
                         'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                     onDone: () {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cuota: calcularCuotaProvider.state.montoPrimeraCuota
+                              .toInt(),
+                        ),
+                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

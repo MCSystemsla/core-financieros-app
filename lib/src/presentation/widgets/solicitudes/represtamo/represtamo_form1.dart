@@ -104,6 +104,8 @@ class _ReprestamoForm1State extends State<ReprestamoForm1>
                 cedula: cedula,
                 tipoPersona: tipoPersonaCredito,
                 nombreCompletoCliente: nombreCliente,
+                objTipoPersonaId: tipoPersonaCredito,
+                objTipoPersonaIdVer: tipoPersonaCreditoVer,
               ),
         );
     localDbProvider.saveCedulaClient(

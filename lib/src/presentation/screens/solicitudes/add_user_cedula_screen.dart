@@ -106,7 +106,10 @@ class AddUserCedulaScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return _UserCedulaForm(state: state);
+          return _UserCedulaForm(
+            state: state,
+            typeForm: typeForm,
+          );
         },
       ),
     );
@@ -115,8 +118,10 @@ class AddUserCedulaScreen extends StatelessWidget {
 
 class _UserCedulaForm extends StatefulWidget {
   final UserByCedulaState state;
+  final TypeForm typeForm;
   const _UserCedulaForm({
     required this.state,
+    required this.typeForm,
   });
 
   @override
@@ -245,6 +250,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
                       context.read<UserByCedulaCubit>().getUserByCedula(
+                            typeForm: widget.typeForm,
                             cedula: cedulaController.text.trim(),
                             tipoDocumento: tipoDocumento!,
                             paisEmisor: paisEmisorDocumento!,

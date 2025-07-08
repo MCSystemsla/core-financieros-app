@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/repre
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:logger/logger.dart';
 
 abstract class SolicitudesCreditoRepository {
@@ -30,13 +31,21 @@ abstract class SolicitudesCreditoRepository {
     required String codigo,
   });
   Future<CatalogoValor> getCatalogoProductos();
-  Future<(UserCedulaData?, bool, String)> getUserByCedula(
-      {required String cedula});
+  Future<(UserCedulaData?, bool, String)> getUserByCedulaNuevaMenor({
+    required String cedula,
+  });
   Future<ReprestamoUserCedula> getUserReprestamoByCedula({
     required String cedula,
   });
   Future<ParametroValor> getParametroByName({required String nombre});
   Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago();
+  Future<(UserCedulaData?, bool, String)> getUserByCedulaAsalariado({
+    required String cedula,
+  });
+  Future<(UserCedulaData?, bool, String)> determineUserCedulaByTypeForm({
+    required String cedula,
+    required TypeForm typeForm,
+  });
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -119,7 +128,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(UserCedulaData?, bool, String)> getUserByCedula({
+  Future<(UserCedulaData?, bool, String)> getUserByCedulaNuevaMenor({
     required String cedula,
   }) async {
     final endpoint = UserCedulaEndpoint(cedula: cedula);
@@ -184,7 +193,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         final (errorMsg, errorCode) = getErrorMessage(resp, errorMsg: '');
         throw AppException(optionalMsg: errorMsg);
       }
-      final data = ReprestamoUserCedula.fromJson(resp);
+      final data = ReprestamoUserCedula.fromJson(resp['data']);
       return data;
     } catch (e) {
       _logger.e(e);
@@ -242,6 +251,47 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     } catch (e) {
       _logger.e(e);
       rethrow;
+    }
+  }
+
+  @override
+  Future<(UserCedulaData?, bool, String)> getUserByCedulaAsalariado({
+    required String cedula,
+  }) async {
+    final endpoint = AsalariadoUserCedulaEndpoint(cedula: cedula);
+
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, errorCode) = getErrorMessage(
+          resp,
+          errorMsg: 'Aun puedes seguir creando la solicitud',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      if (resp['data'] == null) return (null, true, 'NO_DATA');
+      final data = UserCedulaData.fromJson(resp);
+
+      return (data, false, 'OK');
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(UserCedulaData?, bool, String)> determineUserCedulaByTypeForm({
+    required String cedula,
+    required TypeForm typeForm,
+  }) async {
+    switch (typeForm) {
+      case TypeForm.nueva:
+        return getUserByCedulaNuevaMenor(cedula: cedula);
+      case TypeForm.asalariado:
+        return getUserByCedulaAsalariado(cedula: cedula);
+
+      default:
+        throw AppException(optionalMsg: 'Form Type not found');
     }
   }
 }

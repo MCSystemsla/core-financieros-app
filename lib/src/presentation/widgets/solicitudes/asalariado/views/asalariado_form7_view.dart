@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -199,6 +200,8 @@ class __FormContentState extends State<_FormContent> {
                   textEditingController: montoController,
                   inputFormatters: [
                     CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                    LengthLimitingTextInputFormatter(10),
                   ],
                   icon: Icon(
                     Icons.price_change,
