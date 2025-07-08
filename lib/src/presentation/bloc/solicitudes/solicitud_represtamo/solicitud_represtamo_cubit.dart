@@ -115,6 +115,14 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      montoMaximo:
+          state.montoMaximo == 0 ? prev?.montoMaximo ?? 0 : state.montoMaximo,
+      montoMinimo:
+          state.montoMinimo == 0 ? prev?.montoMinimo ?? 0 : state.montoMinimo,
+      frecuenciaPagoMeses: _prefer(
+        state.frecuenciaPagoMeses,
+        prev?.frecuenciaPagoMeses,
+      ),
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
       celularReprestamo:
           _prefer(state.celularReprestamo, prev?.celularReprestamo),

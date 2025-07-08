@@ -85,6 +85,10 @@ class ReprestamoResponsesLocalDb {
   String? parentescoFamiliarVer;
   String? nombreCompletoCliente;
   String? uuid;
+  int? montoMinimo;
+  int? montoMaximo;
+  String? frecuenciaPagoMeses;
+
   ReprestamoResponsesLocalDb({
     required this.id,
     this.uuid,
@@ -166,5 +170,8 @@ class ReprestamoResponsesLocalDb {
     this.errorMsg = '',
     this.hasVerified = false,
     this.nombreCompletoCliente,
+    this.montoMinimo,
+    this.montoMaximo,
+    this.frecuenciaPagoMeses,
   });
 }

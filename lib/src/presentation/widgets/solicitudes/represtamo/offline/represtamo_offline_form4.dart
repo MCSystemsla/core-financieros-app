@@ -107,10 +107,10 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
               title: 'Actividad 1',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                if (actividadesPredominantesList
+                    .any((element) => element.value == item.value)) {
+                  return;
+                }
                 actividad = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -125,10 +125,10 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
               title: 'Actividad 2',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                if (actividadesPredominantesList
+                    .any((element) => element.value == item.value)) {
+                  return;
+                }
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});
@@ -141,10 +141,10 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
               title: 'Actividad 3',
               onChanged: (item) {
                 if (item == null) return;
-                // if (actividadesPredominantesList
-                //     .any((element) => element.value == item.value)) {
-                //   return;
-                // }
+                if (actividadesPredominantesList
+                    .any((element) => element.value == item.value)) {
+                  return;
+                }
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
                 setState(() {});

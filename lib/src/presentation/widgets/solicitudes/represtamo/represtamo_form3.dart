@@ -228,9 +228,8 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     objProductoId: producto?.value,
                     objProductoIdVer: producto?.name,
                     tasaInteres: tasaInteres,
-                    // TODO:: Añadir campos de montoMinimo y montoMaximo A BD LOCAL
-                    // montoMinimo: montoMinimo,
-                    // montoMaximo: montoMaximo,
+                    montoMinimo: montoMinimo,
+                    montoMaximo: montoMaximo?.toInt(),
                   ),
                 );
               },
@@ -246,8 +245,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                   () => cubit.state.copyWith(
                     objFrecuenciaId: frecuenciaDePago?.valor,
                     objFrecuenciaIdVer2: frecuenciaDePago?.nombre,
-                    // TODO:: Añadir campo de frecuenciaPagoMeses A BD LOCAL
-                    // frecuenciaPagoMeses: frecuenciaDePago?.meses,
+                    frecuenciaPagoMeses: frecuenciaDePago?.meses,
                   ),
                 );
               },

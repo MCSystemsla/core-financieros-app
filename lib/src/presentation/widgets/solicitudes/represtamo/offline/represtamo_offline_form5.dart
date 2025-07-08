@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -45,6 +46,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
   Item? sector;
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.solicitud;
     sector = Item(
       name: solicitud.objSectorIdVer!,
@@ -57,7 +59,18 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
       value: solicitud.objParentescoBeneficiarioSeguroId,
     );
     telefonoBeneficiario = solicitud.telefonoBeneficiario;
-    super.initState();
+
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                objSectorId: sector?.value,
+                objSectorIdVer: sector?.name,
+                beneficiarioSeguro: beneficiarioSeguro,
+                cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                objParentescoBeneficiarioSeguroId: parentesco?.value,
+                objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
+                telefonoBeneficiario: telefonoBeneficiario,
+              ),
+        );
   }
 
   @override
@@ -65,6 +78,7 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
     super.build(context);
     final isConnected =
         context.read<InternetConnectionCubit>().state.isConnected;
+    final cubit = context.read<SolicitudReprestamoCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -79,12 +93,21 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               onChanged: (item) {
                 if (item == null) return;
                 sector = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objSectorId: item.value,
+                    objSectorIdVer: item.name,
+                  ),
+                );
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
               initialValue: beneficiarioSeguro,
-              maxLength: 50,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              maxLength: 40,
               icon: Icon(
                 Icons.family_restroom,
                 color: AppColors.getPrimaryColor(),
@@ -94,11 +117,19 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               isValid: null,
               onChange: (value) {
                 beneficiarioSeguro = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    beneficiarioSeguro: beneficiarioSeguro,
+                  ),
+                );
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
               initialValue: cedulaBeneficiarioSeguro,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               maxLength: 16,
               icon: Icon(
                 Icons.credit_card,
@@ -109,6 +140,11 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               isValid: null,
               onChange: (value) {
                 cedulaBeneficiarioSeguro = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -120,6 +156,12 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               onChanged: (item) {
                 if (item == null) return;
                 parentesco = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objParentescoBeneficiarioSeguroId: item.value,
+                    objParentescoBeneficiarioSeguroIdVer: item.name,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -129,8 +171,8 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 DashFormatter(),
+                LengthLimitingTextInputFormatter(9),
               ],
-              maxLength: 16,
               icon: Icon(
                 Icons.phone,
                 color: AppColors.getPrimaryColor(),
@@ -141,6 +183,11 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
               isValid: null,
               onChange: (value) {
                 telefonoBeneficiario = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    telefonoBeneficiario: telefonoBeneficiario,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -152,8 +199,18 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      isDone: true,
+                      isOffline: !isConnected,
+                    ),
+                  );
                   if (!isConnected) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        errorMsg: 'No tienes conexion a internet',
+                      ),
+                    );
                     CustomAlertDialog(
                       context: context,
                       title:

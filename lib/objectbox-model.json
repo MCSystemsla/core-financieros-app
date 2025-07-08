@@ -893,7 +893,7 @@
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "81:7806065940968950408",
+      "lastPropertyId": "84:7928026340743675682",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1295,6 +1295,21 @@
         {
           "id": "81:7806065940968950408",
           "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "82:238732349104584508",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "83:7509721249095363864",
+          "name": "montoMaximo",
+          "type": 6
+        },
+        {
+          "id": "84:7928026340743675682",
+          "name": "frecuenciaPagoMeses",
           "type": 9
         }
       ],

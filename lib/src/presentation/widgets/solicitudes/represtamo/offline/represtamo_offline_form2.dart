@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -140,6 +142,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreEmpleado,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.person,
                   color: AppColors.getPrimaryColor(),
@@ -159,11 +164,14 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cedulaEmpleado,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cedula',
+                title: 'Cedula del empleado',
                 hintText: 'Ingresa Cedula del empleado',
                 isValid: null,
                 onChange: (value) {
@@ -211,6 +219,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreDeEntidadPeps,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -245,8 +256,6 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                       paisPeps: paisPeps?.value,
                     ),
                   );
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
 
                   setState(() {});
                 },
@@ -258,6 +267,10 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: periodoPeps,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -277,6 +290,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cargoOficialPeps,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -333,6 +349,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 title: 'Nombre del familiar',
                 hintText: 'Ingrese Nombre del familiar',
                 isValid: null,
@@ -348,6 +367,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cargoFamiliarPeps2,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -367,6 +389,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreEntidadPeps2,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -403,6 +428,10 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: periodoPeps2,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),

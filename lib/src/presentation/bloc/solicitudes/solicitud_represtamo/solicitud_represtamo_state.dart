@@ -86,6 +86,10 @@ class SolicitudReprestamoState extends Equatable {
   final String nombreCompletoCliente;
   final String? uuid;
   final String createdAt;
+  final int montoMinimo;
+  final int montoMaximo;
+  final String frecuenciaPagoMeses;
+
   const SolicitudReprestamoState({
     this.createdAt = '',
     this.uuid,
@@ -171,10 +175,16 @@ class SolicitudReprestamoState extends Equatable {
     this.fechaPrimerPagoSolicitud = '',
     this.userIp = '',
     this.username = '',
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
+    this.frecuenciaPagoMeses = '',
   });
 
   @override
   List<Object> get props => [
+        montoMinimo,
+        montoMaximo,
+        frecuenciaPagoMeses,
         nombreCompletoCliente,
         cedulaBackPath,
         cedulaFrontPath,
@@ -341,6 +351,10 @@ class SolicitudReprestamoState extends Equatable {
     String? cedulaBackPath,
     String? nombreCompletoCliente,
     String? uuid,
+    String? createdAt,
+    int? montoMinimo,
+    int? montoMaximo,
+    String? frecuenciaPagoMeses,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -442,6 +456,10 @@ class SolicitudReprestamoState extends Equatable {
       nombreCompletoCliente:
           nombreCompletoCliente ?? this.nombreCompletoCliente,
       uuid: uuid ?? this.uuid,
+      createdAt: createdAt ?? this.createdAt,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
+      frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
@@ -175,7 +176,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   hintText: tipoPersonaCreditoVer ?? 'Tipo de Persona',
-                  // initialValue: '',
                   codigo: 'TIPOSPERSONACREDITO',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -195,7 +195,6 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   hintText: tipoDocumento?.name ?? 'Tipo de Documento',
-                  // initialValue: '',
                   codigo: 'TIPODOCUMENTOPERSONA',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -215,7 +214,9 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: cedula,
-                  // onTap: () => selectDate(context),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(
                     Icons.edit_document,
                     color: AppColors.getPrimaryColor(),
@@ -237,15 +238,16 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   initialValue: celularReprestamo!,
-                  maxLength: 40,
                   icon: Icon(
                     Icons.person,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Celular',
+                  textInputType: TextInputType.phone,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     DashFormatter(),
+                    LengthLimitingTextInputFormatter(9),
                   ],
                   onChange: (value) {
                     celularReprestamo = value;
@@ -262,14 +264,16 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   initialValue: ubicacion,
-                  maxLength: 50,
+                  maxLength: 40,
                   icon: Icon(
                     Icons.location_on,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Ubicacion',
-                  textCapitalization: TextCapitalization.words,
                   onChange: (value) {
                     ubicacion = value;
                     cubit.onFieldChanged(
