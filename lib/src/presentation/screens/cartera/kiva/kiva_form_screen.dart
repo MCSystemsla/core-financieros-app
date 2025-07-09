@@ -32,12 +32,6 @@ class KivaFormScreen extends StatefulWidget {
 
 class _KivaFormScreenState extends State<KivaFormScreen> {
   @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -249,8 +243,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // bool isMatching = numSolicitud == int.tryParse(widget.solicitud.id);
-
     return ListTile(
       title: Text(
           '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
