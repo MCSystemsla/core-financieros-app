@@ -53,7 +53,6 @@ class __FormContentState extends State<_FormContent> {
   String? trabajoConyuge;
   String? direccionTrabajoConyuge;
   String? telefonoTrabajoConyuge;
-  String? cantidadHijos;
   String? esFamiliarEmpleado;
   String? nombreFamiliarEmpleado;
   String? cedulaFamiliarEmpleado;
@@ -234,31 +233,6 @@ class __FormContentState extends State<_FormContent> {
                       },
                     ),
                   ],
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(2),
-                    ],
-                    key: const ValueKey('cantidadHijos'),
-                    icon: Icon(
-                      Icons.child_care,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    title: 'Cantidad de Hijos',
-                    hintText: 'Ingresa Cantidad de Hijos',
-                    textInputType: TextInputType.number,
-                    isValid: null,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    onChange: (value) {
-                      cantidadHijos = value;
-                      cubit.onFieldChanged(
-                        () => cubit.state
-                            .copyWith(cantidadHijos: int.tryParse(value)),
-                      );
-                    },
-                  ),
                 ],
                 const Gap(20),
                 Container(

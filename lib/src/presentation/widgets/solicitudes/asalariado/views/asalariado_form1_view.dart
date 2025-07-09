@@ -490,24 +490,6 @@ class __FormContentState extends State<_FormContent> {
                   icon: const Icon(Icons.person),
                 ),
                 const Gap(30),
-                SearchDropdownWidget(
-                  hintText: 'input.select_option'.tr(),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  onChanged: (item) {
-                    estadoCivil = item?.value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objEstadoCivilId: estadoCivil,
-                        objEstadoCivilIdVer: estadoCivil,
-                      ),
-                    );
-                    setState(() {});
-                  },
-                  codigo: 'ESTADOCIVIL',
-                  title: 'Estado civil',
-                ),
-                const Gap(30),
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),

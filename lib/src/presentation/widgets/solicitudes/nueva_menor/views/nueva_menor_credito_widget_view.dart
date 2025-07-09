@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
@@ -76,8 +75,8 @@ class __FormContentState extends State<_FormContent> {
   @override
   void initState() {
     super.initState();
-    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
-          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+    context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
+          () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objMonedaId: 'DOLAR',
                 objMonedaIdVer: 'DOLAR',
               ),

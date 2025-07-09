@@ -41,7 +41,6 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
   String? trabajoConyuge;
   String? direccionTrabajoConyuge;
   String? telefonoTrabajoConyuge;
-  String? cantidadHijos;
   String? esFamiliarEmpleado;
   String? nombreFamiliarEmpleado;
   String? cedulaFamiliarEmpleado;
@@ -65,7 +64,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
     trabajoConyuge = widget.responseLocalDb.trabajoConyugue;
     direccionTrabajoConyuge = widget.responseLocalDb.direccionTrabajoConyugue;
     telefonoTrabajoConyuge = widget.responseLocalDb.telefonoTrabajoConyugue;
-    cantidadHijos = widget.responseLocalDb.cantidadHijos.toString();
+
     nombreFamiliarEmpleado = widget.responseLocalDb.nombreFamiliar;
     cedulaFamiliarEmpleado = widget.responseLocalDb.cedulaFamiliar;
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
@@ -80,7 +79,6 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 trabajoConyugue: trabajoConyuge,
                 direccionTrabajoConyugue: direccionTrabajoConyuge,
                 telefonoTrabajoConyugue: telefonoTrabajoConyuge,
-                cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
                 nombreFamiliar: nombreFamiliarEmpleado,
                 cedulaFamiliar: cedulaFamiliarEmpleado,
               ),
@@ -255,30 +253,6 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           telefonoTrabajoConyugue: telefonoTrabajoConyuge,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(2),
-                    ],
-                    initialValue: cantidadHijos,
-                    icon: Icon(
-                      Icons.phone,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    title: 'Cantidad Hijos',
-                    hintText: 'Ingresa Cantida de Hijos',
-                    textInputType: TextInputType.number,
-                    isValid: null,
-                    onChange: (value) {
-                      cantidadHijos = value;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
                         ),
                       );
                     },

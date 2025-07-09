@@ -207,7 +207,7 @@ class SolicitudNuevaMenor {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
-      'TipoSolicitudCodigo': 'APPMOVIL',
+      'OrigenSolicitudCodigo': 'APPMOVIL',
       'Nombre1': nombre1,
       'Nombre2': nombre2,
       'Apellido1': apellido1,

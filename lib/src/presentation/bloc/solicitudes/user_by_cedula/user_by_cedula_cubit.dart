@@ -53,6 +53,7 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
             fechaNacimiento: resp?.data.fechaNacimiento,
             fechaEmision: resp?.data.fechaEmision,
             fechaVencimiento: resp?.data.fechaExpira,
+            sexo: resp?.data.sexo,
           ),
         ),
       );

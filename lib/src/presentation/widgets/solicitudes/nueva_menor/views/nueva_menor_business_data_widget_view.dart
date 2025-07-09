@@ -263,8 +263,8 @@ class __FormContentState extends State<_FormContent> {
                     condicionNegocio = Item(name: item.name, value: item.value);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        objCondicionCasaId: item.value,
-                        objCondicionCasaIdVer: item.name,
+                        objCondicionNegocioId: item.value,
+                        objCondicionNegocioIdVer: item.name,
                       ),
                     );
                   },

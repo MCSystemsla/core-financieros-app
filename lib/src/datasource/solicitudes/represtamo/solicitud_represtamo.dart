@@ -114,7 +114,7 @@ class SolicitudReprestamo {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
-      'TipoSolicitudCodigo': 'APPMOVIL',
+      'OrigenSolicitudCodigo': 'APPMOVIL',
       'isOffline': isOffline,
       'database': LocalStorage().database,
       'Cedula': cedula,

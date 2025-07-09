@@ -234,7 +234,7 @@ class SolicitudAsalariado {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
-      'TipoSolicitudCodigo': 'APPMOVIL',
+      'OrigenSolicitudCodigo': 'APPMOVIL',
       'database': LocalStorage().database,
       'Nombre1': nombre1,
       'Nombre2': nombre2,

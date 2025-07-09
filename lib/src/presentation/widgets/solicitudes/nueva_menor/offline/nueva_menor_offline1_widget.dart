@@ -68,7 +68,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
   String? fechaEmisionCedula;
   String? fechaNacimiento;
   String? nacionalidad;
-  // String? objPaisNacimientoId;
+  String? cantidadHijos;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
@@ -207,6 +207,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
     paisEmisorVer = widget.responseLocalDb.objPaisEmisorCedulaVer;
     paisNacimientoVer = widget.responseLocalDb.objPaisNacimientoIdVer;
     escolaridadVer = widget.responseLocalDb.objEscolaridadIdVer;
+    cantidadHijos = widget.responseLocalDb.cantidadHijos.toString();
     edadMinima = global<ObjectBoxService>()
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<ObjectBoxService>()
@@ -215,6 +216,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
 
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
+                cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
                 objTipoDocumentoId: tipoDocumento,
                 objTipoDocumentoIdVer: tipoDocumentoVer,
                 tipoPersona: tipoPersonaCredito,
@@ -701,6 +703,30 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   textInputType: TextInputType.emailAddress,
                   isValid: null,
                   validator: (value) => ClassValidator.validateEmail(value),
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  initialValue: cantidadHijos,
+                  icon: Icon(
+                    Icons.phone,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Cantidad Hijos',
+                  hintText: 'Ingresa Cantida de Hijos',
+                  textInputType: TextInputType.number,
+                  isValid: null,
+                  onChange: (value) {
+                    cantidadHijos = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 SearchDropdownWidget(

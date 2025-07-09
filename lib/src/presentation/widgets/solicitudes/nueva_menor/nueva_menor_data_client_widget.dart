@@ -111,29 +111,31 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
   String? emailController;
   Item? nacionalidadController;
   String? cedulaController;
+  String? cantidadHijos;
   final formKey = GlobalKey<FormState>();
   final localDpProvider = global<ObjectBoxService>();
 
   @override
   void initState() {
     super.initState();
+    final solicitud = widget.userByCedulaSolicitud;
 
     tipoDocumento = Item(
-      name: widget.userByCedulaSolicitud.tipoDocumento,
-      value: widget.userByCedulaSolicitud.tipoDocumento,
+      name: solicitud.tipoDocumento,
+      value: solicitud.tipoDocumento,
     );
-    paisEmisor = widget.userByCedulaSolicitud.paisEmisor;
-    cedulaController = widget.userByCedulaSolicitud.cedula;
-    fechaEmisionCedula = widget.userByCedulaSolicitud.fechaEmision;
-    fechaNacimiento = widget.userByCedulaSolicitud.fechaNacimiento;
-    _selectedDate = widget.userByCedulaSolicitud.fechaVencimiento;
-    nombre1 = widget.userByCedulaSolicitud.primerNombre;
-    nombre2 = widget.userByCedulaSolicitud.segundoNombre;
-    apellido1 = widget.userByCedulaSolicitud.primerApellido;
-    apellido2 = widget.userByCedulaSolicitud.segundoApellido;
+    paisEmisor = solicitud.paisEmisor;
+    cedulaController = solicitud.cedula;
+    fechaEmisionCedula = solicitud.fechaEmision;
+    fechaNacimiento = solicitud.fechaNacimiento;
+    _selectedDate = solicitud.fechaVencimiento;
+    nombre1 = solicitud.primerNombre;
+    nombre2 = solicitud.segundoNombre;
+    apellido1 = solicitud.primerApellido;
+    apellido2 = solicitud.segundoApellido;
     sexo = Item(
-      name: widget.userByCedulaSolicitud.sexo == 'F' ? 'Femenino' : 'Masculino',
-      value: widget.userByCedulaSolicitud.sexo,
+      name: solicitud.sexo == 'F' ? 'Femenino' : 'Masculino',
+      value: solicitud.sexo,
     );
 
     edadMinima = global<ObjectBoxService>()
@@ -153,7 +155,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 fechaEmisionCedula:
                     fechaEmisionCedula?.toUtc().toIso8601String(),
                 fechaVencimientoCedula:
-                    fechaVencimientoCedula?.toUtc().toIso8601String(),
+                    _selectedDate?.toUtc().toIso8601String(),
                 nombre1: nombre1,
                 nombre2: nombre2,
                 apellido1: apellido1,
@@ -665,6 +667,30 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               textCapitalization: TextCapitalization.none,
               isValid: null,
               validator: (value) => ClassValidator.validateEmail(value),
+            ),
+            const Gap(20),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
+              key: const ValueKey('cantidadHijos'),
+              icon: Icon(
+                Icons.child_care,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Cantidad de Hijos',
+              hintText: 'Ingresa Cantidad de Hijos',
+              textInputType: TextInputType.number,
+              isValid: null,
+              validator: (value) => ClassValidator.validateRequired(value),
+              onChange: (value) {
+                cantidadHijos = value;
+                cubit.onFieldChanged(
+                  () =>
+                      cubit.state.copyWith(cantidadHijos: int.tryParse(value)),
+                );
+              },
             ),
             const Gap(30),
             SearchDropdownWidget(
