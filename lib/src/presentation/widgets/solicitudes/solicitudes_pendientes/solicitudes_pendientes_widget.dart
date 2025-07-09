@@ -153,10 +153,11 @@ class SolicitudesPendientesWidget extends StatelessWidget {
                 .capitalizeAll,
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(days: 30))
+            .add(const Duration(hours: 1))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
@@ -257,10 +258,12 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
         title: solicitud.nombreCompletoCliente ?? 'N/A',
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
+
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(days: 30))
+            .add(const Duration(hours: 1))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
@@ -424,10 +427,11 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
                 .capitalizeAll,
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(days: 30))
+            .add(const Duration(hours: 1))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
