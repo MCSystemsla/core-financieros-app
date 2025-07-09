@@ -1,4 +1,9 @@
-enum ErrorNetworkCode { noConnection, serverError, timeOutError, unknownError }
+enum ErrorNetworkCode {
+  noConnection,
+  serverError,
+  timeOutError,
+  unknownError,
+}
 
 (String, ErrorNetworkCode) getErrorMessage(
   dynamic resp, {

@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
@@ -43,15 +41,10 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       if (isConnected) {
         await _saveToDatabase(codigo: codigo, items: data.data);
       }
-    } on SocketException {
-      emit(const SolicitudCatalogoError(
-        error: 'Tienes problemas de conexión. Revisa tu conexión a internet.',
-      ));
     } on AppException catch (e) {
       emit(SolicitudCatalogoError(error: e.optionalMsg));
     } catch (e) {
-      emit(SolicitudCatalogoError(
-          error: 'Error no controlado: ${e.toString()}'));
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
   }
 
@@ -87,6 +80,8 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         );
       }
       log('Guardados los departamentos en la base de datos local');
+    } on AppException catch (e) {
+      emit(SolicitudCatalogoError(error: e.optionalMsg));
     } catch (e) {
       emit(SolicitudCatalogoError(error: e.toString()));
     }
@@ -175,33 +170,40 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     final actions = LocalStorage().currentActions;
 
     if (!actions.contains('LLENARKIVAMOVIL')) return;
+    try {
+      final solicitudesKiva =
+          await solicitudesPendientesRepository.getSolicitudesPendientes();
+      if (!context.mounted) return;
 
-    final solicitudesKiva =
-        await solicitudesPendientesRepository.getSolicitudesPendientes();
-    if (!context.mounted) return;
+      final solicitudes = solicitudesKiva.solicitudes.map((e) {
+        return SolicitudesPendientes()
+          ..estado = e.estado
+          ..fecha = e.fecha
+          ..moneda = e.moneda
+          ..numero = e.numero
+          ..producto = e.producto
+          ..nombreFormulario = e.nombreFormulario
+          ..solicitudId = e.id
+          ..cedula = e.cedula
+          ..sucursal = LocalStorage().database
+          ..nombre = e.nombre
+          ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+          ..tipoSolicitud = e.tipoSolicitud
+          ..idAsesor = int.tryParse(LocalStorage().userId)
+          ..motivoAnterior = e.motivoAnterior;
+      }).toList();
 
-    final solicitudes = solicitudesKiva.solicitudes.map((e) {
-      return SolicitudesPendientes()
-        ..estado = e.estado
-        ..fecha = e.fecha
-        ..moneda = e.moneda
-        ..numero = e.numero
-        ..producto = e.producto
-        ..nombreFormulario = e.nombreFormulario
-        ..solicitudId = e.id
-        ..cedula = e.cedula
-        ..sucursal = LocalStorage().database
-        ..nombre = e.nombre
-        ..monto = double.tryParse(e.monto.toString()) ?? 0.00
-        ..tipoSolicitud = e.tipoSolicitud
-        ..idAsesor = int.tryParse(LocalStorage().userId)
-        ..motivoAnterior = e.motivoAnterior;
-    }).toList();
-
-    context.read<SolicitudesPendientesLocalDbCubit>().saveSolicitudesPendientes(
-          solicitudes: solicitudes,
-        );
-    log('Solicitudes KIVA guardadas');
+      context
+          .read<SolicitudesPendientesLocalDbCubit>()
+          .saveSolicitudesPendientes(
+            solicitudes: solicitudes,
+          );
+      log('Solicitudes KIVA guardadas');
+    } on AppException catch (e) {
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.optionalMsg}'));
+    } catch (e) {
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
+    }
   }
 
   Future<void> getAndSaveParametros() async {
@@ -209,7 +211,6 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         await _repository.getParametroByName(nombre: 'EDADMINIMACLIENTE');
     final edadMaxima =
         await _repository.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-    log('Guardando parámetros de edad: ${edadMinima.data.valor} - ${edadMaxima.data.valor}');
 
     _objectBoxService.catalogoBox.put(CatalogoLocalDb(
       valor: edadMinima.data.valor,

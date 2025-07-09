@@ -89,7 +89,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        throw AppException(optionalMsg: 'App Exception: ${resp['message']}');
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
       }
       final data = CatalogoValor.fromJson(resp);
       return data;
@@ -106,6 +111,15 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     final endpoint = NacionalidadEndpoint(codigo: codigo);
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
+
       final data = CatalogoNacionalidad.fromJson(resp);
       return data;
     } catch (e) {
@@ -119,6 +133,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     final endpoint = ProductosEndpoint();
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
       final data = CatalogoValor.fromJson(resp);
       return data;
     } catch (e) {
@@ -136,7 +158,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        final (errorMsg, errorCode) = getErrorMessage(
+        final (errorMsg, _) = getErrorMessage(
           resp,
           errorMsg: 'Aun puedes seguir creando la solicitud',
         );
@@ -168,7 +190,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, errorCode) = getErrorMessage(resp);
+        final (errorMsg, _) = getErrorMessage(resp);
         return (false, errorMsg);
       }
 
@@ -190,7 +212,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        final (errorMsg, errorCode) = getErrorMessage(resp, errorMsg: '');
+        final (errorMsg, _) = getErrorMessage(resp, errorMsg: '');
         throw AppException(optionalMsg: errorMsg);
       }
       final data = ReprestamoUserCedula.fromJson(resp['data']);
@@ -213,7 +235,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] != 201) {
         _logger.e(resp);
         _logger.i(endpoint.body);
-        final (errorMsg, errorCode) = getErrorMessage(resp);
+        final (errorMsg, _) = getErrorMessage(resp);
         return (false, errorMsg);
       }
       _logger.i(resp);
@@ -233,6 +255,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     final endpoint = ObtenerParametrosEndpoint(nombre: nombre);
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
       final data = ParametroValor.fromJson(resp);
       return data;
     } catch (e) {
@@ -246,6 +276,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     final endpoint = CatalogoFrecuenciaPagoEndpoint();
     try {
       final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
       final data = CatalogoFrecuenciaPago.fromJson(resp);
       return data;
     } catch (e) {
@@ -263,7 +301,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
-        final (errorMsg, errorCode) = getErrorMessage(
+        final (errorMsg, _) = getErrorMessage(
           resp,
           errorMsg: 'Aun puedes seguir creando la solicitud',
         );

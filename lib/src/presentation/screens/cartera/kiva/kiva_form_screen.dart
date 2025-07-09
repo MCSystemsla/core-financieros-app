@@ -93,7 +93,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             return switch (state.status) {
               Status.inProgress => const SkeletonLoadingWidget(),
               Status.error => OnErrorWidget(
-                  errorMsg: 'Error de Sistema',
+                  errorMsg: state.errorMsg,
                   onPressed: () {
                     context
                         .read<SolicitudesPendientesCubit>()
