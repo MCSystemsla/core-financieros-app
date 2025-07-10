@@ -6,6 +6,7 @@ abstract class ImageAsset {
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
   static const String loader = 'assets/images/loader.gif';
   static const String error = 'assets/images/error_lottie.json';
+  static const String appMaintanance = 'assets/images/app_maintanance.svg';
 
   // * Auth
 
