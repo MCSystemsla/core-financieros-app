@@ -10,7 +10,6 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,25 +19,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _isChecking = true;
+  bool _shouldSync = false;
+  Future<void> _checkRequirements() async {
+    final bioCubit = global<BiometricCubit>();
+    final connection = context.read<InternetConnectionCubit>().state;
+
+    final shouldSync = CatalogoSync.needToSync();
+
+    setState(() {
+      _shouldSync = shouldSync && connection.isConnected;
+    });
+
+    if (!_shouldSync && !bioCubit.state.isAuthenticated) {
+      await bioCubit.authenticate(context);
+    }
+
+    setState(() {
+      _isChecking = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    final bioProvider = global<BiometricCubit>();
-
-    if (!bioProvider.state.isAuthenticated) {
-      bioProvider.authenticate(context);
-    }
+    _checkRequirements();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isConnected = context.watch<InternetConnectionCubit>().state;
-    final shouldSync = CatalogoSync.needToSync();
-    if (shouldSync && isConnected.isConnected) {
+    final isConnected = context.read<InternetConnectionCubit>().state;
+    if (_isChecking) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_shouldSync) {
       return DownsloadingCatalogosWidget(
         onDownloadComplete: () {
           global<BiometricCubit>().authenticate(context);
-          context.push('/');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+          setState(() {
+            _shouldSync = false;
+          });
         },
       );
     }
@@ -66,7 +94,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           onPressed: () => {
                             context.pushTransparentRoute(
-                                const DownsloadingCatalogosWidget()),
+                              DownsloadingCatalogosWidget(
+                                onDownloadComplete: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const HomeScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           },
                         ),
                       )

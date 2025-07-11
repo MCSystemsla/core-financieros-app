@@ -127,7 +127,7 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   const Gap(20),
                   CatalogoValorNacionalidad(
-                    hintText: 'Selecciona Pais PEPS',
+                    hintText: 'input.select_option'.tr(),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     title: 'País PEPs',
@@ -136,7 +136,7 @@ class __FormContentState extends State<_FormContent> {
                       paisPeps = item.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objPaisEmisorCedula: item.valor,
+                          objPaisEmisorCedula: paisPeps,
                           objPaisEmisorCedulaVer: item.nombre,
                         ),
                       );

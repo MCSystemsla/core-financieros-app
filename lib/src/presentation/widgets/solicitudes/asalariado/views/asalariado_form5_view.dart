@@ -58,6 +58,18 @@ class __FormContentState extends State<_FormContent> {
   String? totalIngresoMes;
   final formKey = GlobalKey<FormState>();
 
+  void getTotalIngresoMes() {
+    final double? salarioNetoMes =
+        double.tryParse(salarioNetoMensual?.replaceAll(',', '') ?? '0');
+    final double? otrosIngresosMes =
+        double.tryParse(otrosIngresos?.replaceAll(',', '') ?? '0');
+    final totalIngresosMesSum = (salarioNetoMes ?? 0) + (otrosIngresosMes ?? 0);
+
+    setState(() {
+      totalIngresoMes = totalIngresosMesSum.toStringAsFixed(2);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
@@ -140,6 +152,7 @@ class __FormContentState extends State<_FormContent> {
                             double.tryParse(otrosIngresos ?? '0'),
                       ),
                     );
+                    getTotalIngresoMes();
                   },
                   inputFormatters: [
                     CurrencyInputFormatter(),
@@ -238,6 +251,7 @@ class __FormContentState extends State<_FormContent> {
                             double.tryParse(salarioNetoMensual ?? '0'),
                       ),
                     );
+                    getTotalIngresoMes();
                   },
                   textInputType: TextInputType.number,
                   inputFormatters: [
@@ -249,24 +263,17 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  readOnly: true,
+                  validator: (value) =>
+                      ClassValidator.validateRequired(totalIngresoMes),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
+                  hintText: totalIngresoMes,
                   title: 'Total ingresos mes (C\$)',
                   icon: const Icon(Icons.summarize),
-                  onChange: (value) {
-                    totalIngresoMes = value.replaceAll(',', '');
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        totalIngresoMes:
-                            double.tryParse(totalIngresoMes ?? '0'),
-                      ),
-                    );
-                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -308,6 +315,12 @@ class __FormContentState extends State<_FormContent> {
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          totalIngresoMes:
+                              double.tryParse(totalIngresoMes ?? '0'),
+                        ),
+                      );
 
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),

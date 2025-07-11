@@ -9,7 +9,7 @@ class UserByCedulaSolicitud {
   final DateTime? fechaEmision;
   final DateTime? fechaVencimiento;
   final DateTime? fechaNacimiento;
-  final String tipoDocumento;
+  final String? tipoDocumento;
   final String? tipoPersona;
   final Item? paisEmisor;
   final String? sexo;
@@ -23,7 +23,7 @@ class UserByCedulaSolicitud {
     this.fechaEmision,
     this.fechaVencimiento,
     this.fechaNacimiento,
-    required this.tipoDocumento,
+    this.tipoDocumento,
     this.paisEmisor,
     this.tipoPersona,
     this.sexo,

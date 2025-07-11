@@ -20,11 +20,26 @@ class CarteraScreen extends StatefulWidget {
   State<CarteraScreen> createState() => _CarteraScreenState();
 }
 
-class _CarteraScreenState extends State<CarteraScreen> {
+class _CarteraScreenState extends State<CarteraScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initFunctions();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      initFunctions();
+    }
   }
 
   initFunctions() async {

@@ -321,6 +321,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                   },
                   hintText: condicionNegocioVer ?? 'input.select_option'.tr(),
                   title: 'Condicion Negocio',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(condicionNegocio),
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
@@ -391,8 +393,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 const Gap(20),
                 SearchDropdownWidget(
                   hintText: actividad1Ver ?? 'input.select_option'.tr(),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
                   codigo: 'ACTIVIDADECONOMICA',
                   title: 'Actividad 2',
                   onChanged: (item) {
@@ -446,12 +446,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                       dropdownColor: Colors.white,
                       isContainIcon: true,
                       title: 'Actividad Predominante',
-                      items: actividadesPredominantesList.length >= 3
-                          ? actividadesPredominantesList
-                              .skip(actividadesPredominantesList.length - 3)
-                              .toSet()
-                              .toList()
-                          : actividadesPredominantesList.toSet().toList(),
+                      items: {
+                        for (var item in actividadesPredominantesList)
+                          item.value: item
+                      }.values.toList(),
                       onChanged: (item) {
                         if (item == null) return;
                         actividadPredominante = item.value;
@@ -568,13 +566,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                         value?.value,
                       ),
                       title: 'Rubro actividad Predominante',
-                      items: rubrosActividadesPredominanteList.length >= 3
-                          ? rubrosActividadesPredominanteList
-                              .skip(
-                                  rubrosActividadesPredominanteList.length - 3)
-                              .toSet()
-                              .toList()
-                          : rubrosActividadesPredominanteList.toSet().toList(),
+                      items: {
+                        for (var item in rubrosActividadesPredominanteList)
+                          item.value: item
+                      }.values.toList(),
                       onChanged: (item) {
                         if (item == null) return;
                         objRubroActividadPredominante = item.value;

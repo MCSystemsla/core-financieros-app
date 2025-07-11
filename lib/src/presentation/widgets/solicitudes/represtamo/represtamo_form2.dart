@@ -178,7 +178,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa Pais',
+                hintText: 'input.select_option'.tr(),
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;

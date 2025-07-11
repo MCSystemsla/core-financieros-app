@@ -554,29 +554,29 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   isRequired: true,
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  maxLength: 50,
-                  icon: Icon(
-                    Icons.flag,
-                    color: AppColors.getPrimaryColor(),
+                CatalogoValorNacionalidad(
+                  hintText: nacionalidad ?? 'input.select_option'.tr(),
+                  initialValue: ItemNacionalidad(
+                    id: 0,
+                    valor: nacionalidad ?? '',
+                    nombre: nacionalidad ?? '',
+                    relacion: '',
                   ),
-                  title: 'Nacionalidad',
-                  hintText: 'Ingresa Nacionalidad',
-                  isValid: null,
-                  initialValue: nacionalidad,
-                  onChange: (value) {
-                    nacionalidad = value;
+
+                  title: 'Pais de Nacimiento',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    nacionalidad = item.valor;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         nacionalidad: nacionalidad,
                       ),
                     );
                   },
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  codigo: 'PAIS',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value.valor),
+                  // initialValue: paisEmisor ?? '',
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
@@ -730,8 +730,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
-                  // initialValue: '',
-                  hintText: escolaridadVer ?? 'Selecciona una opcion',
+                  hintText: escolaridadVer ?? 'input.select_option'.tr(),
                   codigo: 'ESCOLARIDAD',
                   onChanged: (item) {
                     if (item == null || !mounted) return;

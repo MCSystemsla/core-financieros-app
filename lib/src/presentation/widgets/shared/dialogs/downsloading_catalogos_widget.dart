@@ -62,6 +62,12 @@ class _DownsloadingCatalogosWidgetState
                             .state
                             .isConnected,
                       );
+                  context.read<CatologoNacionalidadCubit>().saveAllCatalogos(
+                        isConnected: context
+                            .read<InternetConnectionCubit>()
+                            .state
+                            .isConnected,
+                      );
                 },
                 btnTitle: 'Intentar de nuevo',
                 errorMsg: state.error,

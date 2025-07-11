@@ -3,13 +3,13 @@ import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -31,49 +31,64 @@ class LoginScreenView extends StatefulWidget {
 class _LoginScreenViewState extends State<LoginScreenView> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AutoupdateCubit, AutoupdateState>(
-      listener: (context, state) {
-        if (state is AutoupdateSuccess) {
-          UpdateAppDialog(
-            apkUrl: state.apkVersion,
-            context: context,
-            title: 'Para continuar, es necesario actualizar la aplicación.',
-            versionName: state.apkVersionName,
-          ).showDialog(context);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: PopScope(
-            canPop: false,
-            child: FadeIn(
-              child: const CustomBackground(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SafeArea(
-                          child: ChangeLangWidget(
-                            child: LoginScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (ctx) =>
+                AutoupdateCubit()..verificarActualizacion(context)),
+        BlocProvider(
+          create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
+            ..getBranchTeam(
+              accessCode: '2wydJKIvNuO41hCZ7Y6',
+              context: context,
+            ),
+        ),
+        BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+      ],
+      child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
+        listener: (context, state) {
+          // if (state is AutoupdateSuccess) {
+          //   UpdateAppDialog(
+          //     apkUrl: state.apkVersion,
+          //     context: context,
+          //     title: 'Para continuar, es necesario actualizar la aplicación.',
+          //     versionName: state.apkVersionName,
+          //   ).showDialog(context);
+          // }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: PopScope(
+              canPop: false,
+              child: FadeIn(
+                child: const CustomBackground(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SafeArea(
+                            child: ChangeLangWidget(
+                              child: LoginScreen(),
+                            ),
                           ),
-                        ),
-                        Image(
-                          height: 160,
-                          image: AssetImage(ImageAsset.logoNi),
-                        ),
-                        LoginFormWidget(),
-                      ],
+                          Image(
+                            height: 160,
+                            image: AssetImage(ImageAsset.logoNi),
+                          ),
+                          LoginFormWidget(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

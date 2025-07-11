@@ -294,6 +294,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     OutlineTextfieldWidget(
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
+                        FilteringTextInputFormatter.allow(RegExp(r'[1-9]')),
                         LengthLimitingTextInputFormatter(2),
                       ],
                       initialValue:
@@ -325,6 +326,9 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 5),
                       child: JLuxDropdown(
+                        validator: (value) => ClassValidator.validateRequired(
+                          value?.valor,
+                        ),
                         dropdownColor: Colors.white,
                         isContainIcon: true,
                         title: 'Ubicacion',

@@ -175,25 +175,6 @@ class __FormContentState extends State<_FormContent> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'input.select_option'.tr(),
-                  onChanged: (item) {
-                    estadoCivil = item?.value;
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        objEstadoCivilId: item?.value,
-                        objEstadoCivilIdVer: item?.name,
-                      ),
-                    );
-                    setState(() {});
-                  },
-                  codigo: 'ESTADOCIVIL',
-                  title: 'Estado civil ',
-                ),
                 if (estadoCivil == 'CAS' || estadoCivil == 'UNI') ...[
                   const Gap(30),
                   Padding(
@@ -499,39 +480,6 @@ class __FormContentState extends State<_FormContent> {
                         return;
                       }
 
-                      context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                            direccionTrabajoConyugue: direccionTrabajoConyugue,
-                            tiempoLaborarConyugue: tiempoLaborarConyugue,
-                            nombreFamiliarCercano: nombreFamiliarCercano,
-                            telefonoFamiliarCercano:
-                                telefonoFamiliarCercano?.replaceAll('-', ''),
-                            objParentescoFamiliarCercanoId:
-                                parentescoFamiliarCercano?.value,
-                            objParentescoFamiliarCercanoIdVer:
-                                parentescoFamiliarCercano?.name,
-                            direccionFamiliarCercano:
-                                direccionDomicilioFamiiiar,
-                            nombreConyugue: nombreConyuge,
-                            nacionalidadConyugue: nacionalidadConyuge,
-                            profesionConyugue: profesionConyuge,
-                            trabajaConyugue: trabajaConyuge == 'input.yes'.tr(),
-                            sueldoMesConyugue: double.tryParse(
-                                salarioNetoMensualConyuge ?? '0'),
-                            otrosIngresosConyugue:
-                                double.tryParse(otrosIngresosConyuge ?? '0'),
-                            fuenteOtrosIngresosConyugue:
-                                fuenteOtrosIngresosConyuge,
-                            totalIngresoMesConyugue:
-                                double.tryParse(totalIngresosMesConyuge ?? '0'),
-                            observacion: observaciones,
-                            trabajoConyugue: nombreDelaEmpresaConyuge,
-                            telefonoTrabajoConyugue:
-                                telefonoOficinaCodeConyuge +
-                                    (telefonoOficinaConyuge ?? '')
-                                        .replaceAll('-', ''),
-                            objEstadoCivilId: estadoCivil,
-                            objEstadoCivilIdVer: estadoCivil,
-                          );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

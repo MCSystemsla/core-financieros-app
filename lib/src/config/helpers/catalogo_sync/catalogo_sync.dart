@@ -1,6 +1,4 @@
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 
 class CatalogoSync {
   static bool _shouldForceSync() {
@@ -15,8 +13,7 @@ class CatalogoSync {
 
   static bool needToSync() {
     final shouldSync = _shouldForceSync();
-    final haveSyncDataExists = getIt<ObjectBoxService>().catalogoBox.isEmpty();
 
-    return shouldSync || haveSyncDataExists;
+    return shouldSync;
   }
 }

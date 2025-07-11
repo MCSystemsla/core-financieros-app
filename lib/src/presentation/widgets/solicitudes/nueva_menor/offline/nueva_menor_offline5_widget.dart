@@ -125,6 +125,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                 if (esPeps == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -148,6 +150,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   CatalogoValorNacionalidad(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps ?? '',
@@ -155,7 +159,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                       relacion: '',
                     ),
                     // initialValue: ,
-                    hintText: paisPeps ?? 'Selecciona Pais PEPS',
+                    hintText: paisPeps ?? 'input.select_option'.tr(),
                     title: 'País PEPS',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -170,6 +174,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -192,6 +198,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(2),
@@ -243,6 +251,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                 if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -265,6 +275,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
                     hintText: parentesco ?? 'input.select_option'.tr(),
                     codigo: 'PARENTESCO',
                     onChanged: (item) {
@@ -280,6 +292,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -302,6 +316,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -324,6 +340,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(2),
@@ -347,6 +365,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   ),
                   const Gap(20),
                   CatalogoValorNacionalidad(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps2 ?? '',

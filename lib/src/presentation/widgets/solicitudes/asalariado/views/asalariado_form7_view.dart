@@ -72,7 +72,7 @@ class __FormContentState extends State<_FormContent> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -114,7 +114,7 @@ class __FormContentState extends State<_FormContent> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -375,6 +375,21 @@ class __FormContentState extends State<_FormContent> {
                               context: context,
                               title:
                                   'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                              onDone: () => context.pop(),
+                            ).showDialog(context,
+                                dialogType: DialogType.warning);
+                            return;
+                          }
+                          final plazoSolicitudMount =
+                              (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                          final frecuenciaPagoMesesMount = (double.tryParse(
+                                  frecuenciaDePago?.meses ?? '0') ??
+                              0);
+                          if (plazoSolicitudMount < frecuenciaPagoMesesMount) {
+                            CustomAlertDialog(
+                              context: context,
+                              title:
+                                  'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
                               onDone: () => context.pop(),
                             ).showDialog(context,
                                 dialogType: DialogType.warning);

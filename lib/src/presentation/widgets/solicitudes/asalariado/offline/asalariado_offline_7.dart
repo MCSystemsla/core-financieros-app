@@ -151,9 +151,9 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
 
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                objMonedaId: 'DOLAR',
+                objMonedaIdVer: 'DOLAR',
                 monto: double.tryParse(montoController ?? '0'),
-                objMonedaId: moneda?.value,
-                objMonedaIdVer: moneda?.name,
                 objPropositoId: proposito?.value,
                 objPropositoIdVer: proposito?.name,
                 frecuenciaPagoMeses: frecuenciaDePago?.meses,
@@ -404,6 +404,20 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                           context: context,
                           title:
                               'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      final plazoSolicitudMount =
+                          (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                      final frecuenciaPagoMesesMount =
+                          (double.tryParse(frecuenciaDePago?.meses ?? '0') ??
+                              0);
+                      if (plazoSolicitudMount < frecuenciaPagoMesesMount) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
                           onDone: () => context.pop(),
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;

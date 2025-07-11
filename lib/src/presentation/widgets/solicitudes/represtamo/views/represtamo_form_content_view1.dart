@@ -12,7 +12,6 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -66,29 +65,6 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
   String? nombreCliente;
   final localDbProvider = global<ObjectBoxService>();
 
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2101),
-      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-    );
-    if (picked != null && picked != _selectedDate) {
-      if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
-        CustomAlertDialog(
-          onDone: () => context.pop(),
-          context: context,
-          title: 'La Fecha no puede ser antes a la fecha actual',
-        ).showDialog(context, dialogType: DialogType.warning);
-        return;
-      }
-      _selectedDate = picked;
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -98,6 +74,10 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
     fechaVencimiento = widget.userByCedulaSolicitud.fechaVencimiento;
     paisEmisorDocumento = widget.userByCedulaSolicitud.paisEmisor?.value;
     nombreCliente = widget.userByCedulaSolicitud.primerNombre;
+    tipoDocumento = Item(
+      name: widget.userByCedulaSolicitud.tipoDocumento ?? '',
+      value: widget.userByCedulaSolicitud.tipoDocumento,
+    );
     context.read<GeolocationCubit>().getCurrentLocation();
     context.read<SolicitudReprestamoCubit>().onFieldChanged(
           () => context.read<SolicitudReprestamoCubit>().state.copyWith(
@@ -106,6 +86,8 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                 nombreCompletoCliente: nombreCliente,
                 objTipoPersonaId: tipoPersonaCredito,
                 objTipoPersonaIdVer: tipoPersonaCreditoVer,
+                objTipoDocumentoId: tipoDocumento?.value,
+                objTipoDocumentoIdVer: tipoDocumento?.name,
               ),
         );
     localDbProvider.saveCedulaClient(
@@ -266,7 +248,6 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        onTap: () => selectDate(context),
                         readOnly: true,
                         icon: Icon(
                           Icons.calendar_today,

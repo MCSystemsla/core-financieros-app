@@ -1,12 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
@@ -14,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AsalariadoOffline5 extends StatefulWidget {
   final PageController controller;
@@ -38,10 +42,24 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
   String? lugarTrabajoAnterior;
   String? fuenteOtrosIngresos;
   String? telefonoOficina;
+  String telefonoCodeOficina = '+503';
   String? salarioNetoMensual;
   String? tiempoDeTrabajar;
   String? direccionEmpresa;
+  String? totalIngresoMes;
   final formKey = GlobalKey<FormState>();
+  void getTotalIngresoMes() {
+    final double? salarioNetoMes =
+        double.tryParse(salarioNetoMensual?.replaceAll(',', '') ?? '0');
+    final double? otrosIngresosMes =
+        double.tryParse(otrosIngresos?.replaceAll(',', '') ?? '0');
+    final totalIngresosMesSum = (salarioNetoMes ?? 0) + (otrosIngresosMes ?? 0);
+
+    setState(() {
+      totalIngresoMes = totalIngresosMesSum.toStringAsFixed(2);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,7 +114,9 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: nombreEmpresa,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     nombreEmpresa = value;
@@ -111,7 +131,26 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: barrioEmpresa,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    direccionEmpresa = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        direccionTrabajo: direccionEmpresa,
+                      ),
+                    );
+                  },
+                  title: 'Dirección de la empresa',
+                  icon: const Icon(Icons.location_on),
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     barrioEmpresa = value;
@@ -126,19 +165,20 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: otrosIngresos,
                   onChange: (value) {
-                    otrosIngresos = value;
+                    otrosIngresos = value.replaceAll(',', '');
+
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         otrosIngresosCordoba:
                             double.tryParse(otrosIngresos ?? '0'),
                       ),
                     );
+                    getTotalIngresoMes();
                   },
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   textInputType: TextInputType.number,
                   title: 'Otros ingresos (C\$)',
@@ -146,7 +186,10 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: cargo,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     cargo = value;
                     cubit.onFieldChanged(
@@ -160,9 +203,12 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: lugarTrabajoAnterior,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     lugarTrabajoAnterior = value;
+
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         lugarTrabajoAnterior: lugarTrabajoAnterior,
@@ -174,9 +220,12 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: fuenteOtrosIngresos,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     fuenteOtrosIngresos = value;
+
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         fuenteOtrosIngresos: fuenteOtrosIngresos,
@@ -188,7 +237,11 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 CountryInput(
-                  initialValue: telefonoOficina,
+                  textInputType: TextInputType.phone,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  onCountryCodeChange: (value) {
+                    telefonoCodeOficina = value?.dialCode ?? '+503';
+                  },
                   maxLength: 9,
                   isRequired: false,
                   inputFormatters: [
@@ -200,7 +253,8 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                     telefonoOficina = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        telefonoTrabajo: telefonoOficina,
+                        telefonoTrabajo: telefonoCodeOficina +
+                            telefonoOficina!.replaceAll('-', ''),
                       ),
                     );
                   },
@@ -209,51 +263,46 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: salarioNetoMensual,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     salarioNetoMensual = value.replaceAll(',', '');
+
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         salarioNetoCordoba:
                             double.tryParse(salarioNetoMensual ?? '0'),
                       ),
                     );
+                    getTotalIngresoMes();
                   },
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
                     CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   title: 'Salario Neto Mensual (C\$)',
                   icon: const Icon(Icons.money),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: salarioNetoMensual,
+                  readOnly: true,
+                  validator: (value) =>
+                      ClassValidator.validateRequired(totalIngresoMes),
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(9),
                     CurrencyInputFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
+                  hintText: totalIngresoMes,
                   title: 'Total ingresos mes (C\$)',
                   icon: const Icon(Icons.summarize),
-                  onChange: (value) {
-                    salarioNetoMensual = value.replaceAll(',', '');
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        totalIngresoMes:
-                            double.tryParse(salarioNetoMensual ?? '0'),
-                      ),
-                    );
-                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: tiempoDeTrabajar,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     tiempoDeTrabajar = value;
+
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         tiempoLaborar: tiempoDeTrabajar,
@@ -268,20 +317,6 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                   title: 'Tiempo de Trabajar',
                   icon: const Icon(Icons.schedule),
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: direccionEmpresa,
-                  onChange: (value) {
-                    direccionEmpresa = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        direccionTrabajo: direccionEmpresa,
-                      ),
-                    );
-                  },
-                  title: 'Dirección de la empresa',
-                  icon: const Icon(Icons.location_on),
-                ),
                 const Gap(20),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -291,6 +326,23 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
+
+                      if ((double.tryParse(totalIngresoMes ?? '0') ?? 0) <
+                          (double.tryParse(salarioNetoMensual ?? '0') ?? 0.0)) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El total de ingresos del mes no puede ser menor al salario neto mensual',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          totalIngresoMes:
+                              double.tryParse(totalIngresoMes ?? '0'),
+                        ),
+                      );
 
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),

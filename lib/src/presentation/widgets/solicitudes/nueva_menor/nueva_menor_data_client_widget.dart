@@ -121,7 +121,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
     final solicitud = widget.userByCedulaSolicitud;
 
     tipoDocumento = Item(
-      name: solicitud.tipoDocumento,
+      name: solicitud.tipoDocumento ?? '',
       value: solicitud.tipoDocumento,
     );
     paisEmisor = solicitud.paisEmisor;
@@ -134,7 +134,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
     apellido1 = solicitud.primerApellido;
     apellido2 = solicitud.segundoApellido;
     sexo = Item(
-      name: solicitud.sexo == 'F' ? 'Femenino' : 'Masculino',
+      name: solicitud.sexo ?? '',
       value: solicitud.sexo,
     );
 
@@ -480,6 +480,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
+              validator: (value) => ClassValidator.validateRequired(
+                  fechaEmisionCedula?.selectorFormat()),
               initialValue: fechaEmisionCedula?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
@@ -492,7 +494,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               ),
               title: 'Fecha Emisión Documento',
               isRequired: true,
-              hintText: 'Fecha Emisión Documento',
+              hintText: fechaEmisionCedula?.selectorFormat() ??
+                  'Fecha Emisión Documento',
               isValid: null,
             ),
             const Gap(30),
@@ -504,7 +507,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               validator: (_) => ClassValidator.validateRequired(
                 _selectedDate?.selectorFormat(),
               ),
-              hintText: 'Ingrese Fecha Documento',
+              hintText:
+                  _selectedDate?.selectorFormat() ?? 'Ingrese Fecha Documento',
               icon: Icon(
                 Icons.calendar_today,
                 color: AppColors.getPrimaryColor(),

@@ -120,6 +120,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 if (estadoCivil == 'UNI' || estadoCivil == 'CAS') ...[
                   const Gap(20),
                   CatalogoValorNacionalidad(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value?.valor,
+                    ),
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: nacionalidadConyuge ?? '',
@@ -141,6 +144,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -167,6 +173,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
                       dropdownColor: Colors.white,
                       isContainIcon: true,
                       title: 'Trabaja su conyuge',
@@ -188,6 +197,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -211,6 +223,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -234,6 +249,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(9),
@@ -290,6 +308,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -313,6 +334,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -337,6 +361,9 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 ],
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value,
+                  ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
