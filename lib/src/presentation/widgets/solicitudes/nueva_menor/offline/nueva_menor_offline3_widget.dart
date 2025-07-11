@@ -195,86 +195,88 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                       hintText: trabajaConyuge ?? 'input.select_option'.tr(),
                     ),
                   ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    validator: (value) => ClassValidator.validateRequired(
-                      value,
+                  if (trabajaConyuge == 'input.yes'.tr()) ...[
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      initialValue: trabajoConyuge,
+                      maxLength: 50,
+                      icon: Icon(
+                        Icons.woman_2,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Trabajo de Conyuge',
+                      hintText: 'Ingresa el Trabajo de Conyuge',
+                      isValid: null,
+                      onChange: (value) {
+                        trabajoConyuge = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            trabajoConyugue: trabajoConyuge,
+                          ),
+                        );
+                      },
                     ),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    initialValue: trabajoConyuge,
-                    maxLength: 50,
-                    icon: Icon(
-                      Icons.woman_2,
-                      color: AppColors.getPrimaryColor(),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      initialValue: direccionTrabajoConyuge,
+                      maxLength: 50,
+                      icon: Icon(
+                        Icons.woman_2,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Direccion Trabajo Conyuge',
+                      hintText: 'Ingresa el Trabajo de Conyuge',
+                      isValid: null,
+                      onChange: (value) {
+                        direccionTrabajoConyuge = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            direccionTrabajoConyugue: direccionTrabajoConyuge,
+                          ),
+                        );
+                      },
                     ),
-                    title: 'Trabajo de Conyuge',
-                    hintText: 'Ingresa el Trabajo de Conyuge',
-                    isValid: null,
-                    onChange: (value) {
-                      trabajoConyuge = value;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          trabajoConyugue: trabajoConyuge,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    validator: (value) => ClassValidator.validateRequired(
-                      value,
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9),
+                      ],
+                      initialValue: telefonoTrabajoConyuge,
+                      maxLength: 15,
+                      icon: Icon(
+                        Icons.phone,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Telefono Trabajo Conyuge',
+                      hintText: 'Ingresa el Telefono de Conyuge',
+                      textInputType: TextInputType.phone,
+                      isValid: null,
+                      onChange: (value) {
+                        telefonoTrabajoConyuge = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            telefonoTrabajoConyugue: telefonoTrabajoConyuge,
+                          ),
+                        );
+                      },
                     ),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    initialValue: direccionTrabajoConyuge,
-                    maxLength: 50,
-                    icon: Icon(
-                      Icons.woman_2,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    title: 'Direccion Trabajo Conyuge',
-                    hintText: 'Ingresa el Trabajo de Conyuge',
-                    isValid: null,
-                    onChange: (value) {
-                      direccionTrabajoConyuge = value;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          direccionTrabajoConyugue: direccionTrabajoConyuge,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    validator: (value) => ClassValidator.validateRequired(
-                      value,
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(9),
-                    ],
-                    initialValue: telefonoTrabajoConyuge,
-                    maxLength: 15,
-                    icon: Icon(
-                      Icons.phone,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    title: 'Telefono Trabajo Conyuge',
-                    hintText: 'Ingresa el Telefono de Conyuge',
-                    textInputType: TextInputType.phone,
-                    isValid: null,
-                    onChange: (value) {
-                      telefonoTrabajoConyuge = value;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          telefonoTrabajoConyugue: telefonoTrabajoConyuge,
-                        ),
-                      );
-                    },
-                  ),
+                  ],
                 ],
                 const Gap(20),
                 Container(

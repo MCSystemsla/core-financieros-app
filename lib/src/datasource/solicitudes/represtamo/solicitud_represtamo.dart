@@ -119,7 +119,7 @@ class SolicitudReprestamo {
       'database': LocalStorage().database,
       'Cedula': cedula,
       'Monto': monto,
-      'MonedaCodigo': objMonedaId,
+      'MonedaCodigo': 'DOLAR',
       'PropositoCodigo': objPropositoId,
       'FrecuenciaCodigo': objFrecuenciaId,
       'Cuota': cuota,

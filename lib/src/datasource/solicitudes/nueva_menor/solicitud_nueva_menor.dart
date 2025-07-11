@@ -231,7 +231,7 @@ class SolicitudNuevaMenor {
       'AnosResidirCasa': anosResidirCasa,
       'Email': email,
       'Monto': monto,
-      'MonedaCodigo': objMonedaId,
+      'MonedaCodigo': 'DOLAR',
       'PropositoCodigo': objPropositoId,
       'FrecuenciaCodigo': objFrecuenciaId,
       'Cuota': cuota,

@@ -151,7 +151,8 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   const Gap(20),
                   CatalogoValorNacionalidad(
                     validator: (value) =>
-                        ClassValidator.validateRequired(value),
+                        ClassValidator.validateRequired(value?.valor),
+
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps ?? '',
@@ -366,7 +367,7 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   const Gap(20),
                   CatalogoValorNacionalidad(
                     validator: (value) =>
-                        ClassValidator.validateRequired(value),
+                        ClassValidator.validateRequired(value?.valor),
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps2 ?? '',

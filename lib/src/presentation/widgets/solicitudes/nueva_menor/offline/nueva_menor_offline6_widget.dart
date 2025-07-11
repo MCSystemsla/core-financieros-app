@@ -166,8 +166,8 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 objProductoIdVer: productoVer,
                 objFrecuenciaIdVer: frecuenciaDePagoVer,
                 objFrecuenciaId: frecuenciaDePago,
-                objMonedaId: moneda,
-                objMonedaIdVer: monedaVer,
+                objMonedaId: 'DOLAR',
+                objMonedaIdVer: 'DOLAR',
                 monto: int.tryParse(monto ?? '0'),
                 plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                 fechaPrimerPagoSolicitud:
