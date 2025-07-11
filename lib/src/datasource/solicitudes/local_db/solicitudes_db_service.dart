@@ -167,6 +167,21 @@ class ObjectBoxService {
     return results;
   }
 
+  List<CatalogoLocalDb> getCatalogoProductos({bool isRecurrente = false}) {
+    final query = catalogoBox
+        .query(
+          CatalogoLocalDb_.type.equals('PRODUCTO').and(
+                CatalogoLocalDb_.isRecurrente.equals(isRecurrente),
+              ),
+        )
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
   List<CatalogoFrecuenciaPagoDb> getCatalogoFrecuenciaPago() {
     final query = catalogoFrecuenciaPagoBox.query().build();
 

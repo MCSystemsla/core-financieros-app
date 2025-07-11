@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_
 import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -47,14 +48,14 @@ class _LoginScreenViewState extends State<LoginScreenView> {
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
-          // if (state is AutoupdateSuccess) {
-          //   UpdateAppDialog(
-          //     apkUrl: state.apkVersion,
-          //     context: context,
-          //     title: 'Para continuar, es necesario actualizar la aplicación.',
-          //     versionName: state.apkVersionName,
-          //   ).showDialog(context);
-          // }
+          if (state is AutoupdateSuccess) {
+            UpdateAppDialog(
+              apkUrl: state.apkVersion,
+              context: context,
+              title: 'Para continuar, es necesario actualizar la aplicación.',
+              versionName: state.apkVersionName,
+            ).showDialog(context);
+          }
         },
         builder: (context, state) {
           return Scaffold(

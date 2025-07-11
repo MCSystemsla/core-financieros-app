@@ -253,8 +253,7 @@ class __FormContentState extends State<_FormContent> {
                       parentesco = item.value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objRubroActividad: item.value,
-                          objRubroActividadVer: item.name,
+                          parentescoFamiliarPeps2: item.value,
                         ),
                       );
                     },

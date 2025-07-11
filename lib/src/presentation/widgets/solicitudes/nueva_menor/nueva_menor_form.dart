@@ -44,6 +44,9 @@ class NuevaMenorForm extends StatelessWidget {
                       );
                 },
               ),
+              NuevaMenorCreditoWidget(
+                pageController: pageController,
+              ),
               NuevaMenorDataClientWidget(
                 controller: pageController,
               ),

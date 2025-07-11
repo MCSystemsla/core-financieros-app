@@ -34,7 +34,7 @@
     },
     {
       "id": "5:1884745770876461125",
-      "lastPropertyId": "12:3117474480138809276",
+      "lastPropertyId": "13:8910477462815401448",
       "name": "CatalogoLocalDb",
       "properties": [
         {
@@ -72,6 +72,11 @@
           "id": "12:3117474480138809276",
           "name": "montoMaximo",
           "type": 8
+        },
+        {
+          "id": "13:8910477462815401448",
+          "name": "isRecurrente",
+          "type": 1
         }
       ],
       "relations": []

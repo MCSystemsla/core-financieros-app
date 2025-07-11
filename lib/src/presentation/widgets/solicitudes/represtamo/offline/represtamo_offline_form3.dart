@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -227,9 +228,9 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               onTap: () => selectFechaDesembolso(context),
             ),
             const Gap(20),
-            SearchDropdownWidget(
+            CatalogoProductoDropdown(
+              isRecurrente: true,
               hintText: producto?.name ?? 'Seleccionar Producto',
-              codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;

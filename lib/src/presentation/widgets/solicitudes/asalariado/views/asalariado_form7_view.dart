@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/sending/asalariado_sending_form.dart';
@@ -238,10 +239,9 @@ class __FormContentState extends State<_FormContent> {
                   onTap: () => selectFechaDesembolso(context),
                 ),
                 const Gap(20),
-                SearchDropdownWidget(
+                CatalogoProductoDropdown(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  codigo: 'PRODUCTO',
                   title: 'Producto',
                   onChanged: (item) {
                     if (item == null) return;
