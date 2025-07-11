@@ -41,7 +41,7 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile']
+            storeFile rootProject.file(keystoreProperties['storeFile']) 
             storePassword keystoreProperties['storePassword']
         }
     }
@@ -64,7 +64,7 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.release
             // signingConfig = signingConfigs.release
             minifyEnabled true
             shrinkResources true
@@ -84,7 +84,7 @@ android {
             resValue "string", "app_name", "MiCrédito"
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.ni"
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
         micreditoHonduras {
             dimension "country"

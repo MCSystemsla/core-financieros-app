@@ -12,13 +12,106 @@ class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/solicitudes/crear-solicitud-nuevamenor';
+  String get path => '/solicitud-nueva-menor/crear';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
   Map<String, dynamic> get body => solicitudNuevaMenor.toJson();
+}
+
+class SolicitudReprestamoEndpoint extends Endpoint {
+  final SolicitudReprestamo solicitudReprestamo;
+  SolicitudReprestamoEndpoint({required this.solicitudReprestamo});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/solicitud-represtamo/crear';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => solicitudReprestamo.toJson();
+}
+
+class SolicitudAsalariadoEndpoint extends Endpoint {
+  final SolicitudAsalariado solicitudAsalariado;
+  SolicitudAsalariadoEndpoint({required this.solicitudAsalariado});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/solicitud-asalariado/crear';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => solicitudAsalariado.toJson();
+}
+
+class UserCedulaEndpoint extends Endpoint {
+  final String cedula;
+  UserCedulaEndpoint({required this.cedula});
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/solicitud-nueva-menor/validar-cedula-y-obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'cedula': cedula,
+      };
+}
+
+class ReprestamoUserCedulaEndpoint extends Endpoint {
+  final String cedula;
+  ReprestamoUserCedulaEndpoint({required this.cedula});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/solicitud-represtamo/validar-cedula-y-obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'cedula': cedula,
+      };
+}
+
+class AsalariadoUserCedulaEndpoint extends Endpoint {
+  final String cedula;
+  AsalariadoUserCedulaEndpoint({required this.cedula});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/solicitud-asalariado/validar-cedula-y-obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'cedula': cedula,
+      };
 }
 
 class CatalogoSolicitudEndpoint extends Endpoint {
@@ -36,7 +129,6 @@ class CatalogoSolicitudEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
         'codigo': codigo,
       };
@@ -57,7 +149,6 @@ class NacionalidadEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
         'codigo': codigo,
       };
@@ -77,80 +168,8 @@ class ProductosEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
       };
-}
-
-class UserCedulaEndpoint extends Endpoint {
-  final String cedula;
-  UserCedulaEndpoint({required this.cedula});
-
-  @override
-  Method get method => Method.get;
-
-  @override
-  String get path => '/solicitudes/obtener-persona';
-  @override
-  Map<String, String> get headers => {
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      };
-  @override
-  Map<String, dynamic> get queryParameters => {
-        'database': LocalStorage().database,
-        'cedula': cedula,
-      };
-}
-
-class SolicitudReprestamoEndpoint extends Endpoint {
-  final SolicitudReprestamo solicitudReprestamo;
-  SolicitudReprestamoEndpoint({required this.solicitudReprestamo});
-  @override
-  Method get method => Method.post;
-
-  @override
-  String get path => '/solicitudes/crear-solicitud-represtamo';
-  @override
-  Map<String, String> get headers => {
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      };
-  @override
-  Map<String, dynamic> get body => solicitudReprestamo.toJson();
-}
-
-class ReprestamoUserCedulaEndpoint extends Endpoint {
-  final String cedula;
-  ReprestamoUserCedulaEndpoint({required this.cedula});
-  @override
-  Method get method => Method.get;
-
-  @override
-  String get path => '/solicitudes/obtener-cliente-id';
-  @override
-  Map<String, String> get headers => {
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      };
-  @override
-  Map<String, dynamic> get queryParameters => {
-        'database': LocalStorage().database,
-        'Cedula': cedula,
-      };
-}
-
-class SolicitudAsalariadoEndpoint extends Endpoint {
-  final SolicitudAsalariado solicitudAsalariado;
-  SolicitudAsalariadoEndpoint({required this.solicitudAsalariado});
-  @override
-  Method get method => Method.post;
-
-  @override
-  String get path => '/solicitudes/crear-solicitud-asalariado';
-  @override
-  Map<String, String> get headers => {
-        'Authorization': 'Bearer ${LocalStorage().jwt}',
-      };
-  @override
-  Map<String, dynamic> get body => solicitudAsalariado.toJson();
 }
 
 class ObtenerParametrosEndpoint extends Endpoint {
@@ -169,5 +188,22 @@ class ObtenerParametrosEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
         'nombre': nombre,
+      };
+}
+
+class CatalogoFrecuenciaPagoEndpoint extends Endpoint {
+  CatalogoFrecuenciaPagoEndpoint();
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-frecuencia-pago';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
       };
 }

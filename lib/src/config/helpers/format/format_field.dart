@@ -1,15 +1,35 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class FormatField {
-  static String formatMonto(String value) {
-    if (value.isEmpty) return value;
+class CurrencyInputFormatter extends TextInputFormatter {
+  final NumberFormat _formatter = NumberFormat('#,##0', 'en_US');
 
-    String newValue = value.replaceAll(',', '');
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String rawText = newValue.text.replaceAll(',', '');
 
-    int? number = int.tryParse(newValue);
-    if (number == null) return value;
+    if (rawText.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
 
-    final NumberFormat formatter = NumberFormat('#,##0.00', 'en_US');
-    return formatter.format(number);
+    int? value = int.tryParse(rawText);
+    if (value == null) return oldValue;
+
+    String newText = _formatter.format(value);
+
+    // Calcula nueva posición del cursor
+    int selectionIndex =
+        newText.length - (rawText.length - newValue.selection.end);
+
+    // Clamp para evitar errores de rango
+    selectionIndex = selectionIndex.clamp(0, newText.length);
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
   }
 }

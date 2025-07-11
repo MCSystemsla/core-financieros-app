@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
@@ -30,7 +30,7 @@ class ObjectBoxService {
   late final Box<ReprestamoResponsesLocalDb> solicitudesReprestamoResponsesBox;
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   late final Box<CedulaClientDb> cedulaClientBox;
-  late final Box<CatalogoParametroLocalDb> catalogoParametroBox;
+  late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -45,9 +45,12 @@ class ObjectBoxService {
     solicitudesAsalariadoResponsesBox =
         _store.box<AsalariadoResponsesLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
-    catalogoParametroBox = _store.box<CatalogoParametroLocalDb>();
+    catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
+    // solicitudesResponsesBox.removeAll();
+    // solicitudesReprestamoResponsesBox.removeAll();
+    // catalogoParametroBox.removeAll();
   }
 
   static Future<ObjectBoxService> init() async {
@@ -86,9 +89,21 @@ class ObjectBoxService {
   }
 
   void deleteRowsByDeterminateTime() {
-    final now = DateTime.now().subtract(const Duration(hours: 3));
+    // TODO: VOLVER A ACTUALIZAR EL LOGICO DE ELIMINACION DE DATOS A 30 DIAS
+    // final now = DateTime.now().subtract(const Duration(days: 30));
+    final now = DateTime.now().subtract(const Duration(hours: 1));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesReprestamoResponsesBox
+        .query(ReprestamoResponsesLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesAsalariadoResponsesBox
+        .query(AsalariadoResponsesLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
         .build()
         .remove();
   }
@@ -145,6 +160,30 @@ class ObjectBoxService {
   // * Catalgos
   List<CatalogoLocalDb> findParentescosByNombre({required String type}) {
     final query = catalogoBox.query(CatalogoLocalDb_.type.equals(type)).build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  List<CatalogoLocalDb> getCatalogoProductos({bool isRecurrente = false}) {
+    final query = catalogoBox
+        .query(
+          CatalogoLocalDb_.type.equals('PRODUCTO').and(
+                CatalogoLocalDb_.isRecurrente.equals(isRecurrente),
+              ),
+        )
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  List<CatalogoFrecuenciaPagoDb> getCatalogoFrecuenciaPago() {
+    final query = catalogoFrecuenciaPagoBox.query().build();
 
     final results = query.find();
     query.close();
@@ -470,14 +509,13 @@ class ObjectBoxService {
     }
   }
 
-  CatalogoParametroLocalDb? getParametroByName({required String nombre}) {
+  CatalogoLocalDb? getParametroByName({required String nombre}) {
     try {
-      final query = catalogoParametroBox
-          .query(CatalogoParametroLocalDb_.type.equals(nombre))
-          .build();
-      final result = query.findFirst();
+      final result = catalogoBox
+          .query(CatalogoLocalDb_.type.equals(nombre, caseSensitive: false))
+          .build()
+          .findFirst();
 
-      query.close();
       return result;
     } catch (e) {
       _logger.e(e.toString());

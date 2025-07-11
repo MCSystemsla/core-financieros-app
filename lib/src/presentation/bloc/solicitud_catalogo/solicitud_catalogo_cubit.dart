@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_parametro_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'solicitud_catalogo_state.dart';
 
@@ -21,11 +23,13 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
   final SolicitudesCreditoRepository _repository;
   final ObjectBoxService _objectBoxService;
   final DepartamentoRepository departamentoRepository;
+  final SolicitudesPendientesRepository solicitudesPendientesRepository;
 
   SolicitudCatalogoCubit(
     this._repository,
     this._objectBoxService,
     this.departamentoRepository,
+    this.solicitudesPendientesRepository,
   ) : super(SolicitudCatalogoInitial());
 
   Future<void> getCatalogoByCodigo({
@@ -37,15 +41,10 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       if (isConnected) {
         await _saveToDatabase(codigo: codigo, items: data.data);
       }
-    } on SocketException {
-      emit(const SolicitudCatalogoError(
-        error: 'Tienes problemas de conexión. Revisa tu conexión a internet.',
-      ));
     } on AppException catch (e) {
       emit(SolicitudCatalogoError(error: e.optionalMsg));
     } catch (e) {
-      emit(SolicitudCatalogoError(
-          error: 'Error no controlado: ${e.toString()}'));
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
     }
   }
 
@@ -56,8 +55,6 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         .build();
     query.remove();
     for (var item in data.data) {
-      log(item.interes.toString());
-      log(item.nombre.toString());
       _objectBoxService.catalogoBox.put(CatalogoLocalDb(
         valor: item.valor,
         nombre: item.nombre,
@@ -65,6 +62,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         type: 'PRODUCTO',
         montoMaximo: item.montoMaximo,
         montoMinimo: item.montoMinimo,
+        isRecurrente: item.isRecurrente,
       ));
     }
   }
@@ -83,48 +81,125 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         );
       }
       log('Guardados los departamentos en la base de datos local');
+    } on AppException catch (e) {
+      emit(SolicitudCatalogoError(error: e.optionalMsg));
     } catch (e) {
       emit(SolicitudCatalogoError(error: e.toString()));
     }
   }
 
-  Future<void> saveAllCatalogos({required bool isConnected}) async {
+  Future<void> saveAllCatalogos({
+    required bool isConnected,
+    required BuildContext context,
+  }) async {
     if (!isConnected) {
       emit(SolicitudCatalogoSuccess());
       return;
     }
 
+    emit(SolicitudCatalogoLoading());
     try {
-      emit(SolicitudCatalogoLoading());
       await getAndSaveDepartamentos();
 
-      const codigos = [
-        'PARENTESCO',
-        'TIPOVIVIENDA',
-        'MONEDA',
-        'DESTINOCREDITO',
-        'FRECUENCIAPAGO',
-        'SECTORECONOMICO',
-        'ESTADOCIVIL',
-        'ESTADOSOLICITUDCREDITO',
-        'ESCOLARIDAD',
-        'SEXO',
-        'RUBROACTIVIDAD',
-        'TIPOSPERSONACREDITO',
-        'ACTIVIDADECONOMICA',
-        'TIPODOCUMENTOPERSONA',
-      ];
+      await saveCatalogosSolicitudesCreditoToLocalDb(isConnected: isConnected);
 
-      for (final codigo in codigos) {
-        await getCatalogoByCodigo(codigo: codigo, isConnected: isConnected);
-      }
-      log('Catalogos guardados');
+      if (!context.mounted) return;
+      await saveKIVAPendingRequestsToLocalDb(context: context);
 
-      await getandSaveProductos();
-      log('Productos guardados');
-      await getAndSaveParametros();
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(SolicitudCatalogoSuccess());
+    } on AppException catch (e) {
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.optionalMsg}'));
+    } catch (e) {
+      emit(SolicitudCatalogoError(error: 'Error controlado: ${e.toString()}'));
+    }
+  }
+
+  Future<void> saveCatalogosSolicitudesCreditoToLocalDb({
+    required bool isConnected,
+  }) async {
+    final actions = LocalStorage().currentActions;
+    if (!actions.contains('LLENARSOLICITUDESMOVIL')) return;
+    const codigos = [
+      'PARENTESCO',
+      'TIPOVIVIENDA',
+      'MONEDA',
+      'DESTINOCREDITO',
+      'FRECUENCIAPAGO',
+      'SECTORECONOMICO',
+      'ESTADOCIVIL',
+      'ESTADOSOLICITUDCREDITO',
+      'ESCOLARIDAD',
+      'SEXO',
+      'RUBROACTIVIDAD',
+      'TIPOSPERSONACREDITO',
+      'ACTIVIDADECONOMICA',
+      'TIPODOCUMENTOPERSONA',
+    ];
+
+    for (final codigo in codigos) {
+      await getCatalogoByCodigo(codigo: codigo, isConnected: isConnected);
+    }
+    log('Catalogos guardados');
+
+    await getandSaveProductos();
+    log('Productos guardados');
+
+    await getAndSaveParametros();
+    log('Parámetros guardados');
+
+    await saveCatalogoFrecuenciaPago();
+    log('Frecuencia de Pago guardados');
+  }
+
+  Future<void> saveCatalogoFrecuenciaPago() async {
+    final data = await _repository.getCatalogoFrecuenciaPago();
+    final query = _objectBoxService.catalogoFrecuenciaPagoBox.query().build();
+    query.remove();
+    for (var item in data.catalogo) {
+      _objectBoxService.catalogoFrecuenciaPagoBox.put(CatalogoFrecuenciaPagoDb(
+        valor: item.valor,
+        meses: item.meses,
+        nombre: item.nombre,
+      ));
+    }
+  }
+
+  Future<void> saveKIVAPendingRequestsToLocalDb({
+    required BuildContext context,
+  }) async {
+    final actions = LocalStorage().currentActions;
+
+    if (!actions.contains('LLENARKIVAMOVIL')) return;
+    try {
+      final solicitudesKiva =
+          await solicitudesPendientesRepository.getSolicitudesPendientes();
+      if (!context.mounted) return;
+
+      final solicitudes = solicitudesKiva.solicitudes.map((e) {
+        return SolicitudesPendientes()
+          ..estado = e.estado
+          ..fecha = e.fecha
+          ..moneda = e.moneda
+          ..numero = e.numero
+          ..producto = e.producto
+          ..nombreFormulario = e.nombreFormulario
+          ..solicitudId = e.id
+          ..cedula = e.cedula
+          ..sucursal = LocalStorage().database
+          ..nombre = e.nombre
+          ..monto = double.tryParse(e.monto.toString()) ?? 0.00
+          ..tipoSolicitud = e.tipoSolicitud
+          ..idAsesor = int.tryParse(LocalStorage().userId)
+          ..motivoAnterior = e.motivoAnterior;
+      }).toList();
+
+      context
+          .read<SolicitudesPendientesLocalDbCubit>()
+          .saveSolicitudesPendientes(
+            solicitudes: solicitudes,
+          );
+      log('Solicitudes KIVA guardadas');
     } on AppException catch (e) {
       emit(SolicitudCatalogoError(error: 'Error controlado: ${e.optionalMsg}'));
     } catch (e) {
@@ -137,15 +212,16 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         await _repository.getParametroByName(nombre: 'EDADMINIMACLIENTE');
     final edadMaxima =
         await _repository.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-    final query = _objectBoxService.catalogoParametroBox.query().build();
-    query.remove();
-    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+
+    _objectBoxService.catalogoBox.put(CatalogoLocalDb(
       valor: edadMinima.data.valor,
+      nombre: 'EDADMINIMACLIENTE',
       type: 'EDADMINIMACLIENTE',
     ));
-    _objectBoxService.catalogoParametroBox.put(CatalogoParametroLocalDb(
+    _objectBoxService.catalogoBox.put(CatalogoLocalDb(
       valor: edadMaxima.data.valor,
       type: 'EDADMAXIMACLIENTE',
+      nombre: 'EDADMAXIMACLIENTE',
     ));
   }
 

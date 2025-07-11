@@ -113,28 +113,24 @@ class SolicitudReprestamo {
   });
 
   Map<String, dynamic> toJson() {
-    // 'objClienteID': 35280,
     final Map<String, dynamic> data = {
-      'objOrigenSolicitudID': 'APPMOVIL',
+      'OrigenSolicitudCodigo': 'APPMOVIL',
       'isOffline': isOffline,
       'database': LocalStorage().database,
       'Cedula': cedula,
       'Monto': monto,
-      'objMonedaID': objMonedaId.isEmpty ? null : objMonedaId,
-      'objPropositoID': objPropositoId.isEmpty ? null : objPropositoId,
-      'objFrecuenciaID': objFrecuenciaId.isEmpty ? null : objFrecuenciaId,
+      'MonedaCodigo': 'DOLAR',
+      'PropositoCodigo': objPropositoId,
+      'FrecuenciaCodigo': objFrecuenciaId,
       'Cuota': cuota,
-      'objActividadID': objActividadId.isEmpty ? null : objActividadId,
-      'objActividadID1': objActividadId1.isEmpty ? null : objActividadId1,
-      'objActividadID2': objActividadId2.isEmpty ? null : objActividadId2,
-      'objSectorID': objSectorId.isEmpty ? null : objSectorId,
+      'ActividadCodigo': objActividadId,
+      'Actividad1Codigo': objActividadId1,
+      'Actividad2Codigo': objActividadId2,
+      'SectorCodigo': objSectorId,
       'BeneficiarioSeguro': beneficiarioSeguro,
       'CedulaBeneficiarioSeguro': cedulaBeneficiarioSeguro,
-      'objParentescoBeneficiarioSeguroID':
-          objParentescoBeneficiarioSeguroId.isEmpty
-              ? null
-              : objParentescoBeneficiarioSeguroId,
-      'objProductoID': objProductoId.isEmpty ? null : objProductoId,
+      'ParentescoBeneficiarioSeguroCodigo': objParentescoBeneficiarioSeguroId,
+      'ProductoCodigo': objProductoId,
       'Observacion': observacion,
       'UbicacionLongitud': ubicacionLongitud,
       'UbicacionLatitud': ubicacionLatitud,
@@ -146,25 +142,18 @@ class SolicitudReprestamo {
       'CargoOficialPeps': cargoOficialPeps,
       'TieneFamiliarPeps': tieneFamiliarPeps,
       'NombreFamiliarPeps2': nombreFamiliarPeps2,
-      'ParentescoFamiliarPeps2': parentescoFamiliarPeps2,
+      'ParentescoFamiliarPeps2Codigo': parentescoFamiliarPeps2,
       'CargoFamiliarPeps2': cargoFamiliarPeps2,
       'NombreEntidadPeps2': nombreEntidadPeps2,
       'PeriodoPeps2': periodoPeps2,
       'PaisPeps2': paisPeps2,
-      'objRubroActividad': objRubroActividad.isEmpty ? null : objRubroActividad,
-      'objActividadPredominante':
-          objActividadPredominante.isEmpty ? null : objActividadPredominante,
-      'objTipoDocumentoID':
-          objTipoDocumentoId.isEmpty ? null : objTipoDocumentoId,
-      'objRubroActividad2':
-          objRubroActividad2.isEmpty ? null : objRubroActividad2,
-      'objRubroActividad3':
-          objRubroActividad3.isEmpty ? null : objRubroActividad3,
-      'objRubroActividadPredominante': objRubroActividadPredominante.isEmpty
-          ? null
-          : objRubroActividadPredominante,
-      'TipoPersona': tipoPersona,
-      'objTipoPersonaID': objTipoPersonaId.isEmpty ? null : objTipoPersonaId,
+      'RubroActividadCodigo': objRubroActividad,
+      'ActividadPredominanteCodigo': objActividadPredominante,
+      'TipoDocumentoCodigo': objTipoDocumentoId,
+      'RubroActividad2Codigo': objRubroActividad2,
+      'RubroActividad3Codigo': objRubroActividad3,
+      'RubroActividadPredominanteCodigo': objRubroActividadPredominante,
+      'TipoPersonaCodigo': objTipoPersonaId,
       'TelefonoBeneficiario': telefonoBeneficiario,
       'EsFamiliarEmpleado': esFamiliarEmpleado,
       'NombreFamiliar': nombreFamiliar,
@@ -174,7 +163,8 @@ class SolicitudReprestamo {
       'FechaPrimerPagoSolicitud':
           fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
     };
-    data.removeWhere((key, value) => value == null || value == '');
+    data.removeWhere(
+        (key, value) => value == null || value == '' || value == 0);
     return data;
   }
 }

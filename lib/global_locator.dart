@@ -26,10 +26,6 @@ Future<void> setUpGlobalLocator({required Flavor flavor}) async {
     FlavorCubit()..setFlavor(flavor),
   );
 
-  // global.registerFactory<InternetConnectionCubit>(
-  //   () => InternetConnectionCubit()..getInternetStatusConnection(),
-  // );
-
   _injectStorage();
 }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -43,6 +45,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
   Item? paisPeps2;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -61,14 +64,14 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   familiarEmpleado = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esFamiliarEmpleado: familiarEmpleado == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
+                validator: (value) => ClassValidator.validateRequired(value),
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
@@ -76,6 +79,10 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (familiarEmpleado == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.person,
                   color: AppColors.getPrimaryColor(),
@@ -85,19 +92,39 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliar: nombreEmpleado,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) =>
+                    ClassValidator.validateMaxIntValueAndMinValue(
+                  value,
+                  14,
+                  isNicaraguaCedula: true,
+                  isRequired: true,
+                ),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cédula',
+                title: 'Cédula del empleado',
                 hintText: 'Ingresa Cédula del empleado',
                 isValid: null,
                 onChange: (value) {
                   cedulaEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cedulaFamiliar: cedulaEmpleado,
+                    ),
+                  );
                 },
               ),
             ],
@@ -111,16 +138,16 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                     '¿Has desempeñado un cargo público y/o figura pública de alto nivel en los últimos 10 años?'
                         .tr(),
                 items: ['input.yes'.tr(), 'input.no'.tr()],
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChanged: (item) {
                   if (item == null) return;
                   espeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esPeps: espeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
                 },
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
@@ -129,6 +156,10 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (espeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -138,29 +169,41 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreDeEntidadPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreDeEntidadPeps: nombreDeEntidadPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa Pais',
+                hintText: 'input.select_option'.tr(),
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
-
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps: paisPeps?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PAIS',
                 validator: (value) =>
-                    ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
+                    ClassValidator.validateRequired(value.valor),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.perm_identity_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',
@@ -168,10 +211,19 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps: periodoPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -181,6 +233,11 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoOficialPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoOficialPeps: cargoOficialPeps,
+                    ),
+                  );
                 },
               ),
             ],
@@ -197,14 +254,14 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   tieneFamiliarPeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
+                validator: (value) => ClassValidator.validateRequired(value),
                 toStringItem: (item) => item,
                 hintText: 'input.select_option'.tr(),
               ),
@@ -212,6 +269,10 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -221,10 +282,19 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliarPeps2: nombreFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -234,10 +304,19 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoFamiliarPeps2: cargoFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -247,22 +326,40 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEntidadPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreEntidadPeps2: nombreEntidadPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 onChanged: (item) {
                   if (item == null) return;
                   parentescoFamiliarPeps2 =
                       Item(name: item.name, value: item.value);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PARENTESCO',
                 title: 'Parentesco',
-                hintText: 'Ingrese parentesco',
+                hintText: 'input.select_option'.tr(),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -272,24 +369,30 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps2: periodoPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: 'Ingresa País',
+                hintText: 'input.select_option'.tr(),
                 title: 'País',
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
-
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps2: paisPeps2?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PAIS',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
               ),
             ],
             const Gap(20),
@@ -301,27 +404,6 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        esFamiliarEmpleado:
-                            familiarEmpleado == 'input.yes'.tr(),
-                        nombreFamiliar: nombreEmpleado?.trim(),
-                        cedulaFamiliar: cedulaEmpleado?.trim(),
-                        esPeps: espeps == 'input.yes'.tr(),
-                        nombreDeEntidadPeps: nombreDeEntidadPeps,
-                        paisPeps: paisPeps?.value,
-                        // paisPepsVe: paisPeps?.value,
-                        periodoPeps: periodoPeps,
-                        cargoOficialPeps: cargoOficialPeps,
-                        tieneFamiliarPeps:
-                            tieneFamiliarPeps == 'input.yes'.tr(),
-                        nombreFamiliarPeps2: nombreFamiliarPeps2,
-                        parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
-                        // parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
-                        cargoFamiliarPeps2: cargoFamiliarPeps2,
-                        nombreEntidadPeps2: nombreEntidadPeps2,
-                        periodoPeps2: periodoPeps2,
-                        paisPeps2: paisPeps2?.value,
-                      );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

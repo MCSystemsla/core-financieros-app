@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/departamentos_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/endpoint/departamentos_endpoint.dart';
@@ -21,17 +20,19 @@ class DepartamentosRepositoryImpl extends DepartamentoRepository {
     try {
       final endpoint = DepartamentosEndpoint();
       final resp = await _api.request(endpoint: endpoint);
-
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
       final data = DepartamentosResponse.fromJson(resp);
       return data;
-    } on TimeoutException catch (e) {
-      _logger.e('Tiempo de espera agotado: $e');
-      throw AppException(optionalMsg: 'Tiempo de espera agotado');
-    } on SocketException catch (e) {
-      _logger.e('Sin conexión a internet: $e');
-      throw AppException(optionalMsg: 'No hay conexión a internet');
     } catch (e) {
-      throw AppException(optionalMsg: 'App Exception: $e');
+      _logger.e(e);
+      rethrow;
     }
   }
 }

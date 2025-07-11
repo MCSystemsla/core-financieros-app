@@ -3,12 +3,14 @@ part of 'solicitudes_pendientes_cubit.dart';
 
 class SolicitudesPendientesState extends Equatable {
   final Status status;
+  final String errorMsg;
   final List<Solicitud> solicitudesPendienteResponse;
   final List<Solicitud> filteredSolicitudes;
   const SolicitudesPendientesState({
     this.solicitudesPendienteResponse = const [],
     this.status = Status.notStarted,
     this.filteredSolicitudes = const [],
+    this.errorMsg = '',
   });
 
   @override
@@ -16,18 +18,21 @@ class SolicitudesPendientesState extends Equatable {
         solicitudesPendienteResponse,
         status,
         filteredSolicitudes,
+        errorMsg,
       ];
 
   SolicitudesPendientesState copyWith({
     Status? status,
+    String? errorMsg,
     List<Solicitud>? solicitudesPendienteResponse,
     List<Solicitud>? filteredSolicitudes,
   }) {
     return SolicitudesPendientesState(
       status: status ?? this.status,
-      filteredSolicitudes: filteredSolicitudes ?? this.filteredSolicitudes,
+      errorMsg: errorMsg ?? this.errorMsg,
       solicitudesPendienteResponse:
           solicitudesPendienteResponse ?? this.solicitudesPendienteResponse,
+      filteredSolicitudes: filteredSolicitudes ?? this.filteredSolicitudes,
     );
   }
 }

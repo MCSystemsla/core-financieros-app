@@ -83,7 +83,17 @@ class SolicitudReprestamoState extends Equatable {
   final String parentescoFamiliarVer;
   final String cedulaFrontPath;
   final String cedulaBackPath;
+  final String nombreCompletoCliente;
+  final String? uuid;
+  final String createdAt;
+  final int montoMinimo;
+  final int montoMaximo;
+  final String frecuenciaPagoMeses;
+
   const SolicitudReprestamoState({
+    this.createdAt = '',
+    this.uuid,
+    this.nombreCompletoCliente = '',
     this.cedulaBackPath = '',
     this.cedulaFrontPath = '',
     this.objOrigenSolicitudIdVer = '',
@@ -165,10 +175,17 @@ class SolicitudReprestamoState extends Equatable {
     this.fechaPrimerPagoSolicitud = '',
     this.userIp = '',
     this.username = '',
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
+    this.frecuenciaPagoMeses = '',
   });
 
   @override
   List<Object> get props => [
+        montoMinimo,
+        montoMaximo,
+        frecuenciaPagoMeses,
+        nombreCompletoCliente,
         cedulaBackPath,
         cedulaFrontPath,
         objOrigenSolicitudIdVer,
@@ -332,6 +349,12 @@ class SolicitudReprestamoState extends Equatable {
     String? parentescoFamiliarVer,
     String? cedulaFrontPath,
     String? cedulaBackPath,
+    String? nombreCompletoCliente,
+    String? uuid,
+    String? createdAt,
+    int? montoMinimo,
+    int? montoMaximo,
+    String? frecuenciaPagoMeses,
   }) {
     return SolicitudReprestamoState(
       isDone: isDone ?? this.isDone,
@@ -430,6 +453,13 @@ class SolicitudReprestamoState extends Equatable {
           parentescoFamiliarVer ?? this.parentescoFamiliarVer,
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
+      nombreCompletoCliente:
+          nombreCompletoCliente ?? this.nombreCompletoCliente,
+      uuid: uuid ?? this.uuid,
+      createdAt: createdAt ?? this.createdAt,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
+      frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
     );
   }
 }

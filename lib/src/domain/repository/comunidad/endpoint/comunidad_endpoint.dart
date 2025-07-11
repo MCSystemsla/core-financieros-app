@@ -15,7 +15,6 @@ class ComunidadEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'database': LocalStorage().database,
       };
 }

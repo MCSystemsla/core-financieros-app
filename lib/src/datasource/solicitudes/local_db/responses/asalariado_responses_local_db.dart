@@ -152,7 +152,15 @@ class AsalariadoResponsesLocalDb {
   String? objActividadEconomicaId1Ver;
   String? objActividadEconomicaId2Ver;
   String? objParentescoFamiliarCercanoIdVer;
+  String? uuid;
+  String? frecuenciaPagoMeses;
+  @Property(type: PropertyType.date)
+  DateTime? createdAt;
+
   AsalariadoResponsesLocalDb({
+    required this.id,
+    this.uuid,
+    this.frecuenciaPagoMeses,
     this.objOrigenSolicitudIdVer,
     this.objPaisEmisorCedulaVer,
     this.objMunicipioCasaIdVer,
@@ -300,5 +308,6 @@ class AsalariadoResponsesLocalDb {
     this.tiempoLaborarConyugue,
     this.totalIngresoMes,
     this.totalIngresoMesConyugue,
+    this.createdAt,
   });
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -75,10 +77,30 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
     nombreEntidadPeps2 = solicitud.nombreEntidadPeps2;
     periodoPeps2 = solicitud.periodoPeps2;
     paisPeps2 = Item(name: solicitud.paisPeps2!, value: solicitud.paisPeps2);
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                esFamiliarEmpleado: familiarEmpleado == 'input.yes'.tr(),
+                tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                nombreFamiliarPeps2: nombreFamiliarPeps2,
+                nombreFamiliar: nombreEmpleado,
+                cedulaFamiliar: cedulaEmpleado,
+                esPeps: espeps == 'input.yes'.tr(),
+                nombreDeEntidadPeps: nombreDeEntidadPeps,
+                paisPeps: paisPeps?.value,
+                periodoPeps: periodoPeps,
+                cargoOficialPeps: cargoOficialPeps,
+                parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                cargoFamiliarPeps2: cargoFamiliarPeps2,
+                nombreEntidadPeps2: nombreEntidadPeps2,
+                periodoPeps2: periodoPeps2,
+                paisPeps2: paisPeps2?.value,
+              ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -98,6 +120,12 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   familiarEmpleado = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esFamiliarEmpleado: familiarEmpleado == 'input.yes'.tr(),
+                    ),
+                  );
+
                   setState(() {});
                 },
                 validator: (value) {
@@ -114,6 +142,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreEmpleado,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.person,
                   color: AppColors.getPrimaryColor(),
@@ -123,20 +154,33 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliar: nombreEmpleado,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cedulaEmpleado,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
-                title: 'Cedula',
+                title: 'Cedula del empleado',
                 hintText: 'Ingresa Cedula del empleado',
                 isValid: null,
                 onChange: (value) {
                   cedulaEmpleado = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cedulaFamiliar: cedulaEmpleado,
+                    ),
+                  );
                 },
               ),
             ],
@@ -154,6 +198,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   espeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      esPeps: espeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
                 validator: (value) {
@@ -170,6 +219,9 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreDeEntidadPeps,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -179,6 +231,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreDeEntidadPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreDeEntidadPeps: nombreDeEntidadPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -194,8 +251,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps: paisPeps?.value,
+                    ),
+                  );
 
                   setState(() {});
                 },
@@ -207,6 +267,10 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: periodoPeps,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -216,11 +280,19 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps: periodoPeps,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cargoOficialPeps,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -230,6 +302,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoOficialPeps = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoOficialPeps: cargoOficialPeps,
+                    ),
+                  );
                 },
               ),
             ],
@@ -247,6 +324,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   tieneFamiliarPeps = item;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                    ),
+                  );
                   setState(() {});
                 },
                 validator: (value) {
@@ -267,16 +349,27 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
                 ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 title: 'Nombre del familiar',
                 hintText: 'Ingrese Nombre del familiar',
                 isValid: null,
                 onChange: (value) {
                   nombreFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreFamiliarPeps2: nombreFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: cargoFamiliarPeps2,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -286,11 +379,19 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   cargoFamiliarPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      cargoFamiliarPeps2: cargoFamiliarPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: nombreEntidadPeps2,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -300,6 +401,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   nombreEntidadPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombreEntidadPeps2: nombreEntidadPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -308,6 +414,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   if (item == null) return;
                   parentescoFamiliarPeps2 =
                       Item(name: item.name, value: item.value);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                    ),
+                  );
                   setState(() {});
                 },
                 codigo: 'PARENTESCO',
@@ -317,6 +428,10 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               const Gap(20),
               OutlineTextfieldWidget(
                 initialValue: periodoPeps2,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 icon: Icon(
                   Icons.credit_card,
                   color: AppColors.getPrimaryColor(),
@@ -326,6 +441,11 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 isValid: null,
                 onChange: (value) {
                   periodoPeps2 = value;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoPeps2: periodoPeps2,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -335,15 +455,17 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 onChanged: (item) {
                   if (item == null) return;
                   paisPeps2 = Item(name: item.nombre, value: item.valor);
-                  // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                  // depWhereClause = item.valor;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisPeps2: paisPeps2?.value,
+                    ),
+                  );
 
                   setState(() {});
                 },
                 codigo: 'PAIS',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
-                // initialValue: paisEmisor ?? '',
               ),
             ],
             const Gap(20),
@@ -355,25 +477,6 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  context.read<SolicitudReprestamoCubit>().saveAnswers(
-                        esFamiliarEmpleado:
-                            familiarEmpleado == 'input.yes'.tr(),
-                        nombreFamiliar: nombreEmpleado?.trim(),
-                        cedulaFamiliar: cedulaEmpleado?.trim(),
-                        esPeps: espeps == 'input.yes'.tr(),
-                        nombreDeEntidadPeps: nombreDeEntidadPeps,
-                        paisPeps: paisPeps?.value,
-                        periodoPeps: periodoPeps,
-                        cargoOficialPeps: cargoOficialPeps,
-                        tieneFamiliarPeps:
-                            tieneFamiliarPeps == 'input.yes'.tr(),
-                        nombreFamiliarPeps2: nombreFamiliarPeps2,
-                        parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
-                        cargoFamiliarPeps2: cargoFamiliarPeps2,
-                        nombreEntidadPeps2: nombreEntidadPeps2,
-                        periodoPeps2: periodoPeps2,
-                        paisPeps2: paisPeps2?.value,
-                      );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

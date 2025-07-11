@@ -4,6 +4,7 @@ import 'package:objectbox/objectbox.dart';
 class ResponseLocalDb {
   @Id(assignable: true) // Campo ID para asignación manual o automática.
   int id = 0;
+  String? uuid;
   String? objOrigenSolicitudId;
   String? objOrigenSolicitudIdVer;
   String? nombre1;
@@ -141,8 +142,11 @@ class ResponseLocalDb {
   bool? hasVerified;
   int? montoMinimo;
   int? montoMaximo;
+  String? frecuenciaPagoMeses;
 
   ResponseLocalDb({
+    required this.id,
+    this.uuid,
     this.montoMaximo,
     this.montoMinimo,
     this.objOrigenSolicitudId,
@@ -279,5 +283,6 @@ class ResponseLocalDb {
     this.isDone = false,
     this.hasVerified = false,
     this.errorMsg,
+    this.frecuenciaPagoMeses,
   });
 }

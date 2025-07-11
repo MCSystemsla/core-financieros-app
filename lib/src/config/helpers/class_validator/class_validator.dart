@@ -2,9 +2,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 
 class ClassValidator {
   static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'El correo es obligatorio';
-    }
+    if (value == null || value.isEmpty) return null;
     final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegExp.hasMatch(value)) {
       return 'Ingresa un correo válido';
@@ -23,7 +21,10 @@ class ClassValidator {
   }
 
   static String? validateRequired(String? value) {
-    if (value == null || value.isEmpty || value == 'input.select_option'.tr()) {
+    final trimmedValue = value?.trim();
+    if (trimmedValue == null ||
+        trimmedValue.isEmpty ||
+        trimmedValue == 'input.select_option'.tr()) {
       return 'input.input_validator'.tr();
     }
     return null;
@@ -55,6 +56,7 @@ class ClassValidator {
     String? value,
     int length, {
     bool isRequired = true,
+    bool isNicaraguaCedula = false,
   }) {
     if (isRequired && value == null && value!.isEmpty) {
       return 'input.input_validator'.tr();
@@ -63,7 +65,12 @@ class ClassValidator {
         isRequired && value!.length > length) {
       return 'Este campo debe tener como maximo $length caracteres';
     }
-
+    if (isNicaraguaCedula) {
+      final endsWithLetter = RegExp(r'[A-Za-z]$');
+      if (!endsWithLetter.hasMatch(value!)) {
+        return 'La cédula nicaragüense debe terminar con una letra';
+      }
+    }
     return null;
   }
 }

@@ -785,6 +785,22 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                   BlocConsumer<EnergiaLimpiaCubit, EnergiaLimpiaState>(
                     listener: (context, state) async {
                       final status = state.status;
+                      final signatureImage = await controller.toPngBytes();
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final filePath = '${directory.path}/signature.png';
+
+                      // Guarda la imagen en el archivo
+                      if (signatureImage != null) {
+                        // Guarda la imagen directamente en el directorio
+                        final file = File(filePath);
+                        await file.writeAsBytes(signatureImage);
+                        log('Firma guardada en: $filePath');
+                      } else {
+                        log('No se pudo generar la imagen de la firma.');
+                        return;
+                      }
+                      if (!context.mounted) return;
                       if (status == Status.error) {
                         CustomAlertDialog(
                           context: context,
@@ -793,16 +809,6 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                         ).showDialog(context, dialogType: DialogType.error);
                       }
                       if (state.status == Status.done) {
-                        final signatureImage = await controller.toPngBytes();
-                        final directory =
-                            await getApplicationDocumentsDirectory();
-                        final filePath = '${directory.path}/signature.png';
-
-                        // Guarda la imagen en el archivo
-                        final file = File(filePath);
-                        await file.writeAsBytes(signatureImage!);
-                        if (!context.mounted) return;
-
                         await customPopUp(
                           context: context,
                           size: size,
@@ -843,7 +849,7 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                                                 .read<KivaRouteCubit>()
                                                 .state
                                                 .tipoSolicitud,
-                                            fotoFirma: file.path,
+                                            fotoFirma: filePath,
                                             solicitudId: int.parse(
                                               context
                                                   .read<KivaRouteCubit>()

@@ -1,7 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:flutter/material.dart';
 import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
@@ -9,7 +16,6 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -19,7 +25,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -41,7 +46,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   String? monto;
   Item? proposito;
   Item? producto;
-  Item? frecuenciaDePago;
+  CatalogoFrecuenciaItem? frecuenciaDePago;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -55,7 +60,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -70,6 +75,11 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
         return;
       }
       fechaPrimerPago = picked;
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaDesembolso: fechaPrimerPago?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -78,7 +88,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -93,38 +103,70 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
         return;
       }
       fechaDesembolso = picked;
+
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                ),
+          );
+
       setState(() {});
     }
   }
 
-  final montoController = TextEditingController();
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.solicitud;
     proposito = Item(
         name: solicitud.objPropositoIdVer!, value: solicitud.objPropositoId);
-    moneda =
-        Item(name: solicitud.objMonedaIdVer!, value: solicitud.objMonedaId!);
+    moneda = const Item(name: 'DOLAR', value: 'DOLAR');
     monto = solicitud.monto.toString();
     fechaDesembolso = solicitud.fechaDesembolso;
     producto = Item(
       name: solicitud.objProductoIdVer!,
       value: solicitud.objProductoId,
-      // montoMaximo: solicitud.montoMaximo,
-      // montoMinimo: solicitud.montoMinimo,
+      interes: solicitud.prestamoInteres,
+      montoMaximo: solicitud.montoMaximo?.toDouble(),
+      montoMinimo: solicitud.montoMinimo,
     );
     tasaInteres = solicitud.prestamoInteres;
-    frecuenciaDePago = Item(
-        name: solicitud.objFrecuenciaIdVer!, value: solicitud.objFrecuenciaId);
+    frecuenciaDePago = CatalogoFrecuenciaItem(
+      nombre: solicitud.objFrecuenciaIdVer!,
+      valor: solicitud.objFrecuenciaId!,
+      meses: solicitud.frecuenciaPagoMeses!,
+    );
     plazoSolicitud = solicitud.plazoSolicitud.toString();
     fechaPrimerPago = solicitud.fechaPrimerPagoSolicitud;
     observacion = solicitud.observacion;
-    montoController.text = solicitud.monto.toString();
-    super.initState();
+
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                monto: double.parse(monto ?? '0').toInt(),
+                tasaInteres: tasaInteres,
+                objPropositoId: proposito?.value,
+                objPropositoIdVer: proposito?.name,
+                objMonedaId: moneda?.value,
+                objMonedaIdVer: moneda?.name,
+                objProductoId: producto?.value,
+                objProductoIdVer: producto?.name,
+                objFrecuenciaId: frecuenciaDePago?.valor,
+                objFrecuenciaIdVer: frecuenciaDePago?.nombre,
+                plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                frecuenciaPagoMeses: frecuenciaDePago?.meses,
+                montoMaximo: montoMaximo?.toInt(),
+                montoMinimo: montoMinimo,
+                fechaPrimerPagoSolicitud:
+                    fechaPrimerPago?.toUtc().toIso8601String(),
+                observacion: observacion,
+                fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+              ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
@@ -145,42 +187,12 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
-              hintText: moneda?.name ?? 'Seleccionar Moneda',
-              codigo: 'MONEDA',
-              onChanged: (item) {
-                if (item == null) return;
-                moneda = item;
-              },
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              title: 'Moneda',
-              isRequired: true,
-            ),
-            const Gap(20),
             OutlineTextfieldWidget(
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
+                CurrencyInputFormatter(),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                LengthLimitingTextInputFormatter(9),
               ],
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              textEditingController: montoController,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -191,7 +203,12 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
-                monto = value;
+                monto = value.replaceAll(',', '.');
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    monto: int.tryParse(monto ?? '0'),
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -211,35 +228,52 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               onTap: () => selectFechaDesembolso(context),
             ),
             const Gap(20),
-            SearchDropdownWidget(
+            CatalogoProductoDropdown(
+              isRecurrente: true,
               hintText: producto?.name ?? 'Seleccionar Producto',
-              codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;
                 producto = item;
                 tasaInteres = item.interes;
                 log(item.interes.toString());
-                // montoMinimo = item.montoMinimo;
-                // montoMaximo = item.montoMaximo;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objProductoId: producto?.value,
+                    objProductoIdVer: producto?.name,
+                    tasaInteres: tasaInteres,
+                    montoMinimo: producto?.montoMinimo,
+                    montoMaximo: producto?.montoMaximo?.toInt(),
+                  ),
+                );
                 setState(() {});
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
-              hintText: frecuenciaDePago?.name ?? 'Seleccionar Frecuencia',
+            CatalogoFrecuenciaPagoDropdown(
+              hintText: frecuenciaDePago?.nombre ?? 'input.select_option'.tr(),
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+                  ClassValidator.validateRequired(frecuenciaDePago?.nombre),
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objFrecuenciaIdVer: item.nombre,
+                    objFrecuenciaId: item.valor,
+                    frecuenciaPagoMeses: item.meses,
+                  ),
+                );
               },
-              codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
               initialValue: plazoSolicitud,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -251,6 +285,11 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               isValid: null,
               onChange: (value) {
                 plazoSolicitud = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    plazoSolicitud: int.tryParse(value ?? '0'),
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -272,6 +311,9 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             const Gap(20),
             OutlineTextfieldWidget(
               initialValue: observacion,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               icon: Icon(
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
@@ -281,6 +323,11 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               isValid: null,
               onChange: (value) {
                 observacion = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    observacion: observacion,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -300,61 +347,58 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  // if (double.tryParse(monto ?? '0')! <
-                  //     montoMinimo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
-                  // if (double.tryParse(monto ?? '0')! >
-                  //     montoMaximo!.toDouble()) {
-                  //   CustomAlertDialog(
-                  //     context: context,
-                  //     title:
-                  //         'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
-                  //     onDone: () => context.pop(),
-                  //   ).showDialog(context, dialogType: DialogType.warning);
-                  //   return;
-                  // }
+                  if ((double.tryParse(monto ?? '0') ?? 0) <
+                      montoMinimo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  if ((double.tryParse(monto ?? '0') ?? 0) >
+                      montoMaximo!.toDouble()) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
+                  final plazoSolicitudMount =
+                      (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                  final frecuenciaPagoMesesMount =
+                      (double.tryParse(frecuenciaDePago?.meses ?? '0') ?? 0);
+                  if (plazoSolicitudMount < frecuenciaPagoMesesMount) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '0',
+                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} ${moneda?.name}',
+                        'Estimación de la Cuota final según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                     onDone: () {
-                      context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            objFrecuenciaIdVer: frecuenciaDePago?.name,
-                            tasaInteres: tasaInteres,
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
-                            objMonedaId: moneda?.value,
-                            objMonedaIdVer: moneda?.name,
-                            monto: int.tryParse(monto ?? '0'),
-                            objPropositoId: proposito?.value,
-                            objPropositoIdVer: proposito?.name,
-                            objProductoId: producto?.value,
-                            objProductoIdVer: producto?.name,
-                            objFrecuenciaId: frecuenciaDePago?.value,
-                            objFrecuenciaIdVer2: frecuenciaDePago?.name,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
-                            fechaPrimerPagoSolicitud:
-                                fechaPrimerPago?.toUtc().toIso8601String(),
-                            cuota: calcularCuotaProvider
-                                .state.montoPrincipalPrimeraCuota
-                                .toInt(),
-                            observacion: observacion,
-                          );
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cuota: calcularCuotaProvider.state.montoPrimeraCuota
+                              .toInt(),
+                        ),
+                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

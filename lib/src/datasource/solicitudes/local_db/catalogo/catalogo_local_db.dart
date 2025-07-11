@@ -11,6 +11,7 @@ class CatalogoLocalDb {
   double? interes;
   int? montoMinimo;
   double? montoMaximo;
+  bool isRecurrente = false;
 
   CatalogoLocalDb({
     required this.valor,
@@ -19,5 +20,6 @@ class CatalogoLocalDb {
     this.interes,
     this.montoMinimo,
     this.montoMaximo,
+    this.isRecurrente = false,
   });
 }
