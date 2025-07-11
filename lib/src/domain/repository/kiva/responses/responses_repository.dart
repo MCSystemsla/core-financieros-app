@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
@@ -114,7 +115,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -131,7 +135,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         mejoraViviendaAnswer: mejoraViviendaRecurrente,
       );
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
+
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -148,7 +156,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -165,7 +176,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -182,7 +196,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -199,7 +216,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -216,7 +236,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -233,7 +256,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -250,7 +276,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -267,7 +296,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -432,7 +464,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       _logger.i(resp);
       return (true, resp.toString());
     } catch (e) {
@@ -450,7 +485,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (
         true,
         resp.toString(),
@@ -570,7 +608,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);
@@ -587,7 +628,10 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) return (false, resp['message'] as String);
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        return (false, errorMsg);
+      }
       return (true, resp.toString());
     } catch (e) {
       _logger.e(e);

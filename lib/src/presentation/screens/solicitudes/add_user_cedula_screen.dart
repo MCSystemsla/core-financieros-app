@@ -4,8 +4,10 @@ import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/user_by_cedula/user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -14,12 +16,12 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asalariado/asalariado_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AddUserCedulaScreen extends StatelessWidget {
   final TypeForm typeForm;
@@ -29,7 +31,20 @@ class AddUserCedulaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     void showSuccessDialog({
       required UserByCedulaSolicitud userByCedula,
+      required bool isNewUserCedula,
     }) {
+      if (isNewUserCedula) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: ((_) => CrearSolicitudScreen(
+                  typeForm: typeForm,
+                  userByCedulaSolicitud: userByCedula,
+                )),
+          ),
+        );
+        return;
+      }
       CustomAlertDialog(
         context: context,
         title:
@@ -47,19 +62,28 @@ class AddUserCedulaScreen extends StatelessWidget {
     }
 
     void showErrorDialog({
-      required String cedula,
-      required Item tipoDocumento,
+      required String errorMsg,
+      required UserByCedulaSolicitud userByCedula,
     }) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => CrearSolicitudScreen(
-                typeForm: typeForm,
-                cedula: cedula,
-                tipoDocumento: tipoDocumento,
-              )),
-        ),
-      );
+      CustomAlertDialog(
+        context: context,
+        title: errorMsg,
+        onDone: () {
+          if (errorMsg.contains('Sin conexión a internet')) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => CrearSolicitudScreen(
+                      typeForm: typeForm,
+                      userByCedulaSolicitud: userByCedula,
+                    )),
+              ),
+            );
+            return;
+          }
+          context.pop();
+        },
+      ).showDialog(context);
     }
 
     return Scaffold(
@@ -70,28 +94,22 @@ class AddUserCedulaScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is OnUserByCedulaError) {
             showErrorDialog(
-              cedula: state.cedula,
-              tipoDocumento: state.tipoDocumento,
+              errorMsg: state.errorMsg,
+              userByCedula: state.userByCedula,
             );
           }
           if (state is OnUserByCedulaSuccess) {
             showSuccessDialog(
-              userByCedula: UserByCedulaSolicitud(
-                segundoApellido: state.userCedulaResponse.segundoApellido,
-                segundoNombre: state.userCedulaResponse.segundoNombre,
-                primerNombre: state.userCedulaResponse.primerNombre,
-                primerApellido: state.userCedulaResponse.primerApellido,
-                cedula: state.userCedulaResponse.cedula,
-                fechaEmision: state.userCedulaResponse.fechaEmision,
-                fechaVencimiento: state.userCedulaResponse.fechaExpira,
-                fechaNacimiento: state.userCedulaResponse.fechaNacimiento,
-                tipoDocumento: state.userCedulaResponse.tipoDocumento,
-              ),
+              isNewUserCedula: state.isNewUserCedula,
+              userByCedula: state.userByCedula,
             );
           }
         },
         builder: (context, state) {
-          return _UserCedulaForm(state: state);
+          return _UserCedulaForm(
+            state: state,
+            typeForm: typeForm,
+          );
         },
       ),
     );
@@ -100,8 +118,10 @@ class AddUserCedulaScreen extends StatelessWidget {
 
 class _UserCedulaForm extends StatefulWidget {
   final UserByCedulaState state;
+  final TypeForm typeForm;
   const _UserCedulaForm({
     required this.state,
+    required this.typeForm,
   });
 
   @override
@@ -179,7 +199,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  // initialValue: '',
                   hintText: 'input.select_option'.tr(),
                   codigo: 'TIPODOCUMENTOPERSONA',
                   onChanged: (item) {
@@ -195,6 +214,9 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 if (tipoDocumento != null && paisEmisorDocumento != null) ...[
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     textEditingController: cedulaController,
                     validator: (value) =>
                         ClassValidator.validateMaxIntValueAndMinValue(
@@ -203,6 +225,8 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         tipoDocumento: tipoDocumento?.value ?? '',
                         paisEmisor: paisEmisorDocumento?.value ?? '',
                       ),
+                      isNicaraguaCedula: paisEmisorDocumento?.value == 'NIC' &&
+                          tipoDocumento?.value == 'CEDULAIDENTIDAD',
                     ),
                     icon: Icon(
                       Icons.credit_card_outlined,
@@ -225,8 +249,10 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
                       context.read<UserByCedulaCubit>().getUserByCedula(
+                            typeForm: widget.typeForm,
                             cedula: cedulaController.text.trim(),
                             tipoDocumento: tipoDocumento!,
+                            paisEmisor: paisEmisorDocumento!,
                           );
                     },
                   ),

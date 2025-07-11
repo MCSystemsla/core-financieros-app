@@ -37,6 +37,7 @@ class CatalogoValorNacionalidad extends StatefulWidget {
   final String? where;
   final ItemNacionalidad? initialValue;
   final ValidatorCallback validator;
+  final bool enabled;
   const CatalogoValorNacionalidad({
     super.key,
     required this.hintText,
@@ -46,6 +47,7 @@ class CatalogoValorNacionalidad extends StatefulWidget {
     this.where,
     this.initialValue,
     this.validator,
+    this.enabled = true,
   });
 
   @override
@@ -109,6 +111,7 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
               ],
             ),
             child: DropdownSearch<ItemNacionalidad>(
+              enabled: widget.enabled,
               validator: widget.validator,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(

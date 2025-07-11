@@ -128,7 +128,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+        context.watch<InternetConnectionCubit>().state.connectionStatus;
     return Row(
       children: [
         const Gap(10),
@@ -137,7 +137,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
             svgPath: ImageAsset.nuevaMenorBg3,
             title: 'Represtamo',
             onPressed: () {
-              if (!isConnected) {
+              if (isConnected != ConnectionStatus.connected) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -177,24 +177,12 @@ class _SolicitudCardsRow1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     return Row(
       children: [
         const Gap(10),
         Expanded(
           child: SolicitudCard(
             onPressed: () {
-              if (!isConnected) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) =>
-                        const CrearSolicitudScreen(typeForm: TypeForm.nueva)),
-                  ),
-                );
-                return;
-              }
               context.pushTransparentRoute(const AddUserCedulaScreen(
                 typeForm: TypeForm.nueva,
               ));
@@ -207,16 +195,6 @@ class _SolicitudCardsRow1 extends StatelessWidget {
         Expanded(
           child: SolicitudCard(
             onPressed: () {
-              if (!isConnected) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const CrearSolicitudScreen(
-                        typeForm: TypeForm.asalariado)),
-                  ),
-                );
-                return;
-              }
               context.pushTransparentRoute(const AddUserCedulaScreen(
                 typeForm: TypeForm.asalariado,
               ));

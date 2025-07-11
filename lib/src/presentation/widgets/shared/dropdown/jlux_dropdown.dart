@@ -176,6 +176,7 @@ class JLuxDropdown<T> extends StatelessWidget {
                   //   ),
                   // ),
                   iconSize: 30,
+                  isExpanded: true,
                   iconEnabledColor: AppColors.grey,
                   icon: isContainIcon
                       ? const Icon(

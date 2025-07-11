@@ -68,11 +68,13 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
   String? tipoPersona;
   String? nacionalidad;
   String? estadoCivil;
+  String? uuid;
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
+    uuid = solicitud?.uuid;
     cedula = solicitud?.cedula;
     primerNombre = solicitud?.nombre1;
     segundoNombre = solicitud?.nombre2;
@@ -98,6 +100,42 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
     nacionalidad = solicitud?.nacionalidad;
     estadoCivil = solicitud?.objEstadoCivilId;
     context.read<GeolocationCubit>().getCurrentLocation();
+    context.read<SolicitudAsalariadoCubit>().initAutoSave(uuid: uuid);
+
+    context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+          () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                objTipoDocumentoId: tipoDocumento,
+                objTipoDocumentoIdVer: tipoDocumento,
+                tipoPersona: tipoPersona,
+                objTipoPersonaId: tipoPersona,
+                objTipoPersonaIdVer: tipoPersona,
+                cedula: cedula,
+                objEstadoCivilId: estadoCivil,
+                objEstadoCivilIdVer: estadoCivil,
+                objPaisEmisorCedula: paisEmisor,
+                objPaisEmisorCedulaVer: paisEmisor,
+                fechaEmisionCedula:
+                    fechaEmisionCedula?.toUtc().toIso8601String(),
+                fechaVencimientoCedula:
+                    fechaVencimientoCedula?.toUtc().toIso8601String(),
+                fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+                nacionalidad: nacionalidad,
+                objPaisNacimientoId: paisNacimiento,
+                objPaisNacimientoIdVer: paisNacimiento,
+                objSexoId: sexo,
+                objSexoIdVer: sexo,
+                telefono: telefono,
+                celular: celular,
+                email: email,
+                objEscolaridadId: escolaridad,
+                objEscolaridadIdVer: escolaridad,
+                nombre1: primerNombre,
+                nombre2: segundoNombre,
+                apellido1: primerApellido,
+                apellido2: segundoApellido,
+                nombrePublico: nombrePublico,
+              ),
+        );
   }
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
@@ -131,6 +169,11 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
         return;
       }
       fechaNacimiento = picked;
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -154,6 +197,12 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
         return;
       }
       fechaEmisionCedula = picked;
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  fechaEmisionCedula:
+                      fechaEmisionCedula?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -178,6 +227,12 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
         return;
       }
       fechaVencimientoCedula = picked;
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  fechaVencimientoCedula:
+                      fechaVencimientoCedula?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -221,368 +276,462 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget
-                    .asalariadoResponsesLocalDb!.errorMsg!.isNotEmpty) ...[
-                  const Gap(30),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: ExpansionTitleCustom(
-                      title: Text(
-                        'Motivo de error de la solicitud',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+        return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+          builder: (context, asalariadoState) {
+            final cubit = context.read<SolicitudAsalariadoCubit>();
+            return SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget
+                        .asalariadoResponsesLocalDb!.errorMsg!.isNotEmpty) ...[
+                      const Gap(30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 5),
+                        child: ExpansionTitleCustom(
+                          title: Text(
+                            'Motivo de error de la solicitud',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                          finalStep: true,
+                          children: [
+                            Text(widget.asalariadoResponsesLocalDb?.errorMsg ??
+                                'N/A'),
+                          ],
+                        ),
                       ),
-                      finalStep: true,
-                      children: [
-                        Text(widget.asalariadoResponsesLocalDb?.errorMsg ??
-                            'N/A'),
-                      ],
+                    ],
+                    const Gap(30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'Datos Personales y Seguro',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
-                  ),
-                ],
-                const Gap(30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Text(
-                    'Datos Personales y Seguro',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: cedula,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    cedula = value;
-                  },
-                  title: 'Cedula Identidad',
-                  icon: const Icon(Icons.badge),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: primerNombre,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    primerNombre = value;
-                  },
-                  title: 'Primer Nombre',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: segundoNombre,
-                  onChange: (value) {
-                    segundoNombre = value;
-                  },
-                  title: 'Segundo Nombre',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: primerApellido,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    primerApellido = value;
-                  },
-                  title: 'Primer Apellido',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: segundoApellido,
-                  onChange: (value) {
-                    segundoApellido = value;
-                  },
-                  title: 'Segundo Apellido',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: nombrePublico,
-                  onChange: (value) {
-                    nombrePublico = value;
-                  },
-                  title: 'Nombre público',
-                  icon: const Icon(Icons.person),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaNacimiento?.selectorFormat()),
-                  initialValue: fechaNacimiento?.selectorFormat(),
-                  onTap: () => selectFechaNacimiento(context),
-                  hintText: fechaNacimiento?.selectorFormat(),
-                  readOnly: true,
-                  title: 'Fecha de nacimiento',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                CatalogoValorNacionalidad(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  hintText: paisNacimiento ?? 'Ingresa Pais',
-                  onChanged: (item) {
-                    paisNacimiento = item?.valor;
-                    setState(() {});
-                  },
-                  codigo: 'PAIS',
-                  title: 'País de nacimiento',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: sexo ?? 'Selecciona una opcion',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'SEXO',
-                  onChanged: (item) {
-                    sexo = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Sexo',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: fechaEmisionCedula?.selectorFormat(),
-                  onTap: () => selectFechaEmisionCedula(context),
-                  hintText: fechaEmisionCedula?.selectorFormat(),
-                  readOnly: true,
-                  title: 'Fecha emisión cédula',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: fechaVencimientoCedula?.selectorFormat(),
-                  readOnly: true,
-                  onTap: () => selectFechaVencimientoCedula(context),
-                  initialValue: fechaVencimientoCedula?.selectorFormat(),
-                  title: 'Fecha vencimiento cédula',
-                  icon: const Icon(Icons.calendar_today),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: ocupacion,
-                  onChange: (value) {
-                    ocupacion = value;
-                  },
-                  title: 'Ocupación',
-                  icon: const Icon(Icons.work),
-                ),
-                const Gap(30),
-                CatalogoValorNacionalidad(
-                  hintText: paisEmisor ?? 'Ingresa Pais',
-                  onChanged: (item) {
-                    paisEmisor = item?.valor;
-                    setState(() {});
-                  },
-                  codigo: 'PAIS',
-                  title: 'País emisor cédula',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: tipoDocumento ?? '',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'TIPODOCUMENTOPERSONA',
-                  onChanged: (item) {
-                    tipoDocumento = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Documento',
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: tipoPersona ?? 'input.select_option'.tr(),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'TIPOSPERSONACREDITO',
-                  onChanged: (item) {
-                    tipoPersona = item?.value;
-                    setState(() {});
-                  },
-                  title: 'Tipo de Persona',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: nacionalidad,
-                  onChange: (value) {
-                    nacionalidad = value;
-                  },
-                  title: 'Nacionalidad',
-                  icon: const Icon(Icons.flag_circle),
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: estadoCivil ?? 'input.select_option'.tr(),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  onChanged: (item) {
-                    estadoCivil = item?.value;
-                    setState(() {});
-                  },
-                  codigo: 'ESTADOCIVIL',
-                  title: 'Estado civil',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: telefono,
-                  isRequired: false,
-                  onChange: (value) {
-                    telefono = value;
-                  },
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
-                    DashFormatter(),
-                  ],
-                  maxLength: 15,
-                  title: 'Teléfono',
-                  icon: const Icon(Icons.phone),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: celular,
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
-                    DashFormatter(),
-                  ],
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    celular = value;
-                  },
-                  isRequired: false,
-                  maxLength: 15,
-                  title: 'Celular',
-                  icon: const Icon(Icons.smartphone),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: email,
-                  onChange: (value) {
-                    email = value;
-                  },
-                  textInputType: TextInputType.emailAddress,
-                  validator: (value) => ClassValidator.validateEmail(value),
-                  title: 'Email',
-                  icon: const Icon(Icons.email),
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: cantidadHijos,
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  onChange: (value) {
-                    cantidadHijos = value;
-                  },
-                  title: 'Cantidad de hijos',
-                  icon: const Icon(Icons.child_care),
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: escolaridad!,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'ESCOLARIDAD',
-                  onChanged: (item) {
-                    escolaridad = item?.value;
-                  },
-                  title: 'Escolaridad',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: profesion,
-                  onChange: (value) {
-                    profesion = value;
-                  },
-                  title: 'Profesión',
-                  icon: const Icon(Icons.work_outline),
-                ),
-                const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Siguiente',
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () async {
-                      if (!formKey.currentState!.validate()) return;
-                      final Position? position =
-                          state is OnGeolocationSuccess ? state.position : null;
-
-                      context.read<SolicitudAsalariadoCubit>().saveAnswers(
-                            idLocalResponse:
-                                widget.asalariadoResponsesLocalDb?.id,
-                            ubicacionLatitud: position?.latitude.toString(),
-                            ubicacionLongitud: position?.longitude.toString(),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cedula,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      onChange: (value) {
+                        cedula = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             cedula: cedula,
+                          ),
+                        );
+                      },
+                      title: 'Documento Identidad',
+                      icon: const Icon(Icons.badge),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: primerNombre,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      onChange: (value) {
+                        primerNombre = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             nombre1: primerNombre,
+                          ),
+                        );
+                      },
+                      title: 'Primer Nombre',
+                      icon: const Icon(Icons.person),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: segundoNombre,
+                      onChange: (value) {
+                        segundoNombre = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             nombre2: segundoNombre,
+                          ),
+                        );
+                      },
+                      title: 'Segundo Nombre',
+                      icon: const Icon(Icons.person),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: primerApellido,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      onChange: (value) {
+                        primerApellido = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             apellido1: primerApellido,
+                          ),
+                        );
+                      },
+                      title: 'Primer Apellido',
+                      icon: const Icon(Icons.person),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: segundoApellido,
+                      onChange: (value) {
+                        segundoApellido = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             apellido2: segundoApellido,
+                          ),
+                        );
+                      },
+                      title: 'Segundo Apellido',
+                      icon: const Icon(Icons.person),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: nombrePublico,
+                      onChange: (value) {
+                        nombrePublico = value;
+
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             nombrePublico: nombrePublico,
-                            objPaisEmisorCedula: paisEmisor,
+                          ),
+                        );
+                      },
+                      title: 'Nombre público',
+                      icon: const Icon(Icons.person),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) => ClassValidator.validateRequired(
+                          fechaNacimiento?.selectorFormat()),
+                      initialValue: fechaNacimiento?.selectorFormat(),
+                      onTap: () => selectFechaNacimiento(context),
+                      hintText: fechaNacimiento?.selectorFormat(),
+                      readOnly: true,
+                      title: 'Fecha de nacimiento',
+                      icon: const Icon(Icons.calendar_today),
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: paisNacimiento ?? 'Ingresa Pais',
+                      onChanged: (item) {
+                        paisNacimiento = item?.valor;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             objPaisNacimientoId: paisNacimiento,
-                            objEstadoCivilId: estadoCivil,
+                            objPaisNacimientoIdVer: paisNacimiento,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      codigo: 'PAIS',
+                      title: 'País de nacimiento',
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      hintText: sexo ?? 'Selecciona una opcion',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      codigo: 'SEXO',
+                      onChanged: (item) {
+                        sexo = item?.value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objSexoId: sexo,
+                            objSexoIdVer: sexo,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      title: 'Sexo',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: fechaEmisionCedula?.selectorFormat(),
+                      onTap: () => selectFechaEmisionCedula(context),
+                      hintText: fechaEmisionCedula?.selectorFormat(),
+                      readOnly: true,
+                      title: 'Fecha emisión cédula',
+                      icon: const Icon(Icons.calendar_today),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: fechaVencimientoCedula?.selectorFormat(),
+                      readOnly: true,
+                      onTap: () => selectFechaVencimientoCedula(context),
+                      initialValue: fechaVencimientoCedula?.selectorFormat(),
+                      title: 'Fecha vencimiento cédula',
+                      icon: const Icon(Icons.calendar_today),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: ocupacion,
+                      onChange: (value) {
+                        ocupacion = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            ocupacion: ocupacion,
+                          ),
+                        );
+                      },
+                      title: 'Ocupación',
+                      icon: const Icon(Icons.work),
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      hintText: paisEmisor ?? 'Ingresa Pais',
+                      onChanged: (item) {
+                        paisEmisor = item?.valor;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objPaisEmisorCedula: paisEmisor,
+                            objPaisEmisorCedulaVer: paisEmisor,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      codigo: 'PAIS',
+                      title: 'País emisor cédula',
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      hintText: tipoDocumento ?? '',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      codigo: 'TIPODOCUMENTOPERSONA',
+                      onChanged: (item) {
+                        tipoDocumento = item?.value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             objTipoDocumentoId: tipoDocumento,
+                            objTipoDocumentoIdVer: tipoDocumento,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      title: 'Tipo de Documento',
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      hintText: tipoPersona ?? 'input.select_option'.tr(),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      codigo: 'TIPOSPERSONACREDITO',
+                      onChanged: (item) {
+                        tipoPersona = item?.value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             tipoPersona: tipoPersona,
                             objTipoPersonaId: tipoPersona,
+                            objTipoPersonaIdVer: tipoPersona,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      title: 'Tipo de Persona',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: nacionalidad,
+                      onChange: (value) {
+                        nacionalidad = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             nacionalidad: nacionalidad,
-                            objSexoId: sexo,
-                            fechaNacimiento:
-                                fechaNacimiento?.toUtc().toIso8601String(),
-                            // edad: edad,
-                            fechaEmisionCedula:
-                                fechaEmisionCedula?.toUtc().toIso8601String(),
-                            fechaVencimientoCedula: fechaVencimientoCedula
-                                ?.toUtc()
-                                .toIso8601String(),
-                            ocupacion: ocupacion,
+                          ),
+                        );
+                      },
+                      title: 'Nacionalidad',
+                      icon: const Icon(Icons.flag_circle),
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      hintText: estadoCivil ?? 'input.select_option'.tr(),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      onChanged: (item) {
+                        estadoCivil = item?.value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            objEstadoCivilId: estadoCivil,
+                            objEstadoCivilIdVer: estadoCivil,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      codigo: 'ESTADOCIVIL',
+                      title: 'Estado civil',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: telefono,
+                      isRequired: false,
+                      onChange: (value) {
+                        telefono = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             telefono: telefono,
+                          ),
+                        );
+                      },
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9),
+                        DashFormatter(),
+                      ],
+                      maxLength: 9,
+                      title: 'Teléfono',
+                      icon: const Icon(Icons.phone),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: celular,
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9),
+                        DashFormatter(),
+                      ],
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      onChange: (value) {
+                        celular = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             celular: celular,
+                          ),
+                        );
+                      },
+                      isRequired: false,
+                      maxLength: 9,
+                      title: 'Celular',
+                      icon: const Icon(Icons.smartphone),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      textCapitalization: TextCapitalization.none,
+                      initialValue: email,
+                      onChange: (value) {
+                        email = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             email: email,
-                            // totalDependientes: totalDependientes,
+                          ),
+                        );
+                      },
+                      textInputType: TextInputType.emailAddress,
+                      validator: (value) => ClassValidator.validateEmail(value),
+                      title: 'Email',
+                      icon: const Icon(Icons.email),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cantidadHijos,
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      onChange: (value) {
+                        cantidadHijos = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                          ),
+                        );
+                      },
+                      title: 'Cantidad de hijos',
+                      icon: const Icon(Icons.child_care),
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      hintText: escolaridad!,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      codigo: 'ESCOLARIDAD',
+                      onChanged: (item) {
+                        escolaridad = item?.value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             objEscolaridadId: escolaridad,
+                            objEscolaridadIdVer: escolaridad,
+                          ),
+                        );
+                      },
+                      title: 'Escolaridad',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: profesion,
+                      onChange: (value) {
+                        profesion = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
                             profesion: profesion,
+                          ),
+                        );
+                      },
+                      title: 'Profesión',
+                      icon: const Icon(Icons.work_outline),
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        text: 'Siguiente',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () async {
+                          if (!formKey.currentState!.validate()) return;
+                          final Position? position =
+                              state is OnGeolocationSuccess
+                                  ? state.position
+                                  : null;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              ubicacionLatitud: position?.latitude.toString(),
+                              ubicacionLongitud: position?.longitude.toString(),
+                            ),
                           );
-                      widget.controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                  ),
+                          widget.controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                      ),
+                    ),
+                    const Gap(10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: CustomOutLineButton(
+                        onPressed: () {
+                          context.pushReplacement(
+                              '/solicitudes/solicitudes-pendientes');
+                        },
+                        text: 'Salir',
+                        textColor: AppColors.red,
+                        color: AppColors.red,
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
                 ),
-                const Gap(10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CustomOutLineButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    text: 'Salir',
-                    textColor: AppColors.red,
-                    color: AppColors.red,
-                  ),
-                ),
-                const Gap(20),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

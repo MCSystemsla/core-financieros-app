@@ -23,6 +23,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   bool _isCameraInitialized = false;
   XFile? selectedImage;
   String? selectedImage1Path;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -85,22 +86,31 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       ).showDialog(context, dialogType: DialogType.error);
       return;
     }
-
+    setState(() {
+      isLoading = true;
+    });
     try {
       final (savedPath, photo) =
           await CameraService.takeAndsavePhoto(controller: _controller);
       if (!context.mounted || !mounted) return;
       setState(() {
+        isLoading = false;
         selectedImage = photo;
         selectedImage1Path = savedPath;
       });
     } on PlatformException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       CustomAlertDialog(
         context: context,
         title: 'Error al tomar la foto: ${e.message}',
         onDone: () => context.pop(),
       ).showDialog(context, dialogType: DialogType.error);
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       CustomAlertDialog(
         context: context,
         title: 'Error al tomar la foto: $e',
@@ -138,6 +148,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
                 child: CameraWidgets(
                   controller: _controller,
                   onTakePhoto: () => _takePhoto(),
+                  isLoading: isLoading,
                 ),
               ),
             ),

@@ -24,7 +24,7 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
           objectBoxService.getSolicitudesAsalariadoResponse();
       emit(
         OnSolicitudesOfflineSuccess(
-          solicitudesAsalariado: solicitudesAsalariadoOffline,
+          solicitudesAsalariado: solicitudesAsalariadoOffline.reversed.toList(),
           solicitudesOffline: solicitudesOffline.reversed.toList(),
           solicitudesOfflineReprestamo:
               solicitudesOfflineReprestamo.reversed.toList(),

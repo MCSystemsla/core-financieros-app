@@ -31,6 +31,7 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
   bool _isCameraInitialized = false;
   File? selectedImage;
   String? selectedImage1Path;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -93,12 +94,15 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
     }
 
     try {
+      isLoading = true;
+      setState(() {});
       if (!context.mounted || !mounted) return;
       final (croppedPath, croppedFile) =
           await CameraService.takeImageAndSaveWithCropped(
         controller: _controller!,
       );
       setState(() {
+        isLoading = false;
         selectedImage = croppedFile;
         selectedImage1Path = croppedPath;
       });
@@ -109,12 +113,16 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
         ),
       );
     } on PlatformException catch (e) {
+      isLoading = false;
+      setState(() {});
       CustomAlertDialog(
         context: context,
         title: 'Error al tomar la foto: ${e.message}',
         onDone: () => context.pop(),
       ).showDialog(context, dialogType: DialogType.error);
     } catch (e) {
+      isLoading = false;
+      setState(() {});
       CustomAlertDialog(
         context: context,
         title: 'Error al tomar la foto: $e',
@@ -165,6 +173,7 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
             child: CameraWidgets(
               onTakePhoto: () => _takePhoto(),
               controller: _controller!,
+              isLoading: isLoading,
             ),
           ),
           const CloseCaptureCedulaWidget(),

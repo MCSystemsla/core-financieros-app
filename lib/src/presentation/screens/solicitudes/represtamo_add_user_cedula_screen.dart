@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/represtamo_user_by_cedula/represta_user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/add_user_cedula_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,20 +24,17 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void showSuccessDialog({
-      required String firstName,
-      required String cedula,
-    }) {
+    void showSuccessDialog({required UserByCedulaSolicitud userByCedula}) {
       CustomAlertDialog(
         context: context,
-        title: '$firstName listo para crear solicitud!!',
+        title: '${userByCedula.primerNombre} listo para crear solicitud!!',
         onDone: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: ((_) => CrearSolicitudScreen(
                     typeForm: typeForm,
-                    cedula: cedula,
+                    userByCedulaSolicitud: userByCedula,
                   )),
             ),
           );
@@ -67,8 +66,22 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
             }
             if (state is OnReprestaUserByCedulaSuccess) {
               showSuccessDialog(
-                cedula: state.represtamoUserCedula.cedula,
-                firstName: state.represtamoUserCedula.nombreCompleto,
+                userByCedula: UserByCedulaSolicitud(
+                  cedula: state.represtamoUserCedula.cedula,
+                  primerNombre: state.represtamoUserCedula.nombreCompleto,
+                  segundoApellido: state.represtamoUserCedula.nombreCompleto,
+                  tipoDocumento:
+                      state.represtamoUserCedula.tipoDocumento ?? 'N/A',
+                  tipoPersona: state.represtamoUserCedula.tipoPersona,
+                  fechaEmision:
+                      state.represtamoUserCedula.fechaEmisionDocumento,
+                  fechaVencimiento:
+                      state.represtamoUserCedula.fechaVencimientoDocumento,
+                  paisEmisor: Item(
+                    name: state.represtamoUserCedula.paisEmisorDocumento,
+                    value: state.represtamoUserCedula.paisEmisorDocumento,
+                  ),
+                ),
               );
             }
           },

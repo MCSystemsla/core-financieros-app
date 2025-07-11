@@ -3,7 +3,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
@@ -12,12 +14,14 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_d
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -36,7 +40,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   String? monto;
   Item? proposito;
   Item? producto;
-  Item? frecuenciaDePago;
+  CatalogoFrecuenciaItem? frecuenciaDePago;
   String? plazoSolicitud;
   String? cuota;
   String? observacion;
@@ -46,40 +50,62 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   int? montoMinimo;
   double? montoMaximo;
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                objMonedaId: 'DOLAR',
+                objMonedaIdVer: 'DOLAR',
+              ),
+        );
+  }
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
-          title: 'La Fecha no puede ser antes a la fecha actual',
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
       fechaPrimerPago = picked;
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaPrimerPagoSolicitud:
+                      fechaPrimerPago?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -87,14 +113,29 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaDesembolso = picked;
+
+      context.read<SolicitudReprestamoCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
 
-  final montoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
@@ -107,56 +148,18 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'DESTINOCREDITO',
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               title: 'Proposito',
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              codigo: 'MONEDA',
-              onChanged: (item) {
-                if (item == null) return;
-                moneda = item;
-              },
-              validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
-              title: 'Moneda',
-              isRequired: true,
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              onFieldSubmitted: (value) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objPropositoId: proposito?.value,
+                    objPropositoIdVer: proposito?.name,
+                  ),
                 );
-              },
-              onTapOutside: (event) {
-                String formattedValue =
-                    FormatField.formatMonto(montoController.text);
-                montoController.value = TextEditingValue(
-                  text: formattedValue,
-                  selection:
-                      TextSelection.collapsed(offset: formattedValue.length),
-                );
-              },
-              textEditingController: montoController,
-              icon: Icon(
-                Icons.price_change,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Monto',
-              hintText: 'Ingresa Monto',
-              textInputType: TextInputType.number,
-              validator: (value) => ClassValidator.validateRequired(value),
-              isValid: null,
-              onChange: (value) {
-                monto = value;
               },
             ),
             const Gap(20),
@@ -171,13 +174,39 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               hintText: fechaDesembolso?.selectorFormat() ??
                   'Ingresar fecha desembolso',
               validator: (value) => ClassValidator.validateRequired(
-                  fechaPrimerPago?.selectorFormat()),
+                  fechaDesembolso?.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
-
+            const Gap(20),
+            OutlineTextfieldWidget(
+              inputFormatters: [
+                CurrencyInputFormatter(),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                LengthLimitingTextInputFormatter(10),
+              ],
+              icon: Icon(
+                Icons.price_change,
+                color: AppColors.getPrimaryColor(),
+              ),
+              title: 'Monto',
+              hintText: 'Ingresa Monto',
+              textInputType: TextInputType.number,
+              validator: (value) => ClassValidator.validateRequired(value),
+              isValid: null,
+              onChange: (value) {
+                monto = value.replaceAll(',', '');
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    monto: int.tryParse(monto ?? '0'),
+                  ),
+                );
+              },
+            ),
             const Gap(20),
             SearchDropdownWidget(
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               codigo: 'PRODUCTO',
               title: 'Producto',
               onChanged: (item) {
@@ -186,21 +215,40 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                 tasaInteres = item.interes;
                 montoMinimo = item.montoMinimo;
                 montoMaximo = item.montoMaximo;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objProductoId: producto?.value,
+                    objProductoIdVer: producto?.name,
+                    tasaInteres: tasaInteres,
+                    montoMinimo: montoMinimo,
+                    montoMaximo: montoMaximo?.toInt(),
+                  ),
+                );
               },
             ),
             const Gap(20),
-            SearchDropdownWidget(
+            CatalogoFrecuenciaPagoDropdown(
               validator: (value) =>
-                  ClassValidator.validateRequired(value?.value),
+                  ClassValidator.validateRequired(value?.valor),
               onChanged: (item) {
                 if (item == null) return;
                 frecuenciaDePago = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objFrecuenciaId: frecuenciaDePago?.valor,
+                    objFrecuenciaIdVer2: frecuenciaDePago?.nombre,
+                    frecuenciaPagoMeses: frecuenciaDePago?.meses,
+                  ),
+                );
               },
-              codigo: 'FRECUENCIAPAGO',
               title: 'Frecuencia de Pago',
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+              ],
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
@@ -212,6 +260,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
               onChange: (value) {
                 plazoSolicitud = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    plazoSolicitud: int.tryParse(value ?? '0'),
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -230,24 +283,10 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
             ),
             const Gap(20),
-            // OutlineTextfieldWidget(
-            //   readOnly: true,
-            //   icon: Icon(
-            //     Icons.payment,
-            //     color: AppColors.getPrimaryColor(),
-            //   ),
-            //   initialValue: calcularCuotaProvider
-            //       .state.montoPrincipalPrimeraCuota
-            //       .toString(),
-            //   title: 'Cuota',
-            //   hintText: 'Ingresa Cuota',
-            //   isValid: null,
-            //   onChange: (value) {
-            //     cuota = value;
-            //   },
-            // ),
-            // const Gap(20),
             OutlineTextfieldWidget(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
               icon: Icon(
                 Icons.remove_red_eye,
                 color: AppColors.getPrimaryColor(),
@@ -257,6 +296,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
               isValid: null,
               onChange: (value) {
                 observacion = value;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    observacion: observacion,
+                  ),
+                );
               },
             ),
             const Gap(20),
@@ -276,7 +320,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  if (double.tryParse(monto ?? '0')! <
+                  if ((double.tryParse(monto ?? '0') ?? 0) <
                       montoMinimo!.toDouble()) {
                     CustomAlertDialog(
                       context: context,
@@ -286,7 +330,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  if (double.tryParse(monto ?? '0')! >
+                  if ((double.tryParse(monto ?? '0') ?? 0) >
                       montoMaximo!.toDouble()) {
                     CustomAlertDialog(
                       context: context,
@@ -296,41 +340,38 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
+                  final plazoSolicitudMount =
+                      (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                  final frecuenciaPagoMesesMount =
+                      (double.tryParse(frecuenciaDePago?.meses ?? '0') ?? 0);
+                  if (plazoSolicitudMount < frecuenciaPagoMesesMount) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   calcularCuotaProvider.calcularCantidadCuotas(
                     fechaDesembolso: fechaDesembolso!,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    formadePago: frecuenciaDePago?.name ?? '',
+                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
                     saldoPrincipal: double.parse(monto ?? '0'),
                     tasaInteresMensual: tasaInteres!,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Concuerda el cliente con este monto de cuota? Cuota Final: \n${calcularCuotaProvider.state.montoPrincipalPrimeraCuota} ${moneda?.name}',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
                     onDone: () {
-                      context.read<SolicitudReprestamoCubit>().saveAnswers(
-                            objFrecuenciaIdVer: frecuenciaDePago?.name,
-                            tasaInteres: tasaInteres,
-                            fechaDesembolso:
-                                fechaDesembolso?.toUtc().toIso8601String(),
-                            objMonedaId: moneda?.value,
-                            objMonedaIdVer: moneda?.name,
-                            monto: int.tryParse(monto!),
-                            objPropositoId: proposito?.value,
-                            objPropositoIdVer: proposito?.name,
-                            objProductoId: producto?.value,
-                            objProductoIdVer: producto?.name,
-                            objFrecuenciaId: frecuenciaDePago?.value,
-                            objFrecuenciaIdVer2: frecuenciaDePago?.name,
-                            plazoSolicitud: int.tryParse(plazoSolicitud ?? ''),
-                            fechaPrimerPagoSolicitud:
-                                fechaPrimerPago?.toUtc().toIso8601String(),
-                            cuota: calcularCuotaProvider
-                                .state.montoPrincipalPrimeraCuota
-                                .toInt(),
-                            observacion: observacion,
-                          );
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cuota: calcularCuotaProvider.state.montoPrimeraCuota
+                              .toInt(),
+                        ),
+                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

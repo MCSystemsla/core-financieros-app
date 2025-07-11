@@ -83,13 +83,13 @@ class SolicitudesCreditoView extends StatelessWidget {
           solicitudesOffline: solicitudesOffline,
           controller: controller,
         ),
-        SolicitudesReprestamoPendientesItems(
-          solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
-          controller: controller,
-        ),
         SolicitudesAsalariadoPendientesItems(
           controller: controller,
           solicitudesAsalariado: solicitudesAsalariado,
+        ),
+        SolicitudesReprestamoPendientesItems(
+          solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
+          controller: controller,
         ),
       ],
     );

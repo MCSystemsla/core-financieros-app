@@ -151,10 +151,14 @@ class SolicitudesPendientesWidget extends StatelessWidget {
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
                 .capitalizeAll,
-        location: solicitud.cedula?.dashFormat ?? 'N/A',
-        dateToStart: solicitud.email ?? 'N/A',
-        dateToEnd: DateTime.tryParse(solicitud.fechaNacimiento ?? '')
-            ?.selectorFormat(),
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(hours: 1))
+            .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),
@@ -251,10 +255,16 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
             ),
           );
         },
-        title: '${solicitud.cedula}'.toUpperCase(),
-        location: solicitud.celularReprestamo ?? 'N/A',
-        dateToStart: solicitud.cedulaFamiliar ?? 'N/A',
-        dateToEnd: 'Fecha',
+        title: solicitud.nombreCompletoCliente ?? 'N/A',
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
+
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(hours: 1))
+            .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),
@@ -415,9 +425,14 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1}'
                 .capitalizeAll,
-        location: solicitud.cedula ?? 'N/A',
-        dateToEnd: solicitud.fechaNacimiento?.selectorFormat() ?? 'N/A',
-        dateToStart: solicitud.email ?? 'N/A',
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        // TODO: CAMBIAR A DATE DE 30 DIAS
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(hours: 1))
+            .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
             : calcularPorcentajeLlenado(solicitud),
@@ -429,14 +444,14 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
 class AdvanceCardState extends StatelessWidget {
   final VoidCallback onPressed;
   final String title;
-  final String location;
+  final String cedula;
   final String? dateToStart;
   final String? dateToEnd;
   final double percentage;
   final Color backgroundColor;
   const AdvanceCardState({
     required this.title,
-    required this.location,
+    required this.cedula,
     required this.dateToStart,
     required this.dateToEnd,
     required this.percentage,
@@ -478,21 +493,20 @@ class AdvanceCardState extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Cedula: $location',
+                    'Cedula: $cedula',
                     style: const TextStyle(color: AppColors.grey),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Email: ${dateToStart ?? "--/--/----"}',
+                    'Fecha de creacion: ${dateToStart ?? "--/--/----"}',
                     style: const TextStyle(
                       color: AppColors.grey,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Fecha Nacimiento: ${dateToEnd ?? "--/--/----"}',
+                    'Esta solicitud sera eliminada automaticamente: ${dateToEnd ?? "--/--/----"}',
                     style: const TextStyle(
-                      // fontSize:
                       color: AppColors.grey,
                     ),
                   ),

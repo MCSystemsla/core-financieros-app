@@ -1,22 +1,22 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 part 'autoupdate_state.dart';
 
 class AutoupdateCubit extends Cubit<AutoupdateState> {
   AutoupdateCubit() : super(AutoupdateInitial());
+  final _logger = Logger();
 
   Future<void> verificarActualizacion(BuildContext context) async {
     const String versionJsonUrl = String.fromEnvironment('versionUrl');
 
     if (versionJsonUrl.isEmpty) {
-      log('URL de versión no definida');
+      _logger.e('URL de versión no definida');
       return;
     }
 
@@ -26,7 +26,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       final response = await http.get(Uri.parse(versionJsonUrl));
 
       if (response.statusCode != 200) {
-        log('Error al obtener versión: código ${response.statusCode}');
+        _logger.e('Error al obtener versión: código ${response.statusCode}');
         emit(AutoupdateError());
         return;
       }
@@ -36,14 +36,15 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       final apkUrl = data['apkUrl']?.toString();
 
       if (nuevaVersion == null || apkUrl == null) {
-        log('Formato JSON inválido');
+        _logger.e('Formato JSON inválido');
         emit(AutoupdateError());
         return;
       }
 
       final info = await PackageInfo.fromPlatform();
       final versionActual = info.version;
-      log('Versión actual: $versionActual - Nueva versión: $nuevaVersion');
+      _logger
+          .d('Versión actual: $versionActual - Nueva versión: $nuevaVersion');
 
       if (nuevaVersion != versionActual) {
         if (!context.mounted) return;
@@ -57,7 +58,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       }
       emit(AutoupdateFoundVersion(versionName: versionActual));
     } catch (e, stack) {
-      log('Excepción al verificar actualización $e',
+      _logger.e('Excepción al verificar actualización $e',
           error: e, stackTrace: stack);
       emit(AutoupdateError());
     }

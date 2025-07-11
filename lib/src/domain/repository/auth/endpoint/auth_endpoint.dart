@@ -12,19 +12,11 @@ class BranchTeamEndpoint extends Endpoint {
 
   @override
   String get path => '/sucursales/obtener-sucursales-movil';
-  // @override
-  // Map<String, String> get headers => {
-  //       'Authorization': LocalStorage().fcmToken,
-  //     };
+
   @override
   Map<String, dynamic> get queryParameters => {
-        // if (queryParams != null) ...queryParams!,
         'codigoDeAcceso': '2wydJKIvNuO41hCZ7Y6',
       };
-  // @override
-  // Map<String, dynamic> get body => {
-  //       // if (bodyMap != null) ...bodyMap!,
-  //     };
 }
 
 class LoginEndpoint extends Endpoint {
@@ -45,10 +37,9 @@ class LoginEndpoint extends Endpoint {
 
   @override
   Map<String, dynamic> get body => {
-        // if (bodyMap != null) ...bodyMap!,
         'username': userName,
         'password': password,
-        'database': dbName
+        'database': dbName,
       };
 }
 
