@@ -97,6 +97,7 @@ class ResponseLocalDb {
   String? objPaisNacimientoId;
   String? objPaisNacimientoIdVer;
   String? nacionalidadConyugue;
+  String? nacionalidadConyugueVer;
   String? database;
   String? ubicacion;
   bool? espeps;
@@ -107,10 +108,12 @@ class ResponseLocalDb {
   bool? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
+  String? parentescoFamiliarPeps2Ver;
   String? cargoFamiliarPeps2;
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Ver;
   String? objRubroActividad;
   String? objRubroActividadVer;
   String? objActividadPredominante;
@@ -146,6 +149,8 @@ class ResponseLocalDb {
 
   ResponseLocalDb({
     required this.id,
+    this.nacionalidadConyugueVer,
+    this.parentescoFamiliarPeps2Ver,
     this.uuid,
     this.montoMaximo,
     this.montoMinimo,
