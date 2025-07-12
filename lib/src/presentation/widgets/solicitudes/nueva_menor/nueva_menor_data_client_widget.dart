@@ -687,7 +687,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               hintText: 'Ingresa Cantidad de Hijos',
               textInputType: TextInputType.number,
               isValid: null,
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) => ClassValidator.validateIntValue(value),
               onChange: (value) {
                 cantidadHijos = value;
                 cubit.onFieldChanged(

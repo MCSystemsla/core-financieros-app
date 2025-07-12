@@ -73,17 +73,6 @@ class __FormContentState extends State<_FormContent> {
 
   final formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
-          () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-                objMonedaId: 'DOLAR',
-                objMonedaIdVer: 'DOLAR',
-              ),
-        );
-  }
-
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
