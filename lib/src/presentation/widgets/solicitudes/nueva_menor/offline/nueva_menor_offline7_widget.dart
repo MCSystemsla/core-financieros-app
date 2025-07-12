@@ -167,7 +167,6 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(9),

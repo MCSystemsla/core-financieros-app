@@ -274,8 +274,10 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(20),
                     SearchDropdownWidget(
+                      validator: (value) => ClassValidator.validateRequired(
+                          objCondicionCasaIdVer),
                       hintText:
-                          objCondicionCasaIdVer ?? 'Selecciona una opcion',
+                          objCondicionCasaIdVer ?? 'input.select_option'.tr(),
                       title: 'Condicion Casa',
                       codigo: 'TIPOVIVIENDA',
                       onChanged: (item) {
@@ -327,7 +329,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                           horizontal: 20, vertical: 5),
                       child: JLuxDropdown(
                         validator: (value) => ClassValidator.validateRequired(
-                          value?.valor,
+                          comunidad,
                         ),
                         dropdownColor: Colors.white,
                         isContainIcon: true,

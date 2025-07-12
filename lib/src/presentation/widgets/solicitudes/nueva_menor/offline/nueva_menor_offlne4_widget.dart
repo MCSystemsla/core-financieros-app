@@ -74,6 +74,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
   List<Item> rubrosActividadesPredominanteList = [];
   String? objRubroActividadPredominante;
   String? objRubroActividadPredominanteVer;
+  Item? departamentoNegocio;
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
     return await showTimePicker(
@@ -631,6 +632,24 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 CatalogoValorNacionalidad(
+                  where: context
+                      .read<SolicitudNuevaMenorCubit>()
+                      .state
+                      .objPaisCasaId,
+                  hintText: 'input.select_option'.tr(),
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
+                  title: 'Departamento de Negocio',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    departamentoNegocio =
+                        Item(name: item.nombre, value: item.valor);
+                    setState(() {});
+                  },
+                  codigo: 'DEP',
+                ),
+                const Gap(20),
+                CatalogoValorNacionalidad(
                   initialValue: ItemNacionalidad(
                       id: 0,
                       valor: municipioNegocio ?? 'Ingresa una opcion',
@@ -654,6 +673,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     );
                   },
                   codigo: 'MUN',
+                  where: departamentoNegocio?.value,
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(

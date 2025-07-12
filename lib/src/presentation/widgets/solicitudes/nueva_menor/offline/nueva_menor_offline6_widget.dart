@@ -216,7 +216,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   validator: (value) => ClassValidator.validateRequired(monto),
                   isValid: null,
                   onChange: (value) {
-                    monto = value;
+                    monto = value.replaceAll(',', '');
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         monto: int.tryParse(monto ?? '0'),
@@ -388,7 +388,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      if (double.tryParse(monto ?? '0')! <
+                      if ((double.tryParse(monto ?? '0') ?? 0) <
                           montoMinimo!.toDouble()) {
                         CustomAlertDialog(
                           context: context,
@@ -398,7 +398,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      if (double.tryParse(monto ?? '0')! >
+                      if ((double.tryParse(monto ?? '0') ?? 0) >
                           montoMaximo!.toDouble()) {
                         CustomAlertDialog(
                           context: context,

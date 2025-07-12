@@ -89,9 +89,7 @@ class ObjectBoxService {
   }
 
   void deleteRowsByDeterminateTime() {
-    // TODO: VOLVER A ACTUALIZAR EL LOGICO DE ELIMINACION DE DATOS A 30 DIAS
-    // final now = DateTime.now().subtract(const Duration(days: 30));
-    final now = DateTime.now().subtract(const Duration(hours: 1));
+    final now = DateTime.now().subtract(const Duration(days: 30));
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
         .build()

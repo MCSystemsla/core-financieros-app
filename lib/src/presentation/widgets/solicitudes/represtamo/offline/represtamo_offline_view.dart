@@ -53,71 +53,74 @@ class ReprestamoOfflineView extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: Column(
-          children: [
-            const Navbar(
-              title: 'Crear nueva Solicitud Represtamo',
-              imageUrl: ImageAsset.represtamoBg,
-            ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller,
-                children: [
-                  Hero(
-                    transitionOnUserGestures: true,
-                    tag: 'cedulaFrontal',
-                    child: PhotoCedulaClientWidget(
-                      controller: controller,
-                      fotoCedulaFrontal:
-                          XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                      fotoCedulaTrasera:
-                          XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                      onCedulaFrontalPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageFrontCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                      onCedulaTraseraPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageBackCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  ReprestamoOfflineForm1(
-                    controller: controller,
-                    solicitud: solicitudReprestamoOffline,
-                  ),
-                  ReprestamoOfflineForm2(
-                    controller: controller,
-                    solicitudReprestamoOffline: solicitudReprestamoOffline,
-                  ),
-                  ReprestamoOfflineForm3(
-                    controller: controller,
-                    solicitud: solicitudReprestamoOffline,
-                  ),
-                  ReprestamoOfflineForm4(
-                    controller: controller,
-                    solicitud: solicitudReprestamoOffline,
-                  ),
-                  ReprestamoOfflineForm5(
-                    controller: controller,
-                    solicitud: solicitudReprestamoOffline,
-                  ),
-                ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: Column(
+            children: [
+              const Navbar(
+                title: 'Crear nueva Solicitud Represtamo',
+                imageUrl: ImageAsset.represtamoBg,
               ),
-            ),
-          ],
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  children: [
+                    Hero(
+                      transitionOnUserGestures: true,
+                      tag: 'cedulaFrontal',
+                      child: PhotoCedulaClientWidget(
+                        controller: controller,
+                        fotoCedulaFrontal:
+                            XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                        fotoCedulaTrasera:
+                            XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                        onCedulaFrontalPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageFrontCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                        onCedulaTraseraPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageBackCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    ReprestamoOfflineForm1(
+                      controller: controller,
+                      solicitud: solicitudReprestamoOffline,
+                    ),
+                    ReprestamoOfflineForm2(
+                      controller: controller,
+                      solicitudReprestamoOffline: solicitudReprestamoOffline,
+                    ),
+                    ReprestamoOfflineForm3(
+                      controller: controller,
+                      solicitud: solicitudReprestamoOffline,
+                    ),
+                    ReprestamoOfflineForm4(
+                      controller: controller,
+                      solicitud: solicitudReprestamoOffline,
+                    ),
+                    ReprestamoOfflineForm5(
+                      controller: controller,
+                      solicitud: solicitudReprestamoOffline,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
