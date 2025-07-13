@@ -280,7 +280,7 @@ class __FormContentState extends State<_FormContent> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(3),
                   ],
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   icon: Icon(
                     Icons.access_time,
                     color: AppColors.getPrimaryColor(),

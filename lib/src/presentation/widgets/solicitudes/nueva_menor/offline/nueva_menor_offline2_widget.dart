@@ -296,7 +296,6 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     OutlineTextfieldWidget(
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        FilteringTextInputFormatter.allow(RegExp(r'[1-9]')),
                         LengthLimitingTextInputFormatter(2),
                       ],
                       initialValue:

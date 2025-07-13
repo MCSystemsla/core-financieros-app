@@ -103,6 +103,7 @@ class ResponseLocalDb {
   bool? espeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
   bool? tieneFamiliarPeps;
@@ -149,6 +150,8 @@ class ResponseLocalDb {
 
   ResponseLocalDb({
     required this.id,
+    this.paisPepsVer,
+    this.paisPeps2Ver,
     this.nacionalidadConyugueVer,
     this.parentescoFamiliarPeps2Ver,
     this.uuid,

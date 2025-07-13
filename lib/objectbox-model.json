@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "142:3537735856315777213",
+      "lastPropertyId": "143:7955569610881981441",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -906,6 +906,11 @@
         {
           "id": "142:3537735856315777213",
           "name": "paisPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "143:7955569610881981441",
+          "name": "paisPepsVer",
           "type": 9
         }
       ],

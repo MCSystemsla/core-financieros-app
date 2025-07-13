@@ -430,7 +430,10 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 if (item == null || !mounted) return;
                 tipoDocumento = item;
                 cubit.onFieldChanged(
-                  () => cubit.state.copyWith(objTipoDocumentoId: item.value),
+                  () => cubit.state.copyWith(
+                    objTipoDocumentoId: item.value,
+                    objTipoDocumentoIdVer: item.name,
+                  ),
                 );
                 setState(() {});
               },

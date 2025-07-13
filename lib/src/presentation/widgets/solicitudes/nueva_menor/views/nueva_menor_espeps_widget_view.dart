@@ -138,6 +138,7 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps: item.valor,
+                          paisPepsVer: item.nombre,
                         ),
                       );
                     },
@@ -257,6 +258,7 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           parentescoFamiliarPeps2: item.value,
+                          parentescoFamiliarPeps2Ver: item.name,
                         ),
                       );
                     },
@@ -347,6 +349,7 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps2: paisPeps2,
+                          paisPeps2Ver: item.nombre,
                         ),
                       );
                     },

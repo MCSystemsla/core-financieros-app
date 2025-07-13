@@ -99,8 +99,8 @@ class __FormContentState extends State<_FormContent> {
                       nacionalidadConyuge = item.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objPaisNacimientoId: item.valor,
-                          objPaisNacimientoIdVer: item.nombre,
+                          nacionalidadConyugue: item.valor,
+                          nacionalidadConyugueVer: item.nombre,
                         ),
                       );
                     },
@@ -125,7 +125,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       nombreConyuge = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(nombreConyugue: value),
+                        () =>
+                            cubit.state.copyWith(nombreConyugue: nombreConyuge),
                       );
                     },
                     isValid: null,
@@ -177,7 +178,8 @@ class __FormContentState extends State<_FormContent> {
                       onChange: (value) {
                         trabajoConyuge = value;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(trabajoConyugue: value),
+                          () => cubit.state
+                              .copyWith(trabajoConyugue: trabajoConyuge),
                         );
                       },
                     ),
@@ -198,8 +200,9 @@ class __FormContentState extends State<_FormContent> {
                       onChange: (value) {
                         direccionTrabajoConyuge = value;
                         cubit.onFieldChanged(
-                          () => cubit.state
-                              .copyWith(direccionTrabajoConyugue: value),
+                          () => cubit.state.copyWith(
+                              direccionTrabajoConyugue:
+                                  direccionTrabajoConyuge),
                         );
                       },
                       validator: (value) =>
@@ -227,8 +230,8 @@ class __FormContentState extends State<_FormContent> {
                       onChange: (value) {
                         telefonoTrabajoConyuge = value;
                         cubit.onFieldChanged(
-                          () => cubit.state
-                              .copyWith(telefonoTrabajoConyugue: value),
+                          () => cubit.state.copyWith(
+                              telefonoTrabajoConyugue: telefonoTrabajoConyuge),
                         );
                       },
                     ),
@@ -281,7 +284,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       nombreFamiliarEmpleado = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(nombreFamiliar: value),
+                        () => cubit.state
+                            .copyWith(nombreFamiliar: nombreFamiliarEmpleado),
                       );
                     },
                   ),
@@ -309,7 +313,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       cedulaFamiliarEmpleado = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(cedulaFamiliar: value),
+                        () => cubit.state
+                            .copyWith(cedulaFamiliar: cedulaFamiliarEmpleado),
                       );
                     },
                   ),
@@ -318,7 +323,6 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(RegExp(r'[1-9]')),
                     LengthLimitingTextInputFormatter(2),
                   ],
                   key: const ValueKey('personasACargo'),
@@ -328,7 +332,7 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   title: 'Persona a cargo',
                   hintText: 'Ingresa la persona a cargo',
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   textInputType: TextInputType.number,
                   isValid: null,
                   onChange: (value) {

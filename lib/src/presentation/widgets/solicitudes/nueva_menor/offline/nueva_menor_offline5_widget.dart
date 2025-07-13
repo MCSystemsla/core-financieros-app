@@ -43,6 +43,9 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
   String? periodoPeps2;
   String? paisPeps2;
   String? nombreFamiliarPeps2;
+  String? paisPepsVer;
+  String? parentescoFamiliarPeps2Ver;
+  String? paisPeps2Ver;
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -63,22 +66,28 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
     periodoPeps = widget.responseLocalDb.periodoPeps;
     periodoPeps2 = widget.responseLocalDb.periodoPeps2;
     paisPeps2 = widget.responseLocalDb.paisPeps2;
+    paisPepsVer = widget.responseLocalDb.paisPepsVer;
+    parentescoFamiliarPeps2Ver =
+        widget.responseLocalDb.parentescoFamiliarPeps2Ver;
+    paisPeps2Ver = widget.responseLocalDb.paisPeps2Ver;
 
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-                espeps: esPeps == 'input.yes'.tr(),
-                nombreDeEntidadPeps: nombreEntidadPeps,
-                paisPeps: paisPeps,
-                cargoOficialPeps: cargoOficialPeps,
-                tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
-                nombreFamiliarPeps2: nombreFamiliarPeps2,
-                parentescoFamiliarPeps2: parentesco,
-                nombreEntidadPeps2: nombreEntidadPeps2,
-                periodoPeps: periodoPeps,
-                periodoPeps2: periodoPeps2,
-                paisPeps2: paisPeps2,
-                cargoFamiliarPeps2: cargoParentesco,
-              ),
+              espeps: esPeps == 'input.yes'.tr(),
+              nombreDeEntidadPeps: nombreEntidadPeps,
+              paisPeps: paisPeps,
+              cargoOficialPeps: cargoOficialPeps,
+              tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+              nombreFamiliarPeps2: nombreFamiliarPeps2,
+              parentescoFamiliarPeps2: parentesco,
+              nombreEntidadPeps2: nombreEntidadPeps2,
+              periodoPeps: periodoPeps,
+              periodoPeps2: periodoPeps2,
+              paisPeps2: paisPeps2,
+              cargoFamiliarPeps2: cargoParentesco,
+              paisPepsVer: paisPepsVer,
+              parentescoFamiliarPeps2Ver: parentescoFamiliarPeps2Ver,
+              paisPeps2Ver: paisPeps2Ver),
         );
   }
 
@@ -156,18 +165,20 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps ?? '',
-                      nombre: paisPeps ?? '',
+                      nombre: paisPepsVer ?? '',
                       relacion: '',
                     ),
                     // initialValue: ,
-                    hintText: paisPeps ?? 'input.select_option'.tr(),
+                    hintText: paisPepsVer ?? 'input.select_option'.tr(),
                     title: 'País PEPS',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
                       paisPeps = item.valor;
+                      paisPepsVer = item.nombre;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps: paisPeps,
+                          paisPepsVer: paisPepsVer,
                         ),
                       );
                     },
@@ -278,14 +289,18 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                   SearchDropdownWidget(
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
-                    hintText: parentesco ?? 'input.select_option'.tr(),
+                    hintText: parentescoFamiliarPeps2Ver ??
+                        'input.select_option'.tr(),
                     codigo: 'PARENTESCO',
                     onChanged: (item) {
                       if (item == null) return;
                       parentesco = item.value;
+                      parentescoFamiliarPeps2Ver = item.name;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           parentescoFamiliarPeps2: parentesco,
+                          parentescoFamiliarPeps2Ver:
+                              parentescoFamiliarPeps2Ver,
                         ),
                       );
                     },
@@ -371,17 +386,19 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
                     initialValue: ItemNacionalidad(
                       id: 0,
                       valor: paisPeps2 ?? '',
-                      nombre: paisPeps2 ?? '',
+                      nombre: paisPeps2Ver ?? '',
                       relacion: '',
                     ),
                     title: 'País PEPS 2',
-                    hintText: paisPeps ?? 'Selecciona País PEPS 2',
+                    hintText: paisPeps2Ver ?? 'Selecciona País PEPS 2',
                     onChanged: (item) {
                       if (item == null) return;
                       paisPeps2 = item.valor;
+                      paisPeps2Ver = item.nombre;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps2: paisPeps2,
+                          paisPeps2Ver: paisPeps2Ver,
                         ),
                       );
                     },

@@ -145,7 +145,15 @@ class SolicitudNuevaMenorState extends Equatable {
   final int montoMaximo;
   final String cedulaFrontPath;
   final String cedulaBackPath;
+  final String paisPepsVer;
+  final String parentescoFamiliarPeps2Ver;
+  final String paisPeps2Ver;
+  final String nacionalidadConyugueVer;
   const SolicitudNuevaMenorState({
+    this.nacionalidadConyugueVer = '',
+    this.paisPeps2Ver = '',
+    this.parentescoFamiliarPeps2Ver = '',
+    this.paisPepsVer = '',
     this.frecuenciaPagoMeses = '0',
     this.uuid,
     this.cedulaFrontPath = '',
@@ -580,6 +588,10 @@ class SolicitudNuevaMenorState extends Equatable {
     int? montoMaximo,
     String? cedulaFrontPath,
     String? cedulaBackPath,
+    String? paisPepsVer,
+    String? parentescoFamiliarPeps2Ver,
+    String? paisPeps2Ver,
+    String? nacionalidadConyugueVer,
   }) {
     return SolicitudNuevaMenorState(
       uuid: uuid ?? this.uuid,
@@ -762,6 +774,12 @@ class SolicitudNuevaMenorState extends Equatable {
       montoMaximo: montoMaximo ?? this.montoMaximo,
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
+      paisPepsVer: paisPepsVer ?? this.paisPepsVer,
+      parentescoFamiliarPeps2Ver:
+          parentescoFamiliarPeps2Ver ?? this.parentescoFamiliarPeps2Ver,
+      paisPeps2Ver: paisPeps2Ver ?? this.paisPeps2Ver,
+      nacionalidadConyugueVer:
+          nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
     );
   }
 }

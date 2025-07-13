@@ -332,7 +332,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     LengthLimitingTextInputFormatter(3),
                   ],
                   initialValue: funcionamientoNegocio,
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   icon: Icon(
                     Icons.access_time,
                     color: AppColors.getPrimaryColor(),

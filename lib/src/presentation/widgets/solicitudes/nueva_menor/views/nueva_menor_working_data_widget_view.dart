@@ -335,9 +335,9 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           ubicacionLongitud:
-                              widget.position!.longitude.toString(),
+                              widget.position?.longitude.toString(),
                           ubicacionLatitud:
-                              widget.position!.latitude.toString(),
+                              widget.position?.latitude.toString(),
                         ),
                       );
                       widget.controller.nextPage(

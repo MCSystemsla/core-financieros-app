@@ -45,6 +45,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
   String? parentescoBeneficiarioSeguro1;
   String? telefonoBeneficiario;
   String? telefonoBeneficiario1;
+  String? objParentescoBeneficiarioSeguroId1Ver;
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -61,6 +62,8 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
         widget.responseLocalDb.objParentescoBeneficiarioSeguroId1;
     telefonoBeneficiario = widget.responseLocalDb.telefonoBeneficiario;
     telefonoBeneficiario1 = widget.responseLocalDb.telefonoBeneficiarioSeguro1;
+    objParentescoBeneficiarioSeguroId1Ver =
+        widget.responseLocalDb.objParentescoBeneficiarioSeguroId1Ver;
 
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
@@ -240,19 +243,21 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  hintText:
-                      parentescoBeneficiarioSeguro1 ?? 'Selecciona una opcion',
+                  hintText: objParentescoBeneficiarioSeguroId1Ver ??
+                      'input.select_option'.tr(),
                   codigo: 'PARENTESCO',
                   title: 'Parentesco Beneficiario Seguro 1',
                   // hintText: 'Ingresa Parentesco Beneficiario Seguro 1',
                   onChanged: (item) {
                     if (item == null) return;
                     parentescoBeneficiarioSeguro1 = item.value;
-
+                    objParentescoBeneficiarioSeguroId1Ver = item.name;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         objParentescoBeneficiarioSeguroId1:
                             parentescoBeneficiarioSeguro1,
+                        objParentescoBeneficiarioSeguroId1Ver:
+                            objParentescoBeneficiarioSeguroId1Ver,
                       ),
                     );
                   },

@@ -157,9 +157,13 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     return ResponseLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       frecuenciaPagoMeses: state.frecuenciaPagoMeses == '0'
           ? prev?.frecuenciaPagoMeses
           : state.frecuenciaPagoMeses,
+      paisPepsVer: _prefer(state.paisPeps, prev?.paisPepsVer),
+      parentescoFamiliarPeps2Ver: _prefer(
+          state.parentescoFamiliarPeps2Ver, prev?.parentescoFamiliarPeps2Ver),
       montoMaximo:
           state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
       montoMinimo:
@@ -396,6 +400,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           prev?.objRubroActividadPredominanteVer),
       objTipoPersonaIdVer:
           _prefer(state.objTipoPersonaIdVer, prev?.objTipoPersonaIdVer),
+      nacionalidadConyugueVer:
+          _prefer(state.nacionalidadConyugueVer, prev?.nacionalidadConyugueVer),
     );
   }
 

@@ -45,6 +45,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
   String? nombreFamiliarEmpleado;
   String? cedulaFamiliarEmpleado;
   String? personasACargo;
+  String? nacionalidadConyugueVer;
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
 
     nombreFamiliarEmpleado = widget.responseLocalDb.nombreFamiliar;
     cedulaFamiliarEmpleado = widget.responseLocalDb.cedulaFamiliar;
+    nacionalidadConyugueVer = widget.responseLocalDb.nacionalidadConyugueVer;
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objEstadoCivilId: estadoCivil,
@@ -81,6 +83,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 telefonoTrabajoConyugue: telefonoTrabajoConyuge,
                 nombreFamiliar: nombreFamiliarEmpleado,
                 cedulaFamiliar: cedulaFamiliarEmpleado,
+                nacionalidadConyugueVer: nacionalidadConyugueVer,
               ),
         );
   }
@@ -133,9 +136,11 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                     onChanged: (item) {
                       if (item == null) return;
                       nacionalidadConyuge = item.valor;
+                      nacionalidadConyugueVer = item.nombre;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nacionalidadConyugue: nacionalidadConyuge,
+                          nacionalidadConyugueVer: nacionalidadConyugueVer,
                         ),
                       );
                     },
@@ -363,7 +368,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                 ],
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(
+                  validator: (value) => ClassValidator.validateIntValue(
                     value,
                   ),
                   inputFormatters: [
