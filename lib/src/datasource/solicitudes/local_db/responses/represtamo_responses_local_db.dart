@@ -40,6 +40,7 @@ class ReprestamoResponsesLocalDb {
   bool? esPeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
   bool? tieneFamiliarPeps;
@@ -50,6 +51,7 @@ class ReprestamoResponsesLocalDb {
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Ver;
   String? objRubroActividad;
   String? objRubroActividadVer;
   String? objActividadPredominante;
@@ -92,6 +94,9 @@ class ReprestamoResponsesLocalDb {
 
   ReprestamoResponsesLocalDb({
     required this.id,
+    this.paisPeps2Ver,
+    this.paisPepsVer,
+    this.parentescoFamiliarPeps2Ver,
     this.uuid,
     this.objOrigenSolicitudIdVer,
     this.objMonedaIdVer,

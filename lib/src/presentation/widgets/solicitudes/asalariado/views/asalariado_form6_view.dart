@@ -69,6 +69,23 @@ class __FormContentState extends State<_FormContent> {
   String? estadoCivil;
 
   final formKey = GlobalKey<FormState>();
+  void getTotalIngresoMes() {
+    final double? salarioNetoMes =
+        double.tryParse(salarioNetoMensualConyuge?.replaceAll(',', '') ?? '0');
+    final double? otrosIngresosMes =
+        double.tryParse(otrosIngresosConyuge?.replaceAll(',', '') ?? '0');
+    final totalIngresosMesSum = (salarioNetoMes ?? 0) + (otrosIngresosMes ?? 0);
+
+    setState(() {
+      totalIngresosMesConyuge = totalIngresosMesSum.toStringAsFixed(2);
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  totalIngresoMesConyugue:
+                      double.tryParse(totalIngresosMesConyuge ?? '0'),
+                ),
+          );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +192,22 @@ class __FormContentState extends State<_FormContent> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'ESTADOCIVIL',
+                  onChanged: (item) {
+                    estadoCivil = item?.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objEstadoCivilId: item?.value,
+                        objEstadoCivilIdVer: item?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  title: 'Estado Civil',
+                ),
                 if (estadoCivil == 'CAS' || estadoCivil == 'UNI') ...[
                   const Gap(30),
                   Padding(
@@ -276,7 +309,7 @@ class __FormContentState extends State<_FormContent> {
                         nombreDelaEmpresaConyuge = value;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            nombreConyugue: nombreDelaEmpresaConyuge,
+                            trabajoConyugue: nombreDelaEmpresaConyuge,
                           ),
                         );
                       },
@@ -336,51 +369,14 @@ class __FormContentState extends State<_FormContent> {
 
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            salarioNetoCordoba: double.tryParse(
+                            sueldoMesConyugue: double.tryParse(
                                 salarioNetoMensualConyuge ?? '0'),
                           ),
                         );
+                        getTotalIngresoMes();
                       },
                       title: 'Salario Neto Mensual Cónyuge (C\$)',
                       icon: const Icon(Icons.attach_money_outlined),
-                    ),
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      // validator: (value) => ClassValidator.validateRequired(value),
-                      textInputType: TextInputType.number,
-                      inputFormatters: [
-                        CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-                      ],
-                      onChange: (value) {
-                        otrosIngresosConyuge = value.replaceAll(',', '');
-
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            otrosIngresosCordoba:
-                                double.tryParse(otrosIngresosConyuge ?? '0'),
-                          ),
-                        );
-                      },
-                      title: 'Otros ingresos Cónyuge (C\$)',
-                      icon: const Icon(Icons.money_off_csred_outlined),
-                    ),
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      // validator: (value) => ClassValidator.validateRequired(value),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      onChange: (value) {
-                        fuenteOtrosIngresosConyuge = value;
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            fuenteOtrosIngresos: fuenteOtrosIngresosConyuge,
-                          ),
-                        );
-                      },
-                      title: 'Fuentes otros ingresos Cónyuge',
-                      icon: const Icon(Icons.source_outlined),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -392,10 +388,53 @@ class __FormContentState extends State<_FormContent> {
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
+                        otrosIngresosConyuge = value.replaceAll(',', '');
+
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            fuenteOtrosIngresosConyugue: otrosIngresosConyuge,
+                          ),
+                        );
+                        getTotalIngresoMes();
+                      },
+                      title: 'Otros ingresos Cónyuge (C\$)',
+                      icon: const Icon(Icons.money_off_csred_outlined),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        fuenteOtrosIngresosConyuge = value;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            fuenteOtrosIngresosConyugue:
+                                fuenteOtrosIngresosConyuge,
+                          ),
+                        );
+                      },
+                      title: 'Fuentes otros ingresos Cónyuge',
+                      icon: const Icon(Icons.source_outlined),
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      readOnly: true,
+                      hintText: totalIngresosMesConyuge,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        CurrencyInputFormatter(),
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                      ],
+                      onChange: (value) {
                         totalIngresosMesConyuge = value.replaceAll(',', '');
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            totalIngresoMes:
+                            totalIngresoMesConyugue:
                                 double.tryParse(totalIngresosMesConyuge ?? '0'),
                           ),
                         );
@@ -439,8 +478,7 @@ class __FormContentState extends State<_FormContent> {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             telefonoTrabajoConyugue:
-                                (telefonoOficinaCodeConyuge +
-                                        (telefonoOficinaConyuge ?? ''))
+                                (telefonoOficinaConyuge ?? '')
                                     .replaceAll('-', ''),
                           ),
                         );

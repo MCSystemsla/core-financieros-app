@@ -245,7 +245,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
+          '${widget.solicitud.numero} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
         context.read<InternetConnectionCubit>().getInternetStatusConnection();
 

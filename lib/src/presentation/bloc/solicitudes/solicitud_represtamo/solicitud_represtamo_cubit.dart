@@ -115,6 +115,10 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
+      paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
+      parentescoFamiliarPeps2Ver: _prefer(
+          state.parentescoFamiliarPeps2Ver, prev?.parentescoFamiliarPeps2Ver),
       montoMaximo:
           state.montoMaximo == 0 ? prev?.montoMaximo ?? 0 : state.montoMaximo,
       montoMinimo:

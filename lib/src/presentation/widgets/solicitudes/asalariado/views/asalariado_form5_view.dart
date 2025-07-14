@@ -67,6 +67,11 @@ class __FormContentState extends State<_FormContent> {
 
     setState(() {
       totalIngresoMes = totalIngresosMesSum.toStringAsFixed(2);
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  totalIngresoMes: totalIngresosMesSum,
+                ),
+          );
     });
   }
 
@@ -217,9 +222,7 @@ class __FormContentState extends State<_FormContent> {
                 CountryInput(
                   textInputType: TextInputType.phone,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  onCountryCodeChange: (value) {
-                    telefonoCodeOficina = value?.dialCode ?? '+503';
-                  },
+                  onCountryCodeChange: (value) {},
                   maxLength: 9,
                   isRequired: false,
                   inputFormatters: [
@@ -231,8 +234,7 @@ class __FormContentState extends State<_FormContent> {
                     telefonoOficina = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        telefonoTrabajo: telefonoCodeOficina +
-                            telefonoOficina!.replaceAll('-', ''),
+                        telefonoTrabajo: telefonoOficina?.replaceAll('-', ''),
                       ),
                     );
                   },

@@ -2,7 +2,6 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
@@ -24,6 +23,8 @@ import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -182,9 +183,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             const Gap(20),
             OutlineTextfieldWidget(
               inputFormatters: [
-                CurrencyInputFormatter(),
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-                LengthLimitingTextInputFormatter(10),
+                MoneyInputFormatter(
+                  leadingSymbol: '',
+                  thousandSeparator: ThousandSeparator.Comma,
+                  mantissaLength: 0,
+                ),
               ],
               icon: Icon(
                 Icons.price_change,

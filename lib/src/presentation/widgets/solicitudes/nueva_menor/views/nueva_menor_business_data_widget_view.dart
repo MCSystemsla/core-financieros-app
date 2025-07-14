@@ -558,6 +558,12 @@ class __FormContentState extends State<_FormContent> {
                     if (item == null) return;
                     departamentoNegocio =
                         Item(name: item.nombre, value: item.valor);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoNegocio: item.valor,
+                        departamentoNegocioVer: item.nombre,
+                      ),
+                    );
                     setState(() {});
                   },
                   codigo: 'DEP',

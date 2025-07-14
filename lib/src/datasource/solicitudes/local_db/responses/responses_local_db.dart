@@ -147,10 +147,14 @@ class ResponseLocalDb {
   int? montoMinimo;
   int? montoMaximo;
   String? frecuenciaPagoMeses;
+  String? departamentoNegocio;
+  String? departamentoNegocioVer;
 
   ResponseLocalDb({
     required this.id,
     this.paisPepsVer,
+    this.departamentoNegocio,
+    this.departamentoNegocioVer,
     this.paisPeps2Ver,
     this.nacionalidadConyugueVer,
     this.parentescoFamiliarPeps2Ver,

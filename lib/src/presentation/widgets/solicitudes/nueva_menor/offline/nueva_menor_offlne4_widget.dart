@@ -185,6 +185,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
         widget.responseLocalDb.objRubroActividadPredominante;
     rubroActividadPredominante =
         widget.responseLocalDb.objRubroActividadPredominante;
+    departamentoNegocio = Item(
+      name: widget.responseLocalDb.departamentoNegocioVer ?? '',
+      value: widget.responseLocalDb.departamentoNegocio,
+    );
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objCondicionNegocioIdVer: condicionNegocioVer,
@@ -217,6 +221,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 horarioTrabajo: horarioTrabajoString,
                 horarioVisita: horarioVisitaString,
                 objRubroActividadPredominante: objRubroActividadPredominante,
+                departamentoNegocio: departamentoNegocio?.value,
+                departamentoNegocioVer: departamentoNegocio?.name,
               ),
         );
   }
@@ -636,9 +642,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                       .read<SolicitudNuevaMenorCubit>()
                       .state
                       .objPaisCasaId,
-                  hintText: 'input.select_option'.tr(),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
+                  hintText:
+                      departamentoNegocio?.name ?? 'input.select_option'.tr(),
+                  validator: (value) => ClassValidator.validateRequired(
+                      departamentoNegocio?.value),
                   title: 'Departamento de Negocio',
                   onChanged: (item) {
                     if (item == null) return;

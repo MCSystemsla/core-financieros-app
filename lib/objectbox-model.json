@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "143:7955569610881981441",
+      "lastPropertyId": "145:2524637299289633514",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -912,13 +912,23 @@
           "id": "143:7955569610881981441",
           "name": "paisPepsVer",
           "type": 9
+        },
+        {
+          "id": "144:7046046325058580571",
+          "name": "departamentoNegocio",
+          "type": 9
+        },
+        {
+          "id": "145:2524637299289633514",
+          "name": "departamentoNegocioVer",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "85:7414972518114164827",
+      "lastPropertyId": "87:6547042730322422823",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1340,6 +1350,16 @@
         {
           "id": "85:7414972518114164827",
           "name": "parentescoFamiliarPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "86:3906664502183309653",
+          "name": "paisPepsVer",
+          "type": 9
+        },
+        {
+          "id": "87:6547042730322422823",
+          "name": "paisPeps2Ver",
           "type": 9
         }
       ],

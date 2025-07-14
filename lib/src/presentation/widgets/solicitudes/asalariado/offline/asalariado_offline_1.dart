@@ -557,24 +557,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                       icon: const Icon(Icons.flag_circle),
                     ),
                     const Gap(30),
-                    SearchDropdownWidget(
-                      hintText: estadoCivil ?? 'input.select_option'.tr(),
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                      onChanged: (item) {
-                        estadoCivil = item?.value;
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            objEstadoCivilId: estadoCivil,
-                            objEstadoCivilIdVer: estadoCivil,
-                          ),
-                        );
-                        setState(() {});
-                      },
-                      codigo: 'ESTADOCIVIL',
-                      title: 'Estado civil',
-                    ),
-                    const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: telefono,
                       isRequired: false,
@@ -639,6 +621,8 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateCantidadHijos(value),
                       initialValue: cantidadHijos,
                       textInputType: TextInputType.number,
                       inputFormatters: [

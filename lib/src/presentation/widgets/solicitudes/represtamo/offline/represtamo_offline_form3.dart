@@ -230,7 +230,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             const Gap(20),
             CatalogoProductoDropdown(
               isRecurrente: true,
-              hintText: producto?.name ?? 'Seleccionar Producto',
+              hintText: producto?.name ?? 'input.select_option'.tr(),
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;

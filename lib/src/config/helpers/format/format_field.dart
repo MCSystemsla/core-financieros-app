@@ -15,16 +15,17 @@ class CurrencyInputFormatter extends TextInputFormatter {
       return newValue.copyWith(text: '');
     }
 
+    // Si el texto no es un número válido, permitilo momentáneamente
     int? value = int.tryParse(rawText);
-    if (value == null) return oldValue;
+    if (value == null) {
+      // permitimos que el usuario borre o modifique sin regresarlo al oldValue
+      return newValue;
+    }
 
     String newText = _formatter.format(value);
 
-    // Calcula nueva posición del cursor
     int selectionIndex =
         newText.length - (rawText.length - newValue.selection.end);
-
-    // Clamp para evitar errores de rango
     selectionIndex = selectionIndex.clamp(0, newText.length);
 
     return TextEditingValue(

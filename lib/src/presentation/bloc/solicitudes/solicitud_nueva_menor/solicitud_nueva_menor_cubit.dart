@@ -156,6 +156,10 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
 
     return ResponseLocalDb(
       id: prev?.id ?? 0,
+      departamentoNegocio:
+          _prefer(state.departamentoNegocio, prev?.departamentoNegocio),
+      departamentoNegocioVer:
+          _prefer(state.departamentoNegocioVer, prev?.departamentoNegocioVer),
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
       paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       frecuenciaPagoMeses: state.frecuenciaPagoMeses == '0'
