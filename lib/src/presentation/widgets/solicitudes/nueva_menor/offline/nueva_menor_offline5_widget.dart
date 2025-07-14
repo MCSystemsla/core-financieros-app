@@ -73,21 +73,22 @@ class _NuevaMenorOffline5WidgetState extends State<NuevaMenorOffline5Widget>
 
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-              espeps: esPeps == 'input.yes'.tr(),
-              nombreDeEntidadPeps: nombreEntidadPeps,
-              paisPeps: paisPeps,
-              cargoOficialPeps: cargoOficialPeps,
-              tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
-              nombreFamiliarPeps2: nombreFamiliarPeps2,
-              parentescoFamiliarPeps2: parentesco,
-              nombreEntidadPeps2: nombreEntidadPeps2,
-              periodoPeps: periodoPeps,
-              periodoPeps2: periodoPeps2,
-              paisPeps2: paisPeps2,
-              cargoFamiliarPeps2: cargoParentesco,
-              paisPepsVer: paisPepsVer,
-              parentescoFamiliarPeps2Ver: parentescoFamiliarPeps2Ver,
-              paisPeps2Ver: paisPeps2Ver),
+                espeps: esPeps == 'input.yes'.tr(),
+                nombreDeEntidadPeps: nombreEntidadPeps,
+                paisPeps: paisPeps,
+                cargoOficialPeps: cargoOficialPeps,
+                tieneFamiliarPeps: tieneFamiliarPeps == 'input.yes'.tr(),
+                nombreFamiliarPeps2: nombreFamiliarPeps2,
+                parentescoFamiliarPeps2: parentesco,
+                nombreEntidadPeps2: nombreEntidadPeps2,
+                periodoPeps: periodoPeps,
+                periodoPeps2: periodoPeps2,
+                paisPeps2: paisPeps2,
+                paisPepsVer: paisPepsVer,
+                cargoFamiliarPeps2: cargoParentesco,
+                parentescoFamiliarPeps2Ver: parentescoFamiliarPeps2Ver,
+                paisPeps2Ver: paisPeps2Ver,
+              ),
         );
   }
 

@@ -76,11 +76,11 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                 objMunicipioCasaIdVer: objMunicipioCasaIdVer,
                 objPaisCasaIdVer: objPaisCasaIdVer,
                 objCondicionCasaIdVer: objCondicionCasaIdVer,
-                objDepartamentoCasaId: objDepartamentoCasaIdVer,
-                objMunicipioCasaId: objMunicipioCasaIdVer,
+                objCondicionCasaId: condicionCasa,
+                objDepartamentoCasaId: departamentoDomicilio,
+                objMunicipioCasaId: municipioDomicilio,
                 direccionCasa: direccionCasa,
                 barrioCasa: barrioCasa,
-                objCondicionCasaId: objCondicionCasaIdVer,
                 anosResidirCasa: int.tryParse(anosResidirCasa ?? '0'),
                 ubicacion: comunidad,
               ),
@@ -274,8 +274,8 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(20),
                     SearchDropdownWidget(
-                      validator: (value) => ClassValidator.validateRequired(
-                          objCondicionCasaIdVer),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(condicionCasa),
                       hintText:
                           objCondicionCasaIdVer ?? 'input.select_option'.tr(),
                       title: 'Condicion Casa',
@@ -336,7 +336,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                         items: Origin.comunidades,
                         onChanged: (item) {
                           if (item == null) return;
-                          comunidad = item.valor;
+                          comunidad = item.nombre;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               ubicacion: comunidad,

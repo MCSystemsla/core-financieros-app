@@ -302,10 +302,10 @@ class __FormContentState extends State<_FormContent> {
                     items: Origin.comunidades,
                     onChanged: (item) {
                       if (item == null) return;
-                      comunidad = item.valor;
+                      comunidad = item.nombre;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          ubicacion: item.valor,
+                          ubicacion: item.nombre,
                         ),
                       );
                     },

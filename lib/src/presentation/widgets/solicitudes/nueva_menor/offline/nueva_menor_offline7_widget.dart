@@ -51,7 +51,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
   void initState() {
     super.initState();
     context.read<InternetConnectionCubit>().getInternetStatusConnection();
-    parentescoVer = widget.responseLocalDb.objParentescoBeneficiarioSeguroId;
+    parentescoVer = widget.responseLocalDb.objParentescoBeneficiarioSeguroIdVer;
     parentesco = widget.responseLocalDb.objParentescoBeneficiarioSeguroId;
     beneficiarioSeguro = widget.responseLocalDb.beneficiarioSeguro;
     cedulaBeneficiarioSeguro = widget.responseLocalDb.cedulaBeneficiarioSeguro;
@@ -68,11 +68,11 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objParentescoBeneficiarioSeguroId1Ver:
-                    parentescoBeneficiarioSeguro1,
-                objParentescoBeneficiarioSeguroIdVer: parentescoVer,
+                    objParentescoBeneficiarioSeguroId1Ver,
                 beneficiarioSeguro: beneficiarioSeguro,
                 cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
                 objParentescoBeneficiarioSeguroId: parentesco,
+                objParentescoBeneficiarioSeguroIdVer: parentescoVer,
                 beneficiarioSeguro1: beneficiarioSeguro1,
                 cedulaBeneficiarioSeguro1: cedulaBeneficiarioSeguro1,
                 objParentescoBeneficiarioSeguroId1:

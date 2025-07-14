@@ -161,7 +161,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       frecuenciaPagoMeses: state.frecuenciaPagoMeses == '0'
           ? prev?.frecuenciaPagoMeses
           : state.frecuenciaPagoMeses,
-      paisPepsVer: _prefer(state.paisPeps, prev?.paisPepsVer),
+      paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
       parentescoFamiliarPeps2Ver: _prefer(
           state.parentescoFamiliarPeps2Ver, prev?.parentescoFamiliarPeps2Ver),
       montoMaximo:
