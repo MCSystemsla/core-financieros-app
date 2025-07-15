@@ -108,6 +108,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
     nombreFamiliarCercano = solicitud?.nombreFamiliar;
     estadoCivil = solicitud?.objEstadoCivilId;
     estadoCivilVer = solicitud?.objEstadoCivilIdVer;
+    totalIngresosMesConyuge = solicitud?.totalIngresoMesConyugue.toString();
 
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -492,8 +493,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     OutlineTextfieldWidget(
                       readOnly: true,
                       hintText: totalIngresosMesConyuge,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),

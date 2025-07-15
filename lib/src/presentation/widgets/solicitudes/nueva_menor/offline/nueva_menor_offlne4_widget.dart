@@ -443,13 +443,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
-                      initialValue: actividadesPredominantesList.any(
-                              (item) => item.value == actividadPredominante)
-                          ? actividadesPredominantesList.firstWhere(
-                              (item) => item.value == actividadPredominante,
-                            )
-                          : null, // Si no hay coincidencias, se usa null
-
                       dropdownColor: Colors.white,
                       isContainIcon: true,
                       title: 'Actividad Predominante',
@@ -474,7 +467,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                       toStringItem: (item) {
                         return item.name;
                       },
-                      hintText: 'input.select_option'.tr(),
+                      hintText: actividadPredominanteVer ??
+                          'input.select_option'.tr(),
                     ),
                   ),
                 ],
@@ -555,10 +549,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
-                      // initialValue: Item(
-                      //   name: objRubroActividadPredominanteVer ?? '',
-                      //   value: objRubroActividadPredominante,
-                      // ),
                       initialValue: rubrosActividadesPredominanteList.any(
                               (item) => item.value == actividadPredominante)
                           ? rubrosActividadesPredominanteList.firstWhere(

@@ -14,7 +14,7 @@
     },
     "input": {
     "placeholder": "Enter your text",
-    "select_option": "Select an option",
+    "select_option": "Selecciona una Opción",
     "input_validator": "This field is required",
     "yes": "Si",
     "no": "No",

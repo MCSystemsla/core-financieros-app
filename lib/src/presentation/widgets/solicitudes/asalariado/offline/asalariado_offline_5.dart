@@ -79,6 +79,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
     salarioNetoMensual = solicitud.salarioNetoCordoba.toString();
     tiempoDeTrabajar = solicitud.tiempoLaborar;
     direccionEmpresa = solicitud.direccionTrabajo;
+    totalIngresoMes = solicitud.totalIngresoMes.toString();
 
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -300,10 +301,8 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: totalIngresoMes,
                   readOnly: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(totalIngresoMes),
+                  // initialValue: totalIngresoMes,
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
