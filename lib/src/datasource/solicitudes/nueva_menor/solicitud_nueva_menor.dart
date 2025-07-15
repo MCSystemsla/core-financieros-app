@@ -307,7 +307,7 @@ class SolicitudNuevaMenor {
       'IsOffline': isOffline,
     };
     data.removeWhere(
-      (key, value) => value == null || value == '' || value == 0,
+      (key, value) => value == null || value == '',
     );
     return data;
   }
