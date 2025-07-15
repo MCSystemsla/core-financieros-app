@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "139:8357879240830722985",
+      "lastPropertyId": "145:2524637299289633514",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -892,13 +892,43 @@
           "id": "139:8357879240830722985",
           "name": "frecuenciaPagoMeses",
           "type": 9
+        },
+        {
+          "id": "140:6310987605421637437",
+          "name": "nacionalidadConyugueVer",
+          "type": 9
+        },
+        {
+          "id": "141:7418268112729550672",
+          "name": "parentescoFamiliarPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "142:3537735856315777213",
+          "name": "paisPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "143:7955569610881981441",
+          "name": "paisPepsVer",
+          "type": 9
+        },
+        {
+          "id": "144:7046046325058580571",
+          "name": "departamentoNegocio",
+          "type": 9
+        },
+        {
+          "id": "145:2524637299289633514",
+          "name": "departamentoNegocioVer",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "84:7928026340743675682",
+      "lastPropertyId": "87:6547042730322422823",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1316,13 +1346,28 @@
           "id": "84:7928026340743675682",
           "name": "frecuenciaPagoMeses",
           "type": 9
+        },
+        {
+          "id": "85:7414972518114164827",
+          "name": "parentescoFamiliarPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "86:3906664502183309653",
+          "name": "paisPepsVer",
+          "type": 9
+        },
+        {
+          "id": "87:6547042730322422823",
+          "name": "paisPeps2Ver",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "151:7270750806661937929",
+      "lastPropertyId": "155:2650882584117058795",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -2080,6 +2125,26 @@
           "id": "151:7270750806661937929",
           "name": "createdAt",
           "type": 10
+        },
+        {
+          "id": "152:4016131150117519077",
+          "name": "nacionalidadConyugueVer",
+          "type": 9
+        },
+        {
+          "id": "153:185393515085540498",
+          "name": "paisPepsVer",
+          "type": 9
+        },
+        {
+          "id": "154:4116450067682871314",
+          "name": "parentescoFamiliarPeps2Ver",
+          "type": 9
+        },
+        {
+          "id": "155:2650882584117058795",
+          "name": "paisPeps2Ver",
+          "type": 9
         }
       ],
       "relations": []

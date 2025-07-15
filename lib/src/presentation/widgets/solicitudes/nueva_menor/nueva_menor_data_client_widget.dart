@@ -430,7 +430,10 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 if (item == null || !mounted) return;
                 tipoDocumento = item;
                 cubit.onFieldChanged(
-                  () => cubit.state.copyWith(objTipoDocumentoId: item.value),
+                  () => cubit.state.copyWith(
+                    objTipoDocumentoId: item.value,
+                    objTipoDocumentoIdVer: item.name,
+                  ),
                 );
                 setState(() {});
               },
@@ -687,7 +690,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               hintText: 'Ingresa Cantidad de Hijos',
               textInputType: TextInputType.number,
               isValid: null,
-              validator: (value) => ClassValidator.validateRequired(value),
+              validator: (value) => ClassValidator.validateCantidadHijos(value),
               onChange: (value) {
                 cantidadHijos = value;
                 cubit.onFieldChanged(

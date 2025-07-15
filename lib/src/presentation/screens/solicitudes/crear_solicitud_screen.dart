@@ -64,23 +64,26 @@ class CrearSolicitudScreen extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: switch (typeForm) {
-          TypeForm.nueva => NuevaMenorForm(
-              pageController: pageController,
-            ),
-          TypeForm.asalariado => AsalariadoForm(
-              controller: pageController,
-            ),
-          TypeForm.represtamo => ReprestamoForm(
-              userByCedulaSolicitud: userByCedulaSolicitud ??
-                  UserByCedulaSolicitud(
-                    cedula: '',
-                    tipoDocumento: '',
-                  ),
-              controller: pageController,
-            ),
-        },
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: switch (typeForm) {
+            TypeForm.nueva => NuevaMenorForm(
+                pageController: pageController,
+              ),
+            TypeForm.asalariado => AsalariadoForm(
+                controller: pageController,
+              ),
+            TypeForm.represtamo => ReprestamoForm(
+                userByCedulaSolicitud: userByCedulaSolicitud ??
+                    UserByCedulaSolicitud(
+                      cedula: '',
+                      tipoDocumento: '',
+                    ),
+                controller: pageController,
+              ),
+          },
+        ),
       ),
     );
   }

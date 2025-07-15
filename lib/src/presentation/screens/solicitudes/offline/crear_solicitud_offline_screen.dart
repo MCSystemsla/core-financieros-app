@@ -53,78 +53,81 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: Column(
-          children: [
-            const Navbar(
-              title: 'Crear nueva Solicitud Nueva Menor',
-            ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: pageController,
-                children: [
-                  Hero(
-                    transitionOnUserGestures: true,
-                    tag: 'cedulaFrontal',
-                    child: PhotoCedulaClientWidget(
-                      controller: pageController,
-                      fotoCedulaFrontal:
-                          XFile(imagesCedula?.imageFrontCedula ?? ''),
-                      fotoCedulaTrasera:
-                          XFile(imagesCedula?.imageBackCedula ?? ''),
-                      onCedulaFrontalPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageFrontCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                      onCedulaTraseraPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageBackCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  NuevaMenorOffline1(
-                    responseLocalDb: responseLocalDb,
-                    pageController: pageController,
-                  ),
-                  NuevaMenorOffline2Widget(
-                    controller: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                  NuevaMenorOffline3Widget(
-                    controller: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                  NuevaMenorOfflne4Widget(
-                    pageController: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                  NuevaMenorOffline5Widget(
-                    pageController: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                  NuevaMenorOffline6Widget(
-                    pageController: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                  NuevaMenorOffline7Widget(
-                    pageController: pageController,
-                    responseLocalDb: responseLocalDb,
-                  ),
-                ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: Column(
+            children: [
+              const Navbar(
+                title: 'Crear nueva Solicitud Nueva Menor',
               ),
-            ),
-          ],
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: [
+                    Hero(
+                      transitionOnUserGestures: true,
+                      tag: 'cedulaFrontal',
+                      child: PhotoCedulaClientWidget(
+                        controller: pageController,
+                        fotoCedulaFrontal:
+                            XFile(imagesCedula?.imageFrontCedula ?? ''),
+                        fotoCedulaTrasera:
+                            XFile(imagesCedula?.imageBackCedula ?? ''),
+                        onCedulaFrontalPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageFrontCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                        onCedulaTraseraPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageBackCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    NuevaMenorOffline1(
+                      responseLocalDb: responseLocalDb,
+                      pageController: pageController,
+                    ),
+                    NuevaMenorOffline2Widget(
+                      controller: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorOffline3Widget(
+                      controller: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorOfflne4Widget(
+                      pageController: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorOffline5Widget(
+                      pageController: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorOffline6Widget(
+                      pageController: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorOffline7Widget(
+                      pageController: pageController,
+                      responseLocalDb: responseLocalDb,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

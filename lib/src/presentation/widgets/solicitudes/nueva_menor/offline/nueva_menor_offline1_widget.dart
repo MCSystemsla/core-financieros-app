@@ -324,7 +324,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   },
                   hintText: 'Ingresa Nombre1',
                   isValid: null,
-                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
@@ -342,7 +341,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   hintText: 'Ingresa Nombre2',
                   textCapitalization: TextCapitalization.words,
                   isValid: null,
-                  isRequired: true,
                   onChange: (value) {
                     nombre2 = value;
                     cubit.onFieldChanged(
@@ -369,7 +367,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   textCapitalization: TextCapitalization.words,
                   validator: (value) => ClassValidator.validateRequired(value),
                   isValid: null,
-                  isRequired: true,
                   onChange: (value) {
                     apellido1 = value;
                     cubit.onFieldChanged(
@@ -395,7 +392,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   hintText: 'Ingresa Apellido2',
                   textCapitalization: TextCapitalization.words,
                   isValid: null,
-                  isRequired: true,
                   onChange: (value) {
                     apellido2 = value;
                     cubit.onFieldChanged(
@@ -408,6 +404,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -421,7 +418,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   hintText: 'Ingresa tu nombre publico',
                   isValid: null,
                   initialValue: nombrePublicoController,
-                  isRequired: true,
                   onChange: (value) {
                     nombrePublicoController = value;
                     cubit.onFieldChanged(
@@ -471,7 +467,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   hintText: 'Ingresa Cedula',
                   textInputType: TextInputType.text,
                   isValid: null,
-                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
@@ -503,6 +498,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(fechaEmisionCedula),
                   onTap: () => selectFechaEmisionDate(context),
                   readOnly: true,
                   icon: Icon(
@@ -510,7 +507,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Emision Cedula',
-                  isRequired: true,
                   // initialValue: fechaEmisionCedula,
                   hintText: DateTime.tryParse(fechaEmisionCedula ?? '0')
                           ?.selectorFormat() ??
@@ -532,12 +528,13 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   ),
                   title: 'Fecha Vencimiento Cedula',
                   isValid: null,
-                  isRequired: true,
                   readOnly: true,
                   onTap: () => selectDateFechaVencimiento(context),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(fechaNacimiento),
                   onTap: () => selectDate(context),
                   readOnly: true,
                   icon: Icon(
@@ -551,7 +548,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   isValid: null,
 
                   // textEditingController: fechaNacimientoController,
-                  isRequired: true,
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
@@ -580,8 +576,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
-                  hintText:
-                      paisNacimientoVer ?? 'Selecciona Pais de Nacimiento',
+                  hintText: paisNacimientoVer ?? 'input.select_option'.tr(),
                   initialValue: ItemNacionalidad(
                     id: 0,
                     valor: paisNacimiento ?? '',
@@ -608,8 +603,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 CatalogoValorDropdownWidget(
-                  hintText: sexoVer ?? 'Ingresar Genero',
-                  isRequired: true,
+                  validator: (value) => ClassValidator.validateRequired(sexo),
+                  hintText: sexoVer ?? 'input.select_option'.tr(),
                   codigo: 'SEXO',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -626,7 +621,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   initialValue: sexoVer,
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget.withCounter(
+                OutlineTextfieldWidget(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(9),
@@ -649,8 +644,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                       ),
                     );
                   },
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget.withCounter(
@@ -677,7 +670,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                       ),
                     );
                   },
-                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                 ),
                 const Gap(30),
@@ -706,6 +698,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateCantidadHijos(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
@@ -744,9 +738,8 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     );
                   },
                   title: 'Escolaridad',
-                  isRequired: true,
                   validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
+                      ClassValidator.validateRequired(escolaridad),
                 ),
                 const Gap(30),
                 Container(

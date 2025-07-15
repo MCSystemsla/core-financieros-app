@@ -76,186 +76,191 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+
     final cubit = context.read<SolicitudReprestamoCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: sector?.name ?? 'Selecciona una opcion',
-              codigo: 'SECTORECONOMICO',
-              title: 'Sector',
-              onChanged: (item) {
-                if (item == null) return;
-                sector = item;
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    objSectorId: item.value,
-                    objSectorIdVer: item.name,
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              initialValue: beneficiarioSeguro,
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              maxLength: 40,
-              icon: Icon(
-                Icons.family_restroom,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Nombre Beneficiario Seguro',
-              hintText: 'Ingresa Nombre Beneficiario Seguro',
-              isValid: null,
-              onChange: (value) {
-                beneficiarioSeguro = value;
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    beneficiarioSeguro: beneficiarioSeguro,
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              initialValue: cedulaBeneficiarioSeguro,
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              maxLength: 16,
-              icon: Icon(
-                Icons.credit_card,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Cedula Beneficiario Seguro',
-              hintText: 'Ingresa Cedula Beneficiario Seguro',
-              isValid: null,
-              onChange: (value) {
-                cedulaBeneficiarioSeguro = value;
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            SearchDropdownWidget(
-              hintText: parentesco?.name ?? 'Selecciona una opcion',
-              codigo: 'PARENTESCO',
-              title: 'Parentesco Beneficiario Seguro',
-              // hintText: 'Ingresa Parentesco Beneficiario Seguro',
-              onChanged: (item) {
-                if (item == null) return;
-                parentesco = item;
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    objParentescoBeneficiarioSeguroId: item.value,
-                    objParentescoBeneficiarioSeguroIdVer: item.name,
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              initialValue: telefonoBeneficiario,
-              isRequired: false,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                DashFormatter(),
-                LengthLimitingTextInputFormatter(9),
-              ],
-              icon: Icon(
-                Icons.phone,
-                color: AppColors.getPrimaryColor(),
-              ),
-              title: 'Telefono Beneficiario',
-              textInputType: TextInputType.phone,
-              hintText: 'Ingresa Telefono Beneficiario',
-              isValid: null,
-              onChange: (value) {
-                telefonoBeneficiario = value;
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    telefonoBeneficiario: telefonoBeneficiario,
-                  ),
-                );
-              },
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Enviar Solicitud',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
-                      isDone: true,
-                      isOffline: !isConnected,
-                    ),
-                  );
-                  if (!isConnected) {
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: sector?.name ?? 'Selecciona una opcion',
+                  codigo: 'SECTORECONOMICO',
+                  title: 'Sector',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    sector = item;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        errorMsg: 'No tienes conexion a internet',
+                        objSectorId: item.value,
+                        objSectorIdVer: item.name,
                       ),
                     );
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                      onDone: () => context.pushReplacement('/solicitudes'),
-                    ).showDialog(context, dialogType: DialogType.infoReverse);
-                    return;
-                  }
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => BlocProvider.value(
-                        value: context.read<SolicitudReprestamoCubit>(),
-                        child: ReprestamoSendingWidget(
-                          solicitudId: context
-                              .read<SolicitudReprestamoCubit>()
-                              .state
-                              .idLocalResponse,
-                        ),
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: beneficiarioSeguro,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  maxLength: 40,
+                  icon: Icon(
+                    Icons.family_restroom,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Nombre Beneficiario Seguro',
+                  hintText: 'Ingresa Nombre Beneficiario Seguro',
+                  isValid: null,
+                  onChange: (value) {
+                    beneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        beneficiarioSeguro: beneficiarioSeguro,
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: cedulaBeneficiarioSeguro,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  maxLength: 16,
+                  icon: Icon(
+                    Icons.credit_card,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Cedula Beneficiario Seguro',
+                  hintText: 'Ingresa Cedula Beneficiario Seguro',
+                  isValid: null,
+                  onChange: (value) {
+                    cedulaBeneficiarioSeguro = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cedulaBeneficiarioSeguro: cedulaBeneficiarioSeguro,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  hintText: parentesco?.name ?? 'Selecciona una opcion',
+                  codigo: 'PARENTESCO',
+                  title: 'Parentesco Beneficiario Seguro',
+                  // hintText: 'Ingresa Parentesco Beneficiario Seguro',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    parentesco = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objParentescoBeneficiarioSeguroId: item.value,
+                        objParentescoBeneficiarioSeguroIdVer: item.name,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: telefonoBeneficiario,
+                  isRequired: false,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    DashFormatter(),
+                    LengthLimitingTextInputFormatter(9),
+                  ],
+                  icon: Icon(
+                    Icons.phone,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Telefono Beneficiario',
+                  textInputType: TextInputType.phone,
+                  hintText: 'Ingresa Telefono Beneficiario',
+                  isValid: null,
+                  onChange: (value) {
+                    telefonoBeneficiario = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefonoBeneficiario: telefonoBeneficiario,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Enviar Solicitud',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          isDone: true,
+                          isOffline: !state.isConnected,
+                        ),
+                      );
+                      if (state.connectionStatus ==
+                          ConnectionStatus.disconnected) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            errorMsg: 'No tienes conexion a internet',
+                          ),
+                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value: context.read<SolicitudReprestamoCubit>(),
+                            child: ReprestamoSendingWidget(
+                              solicitudId: context
+                                  .read<SolicitudReprestamoCubit>()
+                                  .state
+                                  .idLocalResponse,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const Gap(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Atras',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Atras',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

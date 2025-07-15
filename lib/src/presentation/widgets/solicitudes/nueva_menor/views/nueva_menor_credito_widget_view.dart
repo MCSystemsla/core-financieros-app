@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
@@ -23,6 +22,7 @@ import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,17 +72,6 @@ class __FormContentState extends State<_FormContent> {
   double? montoMaximo;
 
   final formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
-          () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-                objMonedaId: 'DOLAR',
-                objMonedaIdVer: 'DOLAR',
-              ),
-        );
-  }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -200,14 +189,16 @@ class __FormContentState extends State<_FormContent> {
                   hintText: 'Ingresa Monto',
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-                    LengthLimitingTextInputFormatter(10),
+                    MoneyInputFormatter(
+                      leadingSymbol: '',
+                      thousandSeparator: ThousandSeparator.Comma,
+                      mantissaLength: 0,
+                    ),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   isValid: null,
                   onChange: (value) {
-                    monto = value.replaceAll(',', '');
+                    monto = toNumericString(value);
                     cubit.onFieldChanged(
                       () => cubit.state
                           .copyWith(monto: int.tryParse(monto ?? '0')),

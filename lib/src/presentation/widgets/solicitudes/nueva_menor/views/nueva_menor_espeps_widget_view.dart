@@ -121,7 +121,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       nombreEntidadPeps = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(nombreDeEntidadPeps: value),
+                        () => cubit.state
+                            .copyWith(nombreDeEntidadPeps: nombreEntidadPeps),
                       );
                     },
                   ),
@@ -136,8 +137,8 @@ class __FormContentState extends State<_FormContent> {
                       paisPeps = item.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objPaisEmisorCedula: paisPeps,
-                          objPaisEmisorCedulaVer: item.nombre,
+                          paisPeps: item.valor,
+                          paisPepsVer: item.nombre,
                         ),
                       );
                     },
@@ -162,7 +163,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       cargoOficialPeps = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(cargoOficialPeps: value),
+                        () => cubit.state
+                            .copyWith(cargoOficialPeps: cargoOficialPeps),
                       );
                     },
                   ),
@@ -187,7 +189,7 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       periodoPeps = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(periodoPeps: value),
+                        () => cubit.state.copyWith(periodoPeps: periodoPeps),
                       );
                     },
                   ),
@@ -207,7 +209,8 @@ class __FormContentState extends State<_FormContent> {
                       tieneFamiliarPeps = item;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          tieneFamiliarPeps: item == 'input.yes'.tr(),
+                          tieneFamiliarPeps:
+                              tieneFamiliarPeps == 'input.yes'.tr(),
                         ),
                       );
                       setState(() {});
@@ -238,7 +241,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       nombreFamiliarPeps2 = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(nombreFamiliarPeps2: value),
+                        () => cubit.state
+                            .copyWith(nombreFamiliarPeps2: nombreFamiliarPeps2),
                       );
                     },
                   ),
@@ -254,6 +258,7 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           parentescoFamiliarPeps2: item.value,
+                          parentescoFamiliarPeps2Ver: item.name,
                         ),
                       );
                     },
@@ -278,7 +283,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       cargoParentesco = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(cargoFamiliarPeps2: value),
+                        () => cubit.state
+                            .copyWith(cargoFamiliarPeps2: cargoParentesco),
                       );
                     },
                   ),
@@ -301,7 +307,8 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       nombreEntidadPeps2 = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(nombreEntidadPeps2: value),
+                        () => cubit.state
+                            .copyWith(nombreEntidadPeps2: nombreEntidadPeps2),
                       );
                     },
                   ),
@@ -326,7 +333,7 @@ class __FormContentState extends State<_FormContent> {
                     onChange: (value) {
                       periodoPeps2 = value;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(periodoPeps2: value),
+                        () => cubit.state.copyWith(periodoPeps2: periodoPeps2),
                       );
                     },
                   ),
@@ -341,7 +348,8 @@ class __FormContentState extends State<_FormContent> {
                       paisPeps2 = item.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          paisPeps2: item.valor,
+                          paisPeps2: paisPeps2,
+                          paisPeps2Ver: item.nombre,
                         ),
                       );
                     },

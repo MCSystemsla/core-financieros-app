@@ -904,7 +904,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
 
   @override
   Widget build(BuildContext context) {
-    final solicitudCliente = context.read<KivaRouteCubit>().state.nombre;
+    final solicitudCliente = context.read<KivaRouteCubit>().state;
     final size = MediaQuery.sizeOf(context);
 
     super.build(context);
@@ -921,7 +921,7 @@ class _SaneamientoContentState extends State<SaneamientoContent>
             ),
             const Gap(20),
             Text(
-              'Cliente: $solicitudCliente',
+              'Cliente: ${solicitudCliente.nombre}\nNumero Solicitud: ${solicitudCliente.numero}',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,

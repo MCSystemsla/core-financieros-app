@@ -74,6 +74,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
   List<Item> rubrosActividadesPredominanteList = [];
   String? objRubroActividadPredominante;
   String? objRubroActividadPredominanteVer;
+  Item? departamentoNegocio;
   Future<TimeOfDay?> _selectTime(
       BuildContext context, TimeOfDay? initialTime) async {
     return await showTimePicker(
@@ -184,6 +185,10 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
         widget.responseLocalDb.objRubroActividadPredominante;
     rubroActividadPredominante =
         widget.responseLocalDb.objRubroActividadPredominante;
+    departamentoNegocio = Item(
+      name: widget.responseLocalDb.departamentoNegocioVer ?? '',
+      value: widget.responseLocalDb.departamentoNegocio,
+    );
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objCondicionNegocioIdVer: condicionNegocioVer,
@@ -216,6 +221,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 horarioTrabajo: horarioTrabajoString,
                 horarioVisita: horarioVisitaString,
                 objRubroActividadPredominante: objRubroActividadPredominante,
+                departamentoNegocio: departamentoNegocio?.value,
+                departamentoNegocioVer: departamentoNegocio?.name,
               ),
         );
   }
@@ -331,7 +338,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     LengthLimitingTextInputFormatter(3),
                   ],
                   initialValue: funcionamientoNegocio,
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   icon: Icon(
                     Icons.access_time,
                     color: AppColors.getPrimaryColor(),
@@ -436,13 +443,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
-                      initialValue: actividadesPredominantesList.any(
-                              (item) => item.value == actividadPredominante)
-                          ? actividadesPredominantesList.firstWhere(
-                              (item) => item.value == actividadPredominante,
-                            )
-                          : null, // Si no hay coincidencias, se usa null
-
                       dropdownColor: Colors.white,
                       isContainIcon: true,
                       title: 'Actividad Predominante',
@@ -467,7 +467,8 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                       toStringItem: (item) {
                         return item.name;
                       },
-                      hintText: 'input.select_option'.tr(),
+                      hintText: actividadPredominanteVer ??
+                          'input.select_option'.tr(),
                     ),
                   ),
                 ],
@@ -548,10 +549,6 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
-                      // initialValue: Item(
-                      //   name: objRubroActividadPredominanteVer ?? '',
-                      //   value: objRubroActividadPredominante,
-                      // ),
                       initialValue: rubrosActividadesPredominanteList.any(
                               (item) => item.value == actividadPredominante)
                           ? rubrosActividadesPredominanteList.firstWhere(
@@ -631,6 +628,25 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 ),
                 const Gap(20),
                 CatalogoValorNacionalidad(
+                  where: context
+                      .read<SolicitudNuevaMenorCubit>()
+                      .state
+                      .objPaisCasaId,
+                  hintText:
+                      departamentoNegocio?.name ?? 'input.select_option'.tr(),
+                  validator: (value) => ClassValidator.validateRequired(
+                      departamentoNegocio?.value),
+                  title: 'Departamento de Negocio',
+                  onChanged: (item) {
+                    if (item == null) return;
+                    departamentoNegocio =
+                        Item(name: item.nombre, value: item.valor);
+                    setState(() {});
+                  },
+                  codigo: 'DEP',
+                ),
+                const Gap(20),
+                CatalogoValorNacionalidad(
                   initialValue: ItemNacionalidad(
                       id: 0,
                       valor: municipioNegocio ?? 'Ingresa una opcion',
@@ -654,6 +670,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                     );
                   },
                   codigo: 'MUN',
+                  where: departamentoNegocio?.value,
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(

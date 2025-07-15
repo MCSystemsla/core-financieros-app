@@ -1,6 +1,6 @@
 {
   "upload_image": {
-    "title": "Select an Option",
+    "title": "Selecciona una Opción",
     "camera": "Camera",
     "gallery": "Gallery"
   },
@@ -14,9 +14,9 @@
     },
     "input": {
     "placeholder": "Enter your text",
-    "select_option": "Select an option",
+    "select_option": "Selecciona una Opción",
     "input_validator": "This field is required",
-    "yes": "Yes",
+    "yes": "Si",
     "no": "No",
     "form_response": "Completed Responses on Forms",
     "select_department": "Select a Department"

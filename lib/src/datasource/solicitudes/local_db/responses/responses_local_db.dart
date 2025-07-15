@@ -97,20 +97,24 @@ class ResponseLocalDb {
   String? objPaisNacimientoId;
   String? objPaisNacimientoIdVer;
   String? nacionalidadConyugue;
+  String? nacionalidadConyugueVer;
   String? database;
   String? ubicacion;
   bool? espeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
   bool? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
+  String? parentescoFamiliarPeps2Ver;
   String? cargoFamiliarPeps2;
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Ver;
   String? objRubroActividad;
   String? objRubroActividadVer;
   String? objActividadPredominante;
@@ -143,9 +147,17 @@ class ResponseLocalDb {
   int? montoMinimo;
   int? montoMaximo;
   String? frecuenciaPagoMeses;
+  String? departamentoNegocio;
+  String? departamentoNegocioVer;
 
   ResponseLocalDb({
     required this.id,
+    this.paisPepsVer,
+    this.departamentoNegocio,
+    this.departamentoNegocioVer,
+    this.paisPeps2Ver,
+    this.nacionalidadConyugueVer,
+    this.parentescoFamiliarPeps2Ver,
     this.uuid,
     this.montoMaximo,
     this.montoMinimo,

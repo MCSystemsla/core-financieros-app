@@ -89,11 +89,13 @@ class __FormContentState extends State<_FormContent> {
       initialTime: initialTime ?? TimeOfDay.now(),
       helpText: helpText,
       builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: false,
+        return Localizations.override(
+          context: context,
+          locale: const Locale('en', 'US'), // Forzamos locale inglés (AM/PM)
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child!,
           ),
-          child: child!,
         );
       },
     );
@@ -278,7 +280,7 @@ class __FormContentState extends State<_FormContent> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(3),
                   ],
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   icon: Icon(
                     Icons.access_time,
                     color: AppColors.getPrimaryColor(),
@@ -556,6 +558,12 @@ class __FormContentState extends State<_FormContent> {
                     if (item == null) return;
                     departamentoNegocio =
                         Item(name: item.nombre, value: item.valor);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoNegocio: item.valor,
+                        departamentoNegocioVer: item.nombre,
+                      ),
+                    );
                     setState(() {});
                   },
                   codigo: 'DEP',

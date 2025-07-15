@@ -73,4 +73,26 @@ class ClassValidator {
     }
     return null;
   }
+
+  static String? validateIntValue(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Este campo es obligatorio';
+    }
+    final numValue = num.tryParse(value.trim());
+    if (numValue == null || numValue <= 0) {
+      return 'Ingresa un número mayor que 0';
+    }
+
+    return null;
+  }
+
+  static String? validateCantidadHijos(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    final numValue = num.tryParse(value.trim());
+    if (numValue == null || numValue <= 0) {
+      return 'Ingresa un número mayor que 0';
+    }
+
+    return null;
+  }
 }

@@ -321,9 +321,9 @@ class SolicitudAsalariado {
       'NombreTrabajo': nombreTrabajo,
       'DireccionTrabajo': direccionTrabajo,
       'BarrioTrabajo': barrioTrabajo,
-      'ActividadCodigo': objActividadEconomicaId,
-      'Actividad1Codigo': objActividadEconomicaId1,
-      'Actividad2Codigo': objActividadEconomicaId2,
+      'ActividadEconomicaCodigo': objActividadEconomicaId,
+      'ActividadEconomica1Codigo': objActividadEconomicaId1,
+      'ActividadEconomica2Codigo': objActividadEconomicaId2,
       'Cargo': cargo,
       'DireccionFamiliarCercano': direccionFamiliarCercano,
       'DuenoVivienda': duenoVivienda,
@@ -333,7 +333,7 @@ class SolicitudAsalariado {
       'FuenteOtrosIngresosConyugue': fuenteOtrosIngresosConyugue,
       'LugarTrabajoAnterior': lugarTrabajoAnterior,
       'NombreFamiliarCercano': nombreFamiliarCercano,
-      'objParentescoFamiliarCercanoId': objParentescoFamiliarCercanoId,
+      'ParentescoFamiliarCercanoCodigo': objParentescoFamiliarCercanoId,
       'OtrosIngresosConyugue': otrosIngresosConyugue,
       'OtrosIngresosCordoba': otrosIngresosCordoba,
       'PagoAlquiler': pagoAlquiler,
@@ -349,7 +349,7 @@ class SolicitudAsalariado {
       'IsOffline': isOffline,
     };
     data.removeWhere(
-      (key, value) => value == null || value == '' || value == 0,
+      (key, value) => value == null || value == '',
     );
     return data;
   }

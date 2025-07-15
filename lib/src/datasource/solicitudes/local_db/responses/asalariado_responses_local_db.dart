@@ -13,6 +13,7 @@ class AsalariadoResponsesLocalDb {
   String? apellido2;
   String? cedula;
   String? objPaisEmisorCedula;
+  String? objPaisEmisorCedulaVer;
   DateTime? fechaEmisionCedula;
   DateTime? fechaVencimientoCedula;
   DateTime? fechaNacimiento;
@@ -21,22 +22,31 @@ class AsalariadoResponsesLocalDb {
   String? direccionCasa;
   String? barrioCasa;
   String? objMunicipioCasaId;
+  String? objMunicipioCasaIdVer;
   String? objDepartamentoCasaId;
+  String? objDepartamentoCasaIdVer;
   String? objPaisCasaId;
+  String? objPaisCasaIdVer;
   String? profesion;
   String? ocupacion;
   String? nacionalidad;
   String? objCondicionCasaId;
+  String? objCondicionCasaIdVer;
   int? anosResidirCasa;
   String? email;
   double? monto;
   String? objMonedaId;
+  String? objMonedaIdVer;
   String? objPropositoId;
+  String? objPropositoIdVer;
   String? objFrecuenciaId;
+  String? objFrecuenciaIdVer;
   double? cuota;
   String? objSectorId;
+  String? objSectorIdVer;
   int? personasACargo;
   String? objEstadoCivilId;
+  String? objEstadoCivilIdVer;
   String? nombreConyugue;
   bool? trabajaConyugue;
   String? trabajoConyugue;
@@ -48,6 +58,7 @@ class AsalariadoResponsesLocalDb {
   String? objEstadoSolicitudId;
   String? objOficialCreditoId;
   String? objProductoId;
+  String? objProductoIdVer;
   String? observacion;
   String? sucursal;
   String? ubicacionLongitud;
@@ -59,29 +70,40 @@ class AsalariadoResponsesLocalDb {
   String? nombrePublico;
   String? objSexoId;
   String? objPaisNacimientoId;
+  String? objPaisNacimientoIdVer;
   String? nacionalidadConyugue;
+  String? nacionalidadConyugueVer;
   String? ubicacion;
   bool? espeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
   bool? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
+  String? parentescoFamiliarPeps2Ver;
   String? cargoFamiliarPeps2;
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Ver;
   String? objRubroActividad;
+  String? objRubroActividadVer;
   String? objActividadPredominante;
+  String? objActividadPredominanteVer;
   bool? esFamiliarEmpleado;
   String? nombreFamiliar;
   String? cedulaFamiliar;
   String? objTipoDocumentoId;
+  String? objTipoDocumentoIdVer;
   String? objRubroActividad2;
+  String? objRubroActividad2Ver;
   String? objRubroActividad3;
+  String? objRubroActividad3Ver;
   String? objRubroActividadPredominante;
+  String? objRubroActividadPredominanteVer;
   String? tipoPersona;
   String? objTipoPersonaId;
   String? telefonoBeneficiario;
@@ -92,8 +114,11 @@ class AsalariadoResponsesLocalDb {
   String? direccionTrabajo;
   String? barrioTrabajo;
   String? objActividadEconomicaId;
+  String? objActividadEconomicaIdVer;
   String? objActividadEconomicaId1;
+  String? objActividadEconomicaId1Ver;
   String? objActividadEconomicaId2;
+  String? objActividadEconomicaId2Ver;
   String? cargo;
   String? direccionFamiliarCercano;
   String? duenoVivienda;
@@ -103,6 +128,7 @@ class AsalariadoResponsesLocalDb {
   String? lugarTrabajoAnterior;
   String? nombreFamiliarCercano;
   String? objParentescoFamiliarCercanoId;
+  String? objParentescoFamiliarCercanoIdVer;
   double? otrosIngresosConyugue;
   double? otrosIngresosCordoba;
   int? pagoAlquiler;
@@ -124,34 +150,12 @@ class AsalariadoResponsesLocalDb {
   int? montoMinimo;
   int? montoMaximo;
   String? objOrigenSolicitudIdVer;
-  String? objPaisEmisorCedulaVer;
-  String? objMunicipioCasaIdVer;
-  String? objDepartamentoCasaIdVer;
-  String? objPaisCasaIdVer;
-  String? objCondicionCasaIdVer;
-  String? objMonedaIdVer;
-  String? objPropositoIdVer;
-  String? objFrecuenciaIdVer;
-  String? objSectorIdVer;
-  String? objEstadoCivilIdVer;
   String? objParentescoBeneficiarioSeguroIdVer;
   String? objEstadoSolicitudIdVer;
   String? objOficialCreditoIdVer;
-  String? objProductoIdVer;
   String? objEscolaridadIdVer;
   String? objSexoIdVer;
-  String? objPaisNacimientoIdVer;
-  String? objRubroActividadVer;
-  String? objActividadPredominanteVer;
-  String? objTipoDocumentoIdVer;
-  String? objRubroActividad2Ver;
-  String? objRubroActividad3Ver;
-  String? objRubroActividadPredominanteVer;
   String? objTipoPersonaIdVer;
-  String? objActividadEconomicaIdVer;
-  String? objActividadEconomicaId1Ver;
-  String? objActividadEconomicaId2Ver;
-  String? objParentescoFamiliarCercanoIdVer;
   String? uuid;
   String? frecuenciaPagoMeses;
   @Property(type: PropertyType.date)
@@ -159,45 +163,6 @@ class AsalariadoResponsesLocalDb {
 
   AsalariadoResponsesLocalDb({
     required this.id,
-    this.uuid,
-    this.frecuenciaPagoMeses,
-    this.objOrigenSolicitudIdVer,
-    this.objPaisEmisorCedulaVer,
-    this.objMunicipioCasaIdVer,
-    this.objDepartamentoCasaIdVer,
-    this.objPaisCasaIdVer,
-    this.objCondicionCasaIdVer,
-    this.objMonedaIdVer,
-    this.objPropositoIdVer,
-    this.objFrecuenciaIdVer,
-    this.objSectorIdVer,
-    this.objEstadoCivilIdVer,
-    this.objParentescoBeneficiarioSeguroIdVer,
-    this.objEstadoSolicitudIdVer,
-    this.objOficialCreditoIdVer,
-    this.objProductoIdVer,
-    this.objEscolaridadIdVer,
-    this.objSexoIdVer,
-    this.objPaisNacimientoIdVer,
-    this.objRubroActividadVer,
-    this.objActividadPredominanteVer,
-    this.objTipoDocumentoIdVer,
-    this.objRubroActividad2Ver,
-    this.objRubroActividad3Ver,
-    this.objRubroActividadPredominanteVer,
-    this.objTipoPersonaIdVer,
-    this.objActividadEconomicaIdVer,
-    this.objActividadEconomicaId1Ver,
-    this.objActividadEconomicaId2Ver,
-    this.objParentescoFamiliarCercanoIdVer,
-    this.fechaDesembolso,
-    this.tasaInteres,
-    this.montoMinimo,
-    this.montoMaximo,
-    this.hasVerified,
-    this.isOffline,
-    this.errorMsg,
-    this.isDone,
     this.objOrigenSolicitudId,
     this.database,
     this.nombre1,
@@ -206,6 +171,7 @@ class AsalariadoResponsesLocalDb {
     this.apellido2,
     this.cedula,
     this.objPaisEmisorCedula,
+    this.objPaisEmisorCedulaVer,
     this.fechaEmisionCedula,
     this.fechaVencimientoCedula,
     this.fechaNacimiento,
@@ -214,22 +180,31 @@ class AsalariadoResponsesLocalDb {
     this.direccionCasa,
     this.barrioCasa,
     this.objMunicipioCasaId,
+    this.objMunicipioCasaIdVer,
     this.objDepartamentoCasaId,
+    this.objDepartamentoCasaIdVer,
     this.objPaisCasaId,
+    this.objPaisCasaIdVer,
     this.profesion,
     this.ocupacion,
     this.nacionalidad,
     this.objCondicionCasaId,
+    this.objCondicionCasaIdVer,
     this.anosResidirCasa,
     this.email,
     this.monto,
     this.objMonedaId,
+    this.objMonedaIdVer,
     this.objPropositoId,
+    this.objPropositoIdVer,
     this.objFrecuenciaId,
+    this.objFrecuenciaIdVer,
     this.cuota,
     this.objSectorId,
+    this.objSectorIdVer,
     this.personasACargo,
     this.objEstadoCivilId,
+    this.objEstadoCivilIdVer,
     this.nombreConyugue,
     this.trabajaConyugue,
     this.trabajoConyugue,
@@ -241,6 +216,7 @@ class AsalariadoResponsesLocalDb {
     this.objEstadoSolicitudId,
     this.objOficialCreditoId,
     this.objProductoId,
+    this.objProductoIdVer,
     this.observacion,
     this.sucursal,
     this.ubicacionLongitud,
@@ -252,29 +228,40 @@ class AsalariadoResponsesLocalDb {
     this.nombrePublico,
     this.objSexoId,
     this.objPaisNacimientoId,
+    this.objPaisNacimientoIdVer,
     this.nacionalidadConyugue,
+    this.nacionalidadConyugueVer,
     this.ubicacion,
     this.espeps,
     this.nombreDeEntidadPeps,
     this.paisPeps,
+    this.paisPepsVer,
     this.periodoPeps,
     this.cargoOficialPeps,
     this.tieneFamiliarPeps,
     this.nombreFamiliarPeps2,
     this.parentescoFamiliarPeps2,
+    this.parentescoFamiliarPeps2Ver,
     this.cargoFamiliarPeps2,
     this.nombreEntidadPeps2,
     this.periodoPeps2,
     this.paisPeps2,
+    this.paisPeps2Ver,
     this.objRubroActividad,
+    this.objRubroActividadVer,
     this.objActividadPredominante,
+    this.objActividadPredominanteVer,
     this.esFamiliarEmpleado,
     this.nombreFamiliar,
     this.cedulaFamiliar,
     this.objTipoDocumentoId,
+    this.objTipoDocumentoIdVer,
     this.objRubroActividad2,
+    this.objRubroActividad2Ver,
     this.objRubroActividad3,
+    this.objRubroActividad3Ver,
     this.objRubroActividadPredominante,
+    this.objRubroActividadPredominanteVer,
     this.tipoPersona,
     this.objTipoPersonaId,
     this.telefonoBeneficiario,
@@ -285,8 +272,11 @@ class AsalariadoResponsesLocalDb {
     this.direccionTrabajo,
     this.barrioTrabajo,
     this.objActividadEconomicaId,
+    this.objActividadEconomicaIdVer,
     this.objActividadEconomicaId1,
+    this.objActividadEconomicaId1Ver,
     this.objActividadEconomicaId2,
+    this.objActividadEconomicaId2Ver,
     this.cargo,
     this.direccionFamiliarCercano,
     this.duenoVivienda,
@@ -296,6 +286,7 @@ class AsalariadoResponsesLocalDb {
     this.lugarTrabajoAnterior,
     this.nombreFamiliarCercano,
     this.objParentescoFamiliarCercanoId,
+    this.objParentescoFamiliarCercanoIdVer,
     this.otrosIngresosConyugue,
     this.otrosIngresosCordoba,
     this.pagoAlquiler,
@@ -308,6 +299,23 @@ class AsalariadoResponsesLocalDb {
     this.tiempoLaborarConyugue,
     this.totalIngresoMes,
     this.totalIngresoMesConyugue,
+    this.errorMsg,
+    this.isDone,
+    this.isOffline,
+    this.hasVerified,
+    this.fechaDesembolso,
+    this.tasaInteres,
+    this.montoMinimo,
+    this.montoMaximo,
+    this.objOrigenSolicitudIdVer,
+    this.objParentescoBeneficiarioSeguroIdVer,
+    this.objEstadoSolicitudIdVer,
+    this.objOficialCreditoIdVer,
+    this.objEscolaridadIdVer,
+    this.objSexoIdVer,
+    this.objTipoPersonaIdVer,
+    this.uuid,
+    this.frecuenciaPagoMeses,
     this.createdAt,
   });
 }

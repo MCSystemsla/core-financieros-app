@@ -123,6 +123,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   @override
   void initState() {
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     final solicitud = widget.asalariadoResponsesLocalDb;
     moneda = Item(
         name: solicitud?.objMonedaIdVer ?? '', value: solicitud?.objMonedaId);
@@ -179,11 +180,9 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
-    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
         final cubit = context.read<SolicitudAsalariadoCubit>();
         return SingleChildScrollView(
@@ -194,6 +193,8 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
               children: [
                 const Gap(20),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(proposito?.value),
                   hintText: proposito?.name ?? 'input.select_option'.tr(),
                   codigo: 'DESTINOCREDITO',
                   title: 'Proposito',
@@ -445,7 +446,8 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                                   calcularCuotaProvider.state.montoPrimeraCuota,
                             ),
                           );
-                          if (!isConnected) {
+                          if (state.connectionStatus ==
+                              ConnectionStatus.disconnected) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
                                 errorMsg:
