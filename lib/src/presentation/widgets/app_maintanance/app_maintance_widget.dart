@@ -18,6 +18,7 @@ class AppMaintanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
       child: Column(
