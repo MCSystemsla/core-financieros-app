@@ -2,13 +2,16 @@ import 'dart:async';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -45,6 +48,24 @@ abstract class SolicitudesCreditoRepository {
   Future<(UserCedulaData?, bool, String)> determineUserCedulaByTypeForm({
     required String cedula,
     required TypeForm typeForm,
+  });
+  Future<(bool, SolicitudByEstado)> getSolicitudesNuevaMenorPorEstado({
+    required EstadoCredito estadoCredito,
+  });
+  Future<(bool, SolicitudByEstado)> getSolicitudesAsalariadoPorEstado({
+    required EstadoCredito estadoCredito,
+  });
+  Future<(bool, SolicitudByEstado)> getSolicitudesReprestamoPorEstado({
+    required EstadoCredito estadoCredito,
+  });
+  Future<(bool, Asesor)> getAsesores();
+  Future<(bool, String)> asignSolicitudToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  });
+  Future<(bool, SolicitudByEstado)> getSolicitudesEstadoByTypeForm({
+    required TypeForm typeForm,
+    required EstadoCredito estadoCredito,
   });
 }
 
@@ -331,5 +352,142 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       default:
         throw AppException(optionalMsg: 'Form Type not found');
     }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesNuevaMenorPorEstado({
+    required EstadoCredito estadoCredito,
+  }) async {
+    final endpoint = NuevaMenorObtenerSolicitudesPorEstadoEndpoint(
+      estadoCredito: estadoCredito,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, Asesor)> getAsesores() async {
+    final endpoint = ObtenerAsesoresEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = Asesor.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, String)> asignSolicitudToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  }) async {
+    final endpoint = AsignarSolicitudEndpoint(
+      idSolicitud: idSolicitud,
+      idPromotor: idPromotor,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión.',
+        );
+        return (false, errorMsg);
+      }
+
+      _logger.i(resp);
+      return (true, resp.toString());
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesAsalariadoPorEstado({
+    required EstadoCredito estadoCredito,
+  }) async {
+    final endpoint = AsalariadoObtenerSolicitudesPorEstadoEndpoint(
+      estadoCredito: estadoCredito,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesReprestamoPorEstado({
+    required EstadoCredito estadoCredito,
+  }) async {
+    final endpoint = ReprestamoObtenerSolicitudesPorEstadoEndpoint(
+      estadoCredito: estadoCredito,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesEstadoByTypeForm({
+    required TypeForm typeForm,
+    required EstadoCredito estadoCredito,
+  }) async {
+    return switch (typeForm) {
+      TypeForm.nueva =>
+        await getSolicitudesNuevaMenorPorEstado(estadoCredito: estadoCredito),
+      TypeForm.asalariado =>
+        await getSolicitudesAsalariadoPorEstado(estadoCredito: estadoCredito),
+      TypeForm.represtamo =>
+        await getSolicitudesReprestamoPorEstado(estadoCredito: estadoCredito),
+    };
   }
 }

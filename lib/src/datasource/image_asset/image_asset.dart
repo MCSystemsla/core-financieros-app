@@ -27,12 +27,13 @@ abstract class ImageAsset {
   static const String nuevaMenorBg = 'assets/images/credit3.svg';
   static const String nuevaMenorBg2 = 'assets/images/credit4.svg';
   static const String nuevaMenorBg3 = 'assets/images/credit2.svg';
+  static const String nuevaMenorBg5 = 'assets/images/nuevamenor_bg4.svg';
+  static const String nuevaMenorBg4 = 'assets/images/solicitudes_pending.svg';
   static const String nuevaAddDni = 'assets/images/add_dni.svg';
   static const String nuevaMenorSuccess =
       'assets/images/nueva_menor_success.json';
   static const String nuevaMenorUploading =
       'assets/images/nueva_menor_uploading.json';
-  static const String nuevaMenorBg4 = 'assets/images/solicitudes_pending.svg';
   static const String noDataBg = 'assets/images/no-data.svg';
 
   // Download Catalogos

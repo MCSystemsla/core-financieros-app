@@ -81,6 +81,8 @@ class DefaultAPIRepository implements APIRepository {
         return _post(url, headers, endpoint.body);
       case Method.put:
         return _put(url, headers, endpoint.body);
+      case Method.patch:
+        return _patch(url, headers, endpoint.body);
       case Method.delete:
         return _delete(url, headers, endpoint.body);
     }
@@ -105,6 +107,13 @@ class DefaultAPIRepository implements APIRepository {
       Uri url, Map<String, String> headers, Map<String, dynamic> body) {
     _logger.d('put() with url ($url) - headers ($headers) - body ($body)');
     return http.put(url,
+        headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
+  }
+
+  Future<Response> _patch(
+      Uri url, Map<String, String> headers, Map<String, dynamic> body) {
+    _logger.d('patch() with url ($url) - headers ($headers) - body ($body)');
+    return http.patch(url,
         headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
   }
 
