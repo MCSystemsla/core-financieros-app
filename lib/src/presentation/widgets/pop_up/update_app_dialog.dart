@@ -31,6 +31,7 @@ class UpdateAppDialog extends OdsDialog {
   @override
   List<CustomElevatedButton>? actions(BuildContext context) {
     return [
+      // TODO: ARREGLAR AUTOUPDATER PARA LA NUEVA VERSION
       CustomElevatedButton(
         text: 'Actualizar'.tr(),
         color: AppColors.getPrimaryColor(),

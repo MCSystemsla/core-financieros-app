@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
@@ -15,13 +16,15 @@ class AsignSolicitudToAsesorCubit extends Cubit<AsignSolicitudToAsesorState> {
   Future<void> asignSolicitudToAsesor({
     required int idSolicitud,
     required int idPromotor,
+    required TypeForm typeForm,
   }) async {
     emit(const OnAsignSolicitudToAsesorLoading());
     try {
       final (isOk, errorMsg) =
-          await _solicitudesCreditoRepository.asignSolicitudToAsesor(
+          await _solicitudesCreditoRepository.asginSolicitudCreditoToAsesor(
         idSolicitud: idSolicitud,
         idPromotor: idPromotor,
+        typeForm: typeForm,
       );
       if (!isOk) {
         emit(OnAsignSolicitudToAsesorError(

@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asesores/asesores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asign_solicitud_to_asesor/asign_solicitud_to_asesor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
@@ -20,8 +21,10 @@ class CreditProductItem extends StatelessWidget {
   final String cuota;
   final String monto;
   final String estadoCodigo;
+  final String solicitudId;
   final String sucursal;
   final String? nombreCliente;
+  final TypeForm typeForm;
 
   const CreditProductItem({
     super.key,
@@ -30,6 +33,8 @@ class CreditProductItem extends StatelessWidget {
     required this.monto,
     required this.estadoCodigo,
     required this.sucursal,
+    required this.typeForm,
+    required this.solicitudId,
     this.nombreCliente,
   });
 
@@ -52,8 +57,20 @@ class CreditProductItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
+          if (estadoCodigo != 'REG') {
+            CustomAlertDialog(
+              context: context,
+              title:
+                  'Solo se puede asignar una solicitud cuando el estado es REG',
+              onDone: () => context.pop(),
+            ).showDialog(context);
+            return;
+          }
           showAsignarSolicitudBottomSheet(
-              context, int.tryParse(estadoCodigo) ?? 0);
+            context,
+            int.tryParse(solicitudId) ?? 0,
+            typeForm,
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +174,11 @@ class _InfoTag extends StatelessWidget {
   }
 }
 
-void showAsignarSolicitudBottomSheet(BuildContext context, int solicitudId) {
+void showAsignarSolicitudBottomSheet(
+  BuildContext context,
+  int solicitudId,
+  TypeForm typeForm,
+) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -316,6 +337,7 @@ void showAsignarSolicitudBottomSheet(BuildContext context, int solicitudId) {
                                     .asignSolicitudToAsesor(
                                       idSolicitud: solicitudId,
                                       idPromotor: asesorSeleccionado?.id ?? 0,
+                                      typeForm: typeForm,
                                     );
                               },
                             ),

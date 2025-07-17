@@ -15,16 +15,35 @@ class SolicitudNuevaByEstadoCubit extends Cubit<SolicitudNuevaByEstadoState> {
   SolicitudNuevaByEstadoCubit(this._solicitudNuevaByEstadoRepository)
       : super(SolicitudNuevaByEstadoInitial());
 
-  Future<void> getSolicitudNuevaByEstado({required TypeForm typeForm}) async {
+  Future<void> getSolicitudesByEstado({
+    required TypeForm typeForm,
+    EstadoCredito estadoCredito = EstadoCredito.registrada,
+    bool isAsignadaToAsesorCredito = false,
+    bool isNumeroSolicitudFilter = false,
+    bool isCedulaSolicitudFilter = false,
+    String? numeroSolicitud,
+    String? cedulaCliente,
+  }) async {
     emit(OnSolicitudNuevaByEstadoLoading());
     try {
       final (isOk, data) = await _solicitudNuevaByEstadoRepository
           .getSolicitudesEstadoByTypeForm(
-        estadoCredito: EstadoCredito.registrada,
+        estadoCredito: estadoCredito,
         typeForm: typeForm,
+        isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+        numeroSolicitud: numeroSolicitud,
+        cedulaCliente: cedulaCliente,
       );
 
-      emit(OnSolicitudNuevaByEstadoSuccess(solicitudByEstado: data));
+      emit(OnSolicitudNuevaByEstadoSuccess(
+        solicitudByEstado: data,
+        estadoCredito: estadoCredito,
+        isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+        isNumeroSolicitudFilter: isNumeroSolicitudFilter,
+        isCedulaSolicitudFilter: isCedulaSolicitudFilter,
+        numeroSolicitud: numeroSolicitud,
+        cedulaCliente: cedulaCliente,
+      ));
     } on AppException catch (e) {
       emit(OnSolicitudNuevaByEstadoError(errorMsg: e.optionalMsg));
     } catch (e) {

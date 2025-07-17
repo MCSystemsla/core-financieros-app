@@ -51,21 +51,46 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesNuevaMenorPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesAsalariadoPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesReprestamoPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   });
   Future<(bool, Asesor)> getAsesores();
-  Future<(bool, String)> asignSolicitudToAsesor({
+  Future<(bool, String)> asignSolicitudNuevaToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  });
+  Future<(bool, String)> asignSolicitudReprestamoToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  });
+  Future<(bool, String)> asignSolicitudAsalariadoToAsesor({
     required int idSolicitud,
     required int idPromotor,
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesEstadoByTypeForm({
     required TypeForm typeForm,
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+  });
+  Future<(bool, String)> asginSolicitudCreditoToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+    required TypeForm typeForm,
   });
 }
 
@@ -357,9 +382,15 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   @override
   Future<(bool, SolicitudByEstado)> getSolicitudesNuevaMenorPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   }) async {
     final endpoint = NuevaMenorObtenerSolicitudesPorEstadoEndpoint(
       estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -401,7 +432,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String)> asignSolicitudToAsesor({
+  Future<(bool, String)> asignSolicitudNuevaToAsesor({
     required int idSolicitud,
     required int idPromotor,
   }) async {
@@ -431,9 +462,15 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   @override
   Future<(bool, SolicitudByEstado)> getSolicitudesAsalariadoPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   }) async {
     final endpoint = AsalariadoObtenerSolicitudesPorEstadoEndpoint(
       estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -455,9 +492,15 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   @override
   Future<(bool, SolicitudByEstado)> getSolicitudesReprestamoPorEstado({
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   }) async {
     final endpoint = ReprestamoObtenerSolicitudesPorEstadoEndpoint(
       estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -480,14 +523,105 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   Future<(bool, SolicitudByEstado)> getSolicitudesEstadoByTypeForm({
     required TypeForm typeForm,
     required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
   }) async {
     return switch (typeForm) {
-      TypeForm.nueva =>
-        await getSolicitudesNuevaMenorPorEstado(estadoCredito: estadoCredito),
-      TypeForm.asalariado =>
-        await getSolicitudesAsalariadoPorEstado(estadoCredito: estadoCredito),
-      TypeForm.represtamo =>
-        await getSolicitudesReprestamoPorEstado(estadoCredito: estadoCredito),
+      TypeForm.nueva => await getSolicitudesNuevaMenorPorEstado(
+          estadoCredito: estadoCredito,
+          isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+          numeroSolicitud: numeroSolicitud,
+          cedulaCliente: cedulaCliente,
+        ),
+      TypeForm.asalariado => await getSolicitudesAsalariadoPorEstado(
+          estadoCredito: estadoCredito,
+          isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+          numeroSolicitud: numeroSolicitud,
+          cedulaCliente: cedulaCliente,
+        ),
+      TypeForm.represtamo => await getSolicitudesReprestamoPorEstado(
+          estadoCredito: estadoCredito,
+          isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+          numeroSolicitud: numeroSolicitud,
+          cedulaCliente: cedulaCliente,
+        ),
+    };
+  }
+
+  @override
+  Future<(bool, String)> asignSolicitudAsalariadoToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  }) async {
+    final endpoint = AsignarSolicitudAsalariadoEndpoint(
+      idSolicitud: idSolicitud,
+      idPromotor: idPromotor,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      return (true, resp.toString());
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> asignSolicitudReprestamoToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+  }) async {
+    final endpoint = AsignarSolicitudReprestamoEndpoint(
+      idSolicitud: idSolicitud,
+      idPromotor: idPromotor,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      return (true, resp['message'] as String);
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> asginSolicitudCreditoToAsesor({
+    required int idSolicitud,
+    required int idPromotor,
+    required TypeForm typeForm,
+  }) async {
+    return switch (typeForm) {
+      TypeForm.nueva => await asignSolicitudNuevaToAsesor(
+          idSolicitud: idSolicitud,
+          idPromotor: idPromotor,
+        ),
+      TypeForm.asalariado => await asignSolicitudAsalariadoToAsesor(
+          idSolicitud: idSolicitud,
+          idPromotor: idPromotor,
+        ),
+      TypeForm.represtamo => await asignSolicitudReprestamoToAsesor(
+          idSolicitud: idSolicitud,
+          idPromotor: idPromotor,
+        ),
     };
   }
 }
