@@ -22,7 +22,7 @@ class SolicitudEstado {
   final String numero;
   final int objTipoSolicitudId;
   final int objEstadoSolicitudId;
-  final int monto;
+  final String monto;
   final String sucursal;
   final String? observacion;
   final dynamic estadoSms;
@@ -50,7 +50,7 @@ class SolicitudEstado {
         numero: json['Numero'],
         objTipoSolicitudId: json['objTipoSolicitudID'],
         objEstadoSolicitudId: json['objEstadoSolicitudID'],
-        monto: json['Monto'],
+        monto: json['Monto'].toString(),
         sucursal: json['Sucursal'],
         observacion: json['Observacion'],
         estadoSms: json['EstadoSMS'],
