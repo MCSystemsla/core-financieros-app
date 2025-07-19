@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
@@ -51,16 +49,52 @@ class EnviarSolicitudWhenIsdoneCubit
           continue;
         }
         if (solicitud is ResponseLocalDb && result.$1) {
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: solicitud.cedula!,
+            tipoSolicitud: 'NUEVA_MENOR',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: solicitud.cedula!,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudWhenisUploaded(
             solicitudId: solicitud.id,
           );
         }
         if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: solicitud.cedula!,
+            tipoSolicitud: 'REPRESTAMO',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: solicitud.cedula!,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudReprestamoWhenisUploaded(
             solicitudId: solicitud.id,
           );
         }
         if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: solicitud.cedula!,
+            tipoSolicitud: 'ASALARIADO',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: solicitud.cedula!,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
             solicitudId: solicitud.id,
           );
@@ -84,20 +118,6 @@ class EnviarSolicitudWhenIsdoneCubit
           ),
         );
       }
-    } on TimeoutException catch (e) {
-      _logger.e(e);
-      emit(
-        const OnEnviarSolicitudWhenIsdoneError(
-          msgError: 'El servidor tardó demasiado en responder.',
-        ),
-      );
-    } on SocketException catch (e) {
-      _logger.e(e);
-      emit(
-        const OnEnviarSolicitudWhenIsdoneError(
-          msgError: 'Error de conexion de red, Verifica tu red',
-        ),
-      );
     } catch (e) {
       _logger.e(e);
       emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
