@@ -21,8 +21,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     try {
       emit(state.copyWith(status: Status.inProgress));
       await Future.delayed(const Duration(seconds: 3));
-      final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
-          solicitudNuevaMenor: SolicitudNuevaMenor(
+      final (isOk, msg, numeroSolicitud) =
+          await repository.createSolicitudCreditoNuevaMenor(
+              solicitudNuevaMenor: SolicitudNuevaMenor(
         isOffline: state.isDone,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         nombre1: state.nombre1,
@@ -127,10 +128,23 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       if (!isOk) {
         return emit(state.copyWith(status: Status.error, errorMsg: msg));
       }
-      emit(state.copyWith(status: Status.done, onSuccessMsg: msg));
+      emit(state.copyWith(
+        status: Status.done,
+        onSuccessMsg: msg,
+        numeroSolicitud: numeroSolicitud,
+      ));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void sendCedulaImages({required String numeroSolicitud}) async {
+    await repository.sendCedulaImageWhenSolicitudCreditoCreated(
+      numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+      cedulaCliente: state.cedula,
+      imagenFrontal: state.cedulaFrontPath,
+      imagenTrasera: state.cedulaBackPath,
+    );
   }
 
   void initAutoSave({String? uuid}) {

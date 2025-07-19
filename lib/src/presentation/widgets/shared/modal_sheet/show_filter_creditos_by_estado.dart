@@ -1,6 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -8,14 +7,9 @@ import 'package:go_router/go_router.dart';
 
 void showFilterCreditosByEstado(
   BuildContext context,
-  TypeForm typeForm,
   EstadoCredito estadoCredito,
   bool isAsignadaToAsesorCredito,
   SolicitudNuevaByEstadoCubit cubit,
-  bool isNumeroSolicitudFilter,
-  String? numeroSolicitud,
-  bool isCedulaSolicitudFilter,
-  String? cedulaCliente,
 ) {
   showModalBottomSheet(
     context: context,
@@ -70,10 +64,16 @@ void showFilterCreditosByEstado(
                     const Gap(20),
                     SwitchListTile(
                       value: isAsignadaToAsesorCredito,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           isAsignadaToAsesorCredito = value;
                         });
+                        await cubit.getSolicitudesByEstado(
+                          estadoCredito: estadoCredito,
+                          isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+                        );
+                        if (!context.mounted) return;
+                        context.pop();
                       },
                       title: const Text('Asignado a un oficial de credito'),
                       subtitle: const Text(
@@ -105,14 +105,9 @@ void showFilterCreditosByEstado(
                                   creditStatesListData[index].estado;
                             });
                             cubit.getSolicitudesByEstado(
-                              typeForm: typeForm,
                               estadoCredito: estadoCredito,
                               isAsignadaToAsesorCredito:
                                   isAsignadaToAsesorCredito,
-                              isNumeroSolicitudFilter: isNumeroSolicitudFilter,
-                              isCedulaSolicitudFilter: isCedulaSolicitudFilter,
-                              numeroSolicitud: numeroSolicitud,
-                              cedulaCliente: cedulaCliente,
                             );
                             context.pop();
                           },

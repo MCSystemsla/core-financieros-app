@@ -26,7 +26,8 @@ class EnviarSolicitudWhenIsdoneCubit
   void sendSolicitudWhenIsDone({required bool isConnected}) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
-    (bool isSuccess, String errorMessage) result = (false, '');
+    (bool isSuccess, String errorMessage, String? numerSolicitud) result =
+        (false, '', null);
     bool hasAnySent = false;
     emit(OnEnviarSolicitudWhenIsdoneLoading());
     try {
@@ -107,7 +108,8 @@ class EnviarSolicitudWhenIsdoneCubit
     emit(EnviarSolicitudWhenIsdoneInitial());
   }
 
-  Future<(bool, String)> _sendSolicitud({required dynamic solicitud}) async {
+  Future<(bool, String, String?)> _sendSolicitud(
+      {required dynamic solicitud}) async {
     return switch (solicitud) {
       ResponseLocalDb() => await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: _mapToSolicitudNuevaMenor(solicitud),

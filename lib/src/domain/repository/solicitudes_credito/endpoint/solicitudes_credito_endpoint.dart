@@ -270,6 +270,36 @@ class NuevaMenorObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
       };
 }
 
+class GetSolicitudesCreditoByEstado extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  GetSolicitudesCreditoByEstado({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    required this.numeroSolicitud,
+    required this.cedulaCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => 'solicitudes/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+      };
+}
+
 class ReprestamoObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
   final EstadoCredito estadoCredito;
   final bool isAsignadaToAsesorCredito;

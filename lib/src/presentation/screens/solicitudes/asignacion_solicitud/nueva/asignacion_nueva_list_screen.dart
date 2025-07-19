@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -23,8 +22,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class AsignacionListScreen extends StatelessWidget {
-  final TypeForm typeForm;
-  const AsignacionListScreen({super.key, required this.typeForm});
+  const AsignacionListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,7 @@ class AsignacionListScreen extends StatelessWidget {
         BlocProvider(
           create: (ctx) => SolicitudNuevaByEstadoCubit(
             SolicitudCreditoRepositoryImpl(),
-          )..getSolicitudesByEstado(typeForm: typeForm),
+          )..getSolicitudesByEstado(),
         ),
       ],
       child: Scaffold(
@@ -47,14 +45,13 @@ class AsignacionListScreen extends StatelessWidget {
               OnSolicitudNuevaByEstadoLoading() => const LoadingWidget(),
               OnSolicitudNuevaByEstadoSuccess() => _AsignacionNuevaListView(
                   solicitudByEstado: state.solicitudByEstado,
-                  typeForm: typeForm,
                 ),
               OnSolicitudNuevaByEstadoError() => OnErrorWidget(
                   errorMsg: state.errorMsg,
                   onPressed: () {
                     context
                         .read<SolicitudNuevaByEstadoCubit>()
-                        .getSolicitudesByEstado(typeForm: typeForm);
+                        .getSolicitudesByEstado();
                   },
                 ),
               _ => const SizedBox(),
@@ -68,10 +65,8 @@ class AsignacionListScreen extends StatelessWidget {
 
 class _AsignacionNuevaListView extends StatelessWidget {
   final SolicitudByEstado solicitudByEstado;
-  final TypeForm typeForm;
   const _AsignacionNuevaListView({
     required this.solicitudByEstado,
-    required this.typeForm,
   });
 
   @override
@@ -83,9 +78,7 @@ class _AsignacionNuevaListView extends StatelessWidget {
           const Gap(20),
           const _HeaderContent(),
           const Gap(20),
-          _FilterContent(
-            typeForm: typeForm,
-          ),
+          const _FilterContent(),
           const Gap(20),
           solicitudByEstado.data.isEmpty
               ? const _AsignListCreditNoData()
@@ -95,18 +88,20 @@ class _AsignacionNuevaListView extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return CreditProductItem(
-                      typeForm: typeForm,
+                      tipoSolicitud:
+                          solicitudByEstado.data[index].tipoSolicitud,
                       solicitudId: solicitudByEstado.data[index].id,
                       nombre:
                           'Numero Solicitud: ${solicitudByEstado.data[index].numero}',
-                      cuota: solicitudByEstado.data[index].cuota
-                          .toCurrencyString(),
-                      monto: solicitudByEstado.data[index].monto
+                      fecha: solicitudByEstado.data[index].fechaSolicitud,
+                      monto: solicitudByEstado.data[index].monto!
                           .toCurrencyString(),
                       estadoCodigo: solicitudByEstado.data[index].codigo,
-                      sucursal: solicitudByEstado.data[index].sucursal,
+                      sucursal: solicitudByEstado.data[index].sucursal ?? 'N/A',
                       nombreCliente:
                           solicitudByEstado.data[index].nombreCompleto,
+                      nombrePromotor:
+                          solicitudByEstado.data[index].nombrePromotor,
                     );
                   },
                 ),
@@ -144,10 +139,7 @@ class _AsignListCreditNoData extends StatelessWidget {
 }
 
 class _FilterContent extends StatefulWidget {
-  final TypeForm typeForm;
-  const _FilterContent({
-    required this.typeForm,
-  });
+  const _FilterContent();
 
   @override
   State<_FilterContent> createState() => _FilterContentState();
@@ -196,10 +188,7 @@ class _FilterContentState extends State<_FilterContent> {
                       numeroSolicitud,
                       isCedulaSolicitudFilter,
                       cedulaCliente,
-                      widget.typeForm,
                       cubit,
-                      estadoCredito,
-                      isAsignadaToAsesorCredito,
                     );
                   },
                 ),
@@ -210,14 +199,9 @@ class _FilterContentState extends State<_FilterContent> {
                   onTap: () {
                     showFilterCreditosByEstado(
                       context,
-                      widget.typeForm,
                       estadoCredito,
                       isAsignadaToAsesorCredito,
                       cubit,
-                      isNumeroSolicitudFilter,
-                      numeroSolicitud,
-                      isCedulaSolicitudFilter,
-                      cedulaCliente,
                     );
                   },
                 ),
@@ -236,10 +220,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
   String? numeroSolicitud,
   bool isCedulaSolicitudFilter,
   String? cedulaCliente,
-  TypeForm typeForm,
   SolicitudNuevaByEstadoCubit cubit,
-  EstadoCredito estadoCredito,
-  bool isAsignadaToAsesorCredito,
 ) {
   showModalBottomSheet(
     context: context,
@@ -356,6 +337,24 @@ void showFilterGetByCedualAndNumeroSolicitud(
                         ),
                       const Gap(20),
                       CustomElevatedButton(
+                        onPressed: () {
+                          cubit.getSolicitudesByEstado(
+                            isNumeroSolicitudFilter: false,
+                            isCedulaSolicitudFilter: false,
+                            numeroSolicitud: null,
+                            cedulaCliente: null,
+                          );
+                          context.pop();
+                        },
+                        text: 'Limpiar Filtros',
+                        color: AppColors.red,
+                        icon: const Icon(
+                          Icons.filter_alt_off_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Gap(20),
+                      CustomElevatedButton(
                         enabled:
                             isNumeroSolicitudFilter || isCedulaSolicitudFilter,
                         onPressed: () {
@@ -367,14 +366,10 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             cedulaCliente = null;
                           }
                           cubit.getSolicitudesByEstado(
-                            typeForm: typeForm,
                             isNumeroSolicitudFilter: isNumeroSolicitudFilter,
                             isCedulaSolicitudFilter: isCedulaSolicitudFilter,
                             numeroSolicitud: numeroSolicitud,
                             cedulaCliente: cedulaCliente,
-                            estadoCredito: estadoCredito,
-                            isAsignadaToAsesorCredito:
-                                isAsignadaToAsesorCredito,
                           );
                           context.pop();
                         },

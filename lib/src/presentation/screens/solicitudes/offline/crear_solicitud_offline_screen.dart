@@ -43,9 +43,7 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorCubit(
-            SolicitudCreditoRepositoryImpl(),
-            global<ObjectBoxService>(),
-          ),
+              SolicitudCreditoRepositoryImpl(), global<ObjectBoxService>()),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(
@@ -70,11 +68,12 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
                       transitionOnUserGestures: true,
                       tag: 'cedulaFrontal',
                       child: PhotoCedulaClientWidget(
+                        onNextPressed: () {},
                         controller: pageController,
                         fotoCedulaFrontal:
-                            XFile(imagesCedula?.imageFrontCedula ?? ''),
+                            XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
                         fotoCedulaTrasera:
-                            XFile(imagesCedula?.imageBackCedula ?? ''),
+                            XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
                         onCedulaFrontalPressed: () {
                           context.pushTransparentRoute(
                             PhotoCedulaImagePreview(

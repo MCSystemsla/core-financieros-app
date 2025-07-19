@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_cre
 import 'package:core_financiero_app/src/datasource/solicitudes/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:equatable/equatable.dart';
 
 part 'solicitud_nueva_by_estado_state.dart';
@@ -16,7 +15,6 @@ class SolicitudNuevaByEstadoCubit extends Cubit<SolicitudNuevaByEstadoState> {
       : super(SolicitudNuevaByEstadoInitial());
 
   Future<void> getSolicitudesByEstado({
-    required TypeForm typeForm,
     EstadoCredito estadoCredito = EstadoCredito.registrada,
     bool isAsignadaToAsesorCredito = false,
     bool isNumeroSolicitudFilter = false,
@@ -26,10 +24,9 @@ class SolicitudNuevaByEstadoCubit extends Cubit<SolicitudNuevaByEstadoState> {
   }) async {
     emit(OnSolicitudNuevaByEstadoLoading());
     try {
-      final (isOk, data) = await _solicitudNuevaByEstadoRepository
-          .getSolicitudesEstadoByTypeForm(
+      final (isOk, data) =
+          await _solicitudNuevaByEstadoRepository.getSolicitudesCreditoByEstado(
         estadoCredito: estadoCredito,
-        typeForm: typeForm,
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
         numeroSolicitud: numeroSolicitud,
         cedulaCliente: cedulaCliente,

@@ -22,26 +22,30 @@ class SolicitudEstado {
   final String numero;
   final int objTipoSolicitudId;
   final int objEstadoSolicitudId;
-  final String monto;
-  final String sucursal;
+  final String? monto;
+  final String? sucursal;
   final String? observacion;
-  final dynamic estadoSms;
-  final double cuota;
+  final double? cuota;
   final String? nombreCompleto;
   final String codigo;
+  final String tipoSolicitud;
+  final String? nombrePromotor;
+  final DateTime fechaSolicitud;
 
   SolicitudEstado({
     required this.id,
     required this.numero,
     required this.objTipoSolicitudId,
     required this.objEstadoSolicitudId,
-    required this.monto,
-    required this.sucursal,
+    this.monto,
+    this.sucursal,
     this.observacion,
-    this.estadoSms,
-    required this.cuota,
+    this.cuota,
     required this.nombreCompleto,
     required this.codigo,
+    required this.tipoSolicitud,
+    required this.fechaSolicitud,
+    this.nombrePromotor,
   });
 
   factory SolicitudEstado.fromJson(Map<String, dynamic> json) =>
@@ -53,9 +57,11 @@ class SolicitudEstado {
         monto: json['Monto'].toString(),
         sucursal: json['Sucursal'],
         observacion: json['Observacion'],
-        estadoSms: json['EstadoSMS'],
-        cuota: json['Cuota']?.toDouble(),
+        cuota: json['Cuota']?.toDouble() ?? 0,
         nombreCompleto: json['NombreCompleto'],
-        codigo: json['Codigo'],
+        codigo: json['Estado'],
+        tipoSolicitud: json['TipoSolicitud'],
+        nombrePromotor: json['NombrePromotor'],
+        fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
       );
 }

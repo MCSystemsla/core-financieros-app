@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
@@ -17,16 +20,18 @@ import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 
 abstract class SolicitudesCreditoRepository {
-  Future<(bool, String)> createSolicitudCreditoNuevaMenor({
+  Future<(bool, String, String?)> createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   });
-  Future<(bool, String)> createSolicitudReprestamo({
+  Future<(bool, String, String?)> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   });
-  Future<(bool, String)> createSolicitudAsalariado({
+  Future<(bool, String, String?)> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
   });
   Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
@@ -87,10 +92,22 @@ abstract class SolicitudesCreditoRepository {
     required String? numeroSolicitud,
     required String? cedulaCliente,
   });
+  Future<(bool, SolicitudByEstado)> getSolicitudesCreditoByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+  });
   Future<(bool, String)> asginSolicitudCreditoToAsesor({
     required int idSolicitud,
     required int idPromotor,
     required TypeForm typeForm,
+  });
+  Future<(bool, String)> sendCedulaImageWhenSolicitudCreditoCreated({
+    required int numeroSolicitud,
+    required String cedulaCliente,
+    required String imagenFrontal,
+    required String imagenTrasera,
   });
 }
 
@@ -98,7 +115,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   final _api = global<APIRepository>();
   final _logger = Logger();
   @override
-  Future<(bool, String)> createSolicitudCreditoNuevaMenor({
+  Future<(bool, String, String?)> createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   }) async {
     final endpoint = SolicitudesCreditoNuevaMenorEndpoint(
@@ -109,23 +126,27 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
 
-        return (false, (resp['message'] as String));
+        return (false, (resp['message'] as String), null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         final (errorMsg, errorCode) = getErrorMessage(resp);
 
-        return (false, errorMsg);
+        return (false, errorMsg, null);
       }
 
       _logger.i(resp);
       _logger.i(endpoint.body);
 
-      return (true, resp['message'] as String);
+      return (
+        true,
+        resp['message'] as String,
+        resp['NumeroSolicitud'] as String
+      );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
-      return (false, e.toString());
+      return (false, e.toString(), null);
     }
   }
 
@@ -221,7 +242,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String)> createSolicitudReprestamo({
+  Future<(bool, String, String?)> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   }) async {
     final endpoint = SolicitudReprestamoEndpoint(
@@ -232,21 +253,29 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
         AppException(optionalMsg: resp.toString());
-        return (false, resp.toString());
+        return (false, resp.toString(), null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         final (errorMsg, _) = getErrorMessage(resp);
-        return (false, errorMsg);
+        return (false, errorMsg, null);
       }
 
       _logger.i(resp);
 
-      return (true, resp['message'] as String);
+      return (
+        true,
+        resp['message'] as String,
+        resp['NumeroSolicitud'] as String
+      );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
-      return (false, e.toString());
+      return (
+        false,
+        e.toString(),
+        null,
+      );
     }
   }
 
@@ -270,7 +299,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String)> createSolicitudAsalariado({
+  Future<(bool, String, String?)> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
   }) async {
     final endpoint = SolicitudAsalariadoEndpoint(
@@ -282,17 +311,21 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         _logger.e(resp);
         _logger.i(endpoint.body);
         final (errorMsg, _) = getErrorMessage(resp);
-        return (false, errorMsg);
+        return (false, errorMsg, null);
       }
       _logger.i(resp);
       _logger.i(endpoint.body);
 
-      return (true, resp['message'] as String);
+      return (
+        true,
+        resp['message'] as String,
+        resp['NumeroSolicitud'] as String
+      );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
 
-      return (false, e.toString());
+      return (false, e.toString(), null);
     }
   }
 
@@ -623,5 +656,104 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
           idPromotor: idPromotor,
         ),
     };
+  }
+
+  @override
+  Future<(bool, String)> sendCedulaImageWhenSolicitudCreditoCreated({
+    required int numeroSolicitud,
+    required String cedulaCliente,
+    required String imagenFrontal,
+    required String imagenTrasera,
+  }) async {
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
+    const url = '$protocol://$apiUrl/solicitudes/registrar-cedula';
+
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields['numeroSolicitud'] = numeroSolicitud.toString();
+      request.fields['cedula'] = cedulaCliente;
+      request.fields['database'] = LocalStorage().database;
+      request.files.add(await http.MultipartFile.fromPath(
+        'frontal',
+        imagenFrontal,
+        filename: imagenFrontal,
+        contentType: MediaType('image', 'jpg'),
+      ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'trasera',
+        imagenTrasera,
+        filename: imagenTrasera,
+        contentType: MediaType('image', 'jpg'),
+      ));
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
+      });
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
+      } else {
+        await ErrorReporter.registerError(
+          errorMessage:
+              'Error enviando imagenes Solicitudes: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
+      }
+      _logger.i(response.reasonPhrase);
+      return (true, 'Imagenes Enviadas exitosamente!');
+    } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagenes Solicitudes: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesCreditoByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+  }) async {
+    final endpoint = GetSolicitudesCreditoByEstado(
+      estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 }

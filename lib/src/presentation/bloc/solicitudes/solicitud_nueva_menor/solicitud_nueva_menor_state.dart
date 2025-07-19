@@ -2,6 +2,7 @@
 part of 'solicitud_nueva_menor_cubit.dart';
 
 class SolicitudNuevaMenorState extends Equatable {
+  final String numeroSolicitud;
   final String? uuid;
   final String frecuenciaPagoMeses;
   final String departamentoNegocio;
@@ -152,6 +153,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String paisPeps2Ver;
   final String nacionalidadConyugueVer;
   const SolicitudNuevaMenorState({
+    this.numeroSolicitud = '',
     this.departamentoNegocio = '',
     this.departamentoNegocioVer = '',
     this.nacionalidadConyugueVer = '',
@@ -450,6 +452,7 @@ class SolicitudNuevaMenorState extends Equatable {
       ];
 
   SolicitudNuevaMenorState copyWith({
+    String? numeroSolicitud,
     String? uuid,
     String? frecuenciaPagoMeses,
     String? departamentoNegocio,
@@ -601,6 +604,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? nacionalidadConyugueVer,
   }) {
     return SolicitudNuevaMenorState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
       departamentoNegocio: departamentoNegocio ?? this.departamentoNegocio,

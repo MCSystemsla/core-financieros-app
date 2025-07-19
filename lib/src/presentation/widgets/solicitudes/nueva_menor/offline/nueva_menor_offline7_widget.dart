@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -47,6 +49,7 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
   String? telefonoBeneficiario1;
   String? objParentescoBeneficiarioSeguroId1Ver;
   final formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +91,11 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
     super.build(context);
 
     final cubit = context.read<SolicitudNuevaMenorCubit>();
+    final localDbProvider = global<ObjectBoxService>();
+    final imagesCedula = localDbProvider.getCedula(
+      cedula: widget.responseLocalDb.cedula!,
+      tipoSolicitud: 'NUEVA_MENOR',
+    );
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -298,6 +306,10 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
+                      context.read<SolicitudNuevaMenorCubit>().saveCedula(
+                            cedulaFrontPath: imagesCedula?.imageFrontCedula,
+                            cedulaBackPath: imagesCedula?.imageBackCedula,
+                          );
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           isDone: true,

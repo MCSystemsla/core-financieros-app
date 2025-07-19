@@ -34,6 +34,9 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
           dbProvider.removeSolicitudWhenisUploaded(
             solicitudId: widget.solicitudId,
           );
+          context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+              );
         }
       },
       builder: (context, state) {

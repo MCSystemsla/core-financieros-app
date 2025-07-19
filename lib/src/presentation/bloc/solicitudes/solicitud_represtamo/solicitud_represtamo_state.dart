@@ -2,6 +2,7 @@
 part of 'solicitud_represtamo_cubit.dart';
 
 class SolicitudReprestamoState extends Equatable {
+  final String numeroSolicitud;
   final bool isDone;
   final bool hasVerified;
   final String successMsg;
@@ -94,6 +95,7 @@ class SolicitudReprestamoState extends Equatable {
   final String frecuenciaPagoMeses;
 
   const SolicitudReprestamoState({
+    this.numeroSolicitud = '',
     this.paisPeps2Ver = '',
     this.paisPepsVer = '',
     this.parentescoFamiliarPeps2Ver = '',
@@ -277,6 +279,7 @@ class SolicitudReprestamoState extends Equatable {
       ];
 
   SolicitudReprestamoState copyWith({
+    String? numeroSolicitud,
     bool? isDone,
     bool? hasVerified,
     String? successMsg,
@@ -369,6 +372,7 @@ class SolicitudReprestamoState extends Equatable {
     String? frecuenciaPagoMeses,
   }) {
     return SolicitudReprestamoState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       isDone: isDone ?? this.isDone,
       hasVerified: hasVerified ?? this.hasVerified,
       successMsg: successMsg ?? this.successMsg,

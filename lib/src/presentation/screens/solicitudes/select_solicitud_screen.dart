@@ -5,7 +5,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/so
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/asignacion_solicitud/asignacion_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -144,7 +144,7 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((_) => const AsignacionSolicitudScreen()),
+                  builder: ((_) => const AsignacionListScreen()),
                 ),
               );
             },

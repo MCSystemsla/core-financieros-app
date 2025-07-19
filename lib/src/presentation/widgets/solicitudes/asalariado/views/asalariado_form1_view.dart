@@ -197,6 +197,10 @@ class __FormContentState extends State<_FormContent> {
                 fechaVencimientoCedula:
                     fechaVencimientoCedula?.toUtc().toIso8601String(),
                 fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+                nombre1: primerNombre,
+                nombre2: segundoNombre,
+                apellido1: primerApellido,
+                apellido2: segundoApellido,
               ),
         );
   }
