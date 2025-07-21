@@ -24,10 +24,14 @@ class EnviarSolicitudWhenIsdoneCubit
   void sendSolicitudWhenIsDone({required bool isConnected}) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
+
     (bool isSuccess, String errorMessage, String? numerSolicitud) result =
         (false, '', null);
+
     bool hasAnySent = false;
+
     emit(OnEnviarSolicitudWhenIsdoneLoading());
+
     try {
       final solicitudes = objectBoxService.sendSolicitudesWhenIsDone();
       if (solicitudes.isEmpty || !isConnected) {
@@ -49,14 +53,16 @@ class EnviarSolicitudWhenIsdoneCubit
           continue;
         }
         if (solicitud is ResponseLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
           final cedulaCliente = objectBoxService.getCedula(
-            cedula: solicitud.cedula!,
+            cedula: cedula,
             tipoSolicitud: 'NUEVA_MENOR',
           );
           if (cedulaCliente != null) {
             repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: solicitud.cedula!,
+              cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
@@ -66,14 +72,16 @@ class EnviarSolicitudWhenIsdoneCubit
           );
         }
         if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
           final cedulaCliente = objectBoxService.getCedula(
-            cedula: solicitud.cedula!,
+            cedula: cedula,
             tipoSolicitud: 'REPRESTAMO',
           );
           if (cedulaCliente != null) {
             repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: solicitud.cedula!,
+              cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
@@ -83,14 +91,16 @@ class EnviarSolicitudWhenIsdoneCubit
           );
         }
         if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
           final cedulaCliente = objectBoxService.getCedula(
-            cedula: solicitud.cedula!,
+            cedula: cedula,
             tipoSolicitud: 'ASALARIADO',
           );
           if (cedulaCliente != null) {
             repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: solicitud.cedula!,
+              cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
