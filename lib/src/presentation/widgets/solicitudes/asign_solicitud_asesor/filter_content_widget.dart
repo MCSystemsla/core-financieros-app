@@ -17,29 +17,22 @@ class FilterContent extends StatefulWidget {
 class _FilterContentState extends State<FilterContent> {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudNuevaByEstadoCubit>();
     return BlocBuilder<SolicitudNuevaByEstadoCubit,
         SolicitudNuevaByEstadoState>(
       builder: (context, state) {
-        final estadoCredito = state is OnSolicitudNuevaByEstadoSuccess
-            ? state.estadoCredito
-            : EstadoCredito.registrada;
+        final cubit = context.read<SolicitudNuevaByEstadoCubit>();
+        final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
+
+        final estadoCredito =
+            isSuccess ? state.estadoCredito : EstadoCredito.registrada;
         final isAsignadaToAsesorCredito =
-            state is OnSolicitudNuevaByEstadoSuccess
-                ? state.isAsignadaToAsesorCredito
-                : false;
-        final isNumeroSolicitudFilter = state is OnSolicitudNuevaByEstadoSuccess
-            ? state.isNumeroSolicitudFilter
-            : false;
-        final isCedulaSolicitudFilter = state is OnSolicitudNuevaByEstadoSuccess
-            ? state.isCedulaSolicitudFilter
-            : false;
-        final numeroSolicitud = state is OnSolicitudNuevaByEstadoSuccess
-            ? state.numeroSolicitud
-            : null;
-        final cedulaCliente = state is OnSolicitudNuevaByEstadoSuccess
-            ? state.cedulaCliente
-            : null;
+            isSuccess ? state.isAsignadaToAsesorCredito : false;
+        final isNumeroSolicitudFilter =
+            isSuccess ? state.isNumeroSolicitudFilter : false;
+        final isCedulaSolicitudFilter =
+            isSuccess ? state.isCedulaSolicitudFilter : false;
+        final numeroSolicitud = isSuccess ? state.numeroSolicitud : null;
+        final cedulaCliente = isSuccess ? state.cedulaCliente : null;
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),

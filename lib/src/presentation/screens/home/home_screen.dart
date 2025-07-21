@@ -21,6 +21,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isChecking = true;
   bool _shouldSync = false;
+  @override
+  void initState() {
+    super.initState();
+    _checkRequirements();
+  }
+
   Future<void> _checkRequirements() async {
     final bioCubit = global<BiometricCubit>();
     final connection = context.read<InternetConnectionCubit>().state;
@@ -38,12 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _isChecking = false;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkRequirements();
   }
 
   @override
