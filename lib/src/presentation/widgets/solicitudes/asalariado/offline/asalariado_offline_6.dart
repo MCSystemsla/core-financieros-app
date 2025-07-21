@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -450,7 +451,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: otrosIngresosConyuge,
-                      // validator: (value) => ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
@@ -473,7 +473,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: fuenteOtrosIngresosConyuge,
-                      // validator: (value) => ClassValidator.validateRequired(value),
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -492,7 +491,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       readOnly: true,
-                      hintText: totalIngresosMesConyuge,
+                      hintText: totalIngresosMesConyuge?.toCurrencyString(),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
