@@ -21,7 +21,7 @@ class AsignSolicitudToAsesorCubit extends Cubit<AsignSolicitudToAsesorState> {
     emit(const OnAsignSolicitudToAsesorLoading());
     try {
       final (isOk, errorMsg) =
-          await _solicitudesCreditoRepository.asginSolicitudCreditoToAsesor(
+          await _solicitudesCreditoRepository.asignSolicitudCreditoToAsesor(
         idSolicitud: idSolicitud,
         idPromotor: idPromotor,
         typeForm: typeForm,

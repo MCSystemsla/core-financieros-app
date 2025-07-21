@@ -98,7 +98,7 @@ abstract class SolicitudesCreditoRepository {
     required String? numeroSolicitud,
     required String? cedulaCliente,
   });
-  Future<(bool, String)> asginSolicitudCreditoToAsesor({
+  Future<(bool, String)> asignSolicitudCreditoToAsesor({
     required int idSolicitud,
     required int idPromotor,
     required TypeForm typeForm,
@@ -637,7 +637,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String)> asginSolicitudCreditoToAsesor({
+  Future<(bool, String)> asignSolicitudCreditoToAsesor({
     required int idSolicitud,
     required int idPromotor,
     required TypeForm typeForm,
