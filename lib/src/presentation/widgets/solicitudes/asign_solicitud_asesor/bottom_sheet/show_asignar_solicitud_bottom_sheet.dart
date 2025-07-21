@@ -159,8 +159,7 @@ void showAsignarSolicitudBottomSheet(
                           if (state is OnAsignSolicitudToAsesorSuccess) {
                             CustomAlertDialog(
                               context: context,
-                              title:
-                                  'Solicitud asignada exitosamente a promotor',
+                              title: 'Solicitud asignada exitosamente a asesor',
                               onDone: () {
                                 cubit.getSolicitudesByEstado();
                                 Navigator.of(context).pop();
