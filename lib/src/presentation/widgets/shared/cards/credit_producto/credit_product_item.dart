@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asign_solicitud_asesor/bottom_sheet/show_asignar_solicitud_bottom_sheet.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -36,7 +36,7 @@ class CreditProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudNuevaByEstadoCubit>();
-    final typeForm = determineTypeForm(tipoSolicitud!);
+    final typeForm = tipoSolicitud?.toTypeForm();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -68,7 +68,7 @@ class CreditProductItem extends StatelessWidget {
             int.tryParse(solicitudId) ?? 0,
             title,
             nombreCliente ?? 'N/A',
-            typeForm,
+            typeForm!,
             cubit,
           );
         },
@@ -127,15 +127,6 @@ class CreditProductItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  TypeForm determineTypeForm(String typeForm) {
-    return switch (typeForm) {
-      'NUEVAMENOR' => TypeForm.nueva,
-      'ASALARIADO' => TypeForm.asalariado,
-      'REPRESTAMO' => TypeForm.represtamo,
-      _ => throw Exception('Tipo Solicitud no reconocido'),
-    };
   }
 }
 
