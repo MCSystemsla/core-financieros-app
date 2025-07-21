@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -29,7 +30,31 @@ class LoginScreenView extends StatefulWidget {
   State<LoginScreenView> createState() => _LoginScreenViewState();
 }
 
-class _LoginScreenViewState extends State<LoginScreenView> {
+class _LoginScreenViewState extends State<LoginScreenView>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
+    if (!isCurrent) return;
+
+    if (state == AppLifecycleState.resumed) {
+      context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -110,17 +135,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final TurnstileOptions options = TurnstileOptions(
+    size: TurnstileSize.flexible,
+    theme: TurnstileTheme.light,
+    borderRadius: BorderRadius.circular(10),
+    language: 'es',
+    retryAutomatically: false,
+    refreshTimeout: TurnstileRefreshTimeout.manual,
+  );
   @override
   Widget build(BuildContext context) {
-    final TurnstileOptions options = TurnstileOptions(
-      size: TurnstileSize.flexible,
-      theme: TurnstileTheme.light,
-      borderRadius: BorderRadius.circular(10),
-      language: 'es',
-      retryAutomatically: false,
-      refreshTimeout: TurnstileRefreshTimeout.manual,
-    );
-
     return Container(
       padding: const EdgeInsets.all(15),
       margin: const EdgeInsets.all(10),
