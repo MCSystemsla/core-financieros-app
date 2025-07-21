@@ -19,6 +19,8 @@ void showFilterGetByCedualAndNumeroSolicitud(
   String? cedulaCliente,
   SolicitudNuevaByEstadoCubit cubit,
 ) {
+  final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -31,7 +33,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
         value: cubit,
         child: Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+            bottom: bottomInset,
             top: 24,
             left: 20,
             right: 20,
