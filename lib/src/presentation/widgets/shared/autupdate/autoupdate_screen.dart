@@ -61,6 +61,17 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
         statusCode: '400',
         username: LocalStorage().currentUserName,
       );
+      setState(() {
+        resultType = ResultType.error;
+        if (e.toString().contains('PERMISSION_DENIED')) {
+          errorMsg =
+              'No se tienen permisos para instalar. Habilítalos e intenta de nuevo.';
+        } else if (e.toString().contains('timeout')) {
+          errorMsg = 'La descarga ha tardado demasiado. Verifica tu conexión.';
+        } else {
+          errorMsg = e.toString();
+        }
+      });
     });
   }
 
@@ -89,7 +100,7 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double estimatedTotalBytes = 98 * 1024 * 1024; // 98 MB aprox
+    const double estimatedTotalBytes = 99 * 1024 * 1024; // 99 MB aprox
 
     final double percentage =
         (_progress / estimatedTotalBytes * 100).clamp(0, 100);
@@ -114,7 +125,7 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
                 const Gap(20),
                 Text(
                   resultType == ResultType.done
-                      ? 'La aplicación se ha actualizado correctamente'
+                      ? 'La aplicación se ha actualizado correctamente.'
                       : 'Actualizando la aplicación, por favor no cierres la aplicación...',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineSmall?.copyWith(
