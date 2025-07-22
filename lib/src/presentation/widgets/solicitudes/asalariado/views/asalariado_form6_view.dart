@@ -420,8 +420,6 @@ class __FormContentState extends State<_FormContent> {
                     OutlineTextfieldWidget(
                       readOnly: true,
                       hintText: totalIngresosMesConyuge?.toCurrencyString(),
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),

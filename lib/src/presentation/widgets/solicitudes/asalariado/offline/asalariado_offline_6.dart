@@ -512,7 +512,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: observaciones,
-                      // validator: (value) => ClassValidator.validateRequired(value),
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],

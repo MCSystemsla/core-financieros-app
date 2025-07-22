@@ -57,6 +57,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   double? montoMaximo;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
+    DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
@@ -66,11 +67,20 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(now)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -86,6 +96,8 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
@@ -95,11 +107,20 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }

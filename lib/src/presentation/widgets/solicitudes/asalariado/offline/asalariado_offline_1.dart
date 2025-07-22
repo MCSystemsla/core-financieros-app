@@ -1,11 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
@@ -70,9 +72,14 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
   String? estadoCivil;
   String? uuid;
   final formKey = GlobalKey<FormState>();
+  final edadMinimaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+  final edadMaximaCliente = global<ObjectBoxService>()
+      .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
   @override
   void initState() {
     super.initState();
+
     final solicitud = widget.asalariadoResponsesLocalDb;
     uuid = solicitud?.uuid;
     cedula = solicitud?.cedula;
@@ -140,12 +147,21 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime eighteenYearsAgo =
-        DateTime(now.year - 18, now.month, now.day);
+    final DateTime eighteenYearsAgo = DateTime(
+      now.year - int.parse(edadMinimaCliente?.valor ?? '0'),
+      now.month,
+      now.day,
+    );
+    final DateTime maxAgeClient = DateTime(
+      now.year - int.parse(edadMaximaCliente?.valor ?? '0'),
+      now.month,
+      now.day,
+    );
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaNacimiento,
-      firstDate: DateTime(1930),
+      firstDate: maxAgeClient,
       lastDate: eighteenYearsAgo,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -159,15 +175,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isBefore(eighteenYearsAgo) ||
-          picked.isAtSameMomentAs(eighteenYearsAgo)) {
-        CustomAlertDialog(
-          onDone: () => context.pop(),
-          context: context,
-          title: 'La edad no puede ser menor a 18 años',
-        ).showDialog(context, dialogType: DialogType.warning);
-        return;
-      }
+
       fechaNacimiento = picked;
       context.read<SolicitudAsalariadoCubit>().onFieldChanged(
             () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -208,10 +216,15 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
   }
 
   Future<void> selectFechaVencimientoCedula(BuildContext context) async {
+    final DateTime minFechaVencimiento = DateTime(
+      fechaEmisionCedula!.year + 10,
+      fechaEmisionCedula!.month,
+      fechaEmisionCedula!.day,
+    );
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaVencimientoCedula,
-      firstDate: DateTime(1930),
+      firstDate: minFechaVencimiento,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -414,7 +427,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     OutlineTextfieldWidget(
                       validator: (value) => ClassValidator.validateRequired(
                           fechaNacimiento?.selectorFormat()),
-                      initialValue: fechaNacimiento?.selectorFormat(),
                       onTap: () => selectFechaNacimiento(context),
                       hintText: fechaNacimiento?.selectorFormat(),
                       readOnly: true,
@@ -459,7 +471,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: fechaEmisionCedula?.selectorFormat(),
                       onTap: () => selectFechaEmisionCedula(context),
                       hintText: fechaEmisionCedula?.selectorFormat(),
                       readOnly: true,
@@ -471,7 +482,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                       hintText: fechaVencimientoCedula?.selectorFormat(),
                       readOnly: true,
                       onTap: () => selectFechaVencimientoCedula(context),
-                      initialValue: fechaVencimientoCedula?.selectorFormat(),
                       title: 'Fecha vencimiento cédula',
                       icon: const Icon(Icons.calendar_today),
                     ),
@@ -543,18 +553,19 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                       title: 'Tipo de Persona',
                     ),
                     const Gap(30),
-                    OutlineTextfieldWidget(
-                      initialValue: nacionalidad,
-                      onChange: (value) {
-                        nacionalidad = value;
+                    CatalogoValorNacionalidad(
+                      hintText: nacionalidad ?? 'input.select_option'.tr(),
+                      onChanged: (item) {
+                        nacionalidad = item?.valor;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             nacionalidad: nacionalidad,
                           ),
                         );
+                        setState(() {});
                       },
-                      title: 'Nacionalidad',
-                      icon: const Icon(Icons.flag_circle),
+                      codigo: 'PAIS',
+                      title: 'País emisor cédula',
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(

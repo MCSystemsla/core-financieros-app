@@ -155,8 +155,8 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                     parentesco = item;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        objParentescoBeneficiarioSeguroId: item?.value,
-                        objParentescoBeneficiarioSeguroIdVer: item?.name,
+                        objParentescoBeneficiarioSeguroId: parentesco?.value,
+                        objParentescoBeneficiarioSeguroIdVer: parentesco?.name,
                       ),
                     );
                     setState(() {});
@@ -172,7 +172,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                     cedula = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        cedulaBeneficiarioSeguro: value,
+                        cedulaBeneficiarioSeguro: cedula,
                       ),
                     );
                   },
@@ -244,7 +244,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       nombreEntidad = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreDeEntidadPeps: value,
+                          nombreDeEntidadPeps: nombreEntidad,
                         ),
                       );
                     },
@@ -253,7 +253,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: paisPeps ?? '',
+                    hintText: paisPeps ?? 'input.select_option'.tr(),
                     title: 'Pais',
                     onChanged: (item) {
                       if (item == null) return;
@@ -263,8 +263,6 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                           paisPeps: item.valor,
                         ),
                       );
-                      // paisDomicilio = Item(name: item.nombre, value: item.valor);
-                      // depWhereClause = item.valor;
 
                       setState(() {});
                     },
@@ -277,7 +275,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       periodoPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          periodoPeps: value,
+                          periodoPeps: periodoPeps,
                         ),
                       );
                     },
@@ -291,7 +289,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       cargoOficialPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          cargoOficialPeps: value,
+                          cargoOficialPeps: cargoOficialPeps,
                         ),
                       );
                     },
@@ -309,7 +307,6 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                     isContainIcon: true,
                     title:
                         '¿Eres familia de una persona que ha desempeñado un cargo público o figura pública de alto nivel?',
-
                     items: ['input.yes'.tr(), 'input.no'.tr()],
                     onChanged: (item) {
                       familiarPeps = item;
@@ -320,7 +317,6 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       );
                       setState(() {});
                     },
-                    // validator: (value) {},
                     toStringItem: (item) => item,
                     hintText: 'input.select_option'.tr(),
                   ),
@@ -333,7 +329,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       nombreFamiliarPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreFamiliarPeps2: value,
+                          nombreFamiliarPeps2: nombreFamiliarPeps,
                         ),
                       );
                     },
@@ -342,13 +338,15 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                   ),
                   const Gap(30),
                   SearchDropdownWidget(
-                    hintText: parentescoFamiliarPeps ?? '',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(parentescoFamiliarPeps),
+                    hintText:
+                        parentescoFamiliarPeps ?? 'input.select_option'.tr(),
                     onChanged: (item) {
                       parentescoFamiliarPeps = item?.value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objParentescoBeneficiarioSeguroId: item?.value,
-                          objParentescoBeneficiarioSeguroIdVer: item?.name,
+                          parentescoFamiliarPeps2: parentescoFamiliarPeps,
                         ),
                       );
                       setState(() {});
@@ -363,7 +361,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       cargoFamiliarPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          cargoFamiliarPeps2: value,
+                          cargoFamiliarPeps2: cargoFamiliarPeps,
                         ),
                       );
                     },
@@ -377,7 +375,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       nombreEntidadPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreEntidadPeps2: value,
+                          nombreEntidadPeps2: nombreEntidadPeps,
                         ),
                       );
                     },
@@ -391,7 +389,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       periodoFamiliarPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          periodoPeps2: value,
+                          periodoPeps2: periodoFamiliarPeps,
                         ),
                       );
                     },
@@ -400,14 +398,14 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    hintText: paisPepsFamiliar ?? '',
+                    hintText: paisPepsFamiliar ?? 'input.select_option'.tr(),
                     codigo: 'PAIS',
                     title: 'País',
                     onChanged: (item) {
                       paisPepsFamiliar = item?.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          paisPeps2: item?.valor,
+                          paisPeps2: paisPepsFamiliar,
                         ),
                       );
                     },

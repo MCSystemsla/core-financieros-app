@@ -559,7 +559,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     relacion: '',
                   ),
 
-                  title: 'Pais de Nacimiento',
+                  title: 'Nacionalidad',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     nacionalidad = item.valor;
@@ -698,8 +698,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  validator: (value) =>
-                      ClassValidator.validateCantidadHijos(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
