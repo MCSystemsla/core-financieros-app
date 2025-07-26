@@ -298,7 +298,7 @@ class SolicitudAsalariado {
       'CargoOficialPeps': cargoOficialPeps,
       'TieneFamiliarPeps': tieneFamiliarPeps,
       'NombreFamiliarPeps2': nombreFamiliarPeps2,
-      'ParentescoFamiliarPeps2Codigo': parentescoFamiliarPeps2,
+      'ParentescoFamiliarPeps2': parentescoFamiliarPeps2,
       'CargoFamiliarPeps2': cargoFamiliarPeps2,
       'NombreEntidadPeps2': nombreEntidadPeps2,
       'PeriodoPeps2': periodoPeps2,

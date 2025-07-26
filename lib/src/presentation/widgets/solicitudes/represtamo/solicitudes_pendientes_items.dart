@@ -42,15 +42,17 @@ class SolicitudesPendientesItems extends StatelessWidget {
                   ],
                 ),
               )
-            : ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: solicitudesOffline.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return SolicitudesPendientesWidget(
-                    solicitud: solicitudesOffline[index],
-                  );
-                },
+            : Expanded(
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: solicitudesOffline.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SolicitudesPendientesWidget(
+                      solicitud: solicitudesOffline[index],
+                    );
+                  },
+                ),
               ),
       ],
     );

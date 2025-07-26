@@ -57,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_shouldSync) {
       return DownsloadingCatalogosWidget(
         onDownloadComplete: () {
-          global<BiometricCubit>().authenticate(context);
           Navigator.push(
             context,
             MaterialPageRoute(

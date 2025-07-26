@@ -24,7 +24,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       final (isOk, msg, numeroSolicitud) =
           await repository.createSolicitudCreditoNuevaMenor(
               solicitudNuevaMenor: SolicitudNuevaMenor(
-        isOffline: state.isDone,
+        isOffline: state.isOffline,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         nombre1: state.nombre1,
         nombre2: state.nombre2,
@@ -420,6 +420,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           _prefer(state.objTipoPersonaIdVer, prev?.objTipoPersonaIdVer),
       nacionalidadConyugueVer:
           _prefer(state.nacionalidadConyugueVer, prev?.nacionalidadConyugueVer),
+      isOffline: prev?.isOffline ?? false,
     );
   }
 

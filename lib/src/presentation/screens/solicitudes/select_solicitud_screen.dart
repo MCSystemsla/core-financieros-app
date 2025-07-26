@@ -37,7 +37,12 @@ class SelectSolicitudScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pushReplacement('/cartera'),
+          ),
+        ),
         body: BlocBuilder<EnviarSolicitudWhenIsdoneCubit,
             EnviarSolicitudWhenIsdoneState>(
           builder: (context, state) {

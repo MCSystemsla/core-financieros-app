@@ -736,7 +736,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pushReplacement('/solicitudes');
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,

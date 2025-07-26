@@ -501,6 +501,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     ),
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      enabled: false,
                       hintText: paisEmisor ?? 'Ingresa Pais',
                       onChanged: (item) {
                         paisEmisor = item?.valor;
@@ -513,10 +514,11 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                         setState(() {});
                       },
                       codigo: 'PAIS',
-                      title: 'País emisor cédula',
+                      title: 'País emisor documento',
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      enabled: false,
                       hintText: tipoDocumento ?? '',
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
@@ -632,8 +634,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateCantidadHijos(value),
                       initialValue: cantidadHijos,
                       textInputType: TextInputType.number,
                       inputFormatters: [

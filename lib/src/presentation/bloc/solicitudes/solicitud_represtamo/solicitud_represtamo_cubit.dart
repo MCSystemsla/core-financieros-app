@@ -201,8 +201,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       parentescoFamiliarVer:
           _prefer(state.parentescoFamiliarVer, prev?.parentescoFamiliarVer),
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
-      isOffline:
-          !state.isOffline ? (prev?.isOffline ?? false) : state.isOffline,
+      isOffline: prev?.isOffline ?? false,
       objRubroActividad:
           _prefer(state.objRubroActividad, prev?.objRubroActividad),
       objFrecuenciaIdVer:

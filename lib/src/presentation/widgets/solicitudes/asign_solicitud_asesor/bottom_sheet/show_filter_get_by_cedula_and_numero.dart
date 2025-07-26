@@ -20,6 +20,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
   SolicitudNuevaByEstadoCubit cubit,
 ) {
   final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+  final formKey = GlobalKey<FormState>();
 
   showModalBottomSheet(
     context: context,
@@ -40,7 +41,6 @@ void showFilterGetByCedualAndNumeroSolicitud(
           ),
           child: StatefulBuilder(
             builder: (context, setState) {
-              final formKey = GlobalKey<FormState>();
               return SingleChildScrollView(
                 child: Form(
                   key: formKey,

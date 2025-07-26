@@ -152,7 +152,9 @@ class SolicitudNuevaMenorState extends Equatable {
   final String parentescoFamiliarPeps2Ver;
   final String paisPeps2Ver;
   final String nacionalidadConyugueVer;
+  final bool isOffline;
   const SolicitudNuevaMenorState({
+    this.isOffline = false,
     this.numeroSolicitud = '',
     this.departamentoNegocio = '',
     this.departamentoNegocioVer = '',
@@ -602,6 +604,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? parentescoFamiliarPeps2Ver,
     String? paisPeps2Ver,
     String? nacionalidadConyugueVer,
+    bool? isOffline,
   }) {
     return SolicitudNuevaMenorState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -794,6 +797,7 @@ class SolicitudNuevaMenorState extends Equatable {
       paisPeps2Ver: paisPeps2Ver ?? this.paisPeps2Ver,
       nacionalidadConyugueVer:
           nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }

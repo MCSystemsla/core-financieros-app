@@ -69,6 +69,14 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
   String? fechaNacimiento;
   String? nacionalidad;
   String? cantidadHijos;
+  String? nombrePublicoController;
+  String? telefonoController;
+  String? celularController;
+  String? emailController;
+  String? uuid;
+  CatalogoLocalDb? edadMinima;
+  CatalogoLocalDb? edadMaxima;
+  final formKey = GlobalKey<FormState>();
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
@@ -169,14 +177,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
     }
   }
 
-  String? nombrePublicoController;
-  String? telefonoController;
-  String? celularController;
-  String? emailController;
-  String? uuid;
-  CatalogoLocalDb? edadMinima;
-  CatalogoLocalDb? edadMaxima;
-  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -429,6 +429,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  enabled: false,
                   // initialValue: '',
                   hintText: tipoDocumentoVer ?? 'input.select_option'.tr(),
                   codigo: 'TIPODOCUMENTOPERSONA',
@@ -471,6 +472,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  enabled: false,
                   initialValue: ItemNacionalidad(
                     id: 0,
                     valor: paisEmisorVer ?? '',
@@ -494,7 +496,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     setState(() {});
                   },
                   codigo: 'PAIS',
-                  // initialValue: paisEmisor ?? '',
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

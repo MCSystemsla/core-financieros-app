@@ -11,10 +11,19 @@ import 'package:image/image.dart' as img;
 class CameraService {
   static Future<(String, XFile)> takeAndsavePhoto({
     required CameraController controller,
+    String numeroSoicitud = 'numero_solicitud',
   }) async {
     final photo = await controller.takePicture();
     final appDir = await getApplicationDocumentsDirectory();
-    final customDir = Directory('${appDir.path}/MyImages');
+    final customDir = Directory('${appDir.path}/KivaImages');
+    // TODO: Prueba de guardar imagenes en carpeta de solicitud
+    final customDirImages = Directory(
+        '/storage/emulated/0/Core_Financiero_App/Kiva/$numeroSoicitud');
+
+    if (!await customDirImages.exists()) {
+      await customDirImages.create(recursive: true);
+      log('Directorio creado: ${customDirImages.path}');
+    }
 
     if (!await customDir.exists()) {
       await customDir.create(recursive: true);
@@ -25,6 +34,13 @@ class CameraService {
         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
     final imageFile = File(photo.path);
     await imageFile.copy(localPath);
+
+    final localPathImages =
+        '${customDirImages.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final imageFileImages = File(photo.path);
+    log('Imagen guardada en: $localPath');
+    await imageFileImages.copy(localPathImages);
+    log('Imagen guardada en Downloads: $localPathImages');
     return (localPath, photo);
   }
 
@@ -54,10 +70,16 @@ class CameraService {
       height: frameHeight,
     );
 
-    // Guardar imagen recortada en archivo temporal
-    final directory = await getTemporaryDirectory();
+    final directory = await getApplicationDocumentsDirectory();
+    final croppedDir = Directory('${directory.path}/cedulas_solicitudes');
+    if (!await croppedDir.exists()) {
+      await croppedDir.create(recursive: true);
+      log('Directorio creado: ${croppedDir.path}');
+    }
     final croppedPath =
-        '${directory.path}/cedula_cropped_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        '${croppedDir.path}/cedula_cropped_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    log('Ruta de imagen recortada: $croppedPath');
     final croppedFile = File(croppedPath)
       ..writeAsBytesSync(img.encodeJpg(croppedImage));
 

@@ -24,6 +24,18 @@ class BiometricAuthService {
     }
   }
 
+  Future<bool> haveBiometricAvailable() async {
+    final isBiometricAvailable = await this.isBiometricAvailable();
+    final availableBiometrics = await getAvailableBiometrics();
+    final hasFingerprintOrFace =
+        availableBiometrics.contains(BiometricType.fingerprint) ||
+            availableBiometrics.contains(BiometricType.strong);
+
+    _logger.d(
+        'Biometría disponible: $isBiometricAvailable, Tipos: $availableBiometrics');
+    return isBiometricAvailable && hasFingerprintOrFace;
+  }
+
   Future<bool> authenticate({String reason = 'Autenticación requerida'}) async {
     try {
       final isAuth = await _auth.authenticate(

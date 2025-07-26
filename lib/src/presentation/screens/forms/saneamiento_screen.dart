@@ -941,158 +941,28 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               selectedImage: selectedImage,
               title: '1- ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
-                onImageSelected: (image) {
+                numeroSoicitud: solicitudCliente.numero,
+                onImageSelected: (image, path) {
                   setState(() {
                     selectedImage = image;
-                    selectedImage1Path = image?.path;
+                    selectedImage1Path = path;
                   });
                 },
               )),
-
-              // if (!mounted) return;
-              // if (!context.mounted) return;
-              // final hasPermission = await _requestPermissions();
-              // if (!context.mounted) return;
-              // if (!hasPermission) {
-              //   CustomAlertDialog(
-              //     context: context,
-              //     title: 'No tienes permisos para usar la camara',
-              //     onDone: () async {
-              //       final isOpened = await openAppSettings();
-              //       if (!context.mounted) return;
-              //       if (isOpened) {
-              //         context.pop();
-              //       }
-              //     },
-              //   ).showDialog(context, dialogType: DialogType.error);
-              //   return;
-              // }
-              // try {
-              //   final photo = await picker.pickImage(
-              //     source: ImageSource.camera,
-              //     maxHeight: 1080,
-              //     maxWidth: 1920,
-              //     imageQuality: 45,
-              //     preferredCameraDevice: CameraDevice.rear,
-              //   );
-              //   if (!mounted || photo == null) return;
-              //   final appDir = await getApplicationDocumentsDirectory();
-              //   final customDir = Directory('${appDir.path}/MyImages');
-
-              //   // Crea el directorio si no existe
-              //   if (!await customDir.exists()) {
-              //     await customDir.create(recursive: true);
-              //     log('Directorio creado: ${customDir.path}');
-              //   }
-              //   // Define la ruta de la imagen en el directorio
-              //   final localPath =
-              //       '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-              //   // Copia la imagen seleccionada al directorio
-              //   final imageFile = File(photo.path);
-              //   await imageFile.copy(localPath);
-              //   if (!mounted) return;
-
-              //   setState(() {
-              //     selectedImage = photo;
-              //     selectedImage1Path = localPath;
-              //   });
-              // } on PlatformException catch (e) {
-              //   if (!context.mounted) return;
-              //   CustomAlertDialog(
-              //     context: context,
-              //     title: 'Error al tomar la foto ${e.message}',
-              //     onDone: () => context.pop(),
-              //   ).showDialog(context, dialogType: DialogType.error);
-              // } catch (e) {
-              //   if (!context.mounted) return;
-              //   CustomAlertDialog(
-              //     context: context,
-              //     title: 'Error al tomar la foto ${e.toString()}',
-              //     onDone: () => context.pop(),
-              //   ).showDialog(context, dialogType: DialogType.error);
-              // }
             ),
             const Gap(20),
             UploadImageWidget(
               selectedImage: selectedImage2,
               title: '2-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
-                onImageSelected: (image) {
+                numeroSoicitud: solicitudCliente.numero,
+                onImageSelected: (image, path) {
                   setState(() {
                     selectedImage2 = image;
-                    selectedImage2Path = image?.path;
+                    selectedImage2Path = path;
                   });
                 },
               )),
-              //   if (!mounted) return;
-              //   final hasPermission = await _requestPermissions();
-              //   if (!context.mounted) return;
-              //   if (!hasPermission) {
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'No tienes permisos para usar la camara',
-              //       onDone: () async {
-              //         final isOpened = await openAppSettings();
-              //         if (!context.mounted) return;
-              //         if (isOpened) {
-              //           context.pop();
-              //         }
-              //       },
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //     return;
-              //   }
-              //   try {
-              //     final photo = await picker.pickImage(
-              //       source: ImageSource.camera,
-              //       maxHeight: 1080,
-              //       maxWidth: 1920,
-              //       imageQuality: 45,
-              //       preferredCameraDevice: CameraDevice.rear,
-              //     );
-              //     if (!mounted || photo == null) return;
-              //     final appDir = await getApplicationDocumentsDirectory();
-              //     final customDir = Directory('${appDir.path}/MyImages');
-
-              //     // Crea el directorio si no existe
-              //     if (!await customDir.exists()) {
-              //       await customDir.create(recursive: true);
-              //       log('Directorio creado: ${customDir.path}');
-              //     }
-              //     // Define la ruta de la imagen en el directorio
-              //     final localPath =
-              //         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-              //     // Copia la imagen seleccionada al directorio
-              //     final imageFile = File(photo.path);
-              //     await imageFile.copy(localPath);
-              //     if (!mounted) return;
-              //     setState(() {
-              //       selectedImage2 = photo;
-              //       selectedImage2Path = localPath;
-              //     });
-              //   } on PlatformException catch (e) {
-              //     if (!context.mounted) return;
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'Error al tomar la foto ${e.message}',
-              //       onDone: () => context.pop(),
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //   } catch (e) {
-              //     if (!context.mounted) return;
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'Error al tomar la foto ${e.toString()}',
-              //       onDone: () async {
-              //         final isOpened = await openAppSettings();
-              //         if (!context.mounted) return;
-              //         if (isOpened) {
-              //           context.pop();
-              //         }
-              //       },
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //   }
-              // },
             ),
             const Gap(15),
             UploadImageWidget(
@@ -1100,77 +970,15 @@ class _SaneamientoContentState extends State<SaneamientoContent>
               title: '3-  ${'forms.saneamiento.client_photo'.tr()}',
               onPressed: () => context.pushTransparentRoute(
                 CameraCaptureScreen(
-                  onImageSelected: (image) {
+                  numeroSoicitud: solicitudCliente.numero,
+                  onImageSelected: (image, path) {
                     setState(() {
                       selectedImage3 = image;
-                      selectedImage3Path = image?.path;
+                      selectedImage3Path = path;
                     });
                   },
                 ),
               ),
-              // onPressed: () async {
-              //   if (!mounted) return;
-              //   final hasPermission = await _requestPermissions();
-              //   if (!context.mounted) return;
-              //   if (!hasPermission) {
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'No tienes permisos para usar la camara',
-              //       onDone: () async {
-              //         final isOpened = await openAppSettings();
-              //         if (!context.mounted) return;
-              //         if (isOpened) {
-              //           context.pop();
-              //         }
-              //       },
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //     return;
-              //   }
-              //   try {
-              //     final photo = await picker.pickImage(
-              //       source: ImageSource.camera,
-              //       maxHeight: 1080,
-              //       maxWidth: 1920,
-              //       imageQuality: 45,
-              //       preferredCameraDevice: CameraDevice.rear,
-              //     );
-              //     if (!mounted || photo == null) return;
-              //     final appDir = await getApplicationDocumentsDirectory();
-              //     final customDir = Directory('${appDir.path}/MyImages');
-
-              //     // Crea el directorio si no existe
-              //     if (!await customDir.exists()) {
-              //       await customDir.create(recursive: true);
-              //       log('Directorio creado: ${customDir.path}');
-              //     }
-              //     // Define la ruta de la imagen en el directorio
-              //     final localPath =
-              //         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-              //     // Copia la imagen seleccionada al directorio
-              //     final imageFile = File(photo.path);
-              //     await imageFile.copy(localPath);
-              //     if (!mounted) return;
-              //     setState(() {
-              //       selectedImage3 = photo;
-              //       selectedImage3Path = localPath;
-              //     });
-              //   } on PlatformException catch (e) {
-              //     if (!context.mounted) return;
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'Error al tomar la foto ${e.message}',
-              //       onDone: () => context.pop(),
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //   } catch (e) {
-              //     if (!context.mounted) return;
-              //     CustomAlertDialog(
-              //       context: context,
-              //       title: 'Error al tomar la foto ${e.toString()}',
-              //       onDone: () => context.pop(),
-              //     ).showDialog(context, dialogType: DialogType.error);
-              //   }
-              // },
             ),
             const Gap(20),
             ButtonActionsWidget(
