@@ -24,6 +24,7 @@ abstract class APIRepository {
 
 class DefaultAPIRepository implements APIRepository {
   final _logger = global<Logger>();
+  final kHttpTimeout = Duration(seconds: 40);
 
   @override
   Future<Map<String, dynamic>> request({required Endpoint endpoint}) async {
@@ -90,38 +91,46 @@ class DefaultAPIRepository implements APIRepository {
 
   Future<Response> _get(Uri url, Map<String, String> headers) {
     _logger.d('get() with url ($url) - headers ($headers)');
-    return http.get(url, headers: headers);
+    return http.get(url, headers: headers).timeout(kHttpTimeout);
   }
 
   Future<Response> _post(
       Uri url, Map<String, String> headers, Map<String, dynamic> body) {
     _logger.d('post() with url ($url) - headers ($headers) - body ($body)');
-    return http.post(
-      url,
-      headers: headers,
-      body: json.encode(body), /* encoding: Utf8Codec() */
-    );
+    return http
+        .post(
+          url,
+          headers: headers,
+          body: json.encode(body), /* encoding: Utf8Codec() */
+        )
+        .timeout(kHttpTimeout);
   }
 
   Future<Response> _put(
       Uri url, Map<String, String> headers, Map<String, dynamic> body) {
     _logger.d('put() with url ($url) - headers ($headers) - body ($body)');
-    return http.put(url,
-        headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
+    return http
+        .put(url,
+            headers: headers, body: jsonEncode(body), encoding: Utf8Codec())
+        .timeout(kHttpTimeout);
   }
 
   Future<Response> _patch(
       Uri url, Map<String, String> headers, Map<String, dynamic> body) {
     _logger.d('patch() with url ($url) - headers ($headers) - body ($body)');
-    return http.patch(url,
-        headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
+    return http
+        .patch(url,
+            headers: headers, body: jsonEncode(body), encoding: Utf8Codec())
+        .timeout(kHttpTimeout);
   }
 
   Future<Response> _delete(
       Uri url, Map<String, String> headers, Map<String, dynamic> body) {
     _logger.d('delete() with url ($url) - headers ($headers) - body ($body)');
-    return http.delete(url,
-        headers: headers, body: jsonEncode(body), encoding: Utf8Codec());
+    return http
+        .delete(url,
+            headers: headers, body: jsonEncode(body), encoding: Utf8Codec())
+        .timeout(kHttpTimeout);
   }
 
   Future<Map<String, dynamic>> _handleResponse(Response response) async {
