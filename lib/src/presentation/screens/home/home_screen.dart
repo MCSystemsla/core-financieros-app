@@ -2,9 +2,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/device_storage/device_storage_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_items_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_warning/low_storage_warning_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isConnected = context.read<InternetConnectionCubit>().state;
     if (_isChecking) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -77,50 +78,72 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        return PopScope(
-          canPop: false,
-          child: Scaffold(
-            floatingActionButton:
-                isConnected.connectionStatus == ConnectionStatus.connected
-                    ? SlideInUp(
-                        child: FloatingActionButton.extended(
-                          label: const Row(
-                            children: [
-                              Icon(Icons.update_rounded),
-                              Gap(5),
-                              Text('Sincronizar'),
-                            ],
-                          ),
-                          onPressed: () => {
-                            context.pushTransparentRoute(
-                              DownsloadingCatalogosWidget(
-                                onDownloadComplete: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomeScreen(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          },
-                        ),
-                      )
-                    : const SizedBox(),
-            body: FadeIn(
-              child: const Column(
-                children: [
-                  HomeBannerWidget(),
-                  Expanded(
-                    child: HomeItemsWidget(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        return BlocBuilder<DeviceStorageCubit, DeviceStorageState>(
+          builder: (context, state) {
+            return switch (state.isStorageFull) {
+              StorageDeviceStatus.full => LowStorageWarning(
+                  freeStorage: state.freeStorage,
+                  totalStorage: state.totalStorage / 1000,
+                  usedStoragePercent: state.usedStoragePercent,
+                ),
+              StorageDeviceStatus.available => _HomeScreenView(),
+              StorageDeviceStatus.userGetContinue => _HomeScreenView(),
+              _ => const SizedBox(),
+            };
+          },
         );
       },
+    );
+  }
+}
+
+class _HomeScreenView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isConnected = context.read<InternetConnectionCubit>().state;
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        floatingActionButton:
+            isConnected.connectionStatus == ConnectionStatus.connected
+                ? SlideInUp(
+                    child: FloatingActionButton.extended(
+                      label: const Row(
+                        children: [
+                          Icon(Icons.update_rounded),
+                          Gap(5),
+                          Text('Sincronizar'),
+                        ],
+                      ),
+                      onPressed: () => {
+                        context.pushTransparentRoute(
+                          DownsloadingCatalogosWidget(
+                            onDownloadComplete: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      },
+                    ),
+                  )
+                : const SizedBox(),
+        body: FadeIn(
+          child: const Column(
+            children: [
+              HomeBannerWidget(),
+              Expanded(
+                child: HomeItemsWidget(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

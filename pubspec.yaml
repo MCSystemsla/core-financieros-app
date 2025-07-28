@@ -80,6 +80,7 @@ dependencies:
   image: ^4.5.4
   uuid: ^4.5.1
   flutter_multi_formatter: ^2.13.7
+  disk_space_plus: ^0.2.6
 
 
   # Intl

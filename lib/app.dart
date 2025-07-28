@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/domain/repository/departamentos/departam
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/device_storage/device_storage_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
@@ -78,6 +79,8 @@ class App extends StatelessWidget {
           create: (ctx) => UserByCedulaCubit(SolicitudCreditoRepositoryImpl()),
         ),
         BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
+        BlocProvider(
+            create: (ctx) => DeviceStorageCubit()..initDeviceStorage()),
       ],
       child: BlocConsumer<LangCubit, LangState>(
         listener: (context, state) async {
