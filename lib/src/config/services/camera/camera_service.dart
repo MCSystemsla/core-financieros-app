@@ -16,7 +16,7 @@ class CameraService {
     final photo = await controller.takePicture();
     final appDir = await getApplicationDocumentsDirectory();
     final customDir = Directory('${appDir.path}/KivaImages');
-    // TODO: Prueba de guardar imagenes en carpeta de solicitud
+    // // TODO: Prueba de guardar imagenes en carpeta de solicitud
     final customDirImages = Directory(
         '/storage/emulated/0/Core_Financiero_App/Kiva/$numeroSoicitud');
 
@@ -38,9 +38,9 @@ class CameraService {
     final localPathImages =
         '${customDirImages.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
     final imageFileImages = File(photo.path);
-    log('Imagen guardada en: $localPath');
     await imageFileImages.copy(localPathImages);
     log('Imagen guardada en Downloads: $localPathImages');
+    log('Imagen guardada en: $localPath');
     return (localPath, photo);
   }
 

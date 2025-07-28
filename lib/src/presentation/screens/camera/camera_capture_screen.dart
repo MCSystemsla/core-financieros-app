@@ -69,10 +69,16 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   }
 
   Future<bool> _requestPermissions() async {
-    final status = await Permission.camera.request();
-    final hasStoragePermission =
-        await Permission.manageExternalStorage.request();
-    return status.isGranted && hasStoragePermission.isGranted;
+    final permissions = await [
+      Permission.camera,
+      Permission.manageExternalStorage,
+    ].request();
+
+    final cameraGranted = permissions[Permission.camera]?.isGranted ?? false;
+    final storageGranted =
+        permissions[Permission.manageExternalStorage]?.isGranted ?? false;
+
+    return cameraGranted && storageGranted;
   }
 
   Future<void> _takePhoto() async {
