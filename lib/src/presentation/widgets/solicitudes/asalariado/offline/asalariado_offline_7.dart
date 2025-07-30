@@ -63,20 +63,30 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   final formKey = GlobalKey<FormState>();
 
   Future<void> selectDate(BuildContext context) async {
+    DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(1930),
+      firstDate: now,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(now)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -92,16 +102,18 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(1930),
+      firstDate: now,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -109,6 +121,16 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+
       fechaDesembolso = picked;
       context.read<SolicitudAsalariadoCubit>().onFieldChanged(
             () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -123,6 +145,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   @override
   void initState() {
     super.initState();
+    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     final solicitud = widget.asalariadoResponsesLocalDb;
     moneda = Item(
         name: solicitud?.objMonedaIdVer ?? '', value: solicitud?.objMonedaId);
@@ -179,11 +202,9 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
-    return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
         final cubit = context.read<SolicitudAsalariadoCubit>();
         return SingleChildScrollView(
@@ -194,6 +215,8 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
               children: [
                 const Gap(20),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(proposito?.value),
                   hintText: proposito?.name ?? 'input.select_option'.tr(),
                   codigo: 'DESTINOCREDITO',
                   title: 'Proposito',
@@ -445,7 +468,8 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                                   calcularCuotaProvider.state.montoPrimeraCuota,
                             ),
                           );
-                          if (!isConnected) {
+                          if (state.connectionStatus ==
+                              ConnectionStatus.disconnected) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
                                 errorMsg:

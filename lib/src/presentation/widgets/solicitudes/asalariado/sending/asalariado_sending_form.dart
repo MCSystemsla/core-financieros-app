@@ -19,10 +19,20 @@ class AsalariadoSendingForm extends StatefulWidget {
 }
 
 class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
+  final localDbProvider = global<ObjectBoxService>();
+
   @override
   initState() {
-    context.read<SolicitudAsalariadoCubit>().createSolicitudAsalariado();
     super.initState();
+    final imagesCedula = localDbProvider.getCedula(
+      cedula: context.read<SolicitudAsalariadoCubit>().state.cedula,
+      tipoSolicitud: 'ASALARIADO',
+    );
+    context.read<SolicitudAsalariadoCubit>().saveCedula(
+          cedulaFrontPath: imagesCedula?.imageFrontCedula,
+          cedulaBackPath: imagesCedula?.imageBackCedula,
+        );
+    context.read<SolicitudAsalariadoCubit>().createSolicitudAsalariado();
   }
 
   @override
@@ -31,6 +41,9 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
     return BlocConsumer<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
+          context.read<SolicitudAsalariadoCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+              );
           dbProvider.removeSolicitudAsalariadoWhenisUploaded(
             solicitudId: widget.solicitudId,
           );

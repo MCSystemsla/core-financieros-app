@@ -15,11 +15,12 @@ class ItemNacionalidad extends Equatable {
   final String nombre;
   final String relacion;
 
-  const ItemNacionalidad(
-      {required this.id,
-      required this.valor,
-      required this.nombre,
-      required this.relacion});
+  const ItemNacionalidad({
+    required this.id,
+    required this.valor,
+    required this.nombre,
+    required this.relacion,
+  });
   @override
   List<Object?> get props => [
         id,

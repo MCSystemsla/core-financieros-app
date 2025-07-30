@@ -302,10 +302,10 @@ class __FormContentState extends State<_FormContent> {
                     items: Origin.comunidades,
                     onChanged: (item) {
                       if (item == null) return;
-                      comunidad = item.valor;
+                      comunidad = item.nombre;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          ubicacion: item.valor,
+                          ubicacion: item.nombre,
                         ),
                       );
                     },
@@ -335,9 +335,9 @@ class __FormContentState extends State<_FormContent> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           ubicacionLongitud:
-                              widget.position!.longitude.toString(),
+                              widget.position?.longitude.toString(),
                           ubicacionLatitud:
-                              widget.position!.latitude.toString(),
+                              widget.position?.latitude.toString(),
                         ),
                       );
                       widget.controller.nextPage(

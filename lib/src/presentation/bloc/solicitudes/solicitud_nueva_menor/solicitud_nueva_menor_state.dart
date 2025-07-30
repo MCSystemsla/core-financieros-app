@@ -2,8 +2,11 @@
 part of 'solicitud_nueva_menor_cubit.dart';
 
 class SolicitudNuevaMenorState extends Equatable {
+  final String numeroSolicitud;
   final String? uuid;
   final String frecuenciaPagoMeses;
+  final String departamentoNegocio;
+  final String departamentoNegocioVer;
   final String onSuccessMsg;
   final bool hasVerified;
   final int idLocalResponse;
@@ -145,7 +148,20 @@ class SolicitudNuevaMenorState extends Equatable {
   final int montoMaximo;
   final String cedulaFrontPath;
   final String cedulaBackPath;
+  final String paisPepsVer;
+  final String parentescoFamiliarPeps2Ver;
+  final String paisPeps2Ver;
+  final String nacionalidadConyugueVer;
+  final bool isOffline;
   const SolicitudNuevaMenorState({
+    this.isOffline = false,
+    this.numeroSolicitud = '',
+    this.departamentoNegocio = '',
+    this.departamentoNegocioVer = '',
+    this.nacionalidadConyugueVer = '',
+    this.paisPeps2Ver = '',
+    this.parentescoFamiliarPeps2Ver = '',
+    this.paisPepsVer = '',
     this.frecuenciaPagoMeses = '0',
     this.uuid,
     this.cedulaFrontPath = '',
@@ -293,7 +309,8 @@ class SolicitudNuevaMenorState extends Equatable {
 
   @override
   List<Object> get props => [
-        // uuid!,
+        departamentoNegocio,
+        departamentoNegocioVer,
         frecuenciaPagoMeses,
         cedulaFrontPath,
         cedulaBackPath,
@@ -437,8 +454,11 @@ class SolicitudNuevaMenorState extends Equatable {
       ];
 
   SolicitudNuevaMenorState copyWith({
+    String? numeroSolicitud,
     String? uuid,
     String? frecuenciaPagoMeses,
+    String? departamentoNegocio,
+    String? departamentoNegocioVer,
     String? onSuccessMsg,
     bool? hasVerified,
     int? idLocalResponse,
@@ -580,10 +600,19 @@ class SolicitudNuevaMenorState extends Equatable {
     int? montoMaximo,
     String? cedulaFrontPath,
     String? cedulaBackPath,
+    String? paisPepsVer,
+    String? parentescoFamiliarPeps2Ver,
+    String? paisPeps2Ver,
+    String? nacionalidadConyugueVer,
+    bool? isOffline,
   }) {
     return SolicitudNuevaMenorState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
+      departamentoNegocio: departamentoNegocio ?? this.departamentoNegocio,
+      departamentoNegocioVer:
+          departamentoNegocioVer ?? this.departamentoNegocioVer,
       onSuccessMsg: onSuccessMsg ?? this.onSuccessMsg,
       hasVerified: hasVerified ?? this.hasVerified,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
@@ -762,6 +791,13 @@ class SolicitudNuevaMenorState extends Equatable {
       montoMaximo: montoMaximo ?? this.montoMaximo,
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
+      paisPepsVer: paisPepsVer ?? this.paisPepsVer,
+      parentescoFamiliarPeps2Ver:
+          parentescoFamiliarPeps2Ver ?? this.parentescoFamiliarPeps2Ver,
+      paisPeps2Ver: paisPeps2Ver ?? this.paisPeps2Ver,
+      nacionalidadConyugueVer:
+          nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }

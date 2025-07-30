@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,8 +59,27 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
   String? direccionTrabajoConyugue;
   String? tiempoLaborarConyugue;
   String? estadoCivil;
+  String? estadoCivilVer;
 
   final formKey = GlobalKey<FormState>();
+  void getTotalIngresoMes() {
+    final double? salarioNetoMes =
+        double.tryParse(salarioNetoMensualConyuge?.replaceAll(',', '') ?? '0');
+    final double? otrosIngresosMes =
+        double.tryParse(otrosIngresosConyuge?.replaceAll(',', '') ?? '0');
+    final totalIngresosMesSum = (salarioNetoMes ?? 0) + (otrosIngresosMes ?? 0);
+
+    setState(() {
+      totalIngresosMesConyuge = totalIngresosMesSum.toStringAsFixed(2);
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  totalIngresoMesConyugue:
+                      double.tryParse(totalIngresosMesConyuge ?? '0'),
+                ),
+          );
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +107,9 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
     direccionTrabajoConyugue = solicitud?.direccionTrabajoConyugue;
     tiempoLaborarConyugue = solicitud?.tiempoLaborarConyugue;
     nombreFamiliarCercano = solicitud?.nombreFamiliar;
+    estadoCivil = solicitud?.objEstadoCivilId;
+    estadoCivilVer = solicitud?.objEstadoCivilIdVer;
+    totalIngresosMesConyuge = solicitud?.totalIngresoMesConyugue.toString();
 
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -113,6 +136,8 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 telefonoTrabajoConyugue: telefonoOficinaConyuge,
                 tiempoLaborarConyugue: tiempoLaborarConyugue,
                 nombreFamiliar: nombreFamiliarCercano,
+                objEstadoCivilId: estadoCivil,
+                objEstadoCivilIdVer: estadoCivilVer,
               ),
         );
   }
@@ -140,6 +165,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: nombreFamiliarCercano,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -157,6 +183,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 ),
                 const Gap(30),
                 CountryInput(
+                  initialValue: telefonoFamiliarCercano,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     telefonoFamiliarCercano = value;
@@ -181,6 +208,8 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  hintText: parentescoFamiliarCercano?.name ??
+                      'input.select_option'.tr(),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'PARENTESCO',
@@ -198,6 +227,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: direccionDomicilioFamiiiar,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -223,6 +253,24 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
+                const Gap(30),
+                SearchDropdownWidget(
+                  hintText: estadoCivilVer ?? 'input.select.option'.tr(),
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'ESTADOCIVIL',
+                  onChanged: (item) {
+                    estadoCivil = item?.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objEstadoCivilId: estadoCivil,
+                        objEstadoCivilIdVer: item?.name,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  title: 'Estado Civil',
+                ),
                 if (estadoCivil == 'CAS' || estadoCivil == 'UNI') ...[
                   const Gap(30),
                   Padding(
@@ -234,6 +282,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    initialValue: nombreConyuge,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -266,10 +315,11 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                       );
                       setState(() {});
                     },
-                    hintText: 'input.select_option'.tr(),
+                    hintText: nacionalidadConyuge ?? 'input.select_option'.tr(),
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    initialValue: profesionConyuge,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -292,6 +342,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: JLuxDropdown(
+                      initialValue: trabajaConyuge,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       dropdownColor: Colors.white,
@@ -315,6 +366,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                   if (trabajaConyuge == 'input.yes'.tr()) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      initialValue: nombreDelaEmpresaConyuge,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [
@@ -324,7 +376,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         nombreDelaEmpresaConyuge = value;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            nombreConyugue: nombreDelaEmpresaConyuge,
+                            trabajoConyugue: nombreDelaEmpresaConyuge,
                           ),
                         );
                       },
@@ -333,6 +385,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      initialValue: direccionTrabajoConyugue,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [
@@ -352,6 +405,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      initialValue: tiempoLaborarConyugue,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
@@ -372,6 +426,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      initialValue: salarioNetoMensualConyuge,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
@@ -384,17 +439,18 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
 
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            salarioNetoCordoba: double.tryParse(
+                            sueldoMesConyugue: double.tryParse(
                                 salarioNetoMensualConyuge ?? '0'),
                           ),
                         );
+                        getTotalIngresoMes();
                       },
                       title: 'Salario Neto Mensual Cónyuge (C\$)',
                       icon: const Icon(Icons.attach_money_outlined),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      // validator: (value) => ClassValidator.validateRequired(value),
+                      initialValue: otrosIngresosConyuge,
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
@@ -405,17 +461,18 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
 
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            otrosIngresosCordoba:
+                            otrosIngresosConyugue:
                                 double.tryParse(otrosIngresosConyuge ?? '0'),
                           ),
                         );
+                        getTotalIngresoMes();
                       },
                       title: 'Otros ingresos Cónyuge (C\$)',
                       icon: const Icon(Icons.money_off_csred_outlined),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      // validator: (value) => ClassValidator.validateRequired(value),
+                      initialValue: fuenteOtrosIngresosConyuge,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -423,7 +480,8 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         fuenteOtrosIngresosConyuge = value;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            fuenteOtrosIngresos: fuenteOtrosIngresosConyuge,
+                            fuenteOtrosIngresosConyugue:
+                                fuenteOtrosIngresosConyuge,
                           ),
                         );
                       },
@@ -432,8 +490,8 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
+                      readOnly: true,
+                      hintText: totalIngresosMesConyuge?.toCurrencyString(),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
@@ -443,7 +501,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         totalIngresosMesConyuge = value.replaceAll(',', '');
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            totalIngresoMes:
+                            totalIngresoMesConyugue:
                                 double.tryParse(totalIngresosMesConyuge ?? '0'),
                           ),
                         );
@@ -453,7 +511,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      // validator: (value) => ClassValidator.validateRequired(value),
+                      initialValue: observaciones,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -470,11 +528,10 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     ),
                     const Gap(30),
                     CountryInput(
+                      initialValue: telefonoOficinaConyuge,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
-                      onCountryCodeChange: (value) {
-                        telefonoOficinaCodeConyuge = value?.dialCode ?? '+503';
-                      },
+                      onCountryCodeChange: (value) {},
                       textInputType: TextInputType.phone,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -487,8 +544,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             telefonoTrabajoConyugue:
-                                (telefonoOficinaCodeConyuge +
-                                        (telefonoOficinaConyuge ?? ''))
+                                (telefonoOficinaConyuge ?? '')
                                     .replaceAll('-', ''),
                           ),
                         );

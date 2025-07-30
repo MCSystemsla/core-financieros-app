@@ -2,9 +2,13 @@
 part of 'solicitud_represtamo_cubit.dart';
 
 class SolicitudReprestamoState extends Equatable {
+  final String numeroSolicitud;
   final bool isDone;
   final bool hasVerified;
   final String successMsg;
+  final String paisPepsVer;
+  final String paisPeps2Ver;
+  final String parentescoFamiliarPeps2Ver;
   final int idLocalResponse;
   final double tasaInteres;
   final String fechaDesembolso;
@@ -91,6 +95,10 @@ class SolicitudReprestamoState extends Equatable {
   final String frecuenciaPagoMeses;
 
   const SolicitudReprestamoState({
+    this.numeroSolicitud = '',
+    this.paisPeps2Ver = '',
+    this.paisPepsVer = '',
+    this.parentescoFamiliarPeps2Ver = '',
     this.createdAt = '',
     this.uuid,
     this.nombreCompletoCliente = '',
@@ -182,6 +190,9 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        paisPepsVer,
+        paisPeps2Ver,
+        parentescoFamiliarPeps2Ver,
         montoMinimo,
         montoMaximo,
         frecuenciaPagoMeses,
@@ -268,9 +279,13 @@ class SolicitudReprestamoState extends Equatable {
       ];
 
   SolicitudReprestamoState copyWith({
+    String? numeroSolicitud,
     bool? isDone,
     bool? hasVerified,
     String? successMsg,
+    String? paisPepsVer,
+    String? paisPeps2Ver,
+    String? parentescoFamiliarPeps2Ver,
     int? idLocalResponse,
     double? tasaInteres,
     String? fechaDesembolso,
@@ -357,9 +372,14 @@ class SolicitudReprestamoState extends Equatable {
     String? frecuenciaPagoMeses,
   }) {
     return SolicitudReprestamoState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       isDone: isDone ?? this.isDone,
       hasVerified: hasVerified ?? this.hasVerified,
       successMsg: successMsg ?? this.successMsg,
+      paisPepsVer: paisPepsVer ?? this.paisPepsVer,
+      paisPeps2Ver: paisPeps2Ver ?? this.paisPeps2Ver,
+      parentescoFamiliarPeps2Ver:
+          parentescoFamiliarPeps2Ver ?? this.parentescoFamiliarPeps2Ver,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       tasaInteres: tasaInteres ?? this.tasaInteres,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,

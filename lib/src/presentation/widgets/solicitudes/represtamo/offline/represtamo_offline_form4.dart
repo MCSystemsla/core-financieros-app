@@ -3,12 +3,14 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ReprestamoOfflineForm4 extends StatefulWidget {
@@ -52,6 +54,7 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
   Item? objRubroActividadPredominante;
   @override
   void initState() {
+    super.initState();
     final solicitud = widget.solicitud;
     actividad = Item(
       name: solicitud.objActividadIdVer!,
@@ -85,12 +88,39 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
       name: solicitud.objRubroActividadPredominanteVer!,
       value: solicitud.objRubroActividadPredominante,
     );
-
-    super.initState();
+    actividadesPredominantesList = [
+      actividad!,
+      actividad1!,
+      actividadEconomica2!
+    ];
+    context.read<SolicitudReprestamoCubit>().onFieldChanged(
+          () => context.read<SolicitudReprestamoCubit>().state.copyWith(
+                objActividadId: actividad?.value,
+                objActividadIdVer: actividad?.name,
+                objActividadId1: actividad1?.value,
+                objActividadId1Ver: actividad1?.name,
+                objActividadId2: actividad1?.value,
+                objActividadId2Ver: actividad1?.name,
+                objRubroActividad: rubroActividad?.value,
+                objRubroActividadVer: rubroActividad?.name,
+                objRubroActividad2: rubroActividad2?.value,
+                objRubroActividad2Ver: rubroActividad2?.name,
+                objRubroActividad3: rubroActividad3?.value,
+                objRubroActividad3Ver: rubroActividad3?.name,
+                objRubroActividadPredominante:
+                    objRubroActividadPredominante?.value,
+                objRubroActividadPredominanteVer:
+                    objRubroActividadPredominante?.name,
+                objActividadPredominanteVer:
+                    objRubroActividadPredominante?.name,
+                objActividadPredominante: objRubroActividadPredominante?.value,
+              ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -111,8 +141,15 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                     .any((element) => element.value == item.value)) {
                   return;
                 }
+
                 actividad = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId: actividad?.value,
+                    objActividadIdVer: actividad?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -131,6 +168,12 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                 }
                 actividad1 = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId1: actividad1?.value,
+                    objActividadId1Ver: actividad1?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -147,6 +190,12 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                 }
                 actividadEconomica2 = item;
                 actividadesPredominantesList.add(item);
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objActividadId2: actividadEconomica2?.value,
+                    objActividadId2Ver: actividadEconomica2?.name,
+                  ),
+                );
                 setState(() {});
               },
             ),
@@ -156,14 +205,14 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: JLuxDropdown(
-                  initialValue: actividadesPredominantesList
-                          .any((item) => item.value == actividadPredominante)
-                      ? actividadesPredominantesList.firstWhere(
-                          (item) => item.value == actividadPredominante,
-                        )
-                      : null,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
+                  // initialValue: actividadesPredominantesList
+                  //         .any((item) => item.value == actividadPredominante)
+                  //     ? actividadesPredominantesList.firstWhere(
+                  //         (item) => item.value == actividadPredominante,
+                  //       )
+                  //     : null,
+                  validator: (value) => ClassValidator.validateRequired(
+                      actividadPredominante?.value),
                   dropdownColor: Colors.white,
                   isContainIcon: true,
                   title: 'Actividad Predominante',
@@ -176,26 +225,40 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                   onChanged: (item) {
                     if (item == null) return;
                     actividadPredominante = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objActividadPredominante: actividadPredominante?.value,
+                        objActividadPredominanteVer:
+                            actividadPredominante?.name,
+                      ),
+                    );
                   },
                   toStringItem: (item) {
                     return item.name;
                   },
-                  hintText: 'input.select_option'.tr(),
+                  hintText:
+                      actividadPredominante?.name ?? 'input.select_option'.tr(),
                 ),
               ),
             ],
             if (actividad?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                hintText: rubroActividad?.name ?? 'Selecciona una opcion',
+                hintText: rubroActividad?.name ?? 'input.select_option'.tr(),
                 validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
+                    ClassValidator.validateRequired(rubroActividad?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad: rubroActividad?.value,
+                      objRubroActividadVer: rubroActividad?.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -205,29 +268,19 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
               SearchDropdownWidget(
                 hintText: rubroActividad?.name ?? 'Selecciona una opcion',
                 validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
-                codigo: 'RUBROACTIVIDAD',
-                title: 'Rubro Actividad',
-                onChanged: (item) {
-                  if (item == null) return;
-                  rubroActividad = item;
-                  rubrosActividadesPredominanteList.add(item);
-                  setState(() {});
-                },
-              ),
-            ],
-            if (actividadEconomica2?.value == 'AGRI') ...[
-              const Gap(20),
-              SearchDropdownWidget(
-                hintText: rubroActividad2?.name ?? 'Selecciona una opcion',
-                // validator: (value) =>
-                //     ClassValidator.validateRequired(value?.value),
+                    ClassValidator.validateRequired(rubroActividad2?.value),
                 codigo: 'RUBROACTIVIDAD',
                 title: 'Rubro Actividad 2',
                 onChanged: (item) {
                   if (item == null) return;
                   rubroActividad2 = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad2: rubroActividad2?.value,
+                      objRubroActividad2Ver: rubroActividad2?.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -235,7 +288,29 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
             if (actividadEconomica2?.value == 'AGRI') ...[
               const Gap(20),
               SearchDropdownWidget(
-                hintText: rubroActividad3?.name ?? 'Selecciona una opcion',
+                hintText: rubroActividad2?.name ?? 'input.select_option'.tr(),
+                validator: (value) =>
+                    ClassValidator.validateRequired(rubroActividad2?.value),
+                codigo: 'RUBROACTIVIDAD',
+                title: 'Rubro Actividad 2',
+                onChanged: (item) {
+                  if (item == null) return;
+                  rubroActividad2 = item;
+                  rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad3: rubroActividad2?.value,
+                      objRubroActividad3Ver: rubroActividad2?.name,
+                    ),
+                  );
+                  setState(() {});
+                },
+              ),
+            ],
+            if (actividadEconomica2?.value == 'AGRI') ...[
+              const Gap(20),
+              SearchDropdownWidget(
+                hintText: rubroActividad3?.name ?? 'input.select_option'.tr(),
                 // validator: (value) =>
                 //     ClassValidator.validateRequired(value?.value),
                 codigo: 'RUBROACTIVIDAD',
@@ -244,6 +319,12 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                   if (item == null) return;
                   rubroActividad3 = item;
                   rubrosActividadesPredominanteList.add(item);
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      objRubroActividad3: item.value,
+                      objRubroActividad3Ver: item.name,
+                    ),
+                  );
                   setState(() {});
                 },
               ),
@@ -274,6 +355,14 @@ class _ReprestamoOfflineForm4State extends State<ReprestamoOfflineForm4>
                   onChanged: (item) {
                     if (item == null) return;
                     objRubroActividadPredominante = item;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objRubroActividadPredominante:
+                            objRubroActividadPredominante?.value,
+                        objRubroActividadPredominanteVer:
+                            objRubroActividadPredominante?.name,
+                      ),
+                    );
                     setState(() {});
                   },
                   toStringItem: (item) {

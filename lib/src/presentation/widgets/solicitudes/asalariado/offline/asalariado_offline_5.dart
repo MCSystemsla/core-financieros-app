@@ -57,6 +57,11 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
 
     setState(() {
       totalIngresoMes = totalIngresosMesSum.toStringAsFixed(2);
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  totalIngresoMes: totalIngresosMesSum,
+                ),
+          );
     });
   }
 
@@ -74,6 +79,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
     salarioNetoMensual = solicitud.salarioNetoCordoba.toString();
     tiempoDeTrabajar = solicitud.tiempoLaborar;
     direccionEmpresa = solicitud.direccionTrabajo;
+    totalIngresoMes = solicitud.totalIngresoMes.toString();
 
     context.read<SolicitudAsalariadoCubit>().onFieldChanged(
           () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
@@ -87,6 +93,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 salarioNetoCordoba: double.tryParse(salarioNetoMensual ?? '0'),
                 tiempoLaborar: tiempoDeTrabajar,
                 direccionTrabajo: direccionEmpresa,
+                totalIngresoMes: double.tryParse(totalIngresoMes ?? '0'),
               ),
         );
   }
@@ -114,6 +121,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: nombreEmpresa,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -131,6 +139,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: direccionEmpresa,
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -148,6 +157,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: barrioEmpresa,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -165,6 +175,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: otrosIngresos,
                   onChange: (value) {
                     otrosIngresos = value.replaceAll(',', '');
 
@@ -186,6 +197,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cargo,
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -203,6 +215,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: lugarTrabajoAnterior,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -220,6 +233,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: fuenteOtrosIngresos,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -237,6 +251,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 CountryInput(
+                  initialValue: telefonoOficina,
                   textInputType: TextInputType.phone,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onCountryCodeChange: (value) {
@@ -263,6 +278,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: salarioNetoMensual,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     salarioNetoMensual = value.replaceAll(',', '');
@@ -286,8 +302,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   readOnly: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(totalIngresoMes),
+                  // initialValue: totalIngresoMes,
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
@@ -299,6 +314,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: tiempoDeTrabajar,
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     tiempoDeTrabajar = value;

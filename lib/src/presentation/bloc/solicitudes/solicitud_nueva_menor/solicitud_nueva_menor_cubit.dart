@@ -21,9 +21,10 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     try {
       emit(state.copyWith(status: Status.inProgress));
       await Future.delayed(const Duration(seconds: 3));
-      final (isOk, msg) = await repository.createSolicitudCreditoNuevaMenor(
-          solicitudNuevaMenor: SolicitudNuevaMenor(
-        isOffline: state.isDone,
+      final (isOk, msg, numeroSolicitud) =
+          await repository.createSolicitudCreditoNuevaMenor(
+              solicitudNuevaMenor: SolicitudNuevaMenor(
+        isOffline: state.isOffline,
         objOrigenSolicitudId: state.objOrigenSolicitudId,
         nombre1: state.nombre1,
         nombre2: state.nombre2,
@@ -127,10 +128,23 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       if (!isOk) {
         return emit(state.copyWith(status: Status.error, errorMsg: msg));
       }
-      emit(state.copyWith(status: Status.done, onSuccessMsg: msg));
+      emit(state.copyWith(
+        status: Status.done,
+        onSuccessMsg: msg,
+        numeroSolicitud: numeroSolicitud,
+      ));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void sendCedulaImages({required String numeroSolicitud}) async {
+    await repository.sendCedulaImageWhenSolicitudCreditoCreated(
+      numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+      cedulaCliente: state.cedula,
+      imagenFrontal: state.cedulaFrontPath,
+      imagenTrasera: state.cedulaBackPath,
+    );
   }
 
   void initAutoSave({String? uuid}) {
@@ -156,10 +170,18 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
 
     return ResponseLocalDb(
       id: prev?.id ?? 0,
+      departamentoNegocio:
+          _prefer(state.departamentoNegocio, prev?.departamentoNegocio),
+      departamentoNegocioVer:
+          _prefer(state.departamentoNegocioVer, prev?.departamentoNegocioVer),
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       frecuenciaPagoMeses: state.frecuenciaPagoMeses == '0'
           ? prev?.frecuenciaPagoMeses
           : state.frecuenciaPagoMeses,
+      paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
+      parentescoFamiliarPeps2Ver: _prefer(
+          state.parentescoFamiliarPeps2Ver, prev?.parentescoFamiliarPeps2Ver),
       montoMaximo:
           state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
       montoMinimo:
@@ -396,6 +418,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           prev?.objRubroActividadPredominanteVer),
       objTipoPersonaIdVer:
           _prefer(state.objTipoPersonaIdVer, prev?.objTipoPersonaIdVer),
+      nacionalidadConyugueVer:
+          _prefer(state.nacionalidadConyugueVer, prev?.nacionalidadConyugueVer),
+      isOffline: prev?.isOffline ?? false,
     );
   }
 

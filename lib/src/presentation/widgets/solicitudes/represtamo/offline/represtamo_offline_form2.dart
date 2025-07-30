@@ -65,7 +65,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
     cedulaEmpleado = solicitud.cedulaFamiliar;
     espeps = solicitud.esPeps == true ? 'input.yes'.tr() : 'input.no'.tr();
     nombreDeEntidadPeps = solicitud.nombreDeEntidadPeps;
-    paisPeps = Item(name: solicitud.paisPeps!, value: solicitud.paisPeps);
+    paisPeps = Item(name: solicitud.paisPeps!, value: solicitud.paisPepsVer);
     periodoPeps = solicitud.periodoPeps;
     cargoOficialPeps = solicitud.cargoOficialPeps;
     nombreFamiliarPeps2 = solicitud.nombreFamiliarPeps2;
@@ -76,7 +76,8 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
     cargoFamiliarPeps2 = solicitud.cargoFamiliarPeps2;
     nombreEntidadPeps2 = solicitud.nombreEntidadPeps2;
     periodoPeps2 = solicitud.periodoPeps2;
-    paisPeps2 = Item(name: solicitud.paisPeps2!, value: solicitud.paisPeps2);
+    paisPeps2 =
+        Item(name: solicitud.paisPeps2 ?? '', value: solicitud.paisPeps2Ver);
     context.read<SolicitudReprestamoCubit>().onFieldChanged(
           () => context.read<SolicitudReprestamoCubit>().state.copyWith(
                 esFamiliarEmpleado: familiarEmpleado == 'input.yes'.tr(),
@@ -87,13 +88,16 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 esPeps: espeps == 'input.yes'.tr(),
                 nombreDeEntidadPeps: nombreDeEntidadPeps,
                 paisPeps: paisPeps?.value,
+                paisPepsVer: paisPeps?.name,
                 periodoPeps: periodoPeps,
                 cargoOficialPeps: cargoOficialPeps,
                 parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                parentescoFamiliarPeps2Ver: parentescoFamiliarPeps2?.name,
                 cargoFamiliarPeps2: cargoFamiliarPeps2,
                 nombreEntidadPeps2: nombreEntidadPeps2,
                 periodoPeps2: periodoPeps2,
                 paisPeps2: paisPeps2?.value,
+                paisPeps2Ver: paisPeps2?.name,
               ),
         );
   }
@@ -246,7 +250,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   nombre: paisPeps?.value,
                   relacion: '',
                 ),
-                hintText: paisPeps?.value ?? 'Ingresa Pais',
+                hintText: paisPeps?.name ?? 'input.select_option'.tr(),
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;
@@ -254,6 +258,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       paisPeps: paisPeps?.value,
+                      paisPeps2Ver: paisPeps?.name,
                     ),
                   );
 
@@ -344,6 +349,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
             if (tieneFamiliarPeps == 'input.yes'.tr()) ...[
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 initialValue: nombreFamiliarPeps2,
                 icon: Icon(
                   Icons.credit_card,
@@ -366,6 +372,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 initialValue: cargoFamiliarPeps2,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -388,6 +395,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                validator: (value) => ClassValidator.validateRequired(value),
                 initialValue: nombreEntidadPeps2,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -410,6 +418,8 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) => ClassValidator.validateRequired(
+                    parentescoFamiliarPeps2?.value),
                 onChanged: (item) {
                   if (item == null) return;
                   parentescoFamiliarPeps2 =
@@ -423,7 +433,8 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 },
                 codigo: 'PARENTESCO',
                 title: 'Parentesco',
-                hintText: parentescoFamiliarPeps2?.name ?? 'Ingrese Parentesco',
+                hintText:
+                    parentescoFamiliarPeps2?.name ?? 'input.select_option'.tr(),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -439,6 +450,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 title: 'Periodo',
                 hintText: 'Ingrese Periodo',
                 isValid: null,
+                validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
                   periodoPeps2 = value;
                   cubit.onFieldChanged(
@@ -450,7 +462,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
               ),
               const Gap(20),
               CatalogoValorNacionalidad(
-                hintText: paisPeps2?.name ?? 'Ingresa Pais',
+                hintText: paisPeps2?.name ?? 'input.select_option'.tr(),
                 title: 'Pais',
                 onChanged: (item) {
                   if (item == null) return;
@@ -458,6 +470,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       paisPeps2: paisPeps2?.value,
+                      paisPeps2Ver: paisPeps2?.name,
                     ),
                   );
 
@@ -465,7 +478,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 },
                 codigo: 'PAIS',
                 validator: (value) =>
-                    ClassValidator.validateRequired(value?.valor),
+                    ClassValidator.validateRequired(paisPeps2?.value),
               ),
             ],
             const Gap(20),

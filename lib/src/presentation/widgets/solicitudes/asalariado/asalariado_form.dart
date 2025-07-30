@@ -36,12 +36,12 @@ class AsalariadoForm extends StatelessWidget {
               AddCedulaPhotosScreen(
                 controller: controller,
                 onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                  context.read<SolicitudAsalariadoCubit>().saveCedula(
                         cedulaFrontPath: imagePath,
                       );
                 },
                 onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudAsalariadoCubit>().saveAnswers(
+                  context.read<SolicitudAsalariadoCubit>().saveCedula(
                         cedulaBackPath: imagePath,
                       );
                 },

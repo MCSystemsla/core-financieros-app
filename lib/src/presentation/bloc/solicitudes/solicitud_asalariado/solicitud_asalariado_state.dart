@@ -2,6 +2,7 @@
 part of 'solicitud_asalariado_cubit.dart';
 
 class SolicitudAsalariadoState extends Equatable {
+  final String numeroSolicitud;
   final String? uuid;
   final bool hasVerified;
   final bool isOffline;
@@ -160,6 +161,7 @@ class SolicitudAsalariadoState extends Equatable {
   const SolicitudAsalariadoState({
     this.uuid,
     this.frecuenciaPagoMeses = '',
+    this.numeroSolicitud = '',
     this.createdAt = '',
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
@@ -445,6 +447,7 @@ class SolicitudAsalariadoState extends Equatable {
       ];
 
   SolicitudAsalariadoState copyWith({
+    String? numeroSolicitud,
     String? uuid,
     bool? hasVerified,
     bool? isOffline,
@@ -602,6 +605,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? createdAt,
   }) {
     return SolicitudAsalariadoState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       hasVerified: hasVerified ?? this.hasVerified,
       isOffline: isOffline ?? this.isOffline,

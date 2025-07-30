@@ -186,6 +186,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       paisPeps: paisPeps?.value,
+                      paisPepsVer: paisPeps?.name,
                     ),
                   );
                   setState(() {});
@@ -344,6 +345,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       parentescoFamiliarPeps2: parentescoFamiliarPeps2?.value,
+                      parentescoFamiliarPeps2Ver: parentescoFamiliarPeps2?.name,
                     ),
                   );
                   setState(() {});
@@ -386,6 +388,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       paisPeps2: paisPeps2?.value,
+                      paisPeps2Ver: paisPeps2?.name,
                     ),
                   );
                   setState(() {});

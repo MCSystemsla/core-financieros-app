@@ -57,79 +57,83 @@ class AsalariadoOfflineView extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: Column(
-          children: [
-            const Navbar(
-              title: 'Crear nueva Solicitud Asalariado',
-              imageUrl: ImageAsset.represtamoBg,
-            ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller,
-                children: [
-                  Hero(
-                    transitionOnUserGestures: true,
-                    tag: 'cedulaFrontal',
-                    child: PhotoCedulaClientWidget(
-                      controller: controller,
-                      fotoCedulaFrontal:
-                          XFile(imagesCedula?.imageFrontCedula ?? ''),
-                      fotoCedulaTrasera:
-                          XFile(imagesCedula?.imageBackCedula ?? ''),
-                      onCedulaFrontalPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageFrontCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                      onCedulaTraseraPressed: () {
-                        context.pushTransparentRoute(
-                          PhotoCedulaImagePreview(
-                            imagesCedula: File(
-                              imagesCedula?.imageBackCedula ?? '',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  AsalariadoOffline1(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline2(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline3(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline4(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline5(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline6(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                  AsalariadoOffline7(
-                    controller: controller,
-                    asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
-                  ),
-                ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: Column(
+            children: [
+              const Navbar(
+                title: 'Crear nueva Solicitud Asalariado',
+                imageUrl: ImageAsset.represtamoBg,
               ),
-            ),
-          ],
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  children: [
+                    Hero(
+                      transitionOnUserGestures: true,
+                      tag: 'cedulaFrontal',
+                      child: PhotoCedulaClientWidget(
+                        controller: controller,
+                        onNextPressed: () {},
+                        fotoCedulaFrontal:
+                            XFile(imagesCedula?.imageFrontCedula ?? ''),
+                        fotoCedulaTrasera:
+                            XFile(imagesCedula?.imageBackCedula ?? ''),
+                        onCedulaFrontalPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageFrontCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                        onCedulaTraseraPressed: () {
+                          context.pushTransparentRoute(
+                            PhotoCedulaImagePreview(
+                              imagesCedula: File(
+                                imagesCedula?.imageBackCedula ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    AsalariadoOffline1(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline2(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline3(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline4(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline5(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline6(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoOffline7(
+                      controller: controller,
+                      asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

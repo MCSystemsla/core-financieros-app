@@ -2,7 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
@@ -26,6 +26,8 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -200,9 +202,11 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   textEditingController: montoController,
                   inputFormatters: [
-                    CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
-                    LengthLimitingTextInputFormatter(10),
+                    MoneyInputFormatter(
+                      leadingSymbol: '',
+                      thousandSeparator: ThousandSeparator.Comma,
+                      mantissaLength: 0,
+                    ),
                   ],
                   icon: Icon(
                     Icons.price_change,
@@ -279,11 +283,15 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
                   icon: Icon(
                     Icons.price_change,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) => ClassValidator.validateIntValue(value),
                   title: 'Plazo en meses',
                   hintText: 'Ingresa en meses',
                   textInputType: TextInputType.number,
@@ -314,6 +322,9 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(
                     Icons.remove_red_eye,
                     color: AppColors.getPrimaryColor(),
@@ -413,11 +424,19 @@ class __FormContentState extends State<_FormContent> {
                                 () => cubit.state.copyWith(
                                   cuota: calcularCuotaProvider
                                       .state.montoPrimeraCuota,
+                                  isDone: true,
                                 ),
                               );
                               if (!context.mounted) return;
                               if (state.connectionStatus ==
                                   ConnectionStatus.disconnected) {
+                                cubit.onFieldChanged(
+                                  () => cubit.state.copyWith(
+                                    isOffline: true,
+                                    errorMsg:
+                                        'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                                  ),
+                                );
                                 CustomAlertDialog(
                                   context: context,
                                   title:

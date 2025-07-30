@@ -121,10 +121,7 @@ class SolicitudesPendientesWidget extends StatelessWidget {
       ];
 
       int camposLlenos = valores
-          .where((valor) =>
-              valor != null &&
-              valor.toString().trim().isNotEmpty &&
-              valor.toString().trim() != '0')
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
           .length;
       int totalCampos = valores.length;
 
@@ -153,11 +150,10 @@ class SolicitudesPendientesWidget extends StatelessWidget {
                 .capitalizeAll,
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
-        // TODO: CAMBIAR A DATE DE 30 DIAS
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(hours: 1))
+            .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
@@ -228,10 +224,7 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
       ];
 
       int camposLlenos = valores
-          .where((valor) =>
-              valor != null &&
-              valor.toString().trim().isNotEmpty &&
-              valor.toString().trim() != '0')
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
           .length;
       int totalCampos = valores.length;
 
@@ -258,12 +251,10 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
         title: solicitud.nombreCompletoCliente ?? 'N/A',
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
-        // TODO: CAMBIAR A DATE DE 30 DIAS
-
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(hours: 1))
+            .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100
@@ -395,10 +386,7 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
       ];
 
       int camposLlenos = valores
-          .where((valor) =>
-              valor != null &&
-              valor.toString().trim().isNotEmpty &&
-              valor.toString().trim() != '0')
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
           .length;
       int totalCampos = valores.length;
 
@@ -427,11 +415,10 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
                 .capitalizeAll,
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
-        // TODO: CAMBIAR A DATE DE 30 DIAS
         dateToEnd: solicitud.createdAt
             ?.toUtc()
             .toLocal()
-            .add(const Duration(hours: 1))
+            .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
         percentage: (solicitud.isDone ?? false)
             ? 100

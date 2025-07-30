@@ -25,10 +25,21 @@ class ReprestamoSendingWidget extends StatefulWidget {
 }
 
 class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
+  final localDbProvider = global<ObjectBoxService>();
+
   @override
   void initState() {
-    context.read<SolicitudReprestamoCubit>().createSolicitudReprestamo();
     super.initState();
+    final imagesCedula = localDbProvider.getCedula(
+      cedula: context.read<SolicitudReprestamoCubit>().state.cedula,
+      tipoSolicitud: 'REPRESTAMO',
+    );
+    context.read<SolicitudReprestamoCubit>().saveCedula(
+          cedulaFrontPath: imagesCedula?.imageFrontCedula,
+          cedulaBackPath: imagesCedula?.imageBackCedula,
+        );
+
+    context.read<SolicitudReprestamoCubit>().createSolicitudReprestamo();
   }
 
   @override
@@ -37,6 +48,9 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
     return BlocConsumer<SolicitudReprestamoCubit, SolicitudReprestamoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
+          context.read<SolicitudReprestamoCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+              );
           dbProvider.removeSolicitudReprestamoWhenisUploaded(
             solicitudId: widget.solicitudId,
           );

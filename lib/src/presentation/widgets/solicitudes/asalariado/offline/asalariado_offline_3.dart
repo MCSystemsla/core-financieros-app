@@ -117,6 +117,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
               children: [
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(paisCasa?.value),
                   codigo: 'PAIS',
                   title: 'País',
                   onChanged: (item) {
@@ -135,6 +137,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(depCasa?.value),
                   codigo: 'DEP',
                   title: 'Departamento',
                   hintText: depCasa?.name ?? 'input.select_option'.tr(),
@@ -155,6 +159,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(munCasa?.value),
                   codigo: 'MUN',
                   title: 'Municipio',
                   hintText: depCasa?.name ?? 'input.select_option'.tr(),
@@ -174,6 +180,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(condicionCasa?.value),
                   hintText: condicionCasa?.name ?? 'input.select_option'.tr(),
                   codigo: 'TIPOVIVIENDA',
                   title: 'Condicion Casa',
@@ -194,6 +202,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                 if (condicionCasa?.value != 'ALQ') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     initialValue: nombreDuenoCasa,
                     onChange: (value) {
                       nombreDuenoCasa = value;
@@ -208,6 +218,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     initialValue: anosResidir,
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -274,6 +286,8 @@ class _AsalariadoOffline3State extends State<AsalariadoOffline3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(sector?.value),
                   hintText: sector?.name ?? 'input.select_option'.tr(),
                   codigo: 'SECTORECONOMICO',
                   title: 'Sector',

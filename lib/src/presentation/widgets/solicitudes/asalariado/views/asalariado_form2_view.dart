@@ -318,7 +318,7 @@ class __FormContentState extends State<_FormContent> {
                       nombreFamiliarPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreFamiliarPeps2: value,
+                          nombreFamiliarPeps2: nombreFamiliarPeps,
                         ),
                       );
                     },
@@ -336,8 +336,7 @@ class __FormContentState extends State<_FormContent> {
                       parentescoFamiliarPeps = item?.value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          objParentescoFamiliarCercanoId: item?.value,
-                          objParentescoFamiliarCercanoIdVer: item?.name,
+                          parentescoFamiliarPeps2: parentescoFamiliarPeps,
                         ),
                       );
                       setState(() {});
@@ -374,7 +373,7 @@ class __FormContentState extends State<_FormContent> {
                       nombreEntidadPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreEntidadPeps2: value,
+                          nombreEntidadPeps2: nombreEntidadPeps,
                         ),
                       );
                     },
@@ -394,7 +393,7 @@ class __FormContentState extends State<_FormContent> {
                       periodoFamiliarPeps = value;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          periodoPeps2: value,
+                          periodoPeps2: periodoFamiliarPeps,
                         ),
                       );
                     },
@@ -412,7 +411,7 @@ class __FormContentState extends State<_FormContent> {
                       paisPepsFamiliar = item?.valor;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          paisPeps2: item?.valor,
+                          paisPeps2: paisPepsFamiliar,
                         ),
                       );
                     },

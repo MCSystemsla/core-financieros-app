@@ -153,7 +153,6 @@ class __FormContentState extends State<_FormContent> {
   String? tipoDocumento;
   String? tipoPersona;
   String? nacionalidad;
-  String? estadoCivil;
   final formKey = GlobalKey<FormState>();
   final edadMinimaCliente = global<ObjectBoxService>()
       .getParametroByName(nombre: 'EDADMINIMACLIENTE');
@@ -198,6 +197,10 @@ class __FormContentState extends State<_FormContent> {
                 fechaVencimientoCedula:
                     fechaVencimientoCedula?.toUtc().toIso8601String(),
                 fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+                nombre1: primerNombre,
+                nombre2: segundoNombre,
+                apellido1: primerApellido,
+                apellido2: segundoApellido,
               ),
         );
   }
@@ -640,6 +643,8 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateCantidadHijos(value),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,

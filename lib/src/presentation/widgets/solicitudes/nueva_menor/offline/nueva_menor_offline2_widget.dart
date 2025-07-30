@@ -76,11 +76,11 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                 objMunicipioCasaIdVer: objMunicipioCasaIdVer,
                 objPaisCasaIdVer: objPaisCasaIdVer,
                 objCondicionCasaIdVer: objCondicionCasaIdVer,
-                objDepartamentoCasaId: objDepartamentoCasaIdVer,
-                objMunicipioCasaId: objMunicipioCasaIdVer,
+                objCondicionCasaId: condicionCasa,
+                objDepartamentoCasaId: departamentoDomicilio,
+                objMunicipioCasaId: municipioDomicilio,
                 direccionCasa: direccionCasa,
                 barrioCasa: barrioCasa,
-                objCondicionCasaId: objCondicionCasaIdVer,
                 anosResidirCasa: int.tryParse(anosResidirCasa ?? '0'),
                 ubicacion: comunidad,
               ),
@@ -274,8 +274,10 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     ),
                     const Gap(20),
                     SearchDropdownWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(condicionCasa),
                       hintText:
-                          objCondicionCasaIdVer ?? 'Selecciona una opcion',
+                          objCondicionCasaIdVer ?? 'input.select_option'.tr(),
                       title: 'Condicion Casa',
                       codigo: 'TIPOVIVIENDA',
                       onChanged: (item) {
@@ -294,7 +296,6 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                     OutlineTextfieldWidget(
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        FilteringTextInputFormatter.allow(RegExp(r'[1-9]')),
                         LengthLimitingTextInputFormatter(2),
                       ],
                       initialValue:
@@ -327,7 +328,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                           horizontal: 20, vertical: 5),
                       child: JLuxDropdown(
                         validator: (value) => ClassValidator.validateRequired(
-                          value?.valor,
+                          comunidad,
                         ),
                         dropdownColor: Colors.white,
                         isContainIcon: true,
@@ -335,7 +336,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                         items: Origin.comunidades,
                         onChanged: (item) {
                           if (item == null) return;
-                          comunidad = item.valor;
+                          comunidad = item.nombre;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               ubicacion: comunidad,

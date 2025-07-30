@@ -10,8 +10,13 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CameraCaptureScreen extends StatefulWidget {
-  final void Function(XFile? image) onImageSelected;
-  const CameraCaptureScreen({super.key, required this.onImageSelected});
+  final void Function(XFile? image, String? path) onImageSelected;
+  final String numeroSoicitud;
+  const CameraCaptureScreen({
+    super.key,
+    required this.onImageSelected,
+    required this.numeroSoicitud,
+  });
 
   @override
   State<CameraCaptureScreen> createState() => _CameraCaptureScreenState();
@@ -64,8 +69,16 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   }
 
   Future<bool> _requestPermissions() async {
-    final status = await Permission.camera.request();
-    return status.isGranted;
+    final permissions = await [
+      Permission.camera,
+      Permission.manageExternalStorage,
+    ].request();
+
+    final cameraGranted = permissions[Permission.camera]?.isGranted ?? false;
+    final storageGranted =
+        permissions[Permission.manageExternalStorage]?.isGranted ?? false;
+
+    return cameraGranted && storageGranted;
   }
 
   Future<void> _takePhoto() async {
@@ -90,8 +103,10 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       isLoading = true;
     });
     try {
-      final (savedPath, photo) =
-          await CameraService.takeAndsavePhoto(controller: _controller);
+      final (savedPath, photo) = await CameraService.takeAndsavePhoto(
+        controller: _controller,
+        numeroSoicitud: widget.numeroSoicitud,
+      );
       if (!context.mounted || !mounted) return;
       setState(() {
         isLoading = false;
@@ -167,7 +182,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
                   });
                 },
                 onConfirm: () {
-                  widget.onImageSelected(selectedImage);
+                  widget.onImageSelected(selectedImage, selectedImage1Path);
                   context.pop();
                 },
                 selectedImage1Path: selectedImage1Path,

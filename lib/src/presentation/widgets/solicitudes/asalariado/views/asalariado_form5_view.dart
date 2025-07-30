@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/count
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -67,6 +68,11 @@ class __FormContentState extends State<_FormContent> {
 
     setState(() {
       totalIngresoMes = totalIngresosMesSum.toStringAsFixed(2);
+      context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+            () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
+                  totalIngresoMes: totalIngresosMesSum,
+                ),
+          );
     });
   }
 
@@ -217,9 +223,7 @@ class __FormContentState extends State<_FormContent> {
                 CountryInput(
                   textInputType: TextInputType.phone,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  onCountryCodeChange: (value) {
-                    telefonoCodeOficina = value?.dialCode ?? '+503';
-                  },
+                  onCountryCodeChange: (value) {},
                   maxLength: 9,
                   isRequired: false,
                   inputFormatters: [
@@ -231,8 +235,7 @@ class __FormContentState extends State<_FormContent> {
                     telefonoOficina = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        telefonoTrabajo: telefonoCodeOficina +
-                            telefonoOficina!.replaceAll('-', ''),
+                        telefonoTrabajo: telefonoOficina?.replaceAll('-', ''),
                       ),
                     );
                   },
@@ -264,14 +267,12 @@ class __FormContentState extends State<_FormContent> {
                 const Gap(30),
                 OutlineTextfieldWidget(
                   readOnly: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(totalIngresoMes),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
-                  hintText: totalIngresoMes,
+                  hintText: totalIngresoMes?.toCurrencyString(),
                   title: 'Total ingresos mes (C\$)',
                   icon: const Icon(Icons.summarize),
                 ),

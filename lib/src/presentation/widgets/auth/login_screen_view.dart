@@ -7,8 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
@@ -29,7 +28,31 @@ class LoginScreenView extends StatefulWidget {
   State<LoginScreenView> createState() => _LoginScreenViewState();
 }
 
-class _LoginScreenViewState extends State<LoginScreenView> {
+class _LoginScreenViewState extends State<LoginScreenView>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
+    if (!isCurrent) return;
+
+    if (state == AppLifecycleState.resumed) {
+      context.read<InternetConnectionCubit>().getInternetStatusConnection();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -44,7 +67,6 @@ class _LoginScreenViewState extends State<LoginScreenView> {
               context: context,
             ),
         ),
-        BlocProvider(create: (ctx) => AuthCubit(AuthRepositoryImpl())),
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
@@ -68,17 +90,16 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                     padding: EdgeInsets.all(20),
                     child: SingleChildScrollView(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SafeArea(
-                            child: ChangeLangWidget(
-                              child: LoginScreen(),
+                            child: Image(
+                              height: 180,
+                              image: AssetImage(ImageAsset.logoNi),
                             ),
                           ),
-                          Image(
-                            height: 160,
-                            image: AssetImage(ImageAsset.logoNi),
-                          ),
+                          Gap(5),
                           LoginFormWidget(),
                         ],
                       ),
@@ -110,20 +131,19 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final TurnstileOptions options = TurnstileOptions(
+    size: TurnstileSize.flexible,
+    theme: TurnstileTheme.light,
+    borderRadius: BorderRadius.circular(10),
+    language: 'es',
+    retryAutomatically: false,
+    refreshTimeout: TurnstileRefreshTimeout.manual,
+  );
   @override
   Widget build(BuildContext context) {
-    final TurnstileOptions options = TurnstileOptions(
-      size: TurnstileSize.flexible,
-      theme: TurnstileTheme.light,
-      borderRadius: BorderRadius.circular(10),
-      language: 'es',
-      retryAutomatically: false,
-      refreshTimeout: TurnstileRefreshTimeout.manual,
-    );
-
     return Container(
       padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),

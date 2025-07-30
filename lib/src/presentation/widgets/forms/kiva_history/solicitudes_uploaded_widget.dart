@@ -82,9 +82,8 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
   ImageModel? imagenes;
   @override
   void initState() {
-    initFunctions();
-
     super.initState();
+    initFunctions();
   }
 
   initFunctions() async {

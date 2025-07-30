@@ -15,9 +15,13 @@ import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import '../../bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 
 enum TypeForm {
-  nueva,
-  asalariado,
-  represtamo,
+  nueva('NUEVAMENOR'),
+  asalariado('ASALARIADO'),
+  represtamo('REPRESTAMO');
+
+  final String codigo;
+
+  const TypeForm(this.codigo);
 }
 
 class CrearSolicitudScreen extends StatelessWidget {
@@ -64,23 +68,26 @@ class CrearSolicitudScreen extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-        body: switch (typeForm) {
-          TypeForm.nueva => NuevaMenorForm(
-              pageController: pageController,
-            ),
-          TypeForm.asalariado => AsalariadoForm(
-              controller: pageController,
-            ),
-          TypeForm.represtamo => ReprestamoForm(
-              userByCedulaSolicitud: userByCedulaSolicitud ??
-                  UserByCedulaSolicitud(
-                    cedula: '',
-                    tipoDocumento: '',
-                  ),
-              controller: pageController,
-            ),
-        },
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: switch (typeForm) {
+            TypeForm.nueva => NuevaMenorForm(
+                pageController: pageController,
+              ),
+            TypeForm.asalariado => AsalariadoForm(
+                controller: pageController,
+              ),
+            TypeForm.represtamo => ReprestamoForm(
+                userByCedulaSolicitud: userByCedulaSolicitud ??
+                    UserByCedulaSolicitud(
+                      cedula: '',
+                      tipoDocumento: '',
+                    ),
+                controller: pageController,
+              ),
+          },
+        ),
       ),
     );
   }

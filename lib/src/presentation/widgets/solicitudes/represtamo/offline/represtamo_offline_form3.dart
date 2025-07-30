@@ -57,6 +57,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   double? montoMaximo;
   final formKey = GlobalKey<FormState>();
   Future<void> selectDate(BuildContext context) async {
+    DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
@@ -66,7 +67,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(now)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -74,10 +75,20 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
       fechaPrimerPago = picked;
       context.read<SolicitudReprestamoCubit>().onFieldChanged(
             () => context.read<SolicitudReprestamoCubit>().state.copyWith(
-                  fechaDesembolso: fechaPrimerPago?.toUtc().toIso8601String(),
+                  fechaPrimerPagoSolicitud:
+                      fechaPrimerPago?.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -85,6 +96,8 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
@@ -94,11 +107,20 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -139,6 +161,8 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
     plazoSolicitud = solicitud.plazoSolicitud.toString();
     fechaPrimerPago = solicitud.fechaPrimerPagoSolicitud;
     observacion = solicitud.observacion;
+    montoMinimo = solicitud.montoMinimo;
+    montoMaximo = solicitud.montoMaximo?.toDouble();
 
     context.read<SolicitudReprestamoCubit>().onFieldChanged(
           () => context.read<SolicitudReprestamoCubit>().state.copyWith(
@@ -166,8 +190,8 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudReprestamoCubit>();
     super.build(context);
+    final cubit = context.read<SolicitudReprestamoCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
 
     return SingleChildScrollView(
@@ -178,16 +202,23 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
           children: [
             const Gap(20),
             SearchDropdownWidget(
-              hintText: proposito?.name ?? 'Seleccionar Proposito',
+              hintText: proposito?.name ?? 'input.select_option'.tr(),
               codigo: 'DESTINOCREDITO',
               title: 'Proposito',
               onChanged: (item) {
                 if (item == null) return;
                 proposito = item;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    objPropositoId: proposito?.value,
+                    objPropositoIdVer: proposito?.name,
+                  ),
+                );
               },
             ),
             const Gap(20),
             OutlineTextfieldWidget(
+              initialValue: monto,
               inputFormatters: [
                 CurrencyInputFormatter(),
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
@@ -198,7 +229,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Monto',
-              hintText: monto ?? 'Ingresa Monto',
+              hintText: 'Ingresa Monto',
               textInputType: TextInputType.number,
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
@@ -230,20 +261,24 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             const Gap(20),
             CatalogoProductoDropdown(
               isRecurrente: true,
-              hintText: producto?.name ?? 'Seleccionar Producto',
+              hintText: producto?.name ?? 'input.select_option'.tr(),
               title: 'Producto',
               onChanged: (item) {
                 if (item == null) return;
                 producto = item;
                 tasaInteres = item.interes;
+                montoMinimo = item.montoMinimo;
+                montoMaximo = item.montoMaximo?.toDouble();
                 log(item.interes.toString());
+                log(item.montoMinimo.toString());
+                log(item.montoMaximo.toString());
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
                     objProductoId: producto?.value,
                     objProductoIdVer: producto?.name,
                     tasaInteres: tasaInteres,
-                    montoMinimo: producto?.montoMinimo,
-                    montoMaximo: producto?.montoMaximo?.toInt(),
+                    montoMinimo: montoMinimo,
+                    montoMaximo: montoMaximo?.toInt(),
                   ),
                 );
                 setState(() {});

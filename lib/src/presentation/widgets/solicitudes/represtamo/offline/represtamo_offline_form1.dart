@@ -74,6 +74,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
   String? locationLongitude;
   String? cedula;
   String? ubicacion;
+  String? nombreCliente;
 
   @override
   void initState() {
@@ -87,6 +88,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
     celularReprestamo = widget.solicitud.celularReprestamo;
     cedula = widget.solicitud.cedula;
     ubicacion = widget.solicitud.ubicacion;
+    nombreCliente = widget.solicitud.nombreCompletoCliente;
     context.read<SolicitudReprestamoCubit>().initAutoSave(
           uuid: widget.solicitud.uuid,
         );
@@ -100,6 +102,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                 celularReprestamo: celularReprestamo,
                 cedula: cedula,
                 ubicacion: ubicacion,
+                nombreCompletoCliente: nombreCliente,
               ),
         );
   }
@@ -173,6 +176,30 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                     ),
                   ),
                 ],
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  initialValue: nombreCliente,
+                  onChange: (value) {
+                    nombreCliente = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombreCompletoCliente: nombreCliente,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  title: 'Nombre del cliente',
+                  isRequired: false,
+                  isValid: null,
+                ),
                 const Gap(30),
                 SearchDropdownWidget(
                   hintText: tipoPersonaCreditoVer ?? 'Tipo de Persona',

@@ -9,22 +9,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class LoadingScreen extends StatelessWidget {
+class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
 
   @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-        builder: (context, state) {
-          return switch (state.connectionStatus) {
-            ConnectionStatus.connected => const LoginScreen(),
-            ConnectionStatus.disconnected => const HomeScreen(),
-            ConnectionStatus.checking => const _WidgetLoading(),
-            _ => const _WidgetLoading(),
-          };
-        },
-      ),
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return switch (state.connectionStatus) {
+          ConnectionStatus.connected => const LoginScreen(),
+          ConnectionStatus.disconnected => const HomeScreen(),
+          ConnectionStatus.checking => const _WidgetLoading(),
+          _ => const _WidgetLoading(),
+        };
+      },
     );
   }
 }
@@ -34,27 +37,30 @@ class _WidgetLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Image(
-              image: AssetImage(ImageAsset.icon),
-              height: 80,
-            ),
-            const Gap(25),
-            SizedBox(
-              width: 110,
-              child: LinearProgressIndicator(
-                color: AppColors.getPrimaryColor(),
-                minHeight: 6,
-                backgroundColor: AppColors.getPrimaryColor().withOpacity(0.15),
-                borderRadius: BorderRadius.circular(8),
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Image(
+                image: AssetImage(ImageAsset.icon),
+                height: 80,
               ),
-            ),
-          ],
+              const Gap(25),
+              SizedBox(
+                width: 110,
+                child: LinearProgressIndicator(
+                  color: AppColors.getPrimaryColor(),
+                  minHeight: 6,
+                  backgroundColor:
+                      AppColors.getPrimaryColor().withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

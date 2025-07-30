@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -27,16 +28,20 @@ class AuthCubit extends Cubit<AuthState> {
         dbName: dbName,
       );
       if (resp['statusCode'] != 201) {
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
         emit(state.copyWith(
-          errorMsg: resp['message'],
+          errorMsg: errorMsg,
           status: Status.error,
         ));
         return;
       }
-      await LocalStorage().setJWT(resp['accessToken']);
-      await LocalStorage().setDatabase(dbName);
-      await LocalStorage().setUserId(resp['usuarioId']);
-      await LocalStorage().setCurrentUsername(resp['username']);
+      await saveCredentialsOnLocalStorage(
+        accessToken: resp['accessToken'],
+        dbName: dbName,
+        userId: resp['usuarioId'],
+        username: resp['username'],
+      );
       final haveToSync = CatalogoSync.needToSync();
       if (!haveToSync) {
         await LocalStorage()
@@ -50,6 +55,20 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  Future<void> saveCredentialsOnLocalStorage({
+    required String accessToken,
+    required String dbName,
+    required String userId,
+    required String username,
+  }) async {
+    await Future.wait([
+      LocalStorage().setJWT(accessToken),
+      LocalStorage().setDatabase(dbName),
+      LocalStorage().setUserId(userId),
+      LocalStorage().setCurrentUsername(username),
+    ]);
   }
 
   void logOut({required BuildContext context}) {

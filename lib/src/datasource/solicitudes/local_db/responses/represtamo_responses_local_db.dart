@@ -12,18 +12,26 @@ class ReprestamoResponsesLocalDb {
   String? cedula;
   int? monto;
   String? objMonedaId;
+  String? objMonedaIdVer;
   String? objPropositoId;
+  String? objPropositoIdVer;
   String? objFrecuenciaId;
   String? objFrecuenciaIdVer;
   int? cuota;
   String? objActividadId;
+  String? objActividadIdVer;
   String? objActividadId1;
+  String? objActividadId1Ver;
   String? objActividadId2;
+  String? objActividadId2Ver;
   String? objSectorId;
+  String? objSectorIdVer;
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? objParentescoBeneficiarioSeguroId;
+  String? objParentescoBeneficiarioSeguroIdVer;
   String? objProductoId;
+  String? objProductoIdVer;
   String? observacion;
   String? ubicacionLongitud;
   String? ubicacionLatitud;
@@ -32,21 +40,30 @@ class ReprestamoResponsesLocalDb {
   bool? esPeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
   bool? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
+  String? parentescoFamiliarPeps2Ver;
   String? cargoFamiliarPeps2;
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Ver;
   String? objRubroActividad;
+  String? objRubroActividadVer;
   String? objActividadPredominante;
+  String? objActividadPredominanteVer;
   String? objTipoDocumentoId;
+  String? objTipoDocumentoIdVer;
   String? objRubroActividad2;
+  String? objRubroActividad2Ver;
   String? objRubroActividad3;
+  String? objRubroActividad3Ver;
   String? objRubroActividadPredominante;
+  String? objRubroActividadPredominanteVer;
   String? tipoPersona;
   String? objTipoPersonaId;
   String? telefonoBeneficiario;
@@ -65,21 +82,7 @@ class ReprestamoResponsesLocalDb {
   bool? hasVerified;
   bool? isOffline;
   String? objOrigenSolicitudIdVer;
-  String? objMonedaIdVer;
-  String? objPropositoIdVer;
   String? objFrecuenciaIdVer2;
-  String? objActividadIdVer;
-  String? objActividadId1Ver;
-  String? objActividadId2Ver;
-  String? objSectorIdVer;
-  String? objParentescoBeneficiarioSeguroIdVer;
-  String? objProductoIdVer;
-  String? objRubroActividadVer;
-  String? objActividadPredominanteVer;
-  String? objTipoDocumentoIdVer;
-  String? objRubroActividad2Ver;
-  String? objRubroActividad3Ver;
-  String? objRubroActividadPredominanteVer;
   String? objTipoPersonaIdVer;
   String? parentescoFamiliar;
   String? parentescoFamiliarVer;
@@ -91,6 +94,9 @@ class ReprestamoResponsesLocalDb {
 
   ReprestamoResponsesLocalDb({
     required this.id,
+    this.paisPeps2Ver,
+    this.paisPepsVer,
+    this.parentescoFamiliarPeps2Ver,
     this.uuid,
     this.objOrigenSolicitudIdVer,
     this.objMonedaIdVer,

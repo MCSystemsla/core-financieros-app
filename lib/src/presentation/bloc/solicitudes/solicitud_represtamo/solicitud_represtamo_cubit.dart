@@ -21,7 +21,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   Future<void> createSolicitudReprestamo() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg) =
+      final (isOk, msg, numeroSolicitud) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
           isOffline: state.isOffline,
@@ -83,11 +83,32 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
         emit(state.copyWith(errorMsg: msg, status: Status.error));
         return;
       }
-      emit(state.copyWith(successMsg: msg, status: Status.done));
+      emit(state.copyWith(
+        successMsg: msg,
+        status: Status.done,
+        numeroSolicitud: numeroSolicitud,
+      ));
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,
         errorMsg: e.toString(),
+      ));
+    }
+  }
+
+  void sendCedulaImages({required String numeroSolicitud}) async {
+    try {
+      await _solicitudesCreditoRepository
+          .sendCedulaImageWhenSolicitudCreditoCreated(
+        numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+        cedulaCliente: state.cedula,
+        imagenFrontal: state.cedulaFrontPath,
+        imagenTrasera: state.cedulaBackPath,
+      );
+    } catch (e) {
+      emit(state.copyWith(
+        errorMsg: e.toString(),
+        status: Status.error,
       ));
     }
   }
@@ -115,10 +136,14 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
+      paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
+      parentescoFamiliarPeps2Ver: _prefer(
+          state.parentescoFamiliarPeps2Ver, prev?.parentescoFamiliarPeps2Ver),
       montoMaximo:
-          state.montoMaximo == 0 ? prev?.montoMaximo ?? 0 : state.montoMaximo,
+          state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
       montoMinimo:
-          state.montoMinimo == 0 ? prev?.montoMinimo ?? 0 : state.montoMinimo,
+          state.montoMinimo == 0 ? prev?.montoMinimo : state.montoMinimo,
       frecuenciaPagoMeses: _prefer(
         state.frecuenciaPagoMeses,
         prev?.frecuenciaPagoMeses,
@@ -176,8 +201,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       parentescoFamiliarVer:
           _prefer(state.parentescoFamiliarVer, prev?.parentescoFamiliarVer),
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
-      isOffline:
-          !state.isOffline ? (prev?.isOffline ?? false) : state.isOffline,
+      isOffline: prev?.isOffline ?? false,
       objRubroActividad:
           _prefer(state.objRubroActividad, prev?.objRubroActividad),
       objFrecuenciaIdVer:
