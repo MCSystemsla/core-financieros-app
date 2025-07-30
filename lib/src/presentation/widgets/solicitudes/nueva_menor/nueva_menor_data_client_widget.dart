@@ -423,7 +423,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             const Gap(30),
             SearchDropdownWidget(
               enabled: false,
-              // initialValue: '',
               hintText: tipoDocumento?.name ?? 'input.select_option'.tr(),
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
@@ -431,8 +430,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 tipoDocumento = item;
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    objTipoDocumentoId: item.value,
-                    objTipoDocumentoIdVer: item.name,
+                    objTipoDocumentoId: tipoDocumento?.value,
+                    objTipoDocumentoIdVer: tipoDocumento?.name,
                   ),
                 );
                 setState(() {});
@@ -449,8 +448,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 paisEmisor = Item(name: item.nombre, value: item.valor);
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    objPaisEmisorCedula: item.valor,
-                    objPaisEmisorCedulaVer: item.nombre,
+                    objPaisEmisorCedula: paisEmisor?.value,
+                    objPaisEmisorCedulaVer: paisEmisor?.name,
                   ),
                 );
                 setState(() {});
@@ -466,10 +465,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Documento',
-
               hintText: 'Ingresa Documento',
               textInputType: TextInputType.text,
-              // textEditingController: cedulaController,
               onChange: (value) {
                 cedulaController = value;
               },
@@ -552,7 +549,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 );
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    nacionalidad: item?.valor,
+                    nacionalidad: nacionalidadController?.value,
                   ),
                 );
                 setState(() {});
@@ -571,8 +568,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 paisNacimiento = Item(name: item.nombre, value: item.valor);
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    objPaisNacimientoId: item.valor,
-                    objPaisNacimientoIdVer: item.nombre,
+                    objPaisNacimientoId: paisNacimiento?.value,
+                    objPaisNacimientoIdVer: paisNacimiento?.name,
                   ),
                 );
               },
@@ -590,8 +587,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 sexo = item;
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    objSexoId: item.value,
-                    objSexoIdVer: item.name,
+                    objSexoId: sexo?.value,
+                    objSexoIdVer: sexo?.name,
                   ),
                 );
               },
@@ -623,7 +620,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               onChange: (value) {
                 telefonoController = value;
                 cubit.onFieldChanged(
-                  () => cubit.state.copyWith(telefono: value),
+                  () => cubit.state.copyWith(telefono: telefonoController),
                 );
               },
             ),
@@ -650,7 +647,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               onChange: (value) {
                 celularController = value;
                 cubit.onFieldChanged(
-                  () => cubit.state.copyWith(celular: value),
+                  () => cubit.state.copyWith(celular: celularController),
                 );
               },
               isRequired: false,
@@ -661,7 +658,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               onChange: (value) {
                 emailController = value;
                 cubit.onFieldChanged(
-                  () => cubit.state.copyWith(email: value),
+                  () => cubit.state.copyWith(email: emailController),
                 );
               },
               icon: Icon(
@@ -690,7 +687,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               hintText: 'Ingresa Cantidad de Hijos',
               textInputType: TextInputType.number,
               isValid: null,
-              validator: (value) => ClassValidator.validateCantidadHijos(value),
               onChange: (value) {
                 cantidadHijos = value;
                 cubit.onFieldChanged(
@@ -708,8 +704,8 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 escolaridad = item;
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
-                    objEscolaridadId: item.value,
-                    objEscolaridadIdVer: item.name,
+                    objEscolaridadId: escolaridad?.value,
+                    objEscolaridadIdVer: escolaridad?.name,
                   ),
                 );
               },
@@ -740,7 +736,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pushReplacement('/solicitudes');
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,

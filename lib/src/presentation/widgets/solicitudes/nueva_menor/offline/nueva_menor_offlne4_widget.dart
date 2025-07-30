@@ -80,6 +80,16 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
     return await showTimePicker(
       context: context,
       initialTime: initialTime ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Localizations.override(
+          context: context,
+          locale: const Locale('en', 'US'), // Forzamos locale inglés (AM/PM)
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child!,
+          ),
+        );
+      },
     );
   }
 

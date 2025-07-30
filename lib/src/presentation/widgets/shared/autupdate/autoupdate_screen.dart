@@ -1,12 +1,22 @@
 import 'dart:developer';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_update/azhon_app_update.dart';
 import 'package:flutter_app_update/result_model.dart';
+import 'package:flutter_app_update/update_model.dart';
 import 'package:gap/gap.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 
 class AutoupdateScreen extends StatefulWidget {
-  const AutoupdateScreen({super.key});
+  final String apkUrl;
+  final String versionName;
+  const AutoupdateScreen({
+    super.key,
+    required this.apkUrl,
+    required this.versionName,
+  });
 
   @override
   State<AutoupdateScreen> createState() => _AutoupdateScreenState();
@@ -14,19 +24,14 @@ class AutoupdateScreen extends StatefulWidget {
 
 class _AutoupdateScreenState extends State<AutoupdateScreen> {
   double _progress = 0;
+  ResultType? resultType;
+  String? errorMsg;
 
   @override
   void initState() {
     super.initState();
-
-    // Escuchamos progreso de descarga
-    AzhonAppUpdate.listener((ResultModel model) {
-      if (!mounted) return;
-      setState(() {
-        _progress = model.progress?.toDouble() ?? 0;
-      });
-      log('Progreso de la actualización: $_progress%');
-    });
+    _startUpdate();
+    _listenToProgress();
   }
 
   @override
@@ -36,9 +41,66 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
     super.dispose();
   }
 
+  void _startUpdate() {
+    final updateModel = UpdateModel(
+      widget.apkUrl,
+      '${widget.versionName}.apk',
+      'ic_launcher',
+      '',
+      showBgdToast: false,
+    );
+
+    AzhonAppUpdate.update(updateModel).then((value) {
+      debugPrint('✅ Actualización completada: $value');
+    }).catchError((e) async {
+      debugPrint('❌ Error durante la actualización: $e');
+      if (!mounted) return;
+
+      await ErrorReporter.registerError(
+        errorMessage: 'Error en actualización: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+      setState(() {
+        resultType = ResultType.error;
+        if (e.toString().contains('PERMISSION_DENIED')) {
+          errorMsg =
+              'No se tienen permisos para instalar. Habilítalos e intenta de nuevo.';
+        } else if (e.toString().contains('timeout')) {
+          errorMsg = 'La descarga ha tardado demasiado. Verifica tu conexión.';
+        } else {
+          errorMsg = e.toString();
+        }
+      });
+    });
+  }
+
+  _listenToProgress() {
+    AzhonAppUpdate.listener((ResultModel model) {
+      if (!mounted) return;
+
+      setState(() {
+        _progress = model.progress?.toDouble() ?? 0;
+        resultType = model.type;
+        errorMsg = model.type == ResultType.error ? model.exception : null;
+      });
+
+      log('⬇️ Progreso de descarga: $_progress bytes');
+    });
+  }
+
+  void _retryUpdate() {
+    setState(() {
+      _progress = 0;
+      resultType = null;
+      errorMsg = null;
+    });
+    _startUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const double estimatedTotalBytes = 98 * 1024 * 1024; // 98 MB aprox
+    const double estimatedTotalBytes = 99 * 1024 * 1024; // 99 MB aprox
 
     final double percentage =
         (_progress / estimatedTotalBytes * 100).clamp(0, 100);
@@ -62,20 +124,39 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
                 ),
                 const Gap(20),
                 Text(
-                  'Actualizando la aplicación...',
+                  resultType == ResultType.done
+                      ? 'La aplicación se ha actualizado correctamente.'
+                      : 'Actualizando la aplicación, por favor no cierres la aplicación...',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const Gap(20),
-                LinearProgressIndicator(
-                  value: percentage / 100,
-                  minHeight: 8,
-                  backgroundColor: Colors.grey.shade300,
-                  color: AppColors.getPrimaryColor(),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                if (resultType == ResultType.downloading)
+                  LinearProgressIndicator(
+                    value: percentage / 100,
+                    minHeight: 8,
+                    backgroundColor: Colors.grey.shade300,
+                    color: AppColors.getPrimaryColor(),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                if (resultType == ResultType.error) ...[
+                  const Gap(20),
+                  Text(
+                    'Error al actualizar la aplicación:\n$errorMsg',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Gap(20),
+                  CustomElevatedButton(
+                    text: 'Reintentar',
+                    color: AppColors.getFourthgColorWithOpacity(),
+                    onPressed: _retryUpdate,
+                  )
+                ],
               ],
             ),
           ),

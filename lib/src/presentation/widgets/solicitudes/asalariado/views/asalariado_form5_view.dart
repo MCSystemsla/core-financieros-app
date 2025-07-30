@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/count
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -266,14 +267,12 @@ class __FormContentState extends State<_FormContent> {
                 const Gap(30),
                 OutlineTextfieldWidget(
                   readOnly: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(totalIngresoMes),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
-                  hintText: totalIngresoMes,
+                  hintText: totalIngresoMes?.toCurrencyString(),
                   title: 'Total ingresos mes (C\$)',
                   icon: const Icon(Icons.summarize),
                 ),

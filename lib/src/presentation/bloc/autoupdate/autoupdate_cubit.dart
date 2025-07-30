@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -32,8 +34,8 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       }
 
       final data = json.decode(response.body);
-      final nuevaVersion = data['version']?.toString();
-      final apkUrl = data['apkUrl']?.toString();
+      final String? nuevaVersion = data['version']?.toString();
+      final String? apkUrl = data['apkUrl']?.toString();
 
       if (nuevaVersion == null || apkUrl == null) {
         _logger.e('Formato JSON inválido');
@@ -60,6 +62,11 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
     } catch (e, stack) {
       _logger.e('Excepción al verificar actualización $e',
           error: e, stackTrace: stack);
+      await ErrorReporter.registerError(
+        errorMessage: 'Error al verificar actualización: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
       emit(AutoupdateError());
     }
   }

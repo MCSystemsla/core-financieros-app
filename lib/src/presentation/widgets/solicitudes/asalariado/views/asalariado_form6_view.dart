@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -380,8 +381,6 @@ class __FormContentState extends State<_FormContent> {
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
@@ -402,8 +401,6 @@ class __FormContentState extends State<_FormContent> {
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -422,9 +419,7 @@ class __FormContentState extends State<_FormContent> {
                     const Gap(30),
                     OutlineTextfieldWidget(
                       readOnly: true,
-                      hintText: totalIngresosMesConyuge,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
+                      hintText: totalIngresosMesConyuge?.toCurrencyString(),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),

@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
@@ -205,5 +206,218 @@ class CatalogoFrecuenciaPagoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+      };
+}
+
+class AsalariadoObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+
+  AsalariadoObtenerSolicitudesPorEstadoEndpoint({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    required this.numeroSolicitud,
+    required this.cedulaCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitud-asalariado/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+      };
+}
+
+class NuevaMenorObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  NuevaMenorObtenerSolicitudesPorEstadoEndpoint({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    required this.numeroSolicitud,
+    required this.cedulaCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitud-nueva-menor/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+      };
+}
+
+class GetSolicitudesCreditoByEstado extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  GetSolicitudesCreditoByEstado({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    required this.numeroSolicitud,
+    required this.cedulaCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => 'solicitudes/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+      };
+}
+
+class ReprestamoObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  ReprestamoObtenerSolicitudesPorEstadoEndpoint({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    required this.numeroSolicitud,
+    required this.cedulaCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitud-represtamo/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+      };
+}
+
+class ObtenerAsesoresEndpoint extends Endpoint {
+  ObtenerAsesoresEndpoint();
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-asesores';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
+
+class AsignarSolicitudEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+  AsignarSolicitudEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/solicitud-nueva-menor/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
+      };
+}
+
+class AsignarSolicitudReprestamoEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+  AsignarSolicitudReprestamoEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/solicitud-represtamo/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
+      };
+}
+
+class AsignarSolicitudAsalariadoEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+  AsignarSolicitudAsalariadoEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/solicitud-asalariado/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
       };
 }

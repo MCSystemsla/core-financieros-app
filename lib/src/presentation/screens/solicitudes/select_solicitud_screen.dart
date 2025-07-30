@@ -5,6 +5,8 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/so
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -36,7 +38,12 @@ class SelectSolicitudScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pushReplacement('/cartera'),
+          ),
+        ),
         body: BlocBuilder<EnviarSolicitudWhenIsdoneCubit,
             EnviarSolicitudWhenIsdoneState>(
           builder: (context, state) {
@@ -93,31 +100,94 @@ class _SelectSolicitud extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 10, bottom: 10),
-            child: Text(
-              'Seleccionar un tipo de Credito',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: 19,
-                  ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 10, bottom: 10),
+              child: Text(
+                'Seleccionar un tipo de Credito',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontSize: 19,
+                    ),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 10, bottom: 10),
-            child: Text(
-              'Por favor, elige una de las siguientes opciones:',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+            Container(
+              margin: const EdgeInsets.only(left: 10, bottom: 10),
+              child: Text(
+                'Por favor, elige una de las siguientes opciones:',
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+              ),
             ),
-          ),
-          const Gap(20),
-          const _SolicitudCardsRow1(),
-          const Gap(20),
-          const _SolicitudesCardsRow2(),
-        ],
+            const Gap(20),
+            const _SolicitudCardsRow1(),
+            const Gap(20),
+            const _SolicitudesCardsRow2(),
+            const Gap(20),
+            const _SolicitudesCardsRow3(),
+            const Gap(20),
+            const _SolicitudesCardsRow4(),
+            const Gap(20),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _SolicitudesCardsRow3 extends StatelessWidget {
+  const _SolicitudesCardsRow3();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg5,
+            title: 'Asignacion de Solicitudes Crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AsignacionListScreen()),
+                ),
+              );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _SolicitudesCardsRow4 extends StatelessWidget {
+  const _SolicitudesCardsRow4();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg6,
+            title: 'Autorizacion de Solicitudes Crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolcitudScreen()),
+                ),
+              );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
     );
   }
 }
@@ -128,7 +198,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isConnected =
-        context.watch<InternetConnectionCubit>().state.connectionStatus;
+        context.read<InternetConnectionCubit>().state.connectionStatus;
     return Row(
       children: [
         const Gap(10),

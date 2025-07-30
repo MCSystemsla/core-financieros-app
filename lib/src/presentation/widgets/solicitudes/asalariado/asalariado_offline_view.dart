@@ -76,6 +76,7 @@ class AsalariadoOfflineView extends StatelessWidget {
                       tag: 'cedulaFrontal',
                       child: PhotoCedulaClientWidget(
                         controller: controller,
+                        onNextPressed: () {},
                         fotoCedulaFrontal:
                             XFile(imagesCedula?.imageFrontCedula ?? ''),
                         fotoCedulaTrasera:

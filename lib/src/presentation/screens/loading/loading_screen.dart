@@ -16,41 +16,18 @@ class LoadingScreen extends StatefulWidget {
   State<LoadingScreen> createState() => _LoadingScreenState();
 }
 
-class _LoadingScreenState extends State<LoadingScreen>
-    with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      context.read<InternetConnectionCubit>().getInternetStatusConnection();
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
+class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-        builder: (context, state) {
-          return switch (state.connectionStatus) {
-            ConnectionStatus.connected => const LoginScreen(),
-            ConnectionStatus.disconnected => const HomeScreen(),
-            ConnectionStatus.checking => const _WidgetLoading(),
-            _ => const _WidgetLoading(),
-          };
-        },
-      ),
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return switch (state.connectionStatus) {
+          ConnectionStatus.connected => const LoginScreen(),
+          ConnectionStatus.disconnected => const HomeScreen(),
+          ConnectionStatus.checking => const _WidgetLoading(),
+          _ => const _WidgetLoading(),
+        };
+      },
     );
   }
 }
@@ -60,27 +37,30 @@ class _WidgetLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Image(
-              image: AssetImage(ImageAsset.icon),
-              height: 80,
-            ),
-            const Gap(25),
-            SizedBox(
-              width: 110,
-              child: LinearProgressIndicator(
-                color: AppColors.getPrimaryColor(),
-                minHeight: 6,
-                backgroundColor: AppColors.getPrimaryColor().withOpacity(0.15),
-                borderRadius: BorderRadius.circular(8),
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Image(
+                image: AssetImage(ImageAsset.icon),
+                height: 80,
               ),
-            ),
-          ],
+              const Gap(25),
+              SizedBox(
+                width: 110,
+                child: LinearProgressIndicator(
+                  color: AppColors.getPrimaryColor(),
+                  minHeight: 6,
+                  backgroundColor:
+                      AppColors.getPrimaryColor().withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

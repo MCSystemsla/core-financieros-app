@@ -137,3 +137,30 @@ class Filter extends StatelessWidget {
     );
   }
 }
+
+class FilterView extends StatelessWidget {
+  final VoidCallback onTap;
+  const FilterView({
+    super.key,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.getSecondaryColor().withOpacity(0.1),
+            border: Border.all(color: AppColors.grey.withOpacity(0.1)),
+          ),
+          child: Icon(
+            Icons.filter_alt_rounded,
+            color: AppColors.getSecondaryColor(),
+          )),
+    );
+  }
+}

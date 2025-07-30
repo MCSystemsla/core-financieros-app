@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
@@ -26,9 +24,14 @@ class EnviarSolicitudWhenIsdoneCubit
   void sendSolicitudWhenIsDone({required bool isConnected}) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
-    (bool isSuccess, String errorMessage) result = (false, '');
+
+    (bool isSuccess, String errorMessage, String? numerSolicitud) result =
+        (false, '', null);
+
     bool hasAnySent = false;
+
     emit(OnEnviarSolicitudWhenIsdoneLoading());
+
     try {
       final solicitudes = objectBoxService.sendSolicitudesWhenIsDone();
       if (solicitudes.isEmpty || !isConnected) {
@@ -50,16 +53,58 @@ class EnviarSolicitudWhenIsdoneCubit
           continue;
         }
         if (solicitud is ResponseLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: cedula,
+            tipoSolicitud: 'NUEVA_MENOR',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: cedula,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudWhenisUploaded(
             solicitudId: solicitud.id,
           );
         }
         if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: cedula,
+            tipoSolicitud: 'REPRESTAMO',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: cedula,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudReprestamoWhenisUploaded(
             solicitudId: solicitud.id,
           );
         }
         if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
+          final String? cedula = solicitud.cedula;
+          if (cedula == null) return;
+          final cedulaCliente = objectBoxService.getCedula(
+            cedula: cedula,
+            tipoSolicitud: 'ASALARIADO',
+          );
+          if (cedulaCliente != null) {
+            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
+              cedulaCliente: cedula,
+              imagenFrontal: cedulaCliente.imageFrontCedula!,
+              imagenTrasera: cedulaCliente.imageBackCedula!,
+            );
+          }
           objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
             solicitudId: solicitud.id,
           );
@@ -83,20 +128,6 @@ class EnviarSolicitudWhenIsdoneCubit
           ),
         );
       }
-    } on TimeoutException catch (e) {
-      _logger.e(e);
-      emit(
-        const OnEnviarSolicitudWhenIsdoneError(
-          msgError: 'El servidor tardó demasiado en responder.',
-        ),
-      );
-    } on SocketException catch (e) {
-      _logger.e(e);
-      emit(
-        const OnEnviarSolicitudWhenIsdoneError(
-          msgError: 'Error de conexion de red, Verifica tu red',
-        ),
-      );
     } catch (e) {
       _logger.e(e);
       emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
@@ -107,7 +138,8 @@ class EnviarSolicitudWhenIsdoneCubit
     emit(EnviarSolicitudWhenIsdoneInitial());
   }
 
-  Future<(bool, String)> _sendSolicitud({required dynamic solicitud}) async {
+  Future<(bool, String, String?)> _sendSolicitud(
+      {required dynamic solicitud}) async {
     return switch (solicitud) {
       ResponseLocalDb() => await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: _mapToSolicitudNuevaMenor(solicitud),

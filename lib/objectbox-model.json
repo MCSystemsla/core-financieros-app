@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "145:2524637299289633514",
+      "lastPropertyId": "146:4604020010912184238",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -922,6 +922,11 @@
           "id": "145:2524637299289633514",
           "name": "departamentoNegocioVer",
           "type": 9
+        },
+        {
+          "id": "146:4604020010912184238",
+          "name": "isOffline",
+          "type": 1
         }
       ],
       "relations": []

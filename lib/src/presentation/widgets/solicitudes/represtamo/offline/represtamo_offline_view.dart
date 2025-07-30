@@ -72,6 +72,7 @@ class ReprestamoOfflineView extends StatelessWidget {
                       tag: 'cedulaFrontal',
                       child: PhotoCedulaClientWidget(
                         controller: controller,
+                        onNextPressed: () {},
                         fotoCedulaFrontal:
                             XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
                         fotoCedulaTrasera:

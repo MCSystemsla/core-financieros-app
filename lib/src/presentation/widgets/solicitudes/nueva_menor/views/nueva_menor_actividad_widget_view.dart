@@ -68,16 +68,6 @@ class _FormContent extends StatefulWidget {
 }
 
 class __FormContentState extends State<_FormContent> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
-          () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
-                isDone: !widget.state.isConnected,
-              ),
-        );
-  }
-
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   Item? parentesco;
@@ -300,6 +290,7 @@ class __FormContentState extends State<_FormContent> {
                           ConnectionStatus.disconnected) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
+                            isOffline: true,
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',
                           ),

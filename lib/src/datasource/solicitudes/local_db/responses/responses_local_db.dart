@@ -149,7 +149,7 @@ class ResponseLocalDb {
   String? frecuenciaPagoMeses;
   String? departamentoNegocio;
   String? departamentoNegocioVer;
-
+  bool isOffline;
   ResponseLocalDb({
     required this.id,
     this.paisPepsVer,
@@ -296,5 +296,6 @@ class ResponseLocalDb {
     this.hasVerified = false,
     this.errorMsg,
     this.frecuenciaPagoMeses,
+    this.isOffline = false,
   });
 }

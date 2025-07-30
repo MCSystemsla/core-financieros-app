@@ -35,6 +35,10 @@ class LocalStorage {
     return prefs.getInt('lastUpdate') ?? 0;
   }
 
+  String get lastDeleteDate {
+    return prefs.getString('last_delete_date') ?? '';
+  }
+
   String get currentUserName {
     return prefs.getString('currentUserName') ?? '';
   }
@@ -69,5 +73,9 @@ class LocalStorage {
 
   Future<void> setCurrentUsername(String currentUserName) async {
     await prefs.setString('currentUserName', currentUserName);
+  }
+
+  Future<void> setLastDeleteDate(String lastDeleteDate) async {
+    await prefs.setString('last_delete_date', lastDeleteDate);
   }
 }

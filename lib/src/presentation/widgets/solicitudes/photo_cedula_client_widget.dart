@@ -12,6 +12,7 @@ class PhotoCedulaClientWidget extends StatelessWidget {
   final VoidCallback onCedulaFrontalPressed;
   final XFile? fotoCedulaTrasera;
   final VoidCallback onCedulaTraseraPressed;
+  final VoidCallback onNextPressed;
   const PhotoCedulaClientWidget({
     super.key,
     required this.controller,
@@ -19,6 +20,7 @@ class PhotoCedulaClientWidget extends StatelessWidget {
     this.fotoCedulaTrasera,
     required this.onCedulaFrontalPressed,
     required this.onCedulaTraseraPressed,
+    required this.onNextPressed,
   });
 
   final PageController controller;
@@ -53,6 +55,7 @@ class PhotoCedulaClientWidget extends StatelessWidget {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
+                onNextPressed();
               },
             ),
           ),

@@ -1,4 +1,4 @@
-enum Method { get, post, put, delete }
+enum Method { get, post, put, delete, patch }
 
 // ignore: constant_identifier_names
 enum TypeBody { raw, formData, x_www_form_urlencoded }

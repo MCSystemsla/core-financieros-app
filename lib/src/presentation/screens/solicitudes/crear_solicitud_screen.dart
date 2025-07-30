@@ -15,9 +15,13 @@ import '../../bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import '../../bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 
 enum TypeForm {
-  nueva,
-  asalariado,
-  represtamo,
+  nueva('NUEVAMENOR'),
+  asalariado('ASALARIADO'),
+  represtamo('REPRESTAMO');
+
+  final String codigo;
+
+  const TypeForm(this.codigo);
 }
 
 class CrearSolicitudScreen extends StatelessWidget {

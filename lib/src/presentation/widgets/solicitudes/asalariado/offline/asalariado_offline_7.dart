@@ -63,20 +63,30 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   final formKey = GlobalKey<FormState>();
 
   Future<void> selectDate(BuildContext context) async {
+    DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaPrimerPago,
-      firstDate: DateTime(1930),
+      firstDate: now,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(now)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -92,16 +102,18 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   }
 
   Future<void> selectFechaDesembolso(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
-      firstDate: DateTime(1930),
+      firstDate: now,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
-      if (picked.isBefore(DateTime.now())) {
+      if (picked.isBefore(today)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -109,6 +121,16 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
+      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title:
+              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+
       fechaDesembolso = picked;
       context.read<SolicitudAsalariadoCubit>().onFieldChanged(
             () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
