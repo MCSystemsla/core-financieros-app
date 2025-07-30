@@ -116,7 +116,7 @@ class LowStorageWarning extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(height: 8),
+                      const Gap(8),
                       Text(
                         '$percent% usado',
                         style: TextStyle(

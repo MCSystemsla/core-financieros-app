@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -126,6 +127,8 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             const _SolicitudesCardsRow3(),
             const Gap(20),
+            const _SolicitudesCardsRow4(),
+            const Gap(20),
           ],
         ),
       ),
@@ -150,6 +153,34 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: ((_) => const AsignacionListScreen()),
+                ),
+              );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _SolicitudesCardsRow4 extends StatelessWidget {
+  const _SolicitudesCardsRow4();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg6,
+            title: 'Autorizacion de Solicitudes Crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolcitudScreen()),
                 ),
               );
             },
