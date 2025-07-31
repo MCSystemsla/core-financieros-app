@@ -90,7 +90,6 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
         const Expanded(
           child: _HeaderContent(),
         ),
-        // const Gap(20),
         const Expanded(
           flex: 1,
           child: FilterContent(),
@@ -141,7 +140,6 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
             },
           ),
         ),
-
         if (isLoadingMore)
           const Expanded(
             child: Center(
