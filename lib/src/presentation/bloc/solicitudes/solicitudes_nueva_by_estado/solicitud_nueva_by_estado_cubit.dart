@@ -21,8 +21,12 @@ class SolicitudNuevaByEstadoCubit extends Cubit<SolicitudNuevaByEstadoState> {
     bool isCedulaSolicitudFilter = false,
     String? numeroSolicitud,
     String? cedulaCliente,
+    int? pagina,
   }) async {
-    emit(OnSolicitudNuevaByEstadoLoading());
+    final isInifinteScrollLoading = (pagina ?? 0) > 1;
+    if (!isInifinteScrollLoading) {
+      emit(OnSolicitudNuevaByEstadoLoading());
+    }
     try {
       final (isOk, data) =
           await _solicitudNuevaByEstadoRepository.getSolicitudesCreditoByEstado(
@@ -30,9 +34,18 @@ class SolicitudNuevaByEstadoCubit extends Cubit<SolicitudNuevaByEstadoState> {
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
         numeroSolicitud: numeroSolicitud,
         cedulaCliente: cedulaCliente,
+        pagina: pagina,
       );
+      final previousSolicitudes = state is OnSolicitudNuevaByEstadoSuccess
+          ? (state as OnSolicitudNuevaByEstadoSuccess).solicitudes
+          : <SolicitudEstado>[];
+
+      final combinedData = isInifinteScrollLoading
+          ? [...previousSolicitudes, ...data.data]
+          : data.data;
 
       emit(OnSolicitudNuevaByEstadoSuccess(
+        solicitudes: combinedData,
         solicitudByEstado: data,
         estadoCredito: estadoCredito,
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,

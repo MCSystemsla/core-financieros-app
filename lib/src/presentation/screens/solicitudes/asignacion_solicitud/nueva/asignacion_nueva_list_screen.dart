@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item.dart';
@@ -28,76 +27,131 @@ class AsignacionListScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Asignar Credito a Asesor'),
         ),
-        body: BlocBuilder<SolicitudNuevaByEstadoCubit,
-            SolicitudNuevaByEstadoState>(
-          builder: (context, state) {
-            return switch (state) {
-              OnSolicitudNuevaByEstadoLoading() => const LoadingWidget(),
-              OnSolicitudNuevaByEstadoSuccess() => _AsignacionNuevaListView(
-                  solicitudByEstado: state.solicitudByEstado,
-                ),
-              OnSolicitudNuevaByEstadoError() => OnErrorWidget(
-                  errorMsg: state.errorMsg,
-                  onPressed: () {
-                    context
-                        .read<SolicitudNuevaByEstadoCubit>()
-                        .getSolicitudesByEstado();
-                  },
-                ),
-              _ => const SizedBox(),
-            };
-          },
-        ),
+        body: const _AsignacionNuevaListView(),
       ),
     );
   }
 }
 
-class _AsignacionNuevaListView extends StatelessWidget {
-  final SolicitudByEstado solicitudByEstado;
-  const _AsignacionNuevaListView({
-    required this.solicitudByEstado,
-  });
+class _AsignacionNuevaListView extends StatefulWidget {
+  const _AsignacionNuevaListView();
+
+  @override
+  State<_AsignacionNuevaListView> createState() =>
+      _AsignacionNuevaListViewState();
+}
+
+class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
+  int pagina = 1;
+  bool isLoadingMore = false;
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() async {
+    final state = context.read<SolicitudNuevaByEstadoCubit>().state;
+    final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
+    final hasMore =
+        isSuccess ? state.solicitudByEstado.metaDataPagination.hasMore : false;
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200;
+
+    if (isAtBottom && hasMore && !isLoadingMore) {
+      setState(() => isLoadingMore = true);
+      pagina++;
+      if (!context.mounted || !mounted) return;
+
+      context.read<SolicitudNuevaByEstadoCubit>().getSolicitudesByEstado(
+            pagina: pagina,
+            isAsignadaToAsesorCredito:
+                isSuccess ? state.isAsignadaToAsesorCredito : false,
+          );
+      if (!mounted) return;
+
+      setState(() => isLoadingMore = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Gap(20),
-          const _HeaderContent(),
-          const Gap(20),
-          const FilterContent(),
-          const Gap(20),
-          solicitudByEstado.data.isEmpty
-              ? const _AsignListCreditNoData()
-              : ListView.builder(
-                  itemCount: solicitudByEstado.data.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return CreditProductItem(
-                      tipoSolicitud:
-                          solicitudByEstado.data[index].tipoSolicitud,
-                      solicitudId: solicitudByEstado.data[index].id,
-                      title:
-                          'Numero Solicitud: ${solicitudByEstado.data[index].numero}',
-                      fecha: solicitudByEstado.data[index].fechaSolicitud,
-                      monto: solicitudByEstado.data[index].monto!
-                          .toCurrencyString(),
-                      estadoCodigo: solicitudByEstado.data[index].codigo,
-                      sucursal: solicitudByEstado.data[index].sucursal ?? 'N/A',
-                      nombreCliente:
-                          solicitudByEstado.data[index].nombreCompleto,
-                      nombrePromotor:
-                          solicitudByEstado.data[index].nombrePromotor,
-                    );
-                  },
-                ),
-          const Gap(20),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Gap(20),
+        const Expanded(
+          child: _HeaderContent(),
+        ),
+        // const Gap(20),
+        const Expanded(
+          flex: 1,
+          child: FilterContent(),
+        ),
+        Expanded(
+          flex: 5,
+          child: BlocBuilder<SolicitudNuevaByEstadoCubit,
+              SolicitudNuevaByEstadoState>(
+            builder: (context, state) {
+              return switch (state) {
+                OnSolicitudNuevaByEstadoLoading() => const LoadingWidget(),
+                OnSolicitudNuevaByEstadoError() => OnErrorWidget(
+                    errorMsg: state.errorMsg,
+                    onPressed: () {
+                      context
+                          .read<SolicitudNuevaByEstadoCubit>()
+                          .getSolicitudesByEstado();
+                    },
+                  ),
+                OnSolicitudNuevaByEstadoSuccess() => state.solicitudes.isEmpty
+                    ? const _AsignListCreditNoData()
+                    : ListView.builder(
+                        controller: _scrollController,
+                        itemCount: state.solicitudes.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return CreditProductItem(
+                            tipoSolicitud:
+                                state.solicitudes[index].tipoSolicitud,
+                            solicitudId: state.solicitudes[index].id,
+                            title:
+                                'Numero Solicitud: ${state.solicitudes[index].numero}',
+                            fecha: state.solicitudes[index].fechaSolicitud,
+                            monto: state.solicitudes[index].monto!
+                                .toCurrencyString(),
+                            estadoCodigo: state.solicitudes[index].codigo,
+                            sucursal:
+                                state.solicitudes[index].sucursal ?? 'N/A',
+                            nombreCliente:
+                                state.solicitudes[index].nombreCompleto,
+                            nombrePromotor:
+                                state.solicitudes[index].nombrePromotor,
+                          );
+                        },
+                      ),
+                _ => const SizedBox(),
+              };
+            },
+          ),
+        ),
+
+        if (isLoadingMore)
+          const Expanded(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
