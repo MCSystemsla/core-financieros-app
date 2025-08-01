@@ -200,6 +200,8 @@ class __FormContentState extends State<_FormContent> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: JLuxDropdown(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     dropdownColor: Colors.white,
                     isContainIcon: true,
                     title: '¿Tiene Familiar PEPS?',

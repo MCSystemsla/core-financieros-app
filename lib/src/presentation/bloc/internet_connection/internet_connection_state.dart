@@ -1,7 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'internet_connection_cubit.dart';
 
-enum ConnectionStatus { checking, connected, disconnected, unKnown }
+enum ConnectionStatus {
+  checking,
+  connected,
+  disconnected,
+  unKnown,
+  handleOfflineActivation
+}
 
 class InternetConnectionState extends Equatable {
   final bool isConnected;
