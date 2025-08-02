@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -80,6 +81,10 @@ class _DescripcionAcademicaState extends State<DescripcionAcademica>
                   CommentaryWidget(
                     title: 'Años de la carrera:',
                     textEditingController: tiempoCarreras,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
                     textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -307,6 +312,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
               CommentaryWidget(
                 title: 'Años de la carrera:',
                 textEditingController: tiempoCarrera,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(2),
+                ],
                 textInputType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
