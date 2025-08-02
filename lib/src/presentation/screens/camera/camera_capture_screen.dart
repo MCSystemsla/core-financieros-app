@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -69,16 +70,24 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   }
 
   Future<bool> _requestPermissions() async {
+    final androidVersion = await AndroidVersionHelper.getAndroidVersion();
+    final isAndroidVersionIsAbove11Permission =
+        androidVersion != null && androidVersion >= 30;
+
     final permissions = await [
       Permission.camera,
-      Permission.manageExternalStorage,
+      if (isAndroidVersionIsAbove11Permission) Permission.manageExternalStorage,
     ].request();
 
-    final cameraGranted = permissions[Permission.camera]?.isGranted ?? false;
-    final storageGranted =
-        permissions[Permission.manageExternalStorage]?.isGranted ?? false;
+    final cameraGranted = (permissions[Permission.camera]?.isGranted ?? false);
 
-    return cameraGranted && storageGranted;
+    final storageGranted = isAndroidVersionIsAbove11Permission
+        ? (permissions[Permission.manageExternalStorage]?.isGranted ?? false)
+        : true;
+
+    final permissionStatus = cameraGranted && storageGranted;
+
+    return permissionStatus;
   }
 
   Future<void> _takePhoto() async {

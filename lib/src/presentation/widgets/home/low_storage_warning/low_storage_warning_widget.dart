@@ -23,7 +23,7 @@ class LowStorageWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = usedStoragePercent.round();
-    final colors = (percent > 90)
+    final colors = (percent >= 90)
         ? [
             Colors.white24,
             Colors.white24,
@@ -126,7 +126,7 @@ class LowStorageWarning extends StatelessWidget {
                         ),
                       ),
                       const Gap(24),
-                      if (percent <= 90)
+                      if (percent < 90)
                         CustomElevatedButton(
                           onPressed: () {
                             context
