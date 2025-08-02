@@ -20,11 +20,18 @@ class MiCreditoProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinearProgressIndicator(
-      backgroundColor: Colors.transparent,
-      minHeight: 12,
-      color: AppColors.getPrimaryColor(),
-      value: _currentValue,
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: _currentValue),
+      builder: (context, value, _) {
+        return LinearProgressIndicator(
+          borderRadius: BorderRadius.circular(2),
+          backgroundColor: Colors.transparent,
+          minHeight: 12,
+          color: AppColors.getPrimaryColor(),
+          value: value,
+        );
+      },
+      duration: const Duration(seconds: 2),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
@@ -12,27 +13,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class MejoraViviendaCreditoDescrip extends StatefulWidget {
-  final bool isRecurrentForm;
+class MicreditoCreditoAnterior extends StatefulWidget {
   final PageController pageController;
-  const MejoraViviendaCreditoDescrip({
+  const MicreditoCreditoAnterior({
     super.key,
     required this.pageController,
-    required this.isRecurrentForm,
   });
 
   @override
-  State<MejoraViviendaCreditoDescrip> createState() =>
-      _MejoraViviendaCreditoDescripState();
+  State<MicreditoCreditoAnterior> createState() =>
+      _MicreditoCreditoAnteriorState();
 }
 
-class _MejoraViviendaCreditoDescripState
-    extends State<MejoraViviendaCreditoDescrip>
+class _MicreditoCreditoAnteriorState extends State<MicreditoCreditoAnterior>
     with AutomaticKeepAliveClientMixin {
-  final question1 = TextEditingController();
-  String? question2;
-  final isNotCoincideResponse = TextEditingController();
-  final viviendaAntesyDespuesController = TextEditingController();
+  String? coincideRespuesta;
+  final explicacionInversion = TextEditingController();
+  final comoAyudoProfesionalmente = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -41,7 +38,6 @@ class _MejoraViviendaCreditoDescripState
     return Padding(
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
           key: formKey,
           child: Column(
@@ -49,16 +45,15 @@ class _MejoraViviendaCreditoDescripState
             children: [
               const MiCreditoProgress(
                 steps: 5,
-                currentStep: 3,
+                currentStep: 4,
               ),
               const Gap(20),
               Text(
-                'Descripción del crédito anterior Mejora de Vivienda'.tr(),
+                'Descripción del crédito anterior MiCrédiEstudio'.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
-              const Gap(20),
               const MotivoPrestamoWidget(),
               const Gap(20),
               WhiteCard(
@@ -76,7 +71,7 @@ class _MejoraViviendaCreditoDescripState
                   items: ['input.yes'.tr(), 'input.no'.tr()],
                   onChanged: (item) {
                     if (item == null) return;
-                    question2 = item;
+                    coincideRespuesta = item;
                     setState(() {});
                   },
                   toStringItem: (item) {
@@ -86,23 +81,29 @@ class _MejoraViviendaCreditoDescripState
                 ),
               ),
               const Gap(20),
-              if (question2 == 'input.no'.tr())
+              if (coincideRespuesta == 'input.no'.tr())
                 CommentaryWidget(
-                  textEditingController: isNotCoincideResponse,
+                  title:
+                      '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
+                  textEditingController: explicacionInversion,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'input.input_validator'.tr();
                     }
                     return null;
                   },
-                  title:
-                      '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),
               const Gap(20),
               CommentaryWidget(
                 title:
-                    '¿Cómo era su vivienda anteriormente y describa como está ahora?',
-                textEditingController: viviendaAntesyDespuesController,
+                    '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
+                textEditingController: comoAyudoProfesionalmente,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
               ),
               const Gap(20),
               ButtonActionsWidget(
@@ -116,37 +117,46 @@ class _MejoraViviendaCreditoDescripState
                 },
                 onNextPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
-                    context.read<RecurrenteMejoraViviendaCubit>().saveAnswers2(
-                          coincideRespuesta: question2 == 'input.yes'.tr(),
+                    context.read<RecurrenteMicrediEstudioCubit>().saveAnswers(
+                          coincideRespuesta:
+                              coincideRespuesta == 'input.yes'.tr(),
                           explicacionInversion:
-                              isNotCoincideResponse.text.trim(),
-                          viviendaAntesDespues:
-                              viviendaAntesyDespuesController.text.trim(),
+                              explicacionInversion.text.trim(),
+                          comoAyudoProfesionalmente:
+                              comoAyudoProfesionalmente.text.trim(),
+                          objSolicitudRecurrenteId: int.parse(
+                            context.read<KivaRouteCubit>().state.solicitudId,
+                          ),
                         );
                     context.read<ResponseCubit>().addResponses(
                       responses: [
                         Response(
-                          index: widget.isRecurrentForm ? 3 : 0,
+                          index: widget.pageController.page?.toInt() ?? 0,
                           question:
                               '¿Coincide la respuesta del cliente con el formato anterior?',
-                          response: question2 ?? 'N/A',
+                          response: coincideRespuesta ?? 'N/A',
                         ),
-                        if (question2 == 'input.no'.tr())
+                        Response(
+                          index: widget.pageController.page?.toInt() ?? 0,
+                          question:
+                              '¿Coincide la respuesta del cliente con el formato anterior?',
+                          response: coincideRespuesta ?? 'N/A',
+                        ),
+                        if (coincideRespuesta == 'input.no'.tr())
                           Response(
-                            index: widget.isRecurrentForm ? 3 : 0,
+                            index: widget.pageController.page?.toInt() ?? 0,
                             question:
                                 '* Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-                            response: isNotCoincideResponse.text.trim(),
+                            response: explicacionInversion.text.trim(),
                           ),
                         Response(
-                          index: widget.isRecurrentForm ? 3 : 0,
+                          index: widget.pageController.page?.toInt() ?? 0,
                           question:
-                              '¿Cómo era su vivienda anteriormente y describa como está ahora?',
-                          response: isNotCoincideResponse.text.trim(),
+                              '¿De qué manera ayudó este préstamo Kiva en su vida profesional?*',
+                          response: comoAyudoProfesionalmente.text.trim(),
                         ),
                       ],
                     );
-
                     widget.pageController.nextPage(
                       duration: const Duration(
                         milliseconds: 350,
@@ -158,7 +168,7 @@ class _MejoraViviendaCreditoDescripState
                 previousTitle: 'button.previous'.tr(),
                 nextTitle: 'button.next'.tr(),
               ),
-              const Gap(10),
+              const Gap(20),
             ],
           ),
         ),

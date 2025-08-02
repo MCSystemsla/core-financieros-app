@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';

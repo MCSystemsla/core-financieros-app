@@ -6,8 +6,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_r
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -70,7 +70,7 @@ class _EstandarEntornoFamiliarState extends State<EstandarEntornoFamiliar>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const MiCreditoProgress(
-                    steps: 4,
+                    steps: 5,
                     currentStep: 3,
                   ),
                   const Gap(20),
@@ -242,8 +242,8 @@ class _RecurrenteFormWidgetState extends State<_RecurrenteFormWidget>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const MiCreditoProgress(
-                steps: 4,
-                currentStep: 2,
+                steps: 5,
+                currentStep: 3,
               ),
               const Gap(20),
               Text(

@@ -4,14 +4,14 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:go_router/go_router.dart';
 
-class NoVpnPopUpOnKiva extends OdsDialog {
+class NoInternetPopUpOnKiva extends OdsDialog {
   final BuildContext context;
-  final String info;
+  final String? info;
   final String header;
-  const NoVpnPopUpOnKiva({
+  const NoInternetPopUpOnKiva({
     super.key,
     required this.context,
-    required this.info,
+    this.info,
     required this.header,
   }) : super(
           title: header,

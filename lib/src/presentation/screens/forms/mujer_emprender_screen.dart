@@ -18,13 +18,14 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_mujer_
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/screens.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_impacto_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -86,7 +87,7 @@ class MujerEmprenderScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
-              SaneamientoContent(
+              AddKivaImagesWidget(
                 controller: pageController,
               ),
               MujerEmprendeEntornoSocialWidget(
@@ -463,7 +464,7 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {
-      return NoVpnPopUpOnKiva(
+      return NoInternetPopUpOnKiva(
         context: context,
         info: msgDialog,
         header: '',
@@ -808,7 +809,7 @@ class _SignSignatureState extends State<_SignSignature> {
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {
-      return NoVpnPopUpOnKiva(
+      return NoInternetPopUpOnKiva(
         context: context,
         info: msgDialog,
         header: '',

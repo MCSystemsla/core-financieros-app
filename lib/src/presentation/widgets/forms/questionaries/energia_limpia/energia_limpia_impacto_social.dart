@@ -3,8 +3,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/en
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_energia_limpia/recurrente_energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -179,8 +179,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const MiCreditoProgress(
-                steps: 4,
-                currentStep: 4,
+                steps: 5,
+                currentStep: 5,
               ),
               const Gap(20),
               Text(

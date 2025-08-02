@@ -2,7 +2,8 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/screens.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_about_family.dart';
@@ -56,7 +57,7 @@ class MigrantesEconomicosScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
-              SaneamientoContent(
+              AddKivaImagesWidget(
                 controller: pageController,
               ),
               PrimerPrestamoWidget(
