@@ -17,6 +17,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
@@ -147,6 +148,10 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
         key: formKey,
         child: Column(
           children: [
+            const MiCreditoProgress(
+              currentStep: 3,
+              steps: 5,
+            ),
             const Gap(20),
             SearchDropdownWidget(
               codigo: 'DESTINOCREDITO',

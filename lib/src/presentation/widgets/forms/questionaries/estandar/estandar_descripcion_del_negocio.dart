@@ -3,10 +3,10 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/dates_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -77,8 +77,8 @@ class _EstandarDescripciondelNegocioState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const MiCreditoProgress(
-                    steps: 4,
-                    currentStep: 3,
+                    steps: 5,
+                    currentStep: 4,
                   ),
                   const Gap(20),
                   Text(
@@ -266,8 +266,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const MiCreditoProgress(
-                steps: 4,
-                currentStep: 3,
+                steps: 5,
+                currentStep: 4,
               ),
               const Gap(20),
               Text(
@@ -302,7 +302,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   hintText: 'input.select_option'.tr(),
                 ),
               ),
-              if (decisionItem == 'input.no'.tr())
+              const Gap(20),
+              if (decisionItem == 'input.no'.tr()) ...[
                 CommentaryWidget(
                   textEditingController: explicacionInversion,
                   validator: (value) {
@@ -314,6 +315,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   title:
                       'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),
+                const Gap(20),
+              ],
               WhiteCard(
                 padding: const EdgeInsets.all(5),
                 child: JLuxDropdown(

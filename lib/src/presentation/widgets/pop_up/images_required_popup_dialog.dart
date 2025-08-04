@@ -5,22 +5,16 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 
-class CustomAlertDialog extends OdsDialog {
+class ImagesRequiredPopupDialog extends OdsDialog {
   @override
   // ignore: overridden_fields
-  final String title;
-  @override
-  // ignore: overridden_fields
-  final String subtitle;
-  const CustomAlertDialog({
+  const ImagesRequiredPopupDialog({
     super.key,
     this.onDone,
     required this.context,
-    required this.title,
-    this.subtitle = '',
   }) : super(
-          title: title,
-          subtitle: subtitle,
+          title: 'Las imagenes son obligatorias',
+          subtitle: 'Rellena todas las imagenes solicitadas',
         );
 
   final VoidCallback? onDone;

@@ -37,10 +37,6 @@ final router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'form/seguimiento',
-          builder: (context, state) => const SeguimientoScreen(),
-        ),
-        GoRoute(
             path: 'form/migrantes-economicos',
             builder: (context, state) {
               final typeProduct =
@@ -154,10 +150,6 @@ final router = GoRouter(
                 typeProducto: typeProduct,
               );
             }),
-        GoRoute(
-          path: 'form/seguimiento',
-          builder: (context, state) => const SeguimientoScreen(),
-        ),
         GoRoute(
             path: 'form/migrantes-economicos',
             builder: (context, state) {

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 
@@ -19,28 +20,33 @@ class CameraService {
     // // TODO: Prueba de guardar imagenes en carpeta de solicitud
     final customDirImages = Directory(
         '/storage/emulated/0/Core_Financiero_App/Kiva/$numeroSoicitud');
-
-    if (!await customDirImages.exists()) {
-      await customDirImages.create(recursive: true);
-      log('Directorio creado: ${customDirImages.path}');
-    }
+    final androidVersion = await AndroidVersionHelper.getAndroidVersion();
+    final isAndroidVersionIsPermission =
+        androidVersion != null && androidVersion >= 30;
 
     if (!await customDir.exists()) {
       await customDir.create(recursive: true);
       log('Directorio creado: ${customDir.path}');
     }
-
+    if (isAndroidVersionIsPermission) {
+      if (!await customDirImages.exists()) {
+        await customDirImages.create(recursive: true);
+        log('Directorio creado: ${customDirImages.path}');
+      }
+    }
     final localPath =
         '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
     final imageFile = File(photo.path);
     await imageFile.copy(localPath);
-
-    final localPathImages =
-        '${customDirImages.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    final imageFileImages = File(photo.path);
-    await imageFileImages.copy(localPathImages);
-    log('Imagen guardada en Downloads: $localPathImages');
     log('Imagen guardada en: $localPath');
+
+    if (isAndroidVersionIsPermission) {
+      final localPathImages =
+          '${customDirImages.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final imageFileImages = File(photo.path);
+      await imageFileImages.copy(localPathImages);
+      log('Imagen guardada en Downloads: $localPathImages');
+    }
     return (localPath, photo);
   }
 
