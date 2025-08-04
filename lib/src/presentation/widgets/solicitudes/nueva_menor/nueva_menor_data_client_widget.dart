@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -292,6 +293,10 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
         key: formKey,
         child: Column(
           children: [
+            const MiCreditoProgress(
+              currentStep: 1,
+              steps: 7,
+            ),
             const Gap(30),
             SearchDropdownWidget(
               codigo: 'TIPOSPERSONACREDITO',

@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,10 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const MiCreditoProgress(
+                      currentStep: 1,
+                      steps: 5,
+                    ),
                     const Gap(30),
                     OutlineTextfieldWidget(
                       validator: (value) =>

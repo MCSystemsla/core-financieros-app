@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/represtamo/sending/represtamo_sending_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,10 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
             key: formKey,
             child: Column(
               children: [
+                const MiCreditoProgress(
+                  currentStep: 5,
+                  steps: 5,
+                ),
                 const Gap(20),
                 SearchDropdownWidget(
                   hintText: 'input.select_option'.tr(),
