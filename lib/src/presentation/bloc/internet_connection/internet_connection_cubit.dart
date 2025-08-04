@@ -46,13 +46,23 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
     try {
       final response = await http
           .get(
-            Uri.parse('https://www.google.com/generate_204'),
+            Uri.parse('https://clients3.google.com/generate_204'),
           )
-          .timeout(const Duration(seconds: 5));
+          .timeout(const Duration(seconds: 3));
       log('HTTP response status code: ${response.statusCode}');
       return response.statusCode == 204;
     } catch (_) {
       return false;
     }
+  }
+
+  void makeToOfflineMode() {
+    emit(
+      state.copyWith(
+        connectionStatus: ConnectionStatus.handleOfflineActivation,
+        isConnected: false,
+        lastCheck: DateTime.now().toIso8601String(),
+      ),
+    );
   }
 }

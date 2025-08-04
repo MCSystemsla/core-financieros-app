@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -194,6 +195,10 @@ class __FormContentState extends State<_FormContent> {
             key: formKey,
             child: Column(
               children: [
+                const MiCreditoProgress(
+                  currentStep: 4,
+                  steps: 7,
+                ),
                 const Gap(20),
                 OutlineTextfieldWidget.withCounter(
                   inputFormatters: [

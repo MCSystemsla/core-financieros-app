@@ -12,7 +12,7 @@ En **Deployment** se pueden obtener mas detalles de como desplegar el proyecto d
 
 _Que cosas necesitas para instalar el software y como instalarlas_
 
-- Instalar Flutter _(3.29.3)_ en la máquina: https://docs.flutter.dev/get-started/install, importante seguir todos los pasos dependiendo de la maquina a utilizar, preferible un Mac para que la aplicación se pueda pobrar en IOS y Android
+- Instalar Flutter _(3.32.6)_ en la máquina: https://docs.flutter.dev/get-started/install, importante seguir todos los pasos dependiendo de la maquina a utilizar, preferible un Mac para que la aplicación se pueda pobrar en IOS y Android
 
 - Configurar un editor: https://docs.flutter.dev/get-started/editor, se recomienda VSCode
 

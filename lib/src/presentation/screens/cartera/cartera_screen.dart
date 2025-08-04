@@ -1,12 +1,11 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/kiva_forms_failded_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/pinput/custom_pinput_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,7 +143,7 @@ class _CarteraContentWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const KivaFormsFaildedScreen(),
+                        builder: (_) => const CustomPinputWidget(),
                       ),
                     );
                   },

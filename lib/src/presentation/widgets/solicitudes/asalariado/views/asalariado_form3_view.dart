@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
@@ -66,6 +67,10 @@ class __FormContentState extends State<_FormContent> {
             key: formKey,
             child: Column(
               children: [
+                const MiCreditoProgress(
+                  currentStep: 3,
+                  steps: 7,
+                ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
                   validator: (value) =>

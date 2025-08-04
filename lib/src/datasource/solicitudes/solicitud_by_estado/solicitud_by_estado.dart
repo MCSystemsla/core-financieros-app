@@ -4,14 +4,17 @@ SolicitudByEstado solicitudByEstadoFromJson(String str) =>
     SolicitudByEstado.fromJson(json.decode(str));
 
 class SolicitudByEstado {
+  MetaDataPagination metaDataPagination;
   List<SolicitudEstado> data;
 
   SolicitudByEstado({
     required this.data,
+    required this.metaDataPagination,
   });
 
   factory SolicitudByEstado.fromJson(Map<String, dynamic> json) =>
       SolicitudByEstado(
+        metaDataPagination: MetaDataPagination.fromJson(json['metaData']),
         data: List<SolicitudEstado>.from(
             json['data'].map((x) => SolicitudEstado.fromJson(x))),
       );
@@ -63,5 +66,27 @@ class SolicitudEstado {
         tipoSolicitud: json['TipoSolicitud'],
         nombrePromotor: json['NombrePromotor'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
+      );
+}
+
+class MetaDataPagination {
+  int paginaActual;
+  int paginasTotales;
+  int registrosTotales;
+  bool hasMore;
+
+  MetaDataPagination({
+    required this.paginaActual,
+    required this.paginasTotales,
+    required this.registrosTotales,
+    required this.hasMore,
+  });
+
+  factory MetaDataPagination.fromJson(Map<String, dynamic> json) =>
+      MetaDataPagination(
+        paginaActual: json['PaginaActual'],
+        paginasTotales: json['PaginasTotales'],
+        registrosTotales: json['RegistrosTotales'],
+        hasMore: json['hasMore'],
       );
 }

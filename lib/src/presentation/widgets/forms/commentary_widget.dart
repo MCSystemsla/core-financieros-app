@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 typedef ValidatorCallback<T> = String? Function(T? value)?;
@@ -18,6 +19,7 @@ class CommentaryWidget extends StatelessWidget {
   final TextInputType? textInputType;
   final TextCapitalization? textCapitalization;
   final bool? readOnly;
+  final List<TextInputFormatter>? inputFormatters;
   const CommentaryWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -30,6 +32,7 @@ class CommentaryWidget extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
     this.readOnly = false,
+    this.inputFormatters,
   }) : haveCounter = false;
   const CommentaryWidget.withCounter({
     super.key,
@@ -43,6 +46,7 @@ class CommentaryWidget extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
     this.readOnly = false,
+    this.inputFormatters,
   }) : haveCounter = true;
 
   @override
@@ -72,6 +76,7 @@ class CommentaryWidget extends StatelessWidget {
               ),
             ),
             child: TextFormField(
+              inputFormatters: inputFormatters,
               keyboardType: textInputType,
               controller: textEditingController,
               validator: validator,

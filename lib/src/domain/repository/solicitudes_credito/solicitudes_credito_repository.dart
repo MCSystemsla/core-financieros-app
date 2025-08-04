@@ -97,6 +97,7 @@ abstract class SolicitudesCreditoRepository {
     required bool isAsignadaToAsesorCredito,
     required String? numeroSolicitud,
     required String? cedulaCliente,
+    required int? pagina,
   });
   Future<(bool, String)> asignSolicitudCreditoToAsesor({
     required int idSolicitud,
@@ -733,12 +734,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     required bool isAsignadaToAsesorCredito,
     required String? numeroSolicitud,
     required String? cedulaCliente,
+    required int? pagina,
   }) async {
     final endpoint = GetSolicitudesCreditoByEstado(
       estadoCredito: estadoCredito,
       isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
       numeroSolicitud: numeroSolicitud,
       cedulaCliente: cedulaCliente,
+      pagina: pagina,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

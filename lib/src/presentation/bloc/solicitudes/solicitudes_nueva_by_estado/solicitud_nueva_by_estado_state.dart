@@ -12,6 +12,9 @@ final class SolicitudNuevaByEstadoInitial extends SolicitudNuevaByEstadoState {}
 final class OnSolicitudNuevaByEstadoLoading
     extends SolicitudNuevaByEstadoState {}
 
+final class OnSolicitudNuevaByEstadoLoadingMore
+    extends SolicitudNuevaByEstadoState {}
+
 final class OnSolicitudNuevaByEstadoSuccess
     extends SolicitudNuevaByEstadoState {
   final SolicitudByEstado solicitudByEstado;
@@ -21,6 +24,7 @@ final class OnSolicitudNuevaByEstadoSuccess
   final bool isCedulaSolicitudFilter;
   final String? numeroSolicitud;
   final String? cedulaCliente;
+  final List<SolicitudEstado> solicitudes;
 
   const OnSolicitudNuevaByEstadoSuccess({
     required this.solicitudByEstado,
@@ -30,7 +34,17 @@ final class OnSolicitudNuevaByEstadoSuccess
     required this.isCedulaSolicitudFilter,
     required this.numeroSolicitud,
     required this.cedulaCliente,
+    required this.solicitudes,
   });
+  @override
+  List<Object> get props => [
+        solicitudByEstado,
+        estadoCredito,
+        isAsignadaToAsesorCredito,
+        isNumeroSolicitudFilter,
+        isCedulaSolicitudFilter,
+        solicitudes,
+      ];
 }
 
 final class OnSolicitudNuevaByEstadoError extends SolicitudNuevaByEstadoState {

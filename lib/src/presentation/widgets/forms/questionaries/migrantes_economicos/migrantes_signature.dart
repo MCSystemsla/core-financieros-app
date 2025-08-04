@@ -16,7 +16,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_vpn_popup_onkiva.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -386,7 +386,7 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
             ..otrosDatosCliente = state.otrosDatosCliente,
         );
     if (!isConnected) {
-      return NoVpnPopUpOnKiva(
+      return NoInternetPopUpOnKiva(
         context: context,
         info: msgDialog,
         header: '',
@@ -745,7 +745,7 @@ class _RecurrenteMigrantesFormSignatureState
                 ..siguienteMeta = state.siguienteMeta,
         );
     if (!isConnected) {
-      return NoVpnPopUpOnKiva(
+      return NoInternetPopUpOnKiva(
         context: context,
         info: msgDialog,
         header: '',

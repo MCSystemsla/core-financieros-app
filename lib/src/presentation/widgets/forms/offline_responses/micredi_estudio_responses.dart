@@ -9,9 +9,9 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/micredi_estudio/m
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/forms/saneamiento_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';

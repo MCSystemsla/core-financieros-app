@@ -275,11 +275,13 @@ class GetSolicitudesCreditoByEstado extends Endpoint {
   final bool isAsignadaToAsesorCredito;
   final String? numeroSolicitud;
   final String? cedulaCliente;
+  final int? pagina;
   GetSolicitudesCreditoByEstado({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
     required this.numeroSolicitud,
     required this.cedulaCliente,
+    required this.pagina,
   });
   @override
   Method get method => Method.get;
@@ -297,6 +299,7 @@ class GetSolicitudesCreditoByEstado extends Endpoint {
         'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
         if (numeroSolicitud != null) 'Numero': numeroSolicitud,
         if (cedulaCliente != null) 'Cedula': cedulaCliente,
+        if (pagina != null) 'Pagina': pagina.toString(),
       };
 }
 

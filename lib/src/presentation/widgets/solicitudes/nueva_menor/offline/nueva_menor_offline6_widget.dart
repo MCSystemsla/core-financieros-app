@@ -226,7 +226,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   },
                 ),
                 OutlineTextfieldWidget(
-                  initialValue: fechaDesembolso?.selectorFormat(),
                   readOnly: true,
                   icon: Icon(
                     Icons.price_change,
@@ -333,7 +332,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  initialValue: fechaPrimerPago?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaPrimerPago?.selectorFormat()),
                   readOnly: true,

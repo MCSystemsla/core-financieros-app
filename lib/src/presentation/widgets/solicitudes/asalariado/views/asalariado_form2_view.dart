@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
@@ -77,6 +78,10 @@ class __FormContentState extends State<_FormContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const MiCreditoProgress(
+                  currentStep: 2,
+                  steps: 7,
+                ),
                 const Gap(30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),

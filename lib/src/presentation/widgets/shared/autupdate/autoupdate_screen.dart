@@ -56,11 +56,6 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
       debugPrint('❌ Error durante la actualización: $e');
       if (!mounted) return;
 
-      await ErrorReporter.registerError(
-        errorMessage: 'Error en actualización: $e',
-        statusCode: '400',
-        username: LocalStorage().currentUserName,
-      );
       setState(() {
         resultType = ResultType.error;
         if (e.toString().contains('PERMISSION_DENIED')) {
@@ -72,6 +67,11 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
           errorMsg = e.toString();
         }
       });
+      await ErrorReporter.registerError(
+        errorMessage: 'Error en actualización: $errorMsg',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
     });
   }
 
