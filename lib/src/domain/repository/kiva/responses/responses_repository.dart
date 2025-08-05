@@ -396,13 +396,18 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
       var responseBody = await http.Response.fromStream(response);
       final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+      final jsonMessage = {
+        'statusCode': responseBody.statusCode,
+        'message': jsonBody['message'],
+        'path': request.url.path,
+      };
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
       } else {
         await ErrorReporter.registerError(
           errorMessage:
-              'Error enviando imagenes KIVA online: ${jsonBody['message']}',
+              'Error enviando imagenes KIVA online: ${jsonBody['message']} JSON: $jsonMessage',
           statusCode: response.statusCode.toString(),
           username: LocalStorage().currentUserName,
         );
@@ -565,16 +570,20 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'CF-Access-Client-Secret':
             const String.fromEnvironment('CFAccessClientSecret'),
       });
-      var response = await request.send();
-      var responseBody = await http.Response.fromStream(response);
-      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
-      } else {
+      final response = await request.send();
+      final responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+      final jsonMessage = {
+        'statusCode': responseBody.statusCode,
+        'message': (jsonBody['message'] ?? 'Imagenes enviadas exitosamente'),
+        'path': request.url.path,
+      };
+
+      if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
         await ErrorReporter.registerError(
           errorMessage:
-              'Error enviando imagenes KIVA offline: ${jsonBody['message']}',
+              'Error enviando imagenes KIVA offline: ${jsonBody['message']}: JSON: $jsonMessage',
           statusCode: response.statusCode.toString(),
           username: LocalStorage().currentUserName,
         );
@@ -587,10 +596,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       }
 
       _logger.i(response.reasonPhrase);
+      _logger.i('Imagenes enviadas exitosamente: $jsonMessage');
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       await ErrorReporter.registerError(
-        errorMessage: 'Error enviando imagenes KIVA offline: $e',
+        errorMessage: 'Error enviando imagenes KIVA offline fileSystem: $e ',
         statusCode: '400',
         username: LocalStorage().currentUserName,
       );
