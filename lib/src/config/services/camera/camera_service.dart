@@ -17,7 +17,6 @@ class CameraService {
     final photo = await controller.takePicture();
     final appDir = await getApplicationDocumentsDirectory();
     final customDir = Directory('${appDir.path}/KivaImages');
-    // // TODO: Prueba de guardar imagenes en carpeta de solicitud
     final customDirImages = Directory(
         '/storage/emulated/0/Core_Financiero_App/Kiva/$numeroSoicitud');
     final androidVersion = await AndroidVersionHelper.getAndroidVersion();

@@ -345,6 +345,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
     // final currentProduct = setCurrentProdut(product: formularioKiva);
     final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
+    final currentUsername = LocalStorage().currentUserName;
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
@@ -398,30 +399,30 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
       final jsonMessage = {
         'statusCode': responseBody.statusCode,
-        'message': jsonBody['message'],
+        'message': (jsonBody['message'] ?? 'Imagenes enviadas exitosamente'),
         'path': request.url.path,
       };
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
-      } else {
+      if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
         await ErrorReporter.registerError(
           errorMessage:
               'Error enviando imagenes KIVA online: ${jsonBody['message']} JSON: $jsonMessage',
           statusCode: response.statusCode.toString(),
-          username: LocalStorage().currentUserName,
+          username: currentUsername,
         );
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
         return (false, jsonBody['message'] as String);
       }
+
       _logger.i(response.reasonPhrase);
+      _logger.i('Imagenes enviadas exitosamente: $jsonMessage');
+
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       await ErrorReporter.registerError(
         errorMessage: 'Error enviando imagenes KIVA online: $e',
         statusCode: '400',
-        username: LocalStorage().currentUserName,
+        username: currentUsername,
       );
       _logger.e(e);
       return (false, e.toString());
