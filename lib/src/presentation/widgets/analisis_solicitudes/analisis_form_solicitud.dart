@@ -1,0 +1,199 @@
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+
+class AnalisisFormSolicitud extends StatelessWidget {
+  final PageController pageController;
+  const AnalisisFormSolicitud({
+    super.key,
+    required this.pageController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ExpansionTitleCustom(
+              title: Text(
+                'Balance General Expresado en cordobas',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              finalStep: true,
+              children: const [
+                ExpansionTitleCustom(
+                  title: Text('Activos'),
+                  finalStep: false,
+                  children: [
+                    _ActivosWidgetsForm(),
+                  ],
+                ),
+                ExpansionTitleCustom(
+                  title: Text('Pasivos'),
+                  finalStep: false,
+                  children: [
+                    _PasivosAnalisisWidgetsForm(),
+                  ],
+                ),
+              ],
+            ),
+            const Gap(20),
+            ExpansionTitleCustom(
+              title: Text(
+                'Estado de resultado expresado en cordobas',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              finalStep: true,
+              children: const [
+                Column(
+                  children: [
+                    OutlineTextfieldWidget(
+                      title: 'Ventas de contado:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Recuperaciones:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Total ingresos:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Costo de Ventas:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Gastos operativos:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Margen bruto del negocio:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Otros ingresos:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Gasto unidad familiar:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'Disponibilidad U.Familiar:',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                    OutlineTextfieldWidget(
+                      title: 'D.P.P: (80%)',
+                      icon: Icon(Icons.person_3_sharp),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const Gap(30),
+            CustomElevatedButton(
+              onPressed: () {
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+              text: 'Siguiente',
+              color: Colors.green,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PasivosAnalisisWidgetsForm extends StatelessWidget {
+  const _PasivosAnalisisWidgetsForm();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        OutlineTextfieldWidget(
+          title: 'Proveedores:',
+          icon: Icon(Icons.person_3_sharp),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Cuentas por pagar:',
+          icon: Icon(Icons.account_balance_wallet),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Otras deudas:',
+          icon: Icon(Icons.pending),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Total pasivos:',
+          icon: Icon(Icons.monetization_on),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Capital:',
+          icon: Icon(Icons.money),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Pasivos + Capital:',
+          icon: Icon(Icons.call_to_action_outlined),
+        ),
+      ],
+    );
+  }
+}
+
+class _ActivosWidgetsForm extends StatelessWidget {
+  const _ActivosWidgetsForm();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        OutlineTextfieldWidget(
+          title: 'Caja:',
+          icon: Icon(Icons.account_balance_wallet),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Banco:',
+          icon: Icon(Icons.account_balance),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Cuentas por cobrar:',
+          icon: Icon(Icons.monetization_on),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Inventario:',
+          icon: Icon(Icons.inventory),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Otros Activos:',
+          icon: Icon(Icons.monetization_on),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Total activos circulantes:',
+          icon: Icon(Icons.money),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Activos fijo:',
+          icon: Icon(Icons.access_time),
+        ),
+        OutlineTextfieldWidget(
+          title: 'Total Activo:',
+          icon: Icon(Icons.call_to_action_outlined),
+        ),
+      ],
+    );
+  }
+}

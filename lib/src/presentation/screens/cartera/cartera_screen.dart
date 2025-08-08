@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/pinput/custom_pinput_widget.dart';
@@ -113,6 +114,26 @@ class _CarteraContentWidget extends StatelessWidget {
                   secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
                   icon: const Icon(
                     Icons.description,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
+                ),
+              if (!isProdMode)
+                _Card(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AnalisisSolicitudesScreen(),
+                      ),
+                    );
+                  },
+                  title: 'Analisis'.tr(),
+                  subtitle: 'Analisis de solicitudes de credito',
+                  firstColor: const Color.fromARGB(255, 48, 47, 47),
+                  secondColor: const Color(0xFFBDBDBD),
+                  icon: const Icon(
+                    Icons.analytics,
                     color: AppColors.white,
                     size: 35,
                   ),

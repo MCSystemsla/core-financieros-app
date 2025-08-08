@@ -117,6 +117,7 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return CreditProductItem(
+                            isAsesorAsignado: state.isAsignadaToAsesorCredito,
                             tipoSolicitud:
                                 state.solicitudes[index].tipoSolicitud,
                             solicitudId: state.solicitudes[index].id,
