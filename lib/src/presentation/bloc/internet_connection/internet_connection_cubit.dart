@@ -48,7 +48,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
           .get(
             Uri.parse('https://clients3.google.com/generate_204'),
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 15));
       log('HTTP response status code: ${response.statusCode}');
       return response.statusCode == 204;
     } catch (_) {

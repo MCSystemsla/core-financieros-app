@@ -21,6 +21,7 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'RUC',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -53,6 +54,7 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Matricula',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -85,6 +87,7 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Licencias',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

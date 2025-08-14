@@ -20,6 +20,7 @@ class ReferenciasAnalisisSolicitud extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Referencia 1',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -31,6 +32,7 @@ class ReferenciasAnalisisSolicitud extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Referencia 2',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

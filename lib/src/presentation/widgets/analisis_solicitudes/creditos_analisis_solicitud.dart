@@ -21,6 +21,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Detalle del Credito',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -37,6 +38,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Nombre de sus principales clientes',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -59,6 +61,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Nombre de sus proveedores',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

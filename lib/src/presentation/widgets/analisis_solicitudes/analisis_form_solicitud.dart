@@ -29,6 +29,7 @@ class AnalisisFormSolicitud extends StatelessWidget {
               finalStep: true,
               children: const [
                 ExpansionTitleCustom(
+                  childrenPadding: EdgeInsets.symmetric(vertical: 15),
                   title: Text('Activos'),
                   finalStep: false,
                   children: [
@@ -36,6 +37,7 @@ class AnalisisFormSolicitud extends StatelessWidget {
                   ],
                 ),
                 ExpansionTitleCustom(
+                  childrenPadding: EdgeInsets.symmetric(vertical: 15),
                   title: Text('Pasivos'),
                   finalStep: false,
                   children: [
@@ -46,6 +48,7 @@ class AnalisisFormSolicitud extends StatelessWidget {
             ),
             const Gap(20),
             ExpansionTitleCustom(
+              childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
                 'Estado de resultado expresado en cordobas',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

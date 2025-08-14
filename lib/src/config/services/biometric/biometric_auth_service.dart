@@ -37,12 +37,13 @@ class BiometricAuthService {
   }
 
   Future<bool> authenticate({String reason = 'Autenticación requerida'}) async {
+    final isBiometricAvailable = await haveBiometricAvailable();
     try {
       final isAuth = await _auth.authenticate(
         localizedReason: reason,
-        options: const AuthenticationOptions(
+        options: AuthenticationOptions(
           stickyAuth: true,
-          biometricOnly: true,
+          biometricOnly: isBiometricAvailable,
           sensitiveTransaction: true,
           useErrorDialogs: true,
         ),

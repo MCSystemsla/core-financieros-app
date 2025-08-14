@@ -26,6 +26,9 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return AnalisisCreditCard(
                   index: index,
+                  title: 'Numero Solicitud #12345',
+                  subtitle: 'Jaime Velásquez',
+                  description: 'C\$. 50,000',
                 );
               },
             ),

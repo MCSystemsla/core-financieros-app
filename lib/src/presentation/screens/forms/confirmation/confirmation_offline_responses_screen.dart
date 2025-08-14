@@ -2,7 +2,6 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/micredi_estudio/micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
@@ -31,13 +30,19 @@ import '../../../bloc/kiva/recurrente_migrante_economico/recurrente_migrantes_ec
 
 class ConfirmationOfflineResponsesScreen extends StatelessWidget {
   final String typeProduct;
-  const ConfirmationOfflineResponsesScreen(
-      {super.key, required this.typeProduct});
+  final String solicitudId;
+  final String nombre;
+  const ConfirmationOfflineResponsesScreen({
+    super.key,
+    required this.typeProduct,
+    this.solicitudId = '',
+    this.nombre = '',
+  });
 
   @override
   Widget build(BuildContext context) {
-    final solicitudId = context.read<KivaRouteCubit>().state.solicitudId;
-    final name = context.read<KivaRouteCubit>().state.nombre;
+    // final solicitudId = context.read<KivaRouteCubit>().state.solicitudId;
+    // final name = context.read<KivaRouteCubit>().state.nombre;
     final isar = context.read<SolicitudesPendientesLocalDbCubit>().state.isar;
     final respository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -98,7 +103,7 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: Text(name),
+          title: Text(nombre),
         ),
         body: _CurrentForm(
           typeProduct: typeProduct,

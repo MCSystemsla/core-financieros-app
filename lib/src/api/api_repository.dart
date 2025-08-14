@@ -151,6 +151,7 @@ class DefaultAPIRepository implements APIRepository {
         return map;
       }
     }
+    if (response.statusCode == 401) {}
     // try {
     //   //si el error es por falta de token se supondra que se debe cerrar sesión
     //   // if (decodedBody['message'] == 'Token not found') {

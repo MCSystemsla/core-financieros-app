@@ -3,7 +3,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/creditos_analisis_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/referencias_analisis_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/analisis_form_solicitud.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/analisis_solicitud_stepper.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/stepper/analisis_solicitud_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_credit_card.dart';
 import 'package:gap/gap.dart';
 
@@ -50,6 +50,9 @@ class _AnalisisSolicitudFormScreenState
               enabled: false,
               index: widget.index,
               animate: false,
+              title: 'Numero Solicitud #12345',
+              subtitle: 'Jaime Velásquez',
+              description: 'C\$. 50,000',
             ),
           ),
           const Gap(20),

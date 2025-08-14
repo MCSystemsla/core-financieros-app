@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
@@ -6,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -87,6 +90,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
   }
 
   initFunctions() async {
+    log('pasa por aqui');
     context.read<KivaRouteCubit>().setCurrentRouteProduct(
           nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
           cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -224,8 +228,16 @@ class _ExpansionButtonsWidget extends StatelessWidget {
         const Gap(15),
         CustomElevatedButton(
           onPressed: () {
-            context.push('/online/form/offline-confirmation',
-                extra: context.read<KivaRouteCubit>().state.solicitudId);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ConfirmationOfflineResponsesScreen(
+                  typeProduct: solicitud.nombreFormulario ?? '',
+                  solicitudId: solicitud.solicitudId.toString(),
+                  nombre: solicitud.nombre ?? '',
+                ),
+              ),
+            );
           },
           text: '📝 Enviar Formulario Kiva',
           color: AppColors.getSecondaryColor(),
