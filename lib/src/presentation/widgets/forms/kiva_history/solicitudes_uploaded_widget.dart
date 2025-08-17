@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
@@ -6,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -45,17 +48,38 @@ class SolicitudesUploadedWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: solicitudes.length,
-            separatorBuilder: (BuildContext context, int index) {
-              return const KivaFormSpacing();
+          BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
+            listener: (context, state) {
+              if (state.status == Status.done) {
+                CustomAlertDialog(
+                  context: context,
+                  title: 'Imagenes Enviadas Exitosamente',
+                  onDone: () => context.pop(),
+                ).showDialog(context, dialogType: DialogType.success);
+              }
+              if (state.status == Status.error) {
+                CustomAlertDialog(
+                  context: context,
+                  title: 'Error inesperado, ${state.errorMsg}',
+                  onDone: () => context.pop(),
+                ).showDialog(context, dialogType: DialogType.error);
+              }
             },
-            itemBuilder: (BuildContext context, int index) {
-              return _SolicitudExpasionTitle(
-                solicitud: solicitudes[index],
-                imageModel: imageModel,
+            builder: (context, state) {
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: solicitudes.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const KivaFormSpacing();
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return _SolicitudExpasionTitle(
+                    solicitud: solicitudes[index],
+                    imageModel: imageModel,
+                    status: state.status,
+                  );
+                },
               );
             },
           ),
@@ -68,8 +92,10 @@ class SolicitudesUploadedWidget extends StatelessWidget {
 class _SolicitudExpasionTitle extends StatefulWidget {
   final SolicitudesPendientes solicitud;
   final ImageModel? imageModel;
+  final Status status;
   const _SolicitudExpasionTitle({
     required this.solicitud,
+    required this.status,
     this.imageModel,
   });
 
@@ -87,6 +113,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
   }
 
   initFunctions() async {
+    log('pasa por aqui');
     context.read<KivaRouteCubit>().setCurrentRouteProduct(
           nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
           cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -112,6 +139,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ExpansionTitleCustom(
+        key: ValueKey(widget.solicitud.id),
         title: _ExpansionRowTitle(solicitud: widget.solicitud),
         finalStep: true,
         children: [
@@ -119,6 +147,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
           _ExpansionButtonsWidget(
             imagenes: imagenes,
             solicitud: widget.solicitud,
+            status: widget.status,
           ),
         ],
       ),
@@ -169,63 +198,53 @@ class SolicitudExpansionTitle extends StatelessWidget {
 class _ExpansionButtonsWidget extends StatelessWidget {
   final ImageModel? imagenes;
   final SolicitudesPendientes solicitud;
+  final Status status;
 
   const _ExpansionButtonsWidget({
     this.imagenes,
     required this.solicitud,
+    required this.status,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
-          listener: (context, state) {
-            if (state.status == Status.done) {
-              CustomAlertDialog(
-                context: context,
-                title: 'Imagenes Enviadas Exitosamente',
-                onDone: () => context.pop(),
-              ).showDialog(context, dialogType: DialogType.success);
-            }
-            if (state.status == Status.error) {
-              CustomAlertDialog(
-                context: context,
-                title: 'Error inesperado, ${state.errorMsg}',
-                onDone: () => context.pop(),
-              ).showDialog(context, dialogType: DialogType.error);
-            }
+        CustomElevatedButton(
+          enabled: status != Status.inProgress,
+          onPressed: () {
+            if (!context.mounted) return;
+            context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                  fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
+                  solicitudId: int.parse(
+                    solicitud.solicitudId ?? '0',
+                  ),
+                  formularioKiva: solicitud.nombreFormulario ?? '',
+                  tipoSolicitud: solicitud.tipoSolicitud ?? '',
+                  numero: solicitud.numero ?? '',
+                  cedula: solicitud.cedula ?? '',
+                  imagen1: imagenes?.imagen1 ?? 'NO PATH',
+                  imagen2: imagenes?.imagen2 ?? 'NO PATH',
+                  imagen3: imagenes?.imagen3 ?? 'NO PATH',
+                  typeSigner: imagenes?.typeSigner ?? '',
+                );
           },
-          builder: (context, state) {
-            return CustomElevatedButton(
-              enabled: state.status != Status.inProgress,
-              onPressed: () {
-                if (!context.mounted) return;
-                context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                      fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
-                      solicitudId: int.parse(
-                        solicitud.solicitudId ?? '0',
-                      ),
-                      formularioKiva: solicitud.nombreFormulario ?? '',
-                      tipoSolicitud: solicitud.tipoSolicitud ?? '',
-                      numero: solicitud.numero ?? '',
-                      cedula: solicitud.cedula ?? '',
-                      imagen1: imagenes?.imagen1 ?? 'NO PATH',
-                      imagen2: imagenes?.imagen2 ?? 'NO PATH',
-                      imagen3: imagenes?.imagen3 ?? 'NO PATH',
-                      typeSigner: imagenes?.typeSigner ?? '',
-                    );
-              },
-              text: '📤 Enviar Imágenes Kiva',
-              color: AppColors.getPrimaryColor(),
-            );
-          },
+          text: '📤 Enviar Imágenes Kiva',
+          color: AppColors.getPrimaryColor(),
         ),
         const Gap(15),
         CustomElevatedButton(
           onPressed: () {
-            context.push('/online/form/offline-confirmation',
-                extra: context.read<KivaRouteCubit>().state.solicitudId);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ConfirmationOfflineResponsesScreen(
+                  typeProduct: solicitud.nombreFormulario ?? '',
+                  solicitudId: solicitud.solicitudId.toString(),
+                  nombre: solicitud.nombre ?? '',
+                ),
+              ),
+            );
           },
           text: '📝 Enviar Formulario Kiva',
           color: AppColors.getSecondaryColor(),

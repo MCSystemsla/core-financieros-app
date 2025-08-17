@@ -1,11 +1,12 @@
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -56,6 +57,16 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
+            if (state.status == Status.error &&
+                state.errorMsg.contains('Unauthorized')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                customSnackbar(
+                  title: 'Tu sesion a caducado, inicia sesión nuevamente',
+                  icon: const Icon(Icons.logout, color: Colors.white),
+                ),
+              );
+              context.pushReplacement('/login');
+            }
 
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(
@@ -225,7 +236,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
   }
 
@@ -247,8 +257,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
       title: Text(
           '${widget.solicitud.numero} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
-        context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               nombreFormularioKiva: widget.solicitud.nombreFormulario,
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -262,8 +270,18 @@ class _RequestWidgetState extends State<_RequestWidget> {
                   'Motivo Anterior no registrado',
             );
         if (isMatching) {
-          context.push('/online/form/offline-confirmation',
-              extra: widget.solicitud.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ConfirmationOfflineResponsesScreen(
+                typeProduct: widget.solicitud.nombreFormulario,
+                solicitudId: widget.solicitud.id,
+                nombre: widget.solicitud.nombre,
+              ),
+            ),
+          );
+          // context.push('/online/form/offline-confirmation',
+          //     extra: widget.solicitud.id);
           return;
         }
 

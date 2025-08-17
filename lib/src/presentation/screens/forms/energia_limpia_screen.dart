@@ -132,11 +132,6 @@ class _RecurrentSignQuestionary extends StatefulWidget {
 
 class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,29 +139,29 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected = context.watch<InternetConnectionCubit>().state;
-    return Column(
-      children: [
-        const MiCreditoProgress(
-          steps: 5,
-          currentStep: 5,
-        ),
-        const Gap(10),
-        JLuxDropdown(
-          title: 'Tiene capacidad el usuario para firma?',
-          items: ['input.yes'.tr(), 'input.no'.tr()],
-          onChanged: (item) {
-            setState(() {
-              typeSigner = item == 'input.yes'.tr()
-                  ? TypeSigner.cliente
-                  : TypeSigner.asesor;
-            });
-          },
-          toStringItem: (item) => item,
-          hintText: 'input.select_option'.tr(),
-        ),
-        if (typeSigner != TypeSigner.ninguno) ...[
-          Expanded(
-            child: Padding(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const MiCreditoProgress(
+            steps: 5,
+            currentStep: 5,
+          ),
+          const Gap(10),
+          JLuxDropdown(
+            title: 'Tiene capacidad el usuario para firma?',
+            items: ['input.yes'.tr(), 'input.no'.tr()],
+            onChanged: (item) {
+              setState(() {
+                typeSigner = item == 'input.yes'.tr()
+                    ? TypeSigner.cliente
+                    : TypeSigner.asesor;
+              });
+            },
+            toStringItem: (item) => item,
+            hintText: 'input.select_option'.tr(),
+          ),
+          if (typeSigner != TypeSigner.ninguno) ...[
+            Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,41 +182,39 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                     ),
                   ),
                   const Gap(20),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.boxGrey,
-                              width: .9,
-                              strokeAlign: BorderSide.strokeAlignOutside,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                  Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Signature(
-                              key: const Key('signature'),
-                              controller: controller,
-                              // height: size.height * .56,
-                              width: size.width * .9,
-                              backgroundColor: AppColors.white,
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: IconBorder.fromIcon(
-                            color: AppColors.red,
-                            icon: Icons.delete_forever,
-                            onTap: () => controller.clear(),
-                            size: const Size(44, 44),
-                          ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const Gap(30),
                   BlocConsumer<RecurrenteEnergiaLimpiaCubit,
@@ -430,9 +423,9 @@ class _RecurrentSignQuestionaryState extends State<_RecurrentSignQuestionary> {
                 ],
               ),
             ),
-          ),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -495,11 +488,6 @@ class _SignQuestionary extends StatefulWidget {
 
 class _SignQuestionaryState extends State<_SignQuestionary> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -507,33 +495,33 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
     final controller = SignatureController();
     final imageProvider = context.watch<UploadUserFileCubit>().state;
     final isConnected = context.watch<InternetConnectionCubit>().state;
-    return Column(
-      children: [
-        const MiCreditoProgress(
-          steps: 5,
-          currentStep: 5,
-        ),
-        const Gap(13),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: JLuxDropdown(
-            dropdownColor: AppColors.white,
-            title: 'Tiene capacidad el usuario para firma?',
-            items: ['input.yes'.tr(), 'input.no'.tr()],
-            onChanged: (item) {
-              setState(() {
-                typeSigner = item == 'input.yes'.tr()
-                    ? TypeSigner.cliente
-                    : TypeSigner.asesor;
-              });
-            },
-            toStringItem: (item) => item,
-            hintText: 'input.select_option'.tr(),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const MiCreditoProgress(
+            steps: 5,
+            currentStep: 5,
           ),
-        ),
-        if (typeSigner != TypeSigner.ninguno)
-          Expanded(
-            child: Padding(
+          const Gap(13),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: JLuxDropdown(
+              dropdownColor: AppColors.white,
+              title: 'Tiene capacidad el usuario para firma?',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                setState(() {
+                  typeSigner = item == 'input.yes'.tr()
+                      ? TypeSigner.cliente
+                      : TypeSigner.asesor;
+                });
+              },
+              toStringItem: (item) => item,
+              hintText: 'input.select_option'.tr(),
+            ),
+          ),
+          if (typeSigner != TypeSigner.ninguno)
+            Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -554,41 +542,39 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                     ),
                   ),
                   const Gap(20),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.boxGrey,
-                              width: .9,
-                              strokeAlign: BorderSide.strokeAlignOutside,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                  Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Signature(
-                              key: const Key('signature'),
-                              controller: controller,
-                              // height: size.height * .56,
-                              width: size.width * .9,
-                              backgroundColor: AppColors.white,
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: IconBorder.fromIcon(
-                            color: AppColors.red,
-                            icon: Icons.delete_forever,
-                            onTap: () => controller.clear(),
-                            size: const Size(44, 44),
-                          ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const Gap(30),
                   BlocConsumer<EnergiaLimpiaCubit, EnergiaLimpiaState>(
@@ -791,8 +777,8 @@ class _SignQuestionaryState extends State<_SignQuestionary> {
                 ],
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 

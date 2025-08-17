@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -130,6 +132,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   bool shouldFallbackToOffline = false;
   String? turnstileToken;
   bool isOffline = false;
+  final localStorage = LocalStorage();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -259,6 +262,34 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   setState(() {});
                 },
               ),
+              if (localStorage.currentUserName.isNotEmpty &&
+                  localStorage.jwt.isNotEmpty)
+                SwitchListTile(
+                  title: const Text('Entrar al modo offline:'),
+                  subtitle: Text(localStorage.currentUserName),
+                  value: isOffline,
+                  onChanged: (e) async {
+                    if (e == isOffline) return;
+                    setState(() => isOffline = e);
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    if (!context.mounted) return;
+                    if (e) {
+                      context
+                          .read<InternetConnectionCubit>()
+                          .makeToOfflineMode();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        customSnackbar(
+                          title: 'Modo offline Activado',
+                          icon: const Icon(
+                            Icons.offline_bolt,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                      context.pushReplacement('/');
+                    }
+                  },
+                ),
               const Gap(14),
               BlocConsumer<AuthCubit, AuthState>(
                 listener: (context, state) async {

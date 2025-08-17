@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -44,6 +45,12 @@ class DefaultAPIRepository implements APIRepository {
           endpoint.queryParameters,
         );
       }
+      final Map<String, dynamic> body = {
+        'path': url.path,
+        'method': endpoint.method.name.toUpperCase(),
+        'body': endpoint.body,
+      };
+      BitacoraService.registerBitacora(payload: body.toString());
     } catch (e) {
       _logger.e('APIRepository - Error parse uri$e ');
       Exception('Error parse uri $e');

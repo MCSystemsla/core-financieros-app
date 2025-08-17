@@ -345,6 +345,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
     // final currentProduct = setCurrentProdut(product: formularioKiva);
     final typeSignerString = setFirmaByTypeSigner(typeSigner: typeSigner);
+    final currentUsername = LocalStorage().currentUserName;
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['solicitudId'] = solicitudId.toString();
@@ -396,27 +397,32 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
 
       var responseBody = await http.Response.fromStream(response);
       final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
-      } else {
+      final jsonMessage = {
+        'statusCode': responseBody.statusCode,
+        'message': (jsonBody['message'] ?? 'Imagenes enviadas exitosamente'),
+        'path': request.url.path,
+      };
+      if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
         await ErrorReporter.registerError(
           errorMessage:
-              'Error enviando imagenes KIVA online: ${jsonBody['message']}',
+              'Error enviando imagenes KIVA online: ${jsonBody['message']} JSON: $jsonMessage',
           statusCode: response.statusCode.toString(),
-          username: LocalStorage().currentUserName,
+          username: currentUsername,
         );
         _logger.e(
             'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
         return (false, jsonBody['message'] as String);
       }
+
       _logger.i(response.reasonPhrase);
+      _logger.i('Imagenes enviadas exitosamente: $jsonMessage');
+
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       await ErrorReporter.registerError(
         errorMessage: 'Error enviando imagenes KIVA online: $e',
         statusCode: '400',
-        username: LocalStorage().currentUserName,
+        username: currentUsername,
       );
       _logger.e(e);
       return (false, e.toString());
@@ -565,16 +571,21 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'CF-Access-Client-Secret':
             const String.fromEnvironment('CFAccessClientSecret'),
       });
-      var response = await request.send();
-      var responseBody = await http.Response.fromStream(response);
-      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
-      } else {
+      final response = await request.send();
+      final responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+      final jsonMessage = {
+        'statusCode': responseBody.statusCode,
+        'message': (jsonBody['message'] ?? 'Imagenes enviadas exitosamente'),
+        'path': request.url.path,
+      };
+      _logger.d('Header: ${request.fields}');
+
+      if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
         await ErrorReporter.registerError(
           errorMessage:
-              'Error enviando imagenes KIVA offline: ${jsonBody['message']}',
+              'Error enviando imagenes KIVA offline: ${jsonBody['message']}: JSON: $jsonMessage',
           statusCode: response.statusCode.toString(),
           username: LocalStorage().currentUserName,
         );
@@ -587,10 +598,11 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
       }
 
       _logger.i(response.reasonPhrase);
+      _logger.i('Imagenes enviadas exitosamente: $jsonMessage');
       return (true, 'Imagenes Enviadas exitosamente!');
     } catch (e) {
       await ErrorReporter.registerError(
-        errorMessage: 'Error enviando imagenes KIVA offline: $e',
+        errorMessage: 'Error enviando imagenes KIVA offline fileSystem: $e ',
         statusCode: '400',
         username: LocalStorage().currentUserName,
       );

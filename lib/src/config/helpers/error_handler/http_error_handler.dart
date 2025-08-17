@@ -3,6 +3,8 @@ enum ErrorNetworkCode {
   serverError,
   timeOutError,
   unknownError,
+  unauthorized,
+  noError,
 }
 
 (String, ErrorNetworkCode) getErrorMessage(
@@ -26,6 +28,12 @@ enum ErrorNetworkCode {
     return (
       'La solicitud tardó demasiado en enviarse, Por favor intente de nuevo.',
       ErrorNetworkCode.timeOutError,
+    );
+  }
+  if (resp['statusCode'] == 401) {
+    return (
+      'Unauthorized, Tu sesión ha caducado. Por favor, inicia sesión nuevamente.',
+      ErrorNetworkCode.unauthorized,
     );
   }
 

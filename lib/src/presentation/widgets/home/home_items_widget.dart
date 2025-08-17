@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -47,15 +48,32 @@ class HomeItemsWidget extends StatelessWidget {
             );
           },
         ),
+      HomeItemCard(
+        title: 'Tutoriales'.tr(),
+        subtitle: 'Descripcion'.tr(),
+        icon: const Icon(
+          Icons.assignment,
+          color: AppColors.white,
+        ),
+        color: AppColors.blueIndigo,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const TutorialsScreen(),
+            ),
+          );
+        },
+      ),
       // HomeItemCard(
-      //   title: 'home.item1'.tr(),
+      //   title: 'Tutoriales'.tr(),
       //   subtitle: 'Descripcion'.tr(),
       //   icon: const Icon(
       //     Icons.account_balance,
       //     color: AppColors.white,
       //   ),
       //   color: AppColors.purple,
-      //   onTap: () => context.push('/tesoreria'),
+      //   onTap: () {},
       // ),
       // HomeItemCard(
       //   title: 'home.item2'.tr(),
@@ -76,16 +94,6 @@ class HomeItemsWidget extends StatelessWidget {
       //   ),
       //   color: AppColors.getFourthgColorWithOpacity(),
       //   onTap: () => context.push('/pla'),
-      // ),
-      // HomeItemCard(
-      //   title: 'home.item4'.tr(),
-      //   subtitle: 'Descripcion'.tr(),
-      //   icon: const Icon(
-      //     Icons.assignment,
-      //     color: AppColors.white,
-      //   ),
-      //   color: AppColors.blueIndigo,
-      //   onTap: () => context.push('/requerimiento'),
       // ),
     ];
 
