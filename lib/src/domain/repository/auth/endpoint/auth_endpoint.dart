@@ -74,3 +74,13 @@ class LogoImageEndpoint extends Endpoint {
   @override
   String get path => '/catalogo/obtener-logo';
 }
+
+class TutorailEndpoint extends Endpoint {
+  TutorailEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/tutorial/movil';
+}

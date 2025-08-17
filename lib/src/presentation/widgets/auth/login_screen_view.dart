@@ -129,7 +129,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? password;
   String? branchTeam;
   bool isPasswordVisible = false;
-  bool shouldFallbackToOffline = false;
   String? turnstileToken;
   bool isOffline = false;
   final localStorage = LocalStorage();
@@ -256,7 +255,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 options: options,
                 siteKey: const String.fromEnvironment('CFAccessSiteKey'),
                 baseUrl: 'http://localhost/',
-                onError: _handleTurnstileError,
                 onTokenReceived: (token) {
                   turnstileToken = token;
                   setState(() {});
@@ -322,10 +320,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     color: Colors.black,
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      if (shouldFallbackToOffline) {
-                        _showOfflineDialog(context);
-                        return;
-                      }
 
                       if (turnstileToken == null) {
                         CustomAlertDialog(
@@ -352,31 +346,5 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         ),
       ),
     );
-  }
-
-  void _showOfflineDialog(BuildContext context) {
-    CustomAlertDialog(
-      context: context,
-      title: 'No tienes conexión a internet, serás redirigido al modo offline',
-      onDone: () {
-        context.read<InternetConnectionCubit>().makeToOfflineMode();
-        context.pushReplacement('/');
-      },
-    ).showDialog(context);
-  }
-
-  void _handleTurnstileError(TurnstileException error) {
-    final offlineErrors = {
-      TurnstileError.CHALLANGE_TIMED_OUT,
-      TurnstileError.CHALLANGE_TIMED_OUT_VISIBLE,
-      TurnstileError.GENERIC_CLIENT_EXECUTION,
-      TurnstileError.INTERNAL_ERROR,
-      TurnstileError.UNKNOWN,
-    };
-
-    debugPrint('[Turnstile] Error: $error ${error.errorType}');
-    if (offlineErrors.contains(error.errorType)) {
-      setState(() => shouldFallbackToOffline = true);
-    }
   }
 }

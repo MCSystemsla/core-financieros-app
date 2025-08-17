@@ -32,7 +32,7 @@ enum ErrorNetworkCode {
   }
   if (resp['statusCode'] == 401) {
     return (
-      'Unauthorized, Tu sesión ha caducado. Por favor, inicia sesión nuevamente.',
+      'Acceso Denegado, ${resp['message']}',
       ErrorNetworkCode.unauthorized,
     );
   }

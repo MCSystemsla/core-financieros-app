@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
+import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
@@ -15,6 +16,7 @@ abstract class AuthRepository {
   Future<BranchTeamResponse> getBranchTeam({required String accessCode});
   Future<ActionsResponse> getActions({required String database});
   Future<String> getLogo();
+  Future<TutorialResponse> getTutorials();
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -72,6 +74,19 @@ class AuthRepositoryImpl extends AuthRepository {
     } catch (e) {
       _logger.e(e);
       throw AppException.toAppException(e.toString());
+    }
+  }
+
+  @override
+  Future<TutorialResponse> getTutorials() async {
+    final endpoint = TutorailEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final tutorialResponse = TutorialResponse.fromJson(resp);
+      return tutorialResponse;
+    } catch (e) {
+      _logger.e(e);
+      throw AppException(optionalMsg: e.toString());
     }
   }
 }
