@@ -133,11 +133,6 @@ class _RecurrentSigntature extends StatefulWidget {
 
 class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,32 +140,32 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected = context.read<InternetConnectionCubit>().state;
-    return Column(
-      children: [
-        const MiCreditoProgress(
-          steps: 5,
-          currentStep: 5,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: JLuxDropdown(
-            dropdownColor: AppColors.white,
-            title: 'Tiene capacidad el usuario para firma?',
-            items: ['input.yes'.tr(), 'input.no'.tr()],
-            onChanged: (item) {
-              setState(() {
-                typeSigner = item == 'input.yes'.tr()
-                    ? TypeSigner.cliente
-                    : TypeSigner.asesor;
-              });
-            },
-            toStringItem: (item) => item,
-            hintText: 'input.select_option'.tr(),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const MiCreditoProgress(
+            steps: 5,
+            currentStep: 5,
           ),
-        ),
-        if (typeSigner != TypeSigner.ninguno)
-          Expanded(
-            child: Padding(
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: JLuxDropdown(
+              dropdownColor: AppColors.white,
+              title: 'Tiene capacidad el usuario para firma?',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                setState(() {
+                  typeSigner = item == 'input.yes'.tr()
+                      ? TypeSigner.cliente
+                      : TypeSigner.asesor;
+                });
+              },
+              toStringItem: (item) => item,
+              hintText: 'input.select_option'.tr(),
+            ),
+          ),
+          if (typeSigner != TypeSigner.ninguno)
+            Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,41 +186,39 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                     ),
                   ),
                   const Gap(20),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.boxGrey,
-                              width: .9,
-                              strokeAlign: BorderSide.strokeAlignOutside,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                  Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Signature(
-                              key: const Key('signature'),
-                              controller: controller,
-                              // height: size.height * .56,
-                              width: size.width * .9,
-                              backgroundColor: AppColors.white,
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: IconBorder.fromIcon(
-                            color: AppColors.red,
-                            icon: Icons.delete_forever,
-                            onTap: () => controller.clear(),
-                            size: const Size(44, 44),
-                          ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const Gap(30),
                   BlocConsumer<RecurrenteMicrediEstudioCubit,
@@ -422,8 +415,8 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                 ],
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -488,11 +481,6 @@ class _SignUserSignature extends StatefulWidget {
 
 class _SignUserSignatureState extends State<_SignUserSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -500,32 +488,32 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
     final size = MediaQuery.sizeOf(context);
     final controller = SignatureController();
     final isConnected = context.read<InternetConnectionCubit>().state;
-    return Column(
-      children: [
-        const MiCreditoProgress(
-          steps: 5,
-          currentStep: 5,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: JLuxDropdown(
-            dropdownColor: AppColors.white,
-            title: 'Tiene capacidad el usuario para firma?',
-            items: ['input.yes'.tr(), 'input.no'.tr()],
-            onChanged: (item) {
-              setState(() {
-                typeSigner = item == 'input.yes'.tr()
-                    ? TypeSigner.cliente
-                    : TypeSigner.asesor;
-              });
-            },
-            toStringItem: (item) => item,
-            hintText: 'input.select_option'.tr(),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const MiCreditoProgress(
+            steps: 5,
+            currentStep: 5,
           ),
-        ),
-        if (typeSigner != TypeSigner.ninguno)
-          Expanded(
-            child: Padding(
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: JLuxDropdown(
+              dropdownColor: AppColors.white,
+              title: 'Tiene capacidad el usuario para firma?',
+              items: ['input.yes'.tr(), 'input.no'.tr()],
+              onChanged: (item) {
+                setState(() {
+                  typeSigner = item == 'input.yes'.tr()
+                      ? TypeSigner.cliente
+                      : TypeSigner.asesor;
+                });
+              },
+              toStringItem: (item) => item,
+              hintText: 'input.select_option'.tr(),
+            ),
+          ),
+          if (typeSigner != TypeSigner.ninguno)
+            Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,41 +534,39 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                     ),
                   ),
                   const Gap(20),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.boxGrey,
-                              width: .9,
-                              strokeAlign: BorderSide.strokeAlignOutside,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                  Stack(
+                    children: [
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.boxGrey,
+                            width: .9,
+                            strokeAlign: BorderSide.strokeAlignOutside,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Signature(
-                              key: const Key('signature'),
-                              controller: controller,
-                              // height: size.height * .56,
-                              width: size.width * .9,
-                              backgroundColor: AppColors.white,
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Signature(
+                            key: const Key('signature'),
+                            controller: controller,
+                            height: size.height * .56,
+                            width: size.width * .9,
+                            backgroundColor: AppColors.white,
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: IconBorder.fromIcon(
-                            color: AppColors.red,
-                            icon: Icons.delete_forever,
-                            onTap: () => controller.clear(),
-                            size: const Size(44, 44),
-                          ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconBorder.fromIcon(
+                          color: AppColors.red,
+                          icon: Icons.delete_forever,
+                          onTap: () => controller.clear(),
+                          size: const Size(44, 44),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const Gap(30),
                   BlocConsumer<MicrediEstudioCubit, MicrediEstudioState>(
@@ -777,8 +763,8 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                 ],
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 

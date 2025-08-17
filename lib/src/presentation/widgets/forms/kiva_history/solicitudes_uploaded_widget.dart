@@ -48,17 +48,38 @@ class SolicitudesUploadedWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: solicitudes.length,
-            separatorBuilder: (BuildContext context, int index) {
-              return const KivaFormSpacing();
+          BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
+            listener: (context, state) {
+              if (state.status == Status.done) {
+                CustomAlertDialog(
+                  context: context,
+                  title: 'Imagenes Enviadas Exitosamente',
+                  onDone: () => context.pop(),
+                ).showDialog(context, dialogType: DialogType.success);
+              }
+              if (state.status == Status.error) {
+                CustomAlertDialog(
+                  context: context,
+                  title: 'Error inesperado, ${state.errorMsg}',
+                  onDone: () => context.pop(),
+                ).showDialog(context, dialogType: DialogType.error);
+              }
             },
-            itemBuilder: (BuildContext context, int index) {
-              return _SolicitudExpasionTitle(
-                solicitud: solicitudes[index],
-                imageModel: imageModel,
+            builder: (context, state) {
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: solicitudes.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const KivaFormSpacing();
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return _SolicitudExpasionTitle(
+                    solicitud: solicitudes[index],
+                    imageModel: imageModel,
+                    status: state.status,
+                  );
+                },
               );
             },
           ),
@@ -71,8 +92,10 @@ class SolicitudesUploadedWidget extends StatelessWidget {
 class _SolicitudExpasionTitle extends StatefulWidget {
   final SolicitudesPendientes solicitud;
   final ImageModel? imageModel;
+  final Status status;
   const _SolicitudExpasionTitle({
     required this.solicitud,
+    required this.status,
     this.imageModel,
   });
 
@@ -116,6 +139,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ExpansionTitleCustom(
+        key: ValueKey(widget.solicitud.id),
         title: _ExpansionRowTitle(solicitud: widget.solicitud),
         finalStep: true,
         children: [
@@ -123,6 +147,7 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
           _ExpansionButtonsWidget(
             imagenes: imagenes,
             solicitud: widget.solicitud,
+            status: widget.status,
           ),
         ],
       ),
@@ -173,57 +198,39 @@ class SolicitudExpansionTitle extends StatelessWidget {
 class _ExpansionButtonsWidget extends StatelessWidget {
   final ImageModel? imagenes;
   final SolicitudesPendientes solicitud;
+  final Status status;
 
   const _ExpansionButtonsWidget({
     this.imagenes,
     required this.solicitud,
+    required this.status,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
-          listener: (context, state) {
-            if (state.status == Status.done) {
-              CustomAlertDialog(
-                context: context,
-                title: 'Imagenes Enviadas Exitosamente',
-                onDone: () => context.pop(),
-              ).showDialog(context, dialogType: DialogType.success);
-            }
-            if (state.status == Status.error) {
-              CustomAlertDialog(
-                context: context,
-                title: 'Error inesperado, ${state.errorMsg}',
-                onDone: () => context.pop(),
-              ).showDialog(context, dialogType: DialogType.error);
-            }
+        CustomElevatedButton(
+          enabled: status != Status.inProgress,
+          onPressed: () {
+            if (!context.mounted) return;
+            context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+                  fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
+                  solicitudId: int.parse(
+                    solicitud.solicitudId ?? '0',
+                  ),
+                  formularioKiva: solicitud.nombreFormulario ?? '',
+                  tipoSolicitud: solicitud.tipoSolicitud ?? '',
+                  numero: solicitud.numero ?? '',
+                  cedula: solicitud.cedula ?? '',
+                  imagen1: imagenes?.imagen1 ?? 'NO PATH',
+                  imagen2: imagenes?.imagen2 ?? 'NO PATH',
+                  imagen3: imagenes?.imagen3 ?? 'NO PATH',
+                  typeSigner: imagenes?.typeSigner ?? '',
+                );
           },
-          builder: (context, state) {
-            return CustomElevatedButton(
-              enabled: state.status != Status.inProgress,
-              onPressed: () {
-                if (!context.mounted) return;
-                context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                      fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
-                      solicitudId: int.parse(
-                        solicitud.solicitudId ?? '0',
-                      ),
-                      formularioKiva: solicitud.nombreFormulario ?? '',
-                      tipoSolicitud: solicitud.tipoSolicitud ?? '',
-                      numero: solicitud.numero ?? '',
-                      cedula: solicitud.cedula ?? '',
-                      imagen1: imagenes?.imagen1 ?? 'NO PATH',
-                      imagen2: imagenes?.imagen2 ?? 'NO PATH',
-                      imagen3: imagenes?.imagen3 ?? 'NO PATH',
-                      typeSigner: imagenes?.typeSigner ?? '',
-                    );
-              },
-              text: '📤 Enviar Imágenes Kiva',
-              color: AppColors.getPrimaryColor(),
-            );
-          },
+          text: '📤 Enviar Imágenes Kiva',
+          color: AppColors.getPrimaryColor(),
         ),
         const Gap(15),
         CustomElevatedButton(

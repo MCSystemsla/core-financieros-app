@@ -1,7 +1,8 @@
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_nivel_produccion.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/stepper/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_credit_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/cuenta_por_cobrar_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/compras_week_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -68,15 +69,20 @@ class _AnalisisSolicitudNuevaMayorAMilState
                 NuevaMayorAMilCicloVentas(
                   pageController: pageController,
                 ),
-                const Column(
-                  children: [
-                    CuentaPorCobrarCard(
-                      totalAbonoPorCobrar: 100,
-                      totalCuentasPorCobrar: 100,
-                    ),
-                  ],
+                NuevaMayorNivelProduccion(
+                  pageController: pageController,
                 ),
-                const Text('asd'),
+                const SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ComprasWeekCard(
+                        semanasBuenas: 2500,
+                        semanasMalos: 2500,
+                        semanasNormales: 2500,
+                      ),
+                    ],
+                  ),
+                ),
                 const Text('asd'),
               ],
             ),

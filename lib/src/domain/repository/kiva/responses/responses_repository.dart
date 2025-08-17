@@ -580,6 +580,7 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
         'message': (jsonBody['message'] ?? 'Imagenes enviadas exitosamente'),
         'path': request.url.path,
       };
+      _logger.d('Header: ${request.fields}');
 
       if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
         await ErrorReporter.registerError(

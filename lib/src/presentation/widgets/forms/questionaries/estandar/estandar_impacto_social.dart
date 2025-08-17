@@ -71,7 +71,10 @@ class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
                     title:
                         '¿Cuáles son sus planes personales para los proximos 5 años?*',
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final trimmedValue = value?.trim();
+                      if (trimmedValue == null ||
+                          trimmedValue.isEmpty ||
+                          trimmedValue == 'input.select_option'.tr()) {
                         return 'input.input_validator'.tr();
                       }
                       return null;
@@ -83,7 +86,10 @@ class _EstandarImpactoSocialState extends State<EstandarImpactoSocial>
                     title:
                         '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final trimmedValue = value?.trim();
+                      if (trimmedValue == null ||
+                          trimmedValue.isEmpty ||
+                          trimmedValue == 'input.select_option'.tr()) {
                         return 'input.input_validator'.tr();
                       }
                       return null;
@@ -226,7 +232,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 textEditingController: siguientePaso,
                 title: 'A futuro ¿Cuál seria su siguiente paso?*',
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  final trimmedValue = value?.trim();
+                  if (trimmedValue == null ||
+                      trimmedValue.isEmpty ||
+                      trimmedValue == 'input.select_option'.tr()) {
                     return 'input.input_validator'.tr();
                   }
                   return null;

@@ -158,7 +158,10 @@ class _EstandarDescripciondelNegocioState
                     title: '¿Cómo mira su negocio en los proximos años?*',
                     textEditingController: negocioProximosAnios,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final trimmedValue = value?.trim();
+                      if (trimmedValue == null ||
+                          trimmedValue.isEmpty ||
+                          trimmedValue == 'input.select_option'.tr()) {
                         return 'input.input_validator'.tr();
                       }
                       return null;
@@ -307,7 +310,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 CommentaryWidget(
                   textEditingController: explicacionInversion,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    final trimmedValue = value?.trim();
+                    if (trimmedValue == null ||
+                        trimmedValue.isEmpty ||
+                        trimmedValue == 'input.select_option'.tr()) {
                       return 'input.input_validator'.tr();
                     }
                     return null;
