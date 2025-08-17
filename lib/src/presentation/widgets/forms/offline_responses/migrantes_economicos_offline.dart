@@ -21,7 +21,12 @@ import 'package:go_router/go_router.dart';
 
 class MigranteEconomicoOffline extends StatefulWidget {
   final int solicitudId;
-  const MigranteEconomicoOffline({super.key, required this.solicitudId});
+  final bool needGoBack;
+  const MigranteEconomicoOffline({
+    super.key,
+    required this.solicitudId,
+    this.needGoBack = false,
+  });
 
   @override
   State<MigranteEconomicoOffline> createState() =>
@@ -93,7 +98,9 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

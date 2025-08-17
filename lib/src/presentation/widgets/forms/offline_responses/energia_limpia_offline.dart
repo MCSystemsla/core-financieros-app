@@ -22,9 +22,11 @@ import 'package:go_router/go_router.dart';
 
 class EnergiaLImpiaOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const EnergiaLImpiaOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -97,7 +99,9 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -282,9 +286,11 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
 
 class RecurrenteEnergiaLimpiaOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const RecurrenteEnergiaLimpiaOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -359,7 +365,9 @@ class _RecurrenteEnergiaLimpiaOfflineState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

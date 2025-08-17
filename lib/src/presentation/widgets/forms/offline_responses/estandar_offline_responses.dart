@@ -21,6 +21,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class EstandarOfflineForm extends StatefulWidget {
+  final bool needGoBack;
   final String typeProduct;
   final int solicitudId;
 
@@ -28,6 +29,7 @@ class EstandarOfflineForm extends StatefulWidget {
     super.key,
     required this.typeProduct,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -101,7 +103,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -344,9 +348,11 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
 
 class EstandarForm extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const EstandarForm({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -419,7 +425,9 @@ class _EstandarFormState extends State<EstandarForm> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

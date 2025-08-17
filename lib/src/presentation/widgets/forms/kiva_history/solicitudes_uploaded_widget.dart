@@ -242,6 +242,7 @@ class _ExpansionButtonsWidget extends StatelessWidget {
                   typeProduct: solicitud.nombreFormulario ?? '',
                   solicitudId: solicitud.solicitudId.toString(),
                   nombre: solicitud.nombre ?? '',
+                  needGoBack: true,
                 ),
               ),
             );
