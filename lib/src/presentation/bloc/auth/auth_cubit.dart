@@ -72,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logOut({required BuildContext context}) {
-    resetLocalStorage();
+    // resetLocalStorage();
     context.pushReplacement('/login');
   }
 

@@ -58,7 +58,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
             if (state.status == Status.error &&
-                state.errorMsg.contains('Unauthorized')) {
+                state.errorMsg.contains('Acceso Denegado')) {
               ScaffoldMessenger.of(context).showSnackBar(
                 customSnackbar(
                   title: 'Tu sesion a caducado, inicia sesión nuevamente',

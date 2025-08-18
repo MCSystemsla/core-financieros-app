@@ -13,14 +13,6 @@ class BiometricCubit extends Cubit<BiometricState> {
   BiometricCubit(this._biometricAuthService) : super(BiometricInitial());
 
   Future<void> authenticate(BuildContext context) async {
-    // TODO: Uncomment the following lines when biometric availability check is implemented
-    // final isBiometricAvailable =
-    //     await _biometricAuthService.haveBiometricAvailable();
-    // if (!isBiometricAvailable) {
-    //   if (!context.mounted) return;
-    //   _navigateToAccessPinScreen(context);
-    //   return;
-    // }
     try {
       final isAuth = await _biometricAuthService.authenticate();
       if (!isAuth) {
@@ -36,8 +28,4 @@ class BiometricCubit extends Cubit<BiometricState> {
   void _navigateToBiometricAuthScreen(BuildContext context) {
     context.pushTransparentRoute(const BiometricNeedAuthScreen());
   }
-
-  // void _navigateToAccessPinScreen(BuildContext context) {
-  //   context.pushTransparentRoute(const PinAccessScreen());
-  // }
 }

@@ -81,9 +81,9 @@ class LogOutWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
         ),
         padding: const EdgeInsets.all(8),
-        child: const Icon(
+        child: Icon(
           Icons.logout,
-          color: AppColors.white,
+          color: AppColors.red,
         ),
       ),
     );
