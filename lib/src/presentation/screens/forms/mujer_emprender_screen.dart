@@ -131,11 +131,6 @@ class _RecurrentSignSignature extends StatefulWidget {
 
 class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -483,11 +478,6 @@ class _SignSignature extends StatefulWidget {
 
 class _SignSignatureState extends State<_SignSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
 
   @override
   Widget build(BuildContext context) {

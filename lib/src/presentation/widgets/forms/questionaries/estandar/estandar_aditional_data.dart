@@ -79,7 +79,10 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                   title: 'Cuales?',
                   textEditingController: cualesOtrosIngrsos,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    final trimmedValue = value?.trim();
+                    if (trimmedValue == null ||
+                        trimmedValue.isEmpty ||
+                        trimmedValue == 'input.select_option'.tr()) {
                       return 'input.input_validator'.tr();
                     }
                     return null;
@@ -199,7 +202,10 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 title: 'Cuales?',
                 textEditingController: cualesOtrosIngrsos,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  final trimmedValue = value?.trim();
+                  if (trimmedValue == null ||
+                      trimmedValue.isEmpty ||
+                      trimmedValue == 'input.select_option'.tr()) {
                     return 'input.input_validator'.tr();
                   }
                   return null;

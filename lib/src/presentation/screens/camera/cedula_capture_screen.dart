@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -70,8 +71,24 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
   }
 
   Future<bool> _requestPermissions() async {
-    final status = await Permission.camera.request();
-    return status.isGranted;
+    final androidVersion = await AndroidVersionHelper.getAndroidVersion();
+    final isAndroidVersionIsAbove11Permission =
+        androidVersion != null && androidVersion >= 30;
+
+    final permissions = await [
+      Permission.camera,
+      if (isAndroidVersionIsAbove11Permission) Permission.manageExternalStorage,
+    ].request();
+
+    final cameraGranted = (permissions[Permission.camera]?.isGranted ?? false);
+
+    final storageGranted = isAndroidVersionIsAbove11Permission
+        ? (permissions[Permission.manageExternalStorage]?.isGranted ?? false)
+        : true;
+
+    final permissionStatus = cameraGranted && storageGranted;
+
+    return permissionStatus;
   }
 
   Future<void> _takePhoto() async {

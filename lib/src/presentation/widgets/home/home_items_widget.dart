@@ -6,10 +6,13 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,6 +23,7 @@ class HomeItemsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final connection = context.read<InternetConnectionCubit>().state;
     final actions = LocalStorage().currentActions;
 
     List<HomeItemCard> homeItemData = [
@@ -35,27 +39,47 @@ class HomeItemsWidget extends StatelessWidget {
           onTap: () async {
             final shouldSync = CatalogoSync.needToSync();
             if (!context.mounted) return;
-            if (shouldSync) {
+            if (shouldSync &&
+                connection.connectionStatus == ConnectionStatus.connected) {
               CustomAlertDialog(
                 onDone: () => context.pop(),
                 context: context,
-                title: 'Necesitas Sincronizar para avanzar',
+                title: 'Es necesario sincronizar los catálogos para avanzar',
               ).showDialog(context);
+              return;
             }
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const CarteraScreen()),
             );
           },
         ),
+      if (connection.connectionStatus == ConnectionStatus.connected)
+        HomeItemCard(
+          title: 'Tutoriales'.tr(),
+          subtitle: 'Descripcion'.tr(),
+          icon: const Icon(
+            Icons.assignment,
+            color: AppColors.white,
+          ),
+          color: AppColors.blueIndigo,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const TutorialsScreen(),
+              ),
+            );
+          },
+        ),
       // HomeItemCard(
-      //   title: 'home.item1'.tr(),
+      //   title: 'Tutoriales'.tr(),
       //   subtitle: 'Descripcion'.tr(),
       //   icon: const Icon(
       //     Icons.account_balance,
       //     color: AppColors.white,
       //   ),
       //   color: AppColors.purple,
-      //   onTap: () => context.push('/tesoreria'),
+      //   onTap: () {},
       // ),
       // HomeItemCard(
       //   title: 'home.item2'.tr(),
@@ -76,16 +100,6 @@ class HomeItemsWidget extends StatelessWidget {
       //   ),
       //   color: AppColors.getFourthgColorWithOpacity(),
       //   onTap: () => context.push('/pla'),
-      // ),
-      // HomeItemCard(
-      //   title: 'home.item4'.tr(),
-      //   subtitle: 'Descripcion'.tr(),
-      //   icon: const Icon(
-      //     Icons.assignment,
-      //     color: AppColors.white,
-      //   ),
-      //   color: AppColors.blueIndigo,
-      //   onTap: () => context.push('/requerimiento'),
       // ),
     ];
 

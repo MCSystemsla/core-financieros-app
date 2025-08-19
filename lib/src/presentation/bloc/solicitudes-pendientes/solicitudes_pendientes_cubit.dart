@@ -27,7 +27,12 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
         ),
       );
     } on AppException catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
+      emit(
+        state.copyWith(
+          status: Status.error,
+          errorMsg: e.optionalMsg,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }

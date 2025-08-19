@@ -22,10 +22,12 @@ import 'package:go_router/go_router.dart';
 
 class MicrediEstudioForm extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
 
   const MicrediEstudioForm({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -97,7 +99,9 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -418,9 +422,11 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
 
 class MiCrediEstudioRecurrenteForm extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const MiCrediEstudioRecurrenteForm({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -495,7 +501,9 @@ class _MiCrediEstudioRecurrenteFormState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

@@ -45,12 +45,6 @@ class MigrantesFormSignature extends StatefulWidget {
 
 class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -410,12 +404,6 @@ class RecurrenteMigrantesFormSignature extends StatefulWidget {
 class _RecurrenteMigrantesFormSignatureState
     extends State<RecurrenteMigrantesFormSignature> {
   TypeSigner typeSigner = TypeSigner.ninguno;
-  @override
-  void initState() {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

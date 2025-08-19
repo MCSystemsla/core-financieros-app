@@ -12,6 +12,8 @@ class ExpansionTitleCustom extends StatefulWidget {
   final bool isVerifier;
   final void Function(bool value)? onExpansionChanged;
   final bool? isExpanded;
+  final EdgeInsetsGeometry childrenPadding;
+
   const ExpansionTitleCustom({
     super.key,
     this.step,
@@ -21,6 +23,10 @@ class ExpansionTitleCustom extends StatefulWidget {
     this.isExpanded,
     this.onExpansionChanged,
     this.isVerifier = false,
+    this.childrenPadding = const EdgeInsets.symmetric(
+      horizontal: 15,
+      vertical: 15,
+    ),
   });
 
   @override
@@ -90,10 +96,7 @@ class _ExpansionTitleCustomState extends State<ExpansionTitleCustom> {
                 ),
                 children: widget.children.map((child) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 15,
-                    ),
+                    padding: widget.childrenPadding,
                     width: MediaQuery.of(context).size.width,
                     color: AppColors.greyWithOpacityV4.withOpacity(0.2),
                     child: child,

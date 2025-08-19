@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -127,9 +129,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? password;
   String? branchTeam;
   bool isPasswordVisible = false;
-  bool shouldFallbackToOffline = false;
   String? turnstileToken;
   bool isOffline = false;
+  final localStorage = LocalStorage();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -253,12 +255,39 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 options: options,
                 siteKey: const String.fromEnvironment('CFAccessSiteKey'),
                 baseUrl: 'http://localhost/',
-                onError: _handleTurnstileError,
                 onTokenReceived: (token) {
                   turnstileToken = token;
                   setState(() {});
                 },
               ),
+              if (localStorage.currentUserName.isNotEmpty &&
+                  localStorage.jwt.isNotEmpty)
+                SwitchListTile(
+                  title: const Text('Entrar al modo offline:'),
+                  subtitle: Text(localStorage.currentUserName),
+                  value: isOffline,
+                  onChanged: (e) async {
+                    if (e == isOffline) return;
+                    setState(() => isOffline = e);
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    if (!context.mounted) return;
+                    if (e) {
+                      context
+                          .read<InternetConnectionCubit>()
+                          .makeToOfflineMode();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        customSnackbar(
+                          title: 'Modo offline Activado',
+                          icon: const Icon(
+                            Icons.offline_bolt,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                      context.pushReplacement('/');
+                    }
+                  },
+                ),
               const Gap(14),
               BlocConsumer<AuthCubit, AuthState>(
                 listener: (context, state) async {
@@ -291,10 +320,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     color: Colors.black,
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      if (shouldFallbackToOffline) {
-                        _showOfflineDialog(context);
-                        return;
-                      }
 
                       if (turnstileToken == null) {
                         CustomAlertDialog(
@@ -321,31 +346,5 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         ),
       ),
     );
-  }
-
-  void _showOfflineDialog(BuildContext context) {
-    CustomAlertDialog(
-      context: context,
-      title: 'No tienes conexión a internet, serás redirigido al modo offline',
-      onDone: () {
-        context.read<InternetConnectionCubit>().makeToOfflineMode();
-        context.pushReplacement('/');
-      },
-    ).showDialog(context);
-  }
-
-  void _handleTurnstileError(TurnstileException error) {
-    final offlineErrors = {
-      TurnstileError.CHALLANGE_TIMED_OUT,
-      TurnstileError.CHALLANGE_TIMED_OUT_VISIBLE,
-      TurnstileError.GENERIC_CLIENT_EXECUTION,
-      TurnstileError.INTERNAL_ERROR,
-      TurnstileError.UNKNOWN,
-    };
-
-    debugPrint('[Turnstile] Error: $error ${error.errorType}');
-    if (offlineErrors.contains(error.errorType)) {
-      setState(() => shouldFallbackToOffline = true);
-    }
   }
 }

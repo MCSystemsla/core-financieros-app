@@ -2,7 +2,6 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/micredi_estudio/micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
@@ -31,13 +30,21 @@ import '../../../bloc/kiva/recurrente_migrante_economico/recurrente_migrantes_ec
 
 class ConfirmationOfflineResponsesScreen extends StatelessWidget {
   final String typeProduct;
-  const ConfirmationOfflineResponsesScreen(
-      {super.key, required this.typeProduct});
+  final String solicitudId;
+  final String nombre;
+  final bool needGoBack;
+  const ConfirmationOfflineResponsesScreen({
+    super.key,
+    required this.typeProduct,
+    this.solicitudId = '',
+    this.nombre = '',
+    this.needGoBack = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final solicitudId = context.read<KivaRouteCubit>().state.solicitudId;
-    final name = context.read<KivaRouteCubit>().state.nombre;
+    // final solicitudId = context.read<KivaRouteCubit>().state.solicitudId;
+    // final name = context.read<KivaRouteCubit>().state.nombre;
     final isar = context.read<SolicitudesPendientesLocalDbCubit>().state.isar;
     final respository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
@@ -98,11 +105,12 @@ class ConfirmationOfflineResponsesScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: Text(name),
+          title: Text(nombre),
         ),
         body: _CurrentForm(
           typeProduct: typeProduct,
           solicitudId: solicitudId,
+          needGoBack: needGoBack,
         ),
       ),
     );
@@ -113,10 +121,12 @@ class _CurrentForm extends StatelessWidget {
   const _CurrentForm({
     required this.typeProduct,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   final String typeProduct;
   final String solicitudId;
+  final bool needGoBack;
 
   @override
   Widget build(BuildContext context) {
@@ -124,54 +134,61 @@ class _CurrentForm extends StatelessWidget {
       'ScrKivaCreditoEstandarRecurrente' => EstandarOfflineForm(
           typeProduct: typeProduct,
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaCreditoEstandar' => EstandarForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMiCrediEstudio' => MicrediEstudioForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMiCrediEstudioRecurrente' => MiCrediEstudioRecurrenteForm(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMejoraVivienda' => ViviendaNuevaOfflineResponse(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMejoraViviendaRecurrente' => RecurrenteViviendaOfflineResponse(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaAguaSaneamiento' => AguaSaneamientoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaAguaSaneamientoRecurrente' => RecurrenteSaneamientoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaEnergiaLimpia' => EnergiaLImpiaOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaEnergiaLimpiaRecurrente' => RecurrenteEnergiaLimpiaOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMujerEmprende' => MujerEmprendeOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMujerEmprendeRecurrente' => RecurrenteMujerEmprendeOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
       'ScrKivaMigrantesEconomicos' => MigranteEconomicoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
-      // 'ScrKivaMigrantesEconomicos' => MigranteEconomicoOffline(
-      //     solicitudId: int.tryParse(solicitudId) ?? 0,
-      //   ),
       'ScrKivaMigrantesEconomicosRecurrentes' =>
         RecurrenteMigranteEconomicoOffline(
           solicitudId: int.tryParse(solicitudId) ?? 0,
+          needGoBack: needGoBack,
         ),
-      // 'ESTANDAR COLONES RECURRENTE MENOR A MIL' =>
-      //   RecurrenteMigranteEconomicoOffline(
-      //     solicitudId: int.tryParse(solicitudId) ?? 0,
-      //   ),
       _ => const SizedBox(),
     };
   }

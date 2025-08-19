@@ -22,9 +22,11 @@ import 'package:go_router/go_router.dart';
 
 class ViviendaNuevaOfflineResponse extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const ViviendaNuevaOfflineResponse({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -97,7 +99,9 @@ class _ViviendaNuevaOfflineResponseState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -269,9 +273,11 @@ class _ViviendaNuevaOfflineResponseState
 
 class RecurrenteViviendaOfflineResponse extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const RecurrenteViviendaOfflineResponse({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -346,7 +352,9 @@ class _RecurrenteViviendaOfflineResponseState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

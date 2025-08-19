@@ -3,8 +3,8 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/pinput/custom_pinput_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -19,32 +19,7 @@ class CarteraScreen extends StatefulWidget {
   State<CarteraScreen> createState() => _CarteraScreenState();
 }
 
-class _CarteraScreenState extends State<CarteraScreen>
-    with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    initFunctions();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      initFunctions();
-    }
-  }
-
-  initFunctions() async {
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
-  }
-
+class _CarteraScreenState extends State<CarteraScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -53,19 +28,8 @@ class _CarteraScreenState extends State<CarteraScreen>
           context.push('/');
         }
       },
-      child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-        builder: (context, state) {
-          return switch (state.connectionStatus) {
-            ConnectionStatus.checking => const _LoadingWidget(),
-            ConnectionStatus.connected => Scaffold(
-                body: _CarteraContentWidget(),
-              ),
-            ConnectionStatus.disconnected => Scaffold(
-                body: _CarteraContentWidget(),
-              ),
-            _ => const SizedBox(),
-          };
-        },
+      child: Scaffold(
+        body: _CarteraContentWidget(),
       ),
     );
   }
@@ -103,7 +67,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
-                _Card(
+                ModuleCard(
                   onTap: () {
                     context.push('/solicitudes');
                   },
@@ -117,8 +81,28 @@ class _CarteraContentWidget extends StatelessWidget {
                     size: 35,
                   ),
                 ),
+              if (!isProdMode)
+                ModuleCard(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AnalisisSolicitudesScreen(),
+                      ),
+                    );
+                  },
+                  title: 'Analisis'.tr(),
+                  subtitle: 'Analisis de solicitudes de credito',
+                  firstColor: const Color.fromARGB(255, 48, 47, 47),
+                  secondColor: const Color(0xFFBDBDBD),
+                  icon: const Icon(
+                    Icons.analytics,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
+                ),
               if (actions.contains('LLENARKIVAMOVIL'))
-                _Card(
+                ModuleCard(
                   onTap: () async {
                     if (!context.mounted) return;
                     state.connectionStatus == ConnectionStatus.connected
@@ -138,7 +122,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               if (state.connectionStatus == ConnectionStatus.connected &&
                   actions.contains('LLENARKIVAMOVIL'))
-                _Card(
+                ModuleCard(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -165,14 +149,15 @@ class _CarteraContentWidget extends StatelessWidget {
   }
 }
 
-class _Card extends StatelessWidget {
+class ModuleCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final Icon icon;
   final Color firstColor;
   final Color secondColor;
   final VoidCallback onTap;
-  const _Card({
+  const ModuleCard({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -266,24 +251,6 @@ class _Card extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class _LoadingWidget extends StatelessWidget {
-  const _LoadingWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LoadingWidget(),
-          Gap(20),
-          Text('Validando conexión a internet...'),
-        ],
       ),
     );
   }

@@ -22,9 +22,11 @@ import 'package:go_router/go_router.dart';
 
 class AguaSaneamientoOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const AguaSaneamientoOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -96,7 +98,9 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -333,9 +337,11 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
 
 class RecurrenteSaneamientoOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const RecurrenteSaneamientoOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -410,7 +416,9 @@ class _RecurrenteSaneamientoOfflineState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }

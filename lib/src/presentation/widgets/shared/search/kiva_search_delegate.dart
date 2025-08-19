@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_form_screen.dart';
@@ -118,7 +117,6 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<InternetConnectionCubit>().getInternetStatusConnection();
     _getNumSolicitud();
   }
 
@@ -140,8 +138,6 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
       title: Text(
           '${widget.solicitud.id} - ${widget.solicitud.nombre.capitalizeAll}'),
       onTap: () async {
-        context.read<InternetConnectionCubit>().getInternetStatusConnection();
-
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               nombreFormularioKiva: widget.solicitud.nombreFormulario,
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,

@@ -19,6 +19,7 @@ class CreditProductItem extends StatelessWidget {
   final String? nombreCliente;
   final String? nombrePromotor;
   final String? tipoSolicitud;
+  final bool isAsesorAsignado;
 
   const CreditProductItem({
     super.key,
@@ -31,6 +32,7 @@ class CreditProductItem extends StatelessWidget {
     this.nombreCliente,
     this.nombrePromotor,
     this.tipoSolicitud,
+    this.isAsesorAsignado = false,
   });
 
   @override
@@ -54,6 +56,15 @@ class CreditProductItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
+          if (isAsesorAsignado) {
+            CustomAlertDialog(
+              context: context,
+              title:
+                  'No puedes asignar una solicitud que ya está asignada a un asesor de credito',
+              onDone: () => context.pop(),
+            ).showDialog(context);
+            return;
+          }
           if (estadoCodigo != 'REG') {
             CustomAlertDialog(
               context: context,

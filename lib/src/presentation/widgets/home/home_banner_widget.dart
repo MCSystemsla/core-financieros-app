@@ -1,7 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +13,6 @@ class HomeBannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final connectionStatusInternet =
-        context.watch<InternetConnectionCubit>().state.connectionStatus;
     final size = MediaQuery.sizeOf(context);
     return Stack(
       children: [
@@ -46,15 +43,14 @@ class HomeBannerWidget extends StatelessWidget {
           width: size.width,
           color: Colors.black12,
         ),
-        SafeArea(
+        const SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const ChangeLangWidget(
+              ChangeLangWidget(
                 child: HomeScreen(),
               ),
-              if (connectionStatusInternet == ConnectionStatus.connected)
-                const LogOutWidget(),
+              LogOutWidget(),
             ],
           ),
         ),
@@ -81,9 +77,9 @@ class LogOutWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
         ),
         padding: const EdgeInsets.all(8),
-        child: const Icon(
+        child: Icon(
           Icons.logout,
-          color: AppColors.white,
+          color: AppColors.red,
         ),
       ),
     );

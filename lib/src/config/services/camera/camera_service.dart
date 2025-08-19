@@ -8,11 +8,13 @@ import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
+import 'package:uuid/uuid.dart';
 
 class CameraService {
+  final uuid = const Uuid();
   static Future<(String, XFile)> takeAndsavePhoto({
     required CameraController controller,
-    String numeroSoicitud = 'numero_solicitud',
+    String numeroSoicitud = 'numeroSoicitud',
   }) async {
     final photo = await controller.takePicture();
     final appDir = await getApplicationDocumentsDirectory();

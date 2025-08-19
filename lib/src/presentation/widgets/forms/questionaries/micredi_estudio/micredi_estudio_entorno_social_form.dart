@@ -119,7 +119,7 @@ class _MiCrediEstudioEntornoSocialFormState
                     ),
                   ),
                   const Gap(20),
-                  if (otrosIngresos == 'Si')
+                  if (otrosIngresos == 'input.yes'.tr())
                     CommentaryWidget(
                       title: 'forms.entorno_familiar.question6'.tr(),
                       textEditingController: otrosIngresosDescripcion,

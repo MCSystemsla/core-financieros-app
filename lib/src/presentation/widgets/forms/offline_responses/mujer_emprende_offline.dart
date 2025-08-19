@@ -22,9 +22,11 @@ import 'package:go_router/go_router.dart';
 
 class MujerEmprendeOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const MujerEmprendeOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -96,7 +98,9 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
@@ -324,9 +328,11 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
 
 class RecurrenteMujerEmprendeOffline extends StatefulWidget {
   final int solicitudId;
+  final bool needGoBack;
   const RecurrenteMujerEmprendeOffline({
     super.key,
     required this.solicitudId,
+    this.needGoBack = false,
   });
 
   @override
@@ -401,7 +407,9 @@ class _RecurrenteMujerEmprendeOfflineState
                 textButtonAcept: 'Ok',
                 colorButtonAcept: AppColors.getPrimaryColor(),
                 onPressedAccept: () {
-                  context.pushReplacement('/');
+                  widget.needGoBack
+                      ? context.pop()
+                      : context.pushReplacement('/');
                 },
               );
             }
