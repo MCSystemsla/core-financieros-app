@@ -4,7 +4,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/e
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class AnalisisFormSolicitud extends StatelessWidget {
+class AnalisisFormSolicitud extends StatefulWidget {
   final PageController pageController;
   const AnalisisFormSolicitud({
     super.key,
@@ -12,7 +12,14 @@ class AnalisisFormSolicitud extends StatelessWidget {
   });
 
   @override
+  State<AnalisisFormSolicitud> createState() => _AnalisisFormSolicitudState();
+}
+
+class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -106,7 +113,7 @@ class AnalisisFormSolicitud extends StatelessWidget {
             const Gap(30),
             CustomElevatedButton(
               onPressed: () {
-                pageController.nextPage(
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                 );
@@ -119,6 +126,9 @@ class AnalisisFormSolicitud extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _PasivosAnalisisWidgetsForm extends StatelessWidget {
@@ -157,14 +167,23 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
   }
 }
 
-class _ActivosWidgetsForm extends StatelessWidget {
+class _ActivosWidgetsForm extends StatefulWidget {
   const _ActivosWidgetsForm();
 
   @override
+  State<_ActivosWidgetsForm> createState() => _ActivosWidgetsFormState();
+}
+
+class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return const Column(
+      key: Key('Activos'),
       children: [
         OutlineTextfieldWidget(
+          key: Key('Caja'),
           title: 'Caja:',
           icon: Icon(Icons.account_balance_wallet),
         ),
@@ -199,4 +218,7 @@ class _ActivosWidgetsForm extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

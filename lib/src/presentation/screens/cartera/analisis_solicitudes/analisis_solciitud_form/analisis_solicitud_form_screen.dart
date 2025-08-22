@@ -9,9 +9,16 @@ import 'package:gap/gap.dart';
 
 class AnalisisSolicitudFormScreen extends StatefulWidget {
   final int index;
+  final String title;
+  final String subtitle;
+  final String description;
+
   const AnalisisSolicitudFormScreen({
     super.key,
     required this.index,
+    required this.title,
+    required this.subtitle,
+    required this.description,
   });
 
   @override
@@ -42,18 +49,18 @@ class _AnalisisSolicitudFormScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Nueva Menor'),
+      ),
       body: Column(
         children: [
-          Expanded(
-            child: AnalisisCreditCard(
-              enabled: false,
-              index: widget.index,
-              animate: false,
-              title: 'Numero Solicitud #12345',
-              subtitle: 'Jaime Velásquez',
-              description: 'C\$. 50,000',
-            ),
+          AnalisisCreditCard(
+            enabled: false,
+            index: widget.index,
+            animate: false,
+            title: widget.title,
+            subtitle: widget.subtitle,
+            description: widget.description,
           ),
           const Gap(20),
           Expanded(
@@ -74,7 +81,7 @@ class _AnalisisSolicitudFormScreenState
   }
 }
 
-class AnalisisFormsPageView extends StatelessWidget {
+class AnalisisFormsPageView extends StatefulWidget {
   const AnalisisFormsPageView({
     super.key,
     required this.pageController,
@@ -83,23 +90,33 @@ class AnalisisFormsPageView extends StatelessWidget {
   final PageController pageController;
 
   @override
+  State<AnalisisFormsPageView> createState() => _AnalisisFormsPageViewState();
+}
+
+class _AnalisisFormsPageViewState extends State<AnalisisFormsPageView>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return PageView(
-      controller: pageController,
+      controller: widget.pageController,
       children: [
         AnalisisFormSolicitud(
-          pageController: pageController,
+          pageController: widget.pageController,
         ),
         ConstanciaYCreditosAnalisis(
-          pageController: pageController,
+          pageController: widget.pageController,
         ),
         CreditosAnalisisSolicitud(
-          pageController: pageController,
+          pageController: widget.pageController,
         ),
         ReferenciasAnalisisSolicitud(
-          pageController: pageController,
+          pageController: widget.pageController,
         ),
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

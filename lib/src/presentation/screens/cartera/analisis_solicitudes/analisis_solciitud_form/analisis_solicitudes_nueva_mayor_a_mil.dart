@@ -1,16 +1,23 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_costo_y_consumo_familiar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_nivel_produccion.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/stepper/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_credit_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/compras_week_card.dart';
-import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class AnalisisSolicitudNuevaMayorAMil extends StatefulWidget {
   final int index;
+  final String title;
+  final String subtitle;
+  final String description;
   const AnalisisSolicitudNuevaMayorAMil({
     super.key,
     required this.index,
+    required this.title,
+    required this.subtitle,
+    required this.description,
   });
 
   @override
@@ -42,18 +49,18 @@ class _AnalisisSolicitudNuevaMayorAMilState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Nueva Mayor a Mil'),
+      ),
       body: Column(
         children: [
-          Expanded(
-            child: AnalisisCreditCard(
-              enabled: false,
-              index: widget.index,
-              animate: false,
-              title: 'Numero Solicitud #12345',
-              subtitle: 'Jaime Velásquez',
-              description: 'C\$. 50,000',
-            ),
+          AnalisisCreditCard(
+            enabled: false,
+            index: widget.index,
+            animate: false,
+            title: widget.title,
+            subtitle: widget.subtitle,
+            description: widget.description,
           ),
           Expanded(
             child: AnalisisSolicitudNuevaMayorAMilStepper(
@@ -72,18 +79,29 @@ class _AnalisisSolicitudNuevaMayorAMilState
                 NuevaMayorNivelProduccion(
                   pageController: pageController,
                 ),
-                const SingleChildScrollView(
+                NuevaMayorCostoYConsumoFamiliar(
+                  pageController: pageController,
+                ),
+                SingleChildScrollView(
                   child: Column(
                     children: [
-                      ComprasWeekCard(
-                        semanasBuenas: 2500,
-                        semanasMalos: 2500,
-                        semanasNormales: 2500,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: CustomElevatedButton(
+                          onPressed: () {
+                            pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          text: 'Siguiente',
+                          color: Colors.green,
+                        ),
                       ),
+                      const Gap(20),
                     ],
                   ),
                 ),
-                const Text('asd'),
               ],
             ),
           )

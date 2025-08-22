@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -78,15 +79,7 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                 CommentaryWidget(
                   title: 'Cuales?',
                   textEditingController: cualesOtrosIngrsos,
-                  validator: (value) {
-                    final trimmedValue = value?.trim();
-                    if (trimmedValue == null ||
-                        trimmedValue.isEmpty ||
-                        trimmedValue == 'input.select_option'.tr()) {
-                      return 'input.input_validator'.tr();
-                    }
-                    return null;
-                  },
+                  validator: (value) => ClassValidator.validateRequired(value),
                 ),
               const Gap(20),
               ButtonActionsWidget(

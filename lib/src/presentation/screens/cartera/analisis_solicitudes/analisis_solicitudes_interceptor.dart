@@ -14,10 +14,16 @@ enum AnalisisSolicitudesInterceptorType {
 class AnalisisSolicitudesInterceptor extends StatelessWidget {
   final AnalisisSolicitudesInterceptorType type;
   final int index;
+  final String title;
+  final String subtitle;
+  final String description;
   const AnalisisSolicitudesInterceptor({
     super.key,
     required this.type,
     required this.index,
+    required this.title,
+    required this.subtitle,
+    required this.description,
   });
 
   @override
@@ -25,9 +31,15 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
     return switch (type) {
       AnalisisSolicitudesInterceptorType.nueva => AnalisisSolicitudFormScreen(
           index: index,
+          title: title,
+          subtitle: subtitle,
+          description: description,
         ),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
         AnalisisSolicitudNuevaMayorAMil(
+          title: title,
+          subtitle: subtitle,
+          description: description,
           index: index,
         ),
       AnalisisSolicitudesInterceptorType.asalariado =>
