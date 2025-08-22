@@ -10,6 +10,7 @@ class AnalisisCreditCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String description;
+  final String numeroSolicitud;
   final AnalisisSolicitudesInterceptorType? tipoSolicitud;
   const AnalisisCreditCard({
     super.key,
@@ -20,6 +21,7 @@ class AnalisisCreditCard extends StatelessWidget {
     required this.subtitle,
     required this.description,
     this.tipoSolicitud,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -47,6 +49,7 @@ class AnalisisCreditCard extends StatelessWidget {
                           title: title,
                           subtitle: subtitle,
                           description: description,
+                          numeroSolicitud: numeroSolicitud,
                         ),
                       ),
                     );

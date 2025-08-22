@@ -52,6 +52,7 @@ class _AnalisisSolicitudAsalariadoFormScreenState
               title: 'Numero Solicitud #12345',
               subtitle: 'Jaime Velásquez',
               description: 'C\$. 50,000',
+              numeroSolicitud: '',
             ),
           ),
           const Gap(20),

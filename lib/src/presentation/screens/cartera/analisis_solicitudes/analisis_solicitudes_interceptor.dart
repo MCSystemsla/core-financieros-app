@@ -17,6 +17,7 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
   final String title;
   final String subtitle;
   final String description;
+  final String numeroSolicitud;
   const AnalisisSolicitudesInterceptor({
     super.key,
     required this.type,
@@ -24,6 +25,7 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.description,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -34,6 +36,7 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
           title: title,
           subtitle: subtitle,
           description: description,
+          numeroSolicitud: numeroSolicitud,
         ),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
         AnalisisSolicitudNuevaMayorAMil(

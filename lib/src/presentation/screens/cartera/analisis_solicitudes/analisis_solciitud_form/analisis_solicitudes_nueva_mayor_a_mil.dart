@@ -61,6 +61,7 @@ class _AnalisisSolicitudNuevaMayorAMilState
             title: widget.title,
             subtitle: widget.subtitle,
             description: widget.description,
+            numeroSolicitud: '',
           ),
           Expanded(
             child: AnalisisSolicitudNuevaMayorAMilStepper(

@@ -41,6 +41,7 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return AnalisisCreditCard(
+                            numeroSolicitud: state.data[index].numero,
                             tipoSolicitud: getTipoSolicitud(
                               tipoSolicitud: state.data[index].tipoSolicitud,
                               monto: state.data[index].monto!,

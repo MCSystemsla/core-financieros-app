@@ -1,6 +1,8 @@
+import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -8,9 +10,11 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
   const ConstanciaYCreditosAnalisis({
     super.key,
     required this.pageController,
+    required this.solicitud,
   });
 
   final PageController pageController;
+  final AnalisisSolicitudNuevaMenorResponse solicitud;
 
   @override
   Widget build(BuildContext context) {
@@ -29,24 +33,32 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
                     ),
               ),
               finalStep: true,
-              children: const [
+              children: [
                 Column(
                   children: [
                     OutlineTextfieldWidget(
+                      initialValue: solicitud.data.analisis?.numeroRuc,
                       title: 'Numero de RUC:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue:
+                          solicitud.data.analisis?.nombreInstitucionRuc,
                       title: 'Nombre de instituto:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue: solicitud.data.analisis?.fechaEmisionRuc!
+                          .selectorFormat(),
                       title: 'Fecha de emision:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue: solicitud
+                          .data.analisis?.fechaVencimientoRuc!
+                          .selectorFormat(),
                       title: 'Fecha de vencimiento:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                   ],
                 ),
@@ -62,24 +74,31 @@ class ConstanciaYCreditosAnalisis extends StatelessWidget {
                     ),
               ),
               finalStep: true,
-              children: const [
+              children: [
                 Column(
                   children: [
                     OutlineTextfieldWidget(
+                      initialValue: solicitud.data.analisis?.numeroMatricula,
                       title: 'Matricula:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue:
+                          solicitud.data.analisis?.nombreInstitucionMatricula,
                       title: 'Nombre de institucion:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue:
+                          solicitud.data.analisis?.fechaEmisionMatricula,
                       title: 'Fecha de emision:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                     OutlineTextfieldWidget(
+                      initialValue:
+                          solicitud.data.analisis?.fechaVencimientoMatricula,
                       title: 'Fecha de vencimiento:',
-                      icon: Icon(Icons.person_3_sharp),
+                      icon: const Icon(Icons.person_3_sharp),
                     ),
                   ],
                 ),
