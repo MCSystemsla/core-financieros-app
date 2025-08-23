@@ -37,15 +37,15 @@ class AnalisisNuevaMenorData {
 
   factory AnalisisNuevaMenorData.fromJson(Map<String, dynamic> json) =>
       AnalisisNuevaMenorData(
-        analisis: json.containsKey('Analisis') && json['Analisis'] != null
+        analisis: json['Analisis'] != null
             ? AnalisisNuevaMenor.fromJson(json['Analisis'])
-            : null,
+            : AnalisisNuevaMenor.empty(),
         inventario: List<NuevaMenorTipoInventario>.from(json['Inventario']
             .map((x) => NuevaMenorTipoInventario.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        'Analisis': analisis?.toJson(),
+        'SolicitudAnalisis': analisis?.toJson(),
         'Inventario': List<dynamic>.from(inventario.map((x) => x.toJson())),
       };
 }
@@ -371,6 +371,83 @@ class AnalisisNuevaMenor {
         'UsuarioCreacion': usuarioCreacion,
         'FechaCreacion': fechaCreacion?.toIso8601String(),
       };
+  AnalisisNuevaMenor.empty({
+    this.id,
+    this.objSolicitudId,
+    this.numeroSolicitud,
+    this.fechaAnalisis,
+    this.caja,
+    this.banco,
+    this.cuentasXCobrar,
+    this.inventario,
+    this.otrosActivos,
+    this.totalAc,
+    this.activoFijo,
+    this.totalActivo,
+    this.proveedores,
+    this.cuentasXPagar,
+    this.otrasDeudas,
+    this.totalPasivo,
+    this.capital,
+    this.pasivoCapital,
+    this.ventasContado,
+    this.recuperaciones,
+    this.otrosIngresos,
+    this.gastosUnidadFamiliar,
+    this.totalIngresos,
+    this.costoVentaPorcentaje,
+    this.costoVenta,
+    this.gastosOperativos,
+    this.margenBrutoNegocio,
+    this.disponidadFamiliar,
+    this.dppPorcentaje,
+    this.dpp,
+    this.numeroRuc,
+    this.nombreInstitucionRuc,
+    this.fechaEmisionRuc,
+    this.fechaVencimientoRuc,
+    this.numeroMatricula,
+    this.nombreInstitucionMatricula,
+    this.fechaEmisionMatricula,
+    this.fechaVencimientoMatricula,
+    this.numeroLicencia,
+    this.nombreInstitucionLicencia,
+    this.fechaEmisionLicencia,
+    this.fechaVencimientoLicencia,
+    this.ingresoAnual,
+    this.cliente1,
+    this.cliente2,
+    this.cliente3,
+    this.proveedor1,
+    this.proveedor2,
+    this.proveedor3,
+    this.fechaVerificacion1,
+    this.nombreReferencia1,
+    this.cedulaReferencia1,
+    this.direccionReferencia1,
+    this.telefonoReferencia1,
+    this.lugarTrabajoReferencia1,
+    this.aniosConocerReferido1,
+    this.objParentescoIdReferencia1,
+    this.resultadoVerificacion1,
+    this.objEmpleadoVerificaReferenciaId1,
+    this.fechaVerificacion2,
+    this.nombreReferencia2,
+    this.cedulaReferencia2,
+    this.direccionReferencia2,
+    this.telefonoReferencia2,
+    this.lugarTrabajoReferencia2,
+    this.aniosConocerReferido2,
+    this.objParentescoIdReferencia2,
+    this.resultadoVerificacion2,
+    this.objEmpleadoVerificaReferenciaId2,
+    this.usuarioCreacion,
+    this.fechaCreacion,
+    this.maquinaCreacion,
+    this.usuarioModificacion,
+    this.fechaModificacion,
+    this.maquinaModificacion,
+  });
 }
 
 class NuevaMenorTipoInventario {

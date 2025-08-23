@@ -1,13 +1,111 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/analisis_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'analisis_solicitud_nueva_menor_state.dart';
 
 class AnalisisSolicitudNuevaMenorCubit
     extends Cubit<AnalisisSolicitudNuevaMenorState> {
-  AnalisisSolicitudNuevaMenorCubit()
+  AnalisisSolicitudNuevaMenorCubit(this._repository)
       : super(AnalisisSolicitudNuevaMenorInitial());
+  final AnalisisRepository _repository;
+
+  void createAnalisisSolicitudNuevaMenorCubit({
+    required String numeroSolicitud,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      final (isOk, msg) = await _repository.createAnalisisSolicitudNuevaMenor(
+        numeroSolicitud: numeroSolicitud,
+        analisisSolicitudNuevaMenor: AnalisisNuevaMenorData(
+          inventario: [],
+          analisis: AnalisisNuevaMenor(
+            caja: state.caja,
+            banco: state.banco,
+            cuentasXCobrar: state.cuentasXCobrar,
+            cuentasXPagar: state.cuentasXPagar,
+            fechaAnalisis: DateTime.tryParse(state.fechaAnalisis),
+            numeroSolicitud: state.numeroSolicitud,
+            otrosActivos: state.otrosActivos,
+            totalAc: state.totalAc,
+            activoFijo: state.activoFijo,
+            totalActivo: state.totalActivo,
+            proveedores: state.proveedores,
+            otrasDeudas: state.otrasDeudas,
+            totalPasivo: state.totalPasivo,
+            capital: state.capital,
+            pasivoCapital: state.pasivoCapital,
+            ventasContado: state.ventasContado,
+            recuperaciones: state.recuperaciones,
+            otrosIngresos: state.otrosIngresos,
+            gastosUnidadFamiliar: state.gastosUnidadFamiliar,
+            totalIngresos: state.totalIngresos,
+            costoVentaPorcentaje: state.costoVentaPorcentaje,
+            costoVenta: state.costoVenta,
+            gastosOperativos: state.gastosOperativos,
+            margenBrutoNegocio: state.margenBrutoNegocio,
+            disponidadFamiliar: state.disponidadFamiliar,
+            dppPorcentaje: state.dppPorcentaje,
+            dpp: state.dpp,
+            numeroRuc: state.numeroRuc,
+            nombreInstitucionRuc: state.nombreInstitucionRuc,
+            fechaEmisionRuc: DateTime.tryParse(state.fechaEmisionRuc),
+            fechaVencimientoRuc: DateTime.tryParse(state.fechaVencimientoRuc),
+            numeroMatricula: state.numeroMatricula,
+            nombreInstitucionMatricula: state.nombreInstitucionMatricula,
+            fechaEmisionMatricula:
+                DateTime.tryParse(state.fechaEmisionMatricula),
+            fechaVencimientoMatricula:
+                DateTime.tryParse(state.fechaVencimientoMatricula),
+            numeroLicencia: state.numeroLicencia,
+            nombreInstitucionLicencia: state.nombreInstitucionLicencia,
+            fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
+            fechaVencimientoLicencia:
+                DateTime.tryParse(state.fechaVencimientoLicencia),
+            ingresoAnual: state.ingresoAnual,
+            cliente1: state.cliente1,
+            cliente2: state.cliente2,
+            cliente3: state.cliente3,
+            proveedor1: state.proveedor1,
+            proveedor2: state.proveedor2,
+            proveedor3: state.proveedor3,
+            fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
+            nombreReferencia1: state.nombreReferencia1,
+            cedulaReferencia1: state.cedulaReferencia1,
+            direccionReferencia1: state.direccionReferencia1,
+            telefonoReferencia1: state.telefonoReferencia1,
+            lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+            aniosConocerReferido1: state.aniosConocerReferido1,
+            objParentescoIdReferencia1: state.objParentescoIdReferencia1,
+            resultadoVerificacion1: state.resultadoVerificacion1,
+            objEmpleadoVerificaReferenciaId1:
+                state.objEmpleadoVerificaReferenciaId1,
+            fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
+            nombreReferencia2: state.nombreReferencia2,
+            cedulaReferencia2: state.cedulaReferencia2,
+            direccionReferencia2: state.direccionReferencia2,
+            telefonoReferencia2: state.telefonoReferencia2,
+            lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+            aniosConocerReferido2: state.aniosConocerReferido2,
+            objParentescoIdReferencia2: state.objParentescoIdReferencia2,
+            resultadoVerificacion2: state.resultadoVerificacion2,
+            objEmpleadoVerificaReferenciaId2:
+                state.objEmpleadoVerificaReferenciaId2,
+            inventario: state.inventario,
+          ),
+        ),
+      );
+      if (!isOk) {
+        emit(state.copyWith(status: Status.error, errorMessage: msg));
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMessage: e.toString()));
+    }
+  }
 
   void initializeFields({
     required AnalisisSolicitudNuevaMenorResponse solicitud,

@@ -1,7 +1,10 @@
+import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
 class CreditosAnalisisSolicitud extends StatelessWidget {
@@ -30,10 +33,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
               ),
               finalStep: true,
               children: const [
-                OutlineTextfieldWidget(
-                  title: 'Ingreso anual y/o volumen de venta:',
-                  icon: Icon(Icons.person_3_sharp),
-                ),
+                _DetalleCredito(),
               ],
             ),
             const Gap(20),
@@ -47,16 +47,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
               ),
               finalStep: true,
               children: const [
-                Column(
-                  children: [
-                    OutlineTextfieldWidget(
-                        title: 'Cliente 1', icon: Icon(Icons.person_3_sharp)),
-                    OutlineTextfieldWidget(
-                        title: 'Cliente 2', icon: Icon(Icons.person_3_sharp)),
-                    OutlineTextfieldWidget(
-                        title: 'Cliente 3', icon: Icon(Icons.person_3_sharp)),
-                  ],
-                ),
+                _NombrePrincipalesClientes(),
               ],
             ),
             const Gap(20),
@@ -70,16 +61,7 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
               ),
               finalStep: true,
               children: const [
-                Column(
-                  children: [
-                    OutlineTextfieldWidget(
-                        title: 'Proveedor 1', icon: Icon(Icons.person_3_sharp)),
-                    OutlineTextfieldWidget(
-                        title: 'Proveedor 2', icon: Icon(Icons.person_3_sharp)),
-                    OutlineTextfieldWidget(
-                        title: 'Proveedor 3', icon: Icon(Icons.person_3_sharp)),
-                  ],
-                ),
+                _NombreDeProveedores(),
               ],
             ),
             const Gap(30),
@@ -107,6 +89,119 @@ class CreditosAnalisisSolicitud extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _NombreDeProveedores extends StatelessWidget {
+  const _NombreDeProveedores();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    return Column(
+      children: [
+        OutlineTextfieldWidget(
+          initialValue: cubit.proveedor1,
+          title: 'Proveedor 1',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(proveedor1: value);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.proveedor2,
+          title: 'Proveedor 2',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(proveedor2: value);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.proveedor3,
+          title: 'Proveedor 3',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(proveedor3: value);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NombrePrincipalesClientes extends StatelessWidget {
+  const _NombrePrincipalesClientes();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    return Column(
+      children: [
+        OutlineTextfieldWidget(
+          initialValue: cubit.cliente1,
+          title: 'Cliente 1',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(cliente1: value);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.cliente2,
+          title: 'Cliente 2',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(cliente2: value);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.cliente3,
+          title: 'Cliente 3',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              return onFieldChanged.state.copyWith(cliente3: value);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DetalleCredito extends StatelessWidget {
+  const _DetalleCredito();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    return Column(
+      children: [
+        OutlineTextfieldWidget(
+          initialValue: cubit.ingresoAnual.toCurrencyString(),
+          title: 'Ingreso anual y/o volumen de venta:',
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(ingresoAnual: newValue);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

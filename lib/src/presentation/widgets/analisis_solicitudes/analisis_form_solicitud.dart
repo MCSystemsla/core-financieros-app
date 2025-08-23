@@ -250,7 +250,7 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
     return Column(
       children: [
         OutlineTextfieldWidget(
-          initialValue: cubit.proveedores.toString(),
+          initialValue: cubit.proveedores.toCurrencyString(),
           title: 'Proveedores:',
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(

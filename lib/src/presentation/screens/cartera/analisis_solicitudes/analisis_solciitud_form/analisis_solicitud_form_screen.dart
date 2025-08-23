@@ -66,7 +66,9 @@ class _AnalisisSolicitudFormScreenState
             ),
         ),
         BlocProvider(
-          create: (ctx) => AnalisisSolicitudNuevaMenorCubit(),
+          create: (ctx) => AnalisisSolicitudNuevaMenorCubit(
+            AnalisisRepositoryImpl(),
+          ),
         ),
       ],
       child: Scaffold(
