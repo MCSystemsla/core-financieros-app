@@ -14,6 +14,15 @@ abstract class AnalisisRepository {
     required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
     required String numeroSolicitud,
   });
+  Future<(bool, String)> updateAnalisisSolicitudNuevaMenor({
+    required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
+    required String numeroSolicitud,
+  });
+  Future<(bool, String)> saveAnalisisNuevaMenorAMilByTypeAndStatus({
+    required bool isAnalisisAreCreated,
+    required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
+    required String numeroSolicitud,
+  });
 }
 
 class AnalisisRepositoryImpl implements AnalisisRepository {
@@ -53,6 +62,7 @@ class AnalisisRepositoryImpl implements AnalisisRepository {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {
         _logger.e(resp);
+        _logger.i(endpoint.body);
         final (errorMsg, _) = getErrorMessage(
           resp,
           errorMsg:
@@ -66,5 +76,53 @@ class AnalisisRepositoryImpl implements AnalisisRepository {
       _logger.e(e);
       return (false, e.toString());
     }
+  }
+
+  @override
+  Future<(bool, String)> updateAnalisisSolicitudNuevaMenor({
+    required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
+    required String numeroSolicitud,
+  }) async {
+    final endpoint = UpdateAnalisisGetNuevaMenorByNumeroSolicitud(
+      analisisSolicitudNuevaMenor: analisisSolicitudNuevaMenor,
+      numeroSolicitud: numeroSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        _logger.i(endpoint.body);
+
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        return (false, errorMsg);
+      }
+      _logger.i(resp);
+      return (true, 'Analisis actualizado exitosamente');
+    } catch (e) {
+      _logger.e(e);
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> saveAnalisisNuevaMenorAMilByTypeAndStatus({
+    required bool isAnalisisAreCreated,
+    required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
+    required String numeroSolicitud,
+  }) async {
+    return switch (isAnalisisAreCreated) {
+      true => await updateAnalisisSolicitudNuevaMenor(
+          analisisSolicitudNuevaMenor: analisisSolicitudNuevaMenor,
+          numeroSolicitud: numeroSolicitud,
+        ),
+      false => await createAnalisisSolicitudNuevaMenor(
+          analisisSolicitudNuevaMenor: analisisSolicitudNuevaMenor,
+          numeroSolicitud: numeroSolicitud,
+        ),
+    };
   }
 }

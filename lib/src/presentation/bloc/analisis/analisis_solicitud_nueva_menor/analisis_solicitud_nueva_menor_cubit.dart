@@ -14,14 +14,19 @@ class AnalisisSolicitudNuevaMenorCubit
 
   void createAnalisisSolicitudNuevaMenorCubit({
     required String numeroSolicitud,
+    required bool isAnalisisAreCreated,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg) = await _repository.createAnalisisSolicitudNuevaMenor(
+      final (isOk, msg) =
+          await _repository.saveAnalisisNuevaMenorAMilByTypeAndStatus(
+        isAnalisisAreCreated: isAnalisisAreCreated,
         numeroSolicitud: numeroSolicitud,
         analisisSolicitudNuevaMenor: AnalisisNuevaMenorData(
           inventario: [],
           analisis: AnalisisNuevaMenor(
+            id: state.id,
+            objSolicitudId: state.objSolicitudId,
             caja: state.caja,
             banco: state.banco,
             cuentasXCobrar: state.cuentasXCobrar,
@@ -112,6 +117,7 @@ class AnalisisSolicitudNuevaMenorCubit
   }) {
     emit(
       state.copyWith(
+        inventarioList: solicitud.data.inventario,
         id: solicitud.data.analisis?.id,
         objSolicitudId: solicitud.data.analisis?.objSolicitudId,
         numeroSolicitud: solicitud.data.analisis?.numeroSolicitud,
@@ -153,15 +159,23 @@ class AnalisisSolicitudNuevaMenorCubit
         numeroMatricula: solicitud.data.analisis?.numeroMatricula,
         nombreInstitucionMatricula:
             solicitud.data.analisis?.nombreInstitucionMatricula,
-        fechaEmisionMatricula: solicitud.data.analisis?.fechaEmisionMatricula,
-        fechaVencimientoMatricula:
-            solicitud.data.analisis?.fechaVencimientoMatricula,
+        fechaEmisionMatricula: solicitud.data.analisis?.fechaEmisionMatricula
+            ?.toUtc()
+            .toIso8601String(),
+        fechaVencimientoMatricula: solicitud
+            .data.analisis?.fechaVencimientoMatricula
+            ?.toUtc()
+            .toIso8601String(),
         numeroLicencia: solicitud.data.analisis?.numeroLicencia,
         nombreInstitucionLicencia:
             solicitud.data.analisis?.nombreInstitucionLicencia,
-        fechaEmisionLicencia: solicitud.data.analisis?.fechaEmisionLicencia,
-        fechaVencimientoLicencia:
-            solicitud.data.analisis?.fechaVencimientoLicencia,
+        fechaEmisionLicencia: solicitud.data.analisis?.fechaEmisionLicencia
+            ?.toUtc()
+            .toIso8601String(),
+        fechaVencimientoLicencia: solicitud
+            .data.analisis?.fechaVencimientoLicencia
+            ?.toUtc()
+            .toIso8601String(),
         ingresoAnual: solicitud.data.analisis?.ingresoAnual,
         cliente1: solicitud.data.analisis?.cliente1,
         cliente2: solicitud.data.analisis?.cliente2,

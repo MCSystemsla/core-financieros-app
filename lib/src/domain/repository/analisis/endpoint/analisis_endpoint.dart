@@ -43,7 +43,32 @@ class CreateAnalisisGetNuevaMenorByNumeroSolicitud extends Endpoint {
   @override
   Map<String, dynamic> get body => {
         'database': LocalStorage().database,
-        'NumeroSolicitud': numeroSolicitud,
+        'NumeroSolicitud': int.tryParse(numeroSolicitud) ?? 0,
+        ...analisisSolicitudNuevaMenor.toJson(),
+      };
+}
+
+class UpdateAnalisisGetNuevaMenorByNumeroSolicitud extends Endpoint {
+  final AnalisisNuevaMenorData analisisSolicitudNuevaMenor;
+  final String numeroSolicitud;
+  UpdateAnalisisGetNuevaMenorByNumeroSolicitud({
+    required this.analisisSolicitudNuevaMenor,
+    required this.numeroSolicitud,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path =>
+      '/analisis_solicitud/update-analisis-solicitud-menor-a-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': int.tryParse(numeroSolicitud) ?? 0,
         ...analisisSolicitudNuevaMenor.toJson(),
       };
 }

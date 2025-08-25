@@ -1,18 +1,27 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class ReferenciasAnalisisSolicitud extends StatelessWidget {
   const ReferenciasAnalisisSolicitud({
     super.key,
     required this.pageController,
+    required this.numeroSolicitud,
   });
 
   final PageController pageController;
+  final String numeroSolicitud;
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +59,45 @@ class ReferenciasAnalisisSolicitud extends StatelessWidget {
               ],
             ),
             const Gap(30),
-            CustomElevatedButton(
-              onPressed: () {
-                pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
+            BlocConsumer<AnalisisSolicitudNuevaMenorCubit,
+                AnalisisSolicitudNuevaMenorState>(
+              listener: (context, state) {
+                if (state.status == Status.done) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Analisis creado exitosamente!',
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.success);
+                }
+                if (state.status == Status.error) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: state.errorMessage,
+                    onDone: () => context.pop(),
+                  ).showDialog(context, dialogType: DialogType.error);
+                }
+              },
+              builder: (context, state) {
+                return CustomElevatedButton(
+                  enabled: state.status != Status.inProgress,
+                  onPressed: () {
+                    context
+                        .read<AnalisisSolicitudNuevaMenorCubit>()
+                        .createAnalisisSolicitudNuevaMenorCubit(
+                          numeroSolicitud: numeroSolicitud,
+                          isAnalisisAreCreated: state.id.isNotEmpty,
+                        );
+                    pageController.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  text: state.status != Status.inProgress
+                      ? 'Enviar analisis'
+                      : 'Enviando...',
+                  color: Colors.green,
                 );
               },
-              text: 'Siguiente',
-              color: Colors.green,
             ),
             const Gap(15),
             CustomElevatedButton(
@@ -160,26 +199,16 @@ class _Referencia2 extends StatelessWidget {
             },
           ),
         ),
-        const OutlineTextfieldWidget(
-          title: 'Fecha de verificación:',
-          icon: Icon(Icons.person_3_sharp),
-        ),
         OutlineTextfieldWidget(
-          initialValue: cubit.objEmpleadoVerificaReferenciaId2.toString(),
-          title: 'Empleado que verifica:',
+          initialValue:
+              DateTime.tryParse(cubit.fechaVerificacion2)?.selectorFormat(),
+          title: 'Fecha de verificación:',
           icon: const Icon(Icons.person_3_sharp),
-          // onChange: (value) => onFieldChanged.onFieldChanged(
-          //   () {
-          //     return onFieldChanged.state.copyWith(
-          //       objEmpleadoVerificaReferenciaId1: value,
-          //     );
-          //   },
-          // ),
         ),
-        const OutlineTextfieldWidget(
-          title: 'Fecha :',
-          icon: Icon(Icons.person_3_sharp),
-        ),
+        // const OutlineTextfieldWidget(
+        //   title: 'Fecha',
+        //   icon: Icon(Icons.person_3_sharp),
+        // ),
       ],
     );
   }
@@ -197,6 +226,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.nombreReferencia1,
           title: 'Nombres y apellidos:',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -217,6 +249,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.direccionReferencia1,
           title: 'Direccion:',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -227,6 +262,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.lugarTrabajoReferencia1,
           title: 'Centro laboral:',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -238,6 +276,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.cedulaReferencia1,
           title: 'Numero de cédula:',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -248,6 +289,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.telefonoReferencia1,
           title: 'Telefono:',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -258,6 +302,9 @@ class _Referencia1 extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.aniosConocerReferido1.toString(),
           title: 'Anos de conocer referido:',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -267,21 +314,11 @@ class _Referencia1 extends StatelessWidget {
             },
           ),
         ),
-        const OutlineTextfieldWidget(
-          title: 'Fecha de verificación:',
-          icon: Icon(Icons.person_3_sharp),
-        ),
         OutlineTextfieldWidget(
-          initialValue: cubit.objEmpleadoVerificaReferenciaId1.toString(),
-          title: 'Empleado que verifica:',
+          initialValue:
+              DateTime.tryParse(cubit.fechaVerificacion1)?.selectorFormat(),
+          title: 'Fecha de verificación:',
           icon: const Icon(Icons.person_3_sharp),
-          // onChange: (value) => onFieldChanged.onFieldChanged(
-          //   () {
-          //     return onFieldChanged.state.copyWith(
-          //       objEmpleadoVerificaReferenciaId1: value,
-          //     );
-          //   },
-          // ),
         ),
         const OutlineTextfieldWidget(
           title: 'Fecha :',

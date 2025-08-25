@@ -104,6 +104,7 @@ class _AnalisisSolicitudFormScreenState
                       child: AnalisisFormsPageView(
                         pageController: pageController,
                         solicitud: state.data,
+                        numeroSolicitud: widget.numeroSolicitud,
                       ),
                     ),
                   _ => const SizedBox(),
@@ -122,10 +123,12 @@ class AnalisisFormsPageView extends StatefulWidget {
     super.key,
     required this.pageController,
     required this.solicitud,
+    required this.numeroSolicitud,
   });
 
   final AnalisisSolicitudNuevaMenorResponse solicitud;
   final PageController pageController;
+  final String numeroSolicitud;
 
   @override
   State<AnalisisFormsPageView> createState() => _AnalisisFormsPageViewState();
@@ -159,6 +162,7 @@ class _AnalisisFormsPageViewState extends State<AnalisisFormsPageView>
         ),
         ReferenciasAnalisisSolicitud(
           pageController: widget.pageController,
+          numeroSolicitud: widget.numeroSolicitud,
         ),
       ],
     );

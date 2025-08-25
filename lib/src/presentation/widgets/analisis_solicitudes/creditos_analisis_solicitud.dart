@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -105,6 +106,9 @@ class _NombreDeProveedores extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.proveedor1,
           title: 'Proveedor 1',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -115,6 +119,9 @@ class _NombreDeProveedores extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.proveedor2,
           title: 'Proveedor 2',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -125,6 +132,9 @@ class _NombreDeProveedores extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.proveedor3,
           title: 'Proveedor 3',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -149,6 +159,9 @@ class _NombrePrincipalesClientes extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.cliente1,
           title: 'Cliente 1',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -159,6 +172,9 @@ class _NombrePrincipalesClientes extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.cliente2,
           title: 'Cliente 2',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -169,6 +185,9 @@ class _NombrePrincipalesClientes extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.cliente3,
           title: 'Cliente 3',
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -193,6 +212,9 @@ class _DetalleCredito extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.ingresoAnual.toCurrencyString(),
           title: 'Ingreso anual y/o volumen de venta:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {

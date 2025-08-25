@@ -87,12 +87,12 @@ class AnalisisNuevaMenor {
   final DateTime? fechaVencimientoRuc;
   final String? numeroMatricula;
   final String? nombreInstitucionMatricula;
-  final dynamic fechaEmisionMatricula;
-  final dynamic fechaVencimientoMatricula;
+  final DateTime? fechaEmisionMatricula;
+  final DateTime? fechaVencimientoMatricula;
   final String? numeroLicencia;
   final String? nombreInstitucionLicencia;
-  final dynamic fechaEmisionLicencia;
-  final dynamic fechaVencimientoLicencia;
+  final DateTime? fechaEmisionLicencia;
+  final DateTime? fechaVencimientoLicencia;
   final num? ingresoAnual;
   final String? cliente1;
   final String? cliente2;
@@ -120,12 +120,6 @@ class AnalisisNuevaMenor {
   final num? objParentescoIdReferencia2;
   final String? resultadoVerificacion2;
   final String? objEmpleadoVerificaReferenciaId2;
-  final String? usuarioCreacion;
-  final DateTime? fechaCreacion;
-  final String? maquinaCreacion;
-  final dynamic usuarioModificacion;
-  final dynamic fechaModificacion;
-  final dynamic maquinaModificacion;
 
   AnalisisNuevaMenor({
     this.id,
@@ -197,12 +191,6 @@ class AnalisisNuevaMenor {
     this.objParentescoIdReferencia2,
     this.resultadoVerificacion2,
     this.objEmpleadoVerificaReferenciaId2,
-    this.usuarioCreacion,
-    this.fechaCreacion,
-    this.maquinaCreacion,
-    this.usuarioModificacion,
-    this.fechaModificacion,
-    this.maquinaModificacion,
   });
 
   factory AnalisisNuevaMenor.fromJson(Map<String, dynamic> json) =>
@@ -243,18 +231,26 @@ class AnalisisNuevaMenor {
         nombreInstitucionRuc: json['NombreInstitucionRUC'],
         fechaEmisionRuc: json['FechaEmisionRUC'] == null
             ? null
-            : DateTime.parse(json['FechaEmisionRUC']),
+            : DateTime.tryParse(json['FechaEmisionRUC']),
         fechaVencimientoRuc: json['FechaVencimientoRUC'] == null
             ? null
-            : DateTime.parse(json['FechaVencimientoRUC']),
+            : DateTime.tryParse(json['FechaVencimientoRUC']),
         numeroMatricula: json['NumeroMatricula'],
         nombreInstitucionMatricula: json['NombreInstitucionMatricula'],
-        fechaEmisionMatricula: json['FechaEmisionMatricula'],
-        fechaVencimientoMatricula: json['FechaVencimientoMatricula'],
+        fechaEmisionMatricula: json['FechaEmisionMatricula'] == null
+            ? null
+            : DateTime.tryParse(json['FechaEmisionMatricula']),
+        fechaVencimientoMatricula: json['FechaVencimientoMatricula'] == null
+            ? null
+            : DateTime.tryParse(json['FechaVencimientoMatricula']),
         numeroLicencia: json['NumeroLicencia'],
         nombreInstitucionLicencia: json['NombreInstitucionLicencia'],
-        fechaEmisionLicencia: json['FechaEmisionLicencia'],
-        fechaVencimientoLicencia: json['FechaVencimientoLicencia'],
+        fechaEmisionLicencia: json['FechaEmisionLicencia'] == null
+            ? null
+            : DateTime.tryParse(json['FechaEmisionLicencia']),
+        fechaVencimientoLicencia: json['FechaVencimientoLicencia'] == null
+            ? null
+            : DateTime.tryParse(json['FechaVencimientoLicencia']),
         ingresoAnual: json['IngresoAnual'],
         cliente1: json['Cliente1'],
         cliente2: json['Cliente2'],
@@ -264,7 +260,7 @@ class AnalisisNuevaMenor {
         proveedor3: json['Proveedor3'],
         fechaVerificacion1: json['FechaVerificacion1'] == null
             ? null
-            : DateTime.parse(json['FechaVerificacion1']),
+            : DateTime.tryParse(json['FechaVerificacion1']),
         nombreReferencia1: json['NombreReferencia1'],
         cedulaReferencia1: json['CedulaReferencia1'],
         direccionReferencia1: json['DireccionReferencia1'],
@@ -277,7 +273,7 @@ class AnalisisNuevaMenor {
             json['objEmpleadoVerificaReferenciaID1'],
         fechaVerificacion2: json['FechaVerificacion2'] == null
             ? null
-            : DateTime.parse(json['FechaVerificacion2']),
+            : DateTime.tryParse(json['FechaVerificacion2']),
         nombreReferencia2: json['NombreReferencia2'],
         cedulaReferencia2: json['CedulaReferencia2'],
         direccionReferencia2: json['DireccionReferencia2'],
@@ -288,21 +284,13 @@ class AnalisisNuevaMenor {
         resultadoVerificacion2: json['ResultadoVerificacion2'],
         objEmpleadoVerificaReferenciaId2:
             json['objEmpleadoVerificaReferenciaID2'],
-        usuarioCreacion: json['UsuarioCreacion'],
-        fechaCreacion: json['FechaCreacion'] == null
-            ? null
-            : DateTime.parse(json['FechaCreacion']),
-        maquinaCreacion: json['MaquinaCreacion'],
-        usuarioModificacion: json['UsuarioModificacion'],
-        fechaModificacion: json['FechaModificacion'],
-        maquinaModificacion: json['MaquinaModificacion'],
       );
 
   Map<String, dynamic> toJson() => {
-        'ID': id,
+        'ID': int.tryParse(id ?? '0'),
         'objSolicitudID': objSolicitudId,
         'NumeroSolicitud': numeroSolicitud,
-        'FechaAnalisis': fechaAnalisis?.toIso8601String(),
+        'FechaAnalisis': fechaAnalisis?.toUtc().toIso8601String(),
         'Caja': caja,
         'Banco': banco,
         'CuentasXCobrar': cuentasXCobrar,
@@ -331,16 +319,19 @@ class AnalisisNuevaMenor {
         'DPP': dpp,
         'NumeroRUC': numeroRuc,
         'NombreInstitucionRUC': nombreInstitucionRuc,
-        'FechaEmisionRUC': fechaEmisionRuc,
-        'FechaVencimientoRUC': fechaVencimientoRuc,
+        'FechaEmisionRUC': fechaEmisionRuc?.toUtc().toIso8601String(),
+        'FechaVencimientoRUC': fechaVencimientoRuc?.toUtc().toIso8601String(),
         'NumeroMatricula': numeroMatricula,
         'NombreInstitucionMatricula': nombreInstitucionMatricula,
-        'FechaEmisionMatricula': fechaEmisionMatricula,
-        'FechaVencimientoMatricula': fechaVencimientoMatricula,
+        'FechaEmisionMatricula':
+            fechaEmisionMatricula?.toUtc().toIso8601String(),
+        'FechaVencimientoMatricula':
+            fechaVencimientoMatricula?.toUtc().toIso8601String(),
         'NumeroLicencia': numeroLicencia,
         'NombreInstitucionLicencia': nombreInstitucionLicencia,
-        'FechaEmisionLicencia': fechaEmisionLicencia,
-        'FechaVencimientoLicencia': fechaVencimientoLicencia,
+        'FechaEmisionLicencia': fechaEmisionLicencia?.toUtc().toIso8601String(),
+        'FechaVencimientoLicencia':
+            fechaVencimientoLicencia?.toUtc().toIso8601String(),
         'IngresoAnual': ingresoAnual,
         'Cliente1': cliente1,
         'Cliente2': cliente2,
@@ -348,7 +339,7 @@ class AnalisisNuevaMenor {
         'Proveedor1': proveedor1,
         'Proveedor2': proveedor2,
         'Proveedor3': proveedor3,
-        'FechaVerificacion1': fechaVerificacion1?.toIso8601String(),
+        'FechaVerificacion1': fechaVerificacion1?.toUtc().toIso8601String(),
         'NombreReferencia1': nombreReferencia1,
         'CedulaReferencia1': cedulaReferencia1,
         'DireccionReferencia1': direccionReferencia1,
@@ -357,8 +348,7 @@ class AnalisisNuevaMenor {
         'AniosConocerReferido1': aniosConocerReferido1,
         'objParentescoIDReferencia1': objParentescoIdReferencia1,
         'ResultadoVerificacion1': resultadoVerificacion1,
-        'objEmpleadoVerificaReferenciaID1': objEmpleadoVerificaReferenciaId1,
-        'FechaVerificacion2': fechaVerificacion2?.toIso8601String(),
+        'FechaVerificacion2': fechaVerificacion2?.toUtc().toIso8601String(),
         'NombreReferencia2': nombreReferencia2,
         'CedulaReferencia2': cedulaReferencia2,
         'DireccionReferencia2': direccionReferencia2,
@@ -367,9 +357,6 @@ class AnalisisNuevaMenor {
         'AniosConocerReferido2': aniosConocerReferido2,
         'objParentescoIDReferencia2': objParentescoIdReferencia2,
         'ResultadoVerificacion2': resultadoVerificacion2,
-        'objEmpleadoVerificaReferenciaID2': objEmpleadoVerificaReferenciaId2,
-        'UsuarioCreacion': usuarioCreacion,
-        'FechaCreacion': fechaCreacion?.toIso8601String(),
       };
   AnalisisNuevaMenor.empty({
     this.id,
@@ -441,12 +428,6 @@ class AnalisisNuevaMenor {
     this.objParentescoIdReferencia2,
     this.resultadoVerificacion2,
     this.objEmpleadoVerificaReferenciaId2,
-    this.usuarioCreacion,
-    this.fechaCreacion,
-    this.maquinaCreacion,
-    this.usuarioModificacion,
-    this.fechaModificacion,
-    this.maquinaModificacion,
   });
 }
 
@@ -457,10 +438,10 @@ class NuevaMenorTipoInventario {
   DateTime? fecha;
   int? cantidad;
   String? articulo;
-  int? costoCompra;
-  int? precioVenta;
+  num? costoCompra;
+  num? precioVenta;
   double? costoVentaPorcentaje;
-  int? total;
+  num? total;
 
   NuevaMenorTipoInventario({
     this.id,

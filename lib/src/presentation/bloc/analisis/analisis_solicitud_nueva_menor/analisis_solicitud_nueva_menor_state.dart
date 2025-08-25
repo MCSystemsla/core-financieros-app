@@ -2,6 +2,7 @@
 part of 'analisis_solicitud_nueva_menor_cubit.dart';
 
 class AnalisisSolicitudNuevaMenorState extends Equatable {
+  final List<NuevaMenorTipoInventario> inventarioList;
   final Status status;
   final String errorMessage;
   final String id;
@@ -33,7 +34,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
   final num margenBrutoNegocio;
   final num disponidadFamiliar;
   final num dppPorcentaje;
-  final double dpp;
+  final num dpp;
   final String numeroRuc;
   final String nombreInstitucionRuc;
   final String fechaEmisionRuc;
@@ -74,6 +75,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
   final String resultadoVerificacion2;
   final String objEmpleadoVerificaReferenciaId2;
   const AnalisisSolicitudNuevaMenorState({
+    this.inventarioList = const [],
     this.status = Status.notStarted,
     this.errorMessage = '',
     this.id = '',
@@ -149,6 +151,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
 
   @override
   List<Object> get props => [
+        inventarioList,
         status,
         errorMessage,
         id,
@@ -223,6 +226,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
       ];
 
   AnalisisSolicitudNuevaMenorState copyWith({
+    List<NuevaMenorTipoInventario>? inventarioList,
     Status? status,
     String? errorMessage,
     String? id,
@@ -254,7 +258,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
     num? margenBrutoNegocio,
     num? disponidadFamiliar,
     num? dppPorcentaje,
-    double? dpp,
+    num? dpp,
     String? numeroRuc,
     String? nombreInstitucionRuc,
     String? fechaEmisionRuc,
@@ -296,6 +300,7 @@ class AnalisisSolicitudNuevaMenorState extends Equatable {
     String? objEmpleadoVerificaReferenciaId2,
   }) {
     return AnalisisSolicitudNuevaMenorState(
+      inventarioList: inventarioList ?? this.inventarioList,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       id: id ?? this.id,

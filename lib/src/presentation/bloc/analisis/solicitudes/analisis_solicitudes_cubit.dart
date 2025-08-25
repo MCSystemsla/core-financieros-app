@@ -26,9 +26,8 @@ class AnalisisSolicitudesCubit extends Cubit<AnalisisSolicitudesState> {
       emit(state.copyWith(status: Status.done, data: solicitudes.data));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
-    (e) {
-      emit(state.copyWith());
-    };
   }
 }

@@ -1,5 +1,7 @@
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/inventario/nueva_inventario.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
@@ -30,6 +32,10 @@ class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            NuevaInventario(
+              totalInventario:
+                  (widget.solicitud.data.analisis?.inventario?.toInt()) ?? 0,
+            ),
             ExpansionTitleCustom(
               title: Text(
                 'Balance General Expresado en cordobas',
@@ -105,6 +111,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.ventasContado.toCurrencyString(),
           title: 'Ventas de contado:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -116,6 +125,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.recuperaciones.toCurrencyString(),
           title: 'Recuperaciones:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -129,6 +141,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.totalIngresos.toCurrencyString(),
           title: 'Total ingresos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -142,6 +157,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.costoVenta.toCurrencyString(),
           title: 'Costo de Ventas:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -155,6 +173,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.gastosOperativos.toCurrencyString(),
           title: 'Gastos operativos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -168,6 +189,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.margenBrutoNegocio.toCurrencyString(),
           title: 'Margen bruto del negocio:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -181,6 +205,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.otrosIngresos.toCurrencyString(),
           title: 'Otros ingresos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -194,6 +221,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.gastosUnidadFamiliar.toCurrencyString(),
           title: 'Gasto unidad familiar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -207,6 +237,9 @@ class _EstadoResultado extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.disponidadFamiliar.toCurrencyString(),
           title: 'Disponibilidad U.Familiar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -221,6 +254,9 @@ class _EstadoResultado extends StatelessWidget {
           initialValue: cubit.dpp.toCurrencyString(),
           title: 'D.P.P: (${cubit.dppPorcentaje}%)',
           icon: const Icon(Icons.person_3_sharp),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
               final newValue = double.tryParse(value.replaceAll(',', '')) ?? 0;
@@ -252,6 +288,9 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.proveedores.toCurrencyString(),
           title: 'Proveedores:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -263,6 +302,9 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.cuentasXPagar.toCurrencyString(),
           title: 'Cuentas por pagar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.account_balance_wallet),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -274,6 +316,9 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.otrasDeudas.toCurrencyString(),
           title: 'Otras deudas:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.pending),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -285,6 +330,9 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
         OutlineTextfieldWidget(
           initialValue: cubit.totalPasivo.toCurrencyString(),
           title: 'Total pasivos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.monetization_on),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -297,6 +345,9 @@ class _PasivosAnalisisWidgetsForm extends StatelessWidget {
           initialValue: cubit.capital.toCurrencyString(),
           title: 'Capital:',
           icon: const Icon(Icons.money),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
               final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
@@ -338,6 +389,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
       children: [
         OutlineTextfieldWidget(
           initialValue: cubit.caja.toCurrencyString(),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           key: const Key('Caja'),
           title: 'Caja:',
           icon: const Icon(Icons.account_balance_wallet),
@@ -351,6 +405,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
         OutlineTextfieldWidget(
           initialValue: cubit.banco.toCurrencyString(),
           title: 'Banco:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.account_balance),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -362,6 +419,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
         OutlineTextfieldWidget(
           initialValue: cubit.cuentasXCobrar.toCurrencyString(),
           title: 'Cuentas por cobrar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.monetization_on),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -371,19 +431,11 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
           ),
         ),
         OutlineTextfieldWidget(
-          initialValue: cubit.inventario.toCurrencyString(),
-          title: 'Inventario:',
-          icon: const Icon(Icons.inventory),
-          onChange: (value) => onFieldChanged.onFieldChanged(
-            () {
-              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
-              return onFieldChanged.state.copyWith(inventario: newValue);
-            },
-          ),
-        ),
-        OutlineTextfieldWidget(
           initialValue: cubit.otrosActivos.toCurrencyString(),
           title: 'Otros Activos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.monetization_on),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -395,6 +447,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
         OutlineTextfieldWidget(
           initialValue: cubit.totalAc.toCurrencyString(),
           title: 'Total activos circulantes:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.money),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -406,6 +461,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
         OutlineTextfieldWidget(
           initialValue: cubit.activoFijo.toCurrencyString(),
           title: 'Activos fijo:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.access_time),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -418,6 +476,9 @@ class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
           readOnly: true,
           initialValue: cubit.totalActivo.toCurrencyString(),
           title: 'Total Activo:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           icon: const Icon(Icons.call_to_action_outlined),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
