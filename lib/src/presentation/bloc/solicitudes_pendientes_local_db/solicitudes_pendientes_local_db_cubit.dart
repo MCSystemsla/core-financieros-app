@@ -80,6 +80,15 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<void> deleteAllSolicitudes() async {
+    await state.isar?.writeTxnSync(() async {
+      return [
+        state.isar?.estandarDbLocals.clearSync(),
+        state.isar?.recurrenteEstandarDbLocals.clearSync(),
+      ];
+    });
+  }
+
   Future<void> saveSolicitudesPendientes(
       {required List<SolicitudesPendientes> solicitudes}) async {
     emit(state.copyWith(status: Status.inProgress));

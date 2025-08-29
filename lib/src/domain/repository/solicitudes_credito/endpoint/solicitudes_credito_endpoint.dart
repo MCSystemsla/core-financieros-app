@@ -333,6 +333,26 @@ class ReprestamoObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
       };
 }
 
+class ObtenerSolciitudesPorAsesorEndpoint extends Endpoint {
+  ObtenerSolciitudesPorAsesorEndpoint();
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/solicitudes/obtener-solicitud-por-asesor';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo':
+            '${EstadoCredito.asignada.codigo},${EstadoCredito.enRevision.codigo}',
+        'OficialCreditoAsignado': true.toString(),
+      };
+}
+
 class ObtenerAsesoresEndpoint extends Endpoint {
   ObtenerAsesoresEndpoint();
   @override

@@ -152,6 +152,7 @@ class _AnalisisFormsPageViewState extends State<AnalisisFormsPageView>
         AnalisisFormSolicitud(
           pageController: widget.pageController,
           solicitud: widget.solicitud,
+          numeroSolicitud: widget.numeroSolicitud,
         ),
         ConstanciaYCreditosAnalisis(
           pageController: widget.pageController,

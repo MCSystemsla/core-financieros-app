@@ -130,8 +130,12 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                       ),
                       const Gap(10),
                       CommentaryWidget(
-                          readOnly: true,
-                          title: 'forms.entorno_familiar.person_origin'.tr()),
+                        readOnly: true,
+                        title: 'forms.entorno_familiar.person_origin'.tr(),
+                        initialValue: state
+                                .saneamientoDbLocal?.objOrigenCatalogoValorId ??
+                            'N/A',
+                      ),
                       const Gap(10),
                       CommentaryWidget(
                         readOnly: true,
@@ -139,19 +143,6 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                         initialValue:
                             state.saneamientoDbLocal?.numeroHijos.toString() ??
                                 '0',
-                      ),
-                      const Gap(10),
-                      CommentaryWidget(
-                          readOnly: true,
-                          title: 'forms.entorno_familiar.childs_age'.tr(),
-                          initialValue:
-                              state.saneamientoDbLocal?.edadHijos ?? 'N/A'),
-                      const Gap(10),
-                      CommentaryWidget(
-                        readOnly: true,
-                        initialValue:
-                            state.saneamientoDbLocal?.tipoEstudioHijos ?? 'N/A',
-                        title: '¿Qué tipo de estudios reciben sus hijos?',
                       ),
                       const Gap(15),
                       CommentaryWidget(

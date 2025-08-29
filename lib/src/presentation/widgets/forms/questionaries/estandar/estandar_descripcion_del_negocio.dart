@@ -104,9 +104,7 @@ class _EstandarDescripciondelNegocioState
 
                         return null;
                       },
-                      title:
-                          '¿Hay alguien que le apoye en su negocio? de ser positivo,?'
-                              .tr(),
+                      title: '¿Hay alguien que le apoye en su negocio?'.tr(),
                       items: ['input.yes'.tr(), 'input.no'.tr()],
                       onChanged: (item) {
                         if (item == null) return;

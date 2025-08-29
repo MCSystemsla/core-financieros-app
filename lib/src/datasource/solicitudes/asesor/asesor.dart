@@ -24,15 +24,15 @@ class Asesor {
 class AsesorData {
   int id;
   String nombre;
-  String email;
-  String imei;
+  String? email;
+  String? imei;
   String objUsuarioId;
 
   AsesorData({
     required this.id,
     required this.nombre,
-    required this.email,
-    required this.imei,
+    this.email,
+    this.imei,
     required this.objUsuarioId,
   });
 

@@ -7,10 +7,12 @@ import 'package:gap/gap.dart';
 
 class NuevaInventario extends StatelessWidget {
   final int totalInventario;
+  final String numeroSolicitud;
 
   const NuevaInventario({
     super.key,
     required this.totalInventario,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -34,6 +36,7 @@ class NuevaInventario extends StatelessWidget {
                     value: context.read<AnalisisSolicitudNuevaMenorCubit>(),
                     child: NuevaInventarioWidget(
                       totalInventario: totalInventario,
+                      numeroSolicitud: numeroSolicitud,
                     ),
                   ),
                 ),
@@ -72,7 +75,7 @@ class NuevaInventario extends StatelessWidget {
                       ),
                       _buildItem(
                         icon: Icons.production_quantity_limits,
-                        label: 'Inventario totlal:',
+                        label: 'Inventario total:',
                         value: totalInventario,
                         color: Colors.green,
                       ),

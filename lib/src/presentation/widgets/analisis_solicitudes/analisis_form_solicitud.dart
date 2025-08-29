@@ -13,10 +13,12 @@ import 'package:gap/gap.dart';
 class AnalisisFormSolicitud extends StatefulWidget {
   final PageController pageController;
   final AnalisisSolicitudNuevaMenorResponse solicitud;
+  final String numeroSolicitud;
   const AnalisisFormSolicitud({
     super.key,
     required this.pageController,
     required this.solicitud,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -35,6 +37,7 @@ class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud> {
             NuevaInventario(
               totalInventario:
                   (widget.solicitud.data.analisis?.inventario?.toInt()) ?? 0,
+              numeroSolicitud: widget.numeroSolicitud,
             ),
             ExpansionTitleCustom(
               title: Text(

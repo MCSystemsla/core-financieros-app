@@ -23,7 +23,7 @@ class AnalisisSolicitudNuevaMenorCubit
         isAnalisisAreCreated: isAnalisisAreCreated,
         numeroSolicitud: numeroSolicitud,
         analisisSolicitudNuevaMenor: AnalisisNuevaMenorData(
-          inventario: [],
+          inventario: state.inventarioList,
           analisis: AnalisisNuevaMenor(
             id: state.id,
             objSolicitudId: state.objSolicitudId,
@@ -110,6 +110,18 @@ class AnalisisSolicitudNuevaMenorCubit
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMessage: e.toString()));
     }
+  }
+
+  deleteInventarioItem({required String id}) {
+    final updatedList = List.of(state.inventarioList)
+      ..removeWhere((e) => e.id == id);
+    emit(state.copyWith(inventarioList: updatedList));
+  }
+
+  createInventarioItem({required NuevaMenorTipoInventario item}) {
+    emit(state.copyWith(
+      inventarioList: [...state.inventarioList, item],
+    ));
   }
 
   void initializeFields({
