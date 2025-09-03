@@ -28,4 +28,8 @@ class BiometricCubit extends Cubit<BiometricState> {
   void _navigateToBiometricAuthScreen(BuildContext context) {
     context.pushTransparentRoute(const BiometricNeedAuthScreen());
   }
+
+  void deactivateBiometricAuth() {
+    emit(state.copyWith(isAuthenticated: false));
+  }
 }

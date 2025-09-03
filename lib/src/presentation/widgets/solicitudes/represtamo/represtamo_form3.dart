@@ -48,11 +48,28 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
   String? cuota;
   String? observacion;
   DateTime? fechaPrimerPago;
-  DateTime? fechaDesembolso;
+  DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
   int? montoMinimo;
   double? montoMaximo;
   final formKey = GlobalKey<FormState>();
+
+  final List<DateTime> holidays = [
+    DateTime(2025, 1, 1), // Año Nuevo
+    DateTime(2025, 4, 17), // Jueves Santo
+    DateTime(2025, 4, 18), // Viernes Santo
+    DateTime(2025, 5, 1), // Día del Trabajo
+    DateTime(2025, 5, 30), // Día de la Madre
+    DateTime(2025, 7, 19), // Revolución
+    DateTime(2025, 9, 14), // Batalla de San Jacinto
+    DateTime(2025, 9, 15), // Independencia
+    DateTime(2025, 12, 8), // Inmaculada Concepción
+    DateTime(2025, 12, 25), // Navidad
+  ];
+  bool _isHoliday(DateTime date) {
+    return holidays.any((h) =>
+        h.year == date.year && h.month == date.month && h.day == date.day);
+  }
 
   @override
   void initState() {
@@ -72,11 +89,16 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+      selectableDayPredicate: (day) {
+        if (day.weekday == DateTime.sunday) return false;
+        if (_isHoliday(day)) return false;
+        return true;
+      },
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
 
-      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+      if (picked.isAtSameMomentAs(fechaDesembolso)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -105,6 +127,11 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+      selectableDayPredicate: (day) {
+        if (day.weekday == DateTime.sunday) return false;
+        if (_isHoliday(day)) return false;
+        return true;
+      },
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
@@ -129,7 +156,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
 
       context.read<SolicitudReprestamoCubit>().onFieldChanged(
             () => context.read<SolicitudReprestamoCubit>().state.copyWith(
-                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                  fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -171,17 +198,15 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             OutlineTextfieldWidget(
-              initialValue: fechaDesembolso?.selectorFormat(),
               readOnly: true,
               icon: Icon(
                 Icons.price_change,
                 color: AppColors.getPrimaryColor(),
               ),
               title: 'Fecha Desembolso',
-              hintText: fechaDesembolso?.selectorFormat() ??
-                  'Ingresar fecha desembolso',
+              hintText: fechaDesembolso.selectorFormat(),
               validator: (value) => ClassValidator.validateRequired(
-                  fechaDesembolso?.selectorFormat()),
+                  fechaDesembolso.selectorFormat()),
               isValid: null,
               onTap: () => selectFechaDesembolso(context),
             ),
@@ -363,7 +388,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     return;
                   }
                   calcularCuotaProvider.calcularCantidadCuotas(
-                    fechaDesembolso: fechaDesembolso!,
+                    fechaDesembolso: fechaDesembolso,
                     fechaPrimeraCuota: fechaPrimerPago!,
                     plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
                     frecuenciaPago: frecuenciaDePago?.meses ?? '0',

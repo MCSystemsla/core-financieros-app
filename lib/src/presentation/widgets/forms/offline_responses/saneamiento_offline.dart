@@ -65,7 +65,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -87,6 +87,7 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -226,93 +227,104 @@ class _AguaSaneamientoOfflineState extends State<AguaSaneamientoOffline> {
                                 'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context
-                              .read<AguaYSaneamientoCubit>()
-                              .sendOfflineAnswers(
-                                aguaSaneamientoModel: AguaSaneamientoModel(
-                                  tipoSolicitud:
-                                      state.saneamientoDbLocal?.tipoSolicitud ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<AguaYSaneamientoCubit>()
+                                  .sendOfflineAnswers(
+                                    aguaSaneamientoModel: AguaSaneamientoModel(
+                                      tipoSolicitud: state.saneamientoDbLocal
+                                              ?.tipoSolicitud ??
                                           '',
-                                  database:
-                                      state.saneamientoDbLocal?.database ?? '',
-                                  objSolicitudNuevamenorId: state
-                                          .saneamientoDbLocal
-                                          ?.objSolicitudNuevamenorId ??
-                                      0,
-                                  tieneTrabajo:
-                                      state.saneamientoDbLocal?.tieneTrabajo ??
-                                          false,
-                                  trabajoNegocioDescripcion: state
-                                          .saneamientoDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state.saneamientoDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos:
-                                      state.saneamientoDbLocal?.otrosIngresos ??
-                                          false,
-                                  otrosIngresosDescripcion: state
-                                          .saneamientoDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objOrigenCatalogoValorId: state
-                                          .saneamientoDbLocal
-                                          ?.objOrigenCatalogoValorId ??
-                                      '',
-                                  personasCargo:
-                                      state.saneamientoDbLocal?.personasCargo ??
-                                          '',
-                                  numeroHijos:
-                                      state.saneamientoDbLocal?.numeroHijos ??
+                                      database:
+                                          state.saneamientoDbLocal?.database ??
+                                              '',
+                                      objSolicitudNuevamenorId: state
+                                              .saneamientoDbLocal
+                                              ?.objSolicitudNuevamenorId ??
                                           0,
-                                  edadHijos:
-                                      state.saneamientoDbLocal?.edadHijos ?? '',
-                                  tipoEstudioHijos: state.saneamientoDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivacionCredito: state.saneamientoDbLocal
-                                          ?.motivacionCredito ??
-                                      '',
-                                  importanciaMejorarCondiciones: state
-                                          .saneamientoDbLocal
-                                          ?.importanciaMejorarCondiciones ??
-                                      '',
-                                  cumpliriaPropuesta: state.saneamientoDbLocal
-                                          ?.cumpliriaPropuesta ??
-                                      false,
-                                  explicacionCumpliriaPropuesta: state
-                                          .saneamientoDbLocal
-                                          ?.explicacionCumpliriaPropuesta ??
-                                      '',
-                                  motivoPrestamo: state
-                                          .saneamientoDbLocal?.motivoPrestamo ??
-                                      '',
-                                  mejoraCalidadVida: state.saneamientoDbLocal
-                                          ?.mejoraCalidadVida ??
-                                      '',
-                                  siguienteProyectoCalidadVida: state
-                                          .saneamientoDbLocal
-                                          ?.siguienteProyectoCalidadVida ??
-                                      '',
-                                  metasProximas:
-                                      state.saneamientoDbLocal?.metasProximas ??
+                                      tieneTrabajo: state.saneamientoDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .saneamientoDbLocal
+                                              ?.trabajoNegocioDescripcion ??
                                           '',
-                                  otrosDatosCliente: state.saneamientoDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
+                                      tiempoActividad: state.saneamientoDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state.saneamientoDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .saneamientoDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objOrigenCatalogoValorId: state
+                                              .saneamientoDbLocal
+                                              ?.objOrigenCatalogoValorId ??
+                                          '',
+                                      personasCargo: state.saneamientoDbLocal
+                                              ?.personasCargo ??
+                                          '',
+                                      numeroHijos: state.saneamientoDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos:
+                                          state.saneamientoDbLocal?.edadHijos ??
+                                              '',
+                                      tipoEstudioHijos: state.saneamientoDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivacionCredito: state
+                                              .saneamientoDbLocal
+                                              ?.motivacionCredito ??
+                                          '',
+                                      importanciaMejorarCondiciones: state
+                                              .saneamientoDbLocal
+                                              ?.importanciaMejorarCondiciones ??
+                                          '',
+                                      cumpliriaPropuesta: state
+                                              .saneamientoDbLocal
+                                              ?.cumpliriaPropuesta ??
+                                          false,
+                                      explicacionCumpliriaPropuesta: state
+                                              .saneamientoDbLocal
+                                              ?.explicacionCumpliriaPropuesta ??
+                                          '',
+                                      motivoPrestamo: state.saneamientoDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      mejoraCalidadVida: state
+                                              .saneamientoDbLocal
+                                              ?.mejoraCalidadVida ??
+                                          '',
+                                      siguienteProyectoCalidadVida: state
+                                              .saneamientoDbLocal
+                                              ?.siguienteProyectoCalidadVida ??
+                                          '',
+                                      metasProximas: state.saneamientoDbLocal
+                                              ?.metasProximas ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .saneamientoDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -374,7 +386,7 @@ class _RecurrenteSaneamientoOfflineState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (resp.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -396,6 +408,7 @@ class _RecurrenteSaneamientoOfflineState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -532,108 +545,116 @@ class _RecurrenteSaneamientoOfflineState
                                 'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteAguaYSaneamientoCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrenteAguaSaniamientoModel:
+                                        RecurrenteAguaSaneamientoModel(
+                                      tipoSolicitud: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      database: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.database ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      personasCargo: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.personasCargo ??
+                                          '',
+                                      numeroHijos: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      coincideRespuesta: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.explicacionInversion ??
+                                          '',
+                                      comoAyudoCondiciones: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.comoAyudoCondiciones ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      comoMejoraCondicionesEntorno: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.comoMejoraCondicionesEntorno ??
+                                          '',
+                                      quienApoya: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      siguientePaso: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.siguientePaso ??
+                                          '',
+                                      alcanzaraMeta: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.alcanzaraMeta ??
+                                          false,
+                                      explicacionAlcanzaraMeta: state
+                                              .recurrenteSaneamientoDbLocal
+                                              ?.explicacionAlcanzaraMeta ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteAguaYSaneamientoCubit>()
-                              .sendOfflineAnswers(
-                                recurrenteAguaSaniamientoModel:
-                                    RecurrenteAguaSaneamientoModel(
-                                  tipoSolicitud: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  database: state.recurrenteSaneamientoDbLocal
-                                          ?.database ??
-                                      '',
-                                  tieneTrabajo: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.personasCargo ??
-                                      '',
-                                  numeroHijos: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state.recurrenteSaneamientoDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  otrosDatosCliente: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  coincideRespuesta: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.explicacionInversion ??
-                                      '',
-                                  comoAyudoCondiciones: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.comoAyudoCondiciones ??
-                                      '',
-                                  motivoPrestamo: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  comoMejoraCondicionesEntorno: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.comoMejoraCondicionesEntorno ??
-                                      '',
-                                  quienApoya: state.recurrenteSaneamientoDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  siguientePaso: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.siguientePaso ??
-                                      '',
-                                  alcanzaraMeta: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.alcanzaraMeta ??
-                                      false,
-                                  explicacionAlcanzaraMeta: state
-                                          .recurrenteSaneamientoDbLocal
-                                          ?.explicacionAlcanzaraMeta ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

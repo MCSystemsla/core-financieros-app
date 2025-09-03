@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,10 @@ class LogOutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.read<AuthCubit>().logOut(context: context),
+      onTap: () {
+        context.read<InternetConnectionCubit>().getInternetStatusConnection();
+        context.read<AuthCubit>().logOut(context: context);
+      },
       child: Container(
         height: 50,
         width: 50,

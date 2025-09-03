@@ -68,7 +68,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (state.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -247,92 +247,107 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                             'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: resp.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteEstandartCubit>()
-                              .sendOfflineAnswers(
-                                  recurrentEstandarModel:
-                                      RecurrenteEstandarModel(
-                                tipoSolicitud: resp.recurrenteEstandarDbLocal
-                                        ?.tipoSolicitud ??
-                                    '',
-                                tiempoActividad: resp.recurrenteEstandarDbLocal
-                                        ?.tiempoActividad ??
-                                    0,
-                                tieneTrabajo: resp.recurrenteEstandarDbLocal
-                                        ?.tieneTrabajo ??
-                                    false,
-                                trabajoNegocioDescripcion: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.trabajoDescripcion ??
-                                    '',
-                                database:
-                                    resp.recurrenteEstandarDbLocal?.database ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: resp.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteEstandartCubit>()
+                                  .sendOfflineAnswers(
+                                      recurrentEstandarModel:
+                                          RecurrenteEstandarModel(
+                                    tipoSolicitud: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.tipoSolicitud ??
                                         '',
-                                otrosIngresos: resp.recurrenteEstandarDbLocal
-                                        ?.otrosIngresos ??
-                                    false,
-                                otrosIngresosDescripcion: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.otrosIngresosDescripcion ??
-                                    '',
-                                personasCargo: resp.recurrenteEstandarDbLocal
-                                        ?.personasCargo ??
-                                    0,
-                                numeroHijos: resp.recurrenteEstandarDbLocal
-                                        ?.numeroHijos ??
-                                    0,
-                                edadHijos:
-                                    resp.recurrenteEstandarDbLocal?.edadHijos ??
+                                    tiempoActividad: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.tiempoActividad ??
+                                        0,
+                                    tieneTrabajo: resp.recurrenteEstandarDbLocal
+                                            ?.tieneTrabajo ??
+                                        false,
+                                    trabajoNegocioDescripcion: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.trabajoDescripcion ??
                                         '',
-                                tipoEstudioHijos: resp.recurrenteEstandarDbLocal
-                                        ?.tipoEstudioHijos ??
-                                    '',
-                                apoyanNegocio: resp.recurrenteEstandarDbLocal
-                                        ?.apoyanNegocio ??
-                                    false,
-                                cuantosApoyan: resp.recurrenteEstandarDbLocal
-                                        ?.cuantosApoyan ??
-                                    '',
-                                objSolicitudRecurrenteId: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.objSolicitudRecurrenteId ??
-                                    0,
-                                coincideRespuesta: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.coincideRespuesta ??
-                                    false,
-                                explicacionInversion: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.explicacionInversion ??
-                                    '',
-                                comoMejoraEntorno: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.comoMejoraEntorno ??
-                                    '',
-                                motivoPrestamo: resp.recurrenteEstandarDbLocal
-                                        ?.motivoPrestamo ??
-                                    '',
-                                comoFortalece: resp.recurrenteEstandarDbLocal
-                                        ?.comoFortalece ??
-                                    '',
-                                siguientePaso: resp.recurrenteEstandarDbLocal
-                                        ?.siguientePaso ??
-                                    '',
-                                personaAutoSuficiente: resp
-                                        .recurrenteEstandarDbLocal
-                                        ?.personaAutoSuficiente ??
-                                    '',
-                              ));
+                                    database: resp.recurrenteEstandarDbLocal
+                                            ?.database ??
+                                        '',
+                                    otrosIngresos: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.otrosIngresos ??
+                                        false,
+                                    otrosIngresosDescripcion: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.otrosIngresosDescripcion ??
+                                        '',
+                                    personasCargo: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.personasCargo ??
+                                        0,
+                                    numeroHijos: resp.recurrenteEstandarDbLocal
+                                            ?.numeroHijos ??
+                                        0,
+                                    edadHijos: resp.recurrenteEstandarDbLocal
+                                            ?.edadHijos ??
+                                        '',
+                                    tipoEstudioHijos: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.tipoEstudioHijos ??
+                                        '',
+                                    apoyanNegocio: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.apoyanNegocio ??
+                                        false,
+                                    cuantosApoyan: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.cuantosApoyan ??
+                                        '',
+                                    objSolicitudRecurrenteId: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.objSolicitudRecurrenteId ??
+                                        0,
+                                    coincideRespuesta: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.coincideRespuesta ??
+                                        false,
+                                    explicacionInversion: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.explicacionInversion ??
+                                        '',
+                                    comoMejoraEntorno: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.comoMejoraEntorno ??
+                                        '',
+                                    motivoPrestamo: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.motivoPrestamo ??
+                                        '',
+                                    comoFortalece: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.comoFortalece ??
+                                        '',
+                                    siguientePaso: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.siguientePaso ??
+                                        '',
+                                    personaAutoSuficiente: resp
+                                            .recurrenteEstandarDbLocal
+                                            ?.personaAutoSuficiente ??
+                                        '',
+                                  ));
+                            },
+                            previousTitle: 'Salir',
+                            nextTitle: 'Enviar',
+                          );
                         },
-                        previousTitle: 'Salir',
-                        nextTitle: 'Enviar',
                       ),
                     ],
                   ),
@@ -392,7 +407,7 @@ class _EstandarFormState extends State<EstandarForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (stateEstandar.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -414,6 +429,7 @@ class _EstandarFormState extends State<EstandarForm> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -567,85 +583,95 @@ class _EstandarFormState extends State<EstandarForm> {
                         readOnly: true,
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context.read<EstandarCubit>().sendOffilneAnswers(
-                                estandarModel: EstandarModel(
-                                  tipoSolicitud:
-                                      state.estandarDbLocal?.tipoSolicitud ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context.read<EstandarCubit>().sendOffilneAnswers(
+                                    estandarModel: EstandarModel(
+                                      tipoSolicitud: state
+                                              .estandarDbLocal?.tipoSolicitud ??
                                           '',
-                                  tiempoActividad:
-                                      state.estandarDbLocal?.tiempoActividad ??
+                                      tiempoActividad: state.estandarDbLocal
+                                              ?.tiempoActividad ??
                                           0,
-                                  tieneTrabajo:
-                                      state.estandarDbLocal?.tieneTrabajo ??
-                                          false,
-                                  trabajoNegocioDescripcion: state
-                                          .estandarDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  objSolicitudNuevamenorId: state
-                                          .estandarDbLocal
-                                          ?.objSolicitudNuevamenorId ??
-                                      0,
-                                  database:
-                                      state.estandarDbLocal?.database ?? '',
-                                  otrosIngresos:
-                                      state.estandarDbLocal?.otrosIngresos ??
-                                          false,
-                                  otrosIngresosDescripcion: state
-                                          .estandarDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objOrigenCatalogoValorId: state
-                                          .estandarDbLocal
-                                          ?.objOrigenCatalogoValorId ??
-                                      '',
-                                  personasCargo:
-                                      state.estandarDbLocal?.personasCargo ?? 0,
-                                  numeroHijos:
-                                      state.estandarDbLocal?.numeroHijos ?? 0,
-                                  edadHijos:
-                                      state.estandarDbLocal?.edadHijos ?? '',
-                                  tipoEstudioHijos:
-                                      state.estandarDbLocal?.tipoEstudioHijos ??
+                                      tieneTrabajo:
+                                          state.estandarDbLocal?.tieneTrabajo ??
+                                              false,
+                                      trabajoNegocioDescripcion: state
+                                              .estandarDbLocal
+                                              ?.trabajoNegocioDescripcion ??
                                           '',
-                                  inicioNegocio:
-                                      state.estandarDbLocal?.inicioNegocio ??
+                                      objSolicitudNuevamenorId: state
+                                              .estandarDbLocal
+                                              ?.objSolicitudNuevamenorId ??
+                                          0,
+                                      database:
+                                          state.estandarDbLocal?.database ?? '',
+                                      otrosIngresos: state
+                                              .estandarDbLocal?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .estandarDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objOrigenCatalogoValorId: state
+                                              .estandarDbLocal
+                                              ?.objOrigenCatalogoValorId ??
+                                          '',
+                                      personasCargo: state
+                                              .estandarDbLocal?.personasCargo ??
+                                          0,
+                                      numeroHijos:
+                                          state.estandarDbLocal?.numeroHijos ??
+                                              0,
+                                      edadHijos:
+                                          state.estandarDbLocal?.edadHijos ??
+                                              '',
+                                      tipoEstudioHijos: state.estandarDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      inicioNegocio: state
+                                              .estandarDbLocal?.inicioNegocio ??
                                           DateTime.now(),
-                                  apoyanNegocio:
-                                      state.estandarDbLocal?.apoyanNegocio ??
+                                      apoyanNegocio: state
+                                              .estandarDbLocal?.apoyanNegocio ??
                                           false,
-                                  cuantosApoyan:
-                                      state.estandarDbLocal?.cuantosApoyan ??
+                                      cuantosApoyan: state
+                                              .estandarDbLocal?.cuantosApoyan ??
                                           '',
-                                  publicitarNegocio: state
-                                          .estandarDbLocal?.publicitarNegocio ??
-                                      '',
-                                  negocioProximosAnios: state.estandarDbLocal
-                                          ?.negocioProximosAnios ??
-                                      '',
-                                  motivoPrestamo:
-                                      state.estandarDbLocal?.motivoPrestamo ??
+                                      publicitarNegocio: state.estandarDbLocal
+                                              ?.publicitarNegocio ??
                                           '',
-                                  comoMejoraVida:
-                                      state.estandarDbLocal?.comoMejoraVida ??
+                                      negocioProximosAnios: state
+                                              .estandarDbLocal
+                                              ?.negocioProximosAnios ??
                                           '',
-                                  planesFuturo:
-                                      state.estandarDbLocal?.planesFuturo ?? '',
-                                  otrosDatosCliente: state
-                                          .estandarDbLocal?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
+                                      motivoPrestamo: state.estandarDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      comoMejoraVida: state.estandarDbLocal
+                                              ?.comoMejoraVida ??
+                                          '',
+                                      planesFuturo:
+                                          state.estandarDbLocal?.planesFuturo ??
+                                              '',
+                                      otrosDatosCliente: state.estandarDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir',
+                            nextTitle: 'Enviar',
+                          );
                         },
-                        previousTitle: 'Salir',
-                        nextTitle: 'Enviar',
                       ),
                     ],
                   ),

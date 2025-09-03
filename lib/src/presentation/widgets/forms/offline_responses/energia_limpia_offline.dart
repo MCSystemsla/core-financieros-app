@@ -65,7 +65,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -87,6 +87,7 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -194,83 +195,94 @@ class _EnergiaLImpiaOfflineState extends State<EnergiaLImpiaOffline> {
                                 'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context.read<EnergiaLimpiaCubit>().sendOfflineAnswers(
-                                energiaLimpia: EnergiaLimpiaModel(
-                                  tipoSolicitud: state.energiaLimpiaDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  problemasEnergiaDescripcion: state
-                                          .energiaLimpiaDbLocal
-                                          ?.problemasEnergiaDescripcion ??
-                                      '',
-                                  database:
-                                      state.energiaLimpiaDbLocal?.database ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<EnergiaLimpiaCubit>()
+                                  .sendOfflineAnswers(
+                                    energiaLimpia: EnergiaLimpiaModel(
+                                      tipoSolicitud: state.energiaLimpiaDbLocal
+                                              ?.tipoSolicitud ??
                                           '',
-                                  solicitudNuevamenorId: state
-                                          .energiaLimpiaDbLocal
-                                          ?.solicitudNuevamenorId ??
-                                      0,
-                                  tieneTrabajo: state
-                                          .energiaLimpiaDbLocal?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .energiaLimpiaDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state.energiaLimpiaDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state.energiaLimpiaDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .energiaLimpiaDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objOrigenCatalogoValorId: state
-                                          .energiaLimpiaDbLocal
-                                          ?.objOrigenCatalogoValorId ??
-                                      '',
-                                  objTipoComunidadId: state.energiaLimpiaDbLocal
-                                          ?.objTipoComunidadId ??
-                                      '',
-                                  tieneProblemasEnergia: state
-                                          .energiaLimpiaDbLocal
-                                          ?.tieneProblemasEnergia ??
-                                      false,
-                                  personasCargo: state.energiaLimpiaDbLocal
-                                          ?.personasCargo ??
-                                      '',
-                                  numeroHijos:
-                                      state.energiaLimpiaDbLocal?.numeroHijos ??
+                                      problemasEnergiaDescripcion: state
+                                              .energiaLimpiaDbLocal
+                                              ?.problemasEnergiaDescripcion ??
+                                          '',
+                                      database: state
+                                              .energiaLimpiaDbLocal?.database ??
+                                          '',
+                                      solicitudNuevamenorId: state
+                                              .energiaLimpiaDbLocal
+                                              ?.solicitudNuevamenorId ??
                                           0,
-                                  edadHijos:
-                                      state.energiaLimpiaDbLocal?.edadHijos ??
+                                      tieneTrabajo: state.energiaLimpiaDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .energiaLimpiaDbLocal
+                                              ?.trabajoNegocioDescripcion ??
                                           '',
-                                  tipoEstudioHijos: state.energiaLimpiaDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivoPrestamo: state.energiaLimpiaDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  planesFuturo: state
-                                          .energiaLimpiaDbLocal?.planesFuturo ??
-                                      '',
-                                  otrosDatosCliente: state.energiaLimpiaDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
+                                      tiempoActividad: state
+                                              .energiaLimpiaDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state.energiaLimpiaDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .energiaLimpiaDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objOrigenCatalogoValorId: state
+                                              .energiaLimpiaDbLocal
+                                              ?.objOrigenCatalogoValorId ??
+                                          '',
+                                      objTipoComunidadId: state
+                                              .energiaLimpiaDbLocal
+                                              ?.objTipoComunidadId ??
+                                          '',
+                                      tieneProblemasEnergia: state
+                                              .energiaLimpiaDbLocal
+                                              ?.tieneProblemasEnergia ??
+                                          false,
+                                      personasCargo: state.energiaLimpiaDbLocal
+                                              ?.personasCargo ??
+                                          '',
+                                      numeroHijos: state.energiaLimpiaDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state.energiaLimpiaDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .energiaLimpiaDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivoPrestamo: state.energiaLimpiaDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      planesFuturo: state.energiaLimpiaDbLocal
+                                              ?.planesFuturo ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .energiaLimpiaDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -331,7 +343,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -353,6 +365,7 @@ class _RecurrenteEnergiaLimpiaOfflineState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -497,110 +510,116 @@ class _RecurrenteEnergiaLimpiaOfflineState
                             'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteEnergiaLimpiaCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrenteEnergiaLimpia:
+                                        RecurrenteEnergiaLimpiaModel(
+                                      tipoSolicitud: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      problemasEnergiaDescripcion: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.problemasEnergiaDescripcion ??
+                                          '',
+                                      database: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.database ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objTipoComunidadId: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.objTipoComunidadId ??
+                                          '',
+                                      tieneProblemasEnergia: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.tieneProblemasEnergia ??
+                                          false,
+                                      personasCargo: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.personasCargo ??
+                                          '',
+                                      numeroHijos: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      coincideRespuesta: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.explicacionInversion ??
+                                          '',
+                                      situacionAntesAhora: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.situacionAntesAhora ??
+                                          '',
+                                      comoMejoraSituacion: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.comoMejoraSituacion ??
+                                          '',
+                                      quienApoya: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      siguienteMeta: state
+                                              .recurrenteEnergiaLimpiaDbLocal
+                                              ?.siguienteMeta ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteEnergiaLimpiaCubit>()
-                              .sendOfflineAnswers(
-                                recurrenteEnergiaLimpia:
-                                    RecurrenteEnergiaLimpiaModel(
-                                  tipoSolicitud: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  problemasEnergiaDescripcion: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.problemasEnergiaDescripcion ??
-                                      '',
-                                  database: state.recurrenteEnergiaLimpiaDbLocal
-                                          ?.database ??
-                                      '',
-                                  tieneTrabajo: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objTipoComunidadId: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.objTipoComunidadId ??
-                                      '',
-                                  tieneProblemasEnergia: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.tieneProblemasEnergia ??
-                                      false,
-                                  personasCargo: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.personasCargo ??
-                                      '',
-                                  numeroHijos: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivoPrestamo: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  coincideRespuesta: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.explicacionInversion ??
-                                      '',
-                                  situacionAntesAhora: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.situacionAntesAhora ??
-                                      '',
-                                  comoMejoraSituacion: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.comoMejoraSituacion ??
-                                      '',
-                                  quienApoya: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  siguienteMeta: state
-                                          .recurrenteEnergiaLimpiaDbLocal
-                                          ?.siguienteMeta ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

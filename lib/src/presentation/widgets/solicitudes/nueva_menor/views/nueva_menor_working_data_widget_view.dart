@@ -273,7 +273,6 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(RegExp(r'[1-9]')),
                     LengthLimitingTextInputFormatter(2),
                   ],
                   icon: Icon(

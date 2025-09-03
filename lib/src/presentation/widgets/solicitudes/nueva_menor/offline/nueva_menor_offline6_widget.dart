@@ -59,6 +59,22 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   double? montoMaximo;
   String? frecuenciaPagoMeses;
   final formKey = GlobalKey<FormState>();
+  final List<DateTime> holidays = [
+    DateTime(2025, 1, 1), // Año Nuevo
+    DateTime(2025, 4, 17), // Jueves Santo
+    DateTime(2025, 4, 18), // Viernes Santo
+    DateTime(2025, 5, 1), // Día del Trabajo
+    DateTime(2025, 5, 30), // Día de la Madre
+    DateTime(2025, 7, 19), // Revolución
+    DateTime(2025, 9, 14), // Batalla de San Jacinto
+    DateTime(2025, 9, 15), // Independencia
+    DateTime(2025, 12, 8), // Inmaculada Concepción
+    DateTime(2025, 12, 25), // Navidad
+  ];
+  bool _isHoliday(DateTime date) {
+    return holidays.any((h) =>
+        h.year == date.year && h.month == date.month && h.day == date.day);
+  }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -67,6 +83,11 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+      selectableDayPredicate: (day) {
+        if (day.weekday == DateTime.sunday) return false;
+        if (_isHoliday(day)) return false;
+        return true;
+      },
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
@@ -101,12 +122,18 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   Future<void> selectFechaDesembolso(BuildContext context) async {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaDesembolso,
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+      selectableDayPredicate: (day) {
+        if (day.weekday == DateTime.sunday) return false;
+        if (_isHoliday(day)) return false;
+        return true;
+      },
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
@@ -153,8 +180,9 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
     fechaPrimerPago = DateTime.tryParse(
         widget.responseLocalDb.fechaPrimerPagoSolicitud ?? '');
     observacion = widget.responseLocalDb.observacion;
-    fechaDesembolso =
-        DateTime.tryParse(widget.responseLocalDb.fechaDesembolso ?? '');
+    fechaDesembolso = DateTime.tryParse(
+        widget.responseLocalDb.fechaDesembolso ??
+            DateTime.now().toIso8601String());
     tasaInteres = widget.responseLocalDb.prestamoInteres;
     montoMinimo = widget.responseLocalDb.montoMinimo;
     montoMaximo = widget.responseLocalDb.montoMaximo?.toDouble();

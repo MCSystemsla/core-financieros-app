@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 part 'autoupdate_state.dart';
 
 class AutoupdateCubit extends Cubit<AutoupdateState> {
-  AutoupdateCubit() : super(AutoupdateInitial());
+  AutoupdateCubit(this.flavor) : super(AutoupdateInitial());
+  final Flavor flavor;
   final _logger = Logger();
 
   Future<void> verificarActualizacion(BuildContext context) async {
@@ -35,7 +37,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
 
       final data = json.decode(response.body);
       final String? nuevaVersion = data['version']?.toString();
-      final String? apkUrl = data['apkUrl']?.toString();
+      final String? apkUrl = data[flavor.name]['apkUrl']?.toString();
 
       if (nuevaVersion == null || apkUrl == null) {
         _logger.e('Formato JSON inválido');
@@ -47,15 +49,13 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       final versionActual = info.version;
       _logger
           .d('Versión actual: $versionActual - Nueva versión: $nuevaVersion');
+      _logger.d('Flavor actual: $flavor');
 
       if (nuevaVersion != versionActual) {
-        if (!context.mounted) return;
-
         emit(AutoupdateSuccess(
           apkVersion: apkUrl,
           apkVersionName: nuevaVersion,
         ));
-        await registerUserAreUpdatedVersion(version: nuevaVersion);
         return;
       }
       emit(AutoupdateFoundVersion(versionName: versionActual));

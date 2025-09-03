@@ -82,8 +82,138 @@ class _SolicitudKivaOfflineEstandarState
         _Form3(
           pageController: pageController,
         ),
+        _Form4(
+          pageController: pageController,
+        ),
         _SignatureView(controller: pageController),
       ],
+    );
+  }
+}
+
+class _Form4 extends StatefulWidget {
+  final PageController pageController;
+  const _Form4({required this.pageController});
+
+  @override
+  State<_Form4> createState() => _Form4State();
+}
+
+class _Form4State extends State<_Form4> {
+  final formKey = GlobalKey<FormState>();
+  final motivoPrestamo = TextEditingController();
+  final planesFuturo = TextEditingController();
+  final comoMejoraVida = TextEditingController();
+  final otrosDatosCliente = TextEditingController();
+  final comoFortalece = TextEditingController();
+  final siguientePaso = TextEditingController();
+  final personaAutoSuficiente = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MiCreditoProgress(
+                steps: 5,
+                currentStep: 5,
+              ),
+              const Gap(20),
+              Text(
+                'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
+                    .tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                title: '¿Para qué solicitó el préstamo? Explique',
+                textEditingController: motivoPrestamo,
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: planesFuturo,
+                title:
+                    '¿Cuáles son sus planes personales para los proximos 5 años?*',
+                validator: (value) => ClassValidator.validateRequired(value),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: comoMejoraVida,
+                title:
+                    '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
+                validator: (value) => ClassValidator.validateRequired(value),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: otrosDatosCliente,
+                title: 'Otros datos relevantes e interesantes del cliente',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: motivoPrestamo,
+                title: '¿En qué piensa invertir este nuevo préstamo? Explique',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: comoFortalece,
+                title:
+                    '¿Considera usted que este nuevo préstamo continúe fortaleciendo su negocio y generando mayores ganancias que beneficien a su familia? Explique ',
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: siguientePaso,
+                title: 'A futuro ¿Cuál seria su siguiente paso?*',
+                validator: (value) {
+                  final trimmedValue = value?.trim();
+                  if (trimmedValue == null ||
+                      trimmedValue.isEmpty ||
+                      trimmedValue == 'input.select_option'.tr()) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                textEditingController: personaAutoSuficiente,
+                title:
+                    'Una vez finalizado el pago de este préstamo ¿ Podría ser una persona auto suficiente?',
+              ),
+              const Gap(20),
+              ButtonActionsWidget(
+                onPreviousPressed: () {
+                  widget.pageController.previousPage(
+                    duration: const Duration(
+                      milliseconds: 350,
+                    ),
+                    curve: Curves.easeIn,
+                  );
+                },
+                onNextPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    widget.pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      curve: Curves.easeIn,
+                    );
+                  }
+                },
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.next'.tr(),
+              ),
+              const Gap(10),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -220,102 +350,6 @@ class __SignatureViewState extends State<_SignatureView> {
   }
 }
 
-class _Form4 extends StatefulWidget {
-  final PageController pageController;
-
-  const _Form4({
-    required this.pageController,
-  });
-
-  @override
-  State<_Form4> createState() => __Form4State();
-}
-
-class __Form4State extends State<_Form4> {
-  final formKey = GlobalKey<FormState>();
-  final motivoPrestamo = TextEditingController();
-  final planesFuturo = TextEditingController();
-  final comoMejoraVida = TextEditingController();
-  final otrosDatosCliente = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const MiCreditoProgress(
-                steps: 5,
-                currentStep: 5,
-              ),
-              const Gap(20),
-              Text(
-                'Impacto Social de Kiva (Uso específico, objetivos, metas del préstamo)'
-                    .tr(),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                title: '¿Para qué solicitó el préstamo? Explique',
-                textEditingController: motivoPrestamo,
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: planesFuturo,
-                title:
-                    '¿Cuáles son sus planes personales para los proximos 5 años?*',
-                validator: (value) => ClassValidator.validateRequired(value),
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: comoMejoraVida,
-                title:
-                    '¿Cómo este crédito fortalecerá su negocio y mejorará sus condiciones de vida?*',
-                validator: (value) => ClassValidator.validateRequired(value),
-              ),
-              const Gap(20),
-              CommentaryWidget(
-                textEditingController: otrosDatosCliente,
-                title: 'Otros datos relevantes e interesantes del cliente',
-              ),
-              const Gap(20),
-              ButtonActionsWidget(
-                onPreviousPressed: () {
-                  widget.pageController.previousPage(
-                    duration: const Duration(
-                      milliseconds: 350,
-                    ),
-                    curve: Curves.easeIn,
-                  );
-                },
-                onNextPressed: () {
-                  if (formKey.currentState?.validate() ?? false) {
-                    widget.pageController.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.easeIn,
-                    );
-                  }
-                },
-                previousTitle: 'button.previous'.tr(),
-                nextTitle: 'button.next'.tr(),
-              ),
-              const Gap(10),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _Form3 extends StatefulWidget {
   final PageController pageController;
   const _Form3({required this.pageController});
@@ -445,6 +479,25 @@ class __Form3State extends State<_Form3> {
                 title: '¿Cómo mira su negocio en los proximos años?*',
                 textEditingController: negocioProximosAnios,
                 validator: (value) => ClassValidator.validateRequired(value),
+              ),
+              const Gap(20),
+              CommentaryWidget(
+                validator: (value) {
+                  final trimmedValue = value?.trim();
+                  if (trimmedValue == null ||
+                      trimmedValue.isEmpty ||
+                      trimmedValue == 'input.select_option'.tr()) {
+                    return 'input.input_validator'.tr();
+                  }
+                  return null;
+                },
+                title:
+                    'explique en que invirtió y porqué hizo esa nueva inversión.',
+              ),
+              const Gap(20),
+              const CommentaryWidget(
+                title:
+                    '¿Cómo este crédito ha constribuido a mejorar su calidad de vida y empoderarse de su negocio? Explique.',
               ),
               const Gap(20),
               ButtonActionsWidget(

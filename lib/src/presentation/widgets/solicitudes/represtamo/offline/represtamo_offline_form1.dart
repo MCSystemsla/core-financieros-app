@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.d
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -17,6 +18,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -290,29 +292,33 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   isRequired: true,
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  initialValue: ubicacion,
-                  maxLength: 40,
-                  icon: Icon(
-                    Icons.location_on,
-                    color: AppColors.getPrimaryColor(),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 5,
                   ),
-                  title: 'Ubicacion',
-                  onChange: (value) {
-                    ubicacion = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        ubicacion: ubicacion,
-                      ),
-                    );
-                    setState(() {});
-                  },
-                  hintText: 'Ingresa Ubicacion',
-                  isValid: null,
-                  isRequired: true,
+                  child: JLuxDropdown(
+                    dropdownColor: Colors.white,
+                    isContainIcon: true,
+                    title: 'Ubicación',
+                    items: Origin.comunidades,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      ubicacion = item.nombre;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          ubicacion: item.nombre,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item.nombre;
+                    },
+                    hintText: ubicacion ?? 'input.select_option'.tr(),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(ubicacion),
+                  ),
                 ),
                 const Gap(30),
                 Container(

@@ -65,7 +65,7 @@ class _RecurrenteMigranteEconomicoOfflineState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -87,6 +87,7 @@ class _RecurrenteMigranteEconomicoOfflineState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -284,107 +285,112 @@ class _RecurrenteMigranteEconomicoOfflineState
                             'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteMigrantesEconomicosCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrenteMigranteEcomico:
+                                        MigrantesEconomicosRecurrente(
+                                      tipoSolicitud: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      database: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.database ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      numeroHijos: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      otrosIngresos: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      personasCargo: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.personasCargo ??
+                                          0,
+                                      motivoPrestamo: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      coincideRespuesta: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.explicacionInversion ??
+                                          '',
+                                      apoyanNegocio: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.apoyanNegocio ??
+                                          false,
+                                      quienApoya: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      cuantosApoyan: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.cuantosApoyan ??
+                                          '',
+                                      mejoraCondiciones: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.mejoraCondiciones ??
+                                          false,
+                                      explicacionMejoraCondiciones: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.explicacionMejoraCondiciones ??
+                                          '',
+                                      siguienteMeta: state
+                                              .recurrenteMigranteEconomicoDbLocal
+                                              ?.siguienteMeta ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteMigrantesEconomicosCubit>()
-                              .sendOfflineAnswers(
-                                recurrenteMigranteEcomico:
-                                    MigrantesEconomicosRecurrente(
-                                  tipoSolicitud: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  database: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.database ??
-                                      '',
-                                  tieneTrabajo: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  numeroHijos: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  otrosIngresos: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  motivoPrestamo: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  coincideRespuesta: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.explicacionInversion ??
-                                      '',
-                                  apoyanNegocio: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.apoyanNegocio ??
-                                      false,
-                                  quienApoya: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  cuantosApoyan: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.cuantosApoyan ??
-                                      '',
-                                  mejoraCondiciones: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.mejoraCondiciones ??
-                                      false,
-                                  explicacionMejoraCondiciones: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.explicacionMejoraCondiciones ??
-                                      '',
-                                  siguienteMeta: state
-                                          .recurrenteMigranteEconomicoDbLocal
-                                          ?.siguienteMeta ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'Salir'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
