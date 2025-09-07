@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.d
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -274,10 +275,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     setState(() => isOffline = e);
                     await Future.delayed(const Duration(milliseconds: 500));
                     if (!context.mounted) return;
-                    if (e) {
+                    if (isOffline) {
                       context
                           .read<InternetConnectionCubit>()
                           .makeToOfflineMode();
+                      global<BiometricCubit>().deactivateBiometricAuth();
+                      context.pushReplacement('/');
                       ScaffoldMessenger.of(context).showSnackBar(
                         customSnackbar(
                           title: 'Modo offline Activado',
@@ -287,7 +290,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           ),
                         ),
                       );
-                      context.pushReplacement('/');
                     }
                   },
                 ),
@@ -306,6 +308,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   }
                   if (state.status == Status.done) {
                     if (!context.mounted) return;
+                    if (global<BiometricCubit>().state.isAuthenticated) {
+                      global<BiometricCubit>().deactivateBiometricAuth();
+                    }
                     context.pushReplacement('/');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

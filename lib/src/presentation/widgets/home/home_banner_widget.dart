@@ -69,7 +69,7 @@ class LogOutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<InternetConnectionCubit>().getInternetStatusConnection();
+        context.read<InternetConnectionCubit>().makeToOnlineMode();
         context.read<AuthCubit>().logOut(context: context);
       },
       child: Container(

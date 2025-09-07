@@ -36,7 +36,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
       }
 
       final data = json.decode(response.body);
-      final String? nuevaVersion = data['version']?.toString();
+      final String? nuevaVersion = data[flavor.name]['version']?.toString();
       final String? apkUrl = data[flavor.name]['apkUrl']?.toString();
 
       if (nuevaVersion == null || apkUrl == null) {
