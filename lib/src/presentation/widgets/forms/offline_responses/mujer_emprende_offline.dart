@@ -64,7 +64,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -86,6 +86,7 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -229,90 +230,101 @@ class _MujerEmprendeOfflineState extends State<MujerEmprendeOffline> {
                                 'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context.read<MujerEmprendeCubit>().sendOfflineAnswers(
-                                mujerEmprendeModel: MujerEmprendeModel(
-                                  tipoSolicitud: state.mujerEmprendeDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  tiempoActividad: state.mujerEmprendeDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  tieneTrabajo: state
-                                          .mujerEmprendeDbLocal?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .mujerEmprendeDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  database:
-                                      state.mujerEmprendeDbLocal?.database ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<MujerEmprendeCubit>()
+                                  .sendOfflineAnswers(
+                                    mujerEmprendeModel: MujerEmprendeModel(
+                                      tipoSolicitud: state.mujerEmprendeDbLocal
+                                              ?.tipoSolicitud ??
                                           '',
-                                  objSolicitudNuevamenorId: state
-                                          .mujerEmprendeDbLocal
-                                          ?.objSolicitudNuevamenorId ??
-                                      0,
-                                  otrosIngresos: state.mujerEmprendeDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .mujerEmprendeDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objOrigenCatalogoValorId: state
-                                          .mujerEmprendeDbLocal
-                                          ?.objOrigenCatalogoValorId ??
-                                      '',
-                                  personasCargo: state.mujerEmprendeDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  numeroHijos:
-                                      state.mujerEmprendeDbLocal?.numeroHijos ??
+                                      tiempoActividad: state
+                                              .mujerEmprendeDbLocal
+                                              ?.tiempoActividad ??
                                           0,
-                                  edadHijos:
-                                      state.mujerEmprendeDbLocal?.edadHijos ??
+                                      tieneTrabajo: state.mujerEmprendeDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .mujerEmprendeDbLocal
+                                              ?.trabajoNegocioDescripcion ??
                                           '',
-                                  tipoEstudioHijos: state.mujerEmprendeDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivoEmprender: state.mujerEmprendeDbLocal
-                                          ?.motivoEmprender ??
-                                      '',
-                                  conocioMujerEmprende: state
-                                          .mujerEmprendeDbLocal
-                                          ?.conocioMujerEmprende ??
-                                      '',
-                                  impulsoOptar: state
-                                          .mujerEmprendeDbLocal?.impulsoOptar ??
-                                      '',
-                                  motivoPrestamo: state.mujerEmprendeDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  quienApoya:
-                                      state.mujerEmprendeDbLocal?.quienApoya ??
+                                      database: state
+                                              .mujerEmprendeDbLocal?.database ??
                                           '',
-                                  comoImpactariaNegocio: state
-                                          .mujerEmprendeDbLocal
-                                          ?.comoImpactariaNegocio ??
-                                      '',
-                                  comoMejoraCalidadVida: state
-                                          .mujerEmprendeDbLocal
-                                          ?.comoMejoraCalidadVida ??
-                                      '',
-                                  otrosDatosCliente: state.mujerEmprendeDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
+                                      objSolicitudNuevamenorId: state
+                                              .mujerEmprendeDbLocal
+                                              ?.objSolicitudNuevamenorId ??
+                                          0,
+                                      otrosIngresos: state.mujerEmprendeDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .mujerEmprendeDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objOrigenCatalogoValorId: state
+                                              .mujerEmprendeDbLocal
+                                              ?.objOrigenCatalogoValorId ??
+                                          '',
+                                      personasCargo: state.mujerEmprendeDbLocal
+                                              ?.personasCargo ??
+                                          0,
+                                      numeroHijos: state.mujerEmprendeDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state.mujerEmprendeDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .mujerEmprendeDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivoEmprender: state
+                                              .mujerEmprendeDbLocal
+                                              ?.motivoEmprender ??
+                                          '',
+                                      conocioMujerEmprende: state
+                                              .mujerEmprendeDbLocal
+                                              ?.conocioMujerEmprende ??
+                                          '',
+                                      impulsoOptar: state.mujerEmprendeDbLocal
+                                              ?.impulsoOptar ??
+                                          '',
+                                      motivoPrestamo: state.mujerEmprendeDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      quienApoya: state.mujerEmprendeDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      comoImpactariaNegocio: state
+                                              .mujerEmprendeDbLocal
+                                              ?.comoImpactariaNegocio ??
+                                          '',
+                                      comoMejoraCalidadVida: state
+                                              .mujerEmprendeDbLocal
+                                              ?.comoMejoraCalidadVida ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .mujerEmprendeDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),
@@ -373,7 +385,7 @@ class _RecurrenteMujerEmprendeOfflineState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -395,6 +407,7 @@ class _RecurrenteMujerEmprendeOfflineState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -544,100 +557,116 @@ class _RecurrenteMujerEmprendeOfflineState
                             'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteMujerEmprendeCubit>()
-                              .sendOfflineAnswers(
-                                recurrenteMujerEmprende:
-                                    RecurrenteMujerEmprendeModel(
-                                  tipoSolicitud: state.recurrenteMujerEmprende
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  tiempoActividad: state.recurrenteMujerEmprende
-                                          ?.tiempoActividad ??
-                                      0,
-                                  database:
-                                      state.recurrenteMujerEmprende?.database ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteMujerEmprendeCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrenteMujerEmprende:
+                                        RecurrenteMujerEmprendeModel(
+                                      tipoSolicitud: state
+                                              .recurrenteMujerEmprende
+                                              ?.tipoSolicitud ??
                                           '',
-                                  otrosIngresos: state.recurrenteMujerEmprende
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteMujerEmprende
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state.recurrenteMujerEmprende
-                                          ?.personasCargo ??
-                                      0,
-                                  numeroHijos: state.recurrenteMujerEmprende
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state
-                                          .recurrenteMujerEmprende?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteMujerEmprende
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivoPrestamo: state.recurrenteMujerEmprende
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteMujerEmprende
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  coincideRespuesta: state
-                                          .recurrenteMujerEmprende
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteMujerEmprende
-                                          ?.explicacionInversion ??
-                                      '',
-                                  comoAyudo: state
-                                          .recurrenteMujerEmprende?.comoAyudo ??
-                                      '',
-                                  apoyanNegocio: state.recurrenteMujerEmprende
-                                          ?.apoyanNegocio ??
-                                      false,
-                                  cuantosApoyan: state.recurrenteMujerEmprende
-                                          ?.cuantosApoyan ??
-                                      '',
-                                  mejoraraEntorno: state.recurrenteMujerEmprende
-                                          ?.mejoraraEntorno ??
-                                      false,
-                                  mejoraraEntornoExplicacion: state
-                                          .recurrenteMujerEmprende
-                                          ?.mejoraraEntornoExplicacion ??
-                                      '',
-                                  siguientePaso: state.recurrenteMujerEmprende
-                                          ?.siguientePaso ??
-                                      '',
-                                  alcanzaraMeta: state.recurrenteMujerEmprende
-                                          ?.alcanzaraMeta ??
-                                      false,
-                                  explicacionAlcanzaraMeta: state
-                                          .recurrenteMujerEmprende
-                                          ?.explicacionAlcanzaraMeta ??
-                                      '',
-                                  tieneTrabajo: state.recurrenteMujerEmprende
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  tieneTrabajoDescripcion: state
-                                          .recurrenteMujerEmprende
-                                          ?.tieneTrabajoDescripcion ??
-                                      '',
-                                ),
-                              );
+                                      tiempoActividad: state
+                                              .recurrenteMujerEmprende
+                                              ?.tiempoActividad ??
+                                          0,
+                                      database: state.recurrenteMujerEmprende
+                                              ?.database ??
+                                          '',
+                                      otrosIngresos: state
+                                              .recurrenteMujerEmprende
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteMujerEmprende
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      personasCargo: state
+                                              .recurrenteMujerEmprende
+                                              ?.personasCargo ??
+                                          0,
+                                      numeroHijos: state.recurrenteMujerEmprende
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state.recurrenteMujerEmprende
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteMujerEmprende
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .recurrenteMujerEmprende
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteMujerEmprende
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      coincideRespuesta: state
+                                              .recurrenteMujerEmprende
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteMujerEmprende
+                                              ?.explicacionInversion ??
+                                          '',
+                                      comoAyudo: state.recurrenteMujerEmprende
+                                              ?.comoAyudo ??
+                                          '',
+                                      apoyanNegocio: state
+                                              .recurrenteMujerEmprende
+                                              ?.apoyanNegocio ??
+                                          false,
+                                      cuantosApoyan: state
+                                              .recurrenteMujerEmprende
+                                              ?.cuantosApoyan ??
+                                          '',
+                                      mejoraraEntorno: state
+                                              .recurrenteMujerEmprende
+                                              ?.mejoraraEntorno ??
+                                          false,
+                                      mejoraraEntornoExplicacion: state
+                                              .recurrenteMujerEmprende
+                                              ?.mejoraraEntornoExplicacion ??
+                                          '',
+                                      siguientePaso: state
+                                              .recurrenteMujerEmprende
+                                              ?.siguientePaso ??
+                                          '',
+                                      alcanzaraMeta: state
+                                              .recurrenteMujerEmprende
+                                              ?.alcanzaraMeta ??
+                                          false,
+                                      explicacionAlcanzaraMeta: state
+                                              .recurrenteMujerEmprende
+                                              ?.explicacionAlcanzaraMeta ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteMujerEmprende
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      tieneTrabajoDescripcion: state
+                                              .recurrenteMujerEmprende
+                                              ?.tieneTrabajoDescripcion ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'button.previous'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        previousTitle: 'button.previous'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

@@ -80,6 +80,15 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  Future<void> deleteAllSolicitudes() async {
+    await state.isar?.writeTxnSync(() async {
+      return [
+        state.isar?.estandarDbLocals.clearSync(),
+        state.isar?.recurrenteEstandarDbLocals.clearSync(),
+      ];
+    });
+  }
+
   Future<void> saveSolicitudesPendientes(
       {required List<SolicitudesPendientes> solicitudes}) async {
     emit(state.copyWith(status: Status.inProgress));
@@ -168,7 +177,7 @@ class SolicitudesPendientesLocalDbCubit
   bool _shouldDeleteSolicitud(SolicitudesPendientes solicitud) {
     if (solicitud.dateSended == null) return false;
     final daysPassed = DateTime.now().difference(solicitud.dateSended!).inDays;
-    return daysPassed >= 12;
+    return daysPassed >= 15;
   }
 
   Future<void> _deleteSolicitudYAsociada(

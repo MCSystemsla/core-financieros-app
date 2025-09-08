@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/recurrente_energia_limpia.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/estandar_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/estandar/recurrente_estandar_model.dart';
+import 'package:core_financiero_app/src/datasource/forms/kiva_request_not_saved_response.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_answer.dart';
 import 'package:core_financiero_app/src/datasource/forms/mejora_vivienda_recurrente.dart';
 import 'package:core_financiero_app/src/datasource/forms/micredi_estudio/micredi_estudio_model.dart';
@@ -18,6 +19,7 @@ import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/mi
 import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/recurrente_migrante_economico.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_emprende_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
@@ -100,6 +102,7 @@ abstract class ResponsesRepository {
   Future<(bool, String)> sendCodigoVerificacion({
     required String codigo,
   });
+  Future<KivaRequestNotSavedResponse> getNoImagesKivasOnHistory();
 }
 
 class ResponsesRepositoryImpl extends ResponsesRepository {
@@ -665,6 +668,26 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
     } catch (e) {
       _logger.e(e);
       return (false, 'Codigo Verificacion Incorrecto');
+    }
+  }
+
+  @override
+  Future<KivaRequestNotSavedResponse> getNoImagesKivasOnHistory() async {
+    final endpoint = GetNoImagesKivasOnHistoryEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = KivaRequestNotSavedResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

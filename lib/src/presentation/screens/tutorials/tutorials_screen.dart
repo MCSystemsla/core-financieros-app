@@ -86,17 +86,17 @@ class TutorialListWidget extends StatelessWidget {
       },
     );
   }
+}
 
-  Future<bool> launchUrlCustom(String urlString) async {
-    try {
-      final Uri uri = Uri.parse(urlString);
+Future<bool> launchUrlCustom(String urlString) async {
+  try {
+    final Uri uri = Uri.parse(urlString);
 
-      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-        throw 'No se pudo abrir: $urlString';
-      }
-      return true;
-    } catch (e) {
-      return false;
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'No se pudo abrir: $urlString';
     }
+    return true;
+  } catch (e) {
+    return false;
   }
 }

@@ -50,4 +50,7 @@ abstract class ImageAsset {
 
   // CEDULA
   static const String cedulaPhoto = 'assets/images/document.svg';
+
+  static const String mySolicitudesAssignments =
+      'assets/images/my_solicitudes_asignadas.svg';
 }

@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/estandar/estandar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -103,9 +104,7 @@ class _EstandarDescripciondelNegocioState
 
                         return null;
                       },
-                      title:
-                          '¿Hay alguien que le apoye en su negocio? de ser positivo,?'
-                              .tr(),
+                      title: '¿Hay alguien que le apoye en su negocio?'.tr(),
                       items: ['input.yes'.tr(), 'input.no'.tr()],
                       onChanged: (item) {
                         if (item == null) return;
@@ -157,15 +156,8 @@ class _EstandarDescripciondelNegocioState
                   CommentaryWidget(
                     title: '¿Cómo mira su negocio en los proximos años?*',
                     textEditingController: negocioProximosAnios,
-                    validator: (value) {
-                      final trimmedValue = value?.trim();
-                      if (trimmedValue == null ||
-                          trimmedValue.isEmpty ||
-                          trimmedValue == 'input.select_option'.tr()) {
-                        return 'input.input_validator'.tr();
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                   ),
                   const Gap(20),
                   ButtonActionsWidget(

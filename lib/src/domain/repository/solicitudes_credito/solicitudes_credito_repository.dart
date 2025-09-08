@@ -110,6 +110,7 @@ abstract class SolicitudesCreditoRepository {
     required String imagenFrontal,
     required String imagenTrasera,
   });
+  Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor();
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -743,6 +744,26 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       cedulaCliente: cedulaCliente,
       pagina: pagina,
     );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      _logger.i(resp);
+      return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor() async {
+    final endpoint = ObtenerSolciitudesPorAsesorEndpoint();
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

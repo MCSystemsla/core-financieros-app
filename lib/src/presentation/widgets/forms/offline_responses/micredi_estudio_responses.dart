@@ -66,7 +66,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -88,6 +88,7 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -300,113 +301,125 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                         readOnly: true,
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<MicrediEstudioCubit>()
+                                  .sendOfflineAnswers(
+                                    miCrediEstudioModel: MiCrediEstudioModel(
+                                      tipoSolitud: state.miCrediEstudioDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      database: state.miCrediEstudioDbLocal
+                                              ?.database ??
+                                          '',
+                                      objSolicitudNuevamenorId: state
+                                              .miCrediEstudioDbLocal
+                                              ?.objSolicitudNuevamenorId ??
+                                          0,
+                                      tieneTrabajo: state.miCrediEstudioDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .miCrediEstudioDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          'N/A',
+                                      tiempoActividad: state
+                                              .miCrediEstudioDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state.miCrediEstudioDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .miCrediEstudioDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objOrigenCatalogoValorId: state
+                                              .miCrediEstudioDbLocal
+                                              ?.objOrigenCatalogoValorId ??
+                                          '',
+                                      personasCargo: state.miCrediEstudioDbLocal
+                                              ?.personasCargo ??
+                                          0,
+                                      numeroHijos: state.miCrediEstudioDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state.miCrediEstudioDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .miCrediEstudioDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      carrera: state
+                                              .miCrediEstudioDbLocal?.carrera ??
+                                          '',
+                                      tiempoCarrera: state.miCrediEstudioDbLocal
+                                              ?.tiempoCarrera ??
+                                          0,
+                                      universidad: state.miCrediEstudioDbLocal
+                                              ?.universidad ??
+                                          '',
+                                      motivoCarrera: state.miCrediEstudioDbLocal
+                                              ?.motivoCarrera ??
+                                          '',
+                                      relizandoProfesionalmente: state
+                                              .miCrediEstudioDbLocal
+                                              ?.relizandoProfesionalmente ??
+                                          false,
+                                      explicacionRelizandoProfesionalmente: state
+                                              .miCrediEstudioDbLocal
+                                              ?.explicacionRelizandoProfesionalmente ??
+                                          '',
+                                      quienApoya: state.miCrediEstudioDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      ocupacionPadres: state
+                                              .miCrediEstudioDbLocal
+                                              ?.ocupacionPadres ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .miCrediEstudioDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      comoAyudaCrecer: state
+                                              .miCrediEstudioDbLocal
+                                              ?.comoAyudaCrecer ??
+                                          '',
+                                      optarOtroEstudio: state
+                                              .miCrediEstudioDbLocal
+                                              ?.optarOtroEstudio ??
+                                          false,
+                                      cualEstudio: state.miCrediEstudioDbLocal
+                                              ?.cualEstudio ??
+                                          '',
+                                      planFuturo: state.miCrediEstudioDbLocal
+                                              ?.planFuturo ??
+                                          '',
+                                      aspiraLaboralmente: state
+                                              .miCrediEstudioDbLocal
+                                              ?.aspiraLaboralmente ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .miCrediEstudioDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir',
+                            nextTitle: 'Enviar',
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<MicrediEstudioCubit>()
-                              .sendOfflineAnswers(
-                                miCrediEstudioModel: MiCrediEstudioModel(
-                                  tipoSolitud: state.miCrediEstudioDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  database:
-                                      state.miCrediEstudioDbLocal?.database ??
-                                          '',
-                                  objSolicitudNuevamenorId: state
-                                          .miCrediEstudioDbLocal
-                                          ?.objSolicitudNuevamenorId ??
-                                      0,
-                                  tieneTrabajo: state.miCrediEstudioDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .miCrediEstudioDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      'N/A',
-                                  tiempoActividad: state.miCrediEstudioDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state.miCrediEstudioDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .miCrediEstudioDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objOrigenCatalogoValorId: state
-                                          .miCrediEstudioDbLocal
-                                          ?.objOrigenCatalogoValorId ??
-                                      '',
-                                  personasCargo: state.miCrediEstudioDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  numeroHijos: state
-                                          .miCrediEstudioDbLocal?.numeroHijos ??
-                                      0,
-                                  edadHijos:
-                                      state.miCrediEstudioDbLocal?.edadHijos ??
-                                          '',
-                                  tipoEstudioHijos: state.miCrediEstudioDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  carrera:
-                                      state.miCrediEstudioDbLocal?.carrera ??
-                                          '',
-                                  tiempoCarrera: state.miCrediEstudioDbLocal
-                                          ?.tiempoCarrera ??
-                                      0,
-                                  universidad: state
-                                          .miCrediEstudioDbLocal?.universidad ??
-                                      '',
-                                  motivoCarrera: state.miCrediEstudioDbLocal
-                                          ?.motivoCarrera ??
-                                      '',
-                                  relizandoProfesionalmente: state
-                                          .miCrediEstudioDbLocal
-                                          ?.relizandoProfesionalmente ??
-                                      false,
-                                  explicacionRelizandoProfesionalmente: state
-                                          .miCrediEstudioDbLocal
-                                          ?.explicacionRelizandoProfesionalmente ??
-                                      '',
-                                  quienApoya:
-                                      state.miCrediEstudioDbLocal?.quienApoya ??
-                                          '',
-                                  ocupacionPadres: state.miCrediEstudioDbLocal
-                                          ?.ocupacionPadres ??
-                                      '',
-                                  motivoPrestamo: state.miCrediEstudioDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  comoAyudaCrecer: state.miCrediEstudioDbLocal
-                                          ?.comoAyudaCrecer ??
-                                      '',
-                                  optarOtroEstudio: state.miCrediEstudioDbLocal
-                                          ?.optarOtroEstudio ??
-                                      false,
-                                  cualEstudio: state
-                                          .miCrediEstudioDbLocal?.cualEstudio ??
-                                      '',
-                                  planFuturo:
-                                      state.miCrediEstudioDbLocal?.planFuturo ??
-                                          '',
-                                  aspiraLaboralmente: state
-                                          .miCrediEstudioDbLocal
-                                          ?.aspiraLaboralmente ??
-                                      '',
-                                  otrosDatosCliente: state.miCrediEstudioDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'Salir',
-                        nextTitle: 'Enviar',
                       ),
                     ],
                   ),
@@ -468,7 +481,7 @@ class _MiCrediEstudioRecurrenteFormState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -490,6 +503,7 @@ class _MiCrediEstudioRecurrenteFormState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -672,118 +686,124 @@ class _MiCrediEstudioRecurrenteFormState
                         title: '¿Cuál sería su siguiente paso?',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteMicrediEstudioCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrenteMicrediEstudioModel:
+                                        RecurrenteMiCrediEstudioModel(
+                                      tipoSolicitud: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      database: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.database ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      personasCargo: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.personasCargo ??
+                                          0,
+                                      numeroHijos: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      carrera: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.carrera ??
+                                          '',
+                                      tiempoCarrera: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.tiempoCarrera ??
+                                          0,
+                                      universidad: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.universidad ??
+                                          '',
+                                      quienApoya: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      comoAyudaCrecer: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.comoAyudaCrecer ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      coincideRespuesta: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.explicacionInversion ??
+                                          '',
+                                      comoAyudoProfesionalmente: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.comoAyudoProfesionalmente ??
+                                          '',
+                                      siguientePaso: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.siguientePaso ??
+                                          '',
+                                      alcanzaraMeta: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.alcanzaraMeta ??
+                                          false,
+                                      explicacionAlcanzaraMeta: state
+                                              .recurrenteMiCrediEstudioDbLocal
+                                              ?.explicacionAlcanzaraMeta ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir',
+                            nextTitle: 'Enviar',
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteMicrediEstudioCubit>()
-                              .sendOfflineAnswers(
-                                recurrenteMicrediEstudioModel:
-                                    RecurrenteMiCrediEstudioModel(
-                                  tipoSolicitud: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  database: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.database ??
-                                      '',
-                                  tieneTrabajo: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  numeroHijos: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  carrera: state.recurrenteMiCrediEstudioDbLocal
-                                          ?.carrera ??
-                                      '',
-                                  tiempoCarrera: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.tiempoCarrera ??
-                                      0,
-                                  universidad: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.universidad ??
-                                      '',
-                                  quienApoya: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  motivoPrestamo: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  comoAyudaCrecer: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.comoAyudaCrecer ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  coincideRespuesta: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.explicacionInversion ??
-                                      '',
-                                  comoAyudoProfesionalmente: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.comoAyudoProfesionalmente ??
-                                      '',
-                                  siguientePaso: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.siguientePaso ??
-                                      '',
-                                  alcanzaraMeta: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.alcanzaraMeta ??
-                                      false,
-                                  explicacionAlcanzaraMeta: state
-                                          .recurrenteMiCrediEstudioDbLocal
-                                          ?.explicacionAlcanzaraMeta ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'Salir',
-                        nextTitle: 'Enviar',
                       ),
                     ],
                   ),

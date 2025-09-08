@@ -30,7 +30,7 @@ class SolicitudEstado {
   final String? observacion;
   final double? cuota;
   final String? nombreCompleto;
-  final String codigo;
+  final String estado;
   final String tipoSolicitud;
   final String? nombrePromotor;
   final DateTime fechaSolicitud;
@@ -45,7 +45,7 @@ class SolicitudEstado {
     this.observacion,
     this.cuota,
     required this.nombreCompleto,
-    required this.codigo,
+    required this.estado,
     required this.tipoSolicitud,
     required this.fechaSolicitud,
     this.nombrePromotor,
@@ -62,7 +62,7 @@ class SolicitudEstado {
         observacion: json['Observacion'],
         cuota: json['Cuota']?.toDouble() ?? 0,
         nombreCompleto: json['NombreCompleto'],
-        codigo: json['Estado'],
+        estado: json['Estado'],
         tipoSolicitud: json['TipoSolicitud'],
         nombrePromotor: json['NombrePromotor'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),

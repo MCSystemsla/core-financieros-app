@@ -15,7 +15,10 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
 
   Future<void> getSolicitudesPendientes() async {
     emit(state.copyWith(status: Status.inProgress));
-    await DeleteFolderImpl().deleteCoreFinancieroFolderByDetermineDate();
+
+    final isDeleted =
+        await DeleteFolderImpl().deleteCoreFinancieroFolderByDetermineDate();
+
     try {
       final data =
           await solicitudesPendientesRepository.getSolicitudesPendientes();
@@ -24,6 +27,7 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
           solicitudesPendienteResponse: data.solicitudes,
           filteredSolicitudes: data.solicitudes,
           status: Status.done,
+          isColletionTablesDelted: isDeleted,
         ),
       );
     } on AppException catch (e) {

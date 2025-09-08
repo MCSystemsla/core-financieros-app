@@ -1,7 +1,10 @@
+import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
@@ -24,6 +27,7 @@ class FormResponses extends StatefulWidget {
 class _FormResponsesState extends State<FormResponses> {
   @override
   Widget build(BuildContext context) {
+    final imageCliente = context.watch<UploadUserFileCubit>().state;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -31,9 +35,27 @@ class _FormResponsesState extends State<FormResponses> {
           children: [
             Text(
               'input.form_response'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
+            ),
+            const Gap(15),
+            UploadImageWidget(
+              selectedImage: XFile(imageCliente.imagen1),
+              title: '1- Imagen Cliente 1',
+              onPressed: () {},
+            ),
+            const Gap(15),
+            UploadImageWidget(
+              selectedImage: XFile(imageCliente.imagen2),
+              title: '1- Imagen Cliente 2',
+              onPressed: () {},
+            ),
+            const Gap(15),
+            UploadImageWidget(
+              selectedImage: XFile(imageCliente.imagen3),
+              title: '1- Imagen Cliente 3',
+              onPressed: () {},
             ),
             const Gap(15),
             BlocBuilder<ResponseCubit, ResponseState>(

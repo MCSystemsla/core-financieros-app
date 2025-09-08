@@ -1,16 +1,31 @@
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/inventario/nueva_inventario.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
-class AnalisisFormSolicitud extends StatelessWidget {
+class AnalisisFormSolicitud extends StatefulWidget {
   final PageController pageController;
+  final AnalisisSolicitudNuevaMenorResponse solicitud;
+  final String numeroSolicitud;
   const AnalisisFormSolicitud({
     super.key,
     required this.pageController,
+    required this.solicitud,
+    required this.numeroSolicitud,
   });
 
+  @override
+  State<AnalisisFormSolicitud> createState() => _AnalisisFormSolicitudState();
+}
+
+class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -19,6 +34,11 @@ class AnalisisFormSolicitud extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            NuevaInventario(
+              totalInventario:
+                  (widget.solicitud.data.analisis?.inventario?.toInt()) ?? 0,
+              numeroSolicitud: widget.numeroSolicitud,
+            ),
             ExpansionTitleCustom(
               title: Text(
                 'Balance General Expresado en cordobas',
@@ -27,21 +47,25 @@ class AnalisisFormSolicitud extends StatelessWidget {
                     ),
               ),
               finalStep: true,
-              children: const [
+              children: [
                 ExpansionTitleCustom(
-                  childrenPadding: EdgeInsets.symmetric(vertical: 15),
-                  title: Text('Activos'),
+                  childrenPadding: const EdgeInsets.symmetric(vertical: 15),
+                  title: const Text('Activos'),
                   finalStep: false,
                   children: [
-                    _ActivosWidgetsForm(),
+                    _ActivosWidgetsForm(
+                      solicitud: widget.solicitud,
+                    ),
                   ],
                 ),
                 ExpansionTitleCustom(
-                  childrenPadding: EdgeInsets.symmetric(vertical: 15),
-                  title: Text('Pasivos'),
+                  childrenPadding: const EdgeInsets.symmetric(vertical: 15),
+                  title: const Text('Pasivos'),
                   finalStep: false,
                   children: [
-                    _PasivosAnalisisWidgetsForm(),
+                    _PasivosAnalisisWidgetsForm(
+                      solicitud: widget.solicitud,
+                    ),
                   ],
                 ),
               ],
@@ -57,56 +81,13 @@ class AnalisisFormSolicitud extends StatelessWidget {
               ),
               finalStep: true,
               children: const [
-                Column(
-                  children: [
-                    OutlineTextfieldWidget(
-                      title: 'Ventas de contado:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Recuperaciones:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Total ingresos:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Costo de Ventas:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Gastos operativos:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Margen bruto del negocio:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Otros ingresos:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Gasto unidad familiar:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'Disponibilidad U.Familiar:',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                    OutlineTextfieldWidget(
-                      title: 'D.P.P: (80%)',
-                      icon: Icon(Icons.person_3_sharp),
-                    ),
-                  ],
-                ),
+                _EstadoResultado(),
               ],
             ),
             const Gap(30),
             CustomElevatedButton(
               onPressed: () {
-                pageController.nextPage(
+                widget.pageController.nextPage(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                 );
@@ -121,82 +102,398 @@ class AnalisisFormSolicitud extends StatelessWidget {
   }
 }
 
-class _PasivosAnalisisWidgetsForm extends StatelessWidget {
-  const _PasivosAnalisisWidgetsForm();
+class _EstadoResultado extends StatelessWidget {
+  const _EstadoResultado();
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    return Column(
       children: [
         OutlineTextfieldWidget(
-          title: 'Proveedores:',
-          icon: Icon(Icons.person_3_sharp),
+          initialValue: cubit.ventasContado.toCurrencyString(),
+          title: 'Ventas de contado:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(ventasContado: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Cuentas por pagar:',
-          icon: Icon(Icons.account_balance_wallet),
+          initialValue: cubit.recuperaciones.toCurrencyString(),
+          title: 'Recuperaciones:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                recuperaciones: newValue,
+              );
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Otras deudas:',
-          icon: Icon(Icons.pending),
+          initialValue: cubit.totalIngresos.toCurrencyString(),
+          title: 'Total ingresos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                totalIngresos: newValue,
+              );
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Total pasivos:',
-          icon: Icon(Icons.monetization_on),
+          initialValue: cubit.costoVenta.toCurrencyString(),
+          title: 'Costo de Ventas:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                costoVenta: newValue,
+              );
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Capital:',
-          icon: Icon(Icons.money),
+          initialValue: cubit.gastosOperativos.toCurrencyString(),
+          title: 'Gastos operativos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                gastosOperativos: newValue,
+              );
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Pasivos + Capital:',
-          icon: Icon(Icons.call_to_action_outlined),
+          initialValue: cubit.margenBrutoNegocio.toCurrencyString(),
+          title: 'Margen bruto del negocio:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                margenBrutoNegocio: newValue,
+              );
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.otrosIngresos.toCurrencyString(),
+          title: 'Otros ingresos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                otrosIngresos: newValue,
+              );
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.gastosUnidadFamiliar.toCurrencyString(),
+          title: 'Gasto unidad familiar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                gastosUnidadFamiliar: newValue,
+              );
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.disponidadFamiliar.toCurrencyString(),
+          title: 'Disponibilidad U.Familiar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                disponidadFamiliar: newValue,
+              );
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.dpp.toCurrencyString(),
+          title: 'D.P.P: (${cubit.dppPorcentaje}%)',
+          icon: const Icon(Icons.person_3_sharp),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = double.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(
+                dpp: newValue,
+              );
+            },
+          ),
         ),
       ],
     );
   }
 }
 
-class _ActivosWidgetsForm extends StatelessWidget {
-  const _ActivosWidgetsForm();
+class _PasivosAnalisisWidgetsForm extends StatelessWidget {
+  final AnalisisSolicitudNuevaMenorResponse solicitud;
+
+  const _PasivosAnalisisWidgetsForm({required this.solicitud});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    final totalPasivoAndCapitalCubit =
+        context.watch<AnalisisSolicitudNuevaMenorCubit>();
+
+    return Column(
       children: [
         OutlineTextfieldWidget(
-          title: 'Caja:',
-          icon: Icon(Icons.account_balance_wallet),
+          initialValue: cubit.proveedores.toCurrencyString(),
+          title: 'Proveedores:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.person_3_sharp),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(proveedores: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Banco:',
-          icon: Icon(Icons.account_balance),
+          initialValue: cubit.cuentasXPagar.toCurrencyString(),
+          title: 'Cuentas por pagar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.account_balance_wallet),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(cuentasXPagar: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Cuentas por cobrar:',
-          icon: Icon(Icons.monetization_on),
+          initialValue: cubit.otrasDeudas.toCurrencyString(),
+          title: 'Otras deudas:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.pending),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(otrasDeudas: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Inventario:',
-          icon: Icon(Icons.inventory),
+          initialValue: cubit.totalPasivo.toCurrencyString(),
+          title: 'Total pasivos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.monetization_on),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(totalPasivo: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Otros Activos:',
-          icon: Icon(Icons.monetization_on),
+          initialValue: cubit.capital.toCurrencyString(),
+          title: 'Capital:',
+          icon: const Icon(Icons.money),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(capital: newValue);
+            },
+          ),
         ),
         OutlineTextfieldWidget(
-          title: 'Total activos circulantes:',
-          icon: Icon(Icons.money),
-        ),
-        OutlineTextfieldWidget(
-          title: 'Activos fijo:',
-          icon: Icon(Icons.access_time),
-        ),
-        OutlineTextfieldWidget(
-          title: 'Total Activo:',
-          icon: Icon(Icons.call_to_action_outlined),
+          readOnly: true,
+          hintText: (totalPasivoAndCapitalCubit.state.totalPasivo +
+                  totalPasivoAndCapitalCubit.state.capital)
+              .toCurrencyString(),
+          title: 'Pasivos + Capital:',
+          icon: const Icon(Icons.call_to_action_outlined),
         ),
       ],
     );
   }
+}
+
+class _ActivosWidgetsForm extends StatefulWidget {
+  final AnalisisSolicitudNuevaMenorResponse solicitud;
+
+  const _ActivosWidgetsForm({required this.solicitud});
+
+  @override
+  State<_ActivosWidgetsForm> createState() => _ActivosWidgetsFormState();
+}
+
+class _ActivosWidgetsFormState extends State<_ActivosWidgetsForm>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisSolicitudNuevaMenorCubit>().state;
+    final onFieldChanged = context.read<AnalisisSolicitudNuevaMenorCubit>();
+    super.build(context);
+    return Column(
+      key: const Key('Activos'),
+      children: [
+        OutlineTextfieldWidget(
+          initialValue: cubit.caja.toCurrencyString(),
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          key: const Key('Caja'),
+          title: 'Caja:',
+          icon: const Icon(Icons.account_balance_wallet),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(caja: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.banco.toCurrencyString(),
+          title: 'Banco:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.account_balance),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(banco: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.cuentasXCobrar.toCurrencyString(),
+          title: 'Cuentas por cobrar:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.monetization_on),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(cuentasXCobrar: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.otrosActivos.toCurrencyString(),
+          title: 'Otros Activos:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.monetization_on),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(otrosActivos: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.totalAc.toCurrencyString(),
+          title: 'Total activos circulantes:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.money),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(totalAc: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          initialValue: cubit.activoFijo.toCurrencyString(),
+          title: 'Activos fijo:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.access_time),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(activoFijo: newValue);
+            },
+          ),
+        ),
+        OutlineTextfieldWidget(
+          readOnly: true,
+          initialValue: cubit.totalActivo.toCurrencyString(),
+          title: 'Total Activo:',
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
+          icon: const Icon(Icons.call_to_action_outlined),
+          onChange: (value) => onFieldChanged.onFieldChanged(
+            () {
+              final newValue = int.tryParse(value.replaceAll(',', '')) ?? 0;
+              return onFieldChanged.state.copyWith(totalActivo: newValue);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

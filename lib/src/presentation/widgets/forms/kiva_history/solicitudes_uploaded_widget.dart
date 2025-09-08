@@ -1,11 +1,12 @@
-import 'dart:developer';
-
+import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/forms/kiva_request_not_saved_response.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_on_history/no_images_kivas_on_history_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
@@ -45,46 +46,57 @@ class SolicitudesUploadedWidget extends StatelessWidget {
         ),
       );
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
-            listener: (context, state) {
-              if (state.status == Status.done) {
-                CustomAlertDialog(
-                  context: context,
-                  title: 'Imagenes Enviadas Exitosamente',
-                  onDone: () => context.pop(),
-                ).showDialog(context, dialogType: DialogType.success);
-              }
-              if (state.status == Status.error) {
-                CustomAlertDialog(
-                  context: context,
-                  title: 'Error inesperado, ${state.errorMsg}',
-                  onDone: () => context.pop(),
-                ).showDialog(context, dialogType: DialogType.error);
-              }
-            },
-            builder: (context, state) {
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: solicitudes.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const KivaFormSpacing();
+    return BlocBuilder<NoImagesKivasOnHistoryCubit,
+        NoImagesKivasOnHistoryState>(
+      builder: (context, noImagesKivasOnHistoryState) {
+        final haveRequestPending = noImagesKivasOnHistoryState
+            is OnNoImagesKivasOnHistoryHaveRequestPending;
+        List<KivaRequestNotSavedUser>? pendingRequestList =
+            haveRequestPending ? noImagesKivasOnHistoryState.data.data : [];
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              BlocConsumer<UploadUserFileCubit, UploadUserFileState>(
+                listener: (context, state) {
+                  if (state.status == Status.done) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'Imagenes Enviadas Exitosamente',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.success);
+                  }
+                  if (state.status == Status.error) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'Error inesperado, ${state.errorMsg}',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.error);
+                  }
                 },
-                itemBuilder: (BuildContext context, int index) {
-                  return _SolicitudExpasionTitle(
-                    solicitud: solicitudes[index],
-                    imageModel: imageModel,
-                    status: state.status,
+                builder: (context, state) {
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: solicitudes.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const KivaFormSpacing();
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return _SolicitudExpasionTitle(
+                        solicitud: solicitudes[index],
+                        imageModel: imageModel,
+                        status: state.status,
+                        haveRequestPendingToSendImages: pendingRequestList!.any(
+                            (req) => req.numero == solicitudes[index].numero),
+                      );
+                    },
                   );
                 },
-              );
-            },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -93,9 +105,11 @@ class _SolicitudExpasionTitle extends StatefulWidget {
   final SolicitudesPendientes solicitud;
   final ImageModel? imageModel;
   final Status status;
+  final bool haveRequestPendingToSendImages;
   const _SolicitudExpasionTitle({
     required this.solicitud,
     required this.status,
+    required this.haveRequestPendingToSendImages,
     this.imageModel,
   });
 
@@ -106,6 +120,7 @@ class _SolicitudExpasionTitle extends StatefulWidget {
 
 class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
   ImageModel? imagenes;
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +128,6 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
   }
 
   initFunctions() async {
-    log('pasa por aqui');
     context.read<KivaRouteCubit>().setCurrentRouteProduct(
           nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
           cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -140,7 +154,10 @@ class _SolicitudExpasionTitleState extends State<_SolicitudExpasionTitle> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ExpansionTitleCustom(
         key: ValueKey(widget.solicitud.id),
-        title: _ExpansionRowTitle(solicitud: widget.solicitud),
+        title: _ExpansionRowTitle(
+          solicitud: widget.solicitud,
+          haveRequestPendingToSendImages: widget.haveRequestPendingToSendImages,
+        ),
         finalStep: true,
         children: [
           SolicitudExpansionTitle(solicitud: widget.solicitud),
@@ -257,15 +274,29 @@ class _ExpansionButtonsWidget extends StatelessWidget {
 
 class _ExpansionRowTitle extends StatelessWidget {
   final SolicitudesPendientes solicitud;
+  final bool haveRequestPendingToSendImages;
 
-  const _ExpansionRowTitle({required this.solicitud});
+  const _ExpansionRowTitle({
+    required this.solicitud,
+    required this.haveRequestPendingToSendImages,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         const Icon(Icons.assignment, color: Colors.blue),
-        const SizedBox(width: 8),
+        const Gap(8),
+        if (haveRequestPendingToSendImages) ...[
+          Pulse(
+            infinite: true,
+            child: const CircleAvatar(
+              backgroundColor: Colors.red,
+              maxRadius: 8,
+            ),
+          ),
+          const Gap(8),
+        ],
         Expanded(
           child: Text(
             '${solicitud.nombre}, ${solicitud.solicitudId}',

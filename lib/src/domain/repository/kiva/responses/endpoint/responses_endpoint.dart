@@ -354,3 +354,21 @@ class FileEndpoint extends Endpoint {
   @override
   List<ImagesModelEndpoint> get files => [imgPath];
 }
+
+class GetNoImagesKivasOnHistoryEndpoint extends Endpoint {
+  GetNoImagesKivasOnHistoryEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/kiva/alerta-archivos-no-guardados';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
