@@ -66,7 +66,7 @@ class _ViviendaNuevaOfflineResponseState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -88,6 +88,7 @@ class _ViviendaNuevaOfflineResponseState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -207,57 +208,63 @@ class _ViviendaNuevaOfflineResponseState
                         title:
                             'Otros datos relevantes e interesantes del cliente',
                       ),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
-                        },
-                        onNextPressed: () {
-                          context
-                              .read<MejoraViviendaCubit>()
-                              .sendOfflineAnswers(
-                                mejoravivienda: MejoraViviendaAnswer(
-                                    tipoSolicitud: state.mejoraViviendaDbLocal
-                                            ?.tipoSolicitud ??
-                                        '',
-                                    otrosDatosCliente: state
-                                            .mejoraViviendaDbLocal
-                                            ?.otrosDatosCliente ??
-                                        '',
-                                    planesFuturo: state.mejoraViviendaDbLocal
-                                            ?.planesFuturo ??
-                                        '',
-                                    comoAyudara:
-                                        state.mejoraViviendaDbLocal?.comoAyudara ??
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<MejoraViviendaCubit>()
+                                  .sendOfflineAnswers(
+                                    mejoravivienda: MejoraViviendaAnswer(
+                                        tipoSolicitud: state
+                                                .mejoraViviendaDbLocal
+                                                ?.tipoSolicitud ??
                                             '',
-                                    motivoPrestamo: state.mejoraViviendaDbLocal
-                                            ?.motivoPrestamo ??
-                                        '',
-                                    tipoEstudioHijos: state
-                                            .mejoraViviendaDbLocal
-                                            ?.tipoEstudioHijos ??
-                                        '',
-                                    edadHijos:
-                                        state.mejoraViviendaDbLocal?.edadHijos ??
+                                        otrosDatosCliente: state
+                                                .mejoraViviendaDbLocal
+                                                ?.otrosDatosCliente ??
                                             '',
-                                    numeroHijos: state.mejoraViviendaDbLocal?.numeroHijos ?? 0,
-                                    personasCargo: state.mejoraViviendaDbLocal?.personasCargo ?? '',
-                                    necesidadesComunidad: state.mejoraViviendaDbLocal?.necesidadesComunidad ?? '',
-                                    objTipoComunidadId: state.mejoraViviendaDbLocal?.objTipoComunidadId ?? '',
-                                    objOrigenCatalogoValorId: state.mejoraViviendaDbLocal?.objOrigenCatalogoValorId ?? '',
-                                    otrosIngresosDescripcion: state.mejoraViviendaDbLocal?.otrosIngresosDescripcion ?? '',
-                                    otrosIngresos: state.mejoraViviendaDbLocal?.otrosIngresos ?? false,
-                                    tiempoActividad: state.mejoraViviendaDbLocal?.tiempoActividad ?? 0,
-                                    solicitudNuevamenorId: state.mejoraViviendaDbLocal?.solicitudNuevamenorId ?? 0,
-                                    username: state.mejoraViviendaDbLocal?.username ?? '',
-                                    tieneTrabajo: state.mejoraViviendaDbLocal?.tieneTrabajo ?? false,
-                                    database: state.mejoraViviendaDbLocal?.database ?? '',
-                                    trabajoNegocioDescripcion: state.mejoraViviendaDbLocal?.trabajoNegocioDescripcion ?? ''),
-                              );
+                                        planesFuturo: state
+                                                .mejoraViviendaDbLocal
+                                                ?.planesFuturo ??
+                                            '',
+                                        comoAyudara: state.mejoraViviendaDbLocal
+                                                ?.comoAyudara ??
+                                            '',
+                                        motivoPrestamo: state
+                                                .mejoraViviendaDbLocal
+                                                ?.motivoPrestamo ??
+                                            '',
+                                        tipoEstudioHijos: state
+                                                .mejoraViviendaDbLocal
+                                                ?.tipoEstudioHijos ??
+                                            '',
+                                        edadHijos: state.mejoraViviendaDbLocal?.edadHijos ?? '',
+                                        numeroHijos: state.mejoraViviendaDbLocal?.numeroHijos ?? 0,
+                                        personasCargo: state.mejoraViviendaDbLocal?.personasCargo ?? '',
+                                        necesidadesComunidad: state.mejoraViviendaDbLocal?.necesidadesComunidad ?? '',
+                                        objTipoComunidadId: state.mejoraViviendaDbLocal?.objTipoComunidadId ?? '',
+                                        objOrigenCatalogoValorId: state.mejoraViviendaDbLocal?.objOrigenCatalogoValorId ?? '',
+                                        otrosIngresosDescripcion: state.mejoraViviendaDbLocal?.otrosIngresosDescripcion ?? '',
+                                        otrosIngresos: state.mejoraViviendaDbLocal?.otrosIngresos ?? false,
+                                        tiempoActividad: state.mejoraViviendaDbLocal?.tiempoActividad ?? 0,
+                                        solicitudNuevamenorId: state.mejoraViviendaDbLocal?.solicitudNuevamenorId ?? 0,
+                                        username: state.mejoraViviendaDbLocal?.username ?? '',
+                                        tieneTrabajo: state.mejoraViviendaDbLocal?.tieneTrabajo ?? false,
+                                        database: state.mejoraViviendaDbLocal?.database ?? '',
+                                        trabajoNegocioDescripcion: state.mejoraViviendaDbLocal?.trabajoNegocioDescripcion ?? ''),
+                                  );
+                            },
+                            previousTitle: 'Salir',
+                            nextTitle: 'Enviar',
+                          );
                         },
-                        previousTitle: 'Salir',
-                        nextTitle: 'Enviar',
                       ),
                     ],
                   ),
@@ -319,7 +326,7 @@ class _RecurrenteViviendaOfflineResponseState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -341,6 +348,7 @@ class _RecurrenteViviendaOfflineResponseState
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
               await customPopUp(
                 context: context,
                 dismissOnTouchOutside: false,
@@ -491,111 +499,116 @@ class _RecurrenteViviendaOfflineResponseState
                             'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (context, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<RecurrenteMejoraViviendaCubit>()
+                                  .sendOfflineAnswers(
+                                    recurrentemejoravivienda:
+                                        MejoraViviendaRecurrente(
+                                      tipoSolicitud: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      objSolicitudRecurrenteId: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.objSolicitudRecurrenteId ??
+                                          0,
+                                      username: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.username ??
+                                          '',
+                                      tieneTrabajo: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      database: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.database ??
+                                          '',
+                                      trabajoNegocioDescripcion: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      objTipoComunidadId: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.objTipoComunidadId ??
+                                          '',
+                                      necesidadesComunidad: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.necesidadesComunidad ??
+                                          '',
+                                      personasCargo: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.personasCargo ??
+                                          '',
+                                      numeroHijos: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      coincideRespuesta: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.coincideRespuesta ??
+                                          false,
+                                      explicacionInversion: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.explicacionInversion ??
+                                          '',
+                                      viviendaAntesDespues: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.viviendaAntesDespues ??
+                                          '',
+                                      mejoraSeguridadFamilia: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.mejoraSeguridadFamilia ??
+                                          '',
+                                      quienApoya: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      siguienteMeta: state
+                                              .recurrenteMejoraViviendaDbLocal
+                                              ?.siguienteMeta ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<RecurrenteMejoraViviendaCubit>()
-                              .sendOfflineAnswers(
-                                recurrentemejoravivienda:
-                                    MejoraViviendaRecurrente(
-                                  tipoSolicitud: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  objSolicitudRecurrenteId: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.objSolicitudRecurrenteId ??
-                                      0,
-                                  username: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.username ??
-                                      '',
-                                  tieneTrabajo: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  database: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.database ??
-                                      '',
-                                  trabajoNegocioDescripcion: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  objTipoComunidadId: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.objTipoComunidadId ??
-                                      '',
-                                  necesidadesComunidad: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.necesidadesComunidad ??
-                                      '',
-                                  personasCargo: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.personasCargo ??
-                                      '',
-                                  numeroHijos: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  motivoPrestamo: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  coincideRespuesta: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.coincideRespuesta ??
-                                      false,
-                                  explicacionInversion: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.explicacionInversion ??
-                                      '',
-                                  viviendaAntesDespues: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.viviendaAntesDespues ??
-                                      '',
-                                  mejoraSeguridadFamilia: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.mejoraSeguridadFamilia ??
-                                      '',
-                                  quienApoya: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  siguienteMeta: state
-                                          .recurrenteMejoraViviendaDbLocal
-                                          ?.siguienteMeta ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'Salir'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

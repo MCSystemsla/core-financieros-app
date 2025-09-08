@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.d
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/origin/origin.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
@@ -306,31 +307,33 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                       isRequired: false,
                     ),
                     const Gap(30),
-                    OutlineTextfieldWidget(
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      maxLength: 40,
-                      icon: Icon(
-                        Icons.location_on,
-                        color: AppColors.getPrimaryColor(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
                       ),
-                      title: 'Ubicación',
-                      textCapitalization: TextCapitalization.words,
-                      onChange: (value) {
-                        ubicacion = value;
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            ubicacion: value,
-                          ),
-                        );
-                        setState(() {});
-                      },
-                      hintText: 'Ingresa Ubicación',
-                      isValid: null,
-                      isRequired: false,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
+                      child: JLuxDropdown(
+                        dropdownColor: Colors.white,
+                        isContainIcon: true,
+                        title: 'Ubicación',
+                        items: Origin.comunidades,
+                        onChanged: (item) {
+                          if (item == null) return;
+                          ubicacion = item.nombre;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              ubicacion: item.nombre,
+                            ),
+                          );
+                          setState(() {});
+                        },
+                        toStringItem: (item) {
+                          return item.nombre;
+                        },
+                        hintText: 'input.select_option'.tr(),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                      ),
                     ),
                     const Gap(30),
                     Container(

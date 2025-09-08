@@ -4,8 +4,8 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/pinput/custom_pinput_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +61,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 margin: const EdgeInsets.all(18),
                 child: Text(
                   'cartera.description'.tr(),
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontSize: 19,
                       ),
                 ),
@@ -103,11 +103,16 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 ModuleCard(
-                  onTap: () async {
-                    if (!context.mounted) return;
+                  onTap: () {
                     state.connectionStatus == ConnectionStatus.connected
                         ? context.push('/cartera/formulario-kiva')
                         : context.push('/cartera/kiva-offline');
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const SelectTypeKivaScreen(),
+                    //   ),
+                    // );
                   },
                   title: 'cartera.kiva'.tr(),
                   subtitle: 'cartera.kiva_description'.tr(),
@@ -127,7 +132,7 @@ class _CarteraContentWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const CustomPinputWidget(),
+                        builder: (_) => const KivaHistoryRequestScreen(),
                       ),
                     );
                   },

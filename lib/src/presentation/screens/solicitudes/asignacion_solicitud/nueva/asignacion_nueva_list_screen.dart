@@ -126,7 +126,7 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
                             fecha: state.solicitudes[index].fechaSolicitud,
                             monto: state.solicitudes[index].monto!
                                 .toCurrencyString(),
-                            estadoCodigo: state.solicitudes[index].codigo,
+                            estadoCodigo: state.solicitudes[index].estado,
                             sucursal:
                                 state.solicitudes[index].sucursal ?? 'N/A',
                             nombreCliente:

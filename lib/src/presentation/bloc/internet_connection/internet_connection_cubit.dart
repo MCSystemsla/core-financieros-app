@@ -64,4 +64,14 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
       ),
     );
   }
+
+  void makeToOnlineMode() {
+    emit(
+      state.copyWith(
+        connectionStatus: ConnectionStatus.connected,
+        isConnected: true,
+        lastCheck: DateTime.now().toIso8601String(),
+      ),
+    );
+  }
 }

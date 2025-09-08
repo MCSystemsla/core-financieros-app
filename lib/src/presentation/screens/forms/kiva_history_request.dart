@@ -1,14 +1,20 @@
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_on_history/no_images_kivas_on_history_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_history/solicitudes_uploaded_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class KivaHistoryRequestScreen extends StatefulWidget {
-  const KivaHistoryRequestScreen({super.key});
+  final bool needGoHome;
+  const KivaHistoryRequestScreen({
+    super.key,
+    this.needGoHome = false,
+  });
 
   @override
   State<KivaHistoryRequestScreen> createState() =>
@@ -30,14 +36,29 @@ class _KivaHistoryRequestScreenState extends State<KivaHistoryRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => UploadUserFileCubit(
-        ResponsesRepositoryImpl(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => UploadUserFileCubit(
+            ResponsesRepositoryImpl(),
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => NoImagesKivasOnHistoryCubit(
+            ResponsesRepositoryImpl(),
+          )..getNoImagesKivasOnHistory(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Historial Solicitudes Kiva Enviadas'),
           centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              widget.needGoHome ? context.push('/') : context.pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          ),
         ),
         body: BlocBuilder<SolicitudesPendientesLocalDbCubit,
             SolicitudesPendientesLocalDbState>(

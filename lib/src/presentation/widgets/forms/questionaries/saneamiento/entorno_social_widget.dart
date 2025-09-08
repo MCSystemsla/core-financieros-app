@@ -1,6 +1,8 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/agua_y_saneamiento/agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
@@ -53,8 +55,12 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
   @override
   Widget build(BuildContext context) {
     final cantidadHijos = context.read<KivaRouteCubit>().state.cantidadHijos;
+    final flavor = global<FlavorCubit>().state.flavor;
+    final currentFlavorString = getCurrentFlavorString(flavor: flavor);
     final localDbProvider = global<ObjectBoxService>();
-    final items = localDbProvider.departmentsBox.getAll();
+    final items = localDbProvider.catalogoNacionalidadDepBox.getAll().where(
+          (e) => e.relacion == currentFlavorString,
+        );
     final departmentos =
         items.map((e) => Item(name: e.nombre, value: e.valor)).toList();
 

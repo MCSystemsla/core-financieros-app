@@ -64,7 +64,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -86,6 +86,7 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
               //       widget.solicitudId,
               //       context.read<KivaRouteCubit>().state.currentRoute,
               //     );
+              if (!context.mounted) return;
 
               await customPopUp(
                 context: context,
@@ -289,124 +290,140 @@ class _MigranteEconomicoOfflineState extends State<MigranteEconomicoOffline> {
                                 'N/A',
                       ),
                       const Gap(20),
-                      ButtonActionsWidget(
-                        disabled: state.status == Status.inProgress ||
-                            response.status == Status.inProgress,
-                        onPreviousPressed: () {
-                          context.pop();
+                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                        builder: (_, imageState) {
+                          return ButtonActionsWidget(
+                            disabled: state.status == Status.inProgress ||
+                                response.status == Status.inProgress ||
+                                imageState.status == Status.inProgress,
+                            onPreviousPressed: () {
+                              context.pop();
+                            },
+                            onNextPressed: () {
+                              context
+                                  .read<MigrantesEconomicosCubit>()
+                                  .sendOfflineAnswers(
+                                    migrantesEconomicos: MigrantesEconomicos(
+                                      tipoSolicitud: state
+                                              .migranteEconomicoDbLocal
+                                              ?.tipoSolicitud ??
+                                          '',
+                                      database: LocalStorage().database,
+                                      objSolicitudNuevamenorId: int.tryParse(
+                                              context
+                                                  .read<KivaRouteCubit>()
+                                                  .state
+                                                  .solicitudId) ??
+                                          0,
+                                      tieneTrabajo: state
+                                              .migranteEconomicoDbLocal
+                                              ?.tieneTrabajo ??
+                                          false,
+                                      trabajoNegocioDescripcion: state
+                                              .migranteEconomicoDbLocal
+                                              ?.trabajoNegocioDescripcion ??
+                                          '',
+                                      tiempoActividad: state
+                                              .migranteEconomicoDbLocal
+                                              ?.tiempoActividad ??
+                                          0,
+                                      otrosIngresos: state
+                                              .migranteEconomicoDbLocal
+                                              ?.otrosIngresos ??
+                                          false,
+                                      otrosIngresosDescripcion: state
+                                              .migranteEconomicoDbLocal
+                                              ?.otrosIngresosDescripcion ??
+                                          '',
+                                      personasCargo: state
+                                              .migranteEconomicoDbLocal
+                                              ?.personasCargo ??
+                                          0,
+                                      objOrigenUbicacionGeograficaId: state
+                                              .migranteEconomicoDbLocal
+                                              ?.objOrigenUbicacionGeograficaId ??
+                                          '',
+                                      motivoDejarPais: state
+                                              .migranteEconomicoDbLocal
+                                              ?.motivoDejarPais ??
+                                          '',
+                                      situacionMigratoria: state
+                                              .migranteEconomicoDbLocal
+                                              ?.situacionMigratoria ??
+                                          '',
+                                      dedicabaPaisOrigen: state
+                                              .migranteEconomicoDbLocal
+                                              ?.dedicabaPaisOrigen ??
+                                          '',
+                                      vivePaisActual: state
+                                              .migranteEconomicoDbLocal
+                                              ?.vivePaisActual ??
+                                          '',
+                                      numeroHijos: state
+                                              .migranteEconomicoDbLocal
+                                              ?.numeroHijos ??
+                                          0,
+                                      edadHijos: state.migranteEconomicoDbLocal
+                                              ?.edadHijos ??
+                                          '',
+                                      tipoEstudioHijos: state
+                                              .migranteEconomicoDbLocal
+                                              ?.tipoEstudioHijos ??
+                                          '',
+                                      enviaRemesas: state
+                                              .migranteEconomicoDbLocal
+                                              ?.enviaRemesas ??
+                                          false,
+                                      enviaRemesasExplicacion: state
+                                              .migranteEconomicoDbLocal
+                                              ?.enviaRemesasExplicacion ??
+                                          '',
+                                      quienApoya: state.migranteEconomicoDbLocal
+                                              ?.quienApoya ??
+                                          '',
+                                      fortalecerIngresos: state
+                                              .migranteEconomicoDbLocal
+                                              ?.fortalecerIngresos ??
+                                          false,
+                                      fortalecerIngresosExplicacion: state
+                                              .migranteEconomicoDbLocal
+                                              ?.fortalecerIngresosExplicacion ??
+                                          '',
+                                      metasFuturo: state
+                                              .migranteEconomicoDbLocal
+                                              ?.metasFuturo ??
+                                          '',
+                                      motivoPrestamo: state
+                                              .migranteEconomicoDbLocal
+                                              ?.motivoPrestamo ??
+                                          '',
+                                      ayudaMejorarCondiciones: state
+                                              .migranteEconomicoDbLocal
+                                              ?.ayudaMejorarCondiciones ??
+                                          false,
+                                      ayudaMejorarCondicionesExplicacion: state
+                                              .migranteEconomicoDbLocal
+                                              ?.ayudaMejorarCondicionesExplicacion ??
+                                          '',
+                                      propositosProximos: state
+                                              .migranteEconomicoDbLocal
+                                              ?.propositosProximos ??
+                                          '',
+                                      piensaRegresar: state
+                                              .migranteEconomicoDbLocal
+                                              ?.piensaRegresar ??
+                                          '',
+                                      otrosDatosCliente: state
+                                              .migranteEconomicoDbLocal
+                                              ?.otrosDatosCliente ??
+                                          '',
+                                    ),
+                                  );
+                            },
+                            previousTitle: 'Salir'.tr(),
+                            nextTitle: 'Enviar'.tr(),
+                          );
                         },
-                        onNextPressed: () {
-                          context
-                              .read<MigrantesEconomicosCubit>()
-                              .sendOfflineAnswers(
-                                migrantesEconomicos: MigrantesEconomicos(
-                                  tipoSolicitud: state.migranteEconomicoDbLocal
-                                          ?.tipoSolicitud ??
-                                      '',
-                                  database: LocalStorage().database,
-                                  objSolicitudNuevamenorId: int.tryParse(context
-                                          .read<KivaRouteCubit>()
-                                          .state
-                                          .solicitudId) ??
-                                      0,
-                                  tieneTrabajo: state.migranteEconomicoDbLocal
-                                          ?.tieneTrabajo ??
-                                      false,
-                                  trabajoNegocioDescripcion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.trabajoNegocioDescripcion ??
-                                      '',
-                                  tiempoActividad: state
-                                          .migranteEconomicoDbLocal
-                                          ?.tiempoActividad ??
-                                      0,
-                                  otrosIngresos: state.migranteEconomicoDbLocal
-                                          ?.otrosIngresos ??
-                                      false,
-                                  otrosIngresosDescripcion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.otrosIngresosDescripcion ??
-                                      '',
-                                  personasCargo: state.migranteEconomicoDbLocal
-                                          ?.personasCargo ??
-                                      0,
-                                  objOrigenUbicacionGeograficaId: state
-                                          .migranteEconomicoDbLocal
-                                          ?.objOrigenUbicacionGeograficaId ??
-                                      '',
-                                  motivoDejarPais: state
-                                          .migranteEconomicoDbLocal
-                                          ?.motivoDejarPais ??
-                                      '',
-                                  situacionMigratoria: state
-                                          .migranteEconomicoDbLocal
-                                          ?.situacionMigratoria ??
-                                      '',
-                                  dedicabaPaisOrigen: state
-                                          .migranteEconomicoDbLocal
-                                          ?.dedicabaPaisOrigen ??
-                                      '',
-                                  vivePaisActual: state.migranteEconomicoDbLocal
-                                          ?.vivePaisActual ??
-                                      '',
-                                  numeroHijos: state.migranteEconomicoDbLocal
-                                          ?.numeroHijos ??
-                                      0,
-                                  edadHijos: state.migranteEconomicoDbLocal
-                                          ?.edadHijos ??
-                                      '',
-                                  tipoEstudioHijos: state
-                                          .migranteEconomicoDbLocal
-                                          ?.tipoEstudioHijos ??
-                                      '',
-                                  enviaRemesas: state.migranteEconomicoDbLocal
-                                          ?.enviaRemesas ??
-                                      false,
-                                  enviaRemesasExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.enviaRemesasExplicacion ??
-                                      '',
-                                  quienApoya: state.migranteEconomicoDbLocal
-                                          ?.quienApoya ??
-                                      '',
-                                  fortalecerIngresos: state
-                                          .migranteEconomicoDbLocal
-                                          ?.fortalecerIngresos ??
-                                      false,
-                                  fortalecerIngresosExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.fortalecerIngresosExplicacion ??
-                                      '',
-                                  metasFuturo: state.migranteEconomicoDbLocal
-                                          ?.metasFuturo ??
-                                      '',
-                                  motivoPrestamo: state.migranteEconomicoDbLocal
-                                          ?.motivoPrestamo ??
-                                      '',
-                                  ayudaMejorarCondiciones: state
-                                          .migranteEconomicoDbLocal
-                                          ?.ayudaMejorarCondiciones ??
-                                      false,
-                                  ayudaMejorarCondicionesExplicacion: state
-                                          .migranteEconomicoDbLocal
-                                          ?.ayudaMejorarCondicionesExplicacion ??
-                                      '',
-                                  propositosProximos: state
-                                          .migranteEconomicoDbLocal
-                                          ?.propositosProximos ??
-                                      '',
-                                  piensaRegresar: state.migranteEconomicoDbLocal
-                                          ?.piensaRegresar ??
-                                      '',
-                                  otrosDatosCliente: state
-                                          .migranteEconomicoDbLocal
-                                          ?.otrosDatosCliente ??
-                                      '',
-                                ),
-                              );
-                        },
-                        previousTitle: 'Salir'.tr(),
-                        nextTitle: 'Enviar'.tr(),
                       ),
                     ],
                   ),

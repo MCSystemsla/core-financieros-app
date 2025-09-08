@@ -6,11 +6,13 @@ class SolicitudesPendientesState extends Equatable {
   final String errorMsg;
   final List<Solicitud> solicitudesPendienteResponse;
   final List<Solicitud> filteredSolicitudes;
+  final bool isColletionTablesDelted;
   const SolicitudesPendientesState({
     this.solicitudesPendienteResponse = const [],
     this.status = Status.notStarted,
     this.filteredSolicitudes = const [],
     this.errorMsg = '',
+    this.isColletionTablesDelted = false,
   });
 
   @override
@@ -19,6 +21,7 @@ class SolicitudesPendientesState extends Equatable {
         status,
         filteredSolicitudes,
         errorMsg,
+        isColletionTablesDelted,
       ];
 
   SolicitudesPendientesState copyWith({
@@ -26,6 +29,7 @@ class SolicitudesPendientesState extends Equatable {
     String? errorMsg,
     List<Solicitud>? solicitudesPendienteResponse,
     List<Solicitud>? filteredSolicitudes,
+    bool? isColletionTablesDelted,
   }) {
     return SolicitudesPendientesState(
       status: status ?? this.status,
@@ -33,6 +37,8 @@ class SolicitudesPendientesState extends Equatable {
       solicitudesPendienteResponse:
           solicitudesPendienteResponse ?? this.solicitudesPendienteResponse,
       filteredSolicitudes: filteredSolicitudes ?? this.filteredSolicitudes,
+      isColletionTablesDelted:
+          isColletionTablesDelted ?? this.isColletionTablesDelted,
     );
   }
 }

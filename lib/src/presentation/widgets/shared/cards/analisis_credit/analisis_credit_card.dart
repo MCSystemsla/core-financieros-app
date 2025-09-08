@@ -10,7 +10,8 @@ class AnalisisCreditCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String description;
-
+  final String numeroSolicitud;
+  final AnalisisSolicitudesInterceptorType? tipoSolicitud;
   const AnalisisCreditCard({
     super.key,
     required this.index,
@@ -19,6 +20,8 @@ class AnalisisCreditCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.description,
+    this.tipoSolicitud,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -42,8 +45,11 @@ class AnalisisCreditCard extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => AnalisisSolicitudesInterceptor(
                           index: index,
-                          type:
-                              AnalisisSolicitudesInterceptorType.nuevaMayorAMil,
+                          type: tipoSolicitud!,
+                          title: title,
+                          subtitle: subtitle,
+                          description: description,
+                          numeroSolicitud: numeroSolicitud,
                         ),
                       ),
                     );

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:equatable/equatable.dart';
 
 part 'solicitudes_offline_state.dart';
@@ -22,12 +23,14 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
           objectBoxService.getSolicitudesReprestamoResponse();
       final solicitudesAsalariadoOffline =
           objectBoxService.getSolicitudesAsalariadoResponse();
+      final solicitudesCreditoKiva = getSolicitudesCreditoOfflineKiva();
       emit(
         OnSolicitudesOfflineSuccess(
           solicitudesAsalariado: solicitudesAsalariadoOffline.reversed.toList(),
           solicitudesOffline: solicitudesOffline.reversed.toList(),
           solicitudesOfflineReprestamo:
               solicitudesOfflineReprestamo.reversed.toList(),
+          solicitudesOnKiva: solicitudesCreditoKiva,
         ),
       );
     } on AppException catch (e) {
@@ -35,6 +38,12 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
     } catch (e) {
       emit(OnSolicitudesOfflineError(errorMsg: e.toString()));
     }
+  }
+
+  List<Item> getSolicitudesCreditoOfflineKiva() {
+    final solicitudes = objectBoxService.getProductosSolicitudesCredito();
+
+    return solicitudes;
   }
 
   void deleteItemByDeterminateDay() {

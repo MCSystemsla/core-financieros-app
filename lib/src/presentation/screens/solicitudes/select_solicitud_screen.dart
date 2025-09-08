@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/asignac
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/solicitudes_asesor/solicitudes_asesor_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -125,6 +126,8 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             const _SolicitudesCardsRow2(),
             const Gap(20),
+            const _MySolicitudesAsignmentsCard(),
+            const Gap(20),
             const _SolicitudesCardsRow3(),
             const Gap(20),
             const _SolicitudesCardsRow4(),
@@ -153,6 +156,34 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: ((_) => const AsignacionListScreen()),
+                ),
+              );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _MySolicitudesAsignmentsCard extends StatelessWidget {
+  const _MySolicitudesAsignmentsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.mySolicitudesAssignments,
+            title: 'Mi Solicitudes Asignadas',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const SolicitudesAsesorScreen()),
                 ),
               );
             },

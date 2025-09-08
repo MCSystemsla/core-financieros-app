@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -432,6 +433,60 @@ class ObjectBoxService {
     try {
       final resp = solicitudesReprestamoResponsesBox.getAll();
       return resp;
+    } catch (e) {
+      _logger.e(e.toString());
+      throw AppException.toAppException(e);
+    }
+  }
+
+  List<Item> getProductosSolicitudesCredito() {
+    final kivaListProducts = [
+      'ESTANDAR NUEVO',
+      'ESTANDAR RECURRENTE',
+    ];
+    try {
+      final solicitudesNuevas = solicitudesResponsesBox.getAll().where(
+            (e) =>
+                e.isDone == true &&
+                kivaListProducts.contains(e.objProductoIdVer),
+          );
+      final solicitudesReprestamo =
+          solicitudesReprestamoResponsesBox.getAll().where(
+                (e) =>
+                    e.isDone == true &&
+                    kivaListProducts.contains(e.objProductoIdVer),
+              );
+
+      final solicitudesAsalariado =
+          solicitudesAsalariadoResponsesBox.getAll().where(
+                (e) =>
+                    e.isDone == true &&
+                    kivaListProducts.contains(e.objProductoIdVer),
+              );
+      final listNuevas = solicitudesNuevas
+          .map((e) => Item(
+                name: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
+                value: e.objProductoIdVer,
+              ))
+          .toList();
+      final listAsalariado = solicitudesAsalariado
+          .map((e) => Item(
+                name: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
+                value: e.objProductoIdVer,
+              ))
+          .toList();
+      final listReprestamo = solicitudesReprestamo
+          .map((e) => Item(
+                name: e.nombreCompletoCliente ?? 'N/A',
+                value: e.objProductoIdVer,
+              ))
+          .toList();
+
+      return [
+        ...listNuevas,
+        ...listAsalariado,
+        ...listReprestamo,
+      ];
     } catch (e) {
       _logger.e(e.toString());
       throw AppException.toAppException(e);

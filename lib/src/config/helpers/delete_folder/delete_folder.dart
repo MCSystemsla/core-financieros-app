@@ -27,24 +27,26 @@ class DeleteFolderImpl extends DeleteFolder {
   }
 
   @override
-  Future<void> deleteCoreFinancieroFolderByDetermineDate() async {
+  Future<bool> deleteCoreFinancieroFolderByDetermineDate() async {
     try {
       final needsDelete =
           await shouldDeleteFolder(determiningTime: const Duration(days: 12));
 
-      if (!needsDelete) return;
+      if (!needsDelete) return false;
       final folder = Directory('/storage/emulated/0/Core_Financiero_App/');
 
       if (!await folder.exists()) {
         _logger.d('🧹 Carpeta `Core_Financiero_App` No Existe');
-        return;
+        return false;
       }
 
       await folder.delete(recursive: true);
       await saveLastDeleteDate();
       _logger.d('Carpeta `Core_Financiero_App` borrada');
+      return true;
     } catch (e) {
       _logger.e(e);
+      return false;
     }
   }
 

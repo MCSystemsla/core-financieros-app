@@ -30,7 +30,7 @@ class AguaYSaneamientoState extends Equatable {
   const AguaYSaneamientoState({
     this.tipoSolicitud = '',
     this.status = Status.notStarted,
-    this.database = 'MC_CH',
+    this.database = '',
     this.solicitudNuevamenorId = 0,
     this.tieneTrabajo = false,
     this.trabajoNegocioDescripcion = '',

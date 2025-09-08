@@ -67,6 +67,9 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
               );
               context.pushReplacement('/login');
             }
+            if (state.isColletionTablesDelted) {
+              solicitudesProvider.deleteAllSolicitudes();
+            }
 
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(

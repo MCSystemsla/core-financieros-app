@@ -122,11 +122,6 @@ class _PrimerPrestamoWidgetState extends State<PrimerPrestamoWidget>
                                 response: otrosIngresosDescripcion.text.trim(),
                                 index: widget.controller.page?.toInt() ?? 0,
                               ),
-                            Response(
-                              question: 'Número de personas a cargo:*',
-                              response: personasCargo.text.trim(),
-                              index: widget.controller.page?.toInt() ?? 0,
-                            ),
                           ],
                         );
                         widget.controller.nextPage(
