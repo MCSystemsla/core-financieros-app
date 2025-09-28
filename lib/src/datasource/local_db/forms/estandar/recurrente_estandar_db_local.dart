@@ -31,4 +31,7 @@ class RecurrenteEstandarDbLocal {
   String? trabajoDescripcion;
   int? tiempoActividad;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

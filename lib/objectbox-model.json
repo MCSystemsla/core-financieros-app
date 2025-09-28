@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "146:4604020010912184238",
+      "lastPropertyId": "147:1434527191702913174",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -556,7 +556,7 @@
         {
           "id": "72:8707214069627763276",
           "name": "espeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "73:2971958953666040933",
@@ -581,7 +581,7 @@
         {
           "id": "77:6002792746728140581",
           "name": "tieneFamiliarPeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "78:1333878176834195371",
@@ -927,13 +927,18 @@
           "id": "146:4604020010912184238",
           "name": "isOffline",
           "type": 1
+        },
+        {
+          "id": "147:1434527191702913174",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "87:6547042730322422823",
+      "lastPropertyId": "88:454189084863864254",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1366,13 +1371,18 @@
           "id": "87:6547042730322422823",
           "name": "paisPeps2Ver",
           "type": 9
+        },
+        {
+          "id": "88:454189084863864254",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "155:2650882584117058795",
+      "lastPropertyId": "156:5945438603063566861",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -1664,7 +1674,7 @@
         {
           "id": "58:1629770468389854072",
           "name": "espeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "59:5219343769096125024",
@@ -1689,7 +1699,7 @@
         {
           "id": "63:3318684764539981590",
           "name": "tieneFamiliarPeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "64:1755152650040289906",
@@ -2150,6 +2160,11 @@
           "id": "155:2650882584117058795",
           "name": "paisPeps2Ver",
           "type": 9
+        },
+        {
+          "id": "156:5945438603063566861",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
@@ -2216,9 +2231,68 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "18:2473895458890891801",
+      "lastPropertyId": "10:8158607882291531379",
+      "name": "KivaConfiguracionLocalDb",
+      "properties": [
+        {
+          "id": "1:171499448387372530",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6201284309161292789",
+          "name": "productoCodigo",
+          "type": 9
+        },
+        {
+          "id": "3:4069165323575816176",
+          "name": "producto",
+          "type": 9
+        },
+        {
+          "id": "4:3853539654527968398",
+          "name": "esRecurrente",
+          "type": 1
+        },
+        {
+          "id": "5:8251158332613813975",
+          "name": "formularioKiva",
+          "type": 9
+        },
+        {
+          "id": "6:820603941334310183",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "7:4021832819291001901",
+          "name": "montoMaximo",
+          "type": 6
+        },
+        {
+          "id": "8:8105191679385203943",
+          "name": "plazoMinimo",
+          "type": 6
+        },
+        {
+          "id": "9:4514748507511931608",
+          "name": "plazoMaximo",
+          "type": 6
+        },
+        {
+          "id": "10:8158607882291531379",
+          "name": "aplicaMigrantesEconomicos",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "17:6725755909143094672",
+  "lastEntityId": "18:2473895458890891801",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

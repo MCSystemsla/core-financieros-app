@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -17,10 +16,11 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/search_branch_sheet_delegate.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/logo/logo_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -91,9 +91,9 @@ class _LoginScreenViewState extends State<LoginScreenView>
             body: PopScope(
               canPop: false,
               child: FadeIn(
-                child: const CustomBackground(
+                child: CustomBackground(
                   child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -102,11 +102,11 @@ class _LoginScreenViewState extends State<LoginScreenView>
                           SafeArea(
                             child: Image(
                               height: 180,
-                              image: AssetImage(ImageAsset.logoNi),
+                              image: AssetImage(flavor.toLogoExtension),
                             ),
                           ),
-                          Gap(5),
-                          LoginFormWidget(),
+                          const Gap(5),
+                          const LoginFormWidget(),
                         ],
                       ),
                     ),
@@ -231,25 +231,23 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               const Gap(25),
               BlocBuilder<BranchteamCubit, BranchteamState>(
                 builder: (context, state) {
-                  return JLuxDropdown(
-                    isContainIcon: true,
-                    isLoading: state.status == Status.inProgress,
-                    validator: (value) {
-                      if (value == null) return 'auth.errors.branchTeam'.tr();
-
-                      return null;
-                    },
+                  return SearchBranchSheetDelegate(
                     title: 'auth.branch'.tr(),
-                    items: state.branchTeams,
+                    isRequired: true,
                     onChanged: (item) {
                       if (item == null) return;
                       branchTeam = item.nombreDb;
                       setState(() {});
                     },
-                    toStringItem: (item) {
-                      return item.nombre;
-                    },
                     hintText: 'auth.select_branch'.tr(),
+                    enabled: true,
+                    isLoading: state.status == Status.inProgress,
+                    items: state.branchTeams,
+                    validator: (value) {
+                      if (value == null) return 'auth.errors.branchTeam'.tr();
+
+                      return null;
+                    },
                   );
                 },
               ),

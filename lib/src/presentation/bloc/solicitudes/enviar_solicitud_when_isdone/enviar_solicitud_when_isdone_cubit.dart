@@ -8,10 +8,21 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitu
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
 part 'enviar_solicitud_when_isdone_state.dart';
+
+typedef OnSolicitudCreditoIsKivaFn = void Function({
+  required String uuid,
+  required String numeroSolicitud,
+  required String solicitudId,
+  required String tipoProducto,
+  required String nombreFomularioKiva,
+  required String cedula,
+  required int tipoSolicitudId,
+});
 
 class EnviarSolicitudWhenIsdoneCubit
     extends Cubit<EnviarSolicitudWhenIsdoneState> {
@@ -21,12 +32,20 @@ class EnviarSolicitudWhenIsdoneCubit
       : super(EnviarSolicitudWhenIsdoneInitial());
   final _logger = Logger();
 
-  void sendSolicitudWhenIsDone({required bool isConnected}) async {
+  void sendSolicitudWhenIsDone({
+    required bool isConnected,
+    required OnSolicitudCreditoIsKivaFn onSolicitudCreditoIsKivaFn,
+  }) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
 
-    (bool isSuccess, String errorMessage, String? numerSolicitud) result =
-        (false, '', null);
+    (
+      bool isSuccess,
+      String errorMessage,
+      String? numerSolicitud,
+      String? solciitudId,
+      int? tipoSolicitudId,
+    ) result = (false, '', null, null, null);
 
     bool hasAnySent = false;
 
@@ -67,6 +86,15 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
           }
+          onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
+          );
           objectBoxService.removeSolicitudWhenisUploaded(
             solicitudId: solicitud.id,
           );
@@ -86,6 +114,15 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
           }
+          onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
+          );
           objectBoxService.removeSolicitudReprestamoWhenisUploaded(
             solicitudId: solicitud.id,
           );
@@ -105,6 +142,15 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
           }
+          onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
+          );
           objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
             solicitudId: solicitud.id,
           );
@@ -138,8 +184,9 @@ class EnviarSolicitudWhenIsdoneCubit
     emit(EnviarSolicitudWhenIsdoneInitial());
   }
 
-  Future<(bool, String, String?)> _sendSolicitud(
-      {required dynamic solicitud}) async {
+  Future<(bool, String, String?, String?, int?)> _sendSolicitud({
+    required dynamic solicitud,
+  }) async {
     return switch (solicitud) {
       ResponseLocalDb() => await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: _mapToSolicitudNuevaMenor(solicitud),
@@ -233,12 +280,12 @@ class EnviarSolicitudWhenIsdoneCubit
       nacionalidadConyugue: solicitud.nacionalidadConyugue ?? '',
       database: solicitud.database ?? '',
       ubicacion: solicitud.ubicacion ?? '',
-      espeps: solicitud.espeps ?? false,
+      espeps: solicitud.espeps == 'input.yes'.tr(),
       nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps ?? '',
       paisPeps: solicitud.paisPeps ?? '',
       periodoPeps: solicitud.periodoPeps ?? '',
       cargoOficialPeps: solicitud.cargoOficialPeps ?? '',
-      tieneFamiliarPeps: solicitud.tieneFamiliarPeps ?? false,
+      tieneFamiliarPeps: solicitud.tieneFamiliarPeps == 'input.yes'.tr(),
       nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2 ?? '',
       parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2 ?? '',
       cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2 ?? '',
@@ -386,12 +433,12 @@ class EnviarSolicitudWhenIsdoneCubit
       objPaisNacimientoId: solicitud.objPaisNacimientoId ?? '',
       nacionalidadConyugue: solicitud.nacionalidadConyugue ?? '',
       ubicacion: solicitud.ubicacion ?? '',
-      espeps: solicitud.espeps ?? false,
+      espeps: solicitud.espeps == 'input.yes'.tr(),
       nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps ?? '',
       paisPeps: solicitud.paisPeps ?? '',
       periodoPeps: solicitud.periodoPeps ?? '',
       cargoOficialPeps: solicitud.cargoOficialPeps ?? '',
-      tieneFamiliarPeps: solicitud.tieneFamiliarPeps ?? false,
+      tieneFamiliarPeps: solicitud.tieneFamiliarPeps == 'input.yes'.tr(),
       nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2 ?? '',
       parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2 ?? '',
       cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2 ?? '',

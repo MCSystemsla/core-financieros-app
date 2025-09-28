@@ -84,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return BlocBuilder<DeviceStorageCubit, DeviceStorageState>(
           builder: (context, state) {
             return switch (state.isStorageFull) {
+              // StorageDeviceStatus.full => _HomeScreenView(),
               StorageDeviceStatus.full => LowStorageWarning(
                   freeStorage: state.freeStorage,
                   totalStorage: state.totalStorage / 1000,

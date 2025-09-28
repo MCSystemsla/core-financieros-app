@@ -444,3 +444,21 @@ class AsignarSolicitudAsalariadoEndpoint extends Endpoint {
         'idPromotor': idPromotor,
       };
 }
+
+class KivaConfiguaracionSolicitudEndpoint extends Endpoint {
+  KivaConfiguaracionSolicitudEndpoint();
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/kiva/configuracion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

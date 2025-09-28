@@ -29,7 +29,7 @@ class UserCedulaResponse {
   final String direccion;
   final DateTime fechaEmision;
   final DateTime fechaExpira;
-  final String tipoDocumento;
+  final String? tipoDocumento;
 
   UserCedulaResponse({
     required this.cedula,
@@ -45,7 +45,7 @@ class UserCedulaResponse {
     required this.direccion,
     required this.fechaEmision,
     required this.fechaExpira,
-    required this.tipoDocumento,
+    this.tipoDocumento,
   });
 
   factory UserCedulaResponse.fromJson(Map<String, dynamic> json) =>

@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/response
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,7 +23,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, solicitudId, tipoSolicitudId) =
           await _repository.createSolicitudAsalariado(
         solicitudAsalariado: SolicitudAsalariado(
           isOffline: state.isOffline,
@@ -84,12 +85,12 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           objPaisNacimientoId: state.objPaisNacimientoId,
           nacionalidadConyugue: state.nacionalidadConyugue,
           ubicacion: state.ubicacion,
-          espeps: state.espeps,
+          espeps: state.espeps == 'input.yes'.tr(),
           nombreDeEntidadPeps: state.nombreDeEntidadPeps,
           paisPeps: state.paisPeps,
           periodoPeps: state.periodoPeps,
           cargoOficialPeps: state.cargoOficialPeps,
-          tieneFamiliarPeps: state.tieneFamiliarPeps,
+          tieneFamiliarPeps: state.tieneFamiliarPeps == 'input.yes'.tr(),
           nombreFamiliarPeps2: state.nombreFamiliarPeps2,
           parentescoFamiliarPeps2: state.parentescoFamiliarPeps2,
           cargoFamiliarPeps2: state.cargoFamiliarPeps2,
@@ -202,6 +203,8 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
     return AsalariadoResponsesLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      nombreFormularioKiva:
+          _prefer(state.nombreFormularioKiva, prev?.nombreFormularioKiva),
       objOrigenSolicitudIdVer:
           _prefer(state.objOrigenSolicitudIdVer, prev?.objOrigenSolicitudIdVer),
       createdAt: prev?.createdAt ?? DateTime.now(),
@@ -351,15 +354,14 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       nacionalidadConyugue:
           _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugue),
       ubicacion: _prefer(state.ubicacion, prev?.ubicacion),
-      espeps: !state.espeps ? (prev?.espeps ?? false) : state.espeps,
+      espeps: _prefer(state.espeps, prev?.espeps),
       nombreDeEntidadPeps:
           _prefer(state.nombreDeEntidadPeps, prev?.nombreDeEntidadPeps),
       paisPeps: _prefer(state.paisPeps, prev?.paisPeps),
       periodoPeps: _prefer(state.periodoPeps, prev?.periodoPeps),
       cargoOficialPeps: _prefer(state.cargoOficialPeps, prev?.cargoOficialPeps),
-      tieneFamiliarPeps: !state.tieneFamiliarPeps
-          ? (prev?.tieneFamiliarPeps ?? false)
-          : state.tieneFamiliarPeps,
+      tieneFamiliarPeps:
+          _prefer(state.tieneFamiliarPeps, prev?.tieneFamiliarPeps),
       nombreFamiliarPeps2:
           _prefer(state.nombreFamiliarPeps2, prev?.nombreFamiliarPeps2),
       parentescoFamiliarPeps2:
@@ -456,6 +458,14 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       isDone: !state.isDone ? (prev?.isDone ?? false) : state.isDone,
       frecuenciaPagoMeses:
           _prefer(state.frecuenciaPagoMeses, prev?.frecuenciaPagoMeses),
+      nacionalidadConyugueVer:
+          _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugueVer),
+      paisPeps2Ver: _prefer(state.paisPeps2, prev?.paisPeps2Ver),
+      paisPepsVer: _prefer(state.paisPeps, prev?.paisPepsVer),
+      parentescoFamiliarPeps2Ver: _prefer(
+        state.parentescoFamiliarPeps2,
+        prev?.parentescoFamiliarPeps2Ver,
+      ),
     );
   }
 

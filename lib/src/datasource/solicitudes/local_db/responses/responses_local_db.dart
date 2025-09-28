@@ -100,13 +100,13 @@ class ResponseLocalDb {
   String? nacionalidadConyugueVer;
   String? database;
   String? ubicacion;
-  bool? espeps;
+  String? espeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
   String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
-  bool? tieneFamiliarPeps;
+  String? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
   String? parentescoFamiliarPeps2Ver;
@@ -150,6 +150,7 @@ class ResponseLocalDb {
   String? departamentoNegocio;
   String? departamentoNegocioVer;
   bool isOffline;
+  String? nombreFormularioKiva;
   ResponseLocalDb({
     required this.id,
     this.paisPepsVer,
@@ -297,5 +298,6 @@ class ResponseLocalDb {
     this.errorMsg,
     this.frecuenciaPagoMeses,
     this.isOffline = false,
+    this.nombreFormularioKiva,
   });
 }

@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/kiva_configuracion/kiva_configuracion_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
@@ -50,10 +51,15 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
   Future<void> getandSaveProductos() async {
     final data = await _repository.getCatalogoProductos();
+    final kivaConfiguracionData = await _repository.getKivaConfiguracion();
     final query = _objectBoxService.catalogoBox
         .query(CatalogoLocalDb_.type.equals('PRODUCTO'))
         .build();
+    final kivaConfiguracionQuery =
+        _objectBoxService.kivaConfiguracionBox.query().build();
     query.remove();
+    kivaConfiguracionQuery.remove();
+    kivaConfiguracionQuery.remove();
     for (var item in data.data) {
       _objectBoxService.catalogoBox.put(CatalogoLocalDb(
         valor: item.valor,
@@ -63,6 +69,19 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         montoMaximo: item.montoMaximo,
         montoMinimo: item.montoMinimo,
         isRecurrente: item.isRecurrente,
+      ));
+    }
+    for (var item in kivaConfiguracionData.data) {
+      _objectBoxService.kivaConfiguracionBox.put(KivaConfiguracionLocalDb(
+        productoCodigo: item.productoCodigo,
+        producto: item.producto,
+        esRecurrente: item.esRecurrente,
+        formularioKiva: item.formularioKiva,
+        montoMinimo: item.montoMinimo,
+        montoMaximo: item.montoMaximo,
+        plazoMinimo: item.plazoMinimo,
+        plazoMaximo: item.plazoMaximo,
+        aplicaMigrantesEconomicos: item.aplicaMigrantesEconomicos,
       ));
     }
   }

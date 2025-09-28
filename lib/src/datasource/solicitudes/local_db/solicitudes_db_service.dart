@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/local_db/kiva_configuracion/kiva_configuracion_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -32,6 +33,7 @@ class ObjectBoxService {
   late final Box<AsalariadoResponsesLocalDb> solicitudesAsalariadoResponsesBox;
   late final Box<CedulaClientDb> cedulaClientBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
+  late final Box<KivaConfiguracionLocalDb> kivaConfiguracionBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -47,6 +49,7 @@ class ObjectBoxService {
         _store.box<AsalariadoResponsesLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
+    kivaConfiguracionBox = _store.box<KivaConfiguracionLocalDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
     // solicitudesResponsesBox.removeAll();
@@ -441,44 +444,57 @@ class ObjectBoxService {
 
   List<Item> getProductosSolicitudesCredito() {
     final kivaListProducts = [
-      'ESTANDAR NUEVO',
-      'ESTANDAR RECURRENTE',
+      'ScrKivaCreditoEstandar',
+      'ScrKivaCreditoEstandarRecurrente',
+      'ScrKivaMejoraVivienda',
+      'ScrKivaMejoraViviendaRecurrente',
+      'ScrKivaMiCrediEstudio',
+      'ScrKivaMiCrediEstudioRecurrente',
+      'ScrKivaMujerEmprende',
+      'ScrKivaMujerEmprendeRecurrente',
+      'ScrKivaAguaSaneamiento',
+      'ScrKivaAguaSaneamientoRecurrente',
+      'ScrKivaEnergiaLimpia',
+      'ScrKivaEnergiaLimpiaRecurrente',
     ];
     try {
       final solicitudesNuevas = solicitudesResponsesBox.getAll().where(
             (e) =>
                 e.isDone == true &&
-                kivaListProducts.contains(e.objProductoIdVer),
+                kivaListProducts.contains(e.nombreFormularioKiva),
           );
       final solicitudesReprestamo =
           solicitudesReprestamoResponsesBox.getAll().where(
                 (e) =>
                     e.isDone == true &&
-                    kivaListProducts.contains(e.objProductoIdVer),
+                    kivaListProducts.contains(e.nombreFormularioKiva),
               );
 
       final solicitudesAsalariado =
           solicitudesAsalariadoResponsesBox.getAll().where(
                 (e) =>
                     e.isDone == true &&
-                    kivaListProducts.contains(e.objProductoIdVer),
+                    kivaListProducts.contains(e.nombreFormularioKiva),
               );
       final listNuevas = solicitudesNuevas
           .map((e) => Item(
+                id: e.uuid,
                 name: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
-                value: e.objProductoIdVer,
+                value: e.nombreFormularioKiva,
               ))
           .toList();
       final listAsalariado = solicitudesAsalariado
           .map((e) => Item(
+                id: e.uuid,
                 name: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
-                value: e.objProductoIdVer,
+                value: e.nombreFormularioKiva,
               ))
           .toList();
       final listReprestamo = solicitudesReprestamo
           .map((e) => Item(
+                id: e.uuid,
                 name: e.nombreCompletoCliente ?? 'N/A',
-                value: e.objProductoIdVer,
+                value: e.nombreFormularioKiva,
               ))
           .toList();
 

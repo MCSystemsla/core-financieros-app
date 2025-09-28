@@ -376,6 +376,10 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -431,6 +435,8 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrenteMujerEmprendeForm(
@@ -456,6 +462,7 @@ class _RecurrentSignSignatureState extends State<_RecurrentSignSignature> {
             ..siguientePaso = state.siguientePaso
             ..tieneTrabajo = state.tieneTrabajo
             ..tieneTrabajoDescripcion = state.tieneTrabajoDescripcion
+            ..solicitudCreditoId = solicitudCreditoId
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {
@@ -722,6 +729,10 @@ class _SignSignatureState extends State<_SignSignature> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -777,6 +788,8 @@ class _SignSignatureState extends State<_SignSignature> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context.read<SolicitudesPendientesLocalDbCubit>().saveMujerEmprendeForm(
           mujerEmprendeDbLocal: MujerEmprendeDbLocal()
             ..tipoSolicitud = state.tipoSolicitud
@@ -796,6 +809,7 @@ class _SignSignatureState extends State<_SignSignature> {
             ..otrosIngresosDescripcion = state.otrosIngresosDescripcion
             ..personasCargo = state.personasCargo
             ..quienApoya = state.quienApoya
+            ..solicitudCreditoId = solicitudCreditoId
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {

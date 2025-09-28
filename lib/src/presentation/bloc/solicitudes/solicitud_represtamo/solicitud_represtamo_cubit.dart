@@ -21,7 +21,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   Future<void> createSolicitudReprestamo() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
           isOffline: state.isOffline,
@@ -136,6 +136,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      nombreFormularioKiva:
+          _prefer(state.nombreFormularioKiva, prev?.nombreFormularioKiva),
       paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
       paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       parentescoFamiliarPeps2Ver: _prefer(

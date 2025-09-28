@@ -106,12 +106,12 @@ class SolicitudNuevaMenorState extends Equatable {
   final String nacionalidadConyugue;
   final String database;
   final String ubicacion;
-  final bool espeps;
+  final String espeps;
   final String nombreDeEntidadPeps;
   final String paisPeps;
   final String periodoPeps;
   final String cargoOficialPeps;
-  final bool tieneFamiliarPeps;
+  final String tieneFamiliarPeps;
   final String nombreFamiliarPeps2;
   final String parentescoFamiliarPeps2;
   final String cargoFamiliarPeps2;
@@ -153,6 +153,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String paisPeps2Ver;
   final String nacionalidadConyugueVer;
   final bool isOffline;
+  final String nombreFormularioKiva;
   const SolicitudNuevaMenorState({
     this.isOffline = false,
     this.numeroSolicitud = '',
@@ -269,12 +270,12 @@ class SolicitudNuevaMenorState extends Equatable {
     this.nacionalidadConyugue = '',
     this.database = '',
     this.ubicacion = '',
-    this.espeps = false,
+    this.espeps = '',
     this.nombreDeEntidadPeps = '',
     this.paisPeps = '',
     this.periodoPeps = '',
     this.cargoOficialPeps = '',
-    this.tieneFamiliarPeps = false,
+    this.tieneFamiliarPeps = '',
     this.nombreFamiliarPeps2 = '',
     this.parentescoFamiliarPeps2 = '',
     this.cargoFamiliarPeps2 = '',
@@ -305,10 +306,12 @@ class SolicitudNuevaMenorState extends Equatable {
     this.fechaPrimerPagoSolicitud = '',
     this.prestamoInteres = 0,
     this.fechaDesembolso = '',
+    this.nombreFormularioKiva = '',
   });
 
   @override
   List<Object> get props => [
+        nombreFormularioKiva,
         departamentoNegocio,
         departamentoNegocioVer,
         frecuenciaPagoMeses,
@@ -413,7 +416,6 @@ class SolicitudNuevaMenorState extends Equatable {
         nacionalidadConyugue,
         database,
         ubicacion,
-        espeps,
         nombreDeEntidadPeps,
         paisPeps,
         periodoPeps,
@@ -450,6 +452,7 @@ class SolicitudNuevaMenorState extends Equatable {
         prestamoInteres,
         fechaDesembolso,
         createdAt,
+        espeps,
         isDone
       ];
 
@@ -558,12 +561,12 @@ class SolicitudNuevaMenorState extends Equatable {
     String? nacionalidadConyugue,
     String? database,
     String? ubicacion,
-    bool? espeps,
+    String? espeps,
     String? nombreDeEntidadPeps,
     String? paisPeps,
     String? periodoPeps,
     String? cargoOficialPeps,
-    bool? tieneFamiliarPeps,
+    String? tieneFamiliarPeps,
     String? nombreFamiliarPeps2,
     String? parentescoFamiliarPeps2,
     String? cargoFamiliarPeps2,
@@ -605,6 +608,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? paisPeps2Ver,
     String? nacionalidadConyugueVer,
     bool? isOffline,
+    String? nombreFormularioKiva,
   }) {
     return SolicitudNuevaMenorState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -798,6 +802,7 @@ class SolicitudNuevaMenorState extends Equatable {
       nacionalidadConyugueVer:
           nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
       isOffline: isOffline ?? this.isOffline,
+      nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
     );
   }
 }

@@ -22,7 +22,7 @@ class AsalariadoAutosave {
 
   void trigger() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), _save);
+    _debounce = Timer(const Duration(milliseconds: 500), _save);
   }
 
   void _save() {

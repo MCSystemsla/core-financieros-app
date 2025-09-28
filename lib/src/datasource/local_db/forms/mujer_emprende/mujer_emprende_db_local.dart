@@ -26,4 +26,7 @@ class MujerEmprendeDbLocal {
   String? trabajoNegocioDescripcion;
   int? tiempoActividad;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

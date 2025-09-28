@@ -91,6 +91,7 @@ class ReprestamoResponsesLocalDb {
   int? montoMinimo;
   int? montoMaximo;
   String? frecuenciaPagoMeses;
+  String? nombreFormularioKiva;
 
   ReprestamoResponsesLocalDb({
     required this.id,
@@ -179,5 +180,6 @@ class ReprestamoResponsesLocalDb {
     this.montoMinimo,
     this.montoMaximo,
     this.frecuenciaPagoMeses,
+    this.nombreFormularioKiva,
   });
 }

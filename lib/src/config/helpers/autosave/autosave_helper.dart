@@ -19,9 +19,9 @@ class AutoSaveResponseLocalDb {
     required this.onSaved,
   });
 
-  void trigger() {
+  void trigger() async {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), _save);
+    _debounce = Timer(const Duration(milliseconds: 500), _save);
   }
 
   void _save() {

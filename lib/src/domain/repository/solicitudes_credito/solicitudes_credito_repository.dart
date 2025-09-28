@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solici
 import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/kiva_configuracion/kiva_configuracion_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/parametro/parametro_valor.dart';
@@ -19,19 +20,20 @@ import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/repre
 import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class SolicitudesCreditoRepository {
-  Future<(bool, String, String?)> createSolicitudCreditoNuevaMenor({
+  Future<(bool, String, String?, String?, int?)>
+      createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   });
-  Future<(bool, String, String?)> createSolicitudReprestamo({
+  Future<(bool, String, String?, String?, int?)> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   });
-  Future<(bool, String, String?)> createSolicitudAsalariado({
+  Future<(bool, String, String?, String?, int?)> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
   });
   Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
@@ -111,13 +113,15 @@ abstract class SolicitudesCreditoRepository {
     required String imagenTrasera,
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor();
+  Future<KivaConfiguracionResponse> getKivaConfiguracion();
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   final _api = global<APIRepository>();
   final _logger = Logger();
   @override
-  Future<(bool, String, String?)> createSolicitudCreditoNuevaMenor({
+  Future<(bool, String, String?, String?, int?)>
+      createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   }) async {
     final endpoint = SolicitudesCreditoNuevaMenorEndpoint(
@@ -128,13 +132,13 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
 
-        return (false, (resp['message'] as String), null);
+        return (false, (resp['message'] as String), null, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         final (errorMsg, errorCode) = getErrorMessage(resp);
 
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null, null);
       }
 
       _logger.i(resp);
@@ -143,12 +147,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String
+        resp['data']['Numero'] as String,
+        resp['data']['ID'] as String,
+        resp['data']['objTipoSolicitudID'] as int,
       );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
-      return (false, e.toString(), null);
+      return (false, e.toString(), null, null, null);
     }
   }
 
@@ -244,7 +250,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String, String?)> createSolicitudReprestamo({
+  Future<(bool, String, String?, String?, int?)> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   }) async {
     final endpoint = SolicitudReprestamoEndpoint(
@@ -255,12 +261,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
         AppException(optionalMsg: resp.toString());
-        return (false, resp.toString(), null);
+        return (false, resp.toString(), null, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         final (errorMsg, _) = getErrorMessage(resp);
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null, null);
       }
 
       _logger.i(resp);
@@ -268,16 +274,14 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String
+        resp['data']['NumeroSolicitud'] as String,
+        resp['data']['ID'] as String,
+        resp['data']['objTipoSolicitudID'] as int,
       );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
-      return (
-        false,
-        e.toString(),
-        null,
-      );
+      return (false, e.toString(), null, null, null);
     }
   }
 
@@ -301,7 +305,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String, String?)> createSolicitudAsalariado({
+  Future<(bool, String, String?, String?, int?)> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
   }) async {
     final endpoint = SolicitudAsalariadoEndpoint(
@@ -313,7 +317,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         _logger.e(resp);
         _logger.i(endpoint.body);
         final (errorMsg, _) = getErrorMessage(resp);
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null, null);
       }
       _logger.i(resp);
       _logger.i(endpoint.body);
@@ -321,13 +325,15 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String
+        resp['NumeroSolicitud'] as String,
+        resp['data']['ID'] as String,
+        resp['data']['objTipoSolicitudID'] as int,
       );
     } catch (e) {
       _logger.e(e);
       _logger.i(endpoint.body);
 
-      return (false, e.toString(), null);
+      return (false, e.toString(), null, null, null);
     }
   }
 
@@ -775,6 +781,26 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       final data = SolicitudByEstado.fromJson(resp);
       _logger.i(resp);
       return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<KivaConfiguracionResponse> getKivaConfiguracion() async {
+    final endpoint = KivaConfiguaracionSolicitudEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = KivaConfiguracionResponse.fromJson(resp);
+      _logger.i(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

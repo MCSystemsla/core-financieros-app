@@ -1,5 +1,5 @@
-export 'package:core_financiero_app/src/presentation/screens/solicitudes/solicitudes_pendientes_screen.dart';
-export 'package:core_financiero_app/src/presentation/screens/solicitudes/select_solicitud_screen.dart';
+export 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/solicitudes_pendientes_screen.dart';
+export 'package:core_financiero_app/src/presentation/screens/solicitudes/select_solicitud/ni/select_solicitud_ni_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/estandar_screen.dart';
 export 'package:core_financiero_app/src/presentation/screens/forms/energia_limpia_screen.dart';

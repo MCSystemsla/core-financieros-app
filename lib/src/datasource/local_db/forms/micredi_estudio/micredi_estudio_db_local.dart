@@ -33,4 +33,7 @@ class MiCrediEstudioDbLocal {
   String? aspiraLaboralmente;
   String? otrosDatosCliente;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

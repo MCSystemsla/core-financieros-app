@@ -74,13 +74,13 @@ class AsalariadoResponsesLocalDb {
   String? nacionalidadConyugue;
   String? nacionalidadConyugueVer;
   String? ubicacion;
-  bool? espeps;
+  String? espeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
   String? paisPepsVer;
   String? periodoPeps;
   String? cargoOficialPeps;
-  bool? tieneFamiliarPeps;
+  String? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2;
   String? parentescoFamiliarPeps2Ver;
@@ -160,6 +160,7 @@ class AsalariadoResponsesLocalDb {
   String? frecuenciaPagoMeses;
   @Property(type: PropertyType.date)
   DateTime? createdAt;
+  String? nombreFormularioKiva;
 
   AsalariadoResponsesLocalDb({
     required this.id,
@@ -317,5 +318,6 @@ class AsalariadoResponsesLocalDb {
     this.uuid,
     this.frecuenciaPagoMeses,
     this.createdAt,
+    this.nombreFormularioKiva,
   });
 }
