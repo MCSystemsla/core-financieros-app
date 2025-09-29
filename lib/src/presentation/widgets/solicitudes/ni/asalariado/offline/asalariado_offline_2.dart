@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,12 +65,18 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
   String? periodoFamiliarPeps;
 
   String? paisPepsFamiliar;
+  String? esFamiliarEmpleado;
+  String? nombreFamiliarEmpleado;
+  String? cedulaFamiliarEmpleado;
 
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     final solicitud = widget.asalariadoResponsesLocalDb;
+    esFamiliarEmpleado = solicitud?.esFamiliarEmpleado;
+    nombreFamiliarEmpleado = solicitud?.nombreFamiliar;
+    cedulaFamiliarEmpleado = solicitud?.cedulaFamiliar;
     beneficiarioSeguro = solicitud?.beneficiarioSeguro;
     parentesco = Item(
       name: solicitud?.objParentescoBeneficiarioSeguroIdVer ?? '',
@@ -109,6 +116,9 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                 nombreEntidadPeps2: nombreEntidadPeps,
                 periodoPeps2: periodoFamiliarPeps,
                 paisPeps2: paisPepsFamiliar,
+                esFamiliarEmpleado: esFamiliarEmpleado,
+                nombreFamiliar: nombreFamiliarEmpleado,
+                cedulaFamiliar: cedulaFamiliarEmpleado,
               ),
         );
   }
@@ -463,6 +473,74 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                         ),
                       );
                     },
+                  ),
+                ],
+                const Gap(20),
+                SheetSearchDropdown(
+                  selectedItem: Item(
+                    name: esFamiliarEmpleado ?? '',
+                    value: esFamiliarEmpleado,
+                  ),
+                  title: 'Es Familiar de un Empleado?',
+                  isRequired: true,
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    setState(() {
+                      esFamiliarEmpleado = item.value;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          esFamiliarEmpleado: item.value,
+                        ),
+                      );
+                    });
+                  },
+                  hintText: 'input.select_option'.tr(),
+                  enabled: true,
+                  items: [
+                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                  ],
+                ),
+                if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    initialValue: nombreFamiliarEmpleado,
+                    key: const ValueKey('nombreFamiliarEmpleado'),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreFamiliar: value,
+                        ),
+                      );
+                    },
+                    title: 'Nombre familiar',
+                    icon: const Icon(Icons.date_range),
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    initialValue: cedulaFamiliarEmpleado,
+                    key: const ValueKey('cedulaFamiliarEmpleado'),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cedulaFamiliar: value,
+                        ),
+                      );
+                    },
+                    title: 'Cedula familiar',
+                    icon: const Icon(Icons.card_travel_sharp),
                   ),
                 ],
                 const Gap(20),

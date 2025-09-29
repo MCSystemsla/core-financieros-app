@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/kiva/kiva_solicitud_model.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_offline/solicitudes_offline_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/solicitudes_kiva_offline/solicitudes_credito_kiva_offline/solicitudes_credito_kiva_offline_interceptor.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,7 @@ class _KivaOfflineList extends StatelessWidget {
 }
 
 class _KivaSolicitudOfflineRequest extends StatefulWidget {
-  final Item solicitudesCreditoKiva;
+  final KivaSolicitudModel solicitudesCreditoKiva;
 
   const _KivaSolicitudOfflineRequest({
     required this.solicitudesCreditoKiva,
@@ -88,26 +88,28 @@ class _KivaSolicitudOfflineRequestState
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        widget.solicitudesCreditoKiva.name.capitalizeAll,
+        widget.solicitudesCreditoKiva.nombre.capitalizeAll,
       ),
       onTap: () {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
-              nombreFormularioKiva: widget.solicitudesCreditoKiva.value,
-              cantidadHijos: 0,
+              nombreFormularioKiva:
+                  widget.solicitudesCreditoKiva.nombreFormularioKiva,
+              cantidadHijos: widget.solicitudesCreditoKiva.cantidadHijos,
               cedula: '',
               tipoSolicitud: '',
               route: 'N/A',
-              solicitudId: widget.solicitudesCreditoKiva.id ?? '',
-              nombre: widget.solicitudesCreditoKiva.name,
+              solicitudId: widget.solicitudesCreditoKiva.uuid,
+              nombre: widget.solicitudesCreditoKiva.nombre,
               numero: 'N/A',
               motivoAnterior: 'Motivo Anterior no registrado',
-              solicitudCreditoId: widget.solicitudesCreditoKiva.id,
+              solicitudCreditoId: widget.solicitudesCreditoKiva.uuid,
             );
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => SolicitudesCreditoKivaOfflineInterceptor(
-              nombreFormularioKiva: widget.solicitudesCreditoKiva.value,
+              nombreFormularioKiva:
+                  widget.solicitudesCreditoKiva.nombreFormularioKiva,
             ),
           ),
         );
@@ -119,7 +121,7 @@ class _KivaSolicitudOfflineRequestState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.solicitudesCreditoKiva.value,
+            widget.solicitudesCreditoKiva.nombreFormularioKiva,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,

@@ -126,6 +126,8 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  areUnsentCedulas: state.unsentCedulas.isNotEmpty,
+                  unsentCedulas: state.unsentCedulas,
                   solicitudesSent: state.solicitudesSent,
                   errors: state.errors,
                   btnTitle: 'OK',

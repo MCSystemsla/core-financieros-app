@@ -122,7 +122,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String objRubroActividadVer;
   final String objActividadPredominante;
   final String objActividadPredominanteVer;
-  final bool esFamiliarEmpleado;
+  final String esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
   final String objTipoDocumentoId;
@@ -286,7 +286,7 @@ class SolicitudNuevaMenorState extends Equatable {
     this.objRubroActividadVer = '',
     this.objActividadPredominante = '',
     this.objActividadPredominanteVer = '',
-    this.esFamiliarEmpleado = false,
+    this.esFamiliarEmpleado = '',
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
     this.objTipoDocumentoId = '',
@@ -577,7 +577,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? objRubroActividadVer,
     String? objActividadPredominante,
     String? objActividadPredominanteVer,
-    bool? esFamiliarEmpleado,
+    String? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
     String? objTipoDocumentoId,

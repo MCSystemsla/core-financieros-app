@@ -14,16 +14,13 @@ final getIt = GetIt.instance;
 
 Future<void> setUpGlobalLocator({required Flavor flavor}) async {
   global = GetIt.I;
-
-  global.registerLazySingleton(() => Logger());
-  global.registerFactory<APIRepository>(() => DefaultAPIRepository());
+  _injectFlavor(flavor: flavor);
   final objectBoxService = await ObjectBoxService.init();
   global.registerSingleton<ObjectBoxService>(objectBoxService);
+  global.registerLazySingleton(() => Logger());
+  global.registerFactory<APIRepository>(() => DefaultAPIRepository());
   global.registerSingleton<BiometricCubit>(
     BiometricCubit(BiometricAuthService()),
-  );
-  global.registerSingleton<FlavorCubit>(
-    FlavorCubit()..setFlavor(flavor),
   );
 
   _injectStorage();
@@ -31,4 +28,9 @@ Future<void> setUpGlobalLocator({required Flavor flavor}) async {
 
 void _injectStorage() {
   // global.registerSingleton<FCMTokenStorage>(FCMTokenStorage());
+}
+void _injectFlavor({required Flavor flavor}) {
+  global.registerSingleton<FlavorCubit>(
+    FlavorCubit()..setFlavor(flavor),
+  );
 }

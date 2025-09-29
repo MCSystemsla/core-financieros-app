@@ -81,7 +81,7 @@ class SolicitudAsalariadoState extends Equatable {
   final String paisPeps2;
   final String objRubroActividad;
   final String objActividadPredominante;
-  final bool esFamiliarEmpleado;
+  final String esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
   final String objTipoDocumentoId;
@@ -278,7 +278,7 @@ class SolicitudAsalariadoState extends Equatable {
     this.paisPeps2 = '',
     this.objRubroActividad = '',
     this.objActividadPredominante = '',
-    this.esFamiliarEmpleado = false,
+    this.esFamiliarEmpleado = '',
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
     this.objTipoDocumentoId = '',
@@ -566,7 +566,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? paisPeps2,
     String? objRubroActividad,
     String? objActividadPredominante,
-    bool? esFamiliarEmpleado,
+    String? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
     String? objTipoDocumentoId,

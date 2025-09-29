@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
@@ -65,6 +66,7 @@ class __FormContentState extends State<_FormContent> {
   String? nombreEntidadPeps;
   String? periodoFamiliarPeps;
   String? paisPepsFamiliar;
+  bool esFamiliarEmpleado = false;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -431,6 +433,68 @@ class __FormContentState extends State<_FormContent> {
                         ),
                       );
                     },
+                  ),
+                ],
+                const Gap(20),
+                SheetSearchDropdown(
+                  title: 'Es Familiar de un Empleado?',
+                  isRequired: true,
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    setState(() {
+                      esFamiliarEmpleado = item.value == 'input.yes'.tr();
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          esFamiliarEmpleado: item.value,
+                        ),
+                      );
+                    });
+                  },
+                  hintText: 'input.select_option'.tr(),
+                  enabled: true,
+                  items: [
+                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                  ],
+                ),
+                if (esFamiliarEmpleado) ...[
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    key: const ValueKey('nombreFamiliarEmpleado'),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreFamiliar: value,
+                        ),
+                      );
+                    },
+                    title: 'Nombre familiar',
+                    icon: const Icon(Icons.date_range),
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    key: const ValueKey('cedulaFamiliarEmpleado'),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cedulaFamiliar: value,
+                        ),
+                      );
+                    },
+                    title: 'Cedula familiar',
+                    icon: const Icon(Icons.card_travel_sharp),
                   ),
                 ],
                 const Gap(20),

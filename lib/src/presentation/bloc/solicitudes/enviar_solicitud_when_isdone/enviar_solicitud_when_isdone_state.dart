@@ -16,9 +16,13 @@ final class OnEnviarSolicitudWhenIsdoneLoading
 final class OnEnviarSolicitudWhenIsdoneSuccess
     extends EnviarSolicitudWhenIsdoneState {
   final List<String> solicitudesSent;
-  const OnEnviarSolicitudWhenIsdoneSuccess({this.solicitudesSent = const []});
+  final List<String> unsentCedulas;
+  const OnEnviarSolicitudWhenIsdoneSuccess({
+    this.solicitudesSent = const [],
+    this.unsentCedulas = const [],
+  });
   @override
-  List<Object> get props => [solicitudesSent];
+  List<Object> get props => [solicitudesSent, unsentCedulas];
 }
 
 final class OnEnviarSolicitudWhenIsdoneError
@@ -35,12 +39,14 @@ final class OnEnviarSolicitudWhenIsdonePendingVerification
   final String msgError;
   final List<String> errors;
   final List<String> solicitudesSent;
+  final List<String> unsentCedulas;
 
   const OnEnviarSolicitudWhenIsdonePendingVerification({
     required this.msgError,
     this.errors = const [],
     this.solicitudesSent = const [],
+    this.unsentCedulas = const [],
   });
   @override
-  List<Object> get props => [msgError, errors, solicitudesSent];
+  List<Object> get props => [msgError, errors, solicitudesSent, unsentCedulas];
 }

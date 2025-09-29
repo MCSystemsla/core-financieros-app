@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/kiva/kiva_solicitud_model.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -40,7 +41,7 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
     }
   }
 
-  List<Item> getSolicitudesCreditoOfflineKiva() {
+  List<KivaSolicitudModel> getSolicitudesCreditoOfflineKiva() {
     final solicitudes = objectBoxService.getProductosSolicitudesCredito();
 
     return solicitudes;

@@ -52,9 +52,8 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
     super.initState();
     estadoCivil = widget.responseLocalDb.objEstadoCivilId;
     objEstadoCivilIdVer = widget.responseLocalDb.objEstadoCivilIdVer;
-    esFamiliarEmpleado = (widget.responseLocalDb.esFamiliarEmpleado ?? false)
-        ? 'input.yes'.tr()
-        : 'input.no'.tr();
+    esFamiliarEmpleado = widget.responseLocalDb.esFamiliarEmpleado;
+
     nombreConyuge = widget.responseLocalDb.nombreConyugue;
     personasACargo = widget.responseLocalDb.personasACargo.toString();
     nacionalidadConyuge = widget.responseLocalDb.nacionalidadConyugue;
@@ -74,7 +73,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
                 objEstadoCivilId: estadoCivil,
                 objEstadoCivilIdVer: objEstadoCivilIdVer,
-                esFamiliarEmpleado: esFamiliarEmpleado == 'input.yes'.tr(),
+                esFamiliarEmpleado: esFamiliarEmpleado,
                 nombreConyugue: nombreConyuge,
                 personasACargo: int.tryParse(personasACargo ?? '0'),
                 nacionalidadConyugue: nacionalidadConyuge,
@@ -313,8 +312,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                       esFamiliarEmpleado = item;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          esFamiliarEmpleado:
-                              esFamiliarEmpleado == 'input.yes'.tr(),
+                          esFamiliarEmpleado: esFamiliarEmpleado,
                         ),
                       );
                       setState(() {});

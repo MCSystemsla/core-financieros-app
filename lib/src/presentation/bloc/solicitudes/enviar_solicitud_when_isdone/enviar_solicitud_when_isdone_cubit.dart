@@ -38,6 +38,7 @@ class EnviarSolicitudWhenIsdoneCubit
   }) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
+    List<String> unsentCedulas = [];
 
     (
       bool isSuccess,
@@ -67,7 +68,7 @@ class EnviarSolicitudWhenIsdoneCubit
             errorMsg: result.$2,
           );
 
-          errors.add('Solicitud ID ${solicitud.cedula}: ${result.$2}');
+          errors.add('Solicitud con cedula ${solicitud.cedula}: ${result.$2}');
 
           continue;
         }
@@ -79,12 +80,18 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'NUEVA_MENOR',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unsentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
           onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
@@ -107,12 +114,18 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'REPRESTAMO',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unsentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
           onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
@@ -135,12 +148,18 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'ASALARIADO',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unsentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
           onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
@@ -155,18 +174,20 @@ class EnviarSolicitudWhenIsdoneCubit
             solicitudId: solicitud.id,
           );
         }
-        solicitudesSent.add('Solicitud ID ${solicitud.cedula}');
+        solicitudesSent.add('Solicitud con cedula ${solicitud.cedula}');
         hasAnySent = true;
       }
       if (hasAnySent == true && errors.isEmpty) {
         emit(
           OnEnviarSolicitudWhenIsdoneSuccess(
+            unsentCedulas: unsentCedulas,
             solicitudesSent: solicitudesSent,
           ),
         );
       } else {
         emit(
           OnEnviarSolicitudWhenIsdonePendingVerification(
+            unsentCedulas: unsentCedulas,
             solicitudesSent: solicitudesSent,
             errors: errors,
             msgError:
@@ -294,7 +315,7 @@ class EnviarSolicitudWhenIsdoneCubit
       paisPeps2: solicitud.paisPeps2 ?? '',
       objRubroActividad: solicitud.objRubroActividad ?? '',
       objActividadPredominante: solicitud.objActividadPredominante ?? '',
-      esFamiliarEmpleado: solicitud.esFamiliarEmpleado ?? false,
+      esFamiliarEmpleado: solicitud.esFamiliarEmpleado == 'input.yes'.tr(),
       nombreFamiliar: solicitud.nombreFamiliar ?? '',
       cedulaFamiliar: solicitud.cedulaFamiliar ?? '',
       objTipoDocumentoId: solicitud.objTipoDocumentoId ?? '',
@@ -447,7 +468,7 @@ class EnviarSolicitudWhenIsdoneCubit
       paisPeps2: solicitud.paisPeps2 ?? '',
       objRubroActividad: solicitud.objRubroActividad ?? '',
       objActividadPredominante: solicitud.objActividadPredominante ?? '',
-      esFamiliarEmpleado: solicitud.esFamiliarEmpleado ?? false,
+      esFamiliarEmpleado: solicitud.esFamiliarEmpleado == 'input.yes'.tr(),
       nombreFamiliar: solicitud.nombreFamiliar ?? '',
       cedulaFamiliar: solicitud.cedulaFamiliar ?? '',
       objTipoDocumentoId: solicitud.objTipoDocumentoId ?? '',

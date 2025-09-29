@@ -1,4 +1,6 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -214,6 +216,14 @@ class _SolicitudCardsRow1 extends StatelessWidget {
               // context.pushTransparentRoute(const AddUserCedulaScreen(
               //   typeForm: TypeForm.nueva,
               // ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const CrearSolicitudHnScreen(
+                        typeForm: TypeForm.nueva,
+                      )),
+                ),
+              );
             },
             svgPath: ImageAsset.nuevaMenorBg,
             title: 'Nueva',
@@ -226,6 +236,14 @@ class _SolicitudCardsRow1 extends StatelessWidget {
               // context.pushTransparentRoute(const AddUserCedulaScreen(
               //   typeForm: TypeForm.asalariado,
               // ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const CrearSolicitudHnScreen(
+                        typeForm: TypeForm.asalariado,
+                      )),
+                ),
+              );
             },
             svgPath: ImageAsset.nuevaMenorBg2,
             title: 'Asalariado',

@@ -93,7 +93,7 @@ class AsalariadoResponsesLocalDb {
   String? objRubroActividadVer;
   String? objActividadPredominante;
   String? objActividadPredominanteVer;
-  bool? esFamiliarEmpleado;
+  String? esFamiliarEmpleado;
   String? nombreFamiliar;
   String? cedulaFamiliar;
   String? objTipoDocumentoId;

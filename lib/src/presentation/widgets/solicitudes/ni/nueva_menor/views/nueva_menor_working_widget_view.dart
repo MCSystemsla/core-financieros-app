@@ -258,7 +258,7 @@ class __FormContentState extends State<_FormContent> {
                       esFamiliarEmpleado = item;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          esFamiliarEmpleado: item == 'input.yes'.tr(),
+                          esFamiliarEmpleado: item,
                         ),
                       );
                       setState(() {});

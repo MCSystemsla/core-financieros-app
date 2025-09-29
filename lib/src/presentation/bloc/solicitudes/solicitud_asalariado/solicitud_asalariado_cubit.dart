@@ -99,7 +99,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           paisPeps2: state.paisPeps2,
           objRubroActividad: state.objRubroActividad,
           objActividadPredominante: state.objActividadPredominante,
-          esFamiliarEmpleado: state.esFamiliarEmpleado,
+          esFamiliarEmpleado: state.esFamiliarEmpleado == 'input.yes'.tr(),
           nombreFamiliar: state.nombreFamiliar,
           cedulaFamiliar: state.cedulaFamiliar,
           objTipoDocumentoId: state.objTipoDocumentoId,
@@ -376,9 +376,8 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           _prefer(state.objRubroActividad, prev?.objRubroActividad),
       objActividadPredominante: _prefer(
           state.objActividadPredominante, prev?.objActividadPredominante),
-      esFamiliarEmpleado: !state.esFamiliarEmpleado
-          ? (prev?.esFamiliarEmpleado ?? false)
-          : state.esFamiliarEmpleado,
+      esFamiliarEmpleado:
+          _prefer(state.esFamiliarEmpleado, prev?.esFamiliarEmpleado),
       nombreFamiliar: _prefer(state.nombreFamiliar, prev?.nombreFamiliar),
       cedulaFamiliar: _prefer(state.cedulaFamiliar, prev?.cedulaFamiliar),
       objTipoDocumentoId:

@@ -23,7 +23,7 @@ final class OnSolicitudesOfflineSuccess extends SolicitudesOfflineState {
   final List<ResponseLocalDb> solicitudesOffline;
   final List<ReprestamoResponsesLocalDb> solicitudesOfflineReprestamo;
   final List<AsalariadoResponsesLocalDb> solicitudesAsalariado;
-  final List<Item> solicitudesOnKiva;
+  final List<KivaSolicitudModel> solicitudesOnKiva;
 
   const OnSolicitudesOfflineSuccess({
     required this.solicitudesOffline,
