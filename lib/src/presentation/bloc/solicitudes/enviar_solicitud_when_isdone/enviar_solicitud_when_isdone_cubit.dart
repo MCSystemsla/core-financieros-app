@@ -14,7 +14,7 @@ import 'package:logger/logger.dart';
 
 part 'enviar_solicitud_when_isdone_state.dart';
 
-typedef OnSolicitudCreditoIsKivaFn = void Function({
+typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
   required String uuid,
   required String numeroSolicitud,
   required String solicitudId,
@@ -38,7 +38,8 @@ class EnviarSolicitudWhenIsdoneCubit
   }) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
-    List<String> unsentCedulas = [];
+    List<String> unSentCedulas = [];
+    List<String> unSentKivaForms = [];
 
     (
       bool isSuccess,
@@ -88,12 +89,12 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
             if (!isSent) {
-              unsentCedulas.add(
+              unSentCedulas.add(
                 'Error al enviar la imagen de la cédula $cedula al expediente digital.',
               );
             }
           }
-          onSolicitudCreditoIsKivaFn(
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
             numeroSolicitud: result.$3 ?? '0',
             uuid: solicitud.uuid ?? '',
@@ -102,9 +103,14 @@ class EnviarSolicitudWhenIsdoneCubit
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
           );
-          objectBoxService.removeSolicitudWhenisUploaded(
-            solicitudId: solicitud.id,
-          );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
         if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
           final String? cedula = solicitud.cedula;
@@ -122,12 +128,12 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
             if (!isSent) {
-              unsentCedulas.add(
+              unSentCedulas.add(
                 'Error al enviar la imagen de la cédula $cedula al expediente digital.',
               );
             }
           }
-          onSolicitudCreditoIsKivaFn(
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
             numeroSolicitud: result.$3 ?? '0',
             uuid: solicitud.uuid ?? '',
@@ -136,9 +142,14 @@ class EnviarSolicitudWhenIsdoneCubit
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
           );
-          objectBoxService.removeSolicitudReprestamoWhenisUploaded(
-            solicitudId: solicitud.id,
-          );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudReprestamoWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
         if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
           final String? cedula = solicitud.cedula;
@@ -156,12 +167,12 @@ class EnviarSolicitudWhenIsdoneCubit
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
             if (!isSent) {
-              unsentCedulas.add(
+              unSentCedulas.add(
                 'Error al enviar la imagen de la cédula $cedula al expediente digital.',
               );
             }
           }
-          onSolicitudCreditoIsKivaFn(
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
             solicitudId: result.$4 ?? '0',
             numeroSolicitud: result.$3 ?? '0',
             uuid: solicitud.uuid ?? '',
@@ -170,25 +181,31 @@ class EnviarSolicitudWhenIsdoneCubit
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
           );
-          objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
-            solicitudId: solicitud.id,
-          );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
         solicitudesSent.add('Solicitud con cedula ${solicitud.cedula}');
         hasAnySent = true;
       }
-      if (hasAnySent == true && errors.isEmpty) {
+      if (hasAnySent == true && errors.isEmpty && unSentCedulas.isEmpty) {
         emit(
           OnEnviarSolicitudWhenIsdoneSuccess(
-            unsentCedulas: unsentCedulas,
+            unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
           ),
         );
       } else {
         emit(
           OnEnviarSolicitudWhenIsdonePendingVerification(
-            unsentCedulas: unsentCedulas,
+            unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
+            unsentKivaForms: unSentKivaForms,
             errors: errors,
             msgError:
                 'Algunas solicitudes tienen errores y no se pudieron procesar.',

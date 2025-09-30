@@ -40,13 +40,21 @@ final class OnEnviarSolicitudWhenIsdonePendingVerification
   final List<String> errors;
   final List<String> solicitudesSent;
   final List<String> unsentCedulas;
+  final List<String> unsentKivaForms;
 
   const OnEnviarSolicitudWhenIsdonePendingVerification({
     required this.msgError,
     this.errors = const [],
     this.solicitudesSent = const [],
     this.unsentCedulas = const [],
+    this.unsentKivaForms = const [],
   });
   @override
-  List<Object> get props => [msgError, errors, solicitudesSent, unsentCedulas];
+  List<Object> get props => [
+        msgError,
+        errors,
+        solicitudesSent,
+        unsentCedulas,
+        unsentKivaForms,
+      ];
 }

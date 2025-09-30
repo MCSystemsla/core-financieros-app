@@ -44,16 +44,21 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final dbProvider = global<ObjectBoxService>();
+    // final dbProvider = global<ObjectBoxService>();
     return BlocConsumer<SolicitudReprestamoCubit, SolicitudReprestamoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
           context.read<SolicitudReprestamoCubit>().sendCedulaImages(
                 numeroSolicitud: state.numeroSolicitud,
               );
-          dbProvider.removeSolicitudReprestamoWhenisUploaded(
-            solicitudId: widget.solicitudId,
-          );
+          context.read<SolicitudReprestamoCubit>().onFieldChanged(
+                () => state.copyWith(
+                  hasVerified: true,
+                ),
+              );
+          // dbProvider.removeSolicitudReprestamoWhenisUploaded(
+          //   solicitudId: widget.solicitudId,
+          // );
         }
       },
       builder: (context, state) {

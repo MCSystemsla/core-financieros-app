@@ -80,15 +80,42 @@ class SolicitudesCreditoView extends StatelessWidget {
       controller: controller,
       children: [
         SolicitudesPendientesItems(
-          solicitudesOffline: solicitudesOffline,
+          solicitudesOfflinePending: solicitudesOffline
+              .where(
+                (element) => element.isDone == false,
+              )
+              .toList(),
+          solicitudesOfflineDone: solicitudesOffline
+              .where(
+                (element) => element.isDone == true,
+              )
+              .toList(),
           controller: controller,
         ),
         SolicitudesAsalariadoPendientesItems(
           controller: controller,
-          solicitudesAsalariado: solicitudesAsalariado,
+          solicitudesAsalariadoInProgress: solicitudesAsalariado
+              .where(
+                (element) => element.isDone == false,
+              )
+              .toList(),
+          solicitudesAsalariadoDone: solicitudesAsalariado
+              .where(
+                (element) => element.isDone == true,
+              )
+              .toList(),
         ),
         SolicitudesReprestamoPendientesItems(
-          solicitudesReprestamoOffline: solicitudesOfflineReprestamo,
+          solicitudesReprestamoOfflinePending: solicitudesOfflineReprestamo
+              .where(
+                (element) => element.isDone == false,
+              )
+              .toList(),
+          solicitudesReprestamoOfflineDone: solicitudesOfflineReprestamo
+              .where(
+                (element) => element.isDone == true,
+              )
+              .toList(),
           controller: controller,
         ),
       ],

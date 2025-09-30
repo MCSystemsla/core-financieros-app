@@ -1,6 +1,4 @@
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
@@ -21,22 +19,27 @@ class SendingFormWidget extends StatefulWidget {
 class _SendingFormWidgetState extends State<SendingFormWidget> {
   @override
   void initState() {
-    context.read<SolicitudNuevaMenorCubit>().createSolicitudNuevaMenor();
     super.initState();
+    context.read<SolicitudNuevaMenorCubit>().createSolicitudNuevaMenor();
   }
 
   @override
   Widget build(BuildContext context) {
-    final dbProvider = global<ObjectBoxService>();
+    // final dbProvider = global<ObjectBoxService>();
     return BlocConsumer<SolicitudNuevaMenorCubit, SolicitudNuevaMenorState>(
       listener: (context, state) {
         if (state.status == Status.done) {
-          dbProvider.removeSolicitudWhenisUploaded(
-            solicitudId: widget.solicitudId,
-          );
+          // dbProvider.removeSolicitudWhenisUploaded(
+          //   solicitudId: widget.solicitudId,
+          // );
           context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
                 numeroSolicitud: state.numeroSolicitud,
               );
+          context
+              .read<SolicitudNuevaMenorCubit>()
+              .onFieldChanged(() => state.copyWith(
+                    hasVerified: true,
+                  ));
         }
       },
       builder: (context, state) {

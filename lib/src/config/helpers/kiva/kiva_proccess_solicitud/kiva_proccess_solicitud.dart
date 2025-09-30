@@ -17,7 +17,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes
 import 'package:core_financiero_app/src/utils/extensions/kiva/kiva_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 
-Future<void> processSolicitud({
+Future<bool> processSolicitud({
   required String uuid,
   required String numeroSolicitud,
   required String solicitudId,
@@ -62,6 +62,7 @@ Future<void> processSolicitud({
       );
     }
   }
+  return isOk;
 }
 
 Future<void> proccessImagesSolicitud({

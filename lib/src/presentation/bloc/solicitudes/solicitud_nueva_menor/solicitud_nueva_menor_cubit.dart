@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/autosave_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
@@ -160,9 +158,6 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       buildModel: _buildModel,
       uuid: newUuid,
       onSaved: (m) {
-        log('🔥 Autosave ${m.espeps}');
-        log('🔥 Autosave ${m.nombreDeEntidadPeps}');
-        log('🔥 Autosave ${m.paisPeps}');
         emit(state.copyWith(
           idLocalResponse: m.id,
           uuid: m.uuid,
@@ -194,7 +189,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
       montoMinimo:
           state.montoMinimo == 0 ? prev?.montoMinimo : state.montoMinimo,
-      hasVerified: state.hasVerified,
+      hasVerified: prev?.hasVerified ?? state.hasVerified,
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
       isDone: state.isDone,
       createdAt: prev?.createdAt ?? DateTime.now(),

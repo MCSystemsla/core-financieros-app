@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -295,33 +296,32 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ],
                 ],
                 const Gap(20),
-                Container(
-                  key: const Key('esFamiliarEmpleado'),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: JLuxDropdown(
-                    initialValue: esFamiliarEmpleado,
-                    dropdownColor: Colors.white,
-                    isContainIcon: true,
-                    title: 'Es familiar empleado',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    items: ['input.yes'.tr(), 'input.no'.tr()],
-                    onChanged: (item) {
-                      if (item == null) return;
-                      esFamiliarEmpleado = item;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          esFamiliarEmpleado: esFamiliarEmpleado,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    toStringItem: (item) {
-                      return item;
-                    },
-                    hintText: 'input.select_option'.tr(),
+                SheetSearchDropdown(
+                  selectedItem: Item(
+                    name: esFamiliarEmpleado ?? '',
+                    value: esFamiliarEmpleado,
                   ),
+                  enabled: true,
+                  items: [
+                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                  ],
+                  key: const Key('esFamiliarEmpleado'),
+                  isRequired: true,
+                  title: 'Es familiar empleado?',
+                  hintText: 'input.select_option'.tr(),
+                  onChanged: (item) {
+                    if (item == null) return;
+                    esFamiliarEmpleado = item.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        esFamiliarEmpleado: esFamiliarEmpleado,
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                 ),
                 if (esFamiliarEmpleado == 'input.yes'.tr()) ...[
                   const Gap(20),

@@ -51,7 +51,7 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                 required String cedula,
                 required int tipoSolicitudId,
               }) async {
-                await processSolicitud(
+                return processSolicitud(
                   uuid: uuid,
                   numeroSolicitud: numeroSolicitud,
                   solicitudId: solicitudId,
@@ -110,7 +110,7 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                             required String cedula,
                             required int tipoSolicitudId,
                           }) async {
-                            await processSolicitud(
+                            return await processSolicitud(
                               uuid: uuid,
                               numeroSolicitud: numeroSolicitud,
                               solicitudId: solicitudId,
@@ -126,6 +126,8 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
+                  areUnsentKivaForms: state.unsentKivaForms.isNotEmpty,
+                  unsentKivaForms: state.unsentKivaForms,
                   areUnsentCedulas: state.unsentCedulas.isNotEmpty,
                   unsentCedulas: state.unsentCedulas,
                   solicitudesSent: state.solicitudesSent,

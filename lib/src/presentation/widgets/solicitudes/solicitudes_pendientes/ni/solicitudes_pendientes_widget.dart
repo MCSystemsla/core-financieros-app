@@ -11,9 +11,9 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 
-class SolicitudesPendientesWidget extends StatelessWidget {
+class SolicitudesPendientesNIWidget extends StatelessWidget {
   final ResponseLocalDb solicitud;
-  const SolicitudesPendientesWidget({
+  const SolicitudesPendientesNIWidget({
     super.key,
     required this.solicitud,
   });
@@ -163,9 +163,259 @@ class SolicitudesPendientesWidget extends StatelessWidget {
   }
 }
 
+class SolciitudesEnviadasNiWidget extends StatelessWidget {
+  final ResponseLocalDb solicitud;
+  const SolciitudesEnviadasNiWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(ResponseLocalDb respuesta) {
+      var valores = [
+        respuesta.nombre1,
+        respuesta.nombre2,
+        respuesta.apellido1,
+        respuesta.apellido2,
+        respuesta.cedula,
+        respuesta.objPaisEmisorCedula,
+        respuesta.fechaEmisionCedula,
+        respuesta.fechaVencimientoCedula,
+        respuesta.fechaNacimiento,
+        respuesta.telefono,
+        respuesta.celular,
+        respuesta.direccionCasa,
+        respuesta.barrioCasa,
+        respuesta.objMunicipioCasaId,
+        respuesta.objDepartamentoCasaId,
+        respuesta.objPaisCasaId,
+        respuesta.profesion,
+        respuesta.ocupacion,
+        respuesta.nacionalidad,
+        respuesta.objCondicionCasaId,
+        respuesta.anosResidirCasa,
+        respuesta.email,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objActividadId,
+        respuesta.objActividadId1,
+        respuesta.objActividadId2,
+        respuesta.objSectorId,
+        respuesta.nombreNegocio,
+        respuesta.tiempoFuncionamientoNegocio,
+        respuesta.direccionNegocio,
+        respuesta.barrioNegocio,
+        respuesta.objMunicipioNegocioId,
+        respuesta.objCondicionNegocioId,
+        respuesta.horarioTrabajo,
+        respuesta.horarioVisita,
+        respuesta.personasACargo,
+        respuesta.objEstadoCivilId,
+        respuesta.nombreConyugue,
+        respuesta.trabajaConyugue,
+        respuesta.trabajoConyugue,
+        respuesta.direccionTrabajoConyugue,
+        respuesta.telefonoTrabajoConyugue,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.beneficiarioSeguro1,
+        respuesta.cedulaBeneficiarioSeguro1,
+        respuesta.objParentescoBeneficiarioSeguroId1,
+        respuesta.objEstadoSolicitudId,
+        respuesta.objOficialCreditoId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.sucursal,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.ubicacionGradosLongitud,
+        respuesta.ubicacionGradosLatitud,
+        respuesta.objEscolaridadId,
+        respuesta.cantidadHijos,
+        respuesta.nombrePublico,
+        respuesta.objSexoId,
+        respuesta.objPaisNacimientoId,
+        respuesta.nacionalidadConyugue,
+        respuesta.database,
+        respuesta.ubicacion,
+        respuesta.espeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.telefonoBeneficiarioSeguro1,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud
+      ];
+
+      int camposLlenos = valores
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor: Colors.white,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CrearSolicitudOfflineScreen(
+                responseLocalDb: solicitud,
+              ),
+            ),
+          );
+        },
+        title:
+            '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
+                .capitalizeAll,
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(days: 30))
+            .formatDateToTimePeriod(),
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
 class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
   final ReprestamoResponsesLocalDb solicitud;
   const SolicitudesReprestamoPendientesWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(ReprestamoResponsesLocalDb respuesta) {
+      var valores = [
+        respuesta.database,
+        respuesta.cedula,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objActividadId,
+        respuesta.objActividadId1,
+        respuesta.objActividadId2,
+        respuesta.objSectorId,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.sucursal,
+        respuesta.ubicacion,
+        respuesta.esPeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.celularReprestamo,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud,
+      ];
+
+      int camposLlenos = valores
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor:
+            solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
+                ? Colors.white
+                : AppColors.red.withOpacity(.3).withBlue(170),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ReprestamoOfflineView(
+                solicitudReprestamoOffline: solicitud,
+              ),
+            ),
+          );
+        },
+        title: solicitud.nombreCompletoCliente ?? 'N/A',
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(days: 30))
+            .formatDateToTimePeriod(),
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
+class SolciitudesEnviadasReprestamoWidget extends StatelessWidget {
+  final ReprestamoResponsesLocalDb solicitud;
+  const SolciitudesEnviadasReprestamoWidget({
     super.key,
     required this.solicitud,
   });
@@ -400,6 +650,167 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
             solicitud.errorMsg == null || solicitud.errorMsg!.isEmpty
                 ? Colors.white
                 : AppColors.red.withOpacity(.3).withBlue(170),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AsalariadoOfflineView(
+                asalariadoResponsesLocalDb: solicitud,
+              ),
+            ),
+          );
+        },
+        title:
+            '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1}'
+                .capitalizeAll,
+        cedula: solicitud.cedula ?? 'N/A',
+        dateToStart: solicitud.createdAt?.toLocal().selectorFormat(),
+        dateToEnd: solicitud.createdAt
+            ?.toUtc()
+            .toLocal()
+            .add(const Duration(days: 30))
+            .formatDateToTimePeriod(),
+        percentage: (solicitud.isDone ?? false)
+            ? 100
+            : calcularPorcentajeLlenado(solicitud),
+      ),
+    );
+  }
+}
+
+class SolicitudesEnviadasAsalariadoWidget extends StatelessWidget {
+  final AsalariadoResponsesLocalDb solicitud;
+  const SolicitudesEnviadasAsalariadoWidget({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double calcularPorcentajeLlenado(AsalariadoResponsesLocalDb respuesta) {
+      var valores = [
+        respuesta.nombre1,
+        respuesta.nombre2,
+        respuesta.apellido1,
+        respuesta.apellido2,
+        respuesta.cedula,
+        respuesta.objPaisEmisorCedula,
+        respuesta.fechaEmisionCedula,
+        respuesta.fechaVencimientoCedula,
+        respuesta.fechaNacimiento,
+        respuesta.telefono,
+        respuesta.celular,
+        respuesta.direccionCasa,
+        respuesta.barrioCasa,
+        respuesta.objMunicipioCasaId,
+        respuesta.objDepartamentoCasaId,
+        respuesta.objPaisCasaId,
+        respuesta.profesion,
+        respuesta.ocupacion,
+        respuesta.nacionalidad,
+        respuesta.objCondicionCasaId,
+        respuesta.anosResidirCasa,
+        respuesta.email,
+        respuesta.monto,
+        respuesta.objMonedaId,
+        respuesta.objPropositoId,
+        respuesta.objFrecuenciaId,
+        respuesta.cuota,
+        respuesta.objSectorId,
+        respuesta.personasACargo,
+        respuesta.objEstadoCivilId,
+        respuesta.nombreConyugue,
+        respuesta.trabajaConyugue,
+        respuesta.trabajoConyugue,
+        respuesta.direccionTrabajoConyugue,
+        respuesta.telefonoTrabajoConyugue,
+        respuesta.beneficiarioSeguro,
+        respuesta.cedulaBeneficiarioSeguro,
+        respuesta.objParentescoBeneficiarioSeguroId,
+        respuesta.objEstadoSolicitudId,
+        respuesta.objOficialCreditoId,
+        respuesta.objProductoId,
+        respuesta.observacion,
+        respuesta.sucursal,
+        respuesta.ubicacionLongitud,
+        respuesta.ubicacionLatitud,
+        respuesta.ubicacionGradosLongitud,
+        respuesta.ubicacionGradosLatitud,
+        respuesta.objEscolaridadId,
+        respuesta.cantidadHijos,
+        respuesta.nombrePublico,
+        respuesta.objSexoId,
+        respuesta.objPaisNacimientoId,
+        respuesta.nacionalidadConyugue,
+        respuesta.ubicacion,
+        respuesta.espeps,
+        respuesta.nombreDeEntidadPeps,
+        respuesta.paisPeps,
+        respuesta.periodoPeps,
+        respuesta.cargoOficialPeps,
+        respuesta.tieneFamiliarPeps,
+        respuesta.nombreFamiliarPeps2,
+        respuesta.parentescoFamiliarPeps2,
+        respuesta.cargoFamiliarPeps2,
+        respuesta.nombreEntidadPeps2,
+        respuesta.periodoPeps2,
+        respuesta.paisPeps2,
+        respuesta.objRubroActividad,
+        respuesta.objActividadPredominante,
+        respuesta.esFamiliarEmpleado,
+        respuesta.nombreFamiliar,
+        respuesta.cedulaFamiliar,
+        respuesta.objTipoDocumentoId,
+        respuesta.objRubroActividad2,
+        respuesta.objRubroActividad3,
+        respuesta.objRubroActividadPredominante,
+        respuesta.tipoPersona,
+        respuesta.objTipoPersonaId,
+        respuesta.telefonoBeneficiario,
+        respuesta.codigoRed,
+        respuesta.plazoSolicitud,
+        respuesta.fechaPrimerPagoSolicitud,
+        respuesta.nombreTrabajo,
+        respuesta.direccionTrabajo,
+        respuesta.barrioTrabajo,
+        respuesta.objActividadEconomicaId,
+        respuesta.objActividadEconomicaId1,
+        respuesta.objActividadEconomicaId2,
+        respuesta.cargo,
+        respuesta.direccionFamiliarCercano,
+        respuesta.duenoVivienda,
+        respuesta.fechaVenceAvaluoAsalariado,
+        respuesta.fuenteOtrosIngresos,
+        respuesta.fuenteOtrosIngresosConyugue,
+        respuesta.lugarTrabajoAnterior,
+        respuesta.nombreFamiliarCercano,
+        respuesta.objParentescoFamiliarCercanoId,
+        respuesta.otrosIngresosConyugue,
+        respuesta.otrosIngresosCordoba,
+        respuesta.pagoAlquiler,
+        respuesta.profesionConyugue,
+        respuesta.salarioNetoCordoba,
+        respuesta.sueldoMesConyugue,
+        respuesta.telefonoFamiliarCercano,
+        respuesta.telefonoTrabajo,
+        respuesta.tiempoLaborar,
+        respuesta.tiempoLaborarConyugue,
+        respuesta.totalIngresoMes,
+        respuesta.totalIngresoMesConyugue,
+      ];
+
+      int camposLlenos = valores
+          .where((valor) => valor != null && valor.toString().trim().isNotEmpty)
+          .length;
+      int totalCampos = valores.length;
+
+      return (camposLlenos / totalCampos) * 100;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: AdvanceCardState(
+        backgroundColor: Colors.white,
         onPressed: () {
           Navigator.push(
             context,

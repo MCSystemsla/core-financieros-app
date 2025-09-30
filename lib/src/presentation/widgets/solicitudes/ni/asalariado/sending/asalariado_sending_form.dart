@@ -37,16 +37,20 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
 
   @override
   Widget build(BuildContext context) {
-    final dbProvider = global<ObjectBoxService>();
     return BlocConsumer<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
           context.read<SolicitudAsalariadoCubit>().sendCedulaImages(
                 numeroSolicitud: state.numeroSolicitud,
               );
-          dbProvider.removeSolicitudAsalariadoWhenisUploaded(
-            solicitudId: widget.solicitudId,
-          );
+          context.read<SolicitudAsalariadoCubit>().onFieldChanged(
+                () => state.copyWith(
+                  hasVerified: true,
+                ),
+              );
+          // dbProvider.removeSolicitudAsalariadoWhenisUploaded(
+          //   solicitudId: widget.solicitudId,
+          // );
         }
       },
       builder: (context, state) {
