@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/asesor/asesor.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asesores/asesores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asign_solicitud_to_asesor/asign_solicitud_to_asesor_cubit.dart';

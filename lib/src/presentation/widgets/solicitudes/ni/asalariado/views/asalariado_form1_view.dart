@@ -7,9 +7,9 @@ import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.d
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';

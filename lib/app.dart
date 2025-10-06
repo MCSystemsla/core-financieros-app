@@ -3,7 +3,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';

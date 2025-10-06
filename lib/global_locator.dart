@@ -1,7 +1,8 @@
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/services/biometric/biometric_auth_service.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,7 +17,9 @@ Future<void> setUpGlobalLocator({required Flavor flavor}) async {
   global = GetIt.I;
   _injectFlavor(flavor: flavor);
   final objectBoxService = await ObjectBoxService.init();
+  final objectBoxServiceHN = await SolicitudesHnBoxService.init();
   global.registerSingleton<ObjectBoxService>(objectBoxService);
+  global.registerSingleton<SolicitudesHnBoxService>(objectBoxServiceHN);
   global.registerLazySingleton(() => Logger());
   global.registerFactory<APIRepository>(() => DefaultAPIRepository());
   global.registerSingleton<BiometricCubit>(

@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';

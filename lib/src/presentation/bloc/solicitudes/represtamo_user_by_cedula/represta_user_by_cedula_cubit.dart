@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/represtamo_user_cedula.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:equatable/equatable.dart';

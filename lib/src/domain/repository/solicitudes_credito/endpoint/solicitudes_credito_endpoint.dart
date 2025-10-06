@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
 
 class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   final SolicitudNuevaMenor solicitudNuevaMenor;

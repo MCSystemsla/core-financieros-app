@@ -1,7 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
@@ -18,6 +19,7 @@ class SearchDropdownWidget extends StatefulWidget {
   final String hintText;
   final bool enabled;
   final Item? selectedItem;
+  final Flavor flavor;
 
   const SearchDropdownWidget({
     super.key,
@@ -29,6 +31,7 @@ class SearchDropdownWidget extends StatefulWidget {
     this.hintText = 'Selecciona una opción',
     this.enabled = true,
     this.selectedItem,
+    this.flavor = Flavor.nicaragua,
   });
 
   @override
@@ -47,17 +50,23 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
   Widget build(BuildContext context) {
     final uuid = const Uuid().v4();
     final localDbProvider = global<ObjectBoxService>();
-    final items =
+    // final localDbProviderHN = global<SolicitudesHnBoxService>();
+    final items = switch (widget.flavor) {
+      Flavor.nicaragua =>
         localDbProvider.findParentescosByNombre(type: widget.codigo).map((e) {
-      return Item(
-        id: uuid,
-        value: e.valor,
-        name: e.nombre,
-        interes: e.interes ?? 0,
-        montoMaximo: e.montoMaximo ?? 0,
-        montoMinimo: e.montoMinimo ?? 0,
-      );
-    }).toList();
+          return Item(
+            id: uuid,
+            value: e.valor,
+            name: e.nombre,
+            interes: e.interes ?? 0,
+            montoMaximo: e.montoMaximo ?? 0,
+            montoMinimo: e.montoMinimo ?? 0,
+          );
+        }).toList(),
+      Flavor.honduras => [],
+      _ => [],
+    };
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: OutlineTextfieldWidget(

@@ -1,11 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +29,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -59,6 +65,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'Cargo',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cargo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -68,6 +84,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'NombreTrabajo',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombreTrabajo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -77,6 +103,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   title: 'DireccionTrabajo',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        direccionTrabajo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -86,6 +122,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'BarrioTrabajo',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        barrioTrabajo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -94,6 +140,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
                   title: 'TelefonoTrabajo',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefonoTrabajo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -103,6 +159,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'TiempoLaborar',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tiempoLaborar: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -112,6 +178,16 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'LugarTrabajoAnterior',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        lugarTrabajoAnterior: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -121,6 +197,17 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'SalarioNetoCordoba',
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        salarioNetoCordoba: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -130,6 +217,17 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'TotalIngresoMes',
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        totalIngresoMes: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -139,6 +237,17 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'OtrosIngresosCordoba',
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        otrosIngresosCordoba: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

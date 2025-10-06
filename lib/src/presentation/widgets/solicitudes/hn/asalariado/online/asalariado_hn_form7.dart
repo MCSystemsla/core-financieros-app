@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +27,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -78,6 +82,16 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'CaserioDestino',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        caserioDestino: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -86,6 +100,16 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'BarrioDestino',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        barrioDestino: value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

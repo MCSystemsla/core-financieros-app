@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -9,6 +11,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,6 +32,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
   bool tieneVinculosUsa = false;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -46,7 +51,17 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   title: 'Nombre1',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombre1: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -55,7 +70,17 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   title: 'Nombre2',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombre2: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -64,6 +89,16 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   title: 'Apellido 1',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        apellido1: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -73,6 +108,16 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   title: 'Apellido2',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        apellido2: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -82,6 +127,13 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'Cedula',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cedula: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -123,6 +175,16 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
                   title: 'Telefono',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefono: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -132,6 +194,16 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
                   title: 'Celular',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        celular: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -148,6 +220,13 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.emailAddress,
                   textCapitalization: TextCapitalization.none,
                   title: 'Email',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        email: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -165,6 +244,13 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'NombrePublico',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombrePublico: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -173,7 +259,17 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   title: 'CantidadHijos',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        cantidadHijos: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -211,6 +307,11 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                     setState(() {
                       tieneVinculosUsa = item.value == 'input.yes'.tr();
                     });
+                    // cubit.onFieldChanged(
+                    //   () => cubit.state.copyWith(
+                    //     tieneVinculosUsa: item.value == 'input.yes'.tr(),
+                    //   ),
+                    // );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -228,6 +329,13 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,
                     title: 'Codigo USA',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          codigoUsa: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 const Gap(30),
@@ -238,6 +346,16 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.characters,
                   title: 'Rtn',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        rtn: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -255,6 +373,13 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   title: 'Ubicacion',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        ubicacion: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

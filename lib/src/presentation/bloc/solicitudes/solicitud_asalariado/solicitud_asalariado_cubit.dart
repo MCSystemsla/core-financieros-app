@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/asalariado_autosave.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';

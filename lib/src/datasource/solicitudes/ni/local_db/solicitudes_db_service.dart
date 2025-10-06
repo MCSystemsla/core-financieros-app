@@ -4,18 +4,18 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/kiva/kiva_solicitud_model.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/catalogo/departments_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/cedula/cedula_client_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/kiva_configuracion/kiva_configuracion_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/kiva/kiva_solicitud_model.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/departments_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/kiva_configuracion/kiva_configuracion_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:logger/logger.dart';
@@ -68,7 +68,6 @@ class ObjectBoxService {
       final store = await openStore(
         directory: '${dbDir.path}/solicitudes_db',
       );
-      log('🔥 Cargando base de datos local ${store.directoryPath}');
 
       return ObjectBoxService._create(store);
     } on ObjectBoxException catch (e) {

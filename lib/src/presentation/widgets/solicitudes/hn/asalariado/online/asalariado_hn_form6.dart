@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +28,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -43,14 +48,31 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   title: 'NombreFamiliarCercano',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombreFamiliarCercano: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Dirección de Familiar Cercano',
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.streetAddress,
-                  textCapitalization: TextCapitalization.sentences,
+                  textCapitalization: TextCapitalization.words,
                   title: 'DireccionFamiliarCercano',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        direccionFamiliarCercano: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -59,6 +81,16 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
                   title: 'TelefonoFamiliarCercano',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefonoFamiliarCercano: value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

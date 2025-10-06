@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +28,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -79,6 +84,17 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'Monto',
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        monto: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -87,6 +103,36 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'objFrecuenciaID',
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  hintText: 'Plazo de Solicitud',
+                  icon:
+                      Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
+                  textInputType: TextInputType.number,
+                  textCapitalization: TextCapitalization.none,
+                  title: 'PlazoSolicitud',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        plazoSolicitud: value,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  hintText: 'Fecha Primer Pago',
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  textInputType: TextInputType.datetime,
+                  textCapitalization: TextCapitalization.none,
+                  title: 'FechaPrimerPagoSolicitud',
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -103,26 +149,13 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   title: 'Observacion',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Plazo de Solicitud',
-                  icon:
-                      Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'PlazoSolicitud',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Fecha Primer Pago',
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                  textInputType: TextInputType.datetime,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'FechaPrimerPagoSolicitud',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        observacion: value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/solicitudes_asalariado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/solicitudes_pendientes_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/solicitudes_represtamo_pendientes_items.dart';
@@ -8,8 +8,8 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicit
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_offline/solicitudes_offline_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 

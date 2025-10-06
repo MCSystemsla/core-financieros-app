@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/energia_limpia/energia_limpia_cubit.dart';

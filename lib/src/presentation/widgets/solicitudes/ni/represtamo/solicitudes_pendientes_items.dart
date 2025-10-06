@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/slide_pageview_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitudes_pendientes/ni/solicitudes_pendientes_widget.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
@@ -9,7 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/represtamo_form.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/nueva_menor_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

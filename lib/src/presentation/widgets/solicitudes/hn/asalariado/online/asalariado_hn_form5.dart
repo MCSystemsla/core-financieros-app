@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -9,6 +11,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,6 +35,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -52,6 +57,11 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     setState(() {
                       esPeps = item.value == 'input.yes'.tr();
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        espeps: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -64,11 +74,21 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                   const Gap(30),
                   OutlineTextfieldWidget(
                     hintText: 'Nombre de Entidad PEPS',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     icon: Icon(Icons.account_balance,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     title: 'NombreDeEntidadPeps',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreDeEntidadPeps: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -77,7 +97,17 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.datetime,
                     textCapitalization: TextCapitalization.none,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     title: 'PeriodoPeps',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          periodoPeps: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -86,6 +116,13 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
                     title: 'CargoOficialPeps',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cargoOficialPeps: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 SheetSearchDropdown(
@@ -96,6 +133,11 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     setState(() {
                       tieneFamiliarPeps = item.value == 'input.yes'.tr();
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tieneFamiliarPeps: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -112,7 +154,17 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     title: 'NombreFamiliarPeps2',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreFamiliarPeps2: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -131,6 +183,13 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
                     title: 'CargoFamiliarPeps2',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cargoFamiliarPeps2: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -140,15 +199,32 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     title: 'NombreEntidadPeps2',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreEntidadPeps2: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
                     hintText: 'Periodo PEPS 2',
                     icon: Icon(Icons.date_range,
                         color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.datetime,
+                    textInputType: TextInputType.number,
                     textCapitalization: TextCapitalization.none,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     title: 'PeriodoPeps2',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          periodoPeps2: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -168,6 +244,11 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     setState(() {
                       tieneFamiliarPeps = item.value == 'input.yes'.tr();
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tieneFamiliarPeps: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -184,7 +265,17 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     title: 'NombreFamiliarPeps2',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreFamiliarPeps2: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -194,6 +285,16 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,
                     title: 'CedulaFamiliar',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cedulaFamiliar: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 SheetSearchDropdown(
@@ -204,6 +305,11 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     setState(() {
                       esApnfd = item.value == 'input.yes'.tr();
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        esApnfd: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -220,7 +326,17 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     title: 'EjerceAPNFD',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          ejerceApnfd: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ],

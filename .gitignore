@@ -45,6 +45,8 @@ app.*.map.json
 api-key-local.json
 api-key.json
 api-key-prod.json
+api-key-hn.json
+
 
 
 # Version control environment file

@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/asesor/asesor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/asesor/asesor.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';

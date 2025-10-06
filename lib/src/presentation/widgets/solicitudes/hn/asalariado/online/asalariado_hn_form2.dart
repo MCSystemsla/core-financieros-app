@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +28,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -43,6 +48,16 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   title: 'DireccionCasa',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        direccionCasa: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -52,6 +67,16 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'BarrioCasa',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        barrioCasa: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -61,6 +86,13 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'objMunicipioCasaID',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        municipioCasaCodigo: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -95,6 +127,16 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'AnosResidirCasa',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        anosResidirCasa: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -112,6 +154,16 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'CaseriCasa',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        caseriCasa: value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

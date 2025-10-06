@@ -32,7 +32,7 @@
         "program": "lib/main_hn.dart",
         "args": [
           "--dart-define-from-file",
-          "api-key.json",
+          "api-key-hn.json",
           "--flavor",
           "micreditoHonduras"
         ]

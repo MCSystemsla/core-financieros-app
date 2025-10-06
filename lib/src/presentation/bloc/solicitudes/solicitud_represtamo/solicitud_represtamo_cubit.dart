@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/represtamo_autosave.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';

@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -10,6 +12,9 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,6 +35,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
   Item? estadoCivil;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SolicitudAsalariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -66,6 +72,16 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
                     title: 'NombreConyugue',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreConyugue: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -74,7 +90,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                         Icon(Icons.school, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     title: 'ProfesionConyugue',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          profesionConyugue: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   SheetSearchDropdown(
@@ -86,6 +112,11 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                       setState(() {
                         trabajaConyuge = item.value == 'input.yes'.tr();
                       });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          trabajaConyugue: item.value,
+                        ),
+                      );
                     },
                     enabled: true,
                     items: [
@@ -102,15 +133,35 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
                       title: 'TrabajoConyugue',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            trabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
                       hintText: 'Dirección del Trabajo del Cónyuge',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       icon: Icon(Icons.location_on,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
                       title: 'DireccionTrabajoConyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            direccionTrabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -119,7 +170,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                           Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.phone,
                       textCapitalization: TextCapitalization.none,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       title: 'TelefonoTrabajoConyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            telefonoTrabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -128,7 +189,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       title: 'TiempoLaborarConyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            tiempoLaborarConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -138,6 +209,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
                       title: 'SueldoMesConyugue',
+                      inputFormatters: [
+                        CurrencyInputFormatter(),
+                      ],
+                      onChange: (value) {
+                        final newValue = value.replaceAll(',', '');
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            sueldoMesConyugue: int.tryParse(newValue) ?? 0,
+                          ),
+                        );
+                      },
                     ),
                   ],
                   const Gap(30),
@@ -148,6 +230,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     textInputType: TextInputType.number,
                     textCapitalization: TextCapitalization.none,
                     title: 'OtrosIngresosConyugue',
+                    inputFormatters: [
+                      CurrencyInputFormatter(),
+                    ],
+                    onChange: (value) {
+                      final newValue = value.replaceAll(',', '');
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          otrosIngresosConyugue: int.tryParse(newValue) ?? 0,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -157,6 +250,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     textInputType: TextInputType.number,
                     textCapitalization: TextCapitalization.none,
                     title: 'TotalIngresoMesConyugue',
+                    inputFormatters: [
+                      CurrencyInputFormatter(),
+                    ],
+                    onChange: (value) {
+                      final newValue = value.replaceAll(',', '');
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          totalIngresoMesConyugue: int.tryParse(newValue) ?? 0,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
@@ -165,7 +269,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                         Icon(Icons.source, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     title: 'FuenteOtrosIngresosConyugue',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          fuenteOtrosIngresosConyugue: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 const Gap(30),
@@ -175,6 +289,16 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'personasACargo',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        personasACargo: int.tryParse(value) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

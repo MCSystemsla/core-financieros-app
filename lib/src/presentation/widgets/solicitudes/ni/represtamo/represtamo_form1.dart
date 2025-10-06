@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/views/represtamo_form_content_view1.dart';
 
 class ReprestamoForm1 extends StatefulWidget {
