@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_wa
 import 'package:core_financiero_app/src/presentation/widgets/shared/alert/no_images_kivas_on_history_alert.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/download_catalogos_dialog_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -131,19 +132,21 @@ class _HomeScreenView extends StatelessWidget {
                             Text('Sincronizar'),
                           ],
                         ),
-                        onPressed: () => {
-                          saveCatalogoByFlavor(
-                            context,
-                            flavor: flavor,
-                            onDownloadComplete: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              );
-                            },
-                          ),
+                        onPressed: () {
+                          context.pushTransparentRoute(
+                            saveCatalogoByFlavor(
+                              context,
+                              flavor: flavor,
+                              onDownloadComplete: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
                         },
                       ),
                     )
