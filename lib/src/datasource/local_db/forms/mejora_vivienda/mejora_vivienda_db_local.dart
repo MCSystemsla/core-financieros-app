@@ -25,4 +25,7 @@ class MejoraViviendaDbLocal {
   String? planesFuturo;
   String? otrosDatosCliente;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

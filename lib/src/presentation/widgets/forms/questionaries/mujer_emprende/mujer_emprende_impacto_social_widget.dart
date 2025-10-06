@@ -134,7 +134,7 @@ class _MujerEmprendeImpactoSocialState extends State<MujerEmprendeImpactoSocial>
                               comoImpactariaNegocio: question3.text.trim(),
                               comoMejoraCalidadVida: question4.text.trim(),
                               otrosDatosCliente: question5.text.trim(),
-                              objSolicitudNuevamenorId: int.parse(
+                              objSolicitudNuevamenorId: int.tryParse(
                                 context
                                     .read<KivaRouteCubit>()
                                     .state
@@ -347,7 +347,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           siguientePaso: siguientePaso.text.trim(),
                           explicacionAlcanzaraMeta:
                               alcanzaraMetaExplicacion.text.trim(),
-                          objSolicitudRecurrenteId: int.parse(
+                          objSolicitudRecurrenteId: int.tryParse(
                             context.read<KivaRouteCubit>().state.solicitudId,
                           ),
                         );

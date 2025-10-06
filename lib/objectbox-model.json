@@ -194,7 +194,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "146:4604020010912184238",
+      "lastPropertyId": "148:5756922527214864594",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -556,7 +556,7 @@
         {
           "id": "72:8707214069627763276",
           "name": "espeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "73:2971958953666040933",
@@ -581,7 +581,7 @@
         {
           "id": "77:6002792746728140581",
           "name": "tieneFamiliarPeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "78:1333878176834195371",
@@ -626,7 +626,7 @@
         {
           "id": "86:2864282043887046100",
           "name": "esFamiliarEmpleado",
-          "type": 1
+          "type": 9
         },
         {
           "id": "87:8808444959846571274",
@@ -927,13 +927,18 @@
           "id": "146:4604020010912184238",
           "name": "isOffline",
           "type": 1
+        },
+        {
+          "id": "147:1434527191702913174",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "87:6547042730322422823",
+      "lastPropertyId": "88:454189084863864254",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1366,13 +1371,18 @@
           "id": "87:6547042730322422823",
           "name": "paisPeps2Ver",
           "type": 9
+        },
+        {
+          "id": "88:454189084863864254",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "155:2650882584117058795",
+      "lastPropertyId": "156:5945438603063566861",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -1664,7 +1674,7 @@
         {
           "id": "58:1629770468389854072",
           "name": "espeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "59:5219343769096125024",
@@ -1689,7 +1699,7 @@
         {
           "id": "63:3318684764539981590",
           "name": "tieneFamiliarPeps",
-          "type": 1
+          "type": 9
         },
         {
           "id": "64:1755152650040289906",
@@ -1734,7 +1744,7 @@
         {
           "id": "72:3710209949202188194",
           "name": "esFamiliarEmpleado",
-          "type": 1
+          "type": 9
         },
         {
           "id": "73:4856350052108372924",
@@ -2150,6 +2160,11 @@
           "id": "155:2650882584117058795",
           "name": "paisPeps2Ver",
           "type": 9
+        },
+        {
+          "id": "156:5945438603063566861",
+          "name": "nombreFormularioKiva",
+          "type": 9
         }
       ],
       "relations": []
@@ -2216,9 +2231,647 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "18:2473895458890891801",
+      "lastPropertyId": "10:8158607882291531379",
+      "name": "KivaConfiguracionLocalDb",
+      "properties": [
+        {
+          "id": "1:171499448387372530",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6201284309161292789",
+          "name": "productoCodigo",
+          "type": 9
+        },
+        {
+          "id": "3:4069165323575816176",
+          "name": "producto",
+          "type": 9
+        },
+        {
+          "id": "4:3853539654527968398",
+          "name": "esRecurrente",
+          "type": 1
+        },
+        {
+          "id": "5:8251158332613813975",
+          "name": "formularioKiva",
+          "type": 9
+        },
+        {
+          "id": "6:820603941334310183",
+          "name": "montoMinimo",
+          "type": 6
+        },
+        {
+          "id": "7:4021832819291001901",
+          "name": "montoMaximo",
+          "type": 6
+        },
+        {
+          "id": "8:8105191679385203943",
+          "name": "plazoMinimo",
+          "type": 6
+        },
+        {
+          "id": "9:4514748507511931608",
+          "name": "plazoMaximo",
+          "type": 6
+        },
+        {
+          "id": "10:8158607882291531379",
+          "name": "aplicaMigrantesEconomicos",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "19:3800812227675495763",
+      "lastPropertyId": "132:5589645346630404113",
+      "name": "SolicitudAsalariadoHnDbLocal",
+      "properties": [
+        {
+          "id": "1:239050911008136305",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2091741556512410270",
+          "name": "database",
+          "type": 9
+        },
+        {
+          "id": "3:5702457698915370996",
+          "name": "isOffline",
+          "type": 1
+        },
+        {
+          "id": "4:958894096829770896",
+          "name": "origenSolicitudCodigo",
+          "type": 9
+        },
+        {
+          "id": "5:7914242842986292891",
+          "name": "nombre1",
+          "type": 9
+        },
+        {
+          "id": "6:2986219905436096051",
+          "name": "nombre2",
+          "type": 9
+        },
+        {
+          "id": "7:2964878930529881884",
+          "name": "apellido1",
+          "type": 9
+        },
+        {
+          "id": "8:5579688335757151580",
+          "name": "apellido2",
+          "type": 9
+        },
+        {
+          "id": "9:2296432506128967966",
+          "name": "cedula",
+          "type": 9
+        },
+        {
+          "id": "10:8213217989974738912",
+          "name": "paisEmisorCedulaCodigo",
+          "type": 9
+        },
+        {
+          "id": "11:4538608955481090343",
+          "name": "fechaEmisionCedula",
+          "type": 10
+        },
+        {
+          "id": "12:6140492771676408619",
+          "name": "fechaVencimientoCedula",
+          "type": 10
+        },
+        {
+          "id": "13:2174493064330676645",
+          "name": "fechaNacimiento",
+          "type": 10
+        },
+        {
+          "id": "14:7213477441986046034",
+          "name": "telefono",
+          "type": 9
+        },
+        {
+          "id": "15:5750784651089411130",
+          "name": "celular",
+          "type": 9
+        },
+        {
+          "id": "16:5993543172846322323",
+          "name": "direccionCasa",
+          "type": 9
+        },
+        {
+          "id": "17:7396383124895882957",
+          "name": "barrioCasa",
+          "type": 9
+        },
+        {
+          "id": "18:7978705610290776544",
+          "name": "municipioCasaCodigo",
+          "type": 9
+        },
+        {
+          "id": "19:2153694170812700022",
+          "name": "departamentoCasaCodigo",
+          "type": 9
+        },
+        {
+          "id": "20:350598244603528693",
+          "name": "paisCasaCodigo",
+          "type": 9
+        },
+        {
+          "id": "24:2314664680657931401",
+          "name": "condicionCasaCodigo",
+          "type": 9
+        },
+        {
+          "id": "25:754423443040078991",
+          "name": "anosResidirCasa",
+          "type": 6
+        },
+        {
+          "id": "26:1711894274593174778",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "27:4846859451027049131",
+          "name": "monto",
+          "type": 6
+        },
+        {
+          "id": "28:4721526608129350766",
+          "name": "monedaCodigo",
+          "type": 9
+        },
+        {
+          "id": "29:5815801587718165820",
+          "name": "propositoCodigo",
+          "type": 9
+        },
+        {
+          "id": "30:8380669622545254268",
+          "name": "frecuenciaCodigo",
+          "type": 9
+        },
+        {
+          "id": "31:1383885249527397990",
+          "name": "cuota",
+          "type": 6
+        },
+        {
+          "id": "32:5355429039584260780",
+          "name": "sectorCodigo",
+          "type": 9
+        },
+        {
+          "id": "33:2220893980363259095",
+          "name": "personasACargo",
+          "type": 6
+        },
+        {
+          "id": "34:2744751600801058477",
+          "name": "estadoCivilCodigo",
+          "type": 9
+        },
+        {
+          "id": "35:4962949094183036896",
+          "name": "nombreConyugue",
+          "type": 9
+        },
+        {
+          "id": "36:4462494612501831535",
+          "name": "trabajaConyugue",
+          "type": 9
+        },
+        {
+          "id": "37:7604634085528092670",
+          "name": "trabajoConyugue",
+          "type": 9
+        },
+        {
+          "id": "38:6041979659921199203",
+          "name": "direccionTrabajoConyugue",
+          "type": 9
+        },
+        {
+          "id": "39:8760040702571100878",
+          "name": "telefonoTrabajoConyugue",
+          "type": 9
+        },
+        {
+          "id": "43:8235656323243946506",
+          "name": "productoCodigo",
+          "type": 9
+        },
+        {
+          "id": "44:328812792688582729",
+          "name": "observacion",
+          "type": 9
+        },
+        {
+          "id": "45:3452069268466581507",
+          "name": "ubicacionLongitud",
+          "type": 9
+        },
+        {
+          "id": "46:3053820506970262733",
+          "name": "ubicacionLatitud",
+          "type": 9
+        },
+        {
+          "id": "47:192889883500859184",
+          "name": "escolaridadCodigo",
+          "type": 9
+        },
+        {
+          "id": "48:7086620107377805980",
+          "name": "cantidadHijos",
+          "type": 6
+        },
+        {
+          "id": "49:2158706148627728451",
+          "name": "nombrePublico",
+          "type": 9
+        },
+        {
+          "id": "50:5762045346596273250",
+          "name": "sexoCodigo",
+          "type": 9
+        },
+        {
+          "id": "51:5132710389339177448",
+          "name": "paisNacimientoCodigo",
+          "type": 9
+        },
+        {
+          "id": "52:1278796328502499305",
+          "name": "nacionalidadConyugue",
+          "type": 9
+        },
+        {
+          "id": "53:2094407370638306293",
+          "name": "ubicacion",
+          "type": 9
+        },
+        {
+          "id": "54:1816250274127723018",
+          "name": "espeps",
+          "type": 9
+        },
+        {
+          "id": "55:9047995186551634334",
+          "name": "nombreDeEntidadPeps",
+          "type": 9
+        },
+        {
+          "id": "56:3818069102036776472",
+          "name": "paisPeps",
+          "type": 9
+        },
+        {
+          "id": "57:3045684398410867098",
+          "name": "periodoPeps",
+          "type": 9
+        },
+        {
+          "id": "58:2201385597834327516",
+          "name": "cargoOficialPeps",
+          "type": 9
+        },
+        {
+          "id": "59:8266864827525056988",
+          "name": "tieneFamiliarPeps",
+          "type": 9
+        },
+        {
+          "id": "60:1946191284766061123",
+          "name": "nombreFamiliarPeps2",
+          "type": 9
+        },
+        {
+          "id": "61:50654802739992015",
+          "name": "parentescoFamiliarPeps2",
+          "type": 9
+        },
+        {
+          "id": "62:8267923722261239956",
+          "name": "cargoFamiliarPeps2",
+          "type": 9
+        },
+        {
+          "id": "63:2648523730045953949",
+          "name": "nombreEntidadPeps2",
+          "type": 9
+        },
+        {
+          "id": "64:4014878617600707852",
+          "name": "periodoPeps2",
+          "type": 9
+        },
+        {
+          "id": "65:2480116691204126507",
+          "name": "paisPeps2",
+          "type": 9
+        },
+        {
+          "id": "67:683605359507346595",
+          "name": "actividadPredominanteCodigo",
+          "type": 9
+        },
+        {
+          "id": "68:5802491607671118782",
+          "name": "esFamiliarEmpleado",
+          "type": 9
+        },
+        {
+          "id": "69:3241985736328121875",
+          "name": "nombreFamiliar",
+          "type": 9
+        },
+        {
+          "id": "70:4648519229475781290",
+          "name": "cedulaFamiliar",
+          "type": 9
+        },
+        {
+          "id": "71:4867999442529097549",
+          "name": "tipoDocumentoCodigo",
+          "type": 9
+        },
+        {
+          "id": "76:8784113034952474177",
+          "name": "tipoPersonaCodigo",
+          "type": 9
+        },
+        {
+          "id": "78:2559411568759257820",
+          "name": "plazoSolicitud",
+          "type": 6
+        },
+        {
+          "id": "79:2527714324169118441",
+          "name": "fechaPrimerPagoSolicitud",
+          "type": 10
+        },
+        {
+          "id": "80:3085112183430987917",
+          "name": "nombreTrabajo",
+          "type": 9
+        },
+        {
+          "id": "81:5518652415944979589",
+          "name": "direccionTrabajo",
+          "type": 9
+        },
+        {
+          "id": "82:1426033114310905933",
+          "name": "barrioTrabajo",
+          "type": 9
+        },
+        {
+          "id": "86:1735198196733268847",
+          "name": "cargo",
+          "type": 9
+        },
+        {
+          "id": "87:8587235237913835156",
+          "name": "direccionFamiliarCercano",
+          "type": 9
+        },
+        {
+          "id": "90:1047166916406949404",
+          "name": "fuenteOtrosIngresos",
+          "type": 9
+        },
+        {
+          "id": "91:7936614681479809926",
+          "name": "fuenteOtrosIngresosConyugue",
+          "type": 9
+        },
+        {
+          "id": "92:8962597973803280673",
+          "name": "lugarTrabajoAnterior",
+          "type": 9
+        },
+        {
+          "id": "93:4232889733165140879",
+          "name": "nombreFamiliarCercano",
+          "type": 9
+        },
+        {
+          "id": "94:767092629823833044",
+          "name": "parentescoFamiliarCercanoCodigo",
+          "type": 9
+        },
+        {
+          "id": "95:8707557599475361375",
+          "name": "otrosIngresosConyugue",
+          "type": 6
+        },
+        {
+          "id": "96:5918637505095867352",
+          "name": "otrosIngresosCordoba",
+          "type": 6
+        },
+        {
+          "id": "98:7316505371719470309",
+          "name": "profesionConyugue",
+          "type": 9
+        },
+        {
+          "id": "99:3606970282756448559",
+          "name": "salarioNetoCordoba",
+          "type": 6
+        },
+        {
+          "id": "100:7741655184788394235",
+          "name": "sueldoMesConyugue",
+          "type": 6
+        },
+        {
+          "id": "101:802526804742743164",
+          "name": "telefonoFamiliarCercano",
+          "type": 9
+        },
+        {
+          "id": "102:6600417539743929359",
+          "name": "telefonoTrabajo",
+          "type": 9
+        },
+        {
+          "id": "103:1104846746398107250",
+          "name": "tiempoLaborar",
+          "type": 9
+        },
+        {
+          "id": "104:3810287964949434270",
+          "name": "tiempoLaborarConyugue",
+          "type": 9
+        },
+        {
+          "id": "105:8532025778291460405",
+          "name": "totalIngresoMes",
+          "type": 6
+        },
+        {
+          "id": "106:6272038755193034469",
+          "name": "totalIngresoMesConyugue",
+          "type": 6
+        },
+        {
+          "id": "107:6052202365783130055",
+          "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "108:1105590886888473923",
+          "name": "nacinalidad",
+          "type": 9
+        },
+        {
+          "id": "109:4659785414048398328",
+          "name": "rtn",
+          "type": 9
+        },
+        {
+          "id": "110:8849612718924332647",
+          "name": "codigoUsa",
+          "type": 9
+        },
+        {
+          "id": "111:3048302709666739704",
+          "name": "tipoPersonaCnbsidCodigo",
+          "type": 9
+        },
+        {
+          "id": "112:4712368294389478443",
+          "name": "estatusClienteCodigo",
+          "type": 9
+        },
+        {
+          "id": "113:7562026427579449050",
+          "name": "tipoClienteCodigo",
+          "type": 9
+        },
+        {
+          "id": "114:1492749159979316629",
+          "name": "actividadEconomicaCiuu1Codigo",
+          "type": 9
+        },
+        {
+          "id": "115:7552605074441441352",
+          "name": "actividadEconomicaCiuu2Codigo",
+          "type": 9
+        },
+        {
+          "id": "116:261388697890252127",
+          "name": "actividadEconomicaCiuu3Codigo",
+          "type": 9
+        },
+        {
+          "id": "117:176146416665000222",
+          "name": "nivelAproximadoDeIngresosCodigo",
+          "type": 9
+        },
+        {
+          "id": "118:570086042460276052",
+          "name": "ocupacionCodigo",
+          "type": 9
+        },
+        {
+          "id": "119:5961564462964093286",
+          "name": "profesionCodigo",
+          "type": 9
+        },
+        {
+          "id": "120:4129925240645535094",
+          "name": "actividadEconomicaDescripcion1",
+          "type": 9
+        },
+        {
+          "id": "121:368512743797187217",
+          "name": "actividadEconomicaDescripcion2",
+          "type": 9
+        },
+        {
+          "id": "122:7870283399192411923",
+          "name": "actividadEconomicaDescripcion3",
+          "type": 9
+        },
+        {
+          "id": "123:7364532678206578712",
+          "name": "ejerceApnfd",
+          "type": 9
+        },
+        {
+          "id": "124:8576981983646230887",
+          "name": "esApnfd",
+          "type": 9
+        },
+        {
+          "id": "125:841986273097632856",
+          "name": "paisDestinoCodigo",
+          "type": 9
+        },
+        {
+          "id": "126:6591787307648099684",
+          "name": "departamentoDestinoCodigo",
+          "type": 9
+        },
+        {
+          "id": "127:3441616712788213978",
+          "name": "municipioDestinoId",
+          "type": 9
+        },
+        {
+          "id": "128:784980139278377277",
+          "name": "aldeaDestinoCodigo",
+          "type": 9
+        },
+        {
+          "id": "129:7024838526051546231",
+          "name": "caserioDestino",
+          "type": 9
+        },
+        {
+          "id": "130:6619872174568418930",
+          "name": "barrioDestino",
+          "type": 9
+        },
+        {
+          "id": "131:3492007925457351955",
+          "name": "caseriCasa",
+          "type": 9
+        },
+        {
+          "id": "132:5589645346630404113",
+          "name": "aldeaCodigo",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "17:6725755909143094672",
+  "lastEntityId": "19:3800812227675495763",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -2262,7 +2915,26 @@
     2003242826777116512,
     8815944816728084934,
     938455936462783985,
-    7967582365827616337
+    7967582365827616337,
+    5756922527214864594,
+    1405992615193146156,
+    4262342248352533367,
+    8401828870229096105,
+    4551674867964397221,
+    3313519980821981133,
+    2295399776514703951,
+    1829915314402039413,
+    3312196614610342902,
+    1096354845921626431,
+    1096804218561750626,
+    4159032808461402052,
+    587075512808337797,
+    3776577456228334244,
+    4368593462331705197,
+    6774847236491249580,
+    6986873684027661940,
+    3130289212232950153,
+    8972294420756887347
   ],
   "retiredRelationUids": [],
   "version": 1

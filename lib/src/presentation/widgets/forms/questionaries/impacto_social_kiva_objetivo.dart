@@ -103,12 +103,13 @@ class _ImpactoSocialKivaObjetiveWidgetState
                     onNextPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                         context.read<MejoraViviendaCubit>().saveAnswer2(
-                              solicitudNuevamenorId: int.parse(
-                                context
-                                    .read<KivaRouteCubit>()
-                                    .state
-                                    .solicitudId,
-                              ),
+                              solicitudNuevamenorId: int.tryParse(
+                                    context
+                                        .read<KivaRouteCubit>()
+                                        .state
+                                        .solicitudId,
+                                  ) ??
+                                  0,
                               motivoPrestamo: question2Controller.text.trim(),
                               comoAyudara: question2Controller.text.trim(),
                               planesFuturo: question3Controller.text.trim(),

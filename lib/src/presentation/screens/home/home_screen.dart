@@ -1,17 +1,19 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/device_storage/device_storage_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_on_history/no_images_kivas_on_history_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_items_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_warning/low_storage_warning_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/alert/no_images_kivas_on_history_alert.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/download_catalogos_dialog_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -53,13 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final flavor = global<FlavorCubit>().state.flavor;
+
     if (_isChecking) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
     if (_shouldSync) {
-      return DownsloadingCatalogosWidget(
+      return saveCatalogoByFlavor(
+        context,
+        flavor: flavor,
         onDownloadComplete: () {
           Navigator.push(
             context,
@@ -84,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return BlocBuilder<DeviceStorageCubit, DeviceStorageState>(
           builder: (context, state) {
             return switch (state.isStorageFull) {
+              // StorageDeviceStatus.full => _HomeScreenView(),
               StorageDeviceStatus.full => LowStorageWarning(
                   freeStorage: state.freeStorage,
                   totalStorage: state.totalStorage / 1000,
@@ -103,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HomeScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final flavor = global<FlavorCubit>().state.flavor;
     final isConnected = context.read<InternetConnectionCubit>().state;
 
     return PopScope(
@@ -124,17 +132,17 @@ class _HomeScreenView extends StatelessWidget {
                           ],
                         ),
                         onPressed: () => {
-                          context.pushTransparentRoute(
-                            DownsloadingCatalogosWidget(
-                              onDownloadComplete: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              },
-                            ),
+                          saveCatalogoByFlavor(
+                            context,
+                            flavor: flavor,
+                            onDownloadComplete: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                              );
+                            },
                           ),
                         },
                       ),
@@ -165,4 +173,20 @@ class _HomeScreenView extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget saveCatalogoByFlavor(
+  BuildContext context, {
+  required Flavor flavor,
+  required VoidCallback onDownloadComplete,
+}) {
+  return switch (flavor) {
+    Flavor.nicaragua => DownsloadingCatalogosWidget(
+        onDownloadComplete: onDownloadComplete,
+      ),
+    Flavor.honduras => DownloadCatalogosDialogHn(
+        onDownloadComplete: onDownloadComplete,
+      ),
+    _ => throw Exception('No se reconoce el flavor'),
+  };
 }

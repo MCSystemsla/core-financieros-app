@@ -1,17 +1,28 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/asalariado/solicitud_asalariado.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/asalariado_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
 part 'enviar_solicitud_when_isdone_state.dart';
+
+typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
+  required String uuid,
+  required String numeroSolicitud,
+  required String solicitudId,
+  required String tipoProducto,
+  required String nombreFomularioKiva,
+  required String cedula,
+  required int tipoSolicitudId,
+});
 
 class EnviarSolicitudWhenIsdoneCubit
     extends Cubit<EnviarSolicitudWhenIsdoneState> {
@@ -21,12 +32,22 @@ class EnviarSolicitudWhenIsdoneCubit
       : super(EnviarSolicitudWhenIsdoneInitial());
   final _logger = Logger();
 
-  void sendSolicitudWhenIsDone({required bool isConnected}) async {
+  void sendSolicitudWhenIsDone({
+    required bool isConnected,
+    required OnSolicitudCreditoIsKivaFn onSolicitudCreditoIsKivaFn,
+  }) async {
     List<String> errors = [];
     List<String> solicitudesSent = [];
+    List<String> unSentCedulas = [];
+    List<String> unSentKivaForms = [];
 
-    (bool isSuccess, String errorMessage, String? numerSolicitud) result =
-        (false, '', null);
+    (
+      bool isSuccess,
+      String errorMessage,
+      String? numerSolicitud,
+      String? solciitudId,
+      int? tipoSolicitudId,
+    ) result = (false, '', null, null, null);
 
     bool hasAnySent = false;
 
@@ -48,7 +69,7 @@ class EnviarSolicitudWhenIsdoneCubit
             errorMsg: result.$2,
           );
 
-          errors.add('Solicitud ID ${solicitud.cedula}: ${result.$2}');
+          errors.add('Solicitud con cedula ${solicitud.cedula}: ${result.$2}');
 
           continue;
         }
@@ -60,16 +81,36 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'NUEVA_MENOR',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unSentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
-          objectBoxService.removeSolicitudWhenisUploaded(
-            solicitudId: solicitud.id,
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
           );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
         if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
           final String? cedula = solicitud.cedula;
@@ -79,16 +120,36 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'REPRESTAMO',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unSentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
-          objectBoxService.removeSolicitudReprestamoWhenisUploaded(
-            solicitudId: solicitud.id,
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
           );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudReprestamoWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
         if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
           final String? cedula = solicitud.cedula;
@@ -98,30 +159,53 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitud: 'ASALARIADO',
           );
           if (cedulaCliente != null) {
-            repository.sendCedulaImageWhenSolicitudCreditoCreated(
+            final (isSent, msg) =
+                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
               numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
               cedulaCliente: cedula,
               imagenFrontal: cedulaCliente.imageFrontCedula!,
               imagenTrasera: cedulaCliente.imageBackCedula!,
             );
+            if (!isSent) {
+              unSentCedulas.add(
+                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
+              );
+            }
           }
-          objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
-            solicitudId: solicitud.id,
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: solicitud.uuid ?? '',
+            tipoProducto: solicitud.nombreFormularioKiva ?? '',
+            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
+            cedula: solicitud.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
           );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
+            );
+          }
+          // objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
+          //   solicitudId: solicitud.id,
+          // );
         }
-        solicitudesSent.add('Solicitud ID ${solicitud.cedula}');
+        solicitudesSent.add('Solicitud con cedula ${solicitud.cedula}');
         hasAnySent = true;
       }
-      if (hasAnySent == true && errors.isEmpty) {
+      if (hasAnySent == true && errors.isEmpty && unSentCedulas.isEmpty) {
         emit(
           OnEnviarSolicitudWhenIsdoneSuccess(
+            unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
           ),
         );
       } else {
         emit(
           OnEnviarSolicitudWhenIsdonePendingVerification(
+            unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
+            unsentKivaForms: unSentKivaForms,
             errors: errors,
             msgError:
                 'Algunas solicitudes tienen errores y no se pudieron procesar.',
@@ -138,8 +222,9 @@ class EnviarSolicitudWhenIsdoneCubit
     emit(EnviarSolicitudWhenIsdoneInitial());
   }
 
-  Future<(bool, String, String?)> _sendSolicitud(
-      {required dynamic solicitud}) async {
+  Future<(bool, String, String?, String?, int?)> _sendSolicitud({
+    required dynamic solicitud,
+  }) async {
     return switch (solicitud) {
       ResponseLocalDb() => await repository.createSolicitudCreditoNuevaMenor(
           solicitudNuevaMenor: _mapToSolicitudNuevaMenor(solicitud),
@@ -233,12 +318,12 @@ class EnviarSolicitudWhenIsdoneCubit
       nacionalidadConyugue: solicitud.nacionalidadConyugue ?? '',
       database: solicitud.database ?? '',
       ubicacion: solicitud.ubicacion ?? '',
-      espeps: solicitud.espeps ?? false,
+      espeps: solicitud.espeps == 'input.yes'.tr(),
       nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps ?? '',
       paisPeps: solicitud.paisPeps ?? '',
       periodoPeps: solicitud.periodoPeps ?? '',
       cargoOficialPeps: solicitud.cargoOficialPeps ?? '',
-      tieneFamiliarPeps: solicitud.tieneFamiliarPeps ?? false,
+      tieneFamiliarPeps: solicitud.tieneFamiliarPeps == 'input.yes'.tr(),
       nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2 ?? '',
       parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2 ?? '',
       cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2 ?? '',
@@ -247,7 +332,7 @@ class EnviarSolicitudWhenIsdoneCubit
       paisPeps2: solicitud.paisPeps2 ?? '',
       objRubroActividad: solicitud.objRubroActividad ?? '',
       objActividadPredominante: solicitud.objActividadPredominante ?? '',
-      esFamiliarEmpleado: solicitud.esFamiliarEmpleado ?? false,
+      esFamiliarEmpleado: solicitud.esFamiliarEmpleado == 'input.yes'.tr(),
       nombreFamiliar: solicitud.nombreFamiliar ?? '',
       cedulaFamiliar: solicitud.cedulaFamiliar ?? '',
       objTipoDocumentoId: solicitud.objTipoDocumentoId ?? '',
@@ -386,12 +471,12 @@ class EnviarSolicitudWhenIsdoneCubit
       objPaisNacimientoId: solicitud.objPaisNacimientoId ?? '',
       nacionalidadConyugue: solicitud.nacionalidadConyugue ?? '',
       ubicacion: solicitud.ubicacion ?? '',
-      espeps: solicitud.espeps ?? false,
+      espeps: solicitud.espeps == 'input.yes'.tr(),
       nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps ?? '',
       paisPeps: solicitud.paisPeps ?? '',
       periodoPeps: solicitud.periodoPeps ?? '',
       cargoOficialPeps: solicitud.cargoOficialPeps ?? '',
-      tieneFamiliarPeps: solicitud.tieneFamiliarPeps ?? false,
+      tieneFamiliarPeps: solicitud.tieneFamiliarPeps == 'input.yes'.tr(),
       nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2 ?? '',
       parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2 ?? '',
       cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2 ?? '',
@@ -400,7 +485,7 @@ class EnviarSolicitudWhenIsdoneCubit
       paisPeps2: solicitud.paisPeps2 ?? '',
       objRubroActividad: solicitud.objRubroActividad ?? '',
       objActividadPredominante: solicitud.objActividadPredominante ?? '',
-      esFamiliarEmpleado: solicitud.esFamiliarEmpleado ?? false,
+      esFamiliarEmpleado: solicitud.esFamiliarEmpleado == 'input.yes'.tr(),
       nombreFamiliar: solicitud.nombreFamiliar ?? '',
       cedulaFamiliar: solicitud.cedulaFamiliar ?? '',
       objTipoDocumentoId: solicitud.objTipoDocumentoId ?? '',

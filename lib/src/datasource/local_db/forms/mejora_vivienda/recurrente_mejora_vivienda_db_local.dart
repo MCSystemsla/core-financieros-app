@@ -27,4 +27,7 @@ class RecurrenteMejoraViviendaDbLocal {
   String? quienApoya;
   String? siguienteMeta;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

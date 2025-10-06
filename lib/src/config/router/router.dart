@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/offline_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/screens.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitudes_by_flavor_interceptor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -170,7 +171,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/solicitudes',
-      builder: (context, state) => const SelectSolicitudScreen(),
+      builder: (context, state) => const SolicitudesByFlavorInterceptor(),
       routes: [
         GoRoute(
           path: '/solicitudes-pendientes',

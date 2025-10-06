@@ -13,6 +13,10 @@ class OnErrorWidget extends StatelessWidget {
   final List<String> solicitudesSent;
   final bool needToGoBack;
   final String btnTitle;
+  final bool areUnsentCedulas;
+  final List<String> unsentCedulas;
+  final bool areUnsentKivaForms;
+  final List<String> unsentKivaForms;
   const OnErrorWidget({
     super.key,
     required this.onPressed,
@@ -21,6 +25,10 @@ class OnErrorWidget extends StatelessWidget {
     this.btnTitle = 'Volver a intentarlo',
     this.errors = const [],
     this.solicitudesSent = const [],
+    this.areUnsentCedulas = false,
+    this.unsentCedulas = const [],
+    this.areUnsentKivaForms = false,
+    this.unsentKivaForms = const [],
   });
 
   @override
@@ -62,6 +70,50 @@ class OnErrorWidget extends StatelessWidget {
               ),
             ),
           ),
+          const Gap(5),
+          if (areUnsentCedulas) ...[
+            const Gap(5),
+            Text(
+              'Errores al enviar las cédulas al expediente digital:',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 16,
+                  ),
+            ),
+            ...unsentCedulas.map(
+              (error) => ListTile(
+                title: Text(
+                  error,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                leading: const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+          if (areUnsentKivaForms) ...[
+            Text(
+              'Errores al enviar historias Kiva:',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 16,
+                  ),
+            ),
+            ...unsentKivaForms.map(
+              (error) => ListTile(
+                title: Text(
+                  error,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                leading: const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
           if (solicitudesSent.isNotEmpty) ...[
             const Gap(10),
             Column(

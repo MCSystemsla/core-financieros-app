@@ -27,4 +27,7 @@ class SaneamientoDbLocal {
   String? siguienteProyectoCalidadVida;
   String? metasProximas;
   String? otrosDatosCliente;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

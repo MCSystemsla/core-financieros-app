@@ -29,4 +29,7 @@ class RecurrenteMiCrediEstudioDbLocal {
   bool? alcanzaraMeta;
   String? explicacionAlcanzaraMeta;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

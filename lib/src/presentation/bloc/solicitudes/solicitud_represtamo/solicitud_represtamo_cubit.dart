@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/represtamo_autosave.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +21,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   Future<void> createSolicitudReprestamo() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
           isOffline: state.isOffline,
@@ -136,6 +136,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      nombreFormularioKiva:
+          _prefer(state.nombreFormularioKiva, prev?.nombreFormularioKiva),
       paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
       paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       parentescoFamiliarPeps2Ver: _prefer(

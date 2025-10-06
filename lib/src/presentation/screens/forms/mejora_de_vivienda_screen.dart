@@ -385,6 +385,10 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                       ..imagen1 = imageProvider.imagen1
                                       ..imagen2 = imageProvider.imagen2
                                       ..imagen3 = imageProvider.imagen3
+                                      ..solicitudUuid = context
+                                          .read<KivaRouteCubit>()
+                                          .state
+                                          .solicitudCreditoId
                                       ..solicitudId = int.tryParse(
                                         context
                                             .read<KivaRouteCubit>()
@@ -402,6 +406,10 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -459,6 +467,8 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context.read<SolicitudesPendientesLocalDbCubit>().saveMejoraViviendaForm(
           mejoraViviendaDBLocal: MejoraViviendaDbLocal()
             ..tipoSolicitud = state.tipoSolicitud
@@ -479,6 +489,7 @@ class _SignQuestionaryWidgetState extends State<SignQuestionaryWidget> {
             ..tiempoActividad = state.tiempoActividad
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..solicitudCreditoId = solicitudCreditoId
             ..username = '',
         );
     if (!isConnected) {
@@ -755,6 +766,10 @@ class _RecurrentSignState extends State<RecurrentSign> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -810,6 +825,8 @@ class _RecurrentSignState extends State<RecurrentSign> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrenteMejoraViviendaForm(
@@ -834,6 +851,7 @@ class _RecurrentSignState extends State<RecurrentSign> {
             ..tieneTrabajo = state.tieneTrabajo
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..solicitudCreditoId = solicitudCreditoId
             ..viviendaAntesDespues = state.viviendaAntesDespues,
         );
     if (!isConnected) {

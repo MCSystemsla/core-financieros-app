@@ -1,13 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:drop_down_list/drop_down_list.dart';
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 class ItemNacionalidad extends Equatable {
   final int id;
@@ -36,8 +36,8 @@ class CatalogoValorNacionalidad extends StatefulWidget {
   final ItemCallback<ItemNacionalidad> onChanged;
   final String codigo;
   final String? where;
-  final ItemNacionalidad? initialValue;
-  final ValidatorCallback validator;
+  final ItemNacionalidad? selectedItem;
+  final ValidatorCallback<ItemNacionalidad> validator;
   final bool enabled;
   const CatalogoValorNacionalidad({
     super.key,
@@ -46,7 +46,7 @@ class CatalogoValorNacionalidad extends StatefulWidget {
     required this.onChanged,
     required this.codigo,
     this.where,
-    this.initialValue,
+    this.selectedItem,
     this.validator,
     this.enabled = true,
   });
@@ -57,8 +57,9 @@ class CatalogoValorNacionalidad extends StatefulWidget {
 }
 
 class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
-  late String value;
+  // late String value;
   late String whereClause;
+  ItemNacionalidad? selectedItem;
   @override
   void didUpdateWidget(covariant CatalogoValorNacionalidad oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -71,9 +72,10 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
 
   @override
   void initState() {
+    super.initState();
     // value = widget.initialValue;
     whereClause = widget.where ?? '';
-    super.initState();
+    selectedItem = widget.selectedItem;
   }
 
   @override
@@ -85,74 +87,80 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Gap(5),
-          Text(
-            widget.title,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-          const Gap(15),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: DropdownSearch<ItemNacionalidad>(
-              enabled: widget.enabled,
-              validator: widget.validator,
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              popupProps: PopupProps.menu(
-                showSearchBox: true,
-                searchFieldProps: TextFieldProps(
-                  decoration: InputDecoration(
-                    hintText: widget.hintText.isEmpty
-                        ? 'input.select_option'.tr()
-                        : widget.hintText,
-                    labelText: 'Buscar',
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: OutlineTextfieldWidget(
+        readOnly: true,
+        title: widget.title,
+        suffixIcon: const Icon(
+          Icons.keyboard_arrow_down,
+          size: 30,
+        ),
+        hintText: (selectedItem?.nombre.isNotEmpty ?? false)
+            ? selectedItem!.nombre
+            : widget.hintText,
+        validator: (_) {
+          // Aquí solo usamos tu validator directamente
+          return widget.validator?.call(selectedItem);
+        },
+        onTap: !widget.enabled
+            ? null
+            : () {
+                DropDownState<ItemNacionalidad>(
+                  dropDown: DropDown<ItemNacionalidad>(
+                    searchDelegate: (query, dataItems) {
+                      if (query.isEmpty) return dataItems;
+
+                      return dataItems
+                          .where((item) => item.data.nombre
+                              .toLowerCase()
+                              .contains(query.toLowerCase()))
+                          .toList();
+                    },
+                    enableMultipleSelection: false,
+                    bottomSheetTitle: const Text(
+                      'Selecciona una opción',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
+                    listItemBuilder: (index, dataItem) {
+                      return ListTile(
+                        title: Text(
+                          dataItem.data.nombre,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                      );
+                    },
+                    data: [
+                      ...items.map(
+                        (e) {
+                          return SelectedListItem<ItemNacionalidad>(
+                            data: ItemNacionalidad(
+                              id: e.id,
+                              valor: e.valor,
+                              nombre: e.nombre,
+                              relacion: e.relacion,
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                    onSelected: (selectedItems) {
+                      for (var item in selectedItems) {
+                        setState(() {
+                          selectedItem = item.data;
+                        });
+                        widget.onChanged.call(item.data);
+                      }
+                    },
                   ),
-                ),
-              ),
-              items: items,
-              itemAsString: (ItemNacionalidad? item) => item?.nombre ?? 'N/A',
-              onChanged: widget.onChanged,
-              selectedItem: ItemNacionalidad(
-                nombre: widget.hintText.isEmpty
-                    ? 'input.select_option'.tr()
-                    : widget.hintText,
-                valor: widget.hintText.isEmpty
-                    ? 'input.select_option'.tr()
-                    : widget.hintText,
-                relacion: '',
-                id: 0,
-              ),
-            ),
-          ),
-        ],
+                ).showModal(context);
+              },
       ),
     );
   }

@@ -125,9 +125,8 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
                       if (value == null) return 'input.input_validator'.tr();
                       return null;
                     },
-                    title:
-                        'De ser positivo, favor responder cuántas personas.       '
-                            .tr(),
+                    title: 'De ser positivo, favor responder cuántas personas.'
+                        .tr(),
                     items: [
                       '1 a 3'.tr(),
                       '4 a 6'.tr(),

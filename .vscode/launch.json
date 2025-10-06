@@ -14,19 +14,6 @@
         ]
       },
       {
-        "name": "MiCrédito Nicaragua (LOCAL)",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--dart-define-from-file",
-          "api-key-local.json",
-           "--flavor",
-          "micreditoNicaragua"
-        ]
-      },
-     
-      {
         "name": "MiCrédito Nicaragua (PROD)",
         "request": "launch",
         "type": "dart",
@@ -45,7 +32,7 @@
         "program": "lib/main_hn.dart",
         "args": [
           "--dart-define-from-file",
-          "api-key.json",
+          "api-key-hn.json",
           "--flavor",
           "micreditoHonduras"
         ]
@@ -87,7 +74,7 @@
         ]
       },
       {
-        "name": "MiCrédito QA (DEV)",
+        "name": "MiCrédito QA",
         "request": "launch",
         "type": "dart",
         "program": "lib/main.dart",
@@ -98,7 +85,6 @@
           "micreditoQA"
         ]
       },
-     
     ]
   }
   
