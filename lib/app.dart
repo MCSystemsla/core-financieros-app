@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import 'src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
 class App extends StatelessWidget {

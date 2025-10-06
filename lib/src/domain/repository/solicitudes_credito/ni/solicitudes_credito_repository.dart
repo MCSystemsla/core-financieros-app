@@ -19,7 +19,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_e
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/endpoint/solicitudes_credito_endpoint.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
