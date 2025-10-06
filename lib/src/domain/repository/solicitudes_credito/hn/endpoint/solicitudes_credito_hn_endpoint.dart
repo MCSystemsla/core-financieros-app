@@ -12,7 +12,7 @@ class CrearSolciitudAsalariadoHNEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/solicitud-represtamo/crear';
+  String get path => '/solicitud-asalariado/crear';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
