@@ -14,7 +14,6 @@ import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_wa
 import 'package:core_financiero_app/src/presentation/widgets/shared/alert/no_images_kivas_on_history_alert.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/download_catalogos_dialog_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -56,13 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final flavor = global<FlavorCubit>().state.flavor;
+
     if (_isChecking) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
     if (_shouldSync) {
-      return DownsloadingCatalogosWidget(
+      return saveCatalogoByFlavor(
+        context,
+        flavor: flavor,
         onDownloadComplete: () {
           Navigator.push(
             context,
@@ -132,6 +135,14 @@ class _HomeScreenView extends StatelessWidget {
                           saveCatalogoByFlavor(
                             context,
                             flavor: flavor,
+                            onDownloadComplete: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                              );
+                            },
                           ),
                         },
                       ),
@@ -162,34 +173,20 @@ class _HomeScreenView extends StatelessWidget {
       ),
     );
   }
+}
 
-  saveCatalogoByFlavor(BuildContext context, {required Flavor flavor}) {
-    return switch (flavor) {
-      Flavor.nicaragua => context.pushTransparentRoute(
-          DownsloadingCatalogosWidget(
-            onDownloadComplete: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
-            },
-          ),
-        ),
-      Flavor.honduras => context.pushTransparentRoute(
-          DownloadCatalogosDialogHn(
-            onDownloadComplete: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
-            },
-          ),
-        ),
-      _ => throw Exception('No se reconoce el flavor'),
-    };
-  }
+Widget saveCatalogoByFlavor(
+  BuildContext context, {
+  required Flavor flavor,
+  required VoidCallback onDownloadComplete,
+}) {
+  return switch (flavor) {
+    Flavor.nicaragua => DownsloadingCatalogosWidget(
+        onDownloadComplete: onDownloadComplete,
+      ),
+    Flavor.honduras => DownloadCatalogosDialogHn(
+        onDownloadComplete: onDownloadComplete,
+      ),
+    _ => throw Exception('No se reconoce el flavor'),
+  };
 }

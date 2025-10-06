@@ -10,7 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/repr
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/nueva_menor_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

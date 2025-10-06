@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_by_asesor/solicitudes_by_asesor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/card_table/card_table.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
