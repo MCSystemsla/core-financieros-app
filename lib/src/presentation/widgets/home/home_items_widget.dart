@@ -27,32 +27,32 @@ class HomeItemsWidget extends StatelessWidget {
     final actions = LocalStorage().currentActions;
 
     List<HomeItemCard> homeItemData = [
-      if (actions.contains('MENUCARTERAMOVIL'))
-        HomeItemCard(
-          title: 'home.item5'.tr(),
-          subtitle: 'Descripcion'.tr(),
-          icon: const Icon(
-            Icons.wallet_rounded,
-            color: AppColors.white,
-          ),
-          color: AppColors.primaryColorWithOpacity(),
-          onTap: () async {
-            final shouldSync = CatalogoSync.needToSync();
-            if (!context.mounted) return;
-            if (shouldSync &&
-                connection.connectionStatus == ConnectionStatus.connected) {
-              CustomAlertDialog(
-                onDone: () => context.pop(),
-                context: context,
-                title: 'Es necesario sincronizar los catálogos para avanzar',
-              ).showDialog(context);
-              return;
-            }
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const CarteraScreen()),
-            );
-          },
+      // if (actions.contains('MENUCARTERAMOVIL'))
+      HomeItemCard(
+        title: 'home.item5'.tr(),
+        subtitle: 'Descripcion'.tr(),
+        icon: const Icon(
+          Icons.wallet_rounded,
+          color: AppColors.white,
         ),
+        color: AppColors.primaryColorWithOpacity(),
+        onTap: () async {
+          final shouldSync = CatalogoSync.needToSync();
+          if (!context.mounted) return;
+          if (shouldSync &&
+              connection.connectionStatus == ConnectionStatus.connected) {
+            CustomAlertDialog(
+              onDone: () => context.pop(),
+              context: context,
+              title: 'Es necesario sincronizar los catálogos para avanzar',
+            ).showDialog(context);
+            return;
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const CarteraScreen()),
+          );
+        },
+      ),
       if (connection.connectionStatus == ConnectionStatus.connected)
         HomeItemCard(
           title: 'Tutoriales'.tr(),

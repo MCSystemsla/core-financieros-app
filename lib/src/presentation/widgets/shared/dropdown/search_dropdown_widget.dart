@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -50,7 +51,7 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
   Widget build(BuildContext context) {
     final uuid = const Uuid().v4();
     final localDbProvider = global<ObjectBoxService>();
-    // final localDbProviderHN = global<SolicitudesHnBoxService>();
+    final localDbProviderHN = global<SolicitudesHnBoxService>();
     final items = switch (widget.flavor) {
       Flavor.nicaragua =>
         localDbProvider.findParentescosByNombre(type: widget.codigo).map((e) {
@@ -63,7 +64,17 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
             montoMinimo: e.montoMinimo ?? 0,
           );
         }).toList(),
-      Flavor.honduras => [],
+      Flavor.honduras =>
+        localDbProviderHN.findCatalogoByCodigo(codigo: widget.codigo).map((e) {
+          return Item(
+            id: uuid,
+            value: e.valor,
+            name: e.nombre,
+            interes: e.interes ?? 0,
+            montoMaximo: e.montoMaximo ?? 0,
+            montoMinimo: e.montoMinimo ?? 0,
+          );
+        }).toList(),
       _ => [],
     };
 

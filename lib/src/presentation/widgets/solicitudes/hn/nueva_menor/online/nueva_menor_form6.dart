@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorForm6 extends StatefulWidget {
@@ -19,10 +23,15 @@ class NuevaMenorForm6 extends StatefulWidget {
   State<NuevaMenorForm6> createState() => _NuevaMenorForm6State();
 }
 
-class _NuevaMenorForm6State extends State<NuevaMenorForm6> {
+class _NuevaMenorForm6State extends State<NuevaMenorForm6>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
+  String? depWhereClause;
+  String? munWhereClause;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -36,47 +45,90 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6> {
             const Gap(30),
             Column(
               children: [
-                OutlineTextfieldWidget(
-                  hintText: 'Departamento Destino',
-                  icon: Icon(Icons.map, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'objDepartamentoDestinoID',
-                ),
+                if (cubit.state.paisCasaCodigo == 'HN') ...[
+                  CatalogoValorNacionalidad(
+                    where: cubit.state.paisCasaCodigo,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
+                    hintText: 'Departamento Destino',
+                    codigo: 'DEP',
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      setState(() {
+                        depWhereClause = item.valor;
+                      });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          departamentoDestinoCodigo: item.valor,
+                        ),
+                      );
+                    },
+                    title: 'Departamento Destino',
+                  ),
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    where: depWhereClause,
+                    validator: (value) => ClassValidator.validateRequired(
+                      value?.valor,
+                    ),
+                    hintText: 'Municipio Destino',
+                    title: 'Municipio Destino',
+                    codigo: 'MUN',
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      setState(() {
+                        munWhereClause = item.valor;
+                      });
+
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          municipioDestinoCodigo: item.valor,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    where: munWhereClause,
+                    codigo: 'AL',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
+                    hintText: 'Aldea Destino',
+                    title: 'Aldea Destino',
+                    onChanged: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          aldeaDestinoCodigo: value?.valor,
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  hintText: 'Aldea Destino',
-                  icon: Icon(Icons.location_city,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'objAldeaDestinoID',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Municipio Destino',
-                  icon: Icon(Icons.location_on,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'objMunicipioDestinoID',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Caserío Destino',
-                  icon:
-                      Icon(Icons.home_work, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'CaserioDestino',
+                  title: 'Caserio Destino',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        caserioDestino: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio Destino',
-                  icon: Icon(Icons.house, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'Barrio destrino',
+                  title: 'Barrio destino',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        barrioDestino: value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -85,7 +137,14 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6> {
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
-                  title: 'DescripcionDestino',
+                  title: 'Descripción Destino',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        descripcionDestino: value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -127,4 +186,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -9,18 +9,16 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
-part 'solicitud_asalariado_hn_state.dart';
+part 'solicitud_aslariado_hn_state.dart';
 
-class SolicitudAsalariadoHnCubit extends Cubit<SolicitudAsalariadoHnState> {
+class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   final SolicitudesCreditoHnRepository _repository;
   late final AutoSaveSolicitudAsalariadoHN autoSaveHelper;
   final SolicitudesHnBoxService localDbProvider;
-
-  SolicitudAsalariadoHnCubit(
+  SolicitudAslariadoHnCubit(
     this._repository,
     this.localDbProvider,
-  ) : super(SolicitudAsalariadoHnInitial());
-
+  ) : super(SolicitudAslariadoHnInitial());
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -391,7 +389,7 @@ class SolicitudAsalariadoHnCubit extends Cubit<SolicitudAsalariadoHnState> {
     );
   }
 
-  void onFieldChanged(SolicitudAsalariadoHnState Function() copyWithFn) {
+  void onFieldChanged(SolicitudAslariadoHnState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();
   }

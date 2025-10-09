@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:drop_down_list/drop_down_list.dart';
@@ -80,11 +83,21 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
 
   @override
   Widget build(BuildContext context) {
+    final flavor = global<FlavorCubit>().state.flavor;
     final localDbProvider = global<ObjectBoxService>();
-    final items = localDbProvider.getNacionalidadPaises(
-      codigo: widget.codigo,
-      whereClause: whereClause,
-    );
+    final localDbProviderHN = global<SolicitudesHnBoxService>();
+
+    final items = switch (flavor) {
+      Flavor.nicaragua => localDbProvider.getNacionalidadPaises(
+          codigo: widget.codigo,
+          whereClause: whereClause,
+        ),
+      Flavor.honduras => localDbProviderHN.getNacionalidadPaises(
+          codigo: widget.codigo,
+          whereClause: whereClause,
+        ),
+      _ => [],
+    };
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),

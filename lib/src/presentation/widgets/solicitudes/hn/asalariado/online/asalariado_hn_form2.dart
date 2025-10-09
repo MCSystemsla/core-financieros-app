@@ -2,10 +2,11 @@
 
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAsalariadoHnCubit>();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -79,36 +80,46 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Municipio de Casa',
-                  icon: Icon(Icons.location_on,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'objMunicipioCasaID',
-                  onChange: (value) {
+                CatalogoValorNacionalidad(
+                  hintText: 'País de Casa',
+                  title: 'objPaisCasaID',
+                  codigo: 'PAIS',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        municipioCasaCodigo: value,
+                        paisCasaCodigo: item.valor,
                       ),
                     );
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'Departamento de Casa',
-                  icon: Icon(Icons.map, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objDepartamentoCasaID',
+                  codigo: 'DEP',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoCasaCodigo: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'País de Casa',
-                  icon: Icon(Icons.public, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'objPaisCasaID',
+                CatalogoValorNacionalidad(
+                  codigo: 'MUN',
+                  hintText: 'Municipio de Casa',
+                  title: 'objMunicipioCasaID',
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        municipioCasaCodigo: value.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

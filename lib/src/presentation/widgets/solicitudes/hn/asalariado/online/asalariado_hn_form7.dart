@@ -2,10 +2,11 @@
 
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAsalariadoHnCubit>();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -41,29 +42,46 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
             const Gap(30),
             Column(
               children: [
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'País Destino',
-                  icon: Icon(Icons.public, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objPaisDestinoID',
+                  codigo: 'PAIS',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        paisDestinoCodigo: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'Departamento Destino',
-                  icon: Icon(Icons.map, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objDepartamentoDestinoID',
+                  codigo: 'DEP',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoDestinoCodigo: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'Municipio Destino',
-                  icon: Icon(Icons.location_on,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objMunicipioDestinoID',
+                  codigo: 'MUN',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        municipioDestinoId: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

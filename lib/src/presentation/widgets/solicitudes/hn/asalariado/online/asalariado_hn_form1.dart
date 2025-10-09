@@ -1,12 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -32,7 +36,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
   bool tieneVinculosUsa = false;
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAsalariadoHnCubit>();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -153,11 +157,17 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   title: 'FechaVencimientoCedula',
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
+                  codigo: 'PAIS',
                   hintText: 'País Emisor de Cédula',
-                  icon: Icon(Icons.public, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        paisEmisorCedulaCodigo: item.valor,
+                      ),
+                    );
+                  },
                   title: 'ObjPaisEmisorCedula',
                 ),
                 const Gap(30),
@@ -206,12 +216,18 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'Nacionalidad',
-                  icon: Icon(Icons.flag, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'Nacionalidad',
+                  codigo: 'PAIS',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nacionalidadConyugue: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -229,11 +245,18 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
                   hintText: 'Sexo',
-                  icon: Icon(Icons.wc, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
+                  codigo: 'SEXO',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        sexoCodigo: item.value,
+                      ),
+                    );
+                  },
+                  flavor: global<FlavorCubit>().state.flavor,
                   title: 'objSexoID',
                 ),
                 const Gap(30),
@@ -272,31 +295,48 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
+                  codigo: 'PAIS',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        paisNacimientoCodigo: item.valor,
+                      ),
+                    );
+                  },
                   hintText: 'País de Nacimiento',
-                  icon: Icon(Icons.public_outlined,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objPaisNacimientoID',
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
                   hintText: 'Tipo de Documento',
-                  icon: Icon(Icons.description,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objTipoDocumentoID',
+                  codigo: 'TIPODOCUMENTOPERSONA',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoDocumentoCodigo: item.value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
                   hintText: 'Tipo de Persona',
-                  icon: Icon(Icons.person_pin,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objTipoPersonaID',
+                  codigo: 'TIPOSPERSONACREDITO',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoPersonaCodigo: item.value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 SheetSearchDropdown(
@@ -358,12 +398,19 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
                   hintText: 'Tipo de Cliente',
-                  icon: Icon(Icons.groups, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'ObjTipoClienteID',
+                  codigo: 'TIPOCLIENTE',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoClienteCodigo: item.value,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -382,12 +429,18 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
+                  codigo: 'TIPOPERSONACNBS',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoPersonaCnbsidCodigo: item.value,
+                      ),
+                    );
+                  },
                   hintText: 'Tipo Persona CNBS',
-                  icon: Icon(Icons.account_box,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'ObjTipoPersonaCNBSID',
                 ),
               ],

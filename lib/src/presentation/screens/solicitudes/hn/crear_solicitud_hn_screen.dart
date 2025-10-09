@@ -1,10 +1,15 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/nueva_menor_hn_form.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/represtamo_hn_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,9 +26,23 @@ class CrearSolicitudHnScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => SolicitudAsalariadoHnCubit(
+          create: (ctx) => SolicitudAslariadoHnCubit(
             SolicitudesCreditoHnRepositoryImpl(),
             localDbProvider,
+          )..initAutoSave(),
+        ),
+        BlocProvider(
+          create: (ctx) => SolicitudNuevaMenorHnCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+            localDbProvider,
+          )..initAutoSave(),
+        ),
+        BlocProvider(
+          create: (ctx) => CalculoCuotaCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => GeolocationCubit(
+            GeolocationService(),
           ),
         ),
       ],
@@ -31,7 +50,7 @@ class CrearSolicitudHnScreen extends StatelessWidget {
           body: switch (typeForm) {
         TypeForm.nueva => const NuevaMenorHnForm(),
         TypeForm.asalariado => const AsalariadoHnForm(),
-        TypeForm.represtamo => const Text('Formulario Represtamo HN'),
+        TypeForm.represtamo => const ReprestamoHnForm(),
       }),
     );
   }

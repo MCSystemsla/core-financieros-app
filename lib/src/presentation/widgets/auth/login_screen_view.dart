@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -229,28 +230,46 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
               const Gap(25),
-              BlocBuilder<BranchteamCubit, BranchteamState>(
-                builder: (context, state) {
-                  return SearchBranchSheetDelegate(
-                    title: 'auth.branch'.tr(),
-                    isRequired: true,
-                    onChanged: (item) {
-                      if (item == null) return;
-                      branchTeam = item.nombreDb;
-                      setState(() {});
-                    },
-                    hintText: 'auth.select_branch'.tr(),
-                    enabled: true,
-                    isLoading: state.status == Status.inProgress,
-                    items: state.branchTeams,
-                    validator: (value) {
-                      if (value == null) return 'auth.errors.branchTeam'.tr();
-
-                      return null;
-                    },
-                  );
+              SearchBranchSheetDelegate(
+                title: 'Selecciona una sucursal',
+                isRequired: true,
+                onChanged: (item) {
+                  if (item == null) return;
+                  branchTeam = item.nombreDb;
+                  setState(() {});
                 },
+                enabled: true,
+                items: [
+                  Branch(
+                    id: 27,
+                    nombre: 'Tegucigalpa',
+                    nombreDb: 'MC_TEGUCIGALPA_COPIA',
+                  ),
+                ],
+                hintText: 'Selecciona una sucursal',
               ),
+              // BlocBuilder<BranchteamCubit, BranchteamState>(
+              //   builder: (context, state) {
+              //     return SearchBranchSheetDelegate(
+              //       title: 'auth.branch'.tr(),
+              //       isRequired: true,
+              //       onChanged: (item) {
+              //         if (item == null) return;
+              //         branchTeam = item.nombreDb;
+              //         setState(() {});
+              //       },
+              //       hintText: 'auth.select_branch'.tr(),
+              //       enabled: true,
+              //       isLoading: state.status == Status.inProgress,
+              //       items: state.branchTeams,
+              //       validator: (value) {
+              //         if (value == null) return 'auth.errors.branchTeam'.tr();
+
+              //         return null;
+              //       },
+              //     );
+              //   },
+              // ),
               const VersionControlWidget(),
               const Gap(10),
               CloudflareTurnstile(

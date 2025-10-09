@@ -1,18 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'solicitud_asalariado_hn_cubit.dart';
+part of 'solicitud_nueva_menor_hn_cubit.dart';
 
-class SolicitudAsalariadoHnState extends Equatable {
+class SolicitudNuevaMenorHnState extends Equatable {
+  final String email;
+  final String nombre2;
+  final String apellido2;
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
+  final int idLocalResponse;
   final String? uuid;
-  final int? idLocalResponse;
-  final String errorMsg;
   final Status status;
+  final String errorMsg;
   final String database;
-  final bool isOffline;
   final String origenSolicitudCodigo;
   final String nombre1;
-  final String nombre2;
   final String apellido1;
-  final String apellido2;
   final String cedula;
   final String paisEmisorCedulaCodigo;
   final String fechaEmisionCedula;
@@ -25,16 +27,24 @@ class SolicitudAsalariadoHnState extends Equatable {
   final String municipioCasaCodigo;
   final String departamentoCasaCodigo;
   final String paisCasaCodigo;
-  final String nacinalidad;
+  final String profesion;
+  final String ocupacion;
   final String condicionCasaCodigo;
   final int anosResidirCasa;
-  final String email;
   final int monto;
   final String monedaCodigo;
   final String propositoCodigo;
   final String frecuenciaCodigo;
   final int cuota;
   final String sectorCodigo;
+  final String nombreNegocio;
+  final String tiempoFuncionamientoNegocio;
+  final String direccionNegocio;
+  final String barrioNegocio;
+  final String municipioNegocioCodigo;
+  final String condicionNegocioCodigo;
+  final String horarioTrabajo;
+  final String horarioVisita;
   final int personasACargo;
   final String estadoCivilCodigo;
   final String nombreConyugue;
@@ -44,6 +54,7 @@ class SolicitudAsalariadoHnState extends Equatable {
   final String telefonoTrabajoConyugue;
   final String productoCodigo;
   final String observacion;
+  final String sucursal;
   final String ubicacionLongitud;
   final String ubicacionLatitud;
   final String escolaridadCodigo;
@@ -60,12 +71,11 @@ class SolicitudAsalariadoHnState extends Equatable {
   final String cargoOficialPeps;
   final String tieneFamiliarPeps;
   final String nombreFamiliarPeps2;
-  final String parentescoFamiliarPeps2;
+  final String parentescoFamiliarPeps2Codigo;
   final String cargoFamiliarPeps2;
   final String nombreEntidadPeps2;
   final String periodoPeps2;
   final String paisPeps2;
-  final String actividadPredominanteCodigo;
   final String esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
@@ -73,63 +83,60 @@ class SolicitudAsalariadoHnState extends Equatable {
   final String tipoPersonaCodigo;
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
-  final String nombreTrabajo;
-  final String direccionTrabajo;
-  final String barrioTrabajo;
-  final String cargo;
-  final String direccionFamiliarCercano;
-  final String fuenteOtrosIngresos;
-  final String fuenteOtrosIngresosConyugue;
-  final String lugarTrabajoAnterior;
-  final String nombreFamiliarCercano;
-  final String parentescoFamiliarCercanoCodigo;
-  final int otrosIngresosConyugue;
-  final int otrosIngresosCordoba;
-  final String profesionConyugue;
-  final int salarioNetoCordoba;
-  final int sueldoMesConyugue;
-  final String telefonoFamiliarCercano;
-  final String telefonoTrabajo;
-  final String tiempoLaborar;
-  final String tiempoLaborarConyugue;
-  final int totalIngresoMes;
-  final int totalIngresoMesConyugue;
-  final String rtn;
+  final bool isOffline;
   final String codigoUsa;
-  final String tipoPersonaCnbsidCodigo;
-  final String estatusClienteCodigo;
-  final String tipoClienteCodigo;
-  final String actividadEconomicaCiuu1Codigo;
-  final String actividadEconomicaCiuu2Codigo;
-  final String actividadEconomicaCiuu3Codigo;
-  final String nivelAproximadoDeIngresosCodigo;
-  final String ocupacionCodigo;
-  final String profesionCodigo;
-  final String actividadEconomicaDescripcion1;
-  final String actividadEconomicaDescripcion2;
-  final String actividadEconomicaDescripcion3;
+  final String nombre3;
+  final String apellido3;
+  final String rtn;
+  final String telefonoNegocio;
+  final String celularNegocio;
+  final String actividadDescripcionConyugue;
+  final int exeperiencia;
+  final String puestoNegocio;
+  final String actividadEconomicaCnbs1Codigo;
+  final String actividadEconomicaCnbs2Codigo;
+  final String actividaEconomicaDescipcion1;
+  final String actividaEconomicaDescipcion2;
+  final String actividaEconomicaDescipcion3;
   final String ejerceApnfd;
   final String esApnfd;
-  final String paisDestinoCodigo;
+  final String nacinalidadCodigo;
+  final String nacinalidad2Codigo;
+  final String nacinalidad3Codigo;
   final String departamentoDestinoCodigo;
-  final String municipioDestinoId;
+  final String tipoPersonaCnbsCodigo;
+  final String tipoClienteCodigo;
   final String aldeaDestinoCodigo;
+  final String municipioDestinoCodigo;
+  final String aldeaNegocioCodigo;
+  final String departamentoNegocioCodigo;
+  final String nivelAproximadoIngresosCodigo;
+  final String documentoConyuge;
+  final String ocupacionCodigo;
+  final String profesionCodigo;
+  final String aldeaCasaCodigo;
+  final String ubicacionCodigo;
+  final String medidasConocimientoCodigo;
+  final String caserioCasa;
+  final String caserioNegocio;
   final String caserioDestino;
   final String barrioDestino;
-  final String caseriCasa;
-  final String aldeaCodigo;
-  const SolicitudAsalariadoHnState({
-    this.uuid = '',
+  final String descripcionDestino;
+  final int ingresosNetos;
+  const SolicitudNuevaMenorHnState({
+    this.email = '',
+    this.nombre2 = '',
+    this.apellido2 = '',
+    this.cedulaFrontPath = '',
+    this.cedulaBackPath = '',
     this.idLocalResponse = 0,
-    this.errorMsg = '',
+    this.uuid,
     this.status = Status.notStarted,
+    this.errorMsg = '',
     this.database = '',
-    this.isOffline = false,
     this.origenSolicitudCodigo = '',
     this.nombre1 = '',
-    this.nombre2 = '',
     this.apellido1 = '',
-    this.apellido2 = '',
     this.cedula = '',
     this.paisEmisorCedulaCodigo = '',
     this.fechaEmisionCedula = '',
@@ -142,16 +149,24 @@ class SolicitudAsalariadoHnState extends Equatable {
     this.municipioCasaCodigo = '',
     this.departamentoCasaCodigo = '',
     this.paisCasaCodigo = '',
-    this.nacinalidad = '',
+    this.profesion = '',
+    this.ocupacion = '',
     this.condicionCasaCodigo = '',
     this.anosResidirCasa = 0,
-    this.email = '',
     this.monto = 0,
     this.monedaCodigo = '',
     this.propositoCodigo = '',
     this.frecuenciaCodigo = '',
     this.cuota = 0,
     this.sectorCodigo = '',
+    this.nombreNegocio = '',
+    this.tiempoFuncionamientoNegocio = '',
+    this.direccionNegocio = '',
+    this.barrioNegocio = '',
+    this.municipioNegocioCodigo = '',
+    this.condicionNegocioCodigo = '',
+    this.horarioTrabajo = '',
+    this.horarioVisita = '',
     this.personasACargo = 0,
     this.estadoCivilCodigo = '',
     this.nombreConyugue = '',
@@ -161,6 +176,7 @@ class SolicitudAsalariadoHnState extends Equatable {
     this.telefonoTrabajoConyugue = '',
     this.productoCodigo = '',
     this.observacion = '',
+    this.sucursal = '',
     this.ubicacionLongitud = '',
     this.ubicacionLatitud = '',
     this.escolaridadCodigo = '',
@@ -177,12 +193,11 @@ class SolicitudAsalariadoHnState extends Equatable {
     this.cargoOficialPeps = '',
     this.tieneFamiliarPeps = '',
     this.nombreFamiliarPeps2 = '',
-    this.parentescoFamiliarPeps2 = '',
+    this.parentescoFamiliarPeps2Codigo = '',
     this.cargoFamiliarPeps2 = '',
     this.nombreEntidadPeps2 = '',
     this.periodoPeps2 = '',
     this.paisPeps2 = '',
-    this.actividadPredominanteCodigo = '',
     this.esFamiliarEmpleado = '',
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
@@ -190,63 +205,62 @@ class SolicitudAsalariadoHnState extends Equatable {
     this.tipoPersonaCodigo = '',
     this.plazoSolicitud = 0,
     this.fechaPrimerPagoSolicitud = '',
-    this.nombreTrabajo = '',
-    this.direccionTrabajo = '',
-    this.barrioTrabajo = '',
-    this.cargo = '',
-    this.direccionFamiliarCercano = '',
-    this.fuenteOtrosIngresos = '',
-    this.fuenteOtrosIngresosConyugue = '',
-    this.lugarTrabajoAnterior = '',
-    this.nombreFamiliarCercano = '',
-    this.parentescoFamiliarCercanoCodigo = '',
-    this.otrosIngresosConyugue = 0,
-    this.otrosIngresosCordoba = 0,
-    this.profesionConyugue = '',
-    this.salarioNetoCordoba = 0,
-    this.sueldoMesConyugue = 0,
-    this.telefonoFamiliarCercano = '',
-    this.telefonoTrabajo = '',
-    this.tiempoLaborar = '',
-    this.tiempoLaborarConyugue = '',
-    this.totalIngresoMes = 0,
-    this.totalIngresoMesConyugue = 0,
-    this.rtn = '',
+    this.isOffline = false,
     this.codigoUsa = '',
-    this.tipoPersonaCnbsidCodigo = '',
-    this.estatusClienteCodigo = '',
-    this.tipoClienteCodigo = '',
-    this.actividadEconomicaCiuu1Codigo = '',
-    this.actividadEconomicaCiuu2Codigo = '',
-    this.actividadEconomicaCiuu3Codigo = '',
-    this.nivelAproximadoDeIngresosCodigo = '',
-    this.ocupacionCodigo = '',
-    this.profesionCodigo = '',
-    this.actividadEconomicaDescripcion1 = '',
-    this.actividadEconomicaDescripcion2 = '',
-    this.actividadEconomicaDescripcion3 = '',
+    this.nombre3 = '',
+    this.apellido3 = '',
+    this.rtn = '',
+    this.telefonoNegocio = '',
+    this.celularNegocio = '',
+    this.actividadDescripcionConyugue = '',
+    this.exeperiencia = 0,
+    this.puestoNegocio = '',
+    this.actividadEconomicaCnbs1Codigo = '',
+    this.actividadEconomicaCnbs2Codigo = '',
+    this.actividaEconomicaDescipcion1 = '',
+    this.actividaEconomicaDescipcion2 = '',
+    this.actividaEconomicaDescipcion3 = '',
     this.ejerceApnfd = '',
     this.esApnfd = '',
-    this.paisDestinoCodigo = '',
+    this.nacinalidadCodigo = '',
+    this.nacinalidad2Codigo = '',
+    this.nacinalidad3Codigo = '',
     this.departamentoDestinoCodigo = '',
-    this.municipioDestinoId = '',
+    this.tipoPersonaCnbsCodigo = '',
+    this.tipoClienteCodigo = '',
     this.aldeaDestinoCodigo = '',
+    this.municipioDestinoCodigo = '',
+    this.aldeaNegocioCodigo = '',
+    this.departamentoNegocioCodigo = '',
+    this.nivelAproximadoIngresosCodigo = '',
+    this.documentoConyuge = '',
+    this.ocupacionCodigo = '',
+    this.profesionCodigo = '',
+    this.aldeaCasaCodigo = '',
+    this.ubicacionCodigo = '',
+    this.medidasConocimientoCodigo = '',
+    this.caserioCasa = '',
+    this.caserioNegocio = '',
     this.caserioDestino = '',
     this.barrioDestino = '',
-    this.caseriCasa = '',
-    this.aldeaCodigo = '',
+    this.descripcionDestino = '',
+    this.ingresosNetos = 0,
   });
 
   @override
   List<Object> get props => [
-        errorMsg,
+        email,
+        nombre2,
+        apellido2,
+        cedulaFrontPath,
+        cedulaBackPath,
+        idLocalResponse,
         status,
-        isOffline,
+        errorMsg,
+        database,
         origenSolicitudCodigo,
         nombre1,
-        nombre2,
         apellido1,
-        apellido2,
         cedula,
         paisEmisorCedulaCodigo,
         fechaEmisionCedula,
@@ -259,16 +273,24 @@ class SolicitudAsalariadoHnState extends Equatable {
         municipioCasaCodigo,
         departamentoCasaCodigo,
         paisCasaCodigo,
-        nacinalidad,
+        profesion,
+        ocupacion,
         condicionCasaCodigo,
         anosResidirCasa,
-        email,
         monto,
         monedaCodigo,
         propositoCodigo,
         frecuenciaCodigo,
         cuota,
         sectorCodigo,
+        nombreNegocio,
+        tiempoFuncionamientoNegocio,
+        direccionNegocio,
+        barrioNegocio,
+        municipioNegocioCodigo,
+        condicionNegocioCodigo,
+        horarioTrabajo,
+        horarioVisita,
         personasACargo,
         estadoCivilCodigo,
         nombreConyugue,
@@ -278,6 +300,7 @@ class SolicitudAsalariadoHnState extends Equatable {
         telefonoTrabajoConyugue,
         productoCodigo,
         observacion,
+        sucursal,
         ubicacionLongitud,
         ubicacionLatitud,
         escolaridadCodigo,
@@ -294,12 +317,11 @@ class SolicitudAsalariadoHnState extends Equatable {
         cargoOficialPeps,
         tieneFamiliarPeps,
         nombreFamiliarPeps2,
-        parentescoFamiliarPeps2,
+        parentescoFamiliarPeps2Codigo,
         cargoFamiliarPeps2,
         nombreEntidadPeps2,
         periodoPeps2,
         paisPeps2,
-        actividadPredominanteCodigo,
         esFamiliarEmpleado,
         nombreFamiliar,
         cedulaFamiliar,
@@ -307,65 +329,62 @@ class SolicitudAsalariadoHnState extends Equatable {
         tipoPersonaCodigo,
         plazoSolicitud,
         fechaPrimerPagoSolicitud,
-        nombreTrabajo,
-        direccionTrabajo,
-        barrioTrabajo,
-        cargo,
-        direccionFamiliarCercano,
-        fuenteOtrosIngresos,
-        fuenteOtrosIngresosConyugue,
-        lugarTrabajoAnterior,
-        nombreFamiliarCercano,
-        parentescoFamiliarCercanoCodigo,
-        otrosIngresosConyugue,
-        otrosIngresosCordoba,
-        profesionConyugue,
-        salarioNetoCordoba,
-        sueldoMesConyugue,
-        telefonoFamiliarCercano,
-        telefonoTrabajo,
-        tiempoLaborar,
-        tiempoLaborarConyugue,
-        totalIngresoMes,
-        totalIngresoMesConyugue,
-        rtn,
+        isOffline,
         codigoUsa,
-        tipoPersonaCnbsidCodigo,
-        estatusClienteCodigo,
-        tipoClienteCodigo,
-        actividadEconomicaCiuu1Codigo,
-        actividadEconomicaCiuu2Codigo,
-        actividadEconomicaCiuu3Codigo,
-        nivelAproximadoDeIngresosCodigo,
-        ocupacionCodigo,
-        profesionCodigo,
-        actividadEconomicaDescripcion1,
-        actividadEconomicaDescripcion2,
-        actividadEconomicaDescripcion3,
+        nombre3,
+        apellido3,
+        rtn,
+        telefonoNegocio,
+        celularNegocio,
+        actividadDescripcionConyugue,
+        exeperiencia,
+        puestoNegocio,
+        actividadEconomicaCnbs1Codigo,
+        actividadEconomicaCnbs2Codigo,
+        actividaEconomicaDescipcion1,
+        actividaEconomicaDescipcion2,
+        actividaEconomicaDescipcion3,
         ejerceApnfd,
         esApnfd,
-        paisDestinoCodigo,
+        nacinalidadCodigo,
+        nacinalidad2Codigo,
+        nacinalidad3Codigo,
         departamentoDestinoCodigo,
-        municipioDestinoId,
+        tipoPersonaCnbsCodigo,
+        tipoClienteCodigo,
         aldeaDestinoCodigo,
+        municipioDestinoCodigo,
+        aldeaNegocioCodigo,
+        departamentoNegocioCodigo,
+        nivelAproximadoIngresosCodigo,
+        documentoConyuge,
+        ocupacionCodigo,
+        profesionCodigo,
+        aldeaCasaCodigo,
+        ubicacionCodigo,
+        medidasConocimientoCodigo,
+        caserioCasa,
+        caserioNegocio,
         caserioDestino,
         barrioDestino,
-        caseriCasa,
-        aldeaCodigo,
+        descripcionDestino,
+        ingresosNetos,
       ];
 
-  SolicitudAsalariadoHnState copyWith({
-    String? uuid,
+  SolicitudNuevaMenorHnState copyWith({
+    String? email,
+    String? nombre2,
+    String? apellido2,
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
     int? idLocalResponse,
-    String? errorMsg,
+    String? uuid,
     Status? status,
+    String? errorMsg,
     String? database,
-    bool? isOffline,
     String? origenSolicitudCodigo,
     String? nombre1,
-    String? nombre2,
     String? apellido1,
-    String? apellido2,
     String? cedula,
     String? paisEmisorCedulaCodigo,
     String? fechaEmisionCedula,
@@ -378,16 +397,24 @@ class SolicitudAsalariadoHnState extends Equatable {
     String? municipioCasaCodigo,
     String? departamentoCasaCodigo,
     String? paisCasaCodigo,
-    String? nacinalidad,
+    String? profesion,
+    String? ocupacion,
     String? condicionCasaCodigo,
     int? anosResidirCasa,
-    String? email,
     int? monto,
     String? monedaCodigo,
     String? propositoCodigo,
     String? frecuenciaCodigo,
     int? cuota,
     String? sectorCodigo,
+    String? nombreNegocio,
+    String? tiempoFuncionamientoNegocio,
+    String? direccionNegocio,
+    String? barrioNegocio,
+    String? municipioNegocioCodigo,
+    String? condicionNegocioCodigo,
+    String? horarioTrabajo,
+    String? horarioVisita,
     int? personasACargo,
     String? estadoCivilCodigo,
     String? nombreConyugue,
@@ -397,6 +424,7 @@ class SolicitudAsalariadoHnState extends Equatable {
     String? telefonoTrabajoConyugue,
     String? productoCodigo,
     String? observacion,
+    String? sucursal,
     String? ubicacionLongitud,
     String? ubicacionLatitud,
     String? escolaridadCodigo,
@@ -413,12 +441,11 @@ class SolicitudAsalariadoHnState extends Equatable {
     String? cargoOficialPeps,
     String? tieneFamiliarPeps,
     String? nombreFamiliarPeps2,
-    String? parentescoFamiliarPeps2,
+    String? parentescoFamiliarPeps2Codigo,
     String? cargoFamiliarPeps2,
     String? nombreEntidadPeps2,
     String? periodoPeps2,
     String? paisPeps2,
-    String? actividadPredominanteCodigo,
     String? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
@@ -426,65 +453,62 @@ class SolicitudAsalariadoHnState extends Equatable {
     String? tipoPersonaCodigo,
     int? plazoSolicitud,
     String? fechaPrimerPagoSolicitud,
-    String? nombreTrabajo,
-    String? direccionTrabajo,
-    String? barrioTrabajo,
-    String? cargo,
-    String? direccionFamiliarCercano,
-    String? fuenteOtrosIngresos,
-    String? fuenteOtrosIngresosConyugue,
-    String? lugarTrabajoAnterior,
-    String? nombreFamiliarCercano,
-    String? parentescoFamiliarCercanoCodigo,
-    int? otrosIngresosConyugue,
-    int? otrosIngresosCordoba,
-    String? profesionConyugue,
-    int? salarioNetoCordoba,
-    int? sueldoMesConyugue,
-    String? telefonoFamiliarCercano,
-    String? telefonoTrabajo,
-    String? tiempoLaborar,
-    String? tiempoLaborarConyugue,
-    int? totalIngresoMes,
-    int? totalIngresoMesConyugue,
-    String? rtn,
+    bool? isOffline,
     String? codigoUsa,
-    String? tipoPersonaCnbsidCodigo,
-    String? estatusClienteCodigo,
-    String? tipoClienteCodigo,
-    String? actividadEconomicaCiuu1Codigo,
-    String? actividadEconomicaCiuu2Codigo,
-    String? actividadEconomicaCiuu3Codigo,
-    String? nivelAproximadoDeIngresosCodigo,
-    String? ocupacionCodigo,
-    String? profesionCodigo,
-    String? actividadEconomicaDescripcion1,
-    String? actividadEconomicaDescripcion2,
-    String? actividadEconomicaDescripcion3,
+    String? nombre3,
+    String? apellido3,
+    String? rtn,
+    String? telefonoNegocio,
+    String? celularNegocio,
+    String? actividadDescripcionConyugue,
+    int? exeperiencia,
+    String? puestoNegocio,
+    String? actividadEconomicaCnbs1Codigo,
+    String? actividadEconomicaCnbs2Codigo,
+    String? actividaEconomicaDescipcion1,
+    String? actividaEconomicaDescipcion2,
+    String? actividaEconomicaDescipcion3,
     String? ejerceApnfd,
     String? esApnfd,
-    String? paisDestinoCodigo,
+    String? nacinalidadCodigo,
+    String? nacinalidad2Codigo,
+    String? nacinalidad3Codigo,
     String? departamentoDestinoCodigo,
-    String? municipioDestinoId,
+    String? tipoPersonaCnbsCodigo,
+    String? tipoClienteCodigo,
     String? aldeaDestinoCodigo,
+    String? municipioDestinoCodigo,
+    String? aldeaNegocioCodigo,
+    String? departamentoNegocioCodigo,
+    String? nivelAproximadoIngresosCodigo,
+    String? documentoConyuge,
+    String? ocupacionCodigo,
+    String? profesionCodigo,
+    String? aldeaCasaCodigo,
+    String? ubicacionCodigo,
+    String? medidasConocimientoCodigo,
+    String? caserioCasa,
+    String? caserioNegocio,
     String? caserioDestino,
     String? barrioDestino,
-    String? caseriCasa,
-    String? aldeaCodigo,
+    String? descripcionDestino,
+    int? ingresosNetos,
   }) {
-    return SolicitudAsalariadoHnState(
-      uuid: uuid ?? this.uuid,
+    return SolicitudNuevaMenorHnState(
+      email: email ?? this.email,
+      nombre2: nombre2 ?? this.nombre2,
+      apellido2: apellido2 ?? this.apellido2,
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
-      errorMsg: errorMsg ?? this.errorMsg,
+      uuid: uuid ?? this.uuid,
       status: status ?? this.status,
+      errorMsg: errorMsg ?? this.errorMsg,
       database: database ?? this.database,
-      isOffline: isOffline ?? this.isOffline,
       origenSolicitudCodigo:
           origenSolicitudCodigo ?? this.origenSolicitudCodigo,
       nombre1: nombre1 ?? this.nombre1,
-      nombre2: nombre2 ?? this.nombre2,
       apellido1: apellido1 ?? this.apellido1,
-      apellido2: apellido2 ?? this.apellido2,
       cedula: cedula ?? this.cedula,
       paisEmisorCedulaCodigo:
           paisEmisorCedulaCodigo ?? this.paisEmisorCedulaCodigo,
@@ -500,16 +524,27 @@ class SolicitudAsalariadoHnState extends Equatable {
       departamentoCasaCodigo:
           departamentoCasaCodigo ?? this.departamentoCasaCodigo,
       paisCasaCodigo: paisCasaCodigo ?? this.paisCasaCodigo,
-      nacinalidad: nacinalidad ?? this.nacinalidad,
+      profesion: profesion ?? this.profesion,
+      ocupacion: ocupacion ?? this.ocupacion,
       condicionCasaCodigo: condicionCasaCodigo ?? this.condicionCasaCodigo,
       anosResidirCasa: anosResidirCasa ?? this.anosResidirCasa,
-      email: email ?? this.email,
       monto: monto ?? this.monto,
       monedaCodigo: monedaCodigo ?? this.monedaCodigo,
       propositoCodigo: propositoCodigo ?? this.propositoCodigo,
       frecuenciaCodigo: frecuenciaCodigo ?? this.frecuenciaCodigo,
       cuota: cuota ?? this.cuota,
       sectorCodigo: sectorCodigo ?? this.sectorCodigo,
+      nombreNegocio: nombreNegocio ?? this.nombreNegocio,
+      tiempoFuncionamientoNegocio:
+          tiempoFuncionamientoNegocio ?? this.tiempoFuncionamientoNegocio,
+      direccionNegocio: direccionNegocio ?? this.direccionNegocio,
+      barrioNegocio: barrioNegocio ?? this.barrioNegocio,
+      municipioNegocioCodigo:
+          municipioNegocioCodigo ?? this.municipioNegocioCodigo,
+      condicionNegocioCodigo:
+          condicionNegocioCodigo ?? this.condicionNegocioCodigo,
+      horarioTrabajo: horarioTrabajo ?? this.horarioTrabajo,
+      horarioVisita: horarioVisita ?? this.horarioVisita,
       personasACargo: personasACargo ?? this.personasACargo,
       estadoCivilCodigo: estadoCivilCodigo ?? this.estadoCivilCodigo,
       nombreConyugue: nombreConyugue ?? this.nombreConyugue,
@@ -521,6 +556,7 @@ class SolicitudAsalariadoHnState extends Equatable {
           telefonoTrabajoConyugue ?? this.telefonoTrabajoConyugue,
       productoCodigo: productoCodigo ?? this.productoCodigo,
       observacion: observacion ?? this.observacion,
+      sucursal: sucursal ?? this.sucursal,
       ubicacionLongitud: ubicacionLongitud ?? this.ubicacionLongitud,
       ubicacionLatitud: ubicacionLatitud ?? this.ubicacionLatitud,
       escolaridadCodigo: escolaridadCodigo ?? this.escolaridadCodigo,
@@ -537,14 +573,12 @@ class SolicitudAsalariadoHnState extends Equatable {
       cargoOficialPeps: cargoOficialPeps ?? this.cargoOficialPeps,
       tieneFamiliarPeps: tieneFamiliarPeps ?? this.tieneFamiliarPeps,
       nombreFamiliarPeps2: nombreFamiliarPeps2 ?? this.nombreFamiliarPeps2,
-      parentescoFamiliarPeps2:
-          parentescoFamiliarPeps2 ?? this.parentescoFamiliarPeps2,
+      parentescoFamiliarPeps2Codigo:
+          parentescoFamiliarPeps2Codigo ?? this.parentescoFamiliarPeps2Codigo,
       cargoFamiliarPeps2: cargoFamiliarPeps2 ?? this.cargoFamiliarPeps2,
       nombreEntidadPeps2: nombreEntidadPeps2 ?? this.nombreEntidadPeps2,
       periodoPeps2: periodoPeps2 ?? this.periodoPeps2,
       paisPeps2: paisPeps2 ?? this.paisPeps2,
-      actividadPredominanteCodigo:
-          actividadPredominanteCodigo ?? this.actividadPredominanteCodigo,
       esFamiliarEmpleado: esFamiliarEmpleado ?? this.esFamiliarEmpleado,
       nombreFamiliar: nombreFamiliar ?? this.nombreFamiliar,
       cedulaFamiliar: cedulaFamiliar ?? this.cedulaFamiliar,
@@ -553,70 +587,60 @@ class SolicitudAsalariadoHnState extends Equatable {
       plazoSolicitud: plazoSolicitud ?? this.plazoSolicitud,
       fechaPrimerPagoSolicitud:
           fechaPrimerPagoSolicitud ?? this.fechaPrimerPagoSolicitud,
-      nombreTrabajo: nombreTrabajo ?? this.nombreTrabajo,
-      direccionTrabajo: direccionTrabajo ?? this.direccionTrabajo,
-      barrioTrabajo: barrioTrabajo ?? this.barrioTrabajo,
-      cargo: cargo ?? this.cargo,
-      direccionFamiliarCercano:
-          direccionFamiliarCercano ?? this.direccionFamiliarCercano,
-      fuenteOtrosIngresos: fuenteOtrosIngresos ?? this.fuenteOtrosIngresos,
-      fuenteOtrosIngresosConyugue:
-          fuenteOtrosIngresosConyugue ?? this.fuenteOtrosIngresosConyugue,
-      lugarTrabajoAnterior: lugarTrabajoAnterior ?? this.lugarTrabajoAnterior,
-      nombreFamiliarCercano:
-          nombreFamiliarCercano ?? this.nombreFamiliarCercano,
-      parentescoFamiliarCercanoCodigo: parentescoFamiliarCercanoCodigo ??
-          this.parentescoFamiliarCercanoCodigo,
-      otrosIngresosConyugue:
-          otrosIngresosConyugue ?? this.otrosIngresosConyugue,
-      otrosIngresosCordoba: otrosIngresosCordoba ?? this.otrosIngresosCordoba,
-      profesionConyugue: profesionConyugue ?? this.profesionConyugue,
-      salarioNetoCordoba: salarioNetoCordoba ?? this.salarioNetoCordoba,
-      sueldoMesConyugue: sueldoMesConyugue ?? this.sueldoMesConyugue,
-      telefonoFamiliarCercano:
-          telefonoFamiliarCercano ?? this.telefonoFamiliarCercano,
-      telefonoTrabajo: telefonoTrabajo ?? this.telefonoTrabajo,
-      tiempoLaborar: tiempoLaborar ?? this.tiempoLaborar,
-      tiempoLaborarConyugue:
-          tiempoLaborarConyugue ?? this.tiempoLaborarConyugue,
-      totalIngresoMes: totalIngresoMes ?? this.totalIngresoMes,
-      totalIngresoMesConyugue:
-          totalIngresoMesConyugue ?? this.totalIngresoMesConyugue,
-      rtn: rtn ?? this.rtn,
+      isOffline: isOffline ?? this.isOffline,
       codigoUsa: codigoUsa ?? this.codigoUsa,
-      tipoPersonaCnbsidCodigo:
-          tipoPersonaCnbsidCodigo ?? this.tipoPersonaCnbsidCodigo,
-      estatusClienteCodigo: estatusClienteCodigo ?? this.estatusClienteCodigo,
-      tipoClienteCodigo: tipoClienteCodigo ?? this.tipoClienteCodigo,
-      actividadEconomicaCiuu1Codigo:
-          actividadEconomicaCiuu1Codigo ?? this.actividadEconomicaCiuu1Codigo,
-      actividadEconomicaCiuu2Codigo:
-          actividadEconomicaCiuu2Codigo ?? this.actividadEconomicaCiuu2Codigo,
-      actividadEconomicaCiuu3Codigo:
-          actividadEconomicaCiuu3Codigo ?? this.actividadEconomicaCiuu3Codigo,
-      nivelAproximadoDeIngresosCodigo: nivelAproximadoDeIngresosCodigo ??
-          this.nivelAproximadoDeIngresosCodigo,
-      ocupacionCodigo: ocupacionCodigo ?? this.ocupacionCodigo,
-      profesionCodigo: profesionCodigo ?? this.profesionCodigo,
-      actividadEconomicaDescripcion1:
-          actividadEconomicaDescripcion1 ?? this.actividadEconomicaDescripcion1,
-      actividadEconomicaDescripcion2:
-          actividadEconomicaDescripcion2 ?? this.actividadEconomicaDescripcion2,
-      actividadEconomicaDescripcion3:
-          actividadEconomicaDescripcion3 ?? this.actividadEconomicaDescripcion3,
+      nombre3: nombre3 ?? this.nombre3,
+      apellido3: apellido3 ?? this.apellido3,
+      rtn: rtn ?? this.rtn,
+      telefonoNegocio: telefonoNegocio ?? this.telefonoNegocio,
+      celularNegocio: celularNegocio ?? this.celularNegocio,
+      actividadDescripcionConyugue:
+          actividadDescripcionConyugue ?? this.actividadDescripcionConyugue,
+      exeperiencia: exeperiencia ?? this.exeperiencia,
+      puestoNegocio: puestoNegocio ?? this.puestoNegocio,
+      actividadEconomicaCnbs1Codigo:
+          actividadEconomicaCnbs1Codigo ?? this.actividadEconomicaCnbs1Codigo,
+      actividadEconomicaCnbs2Codigo:
+          actividadEconomicaCnbs2Codigo ?? this.actividadEconomicaCnbs2Codigo,
+      actividaEconomicaDescipcion1:
+          actividaEconomicaDescipcion1 ?? this.actividaEconomicaDescipcion1,
+      actividaEconomicaDescipcion2:
+          actividaEconomicaDescipcion2 ?? this.actividaEconomicaDescipcion2,
+      actividaEconomicaDescipcion3:
+          actividaEconomicaDescipcion3 ?? this.actividaEconomicaDescipcion3,
       ejerceApnfd: ejerceApnfd ?? this.ejerceApnfd,
       esApnfd: esApnfd ?? this.esApnfd,
-      paisDestinoCodigo: paisDestinoCodigo ?? this.paisDestinoCodigo,
+      nacinalidadCodigo: nacinalidadCodigo ?? this.nacinalidadCodigo,
+      nacinalidad2Codigo: nacinalidad2Codigo ?? this.nacinalidad2Codigo,
+      nacinalidad3Codigo: nacinalidad3Codigo ?? this.nacinalidad3Codigo,
       departamentoDestinoCodigo:
           departamentoDestinoCodigo ?? this.departamentoDestinoCodigo,
-      municipioDestinoId: municipioDestinoId ?? this.municipioDestinoId,
+      tipoPersonaCnbsCodigo:
+          tipoPersonaCnbsCodigo ?? this.tipoPersonaCnbsCodigo,
+      tipoClienteCodigo: tipoClienteCodigo ?? this.tipoClienteCodigo,
       aldeaDestinoCodigo: aldeaDestinoCodigo ?? this.aldeaDestinoCodigo,
+      municipioDestinoCodigo:
+          municipioDestinoCodigo ?? this.municipioDestinoCodigo,
+      aldeaNegocioCodigo: aldeaNegocioCodigo ?? this.aldeaNegocioCodigo,
+      departamentoNegocioCodigo:
+          departamentoNegocioCodigo ?? this.departamentoNegocioCodigo,
+      nivelAproximadoIngresosCodigo:
+          nivelAproximadoIngresosCodigo ?? this.nivelAproximadoIngresosCodigo,
+      documentoConyuge: documentoConyuge ?? this.documentoConyuge,
+      ocupacionCodigo: ocupacionCodigo ?? this.ocupacionCodigo,
+      profesionCodigo: profesionCodigo ?? this.profesionCodigo,
+      aldeaCasaCodigo: aldeaCasaCodigo ?? this.aldeaCasaCodigo,
+      ubicacionCodigo: ubicacionCodigo ?? this.ubicacionCodigo,
+      medidasConocimientoCodigo:
+          medidasConocimientoCodigo ?? this.medidasConocimientoCodigo,
+      caserioCasa: caserioCasa ?? this.caserioCasa,
+      caserioNegocio: caserioNegocio ?? this.caserioNegocio,
       caserioDestino: caserioDestino ?? this.caserioDestino,
       barrioDestino: barrioDestino ?? this.barrioDestino,
-      caseriCasa: caseriCasa ?? this.caseriCasa,
-      aldeaCodigo: aldeaCodigo ?? this.aldeaCodigo,
+      descripcionDestino: descripcionDestino ?? this.descripcionDestino,
+      ingresosNetos: ingresosNetos ?? this.ingresosNetos,
     );
   }
 }
 
-final class SolicitudAsalariadoHnInitial extends SolicitudAsalariadoHnState {}
+final class SolicitudNuevaMenorHnInitial extends SolicitudNuevaMenorHnState {}

@@ -1,8 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -35,7 +37,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
   Item? estadoCivil;
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAsalariadoHnCubit>();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -52,6 +54,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                 SearchDropdownWidget(
                   codigo: 'ESTADOCIVIL',
                   title: 'Estado Civil',
+                  flavor: global<FlavorCubit>().state.flavor,
                   isRequired: true,
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -84,20 +87,16 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  SearchDropdownWidget(
+                    codigo: 'PROFESION',
+                    flavor: global<FlavorCubit>().state.flavor,
                     hintText: 'Profesión del Cónyuge',
-                    icon:
-                        Icon(Icons.school, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
                     title: 'ProfesionConyugue',
-                    onChange: (value) {
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          profesionConyugue: value,
+                          profesionConyugue: value.value,
                         ),
                       );
                     },
@@ -301,12 +300,19 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
                   hintText: 'Nacionalidad del Cónyuge',
-                  icon: Icon(Icons.flag, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'NacionalidadConyugue',
+                  codigo: 'PAIS',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nacionalidadConyugue: item.value,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

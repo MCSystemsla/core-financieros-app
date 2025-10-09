@@ -1,12 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -35,7 +38,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAsalariadoHnCubit>();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -167,13 +170,19 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  SearchDropdownWidget(
                     hintText: 'Parentesco Familiar PEPS',
-                    icon:
-                        Icon(Icons.people, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
                     title: 'ParentescoFamiliarPeps2',
+                    codigo: 'PARENTESCO',
+                    flavor: global<FlavorCubit>().state.flavor,
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          parentescoFamiliarPeps2: item.value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(

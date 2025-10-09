@@ -1,8 +1,10 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,14 +49,14 @@ class _SelectSolicitud extends StatelessWidget {
               margin: const EdgeInsets.only(left: 10, bottom: 10),
               child: Text(
                 'Por favor, elige una de las siguientes opciones:',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
               ),
             ),
             const Gap(20),
             const _SolicitudCardsRow1(),
             const Gap(20),
-            // const _SolicitudesCardsRow2(),
-            // const Gap(20),
+            const _SolicitudesCardsRow2(),
+            const Gap(20),
             // const _MySolicitudesAsignmentsCard(),
             // const Gap(20),
             // const _SolicitudesCardsRow3(),
@@ -152,55 +154,51 @@ class _SelectSolicitud extends StatelessWidget {
 //   }
 // }
 
-// class _SolicitudesCardsRow2 extends StatelessWidget {
-//   const _SolicitudesCardsRow2();
+class _SolicitudesCardsRow2 extends StatelessWidget {
+  const _SolicitudesCardsRow2();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final isConnected =
-//         context.read<InternetConnectionCubit>().state.connectionStatus;
-//     return Row(
-//       children: [
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             svgPath: ImageAsset.nuevaMenorBg3,
-//             title: 'Represtamo',
-//             onPressed: () {
-//               if (isConnected != ConnectionStatus.connected) {
-//                 // Navigator.push(
-//                 //   context,
-//                 //   MaterialPageRoute(
-//                 //     builder: ((_) => const CrearSolicitudScreen(
-//                 //           typeForm: TypeForm.represtamo,
-//                 //         )),
-//                 //   ),
-//                 // );
-//                 return;
-//               }
-//               // context.pushTransparentRoute(
-//               //   const ReprestamoAddUserCedulaScreen(
-//               //     typeForm: TypeForm.represtamo,
-//               //   ),
-//               // );
-//             },
-//           ),
-//         ),
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             onPressed: () {
-//               context.push('/solicitudes/solicitudes-pendientes');
-//             },
-//             svgPath: ImageAsset.nuevaMenorBg4,
-//             title: 'Solicitudes Pendientes',
-//           ),
-//         ),
-//         const Gap(10),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+              svgPath: ImageAsset.nuevaMenorBg3,
+              title: 'Represtamo',
+              onPressed: () {
+                // if (isConnected != ConnectionStatus.connected) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const CrearSolicitudHnScreen(
+                          typeForm: TypeForm.represtamo,
+                        )),
+                  ),
+                );
+                return;
+              }
+              // context.pushTransparentRoute(
+              //   const ReprestamoAddUserCedulaScreen(
+              //     typeForm: TypeForm.represtamo,
+              //   ),
+              // );
+              // },
+              ),
+        ),
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            onPressed: () {},
+            svgPath: ImageAsset.nuevaMenorBg4,
+            title: 'Solicitudes Pendientes',
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
 
 class _SolicitudCardsRow1 extends StatelessWidget {
   const _SolicitudCardsRow1();

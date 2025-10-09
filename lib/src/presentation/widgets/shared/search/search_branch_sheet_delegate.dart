@@ -101,16 +101,22 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                           );
                         },
                         data: [
-                          ...widget.items.map(
-                            (e) {
-                              return SelectedListItem<Branch>(
-                                  data: Branch(
-                                id: e.id,
-                                nombre: e.nombre,
-                                nombreDb: e.nombreDb,
-                              ));
-                            },
-                          )
+                          // ...widget.items.map(
+                          //   (e) {
+                          //     return SelectedListItem<Branch>(
+                          //         data: Branch(
+                          //       id: e.id,
+                          //       nombre: e.nombre,
+                          //       nombreDb: e.nombreDb,
+                          //     ));
+                          //   },
+                          // )
+                          SelectedListItem<Branch>(
+                              data: Branch(
+                            id: 27,
+                            nombre: 'Tegucigalpa',
+                            nombreDb: 'MC_TEGUCIGALPA_COPIA',
+                          ))
                         ],
                         onSelected: (selectedItems) {
                           for (var item in selectedItems) {

@@ -1,15 +1,23 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorForm4 extends StatefulWidget {
@@ -23,12 +31,15 @@ class NuevaMenorForm4 extends StatefulWidget {
   State<NuevaMenorForm4> createState() => _NuevaMenorForm4State();
 }
 
-class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
+class _NuevaMenorForm4State extends State<NuevaMenorForm4>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   bool trabajaConyuge = false;
   Item? estadoCivil;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -42,24 +53,46 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
             const Gap(30),
             Column(
               children: [
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Profesión',
-                  icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'Profesión',
+                  codigo: 'PROFESION',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        profesionCodigo: item.value,
+                        profesion: item.name,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  codigo: 'OCUPACION',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        ocupacion: item.name,
+                        ocupacionCodigo: item.value,
+                      ),
+                    );
+                  },
                   hintText: 'Ingresa Ocupación',
-                  icon: Icon(Icons.business_center,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'Ocupación',
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'ESTADOCIVIL',
                   title: 'Estado Civil',
                   onChanged: (item) {
@@ -67,29 +100,53 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
                     setState(() {
                       estadoCivil = item;
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        estadoCivilCodigo: item.value,
+                      ),
+                    );
                   },
                 ),
                 if (estadoCivil?.value == 'UNI' ||
                     estadoCivil?.value == 'CAS') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Ingresa Nombre Cónyuge',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
                     title: 'Nombre Conyugue',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreConyugue: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  CatalogoValorNacionalidad(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Nacionalidad Cónyuge',
-                    icon: Icon(Icons.flag, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
                     title: 'Nacionalidad Conyugue',
+                    codigo: 'PAIS',
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nacionalidadConyugue: item.valor,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   SheetSearchDropdown(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
                     title: '¿Trabaja Cónyuge?',
                     isRequired: true,
                     onChanged: (item) {
@@ -97,6 +154,11 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
                       setState(() {
                         trabajaConyuge = item.value == 'input.yes'.tr();
                       });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          trabajaConyugue: item.value,
+                        ),
+                      );
                     },
                     hintText: 'input.select_option'.tr(),
                     enabled: true,
@@ -108,77 +170,155 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
                   if (trabajaConyuge) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Trabajo Cónyuge',
                       icon: Icon(Icons.work_outline,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
                       title: 'Trabajo Conyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            trabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Dirección Trabajo Cónyuge',
                       icon: Icon(Icons.location_on,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.streetAddress,
                       textCapitalization: TextCapitalization.words,
                       title: 'Dirección Trabajo Conyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            direccionTrabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Teléfono Trabajo Cónyuge',
                       icon:
                           Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.phone,
                       textCapitalization: TextCapitalization.none,
                       title: 'TelefonoTrabajoConyugue',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            telefonoTrabajoConyugue: value,
+                          ),
+                        );
+                      },
                     ),
                   ],
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Documento Cónyuge',
                     icon: Icon(Icons.credit_card,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,
                     title: 'DocumentoConyuge',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          documentoConyuge: value,
+                        ),
+                      );
+                    },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Actividad Descripción Cónyuge',
                     icon: Icon(Icons.description,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     title: 'ActividadDescripcionConyuge',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          actividadDescripcionConyugue: value,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresos Netos',
                   icon: Icon(Icons.attach_money,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'IngresosNetos',
+                  title: 'Ingresos Netos',
+                  inputFormatters: [
+                    CurrencyInputFormatter(),
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        ingresosNetos: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Experiencia',
                   icon:
                       Icon(Icons.timeline, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   title: 'Experiencia',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    final newValue = value.replaceAll(',', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        exeperiencia: int.tryParse(newValue) ?? 0,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Ocupación ID',
-                  icon: Icon(Icons.badge_outlined,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.characters,
-                  title: 'objOcupacionID',
+                SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  flavor: global<FlavorCubit>().state.flavor,
+                  codigo: 'OCUPACION',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        ocupacionCodigo: item.value,
+                        ocupacion: item.name,
+                      ),
+                    );
+                  },
+                  hintText: 'Ocupación',
+                  title: 'Ocupacion',
                 ),
               ],
             ),
@@ -220,4 +360,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
