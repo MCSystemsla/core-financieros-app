@@ -140,7 +140,7 @@ class GetParametroByCodigoEndpoint extends Endpoint {
   Method get method => Method.get;
 
   @override
-  String get path => 'cartera/catalogo/obtener-parametro';
+  String get path => '/cartera/catalogo/obtener-parametro';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -149,5 +149,29 @@ class GetParametroByCodigoEndpoint extends Endpoint {
   Map<String, String> get queryParameters => {
         'database': LocalStorage().database,
         'nombre': nombre,
+      };
+}
+
+class ObtenerAutoCompletadoNuevaMenorEndpoint extends Endpoint {
+  final String nombre;
+  final String cedula;
+  ObtenerAutoCompletadoNuevaMenorEndpoint({
+    required this.nombre,
+    required this.cedula,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitud-nueva-menor/obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, String> get queryParameters => {
+        'database': LocalStorage().database,
+        'nombre': nombre,
+        'cedula': cedula,
       };
 }

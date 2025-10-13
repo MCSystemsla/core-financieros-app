@@ -19,10 +19,10 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class SolicitudesCreditoHnRepository {
-  Future<(bool, String)> createSolicitudAsalariado({
+  Future<(bool, String, String?)> createSolicitudAsalariado({
     required SolicitudAsalariadoHn solicitud,
   });
-  Future<(bool, String)> createSolicitudNuevaMenor({
+  Future<(bool, String, String?)> createSolicitudNuevaMenor({
     required SolicitudNuevaMenorHn solicitud,
   });
   Future<(bool, String)> createSolicitudReprestamo({
@@ -46,7 +46,7 @@ class SolicitudesCreditoHnRepositoryImpl
   final _api = global<APIRepository>();
   final _logger = Logger();
   @override
-  Future<(bool, String)> createSolicitudAsalariado({
+  Future<(bool, String, String?)> createSolicitudAsalariado({
     required SolicitudAsalariadoHn solicitud,
   }) async {
     final endpoint = CrearSolciitudAsalariadoHNEndpoint(
@@ -56,19 +56,23 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
-        return (false, resp.toString());
+        return (false, resp.toString(), null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
-        return (false, errorMsg);
+        // final (errorMsg, _) = getErrorMessage(resp);
+        return (false, resp.toString(), null);
       }
 
       _logger.i(endpoint.body);
-      return (true, resp['message'] as String);
+      return (
+        true,
+        resp['message'] as String,
+        resp['NumeroSolicitud'] as String,
+      );
     } catch (e) {
       _logger.e(e.toString());
-      return (false, e.toString());
+      return (false, e.toString(), null);
     }
   }
 
@@ -96,7 +100,7 @@ class SolicitudesCreditoHnRepositoryImpl
   }
 
   @override
-  Future<(bool, String)> createSolicitudNuevaMenor({
+  Future<(bool, String, String?)> createSolicitudNuevaMenor({
     required SolicitudNuevaMenorHn solicitud,
   }) async {
     final endpoint = CrearSolciitudNuevaMenorHNEndpoint(
@@ -106,17 +110,21 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
-        return (false, resp.toString());
+        return (false, resp.toString(), null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        return (false, resp.toString());
+        return (false, resp.toString(), null);
       }
       _logger.i(endpoint.body);
-      return (true, resp['message'] as String);
+      return (
+        true,
+        resp['message'] as String,
+        resp['NumeroSolicitud'] as String,
+      );
     } catch (e) {
       _logger.e(e.toString());
-      return (false, e.toString());
+      return (false, e.toString(), null);
     }
   }
 

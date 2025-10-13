@@ -22,7 +22,8 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg) = await _repository.createSolicitudAsalariado(
+      final (isOk, msg, numeroSolicitud) =
+          await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
           database: state.database,
           isOffline: state.isOffline,
@@ -152,7 +153,10 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         );
         return;
       }
-      emit(state.copyWith(status: Status.done));
+      emit(state.copyWith(
+        status: Status.done,
+        numeroSolicitud: numeroSolicitud,
+      ));
     } catch (e) {
       emit(
         state.copyWith(
@@ -163,12 +167,22 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
     }
   }
 
-  setIngresosTotales() {
-    emit(
-      state.copyWith(
-        totalIngresoMes: state.salarioNetoCordoba + state.otrosIngresosCordoba,
-      ),
-    );
+  sendCedulaImages({required String numeroSolicitud}) async {
+    try {
+      await _repository.sendCedulaImageWhenSolicitudCreditoCreated(
+        numeroSolicitud: int.parse(numeroSolicitud),
+        cedulaCliente: state.cedula,
+        imagenFrontal: state.imagenFrontal,
+        imagenTrasera: state.imagenTrasera,
+      );
+    } catch (_) {}
+  }
+
+  saveCedula({String? imagenFrontal, String? imagenTrasera}) {
+    emit(state.copyWith(
+      imagenFrontal: imagenFrontal,
+      imagenTrasera: imagenTrasera,
+    ));
   }
 
   void initAutoSave({String? uuid}) {

@@ -70,17 +70,9 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
           actividadEconomicaCiuu3: state.actividadEconomicaCiuu3,
           codigoUsa: state.codigoUsa,
           apnfd: state.apnfd == 'input.yes'.tr(),
-          apnfd2: state.apnfd2 == 'input.yes'.tr(),
-          apnfd3: state.apnfd3 == 'input.yes'.tr(),
           actividadEconomicaRealizaCiuu1: state.actividadEconomicaRealizaCiuu1,
           actividadEconomicaRealizaCiuu2: state.actividadEconomicaRealizaCiuu2,
           actividadEconomicaRealizaCiuu3: state.actividadEconomicaRealizaCiuu3,
-          ejerceEconomicaRealizaCiuu1Codigo:
-              state.ejerceEconomicaRealizaCiuu1Codigo,
-          ejerceEconomicaRealizaCiuu2Codigo:
-              state.ejerceEconomicaRealizaCiuu2Codigo,
-          ejerceEconomicaRealizaCiuu3Codigo:
-              state.ejerceEconomicaRealizaCiuu3Codigo,
           tieneIdentificacionEstadosUnidos:
               state.tieneIdentificacionEstadosUnidos == 'input.yes'.tr(),
           tieneVinculoEstadosUnidos:
@@ -152,22 +144,11 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
       actividadEconomicaRealizaCiuu3: _prefer(
           state.actividadEconomicaRealizaCiuu3,
           prev?.actividadEconomicaRealizaCiuu3),
-      ejerceEconomicaRealizaCiuu1Codigo: _prefer(
-          state.ejerceEconomicaRealizaCiuu1Codigo,
-          prev?.ejerceEconomicaRealizaCiuu1Codigo),
-      ejerceEconomicaRealizaCiuu2Codigo: _prefer(
-          state.ejerceEconomicaRealizaCiuu2Codigo,
-          prev?.ejerceEconomicaRealizaCiuu2Codigo),
-      ejerceEconomicaRealizaCiuu3Codigo: _prefer(
-          state.ejerceEconomicaRealizaCiuu3Codigo,
-          prev?.ejerceEconomicaRealizaCiuu3Codigo),
       tieneIdentificacionEstadosUnidos: _prefer(
           state.tieneIdentificacionEstadosUnidos,
           prev?.tieneIdentificacionEstadosUnidos),
       tieneVinculoEstadosUnidos: _prefer(
           state.tieneVinculoEstadosUnidos, prev?.tieneVinculoEstadosUnidos),
-      apnfd2: _prefer(state.apnfd2, prev?.apnfd2),
-      apnfd3: _prefer(state.apnfd3, prev?.apnfd3),
       ejerceActividadApfnd:
           _prefer(state.ejerceActividadApfnd, prev?.ejerceActividadApfnd),
       apnfd: _prefer(state.apnfd, prev?.apnfd),

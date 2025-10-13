@@ -48,14 +48,9 @@ class SolicitudReprestamoHnState extends Equatable {
   final String actividadEconomicaCiuu3;
   final String codigoUsa;
   final String apnfd;
-  final String apnfd2;
-  final String apnfd3;
   final String actividadEconomicaRealizaCiuu1;
   final String actividadEconomicaRealizaCiuu2;
   final String actividadEconomicaRealizaCiuu3;
-  final String ejerceEconomicaRealizaCiuu1Codigo;
-  final String ejerceEconomicaRealizaCiuu2Codigo;
-  final String ejerceEconomicaRealizaCiuu3Codigo;
   final String tieneIdentificacionEstadosUnidos;
   final String tieneVinculoEstadosUnidos;
   final String vinculoEstadosUnidosDescripcion;
@@ -109,14 +104,9 @@ class SolicitudReprestamoHnState extends Equatable {
     this.actividadEconomicaCiuu3 = '',
     this.codigoUsa = '',
     this.apnfd = '',
-    this.apnfd2 = '',
-    this.apnfd3 = '',
     this.actividadEconomicaRealizaCiuu1 = '',
     this.actividadEconomicaRealizaCiuu2 = '',
     this.actividadEconomicaRealizaCiuu3 = '',
-    this.ejerceEconomicaRealizaCiuu1Codigo = '',
-    this.ejerceEconomicaRealizaCiuu2Codigo = '',
-    this.ejerceEconomicaRealizaCiuu3Codigo = '',
     this.tieneIdentificacionEstadosUnidos = '',
     this.tieneVinculoEstadosUnidos = '',
     this.vinculoEstadosUnidosDescripcion = '',
@@ -172,14 +162,9 @@ class SolicitudReprestamoHnState extends Equatable {
         actividadEconomicaCiuu3,
         codigoUsa,
         apnfd,
-        apnfd2,
-        apnfd3,
         actividadEconomicaRealizaCiuu1,
         actividadEconomicaRealizaCiuu2,
         actividadEconomicaRealizaCiuu3,
-        ejerceEconomicaRealizaCiuu1Codigo,
-        ejerceEconomicaRealizaCiuu2Codigo,
-        ejerceEconomicaRealizaCiuu3Codigo,
         tieneIdentificacionEstadosUnidos,
         tieneVinculoEstadosUnidos,
         vinculoEstadosUnidosDescripcion,
@@ -235,14 +220,9 @@ class SolicitudReprestamoHnState extends Equatable {
     String? actividadEconomicaCiuu3,
     String? codigoUsa,
     String? apnfd,
-    String? apnfd2,
-    String? apnfd3,
     String? actividadEconomicaRealizaCiuu1,
     String? actividadEconomicaRealizaCiuu2,
     String? actividadEconomicaRealizaCiuu3,
-    String? ejerceEconomicaRealizaCiuu1Codigo,
-    String? ejerceEconomicaRealizaCiuu2Codigo,
-    String? ejerceEconomicaRealizaCiuu3Codigo,
     String? tieneIdentificacionEstadosUnidos,
     String? tieneVinculoEstadosUnidos,
     String? vinculoEstadosUnidosDescripcion,
@@ -306,20 +286,12 @@ class SolicitudReprestamoHnState extends Equatable {
           actividadEconomicaCiuu3 ?? this.actividadEconomicaCiuu3,
       codigoUsa: codigoUsa ?? this.codigoUsa,
       apnfd: apnfd ?? this.apnfd,
-      apnfd2: apnfd2 ?? this.apnfd2,
-      apnfd3: apnfd3 ?? this.apnfd3,
       actividadEconomicaRealizaCiuu1:
           actividadEconomicaRealizaCiuu1 ?? this.actividadEconomicaRealizaCiuu1,
       actividadEconomicaRealizaCiuu2:
           actividadEconomicaRealizaCiuu2 ?? this.actividadEconomicaRealizaCiuu2,
       actividadEconomicaRealizaCiuu3:
           actividadEconomicaRealizaCiuu3 ?? this.actividadEconomicaRealizaCiuu3,
-      ejerceEconomicaRealizaCiuu1Codigo: ejerceEconomicaRealizaCiuu1Codigo ??
-          this.ejerceEconomicaRealizaCiuu1Codigo,
-      ejerceEconomicaRealizaCiuu2Codigo: ejerceEconomicaRealizaCiuu2Codigo ??
-          this.ejerceEconomicaRealizaCiuu2Codigo,
-      ejerceEconomicaRealizaCiuu3Codigo: ejerceEconomicaRealizaCiuu3Codigo ??
-          this.ejerceEconomicaRealizaCiuu3Codigo,
       tieneIdentificacionEstadosUnidos: tieneIdentificacionEstadosUnidos ??
           this.tieneIdentificacionEstadosUnidos,
       tieneVinculoEstadosUnidos:

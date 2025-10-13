@@ -49,14 +49,9 @@ class SolicitudReprestamoHnLocalDb {
   String? actividadEconomicaCiuu3;
   String? codigoUsa;
   String? apnfd;
-  String? apnfd2;
-  String? apnfd3;
   String? actividadEconomicaRealizaCiuu1;
   String? actividadEconomicaRealizaCiuu2;
   String? actividadEconomicaRealizaCiuu3;
-  String? ejerceEconomicaRealizaCiuu1Codigo;
-  String? ejerceEconomicaRealizaCiuu2Codigo;
-  String? ejerceEconomicaRealizaCiuu3Codigo;
   String? tieneIdentificacionEstadosUnidos;
   String? tieneVinculoEstadosUnidos;
   String? vinculoEstadosUnidosDescripcion;
@@ -111,14 +106,9 @@ class SolicitudReprestamoHnLocalDb {
     this.actividadEconomicaCiuu3,
     this.codigoUsa,
     this.apnfd,
-    this.apnfd2,
-    this.apnfd3,
     this.actividadEconomicaRealizaCiuu1,
     this.actividadEconomicaRealizaCiuu2,
     this.actividadEconomicaRealizaCiuu3,
-    this.ejerceEconomicaRealizaCiuu1Codigo,
-    this.ejerceEconomicaRealizaCiuu2Codigo,
-    this.ejerceEconomicaRealizaCiuu3Codigo,
     this.tieneIdentificacionEstadosUnidos,
     this.tieneVinculoEstadosUnidos,
     this.vinculoEstadosUnidosDescripcion,

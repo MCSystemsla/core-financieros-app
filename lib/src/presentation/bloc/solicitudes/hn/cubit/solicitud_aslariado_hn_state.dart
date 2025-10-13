@@ -2,6 +2,9 @@
 part of 'solicitud_aslariado_hn_cubit.dart';
 
 class SolicitudAslariadoHnState extends Equatable {
+  final String imagenFrontal;
+  final String imagenTrasera;
+  final String numeroSolicitud;
   final String? uuid;
   final int? idLocalResponse;
   final String errorMsg;
@@ -119,6 +122,9 @@ class SolicitudAslariadoHnState extends Equatable {
   final String caseriCasa;
   final String aldeaCodigo;
   const SolicitudAslariadoHnState({
+    this.imagenFrontal = '',
+    this.imagenTrasera = '',
+    this.numeroSolicitud = '',
     this.uuid = '',
     this.idLocalResponse = 0,
     this.errorMsg = '',
@@ -239,6 +245,9 @@ class SolicitudAslariadoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        imagenFrontal,
+        imagenTrasera,
+        numeroSolicitud,
         errorMsg,
         status,
         isOffline,
@@ -355,6 +364,9 @@ class SolicitudAslariadoHnState extends Equatable {
       ];
 
   SolicitudAslariadoHnState copyWith({
+    String? imagenFrontal,
+    String? imagenTrasera,
+    String? numeroSolicitud,
     String? uuid,
     int? idLocalResponse,
     String? errorMsg,
@@ -473,6 +485,9 @@ class SolicitudAslariadoHnState extends Equatable {
     String? aldeaCodigo,
   }) {
     return SolicitudAslariadoHnState(
+      imagenFrontal: imagenFrontal ?? this.imagenFrontal,
+      imagenTrasera: imagenTrasera ?? this.imagenTrasera,
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       errorMsg: errorMsg ?? this.errorMsg,

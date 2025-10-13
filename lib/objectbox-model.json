@@ -3783,16 +3783,6 @@
           "type": 9
         },
         {
-          "id": "45:6223367632383508196",
-          "name": "apnfd2",
-          "type": 9
-        },
-        {
-          "id": "46:4069237034866042174",
-          "name": "apnfd3",
-          "type": 9
-        },
-        {
           "id": "47:7137072892586637120",
           "name": "actividadEconomicaRealizaCiuu1",
           "type": 9
@@ -3805,21 +3795,6 @@
         {
           "id": "49:9021093918286834540",
           "name": "actividadEconomicaRealizaCiuu3",
-          "type": 9
-        },
-        {
-          "id": "50:4429542478296847884",
-          "name": "ejerceEconomicaRealizaCiuu1Codigo",
-          "type": 9
-        },
-        {
-          "id": "51:2461506611566591568",
-          "name": "ejerceEconomicaRealizaCiuu2Codigo",
-          "type": 9
-        },
-        {
-          "id": "52:9133716231844339991",
-          "name": "ejerceEconomicaRealizaCiuu3Codigo",
           "type": 9
         },
         {
@@ -3965,7 +3940,12 @@
     3130289212232950153,
     8972294420756887347,
     3156048730782853733,
-    1707880113106478024
+    1707880113106478024,
+    6223367632383508196,
+    4069237034866042174,
+    4429542478296847884,
+    2461506611566591568,
+    9133716231844339991
   ],
   "retiredRelationUids": [],
   "version": 1

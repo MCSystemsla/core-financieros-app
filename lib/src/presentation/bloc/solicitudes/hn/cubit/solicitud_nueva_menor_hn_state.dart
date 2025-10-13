@@ -2,6 +2,7 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final String numeroSolicitud;
   final String email;
   final String nombre2;
   final String apellido2;
@@ -124,6 +125,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String descripcionDestino;
   final int ingresosNetos;
   const SolicitudNuevaMenorHnState({
+    this.numeroSolicitud = '',
     this.email = '',
     this.nombre2 = '',
     this.apellido2 = '',
@@ -249,6 +251,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        numeroSolicitud,
         email,
         nombre2,
         apellido2,
@@ -372,6 +375,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    String? numeroSolicitud,
     String? email,
     String? nombre2,
     String? apellido2,
@@ -495,6 +499,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     int? ingresosNetos,
   }) {
     return SolicitudNuevaMenorHnState(
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       email: email ?? this.email,
       nombre2: nombre2 ?? this.nombre2,
       apellido2: apellido2 ?? this.apellido2,

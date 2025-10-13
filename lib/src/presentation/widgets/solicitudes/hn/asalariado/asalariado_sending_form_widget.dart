@@ -32,9 +32,9 @@ class _AsalariadoSendingFormWidgetState
           // dbProvider.removeSolicitudWhenisUploaded(
           //   solicitudId: widget.solicitudId,
           // );
-          // context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
-          //       numeroSolicitud: state.numeroSolicitud,
-          //     );
+          context.read<SolicitudAslariadoHnCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+              );
           // context
           //     .read<SolicitudNuevaMenorCubit>()
           //     .onFieldChanged(() => state.copyWith(
@@ -68,7 +68,7 @@ class _AsalariadoSendingFormWidgetState
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Solicitud nueva menor enviada exitosamente!!\n\n',
+                  text: 'Solicitud asalariado enviada exitosamente!!\n\n',
                   repeat: false,
                   isUploadingForms: true,
                 ),

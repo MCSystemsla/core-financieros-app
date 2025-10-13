@@ -48,14 +48,9 @@ class SolicitudReprestamoHn {
   final String actividadEconomicaCiuu3;
   final String codigoUsa;
   final bool apnfd;
-  final bool apnfd2;
-  final bool apnfd3;
   final String actividadEconomicaRealizaCiuu1;
   final String actividadEconomicaRealizaCiuu2;
   final String actividadEconomicaRealizaCiuu3;
-  final String ejerceEconomicaRealizaCiuu1Codigo;
-  final String ejerceEconomicaRealizaCiuu2Codigo;
-  final String ejerceEconomicaRealizaCiuu3Codigo;
   final bool tieneIdentificacionEstadosUnidos;
   final bool tieneVinculoEstadosUnidos;
   final String vinculoEstadosUnidosDescripcion;
@@ -106,14 +101,9 @@ class SolicitudReprestamoHn {
     required this.actividadEconomicaCiuu3,
     required this.codigoUsa,
     required this.apnfd,
-    required this.apnfd2,
-    required this.apnfd3,
     required this.actividadEconomicaRealizaCiuu1,
     required this.actividadEconomicaRealizaCiuu2,
     required this.actividadEconomicaRealizaCiuu3,
-    required this.ejerceEconomicaRealizaCiuu1Codigo,
-    required this.ejerceEconomicaRealizaCiuu2Codigo,
-    required this.ejerceEconomicaRealizaCiuu3Codigo,
     required this.tieneIdentificacionEstadosUnidos,
     required this.tieneVinculoEstadosUnidos,
     required this.vinculoEstadosUnidosDescripcion,
@@ -168,14 +158,9 @@ class SolicitudReprestamoHn {
       'ActividadEconomicaCIUU3': actividadEconomicaCiuu3,
       'CodigoUSA': codigoUsa,
       'APNFD': apnfd,
-      'APNFD2': apnfd2,
-      'APNFD3': apnfd3,
       'ActividadEconomicaRealizaCIUU1': actividadEconomicaRealizaCiuu1,
       'ActividadEconomicaRealizaCIUU2': actividadEconomicaRealizaCiuu2,
       'ActividadEconomicaRealizaCIUU3': actividadEconomicaRealizaCiuu3,
-      'EjerceEconomicaRealizaCiuu1Codigo': ejerceEconomicaRealizaCiuu1Codigo,
-      'EjerceEconomicaRealizaCiuu2Codigo': ejerceEconomicaRealizaCiuu2Codigo,
-      'EjerceEconomicaRealizaCiuu3Codigo': ejerceEconomicaRealizaCiuu3Codigo,
       'TieneIdentificacionEstadosUnidos': tieneIdentificacionEstadosUnidos,
       'TieneVinculoEstadosUnidos': tieneVinculoEstadosUnidos,
       'VinculoEstadosUnidosDescripcion': vinculoEstadosUnidosDescripcion,

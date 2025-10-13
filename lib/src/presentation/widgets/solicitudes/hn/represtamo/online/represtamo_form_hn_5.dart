@@ -1,6 +1,4 @@
 // ignore_for_file: deprecated_member_use
-import 'dart:developer';
-
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -57,20 +55,23 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
             const Gap(30),
             Column(
               children: [
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
+                  isRequired: true,
+                  hintText: 'Selecciona una actividad',
+                  enabled: true,
                   validator: (value) => ClassValidator.validateRequired(
-                    value?.value,
+                    value?.valor,
                   ),
-                  codigo: 'ACTIVIDADECONOMICA',
                   title: 'ActividadEconomicaCIUU1',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomicaCiuu1 = value.value;
+                      actividadEconomicaCiuu1 = value.valor;
+                      isApnfd = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu1: value.value,
+                        actividadEconomicaCiuu1: value.valor,
                       ),
                     );
                   },
@@ -99,41 +100,25 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                       );
                     },
                   ),
-                  const Gap(30),
-                  CatalogoActividadesCNBSDropdown(
-                    isRequired: true,
-                    hintText: 'Selecciona una opcion'.tr(),
-                    enabled: true,
-                    title: 'EjerceEconomicaRealizaCiuu1Codigo',
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      setState(() {
-                        isApnfd = value.esAPNFD;
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          ejerceEconomicaRealizaCiuu1Codigo: value.valor,
-                          apnfd: value.esAPNFD
-                              ? 'input.yes'.tr()
-                              : 'input.no'.tr(),
-                        ),
-                      );
-                      log('value.isApnfd ${value.esAPNFD}');
-                    },
-                  ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
-                  codigo: 'ACTIVIDADECONOMICA',
+                CatalogoActividadesCNBSDropdown(
+                  isRequired: true,
+                  hintText: 'Selecciona una actividad',
+                  enabled: true,
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.valor,
+                  ),
                   title: 'ActividadEconomicaCIUU2',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomicaCiuu2 = value.value;
+                      actividadEconomicaCiuu2 = value.valor;
+                      isApnfd2 = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu2: value.value,
+                        actividadEconomicaCiuu2: value.valor,
                       ),
                     );
                   },
@@ -162,40 +147,22 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                       );
                     },
                   ),
-                  const Gap(30),
-                  CatalogoActividadesCNBSDropdown(
-                    isRequired: true,
-                    hintText: 'Selecciona una opcion'.tr(),
-                    enabled: true,
-                    title: 'EjerceEconomicaRealizaCiuu2Codigo',
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      setState(() {
-                        isApnfd2 = value.esAPNFD;
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          ejerceEconomicaRealizaCiuu2Codigo: value.valor,
-                          apnfd2: value.esAPNFD
-                              ? 'input.yes'.tr()
-                              : 'input.no'.tr(),
-                        ),
-                      );
-                    },
-                  ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
-                  codigo: 'ACTIVIDADECONOMICA',
+                CatalogoActividadesCNBSDropdown(
+                  isRequired: true,
+                  hintText: 'Selecciona una actividad',
+                  enabled: true,
                   title: 'ActividadEconomicaCIUU3',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomicaCiuu3 = value.value;
+                      actividadEconomicaCiuu3 = value.valor;
+                      isApnfd3 = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu3: value.value,
+                        actividadEconomicaCiuu3: value.valor,
                       ),
                     );
                   },
@@ -224,27 +191,6 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                       );
                     },
                   ),
-                  const Gap(30),
-                  CatalogoActividadesCNBSDropdown(
-                    isRequired: true,
-                    hintText: 'Selecciona una actividad',
-                    enabled: true,
-                    title: 'EjerceEconomicaRealizaCiuu3Codigo',
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      setState(() {
-                        isApnfd3 = value.esAPNFD;
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          ejerceEconomicaRealizaCiuu3Codigo: value.valor,
-                          apnfd3: value.esAPNFD
-                              ? 'input.yes'.tr()
-                              : 'input.no'.tr(),
-                        ),
-                      );
-                    },
-                  ),
                 ],
                 if (isApnfd || isApnfd2 || isApnfd3) ...[
                   SheetSearchDropdown(
@@ -255,6 +201,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           ejerceActividadApfnd: item.value,
+                          apnfd: 'input.yes'.tr(),
                         ),
                       );
                     },
