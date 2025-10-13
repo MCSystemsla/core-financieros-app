@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
@@ -48,6 +49,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
             Column(
               children: [
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'País Destino',
                   title: 'objPaisDestinoID',
                   codigo: 'PAIS',
@@ -65,6 +68,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Departamento Destino',
                   title: 'objDepartamentoDestinoID',
                   where: depWhereClause,
@@ -83,6 +88,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Municipio Destino',
                   title: 'objMunicipioDestinoID',
                   where: munWhereClause,
@@ -101,6 +108,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Aldea Destino',
                   title: 'objAldeaDestinoID',
                   where: aldeaWhereClause,
@@ -116,6 +125,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Caserío Destino',
                   icon:
                       Icon(Icons.home_work, color: AppColors.getPrimaryColor()),
@@ -135,6 +146,8 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Barrio Destino',
                   icon: Icon(Icons.house, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

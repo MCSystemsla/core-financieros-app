@@ -52,6 +52,9 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
             Column(
               children: [
                 CatalogoActividadesCNBSDropdown(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.valor,
+                  ),
                   isRequired: true,
                   enabled: true,
                   hintText: 'Actividad Económica CIUU 1',

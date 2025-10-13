@@ -108,8 +108,8 @@ class SolicitudAsalariadoHn {
   final String actividadEconomicaDescripcion1;
   final String actividadEconomicaDescripcion2;
   final String actividadEconomicaDescripcion3;
-  final String ejerceApnfd;
-  final String esApnfd;
+  final bool ejerceApnfd;
+  final bool esApnfd;
   final String paisDestinoCodigo;
   final String departamentoDestinoCodigo;
   final String municipioDestinoId;
