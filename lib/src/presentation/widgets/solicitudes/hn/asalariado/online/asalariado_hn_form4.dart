@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -18,7 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm4 extends StatefulWidget {
   final PageController controller;
@@ -61,6 +61,11 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     setState(() {
                       estadoCivil = item;
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        estadoCivilCodigo: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
@@ -243,26 +248,6 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'Total Ingreso Mensual del Cónyuge',
-                    icon: Icon(Icons.account_balance_wallet,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.number,
-                    textCapitalization: TextCapitalization.none,
-                    title: 'TotalIngresoMesConyugue',
-                    inputFormatters: [
-                      CurrencyInputFormatter(),
-                    ],
-                    onChange: (value) {
-                      final newValue = value.replaceAll(',', '');
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          totalIngresoMesConyugue: int.tryParse(newValue) ?? 0,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  OutlineTextfieldWidget(
                     hintText: 'Fuente de Otros Ingresos del Cónyuge',
                     icon:
                         Icon(Icons.source, color: AppColors.getPrimaryColor()),
@@ -276,6 +261,40 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           fuenteOtrosIngresosConyugue: value,
+                        ),
+                      );
+                    },
+                  ),
+                  // const Gap(30),
+                  // OutlineTextfieldWidget(
+                  //   hintText: 'Total Ingreso Mensual del Cónyuge',
+                  //   icon: Icon(Icons.account_balance_wallet,
+                  //       color: AppColors.getPrimaryColor()),
+                  //   textInputType: TextInputType.number,
+                  //   textCapitalization: TextCapitalization.none,
+                  //   title: 'TotalIngresoMesConyugue',
+                  //   inputFormatters: [
+                  //     CurrencyInputFormatter(),
+                  //   ],
+                  //   onChange: (value) {
+                  //     final newValue = value.replaceAll(',', '');
+                  //     cubit.onFieldChanged(
+                  //       () => cubit.state.copyWith(
+                  //         totalIngresoMesConyugue: int.tryParse(newValue) ?? 0,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    hintText: 'Nacionalidad del Cónyuge',
+                    title: 'NacionalidadConyugue',
+                    codigo: 'PAIS',
+                    onChanged: (item) {
+                      if (item == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nacionalidadConyugue: item.valor,
                         ),
                       );
                     },
@@ -295,21 +314,6 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         personasACargo: int.tryParse(value) ?? 0,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  hintText: 'Nacionalidad del Cónyuge',
-                  title: 'NacionalidadConyugue',
-                  codigo: 'PAIS',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        nacionalidadConyugue: item.value,
                       ),
                     );
                   },
@@ -338,7 +342,10 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  widget.controller.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,

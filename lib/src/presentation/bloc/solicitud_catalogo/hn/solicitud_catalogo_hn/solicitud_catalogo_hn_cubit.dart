@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_actividad_cnbs_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_aldea_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_barrio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_caserio_local_db.dart';
@@ -93,18 +94,13 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     'TIPOPERSONACNBS',
     'TIPOCLIENTE',
     'OCUPACION',
-    'ACTIVIDADESECONOMICASCNBS',
     'NIVELAPROXIMADOINGRESOS',
     'TIPOSOLICITUDCREDITO',
-    'ORIGENSOLICITUDCREDITO',
     'ESTATUSCLIENTE',
     'PROFESION',
     'DESTINOCREDITO',
-    'FRECUENCIAPAGO',
-    'ESTADOSOLICITUDCREDITO',
     'SECTORECONOMICO',
     'ACTIVIDADECONOMICA',
-    'MOTIVOSOLICITUDENREVISION',
     'MEDIDASCONOCIMIENTO',
     'PARENTESCO',
   ];
@@ -140,6 +136,23 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           }
         }
       }
+
+      final catalogosActividadesCNSB = await getCatalogoByCodigo(
+        codigo: 'ACTIVIDADESECONOMICASCNBS',
+      );
+      for (var item in catalogosActividadesCNSB!.data) {
+        _objectBoxService.catalogoActividadCnbsBox
+            .put(CatalogoActividadCnbsLocalDb(
+          nombre: item.nombre,
+          valor: item.valor,
+          isApnfd: item.esAPNFD,
+          isApnfdString: item.esAPNFD.toString(),
+        ));
+        if (item.esAPNFD) {
+          log('esAPNFD ${item.esAPNFD} ${item.nombre}');
+        }
+      }
+
       final catalogoProductos = await _repository.getCatalogoProducts();
       for (var item in catalogoProductos.data) {
         _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(

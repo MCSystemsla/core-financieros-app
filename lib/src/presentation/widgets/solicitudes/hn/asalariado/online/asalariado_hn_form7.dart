@@ -11,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm7 extends StatefulWidget {
   final PageController controller;
@@ -26,6 +25,10 @@ class AsalariadoHnForm7 extends StatefulWidget {
 
 class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
   final formKey = GlobalKey<FormState>();
+  String? depWhereClause;
+  String? munWhereClause;
+  String? aldeaWhereClause;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudAslariadoHnCubit>();
@@ -48,6 +51,9 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
+                    setState(() {
+                      depWhereClause = item.valor;
+                    });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         paisDestinoCodigo: item.valor,
@@ -59,9 +65,13 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                 CatalogoValorNacionalidad(
                   hintText: 'Departamento Destino',
                   title: 'objDepartamentoDestinoID',
+                  where: depWhereClause,
                   codigo: 'DEP',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
+                    setState(() {
+                      munWhereClause = item.valor;
+                    });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         departamentoDestinoCodigo: item.valor,
@@ -73,9 +83,13 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                 CatalogoValorNacionalidad(
                   hintText: 'Municipio Destino',
                   title: 'objMunicipioDestinoID',
+                  where: munWhereClause,
                   codigo: 'MUN',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
+                    setState(() {
+                      aldeaWhereClause = item.valor;
+                    });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         municipioDestinoId: item.valor,
@@ -84,13 +98,19 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CatalogoValorNacionalidad(
                   hintText: 'Aldea Destino',
-                  icon: Icon(Icons.location_city,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
                   title: 'objAldeaDestinoID',
+                  where: aldeaWhereClause,
+                  codigo: 'AL',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        aldeaDestinoCodigo: item.valor,
+                      ),
+                    );
+                  },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -153,7 +173,10 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  widget.controller.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,

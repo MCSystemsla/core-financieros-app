@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
@@ -111,6 +112,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     estadoCivil?.value == 'CAS') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Ingresa Nombre Cónyuge',
@@ -170,6 +174,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   if (trabajaConyuge) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Trabajo Cónyuge',
@@ -188,6 +195,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Dirección Trabajo Cónyuge',
@@ -206,6 +216,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Teléfono Trabajo Cónyuge',
@@ -243,6 +256,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Actividad Descripción Cónyuge',
@@ -287,8 +303,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   hintText: 'Ingresa Experiencia',
                   icon:
                       Icon(Icons.timeline, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
+                  textInputType: TextInputType.number,
                   title: 'Experiencia',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,

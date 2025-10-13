@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -17,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm5 extends StatefulWidget {
   final PageController controller;
@@ -236,13 +236,18 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  CatalogoValorNacionalidad(
+                    codigo: 'PAIS',
                     hintText: 'País PEPS 2',
-                    icon:
-                        Icon(Icons.public, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
                     title: 'PaisPeps2',
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          paisPeps2: value.valor,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 SheetSearchDropdown(
@@ -306,48 +311,48 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
                     },
                   ),
                 ],
-                SheetSearchDropdown(
-                  title: '¿Es APNFD?',
-                  isRequired: true,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    setState(() {
-                      esApnfd = item.value == 'input.yes'.tr();
-                    });
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        esApnfd: item.value,
-                      ),
-                    );
-                  },
-                  hintText: 'input.select_option'.tr(),
-                  enabled: true,
-                  items: [
-                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
-                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
-                  ],
-                ),
-                if (esApnfd) ...[
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    hintText: '¿Ejerce APNFD?',
-                    icon: Icon(Icons.assignment,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    title: 'EjerceAPNFD',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          ejerceApnfd: value,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                // SheetSearchDropdown(
+                //   title: '¿Es APNFD?',
+                //   isRequired: true,
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     setState(() {
+                //       esApnfd = item.value == 'input.yes'.tr();
+                //     });
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         esApnfd: item.value,
+                //       ),
+                //     );
+                //   },
+                //   hintText: 'input.select_option'.tr(),
+                //   enabled: true,
+                //   items: [
+                //     Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                //     Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                //   ],
+                // ),
+                // if (esApnfd) ...[
+                //   const Gap(30),
+                //   OutlineTextfieldWidget(
+                //     hintText: '¿Ejerce APNFD?',
+                //     icon: Icon(Icons.assignment,
+                //         color: AppColors.getPrimaryColor()),
+                //     textInputType: TextInputType.text,
+                //     textCapitalization: TextCapitalization.words,
+                //     inputFormatters: [
+                //       UpperCaseTextFormatter(),
+                //     ],
+                //     title: 'EjerceAPNFD',
+                //     onChange: (value) {
+                //       cubit.onFieldChanged(
+                //         () => cubit.state.copyWith(
+                //           ejerceApnfd: value,
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ],
               ],
             ),
             const Gap(30),
@@ -372,7 +377,10 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  widget.controller.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,

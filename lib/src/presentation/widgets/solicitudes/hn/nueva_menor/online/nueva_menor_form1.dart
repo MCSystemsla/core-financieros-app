@@ -188,7 +188,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                       ClassValidator.validateRequired(value?.value),
                   enabled: true,
                   flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'TIPOCLIENTE',
+                  codigo: 'TIPOSPERSONACREDITO',
                   hintText: 'Ingresa Tipo Persona',
                   title: 'Tipo Persona',
                   onChanged: (Item<dynamic>? item) {
@@ -473,6 +473,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value,
+                  ),
                   hintText: 'Ingresa Celular',
                   icon: Icon(Icons.phone_android,
                       color: AppColors.getPrimaryColor()),
@@ -518,6 +521,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   title: 'Cantidad Hijos',
                   onChange: (value) {
@@ -533,6 +537,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Nombre Público',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   icon: Icon(Icons.account_circle,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
@@ -581,6 +588,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SheetSearchDropdown(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
                   title: 'Tiene vinculos con USA?',
                   isRequired: true,
                   onChanged: (item) {
@@ -599,6 +609,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 if (tieneVinculosUsa) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     hintText: 'Ingresa Código USA',
                     icon: Icon(Icons.code, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,

@@ -52,6 +52,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
             Column(
               children: [
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Nombre Negocio',
                   icon:
@@ -127,6 +130,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   hintText: 'Ingresa Caserio Negocio',
                   title: 'Caserio Negocio',
                   onChange: (value) {
@@ -139,6 +145,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Dirección Negocio',
                   icon: Icon(Icons.location_on,
@@ -156,6 +165,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Negocio',
                   icon:
@@ -181,6 +193,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   title: 'Tiempo de Funcionamiento de Negocio',
                   onChange: (value) {
@@ -283,6 +296,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
                   hintText: 'Ingresa Nivel Aproximado Ingresos',
                   title: 'Nivel Aproximado Ingresos',
                   codigo: 'NIVELAPROXIMADOINGRESOS',

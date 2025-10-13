@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
@@ -147,6 +148,9 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Dirección Casa',
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
@@ -163,6 +167,9 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Casa',
                   title: 'Barrio Casa',
@@ -201,6 +208,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   title: 'Años Residir Casa',
                   onChange: (value) {
@@ -221,6 +229,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   title: 'Personas a cargo',
                   onChange: (value) {

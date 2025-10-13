@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 
 class CrearSolciitudAsalariadoHNEndpoint extends Endpoint {
   final SolicitudAsalariadoHn solicitud;
@@ -13,7 +14,7 @@ class CrearSolciitudAsalariadoHNEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/solicitud-asalariado/crear';
+  String get path => '/cartera/solicitud-asalariado/crear';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -32,7 +33,26 @@ class CrearSolciitudNuevaMenorHNEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/solicitud-nueva-menor/crear';
+  String get path => '/cartera/solicitud-nueva-menor/crear';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => solicitud.toJson();
+}
+
+class CreateSolicitudReprestamoHNEndpoint extends Endpoint {
+  final SolicitudReprestamoHn solicitud;
+
+  CreateSolicitudReprestamoHNEndpoint({
+    required this.solicitud,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/solicitud-represtamo/crear';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

@@ -1,17 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -20,28 +17,27 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorForm5 extends StatefulWidget {
+class ReprestamoFormHn2 extends StatefulWidget {
   final PageController controller;
-  const NuevaMenorForm5({
+  const ReprestamoFormHn2({
     super.key,
     required this.controller,
   });
 
   @override
-  State<NuevaMenorForm5> createState() => _NuevaMenorForm5State();
+  State<ReprestamoFormHn2> createState() => _ReprestamoFormHn2State();
 }
 
-class _NuevaMenorForm5State extends State<NuevaMenorForm5>
+class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
     with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
+  bool tieneFamiliarEmpleado = false;
   bool esPeps = false;
   bool tieneFamiliarPeps = false;
-  bool esFamiliarEmpleado = false;
-  bool esApnfd = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -49,7 +45,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
         child: Column(
           children: [
             const MiCreditoProgress(
-              currentStep: 5,
+              currentStep: 1,
               steps: 7,
             ),
             const Gap(30),
@@ -58,16 +54,83 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 SheetSearchDropdown(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  title: 'Es PEPS?',
+                  title: 'Tiene Familiar Empleado?',
                   isRequired: true,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
                     setState(() {
-                      esPeps = item.value == 'input.yes'.tr();
+                      tieneFamiliarEmpleado = value.value == 'input.yes'.tr();
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        espeps: item.value,
+                        tieneFamiliarPeps: value.value,
+                      ),
+                    );
+                  },
+                  hintText: 'input.select_option'.tr(),
+                  enabled: true,
+                  items: [
+                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                  ],
+                ),
+                if (tieneFamiliarEmpleado) ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    hintText: 'Nombre de Familiar Empleado',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    title: 'Nombre de Familiar Empleado',
+                    onChange: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreFamiliar: value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    hintText: 'Cedula Familiar Empleado',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    textInputType: TextInputType.number,
+                    textCapitalization: TextCapitalization.characters,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    title: 'Cedula Familiar Empleado',
+                    onChange: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cedulaFamiliar: value,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                const Gap(30),
+                SheetSearchDropdown(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
+                  title: 'Es PEPS?',
+                  isRequired: true,
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
+                    setState(() {
+                      esPeps = value.value == 'input.yes'.tr();
+                    });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        esPeps: value.value,
                       ),
                     );
                   },
@@ -81,18 +144,17 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 if (esPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
+                    hintText: 'Nombre de Entidad PEPS',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Nombre de Entidad PEPS',
-                    icon: Icon(Icons.apartment,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'NombreDeEntidadPeps',
+                    title: 'Nombre de Entidad PEPS',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nombreDeEntidadPeps: value,
@@ -102,34 +164,33 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    codigo: 'PAIS',
+                    hintText: 'Pais Peps',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
-                    hintText: 'País PEPS',
-                    title: 'PaisPeps',
-                    codigo: 'PAIS',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
+                    title: 'Pais Peps',
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          paisPeps: item.valor,
+                          paisPeps: value.valor,
                         ),
                       );
                     },
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    hintText: 'Periodo PEPS',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Periodo PEPS',
-                    icon: Icon(Icons.calendar_month,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    textCapitalization: TextCapitalization.none,
-                    title: 'PeriodoPeps',
+                    title: 'Periodo PEPS',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           periodoPeps: value,
@@ -139,17 +200,17 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
+                    hintText: 'Cargo Oficial PEPS',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Cargo Oficial PEPS',
-                    icon: Icon(Icons.badge, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'CargoOficialPeps',
+                    title: 'Cargo Oficial PEPS',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           cargoOficialPeps: value,
@@ -164,14 +225,14 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                       ClassValidator.validateRequired(value?.value),
                   title: '¿Tiene Familiar PEPS?',
                   isRequired: true,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
                     setState(() {
-                      tieneFamiliarPeps = item.value == 'input.yes'.tr();
+                      tieneFamiliarPeps = value.value == 'input.yes'.tr();
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tieneFamiliarPeps: item.value,
+                        tieneFamiliarPeps: value.value,
                       ),
                     );
                   },
@@ -185,18 +246,17 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 if (tieneFamiliarPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Nombre Familiar PEPS 2',
+                    hintText: 'NombreFamiliarPeps2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
                     textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'Nombre Familiar PEPS 2',
+                    textCapitalization: TextCapitalization.characters,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    title: 'NombreFamiliarPeps2',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nombreFamiliarPeps2: value,
@@ -205,36 +265,38 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     },
                   ),
                   const Gap(30),
-                  SearchDropdownWidget(
+                  OutlineTextfieldWidget(
+                    hintText: 'ParentescoFamiliarPeps2',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
+                        ClassValidator.validateRequired(value),
+                    title: 'ParentescoFamiliarPeps2',
+                    onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          parentescoFamiliarPeps2Codigo: item.value,
+                          parentescoFamiliarPeps2Codigo: value,
                         ),
                       );
                     },
-                    flavor: global<FlavorCubit>().state.flavor,
-                    codigo: 'PARENTESCO',
-                    hintText: 'Parentesco Familiar PEPS 2',
-                    title: 'ParentescoFamiliarPeps2',
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
+                    hintText: 'CargoFamiliarPeps2',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Cargo Familiar PEPS 2',
-                    icon: Icon(Icons.assignment_ind,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'Cargo Familiar PEPS 2',
+                    title: 'CargoFamiliarPeps2',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           cargoFamiliarPeps2: value,
@@ -244,39 +306,17 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
+                    hintText: 'PeriodoPeps2',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Nombre Entidad PEPs 2',
-                    icon: Icon(Icons.business,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'NombreEntidadPeps2',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          nombreEntidadPeps2: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Periodo PEPS 2',
-                    icon: Icon(Icons.date_range,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.number,
-                    textCapitalization: TextCapitalization.none,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
                     title: 'PeriodoPeps2',
                     onChange: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           periodoPeps2: value,
@@ -286,86 +326,16 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
-                    validator: (value) => ClassValidator.validateRequired(
-                      value?.valor,
-                    ),
-                    hintText: 'País PEPS 2',
-                    title: 'País PEPS 2',
                     codigo: 'PAIS',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          paisPeps2: item.valor,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                const Gap(30),
-                SheetSearchDropdown(
-                  validator: (value) => ClassValidator.validateRequired(
-                    value?.value,
-                  ),
-                  title: '¿Es Familiar Empleado?',
-                  isRequired: true,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    setState(() {
-                      esFamiliarEmpleado = item.value == 'input.yes'.tr();
-                    });
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        esFamiliarEmpleado: item.value,
-                      ),
-                    );
-                  },
-                  hintText: 'input.select_option'.tr(),
-                  enabled: true,
-                  items: [
-                    Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
-                    Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
-                  ],
-                ),
-                if (esFamiliarEmpleado) ...[
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
+                    hintText: 'PaisPeps2',
                     validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Nombre Familiar',
-                    icon: Icon(Icons.person_outline,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'NombreFamiliar',
-                    onChange: (value) {
+                        ClassValidator.validateRequired(value?.valor),
+                    title: 'PaisPeps2',
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreFamiliar: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Cédula Familiar',
-                    icon: Icon(Icons.credit_card,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.number,
-                    textCapitalization: TextCapitalization.none,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    title: 'CedulaFamiliar',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          cedulaFamiliar: value,
+                          paisPeps2: value.valor,
                         ),
                       );
                     },
@@ -382,7 +352,6 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,

@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_actividad_cnbs_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_aldea_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_barrio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_caserio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/local_db/solicitud_represtamo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
@@ -22,6 +24,7 @@ class SolicitudesHnBoxService {
   late final Store _store;
   late final Box<SolicitudAsalariadoHnDbLocal> solicitudesAsalariadoBox;
   late final Box<SolicitudNuevaMenorHnLocalDb> solicitudesNuevaMenorBox;
+  late final Box<SolicitudReprestamoHnLocalDb> solicitudesReprestamoBox;
   late final Box<CatalogoLocalDb> catalogoLocalBox;
   late final Box<CedulaClientDb> cedulaClientBox;
   late final Box<CatalogoNacionalidadPaisDb> catalogoNacionalidadPaisBox;
@@ -31,6 +34,7 @@ class SolicitudesHnBoxService {
   late final Box<CatalogoAldeaLocalDb> catalogoAldeaBox;
   late final Box<CatalogoCaserioLocalDb> catalogoCaserioBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
+  late final Box<CatalogoActividadCnbsLocalDb> catalogoActividadCnbsBox;
 
   SolicitudesHnBoxService._create(this._store) {
     solicitudesAsalariadoBox = _store.box<SolicitudAsalariadoHnDbLocal>();
@@ -44,8 +48,8 @@ class SolicitudesHnBoxService {
     catalogoAldeaBox = _store.box<CatalogoAldeaLocalDb>();
     catalogoCaserioBox = _store.box<CatalogoCaserioLocalDb>();
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
-
-    // catalogoParametroBox.removeAll();
+    solicitudesReprestamoBox = _store.box<SolicitudReprestamoHnLocalDb>();
+    catalogoActividadCnbsBox = _store.box<CatalogoActividadCnbsLocalDb>();
   }
 
   static Future<SolicitudesHnBoxService> init() async {

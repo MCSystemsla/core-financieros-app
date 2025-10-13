@@ -29,6 +29,7 @@ class Catalogo {
   final int? montoMinimo;
   final double? montoMaximo;
   final bool isRecurrente;
+  final bool esAPNFD;
 
   Catalogo({
     required this.valor,
@@ -37,6 +38,7 @@ class Catalogo {
     this.montoMaximo,
     this.montoMinimo,
     this.isRecurrente = false,
+    this.esAPNFD = false,
   });
 
   factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
@@ -54,6 +56,8 @@ class Catalogo {
         isRecurrente: json.containsKey('EsRecurrente')
             ? (json['EsRecurrente'] as bool)
             : false,
+        esAPNFD:
+            json.containsKey('esAPNFD') ? (json['esAPNFD'] as bool) : false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,5 +67,6 @@ class Catalogo {
         if (montoMinimo != null) 'montoMinimo': montoMinimo,
         if (montoMaximo != null) 'montoMaximo': montoMaximo,
         'EsRecurrente': isRecurrente,
+        'esAPNFD': esAPNFD,
       };
 }

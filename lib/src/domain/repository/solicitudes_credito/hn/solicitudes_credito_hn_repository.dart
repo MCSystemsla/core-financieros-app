@@ -1,15 +1,22 @@
+import 'dart:convert';
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/endpoint/solicitudes_credito_hn_endpoint.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 
 abstract class SolicitudesCreditoHnRepository {
   Future<(bool, String)> createSolicitudAsalariado({
@@ -17,6 +24,15 @@ abstract class SolicitudesCreditoHnRepository {
   });
   Future<(bool, String)> createSolicitudNuevaMenor({
     required SolicitudNuevaMenorHn solicitud,
+  });
+  Future<(bool, String)> createSolicitudReprestamo({
+    required SolicitudReprestamoHn solicitud,
+  });
+  Future<(bool, String)> sendCedulaImageWhenSolicitudCreditoCreated({
+    required int numeroSolicitud,
+    required String cedulaCliente,
+    required String imagenFrontal,
+    required String imagenTrasera,
   });
   Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
   Future<CatalogoValor> getCatalogoProducts();
@@ -118,7 +134,6 @@ class SolicitudesCreditoHnRepositoryImpl
         throw AppException(optionalMsg: errorMsg);
       }
       final data = CatalogoValor.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       rethrow;
@@ -143,7 +158,6 @@ class SolicitudesCreditoHnRepositoryImpl
         throw AppException(optionalMsg: errorMsg);
       }
       final data = CatalogoNacionalidad.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       rethrow;
@@ -188,6 +202,102 @@ class SolicitudesCreditoHnRepositoryImpl
       return data;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, String)> createSolicitudReprestamo({
+    required SolicitudReprestamoHn solicitud,
+  }) async {
+    final endpoint = CreateSolicitudReprestamoHNEndpoint(
+      solicitud: solicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] == 409) {
+        _logger.i(endpoint.body);
+        return (false, resp.toString());
+      }
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        // final (_, _) = getErrorMessage(resp);
+        return (false, resp.toString());
+      }
+
+      _logger.i(resp);
+      return (true, resp['message'] as String);
+    } catch (e) {
+      _logger.e(e.toString());
+      return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<(bool, String)> sendCedulaImageWhenSolicitudCreditoCreated({
+    required int numeroSolicitud,
+    required String cedulaCliente,
+    required String imagenFrontal,
+    required String imagenTrasera,
+  }) async {
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
+    const url = '$protocol://$apiUrl/solicitudes/general/subir-fotos-cedula';
+
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields['numeroSolicitud'] = numeroSolicitud.toString();
+      request.fields['cedula'] = cedulaCliente;
+      request.fields['database'] = LocalStorage().database;
+      request.files.add(await http.MultipartFile.fromPath(
+        'frontal',
+        imagenFrontal,
+        filename: imagenFrontal,
+        contentType: MediaType('image', 'jpg'),
+      ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'trasera',
+        imagenTrasera,
+        filename: imagenTrasera,
+        contentType: MediaType('image', 'jpg'),
+      ));
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
+      });
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
+      } else {
+        await ErrorReporter.registerError(
+          errorMessage:
+              'Error enviando imagenes Solicitudes: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
+      }
+      _logger.i(response.reasonPhrase);
+      return (true, 'Imagenes Enviadas exitosamente!');
+    } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagenes Solicitudes: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+      _logger.e(e);
+      return (false, e.toString());
     }
   }
 }

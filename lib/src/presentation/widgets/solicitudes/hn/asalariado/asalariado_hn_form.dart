@@ -24,7 +24,7 @@ class AsalariadoHnForm extends StatelessWidget {
         ),
         Expanded(
           child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
               AddCedulaPhotosScreen(

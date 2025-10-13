@@ -1,33 +1,39 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class AsalariadoHnForm6 extends StatefulWidget {
+class ReprestamoFormHn4 extends StatefulWidget {
   final PageController controller;
-  const AsalariadoHnForm6({
+  const ReprestamoFormHn4({
     super.key,
     required this.controller,
   });
 
   @override
-  State<AsalariadoHnForm6> createState() => _AsalariadoHnForm6State();
+  State<ReprestamoFormHn4> createState() => _ReprestamoFormHn4State();
 }
 
-class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
+class _ReprestamoFormHn4State extends State<ReprestamoFormHn4>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SolicitudAslariadoHnCubit>();
+    super.build(context);
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -35,58 +41,68 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
         child: Column(
           children: [
             const MiCreditoProgress(
-              currentStep: 6,
+              currentStep: 1,
               steps: 7,
             ),
             const Gap(30),
             Column(
               children: [
                 OutlineTextfieldWidget(
-                  hintText: 'Nombre de Familiar Cercano',
-                  icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'NombreFamiliarCercano',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
+                  title: 'Nombre Beneficiario Seguro',
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  hintText: 'Ingresa Nombre Beneficiario Seguro',
+                  textInputType: TextInputType.name,
+                  textCapitalization: TextCapitalization.characters,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        nombreFamiliarCercano: value,
+                        beneficiarioSeguro: value,
                       ),
                     );
                   },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  hintText: 'Dirección de Familiar Cercano',
-                  icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.streetAddress,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'DireccionFamiliarCercano',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        direccionFamiliarCercano: value,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Teléfono de Familiar Cercano',
-                  icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.phone,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'TelefonoFamiliarCercano',
+                  title: 'Cedula Beneficiario Seguro',
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  hintText: 'Cedula Beneficiario Seguro',
+                  textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        telefonoFamiliarCercano: value,
+                        cedulaBeneficiarioSeguro: value,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                SearchDropdownWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
+                  enabled: true,
+                  flavor: global<FlavorCubit>().state.flavor,
+                  codigo: 'PARENTESCO',
+                  title: 'Parentesco Familiar Seguro',
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        parentescoBeneficiarioSeguroCodigo: value.value,
                       ),
                     );
                   },
@@ -102,7 +118,6 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
@@ -120,7 +135,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
                     curve: Curves.easeIn,
                   );
                 },
-                text: 'Cancelar',
+                text: 'Anterior',
                 textColor: AppColors.red,
                 color: AppColors.red,
               ),
@@ -131,4 +146,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

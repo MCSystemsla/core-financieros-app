@@ -2,15 +2,19 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -32,6 +36,9 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
   String? actividadEconomica1;
   String? actividadEconomica2;
   String? actividadEconomica3;
+  bool isApnfd = false;
+  bool isApnfd2 = false;
+  bool isApnfd3 = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -49,20 +56,21 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
             const Gap(30),
             Column(
               children: [
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
+                  isRequired: true,
+                  enabled: true,
                   validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Actividad Económica CNBS 1',
-                  codigo: 'ACTIVIDADESECONOMICASCNBS',
-                  flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      actividadEconomica1 = item.name;
+                      actividadEconomica1 = item.nombre;
+                      isApnfd = item.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCnbs1Codigo: item.value,
+                        actividadEconomicaCnbs1Codigo: item.nombre,
                       ),
                     );
                   },
@@ -71,6 +79,9 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 if (actividadEconomica1 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 1',
@@ -89,26 +100,30 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
-                  codigo: 'ACTIVIDADESECONOMICASCNBS',
-                  flavor: global<FlavorCubit>().state.flavor,
+                CatalogoActividadesCNBSDropdown(
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      actividadEconomica2 = item.name;
+                      actividadEconomica2 = item.nombre;
+                      isApnfd2 = item.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCnbs2Codigo: item.value,
+                        actividadEconomicaCnbs2Codigo: item.valor,
                       ),
                     );
                   },
                   hintText: 'Actividad Económica CNBS 2',
                   title: 'Actividad Económica CNBS 2',
+                  isRequired: true,
+                  enabled: true,
                 ),
                 if (actividadEconomica2 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 2',
@@ -127,26 +142,30 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
                   hintText: 'Actividad Económica CNBS 3',
-                  codigo: 'ACTIVIDADESECONOMICASCNBS',
-                  flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      actividadEconomica3 = item.name;
+                      actividadEconomica3 = item.nombre;
+                      isApnfd3 = item.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCnbs2Codigo: item.value,
+                        actividadEconomicaCnbs2Codigo: item.nombre,
                       ),
                     );
                   },
                   title: 'Actividad Económica CNBS 3',
+                  isRequired: true,
+                  enabled: true,
                 ),
                 if (actividadEconomica3 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 3',
@@ -181,6 +200,29 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     );
                   },
                 ),
+                if (isApnfd || isApnfd2 || isApnfd3) ...[
+                  const Gap(30),
+                  SheetSearchDropdown(
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    enabled: true,
+                    items: [
+                      Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                      Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                    ],
+                    hintText: '¿Ejerce APNFD?',
+                    title: '¿Ejerce APNFD?',
+                    onChanged: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          ejerceApnfd: value?.value,
+                          esApnfd: 'input.yes'.tr(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ],
             ),
             const Gap(30),

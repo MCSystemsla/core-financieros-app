@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -106,6 +107,9 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Caserío Destino',
                   title: 'Caserio Destino',
@@ -119,6 +123,9 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio Destino',
                   title: 'Barrio destino',
@@ -132,6 +139,9 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   hintText: 'Descripción Destino',
                   icon: Icon(Icons.description,
                       color: AppColors.getPrimaryColor()),

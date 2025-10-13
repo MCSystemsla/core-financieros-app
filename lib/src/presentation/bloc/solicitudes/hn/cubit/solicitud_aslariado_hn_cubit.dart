@@ -22,7 +22,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      await _repository.createSolicitudAsalariado(
+      final (isOk, msg) = await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
           database: state.database,
           isOffline: state.isOffline,
@@ -112,8 +112,10 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
           telefonoTrabajo: state.telefonoTrabajo,
           tiempoLaborar: state.tiempoLaborar,
           tiempoLaborarConyugue: state.tiempoLaborarConyugue,
-          totalIngresoMes: state.totalIngresoMes,
-          totalIngresoMesConyugue: state.totalIngresoMesConyugue,
+          totalIngresoMes:
+              state.salarioNetoCordoba + state.otrosIngresosCordoba,
+          totalIngresoMesConyugue:
+              state.sueldoMesConyugue + state.otrosIngresosConyugue,
           rtn: state.rtn,
           codigoUsa: state.codigoUsa,
           tipoPersonaCnbsidCodigo: state.tipoPersonaCnbsidCodigo,
@@ -141,6 +143,16 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
           aldeaCodigo: state.aldeaCodigo,
         ),
       );
+      if (!isOk) {
+        emit(
+          state.copyWith(
+            status: Status.error,
+            errorMsg: msg,
+          ),
+        );
+        return;
+      }
+      emit(state.copyWith(status: Status.done));
     } catch (e) {
       emit(
         state.copyWith(
@@ -149,6 +161,14 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         ),
       );
     }
+  }
+
+  setIngresosTotales() {
+    emit(
+      state.copyWith(
+        totalIngresoMes: state.salarioNetoCordoba + state.otrosIngresosCordoba,
+      ),
+    );
   }
 
   void initAutoSave({String? uuid}) {

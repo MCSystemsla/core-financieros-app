@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocatio
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/nueva_menor_hn_form.dart';
@@ -33,6 +34,12 @@ class CrearSolicitudHnScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorHnCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+            localDbProvider,
+          )..initAutoSave(),
+        ),
+        BlocProvider(
+          create: (ctx) => SolicitudReprestamoHnCubit(
             SolicitudesCreditoHnRepositoryImpl(),
             localDbProvider,
           )..initAutoSave(),

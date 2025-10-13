@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -52,14 +53,12 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
 
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
+    DateTime(DateTime.now().year, 4, 14), // Día de las Américas
     DateTime(DateTime.now().year, 4, 17), // Jueves Santo
     DateTime(DateTime.now().year, 4, 18), // Viernes Santo
+    DateTime(DateTime.now().year, 4, 19), // Sábado Santo
     DateTime(DateTime.now().year, 5, 1), // Día del Trabajo
-    DateTime(DateTime.now().year, 5, 30), // Día de la Madre
-    DateTime(DateTime.now().year, 7, 19), // Revolución
-    DateTime(DateTime.now().year, 9, 14), // Batalla de San Jacinto
-    DateTime(DateTime.now().year, 9, 15), // Independencia
-    DateTime(DateTime.now().year, 12, 8), // Inmaculada Concepción
+    DateTime(DateTime.now().year, 9, 15), // Día de la Independencia
     DateTime(DateTime.now().year, 12, 25), // Navidad
   ];
 
@@ -174,6 +173,8 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
             Column(
               children: [
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   hintText: 'Propósito',
                   title: 'Proposito',
                   onChanged: (value) {
@@ -226,7 +227,6 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  textCapitalization: TextCapitalization.none,
                   title: 'Monto',
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -267,6 +267,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   title: 'Plazo de la solicitud',
                   onChange: (value) {
@@ -314,6 +315,9 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   hintText: 'Observación',
                   icon: Icon(Icons.note, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

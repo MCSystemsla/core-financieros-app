@@ -14,6 +14,7 @@ class Item<T> extends Equatable {
   final double? interes;
   final int? montoMinimo;
   final double? montoMaximo;
+  final bool isApnfd;
 
   const Item({
     this.id,
@@ -22,6 +23,7 @@ class Item<T> extends Equatable {
     this.interes,
     this.montoMinimo,
     this.montoMaximo,
+    this.isApnfd = false,
   });
 
   @override
@@ -32,6 +34,7 @@ class Item<T> extends Equatable {
         interes,
         montoMinimo,
         montoMaximo,
+        isApnfd,
       ];
 }
 

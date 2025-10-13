@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -11,7 +13,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm8 extends StatefulWidget {
   final PageController controller;
@@ -64,11 +65,12 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                 ),
                 if (actividadEconomica1 != null) ...[
                   const Gap(30),
-                  SearchDropdownWidget(
+                  OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 1',
                     title: 'actividadEconomicaDescripcion1',
-                    codigo: 'ACTIVIDADECONOMICA',
-                    onChanged: (value) {
+                    onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -98,11 +100,12 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                 ),
                 if (actividadEconomica2 != null) ...[
                   const Gap(30),
-                  SearchDropdownWidget(
+                  OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 2',
                     title: 'actividadEconomicaDescripcion2',
-                    codigo: 'ACTIVIDADECONOMICA',
-                    onChanged: (value) {
+                    onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -132,11 +135,13 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                 ),
                 if (actividadEconomica3 != null) ...[
                   const Gap(30),
-                  SearchDropdownWidget(
+                  OutlineTextfieldWidget(
+                    validator: (value) => ClassValidator.validateRequired(
+                      value,
+                    ),
                     hintText: 'Descripción Actividad Económica 3',
                     title: 'actividadEconomicaDescripcion3',
-                    codigo: 'ACTIVIDADECONOMICA',
-                    onChanged: (value) {
+                    onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -170,7 +175,10 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomOutLineButton(
                 onPressed: () {
-                  context.pushReplacement('/solicitudes');
+                  widget.controller.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
                 },
                 text: 'Cancelar',
                 textColor: AppColors.red,
