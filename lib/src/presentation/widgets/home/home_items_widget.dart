@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/config/helpers/greeting/greeting.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
@@ -25,6 +28,7 @@ class HomeItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final connection = context.read<InternetConnectionCubit>().state;
     final actions = LocalStorage().currentActions;
+    final flavor = global<FlavorCubit>().state.flavor;
 
     List<HomeItemCard> homeItemData = [
       // if (actions.contains('MENUCARTERAMOVIL'))
@@ -53,7 +57,8 @@ class HomeItemsWidget extends StatelessWidget {
           );
         },
       ),
-      if (connection.connectionStatus == ConnectionStatus.connected)
+      if (connection.connectionStatus == ConnectionStatus.connected &&
+          (flavor == Flavor.nicaragua || flavor == Flavor.costaRica))
         HomeItemCard(
           title: 'Tutoriales'.tr(),
           subtitle: 'Descripcion'.tr(),

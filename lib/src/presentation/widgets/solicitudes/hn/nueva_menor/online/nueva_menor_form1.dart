@@ -558,7 +558,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Sexo',
-                  title: 'Sexo',
+                  title: 'Genero de cliente',
                   codigo: 'SEXO',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -630,8 +630,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 CatalogoValorNacionalidad(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
-                  hintText: 'Ingresa Nacionalidad',
-                  title: 'Nacionalidad',
+                  hintText: 'Ingresa Nacionalidad 1',
+                  title: 'Nacionalidad 1',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -659,7 +659,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 CatalogoValorNacionalidad(
                   hintText: 'Ingresa Nacionalidad 3',
-                  title: 'Nacionalidad 3 ID',
+                  title: 'Nacionalidad 3',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;

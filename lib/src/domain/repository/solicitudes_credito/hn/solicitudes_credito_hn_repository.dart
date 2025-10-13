@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/catalogo_nacionalidad.dart';
@@ -39,6 +40,10 @@ abstract class SolicitudesCreditoHnRepository {
   Future<CatalogoNacionalidad> getCatalogoUbicaciones({required String codigo});
   Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago();
   Future<ParametroValor> getParametroValor({required String nombre});
+  Future<UserByDocumentHn> getUserByDocument({
+    required String nombre,
+    required String cedula,
+  });
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -306,6 +311,34 @@ class SolicitudesCreditoHnRepositoryImpl
       );
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<UserByDocumentHn> getUserByDocument({
+    required String nombre,
+    required String cedula,
+  }) async {
+    final endpoint = ObtenerAutoCompletadoNuevaMenorEndpoint(
+      nombre: nombre,
+      cedula: cedula,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = UserByDocumentHn.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

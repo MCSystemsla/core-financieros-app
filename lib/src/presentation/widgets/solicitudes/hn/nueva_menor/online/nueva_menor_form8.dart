@@ -61,7 +61,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   enabled: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
-                  hintText: 'Actividad Económica CNBS 1',
+                  hintText: 'selecciona actividad economica',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
@@ -84,12 +84,12 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Descripción Actividad Económica 1',
+                    hintText: 'ingresa descripcion actividad economica',
                     icon: Icon(Icons.description,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Actividad Económica CNBS 1',
+                    title: 'Descripción Actividad Económica 1',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -113,7 +113,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                       ),
                     );
                   },
-                  hintText: 'Actividad Económica CNBS 2',
+                  hintText: 'selecciona actividad economica',
                   title: 'Actividad Económica CNBS 2',
                   isRequired: true,
                   enabled: true,
@@ -126,12 +126,12 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Descripción Actividad Económica 2',
+                    hintText: 'ingresa descripcion actividad economica',
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Actividad Económica CNBS 2',
+                    title: 'Descripción Actividad Económica 2',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -143,7 +143,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 ],
                 const Gap(30),
                 CatalogoActividadesCNBSDropdown(
-                  hintText: 'Actividad Económica CNBS 3',
+                  hintText: 'selecciona actividad economica',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
@@ -168,12 +168,12 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Descripción Actividad Económica 3',
+                    hintText: 'ingresa descripcion actividad economica',
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Actividad Económica CNBS 3',
+                    title: 'Descripción Actividad Económica 3',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

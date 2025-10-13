@@ -165,7 +165,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     codigo: 'PAIS',
-                    hintText: 'Pais Peps',
+                    hintText: 'Pais PEPS',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     title: 'Pais Peps',
@@ -254,12 +254,31 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'NombreFamiliarPeps2',
+                    title: 'Nombre Familiar PEPS 2',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nombreFamiliarPeps2: value,
+                        ),
+                      );
+                    },
+                  ),
+                  OutlineTextfieldWidget(
+                    hintText: 'Nombre Entidad Familiar PEPS 2',
+                    icon:
+                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                    inputFormatters: [UpperCaseTextFormatter()],
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.characters,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    title: 'Nombre Familiar PEPS 2',
+                    onChange: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          nombreEntidadPeps2: value,
                         ),
                       );
                     },
@@ -274,7 +293,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'ParentescoFamiliarPeps2',
+                    title: 'Parentesco Familiar PEPS 2',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -294,7 +313,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'CargoFamiliarPeps2',
+                    title: 'Cargo Familiar PEPS 2',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -314,7 +333,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'PeriodoPeps2',
+                    title: 'Periodo PEPS 2',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -327,7 +346,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     codigo: 'PAIS',
-                    hintText: 'PaisPeps2',
+                    hintText: 'Pais PEPS 2',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     title: 'PaisPeps2',

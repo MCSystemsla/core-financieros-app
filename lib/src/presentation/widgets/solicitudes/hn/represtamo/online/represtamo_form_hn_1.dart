@@ -76,7 +76,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   key: const ValueKey('tipoDocumento'),
                   flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'TIPODOCUMENTOPERSONA',
-                  title: 'Tipo Docuemnto Persona',
+                  title: 'Tipo Documento Persona',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(

@@ -38,7 +38,8 @@ class AsalariadoHnForm9 extends StatefulWidget {
   State<AsalariadoHnForm9> createState() => _AsalariadoHnForm9State();
 }
 
-class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
+class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
@@ -154,6 +155,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     return SingleChildScrollView(
@@ -462,4 +464,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

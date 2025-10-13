@@ -56,7 +56,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa País Casa',
-                  title: 'País Casa',
+                  title: 'País Casa de cliente',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -92,7 +92,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Departamento Casa',
-                    title: 'Departamento Casa',
+                    title: 'Departamento Casa de cliente',
                     codigo: 'DEP',
                     where: depWhereClause,
                     onChanged: (item) {
@@ -114,7 +114,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Municipio Casa',
-                    title: 'Municipio Casa',
+                    title: 'Municipio Casa de cliente',
                     codigo: 'MUN',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -135,7 +135,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Aldea Casa',
-                    title: 'Ingresa Aldea Casa',
+                    title: 'Ingresa Aldea Casa de cliente',
                     onChanged: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -156,7 +156,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.streetAddress,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Dirección Casa',
+                  title: 'Dirección Casa de cliente',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -172,7 +172,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Casa',
-                  title: 'Barrio Casa',
+                  title: 'Barrio Casa de cliente',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(

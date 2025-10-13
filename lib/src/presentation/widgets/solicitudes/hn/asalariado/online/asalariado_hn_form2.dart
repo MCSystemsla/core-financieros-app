@@ -26,13 +26,15 @@ class AsalariadoHnForm2 extends StatefulWidget {
   State<AsalariadoHnForm2> createState() => _AsalariadoHnForm2State();
 }
 
-class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
+class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? depWhereClause;
   String? munWhereClause;
   String? aldeaWhereClause;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -247,4 +249,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

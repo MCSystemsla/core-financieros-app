@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -215,7 +216,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((_) => const CrearSolicitudHnScreen(
+                  builder: ((_) => const AddUserCedulaHnScreen(
                         typeForm: TypeForm.nueva,
                       )),
                 ),

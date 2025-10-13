@@ -118,6 +118,7 @@ class SolicitudAsalariadoHn {
   final String barrioDestino;
   final String caseriCasa;
   final String aldeaCodigo;
+  // final String medidasConocimientoCodigo;
 
   SolicitudAsalariadoHn({
     required this.database,
@@ -232,6 +233,7 @@ class SolicitudAsalariadoHn {
     required this.barrioDestino,
     required this.caseriCasa,
     required this.aldeaCodigo,
+    // required this.medidasConocimientoCodigo,
   });
 
   Map<String, dynamic> toJson() {
@@ -256,7 +258,7 @@ class SolicitudAsalariadoHn {
       'MunicipioCasaCodigo': municipioCasaCodigo,
       'DepartamentoCasaCodigo': departamentoCasaCodigo,
       'PaisCasaCodigo': paisCasaCodigo,
-      'Nacinalidad': nacinalidad,
+      'Nacionalidad': nacinalidad,
       'CondicionCasaCodigo': condicionCasaCodigo,
       'AnosResidirCasa': anosResidirCasa,
       'Email': email,
@@ -275,8 +277,8 @@ class SolicitudAsalariadoHn {
       'TelefonoTrabajoConyugue': telefonoTrabajoConyugue,
       'ProductoCodigo': productoCodigo,
       'Observacion': observacion,
-      'UbicacionLongitud': ubicacionLongitud,
-      'UbicacionLatitud': ubicacionLatitud,
+      'UbicacionLongitud': '22332.2322',
+      'UbicacionLatitud': '223332.2322',
       'EscolaridadCodigo': escolaridadCodigo,
       'CantidadHijos': cantidadHijos,
       'NombrePublico': nombrePublico,
@@ -344,12 +346,13 @@ class SolicitudAsalariadoHn {
       'EsAPNFD': esApnfd,
       'PaisDestinoCodigo': paisDestinoCodigo,
       'DepartamentoDestinoCodigo': departamentoDestinoCodigo,
-      'MunicipioDestinoID': municipioDestinoId,
+      'MunicipioDestinoCodigo': municipioDestinoId,
       'AldeaDestinoCodigo': aldeaDestinoCodigo,
       'CaserioDestino': caserioDestino,
       'BarrioDestino': barrioDestino,
       'CaseriCasa': caseriCasa,
       'AldeaCodigo': aldeaCodigo,
+      // 'MedidasConocimientoCodigo': medidasConocimientoCodigo,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

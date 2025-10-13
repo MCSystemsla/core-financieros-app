@@ -199,7 +199,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                       ),
                     );
                   },
-                  hintText: 'Moneda',
+                  hintText: 'ingresa moneda',
                   title: 'Moneda',
                 ),
                 OutlineTextfieldWidget(
@@ -241,7 +241,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 SearchDropdownWidget(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: 'Producto',
+                  hintText: 'selecciona producto',
                   codigo: 'PRODUCTO',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -269,7 +269,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  title: 'Plazo de la solicitud',
+                  title: 'Plazo de la solicitud (meses)',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state

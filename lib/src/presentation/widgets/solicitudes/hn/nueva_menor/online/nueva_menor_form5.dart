@@ -249,7 +249,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Nombre Entidad PEPs 2',
+                    hintText: 'Nombre Entidad PEPS 2',
                     icon: Icon(Icons.business,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,

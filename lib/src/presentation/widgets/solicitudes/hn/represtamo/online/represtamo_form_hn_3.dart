@@ -204,7 +204,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                       ),
                     );
                   },
-                  hintText: 'Moneda',
+                  hintText: 'ingresa moneda',
                   title: 'Moneda',
                 ),
                 OutlineTextfieldWidget(
@@ -222,7 +222,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Monto',
+                  hintText: 'ingresa monto',
                   icon: Icon(Icons.attach_money,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
@@ -263,7 +263,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Plazo de la solicitud',
+                  hintText: 'Plazo de la solicitud (meses)',
                   icon:
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,

@@ -1,15 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -25,13 +25,18 @@ class AsalariadoHnForm8 extends StatefulWidget {
   State<AsalariadoHnForm8> createState() => _AsalariadoHnForm8State();
 }
 
-class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
+class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? actividadEconomica1;
   String? actividadEconomica2;
   String? actividadEconomica3;
+  bool isApnfd = false;
+  bool isApnfd2 = false;
+  bool isApnfd3 = false;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -46,19 +51,20 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
             const Gap(30),
             Column(
               children: [
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
+                  isRequired: true,
+                  enabled: true,
                   hintText: 'Actividad Económica CIUU 1',
                   title: 'ObjActividadEconomicaCIUU1',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'ACTIVIDADECONOMICA',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomica1 = value.name;
+                      actividadEconomica1 = value.nombre;
+                      isApnfd = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu1Codigo: value.value,
+                        actividadEconomicaCiuu1Codigo: value.valor,
                       ),
                     );
                   },
@@ -81,19 +87,20 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                   ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
+                  enabled: true,
+                  isRequired: true,
                   hintText: 'Actividad Económica CIUU 2',
                   title: 'ObjActividadEconomicaCIUU2',
-                  codigo: 'ACTIVIDADECONOMICA',
-                  flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomica2 = value.name;
+                      actividadEconomica2 = value.nombre;
+                      isApnfd2 = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu2Codigo: value.value,
+                        actividadEconomicaCiuu2Codigo: value.valor,
                       ),
                     );
                   },
@@ -116,19 +123,20 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                   ),
                 ],
                 const Gap(30),
-                SearchDropdownWidget(
+                CatalogoActividadesCNBSDropdown(
+                  enabled: true,
+                  isRequired: true,
                   hintText: 'Actividad Económica CIUU 3',
                   title: 'ObjActividadEconomicaCIUU3',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'ACTIVIDADECONOMICA',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
-                      actividadEconomica3 = value.name;
+                      actividadEconomica3 = value.nombre;
+                      isApnfd3 = value.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu3Codigo: value.value,
+                        actividadEconomicaCiuu3Codigo: value.nombre,
                       ),
                     );
                   },
@@ -150,6 +158,29 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
                       );
                     },
                   ),
+                  if (isApnfd || isApnfd2 || isApnfd3) ...[
+                    const Gap(30),
+                    SheetSearchDropdown(
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      enabled: true,
+                      items: [
+                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                      ],
+                      hintText: '¿Ejerce APNFD?',
+                      title: '¿Ejerce APNFD?',
+                      onChanged: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            ejerceApnfd: value?.value,
+                            esApnfd: 'input.yes'.tr(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ],
               ],
             ),
@@ -191,4 +222,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

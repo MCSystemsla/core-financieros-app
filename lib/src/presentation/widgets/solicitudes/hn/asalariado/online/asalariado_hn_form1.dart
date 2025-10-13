@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
@@ -38,7 +39,8 @@ class AsalariadoHnForm1 extends StatefulWidget {
   State<AsalariadoHnForm1> createState() => _AsalariadoHnForm1State();
 }
 
-class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
+class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   bool tieneVinculosUsa = false;
   CatalogoLocalDb? edadMinima;
@@ -55,6 +57,14 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        tipoPersonaCnbsidCodigo: 'NAT',
+        tipoClienteCodigo: 'NORMAL',
+        estatusClienteCodigo: 'NORMAL',
+      ),
+    );
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -165,6 +175,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -179,22 +190,58 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
             const Gap(30),
             Column(
               children: [
+                // SearchDropdownWidget(
+                //   hintText: 'Tipo de Cliente',
+                //   title: 'ObjTipoClienteID',
+                //   codigo: 'TIPOCLIENTE',
+                //   flavor: global<FlavorCubit>().state.flavor,
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         tipoClienteCodigo: item.value,
+                //       ),
+                //     );
+                //   },
+                // ),
+                const Gap(30),
                 SearchDropdownWidget(
-                  hintText: 'Tipo de Cliente',
-                  title: 'ObjTipoClienteID',
-                  codigo: 'TIPOCLIENTE',
+                  selectedItem: const Item(name: 'NORMAL', value: 'NORMAL'),
+                  hintText: 'input.select_option'.tr(),
+                  title: 'Estatus Cliente',
+                  codigo: 'ESTATUSCLIENTE',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tipoClienteCodigo: item.value,
+                        estatusClienteCodigo: item.value,
                       ),
                     );
                   },
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(name: 'SIMPLIFICADO', value: 'SIMP'),
+                  hintText: 'input.select_option'.tr(),
+                  title: 'Medidas Conocimiento',
+                  codigo: 'MEDIDASCONOCIMIENTO',
+                  flavor: global<FlavorCubit>().state.flavor,
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                          // medi: item.value,
+                          ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                SearchDropdownWidget(
+                  selectedItem: const Item(
+                    name: 'PERSONA NATURAL',
+                    value: 'NAT',
+                  ),
                   codigo: 'TIPOPERSONACNBS',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -388,7 +435,24 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                     if (item == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        nacionalidadConyugue: item.valor,
+                        nacinalidad: item.valor,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                SearchDropdownWidget(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
+                  ),
+                  hintText: 'Escolaridad',
+                  title: 'Escolaridad',
+                  codigo: 'ESCOLARIDAD',
+                  onChanged: (item) {
+                    if (item == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        escolaridadCodigo: item.value,
                       ),
                     );
                   },
@@ -614,6 +678,23 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  localDpProvider.saveCedulaClient(
+                    cedulaClient: CedulaClientDb(
+                      typeSolicitud: 'ASLARIADO',
+                      cedula: context
+                          .read<SolicitudAslariadoHnCubit>()
+                          .state
+                          .cedula,
+                      imageBackCedula: context
+                          .read<SolicitudAslariadoHnCubit>()
+                          .state
+                          .imagenTrasera,
+                      imageFrontCedula: context
+                          .read<SolicitudAslariadoHnCubit>()
+                          .state
+                          .imagenFrontal,
+                    ),
+                  );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
@@ -640,4 +721,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
