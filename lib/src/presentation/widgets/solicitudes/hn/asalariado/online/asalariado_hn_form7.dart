@@ -125,8 +125,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Caserío Destino',
                   icon:
                       Icon(Icons.home_work, color: AppColors.getPrimaryColor()),
@@ -146,8 +145,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio Destino',
                   icon: Icon(Icons.house, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

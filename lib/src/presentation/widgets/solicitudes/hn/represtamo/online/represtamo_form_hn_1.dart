@@ -4,6 +4,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document_represtamo.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -22,9 +23,11 @@ import 'package:go_router/go_router.dart';
 
 class ReprestamoFormHn1 extends StatefulWidget {
   final PageController controller;
+  final UserByDocumentReprestamoData userByDocumentReprestamoData;
   const ReprestamoFormHn1({
     super.key,
     required this.controller,
+    required this.userByDocumentReprestamoData,
   });
 
   @override
@@ -52,7 +55,31 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
             const Gap(30),
             Column(
               children: [
+                OutlineTextfieldWidget(
+                  initialValue:
+                      widget.userByDocumentReprestamoData.nombreCompleto,
+                  key: const ValueKey('nombreCompleto'),
+                  readOnly: true,
+                  hintText: 'Ingresa nombre completo',
+                  icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  textInputType: TextInputType.text,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  title: 'Nombre Completo',
+                  onChange: (value) {
+                    if (value == null || !mounted) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombreCompleto: value,
+                      ),
+                    );
+                  },
+                ),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: widget.userByDocumentReprestamoData.tipoPersona,
+                    value: widget.userByDocumentReprestamoData.tipoPersona,
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   key: const ValueKey('tipoPersona'),
@@ -70,6 +97,10 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: widget.userByDocumentReprestamoData.tipoDocumento,
+                    value: widget.userByDocumentReprestamoData.tipoDocumento,
+                  ),
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
                   ),
@@ -88,6 +119,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentReprestamoData.cedula,
                   key: const ValueKey('cedula'),
                   hintText: 'Cedula',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),

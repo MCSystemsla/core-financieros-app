@@ -4,6 +4,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -21,8 +22,13 @@ import 'package:gap/gap.dart';
 
 class NuevaMenorForm2 extends StatefulWidget {
   final PageController controller;
+  final UserDocumentDataHN userByDocumentHn;
 
-  const NuevaMenorForm2({super.key, required this.controller});
+  const NuevaMenorForm2({
+    super.key,
+    required this.controller,
+    required this.userByDocumentHn,
+  });
 
   @override
   State<NuevaMenorForm2> createState() => _NuevaMenorForm2State();
@@ -53,6 +59,12 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
             Column(
               children: [
                 CatalogoValorNacionalidad(
+                  selectedItem: ItemNacionalidad(
+                    id: 0,
+                    nombre: widget.userByDocumentHn.pais ?? '',
+                    valor: widget.userByDocumentHn.pais ?? '',
+                    relacion: '',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa País Casa',
@@ -89,6 +101,12 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 if (cubit.state.paisCasaCodigo == 'HN') ...[
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: widget.userByDocumentHn.departamento ?? '',
+                      nombre: widget.userByDocumentHn.departamento ?? '',
+                      relacion: '',
+                    ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Departamento Casa',
@@ -110,6 +128,12 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: widget.userByDocumentHn.municipio ?? '',
+                      nombre: widget.userByDocumentHn.municipio ?? '',
+                      relacion: '',
+                    ),
                     where: munWhereClause,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
@@ -148,6 +172,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHn.direccion,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],

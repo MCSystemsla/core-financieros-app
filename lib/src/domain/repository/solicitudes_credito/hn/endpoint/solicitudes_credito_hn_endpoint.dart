@@ -155,9 +155,11 @@ class GetParametroByCodigoEndpoint extends Endpoint {
 class ObtenerAutoCompletadoNuevaMenorEndpoint extends Endpoint {
   final String nombre;
   final String cedula;
+  final String tipoDocumentoCodigo;
   ObtenerAutoCompletadoNuevaMenorEndpoint({
     required this.nombre,
     required this.cedula,
+    required this.tipoDocumentoCodigo,
   });
   @override
   Method get method => Method.get;
@@ -173,5 +175,60 @@ class ObtenerAutoCompletadoNuevaMenorEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'nombre': nombre,
         'cedula': cedula,
+        'tipoDocumentoCodigo': tipoDocumentoCodigo,
+      };
+}
+
+class ObtenerAutoCompletadoReprestamoEndpoint extends Endpoint {
+  final String nombre;
+  final String cedula;
+  final String tipoDocumentoCodigo;
+  ObtenerAutoCompletadoReprestamoEndpoint({
+    required this.nombre,
+    required this.cedula,
+    required this.tipoDocumentoCodigo,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitud-represtamo/obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, String> get queryParameters => {
+        'database': LocalStorage().database,
+        'nombre': nombre,
+        'cedula': cedula,
+        'tipoDocumentoCodigo': tipoDocumentoCodigo,
+      };
+}
+
+class ObtenerAutoCompletadoAsalariadoEndpoint extends Endpoint {
+  final String nombre;
+  final String cedula;
+  final String tipoDocumentoCodigo;
+  ObtenerAutoCompletadoAsalariadoEndpoint({
+    required this.nombre,
+    required this.cedula,
+    required this.tipoDocumentoCodigo,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitud-asalariado/obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, String> get queryParameters => {
+        'database': LocalStorage().database,
+        'nombre': nombre,
+        'cedula': cedula,
+        'tipoDocumentoCodigo': tipoDocumentoCodigo,
       };
 }

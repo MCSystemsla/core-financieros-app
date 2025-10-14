@@ -86,7 +86,7 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: OutlineTextfieldWidget(
         readOnly: true,
-        title: widget.title,
+        title: '${widget.title}*',
         suffixIcon: const Icon(
           Icons.keyboard_arrow_down,
           size: 30,

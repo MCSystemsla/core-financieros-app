@@ -74,6 +74,22 @@ class ClassValidator {
     return null;
   }
 
+  static String? validateMaxIntValueAndMinValueHN(
+    String? value,
+    int length, {
+    bool isRequired = true,
+  }) {
+    if (isRequired && value == null && value!.isEmpty) {
+      return 'input.input_validator'.tr();
+    }
+    if (isRequired && value!.length < length ||
+        isRequired && value!.length > length) {
+      return 'Este campo debe tener como maximo $length caracteres';
+    }
+
+    return null;
+  }
+
   static String? validateIntValue(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Este campo es obligatorio';

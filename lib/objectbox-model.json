@@ -3558,7 +3558,7 @@
     },
     {
       "id": "24:2952094495400237",
-      "lastPropertyId": "60:55407702161628121",
+      "lastPropertyId": "61:7932802342203269778",
       "name": "SolicitudReprestamoHnLocalDb",
       "properties": [
         {
@@ -3836,6 +3836,11 @@
           "id": "60:55407702161628121",
           "name": "cuotaClientePuedePagar",
           "type": 6
+        },
+        {
+          "id": "61:7932802342203269778",
+          "name": "nombreCompleto",
+          "type": 9
         }
       ],
       "relations": []

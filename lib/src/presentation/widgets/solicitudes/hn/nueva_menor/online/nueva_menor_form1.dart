@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -30,9 +31,11 @@ import 'package:go_router/go_router.dart';
 
 class NuevaMenorForm1 extends StatefulWidget {
   final PageController controller;
+  final UserDocumentDataHN userByDocumentHn;
   const NuevaMenorForm1({
     super.key,
     required this.controller,
+    required this.userByDocumentHn,
   });
 
   @override
@@ -57,6 +60,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+    fechaEmisionCedula = widget.userByDocumentHn.fechaEmision;
+    _selectedDate = widget.userByDocumentHn.fechaExpira;
+    fechaNacimiento = widget.userByDocumentHn.fechaNacimiento;
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -201,6 +207,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHn.primerNombre,
                   hintText: 'Ingresa Nombre 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [UpperCaseTextFormatter()],
@@ -218,6 +225,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHn.segundoNombre,
                   hintText: 'Ingresa Nombre 2',
                   // validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -252,6 +260,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHn.primerApellido,
                   hintText: 'Ingresa Apellido 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -269,6 +278,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHn.segundoApellido,
                   hintText: 'Ingresa Apellido 2',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [UpperCaseTextFormatter()],
@@ -301,6 +311,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: widget.userByDocumentHn.tipoDocumento,
+                    value: widget.userByDocumentHn.tipoDocumento,
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Tipo Documento',
@@ -319,6 +333,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(
+                    name: 'NATURAL',
+                    value: 'NAT',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (item) {
@@ -336,6 +354,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
+                  initialValue: widget.userByDocumentHn.cedula,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Cédula',
                   icon: Icon(Icons.credit_card,
@@ -347,13 +367,13 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'Cédula',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        cedula: value,
-                      ),
-                    );
-                  },
+                  // onChange: (value) {
+                  //   cubit.onFieldChanged(
+                  //     () => cubit.state.copyWith(
+                  //       cedula: value,
+                  //     ),
+                  //   );
+                  // },
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -413,6 +433,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: fechaEmisionCedula?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaEmisionCedula?.selectorFormat()),
                   onTap: () => selectEmisionFecha(context),
@@ -427,6 +448,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: _selectedDate?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       _selectedDate?.selectorFormat()),
                   readOnly: true,
@@ -441,6 +463,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: fechaNacimiento?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),
                   readOnly: true,
@@ -555,6 +578,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: widget.userByDocumentHn.sexo,
+                    value: widget.userByDocumentHn.sexo,
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Sexo',

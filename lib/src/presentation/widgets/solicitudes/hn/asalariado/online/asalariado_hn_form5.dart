@@ -129,6 +129,20 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                       );
                     },
                   ),
+                  const Gap(30),
+                  CatalogoValorNacionalidad(
+                    codigo: 'PAIS',
+                    hintText: 'País PEPS',
+                    title: 'PaisPeps',
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          paisPeps: value.valor,
+                        ),
+                      );
+                    },
+                  ),
                 ],
                 SheetSearchDropdown(
                   title: '¿Tiene Familiar PEPS?',

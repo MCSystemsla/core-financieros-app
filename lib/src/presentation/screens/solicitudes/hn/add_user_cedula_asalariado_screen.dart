@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
@@ -7,7 +9,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -22,9 +24,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class AddUserCedulaHnScreen extends StatelessWidget {
+class AddUserCedulaAsalariadoScreen extends StatelessWidget {
   final TypeForm typeForm;
-  const AddUserCedulaHnScreen({
+  const AddUserCedulaAsalariadoScreen({
     super.key,
     required this.typeForm,
   });
@@ -32,7 +34,7 @@ class AddUserCedulaHnScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => UserByDocumentCubit(
+      create: (ctx) => UserByDocumentAsalariadoCubit(
         SolicitudesCreditoHnRepositoryImpl(),
       ),
       child: Scaffold(
@@ -67,15 +69,12 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
 
   int determineDocumentoLength({
     String? tipoDocumento,
-    String? paisEmisor,
   }) {
-    return switch ((tipoDocumento, paisEmisor)) {
-      ('CEDULAIDENTIDAD', 'HN') => 13,
-      ('CEDULAIDENTIDAD', 'NIC') => 14,
-      ('PASAPORTE', 'NIC') => 9,
-      ('PASAPORTE', 'HN') => 7,
-      ('RTN', 'HN') => 14,
-      ('CARNETRESIDENCIA', 'HN') => 8,
+    return switch ((tipoDocumento)) {
+      ('CEDULAIDENTIDAD') => 13,
+      ('PASAPORTE') => 7,
+      ('RTN') => 14,
+      ('CARNETRESIDENCIA') => 8,
       _ => 0
     };
   }
@@ -100,7 +99,8 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
       child: Form(
         key: formKey,
         child: Center(
-          child: BlocConsumer<UserByDocumentCubit, UserByDocumentState>(
+          child: BlocConsumer<UserByDocumentAsalariadoCubit,
+              UserByDocumentAsalariadoState>(
             listener: (context, state) {
               if (state.status == Status.error) {
                 CustomAlertDialog(
@@ -113,13 +113,13 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 CustomAlertDialog(
                   context: context,
                   title:
-                      '${state.primerNombre} ${state.segundoNombre} listo para crear solicitud!!',
+                      '${state.primerNombre} ${state.primerApellido} listo para crear solicitud!!',
                   onDone: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (ctx) => BlocProvider.value(
-                          value: context.read<UserByDocumentCubit>(),
+                          value: context.read<UserByDocumentAsalariadoCubit>(),
                           child: CrearSolicitudHnScreen(
                             typeForm: widget.typeForm,
                           ),
@@ -155,6 +155,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -167,10 +168,11 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Nombre de cliente',
-                      hintText: 'Ingresa el nombre de cliente',
+                      hintText: 'Ingrese el nombre de cliente',
                     ),
                     const Gap(20),
                     SearchDropdownWidget(
+                      isRequired: true,
                       hintText: 'input.select_option'.tr(),
                       codigo: 'TIPODOCUMENTOPERSONA',
                       onChanged: (item) {
@@ -200,7 +202,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                           color: AppColors.getPrimaryColor(),
                         ),
                         title: 'Documento',
-                        hintText: 'Ingresa documento de cliente',
+                        hintText: 'Ingresa Documento de cliente',
                       ),
                     ],
                     const Gap(20),
@@ -215,7 +217,9 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          context.read<UserByDocumentCubit>().getUserByDocument(
+                          context
+                              .read<UserByDocumentAsalariadoCubit>()
+                              .getUserByDocument(
                                 cedula: cedulaController.text.trim(),
                                 nombre: nombreController.text.trim(),
                                 tipoDocumentoCodigo: tipoDocumento?.value,

@@ -4,11 +4,13 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
-part 'user_by_document_state.dart';
+part 'user_by_document_asalariado_state.dart';
 
-class UserByDocumentCubit extends Cubit<UserByDocumentState> {
+class UserByDocumentAsalariadoCubit
+    extends Cubit<UserByDocumentAsalariadoState> {
   final SolicitudesCreditoHnRepository _repository;
-  UserByDocumentCubit(this._repository) : super(UserByDocumentInitial());
+  UserByDocumentAsalariadoCubit(this._repository)
+      : super(UserByDocumentAsalariadoInitial());
 
   Future<void> getUserByDocument({
     required String nombre,
@@ -17,7 +19,7 @@ class UserByDocumentCubit extends Cubit<UserByDocumentState> {
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await _repository.getUserByDocument(
+      final resp = await _repository.getUserByDocumentAsalariado(
         nombre: nombre,
         cedula: cedula,
         tipoDocumentoCodigo: tipoDocumentoCodigo,
@@ -46,12 +48,10 @@ class UserByDocumentCubit extends Cubit<UserByDocumentState> {
         errorMsg: e.optionalMsg,
       ));
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: Status.error,
-          errorMsg: e.toString(),
-        ),
-      );
+      emit(state.copyWith(
+        status: Status.error,
+        errorMsg: e.toString(),
+      ));
     }
   }
 }

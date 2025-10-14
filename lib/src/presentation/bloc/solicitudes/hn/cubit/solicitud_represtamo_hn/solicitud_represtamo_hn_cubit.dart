@@ -218,6 +218,7 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
       origenSolicitudCodigo:
           _prefer(state.origenSolicitudCodigo, prev?.origenSolicitudCodigo),
       frecuenciaCodigo: _prefer(state.frecuenciaCodigo, prev?.frecuenciaCodigo),
+      nombreCompleto: _prefer(state.nombreCompleto, prev?.nombreCompleto),
     );
   }
 

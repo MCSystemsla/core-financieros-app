@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/catalogo_nacionalidad.dart';
@@ -43,6 +44,17 @@ abstract class SolicitudesCreditoHnRepository {
   Future<UserByDocumentHn> getUserByDocument({
     required String nombre,
     required String cedula,
+    required String tipoDocumentoCodigo,
+  });
+  Future<UserByDocumentReprestamoHn> getUserByDocumentReprestamo({
+    required String nombre,
+    required String cedula,
+    required String tipoDocumentoCodigo,
+  });
+  Future<UserByDocumentHn> getUserByDocumentAsalariado({
+    required String nombre,
+    required String cedula,
+    required String tipoDocumentoCodigo,
   });
 }
 
@@ -318,10 +330,72 @@ class SolicitudesCreditoHnRepositoryImpl
   Future<UserByDocumentHn> getUserByDocument({
     required String nombre,
     required String cedula,
+    required String tipoDocumentoCodigo,
   }) async {
     final endpoint = ObtenerAutoCompletadoNuevaMenorEndpoint(
       nombre: nombre,
       cedula: cedula,
+      tipoDocumentoCodigo: tipoDocumentoCodigo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = UserByDocumentHn.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserByDocumentReprestamoHn> getUserByDocumentReprestamo({
+    required String nombre,
+    required String cedula,
+    required String tipoDocumentoCodigo,
+  }) async {
+    final endpoint = ObtenerAutoCompletadoReprestamoEndpoint(
+      nombre: nombre,
+      cedula: cedula,
+      tipoDocumentoCodigo: tipoDocumentoCodigo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = UserByDocumentReprestamoHn.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserByDocumentHn> getUserByDocumentAsalariado({
+    required String nombre,
+    required String cedula,
+    required String tipoDocumentoCodigo,
+  }) async {
+    final endpoint = ObtenerAutoCompletadoAsalariadoEndpoint(
+      nombre: nombre,
+      cedula: cedula,
+      tipoDocumentoCodigo: tipoDocumentoCodigo,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

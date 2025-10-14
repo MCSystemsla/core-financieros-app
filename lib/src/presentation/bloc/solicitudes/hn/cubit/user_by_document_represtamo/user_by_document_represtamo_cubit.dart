@@ -4,41 +4,38 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
-part 'user_by_document_state.dart';
+part 'user_by_document_represtamo_state.dart';
 
-class UserByDocumentCubit extends Cubit<UserByDocumentState> {
+class UserByDocumentReprestamoCubit
+    extends Cubit<UserByDocumentReprestamoState> {
   final SolicitudesCreditoHnRepository _repository;
-  UserByDocumentCubit(this._repository) : super(UserByDocumentInitial());
-
+  UserByDocumentReprestamoCubit(this._repository)
+      : super(UserByDocumentReprestamoInitial());
   Future<void> getUserByDocument({
-    required String nombre,
     required String cedula,
+    required String nombre,
     required String tipoDocumentoCodigo,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await _repository.getUserByDocument(
-        nombre: nombre,
+      final resp = await _repository.getUserByDocumentReprestamo(
         cedula: cedula,
+        nombre: nombre,
         tipoDocumentoCodigo: tipoDocumentoCodigo,
       );
 
       emit(state.copyWith(
         status: Status.done,
-        primerNombre: resp.data.primerNombre,
-        segundoNombre: resp.data.segundoNombre,
-        fechaNacimiento: resp.data.fechaNacimiento.toUtc().toIso8601String(),
-        tipoDocumento: resp.data.tipoDocumento,
+        id: resp.data.id,
+        nombreCompleto: resp.data.nombreCompleto,
         cedula: resp.data.cedula,
-        fechaExpira: resp.data.fechaExpira.toUtc().toIso8601String(),
-        departamento: resp.data.departamento,
-        direccion: resp.data.direccion,
-        fechaEmision: resp.data.fechaEmision.toUtc().toIso8601String(),
-        municipio: resp.data.municipio,
-        pais: resp.data.pais,
-        primerApellido: resp.data.primerApellido,
-        segundoApellido: resp.data.segundoApellido,
-        sexo: resp.data.sexo,
+        tipoDocumento: resp.data.tipoDocumento,
+        tipoPersona: resp.data.tipoPersona,
+        paisEmisorCedula: resp.data.paisEmisorCedula,
+        fechaVencimientoCedula:
+            resp.data.fechaVencimientoCedula.toUtc().toIso8601String(),
+        fechaEmisionCedula:
+            resp.data.fechaEmisionCedula.toUtc().toIso8601String(),
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

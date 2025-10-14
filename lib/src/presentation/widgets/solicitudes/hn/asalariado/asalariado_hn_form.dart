@@ -1,4 +1,6 @@
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form1.dart';
@@ -18,6 +20,7 @@ class AsalariadoHnForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userByDocumentProvider = context.read<UserByDocumentCubit>().state;
     final pageController = PageController();
     return Column(
       children: [
@@ -44,9 +47,41 @@ class AsalariadoHnForm extends StatelessWidget {
               ),
               AsalariadoHnForm1(
                 controller: pageController,
+                userByDocumentHnData: UserDocumentDataHN(
+                  cedula: userByDocumentProvider.cedula,
+                  primerNombre: userByDocumentProvider.primerNombre,
+                  segundoNombre: userByDocumentProvider.segundoNombre,
+                  primerApellido: userByDocumentProvider.primerApellido,
+                  segundoApellido: userByDocumentProvider.segundoApellido,
+                  fechaNacimiento:
+                      DateTime.parse(userByDocumentProvider.fechaNacimiento),
+                  sexo: userByDocumentProvider.sexo,
+                  direccion: userByDocumentProvider.direccion,
+                  fechaEmision:
+                      DateTime.parse(userByDocumentProvider.fechaEmision),
+                  fechaExpira:
+                      DateTime.parse(userByDocumentProvider.fechaExpira),
+                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+                ),
               ),
               AsalariadoHnForm2(
                 controller: pageController,
+                userByDocumentHnData: UserDocumentDataHN(
+                  cedula: userByDocumentProvider.cedula,
+                  primerNombre: userByDocumentProvider.primerNombre,
+                  segundoNombre: userByDocumentProvider.segundoNombre,
+                  primerApellido: userByDocumentProvider.primerApellido,
+                  segundoApellido: userByDocumentProvider.segundoApellido,
+                  fechaNacimiento:
+                      DateTime.parse(userByDocumentProvider.fechaNacimiento),
+                  sexo: userByDocumentProvider.sexo,
+                  direccion: userByDocumentProvider.direccion,
+                  fechaEmision:
+                      DateTime.parse(userByDocumentProvider.fechaEmision),
+                  fechaExpira:
+                      DateTime.parse(userByDocumentProvider.fechaExpira),
+                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+                ),
               ),
               AsalariadoHnForm3(
                 controller: pageController,

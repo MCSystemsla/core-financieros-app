@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -17,9 +18,11 @@ import 'package:gap/gap.dart';
 
 class AsalariadoHnForm2 extends StatefulWidget {
   final PageController controller;
+  final UserDocumentDataHN userByDocumentHnData;
   const AsalariadoHnForm2({
     super.key,
     required this.controller,
+    required this.userByDocumentHnData,
   });
 
   @override
@@ -51,6 +54,12 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
               children: [
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: ItemNacionalidad(
+                    id: 0,
+                    valor: widget.userByDocumentHnData.pais ?? '',
+                    nombre: widget.userByDocumentHnData.pais ?? '',
+                    relacion: '',
+                  ),
                   hintText: 'País de Casa',
                   title: 'objPaisCasaID',
                   codigo: 'PAIS',
@@ -68,6 +77,12 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: ItemNacionalidad(
+                    id: 0,
+                    valor: widget.userByDocumentHnData.departamento ?? '',
+                    nombre: widget.userByDocumentHnData.departamento ?? '',
+                    relacion: '',
+                  ),
                   hintText: 'Departamento de Casa',
                   title: 'objDepartamentoCasaID',
                   codigo: 'DEP',
@@ -86,6 +101,12 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: ItemNacionalidad(
+                    id: 0,
+                    valor: widget.userByDocumentHnData.municipio ?? '',
+                    nombre: widget.userByDocumentHnData.municipio ?? '',
+                    relacion: '',
+                  ),
                   codigo: 'MUN',
                   hintText: 'Municipio de Casa',
                   title: 'objMunicipioCasaID',
@@ -139,6 +160,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   },
                 ),
                 OutlineTextfieldWidget(
+                  initialValue: widget.userByDocumentHnData.direccion,
                   hintText: 'Dirección de Casa',
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

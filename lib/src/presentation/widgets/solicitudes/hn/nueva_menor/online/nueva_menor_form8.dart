@@ -1,16 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
@@ -183,23 +180,23 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     },
                   ),
                 ],
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Medidas de Conocimiento',
-                  title: 'Medidas de Conocimiento',
-                  codigo: 'MEDIDASCONOCIMIENTO',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        medidasConocimientoCodigo: item.value,
-                      ),
-                    );
-                  },
-                ),
+                // const Gap(30),
+                // SearchDropdownWidget(
+                //   validator: (value) =>
+                //       ClassValidator.validateRequired(value?.value),
+                //   hintText: 'Medidas de Conocimiento',
+                //   title: 'Medidas de Conocimiento',
+                //   codigo: 'MEDIDASCONOCIMIENTO',
+                //   flavor: global<FlavorCubit>().state.flavor,
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         medidasConocimientoCodigo: item.value,
+                //       ),
+                //     );
+                //   },
+                // ),
                 if (isApnfd || isApnfd2 || isApnfd3) ...[
                   const Gap(30),
                   SheetSearchDropdown(

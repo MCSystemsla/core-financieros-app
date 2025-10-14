@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'user_by_document_cubit.dart';
+part of 'user_by_document_asalariado_cubit.dart';
 
-class UserByDocumentState extends Equatable {
-  final Status status;
+class UserByDocumentAsalariadoState extends Equatable {
   final String errorMsg;
+  final Status status;
   final String cedula;
   final String primerNombre;
   final String segundoNombre;
@@ -18,7 +18,7 @@ class UserByDocumentState extends Equatable {
   final String fechaEmision;
   final String fechaExpira;
   final String tipoDocumento;
-  const UserByDocumentState({
+  const UserByDocumentAsalariadoState({
     this.errorMsg = '',
     this.status = Status.notStarted,
     this.cedula = '',
@@ -39,8 +39,8 @@ class UserByDocumentState extends Equatable {
 
   @override
   List<Object> get props => [
-        status,
         errorMsg,
+        status,
         cedula,
         primerNombre,
         segundoNombre,
@@ -57,9 +57,9 @@ class UserByDocumentState extends Equatable {
         tipoDocumento,
       ];
 
-  UserByDocumentState copyWith({
-    Status? status,
+  UserByDocumentAsalariadoState copyWith({
     String? errorMsg,
+    Status? status,
     String? cedula,
     String? primerNombre,
     String? segundoNombre,
@@ -75,9 +75,9 @@ class UserByDocumentState extends Equatable {
     String? fechaExpira,
     String? tipoDocumento,
   }) {
-    return UserByDocumentState(
-      status: status ?? this.status,
+    return UserByDocumentAsalariadoState(
       errorMsg: errorMsg ?? this.errorMsg,
+      status: status ?? this.status,
       cedula: cedula ?? this.cedula,
       primerNombre: primerNombre ?? this.primerNombre,
       segundoNombre: segundoNombre ?? this.segundoNombre,
@@ -96,4 +96,5 @@ class UserByDocumentState extends Equatable {
   }
 }
 
-final class UserByDocumentInitial extends UserByDocumentState {}
+final class UserByDocumentAsalariadoInitial
+    extends UserByDocumentAsalariadoState {}
