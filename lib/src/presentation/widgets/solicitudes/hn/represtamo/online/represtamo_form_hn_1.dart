@@ -39,6 +39,19 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
   bool tieneVinculoEstadosUnidos = false;
   final formKey = GlobalKey<FormState>();
   @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        tipoPersonaCodigo: widget.userByDocumentReprestamoData.tipoDocumento,
+        tipoDocumentoCodigo: widget.userByDocumentReprestamoData.tipoDocumento,
+        cedula: widget.userByDocumentReprestamoData.cedula,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudReprestamoHnCubit>();

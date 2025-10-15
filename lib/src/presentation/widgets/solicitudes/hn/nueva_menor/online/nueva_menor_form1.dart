@@ -63,6 +63,34 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
     fechaEmisionCedula = widget.userByDocumentHn.fechaEmision;
     _selectedDate = widget.userByDocumentHn.fechaExpira;
     fechaNacimiento = widget.userByDocumentHn.fechaNacimiento;
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
+        fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+        fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
+        cedula: widget.userByDocumentHn.cedula,
+        tipoDocumentoCodigo: widget.userByDocumentHn.tipoDocumento,
+        nombre1: widget.userByDocumentHn.primerNombre,
+        nombre2: widget.userByDocumentHn.segundoNombre,
+        apellido1: widget.userByDocumentHn.segundoApellido,
+        sexoCodigo: widget.userByDocumentHn.sexo,
+        paisCasaCodigo: widget.userByDocumentHn.pais,
+        departamentoCasaCodigo: widget.userByDocumentHn.departamento,
+        municipioCasaCodigo: widget.userByDocumentHn.municipio,
+        direccionCasa: widget.userByDocumentHn.direccion,
+      ),
+    );
+    localDpProvider.saveCedulaClient(
+      cedulaClient: CedulaClientDb(
+        typeSolicitud: 'NUEVA_MENOR',
+        cedula: context.read<SolicitudNuevaMenorHnCubit>().state.cedula,
+        imageBackCedula:
+            context.read<SolicitudNuevaMenorHnCubit>().state.cedulaBackPath,
+        imageFrontCedula:
+            context.read<SolicitudNuevaMenorHnCubit>().state.cedulaFrontPath,
+      ),
+    );
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -537,7 +565,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Cantidad Hijos',
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  // validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(Icons.family_restroom,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
@@ -559,6 +587,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Nombre Público',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -708,23 +737,6 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  localDpProvider.saveCedulaClient(
-                    cedulaClient: CedulaClientDb(
-                      typeSolicitud: 'NUEVA_MENOR',
-                      cedula: context
-                          .read<SolicitudNuevaMenorHnCubit>()
-                          .state
-                          .cedula,
-                      imageBackCedula: context
-                          .read<SolicitudNuevaMenorHnCubit>()
-                          .state
-                          .cedulaBackPath,
-                      imageFrontCedula: context
-                          .read<SolicitudNuevaMenorHnCubit>()
-                          .state
-                          .cedulaFrontPath,
-                    ),
-                  );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

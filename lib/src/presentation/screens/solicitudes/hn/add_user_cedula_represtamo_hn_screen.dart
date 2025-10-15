@@ -186,6 +186,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     if (tipoDocumento != null) ...[
                       const Gap(20),
                       OutlineTextfieldWidget(
+                        isRequired: true,
                         textInputType: determineInputType(
                           tipoDocumento: tipoDocumento?.value,
                         ),

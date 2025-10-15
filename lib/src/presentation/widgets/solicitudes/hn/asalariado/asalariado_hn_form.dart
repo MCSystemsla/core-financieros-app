@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form1.dart';
@@ -20,7 +20,8 @@ class AsalariadoHnForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userByDocumentProvider = context.read<UserByDocumentCubit>().state;
+    final userByDocumentProvider =
+        context.read<UserByDocumentAsalariadoCubit>().state;
     final pageController = PageController();
     return Column(
       children: [

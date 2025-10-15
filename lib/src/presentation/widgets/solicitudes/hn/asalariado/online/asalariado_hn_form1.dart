@@ -69,6 +69,30 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
         tipoPersonaCnbsidCodigo: 'NAT',
         tipoClienteCodigo: 'NORMAL',
         estatusClienteCodigo: 'NORMAL',
+        fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
+        fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+        fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
+        cedula: widget.userByDocumentHnData.cedula,
+        tipoDocumentoCodigo: widget.userByDocumentHnData.tipoDocumento,
+        nombre1: widget.userByDocumentHnData.primerNombre,
+        nombre2: widget.userByDocumentHnData.segundoNombre,
+        apellido1: widget.userByDocumentHnData.primerApellido,
+        apellido2: widget.userByDocumentHnData.segundoApellido,
+        sexoCodigo: widget.userByDocumentHnData.sexo,
+        paisCasaCodigo: widget.userByDocumentHnData.pais,
+        departamentoCasaCodigo: widget.userByDocumentHnData.departamento,
+        municipioCasaCodigo: widget.userByDocumentHnData.municipio,
+        direccionCasa: widget.userByDocumentHnData.direccion,
+      ),
+    );
+    localDpProvider.saveCedulaClient(
+      cedulaClient: CedulaClientDb(
+        typeSolicitud: 'ASLARIADO',
+        cedula: context.read<SolicitudAslariadoHnCubit>().state.cedula,
+        imageBackCedula:
+            context.read<SolicitudAslariadoHnCubit>().state.imagenTrasera,
+        imageFrontCedula:
+            context.read<SolicitudAslariadoHnCubit>().state.imagenFrontal,
       ),
     );
   }
@@ -226,7 +250,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 //     );
                 //   },
                 // ),
-                const Gap(30),
                 // SearchDropdownWidget(
                 //   selectedItem: const Item(name: 'SIMPLIFICADO', value: 'SIMP'),
                 //   hintText: 'input.select_option'.tr(),
@@ -591,6 +614,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -700,23 +724,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
-                  localDpProvider.saveCedulaClient(
-                    cedulaClient: CedulaClientDb(
-                      typeSolicitud: 'ASLARIADO',
-                      cedula: context
-                          .read<SolicitudAslariadoHnCubit>()
-                          .state
-                          .cedula,
-                      imageBackCedula: context
-                          .read<SolicitudAslariadoHnCubit>()
-                          .state
-                          .imagenTrasera,
-                      imageFrontCedula: context
-                          .read<SolicitudAslariadoHnCubit>()
-                          .state
-                          .imagenFrontal,
-                    ),
-                  );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),

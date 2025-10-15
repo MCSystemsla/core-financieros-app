@@ -155,6 +155,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -171,6 +172,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     ),
                     const Gap(20),
                     SearchDropdownWidget(
+                      isRequired: true,
                       hintText: 'input.select_option'.tr(),
                       codigo: 'TIPODOCUMENTOPERSONA',
                       onChanged: (item) {
@@ -185,6 +187,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     if (tipoDocumento != null) ...[
                       const Gap(20),
                       OutlineTextfieldWidget(
+                        isRequired: true,
                         textInputType: determineInputType(
                           tipoDocumento: tipoDocumento?.value,
                         ),

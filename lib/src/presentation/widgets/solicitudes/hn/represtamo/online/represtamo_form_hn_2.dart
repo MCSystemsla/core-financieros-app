@@ -183,9 +183,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Periodo PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
-                    textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.characters,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    textInputType: TextInputType.number,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     title: 'Periodo PEPS',
@@ -328,9 +329,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'PeriodoPeps2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
-                    textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.characters,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    textInputType: TextInputType.number,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     title: 'Periodo PEPS 2',

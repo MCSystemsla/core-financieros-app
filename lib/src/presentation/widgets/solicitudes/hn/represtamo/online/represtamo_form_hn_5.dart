@@ -106,9 +106,9 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   isRequired: true,
                   hintText: 'Selecciona una actividad',
                   enabled: true,
-                  validator: (value) => ClassValidator.validateRequired(
-                    value?.valor,
-                  ),
+                  // validator: (value) => ClassValidator.validateRequired(
+                  //   value?.valor,
+                  // ),
                   title: 'ActividadEconomicaCIUU2',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -135,7 +135,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                       color: AppColors.getPrimaryColor(),
                     ),
                     textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
+                    textCapitalization: TextCapitalization.words,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     onChange: (value) {
@@ -194,6 +194,8 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 ],
                 if (isApnfd || isApnfd2 || isApnfd3) ...[
                   SheetSearchDropdown(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
                     title: 'Ejerce APNFD',
                     isRequired: true,
                     onChanged: (item) {
