@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
@@ -230,5 +231,39 @@ class ObtenerAutoCompletadoAsalariadoEndpoint extends Endpoint {
         'nombre': nombre,
         'cedula': cedula,
         'tipoDocumentoCodigo': tipoDocumentoCodigo,
+      };
+}
+
+class GetSolicitudesByEstado extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  final int? pagina;
+  GetSolicitudesByEstado({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    this.numeroSolicitud,
+    this.cedulaCliente,
+    this.pagina,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/cartera/solicitudes/general/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
+        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+        if (pagina != null) 'Pagina': pagina.toString(),
       };
 }

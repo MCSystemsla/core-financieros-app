@@ -59,8 +59,8 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             // const _MySolicitudesAsignmentsCard(),
             // const Gap(20),
-            // const _SolicitudesCardsRow3(),
-            // const Gap(20),
+            const _SolicitudesCardsRow3(),
+            const Gap(20),
             // const _SolicitudesCardsRow4(),
             // const Gap(20),
           ],
@@ -70,33 +70,33 @@ class _SelectSolicitud extends StatelessWidget {
   }
 }
 
-// class _SolicitudesCardsRow3 extends StatelessWidget {
-//   const _SolicitudesCardsRow3();
+class _SolicitudesCardsRow3 extends StatelessWidget {
+  const _SolicitudesCardsRow3();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             svgPath: ImageAsset.nuevaMenorBg5,
-//             title: 'Asignacion de Solicitudes Crédito',
-//             onPressed: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: ((_) => const AsignacionListScreen()),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//         const Gap(10),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg5,
+            title: 'Asignacion de Solicitudes Crédito',
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: ((_) => const AsignacionListScreen()),
+              //   ),
+              // );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
 
 // class _MySolicitudesAsignmentsCard extends StatelessWidget {
 //   const _MySolicitudesAsignmentsCard();

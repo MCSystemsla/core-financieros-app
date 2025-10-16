@@ -217,6 +217,8 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 ],
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   codigo: 'MEDIDASCONOCIMIENTO',
                   title: 'objMedidasConocimientoID',
                   onChanged: (value) {

@@ -44,7 +44,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
     final cubit = context.read<SolicitudReprestamoHnCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
-        tipoPersonaCodigo: widget.userByDocumentReprestamoData.tipoDocumento,
+        tipoPersonaCodigo: widget.userByDocumentReprestamoData.tipoPersona,
         tipoDocumentoCodigo: widget.userByDocumentReprestamoData.tipoDocumento,
         cedula: widget.userByDocumentReprestamoData.cedula,
       ),

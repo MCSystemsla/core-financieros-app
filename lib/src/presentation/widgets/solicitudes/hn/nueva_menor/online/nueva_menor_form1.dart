@@ -79,6 +79,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         departamentoCasaCodigo: widget.userByDocumentHn.departamento,
         municipioCasaCodigo: widget.userByDocumentHn.municipio,
         direccionCasa: widget.userByDocumentHn.direccion,
+        tipoPersonaCnbsCodigo: 'NAT',
+        tipoClienteCodigo: 'NORMAL',
       ),
     );
     localDpProvider.saveCedulaClient(
