@@ -100,7 +100,7 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double estimatedTotalBytes = 99 * 1024 * 1024; // 99 MB aprox
+    const double estimatedTotalBytes = 37 * 1024 * 1024; // 37 MB aprox
 
     final double percentage =
         (_progress / estimatedTotalBytes * 100).clamp(0, 100);

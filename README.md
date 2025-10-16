@@ -64,6 +64,10 @@ CORE FINANCIERO
 ```
 flutter build apk --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
+BUILD POR ABI
+```
+flutter build apk --split-per-abi --flavor micreditoHonduras --dart-define-from-file=api-key-hn.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../ 
+```
 
 ó
 
