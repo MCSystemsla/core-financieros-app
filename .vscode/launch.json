@@ -44,7 +44,7 @@
         "program": "lib/main_hn.dart",
         "args": [
           "--dart-define-from-file",
-          "api-key-prod.json",
+          "api-key-hn-prod.json",
           "--flavor",
           "micreditoHonduras"
         ]
