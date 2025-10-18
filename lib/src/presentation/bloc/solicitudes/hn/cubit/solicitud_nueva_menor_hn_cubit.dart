@@ -26,6 +26,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
+          actividadEconomicaCnbs3Codigo: state.actividadEconomicaCnbs3Codigo,
           email: state.email,
           nombre2: state.nombre2,
           apellido2: state.apellido2,
@@ -389,6 +390,10 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       propositoCodigo: _prefer(state.propositoCodigo, prev?.propositoCodigo),
       isOffline: prev?.isOffline ?? false,
       email: _prefer(state.email, prev?.email),
+      actividadEconomicaCnbs3Codigo: _prefer(
+        state.actividadEconomicaCnbs3Codigo,
+        prev?.actividadEconomicaCnbs3Codigo,
+      ),
     );
   }
 

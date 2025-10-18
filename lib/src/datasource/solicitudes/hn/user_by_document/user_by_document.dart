@@ -17,36 +17,36 @@ class UserByDocumentHn {
 }
 
 class UserDocumentDataHN {
-  final String cedula;
-  final String primerNombre;
-  final String segundoNombre;
-  final String primerApellido;
-  final String segundoApellido;
-  final DateTime fechaNacimiento;
-  final String sexo;
+  final String? cedula;
+  final String? primerNombre;
+  final String? segundoNombre;
+  final String? primerApellido;
+  final String? segundoApellido;
+  final DateTime? fechaNacimiento;
+  final String? sexo;
   final String? pais;
   final String? departamento;
   final String? municipio;
-  final String direccion;
-  final DateTime fechaEmision;
-  final DateTime fechaExpira;
-  final String tipoDocumento;
+  final String? direccion;
+  final DateTime? fechaEmision;
+  final DateTime? fechaExpira;
+  final String? tipoDocumento;
 
   UserDocumentDataHN({
-    required this.cedula,
-    required this.primerNombre,
-    required this.segundoNombre,
-    required this.primerApellido,
-    required this.segundoApellido,
-    required this.fechaNacimiento,
-    required this.sexo,
+    this.cedula,
+    this.primerNombre,
+    this.segundoNombre,
+    this.primerApellido,
+    this.segundoApellido,
+    this.fechaNacimiento,
+    this.sexo,
     this.pais,
     this.departamento,
     this.municipio,
-    required this.direccion,
-    required this.fechaEmision,
-    required this.fechaExpira,
-    required this.tipoDocumento,
+    this.direccion,
+    this.fechaEmision,
+    this.fechaExpira,
+    this.tipoDocumento,
   });
 
   factory UserDocumentDataHN.fromJson(Map<String, dynamic> json) =>

@@ -30,7 +30,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm1 extends StatefulWidget {
-  final UserDocumentDataHN userByDocumentHnData;
+  final UserDocumentDataHN? userByDocumentHnData;
   final PageController controller;
   const AsalariadoHnForm1({
     super.key,
@@ -60,9 +60,9 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-    _selectedDate = widget.userByDocumentHnData.fechaExpira;
-    fechaEmisionCedula = widget.userByDocumentHnData.fechaEmision;
-    fechaNacimiento = widget.userByDocumentHnData.fechaNacimiento;
+    _selectedDate = widget.userByDocumentHnData?.fechaExpira;
+    fechaEmisionCedula = widget.userByDocumentHnData?.fechaEmision;
+    fechaNacimiento = widget.userByDocumentHnData?.fechaNacimiento;
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
@@ -72,17 +72,17 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
         fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
         fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
         fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
-        cedula: widget.userByDocumentHnData.cedula,
-        tipoDocumentoCodigo: widget.userByDocumentHnData.tipoDocumento,
-        nombre1: widget.userByDocumentHnData.primerNombre,
-        nombre2: widget.userByDocumentHnData.segundoNombre,
-        apellido1: widget.userByDocumentHnData.primerApellido,
-        apellido2: widget.userByDocumentHnData.segundoApellido,
-        sexoCodigo: widget.userByDocumentHnData.sexo,
-        paisCasaCodigo: widget.userByDocumentHnData.pais,
-        departamentoCasaCodigo: widget.userByDocumentHnData.departamento,
-        municipioCasaCodigo: widget.userByDocumentHnData.municipio,
-        direccionCasa: widget.userByDocumentHnData.direccion,
+        cedula: widget.userByDocumentHnData?.cedula,
+        tipoDocumentoCodigo: widget.userByDocumentHnData?.tipoDocumento,
+        nombre1: widget.userByDocumentHnData?.primerNombre,
+        nombre2: widget.userByDocumentHnData?.segundoNombre,
+        apellido1: widget.userByDocumentHnData?.primerApellido,
+        apellido2: widget.userByDocumentHnData?.segundoApellido,
+        sexoCodigo: widget.userByDocumentHnData?.sexo,
+        paisCasaCodigo: widget.userByDocumentHnData?.pais,
+        departamentoCasaCodigo: widget.userByDocumentHnData?.departamento,
+        municipioCasaCodigo: widget.userByDocumentHnData?.municipio,
+        direccionCasa: widget.userByDocumentHnData?.direccion,
       ),
     );
     localDpProvider.saveCedulaClient(
@@ -286,7 +286,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHnData.primerNombre,
+                  initialValue: widget.userByDocumentHnData?.primerNombre,
                   hintText: 'Primer Nombre',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.name,
@@ -305,7 +305,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHnData.segundoNombre,
+                  initialValue: widget.userByDocumentHnData?.segundoNombre,
                   hintText: 'Segundo Nombre',
                   icon: Icon(Icons.person_outline,
                       color: AppColors.getPrimaryColor()),
@@ -325,7 +325,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHnData.primerApellido,
+                  initialValue: widget.userByDocumentHnData?.primerApellido,
                   hintText: 'Primer Apellido',
                   icon: Icon(Icons.badge, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.name,
@@ -344,7 +344,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHnData.segundoApellido,
+                  initialValue: widget.userByDocumentHnData?.segundoApellido,
                   hintText: 'Segundo Apellido',
                   icon: Icon(Icons.badge_outlined,
                       color: AppColors.getPrimaryColor()),
@@ -365,8 +365,8 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: widget.userByDocumentHnData.sexo,
-                    value: widget.userByDocumentHnData.sexo,
+                    name: widget.userByDocumentHnData?.sexo ?? '',
+                    value: widget.userByDocumentHnData?.sexo,
                   ),
                   hintText: 'Sexo',
                   codigo: 'SEXO',
@@ -398,8 +398,8 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: widget.userByDocumentHnData.tipoDocumento,
-                    value: widget.userByDocumentHnData.tipoDocumento,
+                    name: widget.userByDocumentHnData?.tipoDocumento ?? '',
+                    value: widget.userByDocumentHnData?.tipoDocumento,
                   ),
                   hintText: 'Tipo de Documento',
                   title: 'objTipoDocumentoID',
@@ -431,7 +431,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHnData.cedula,
+                  initialValue: widget.userByDocumentHnData?.cedula,
                   hintText: 'Cédula',
                   icon: Icon(Icons.credit_card,
                       color: AppColors.getPrimaryColor()),

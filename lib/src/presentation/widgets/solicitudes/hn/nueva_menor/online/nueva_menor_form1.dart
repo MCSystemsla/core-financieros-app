@@ -31,7 +31,7 @@ import 'package:go_router/go_router.dart';
 
 class NuevaMenorForm1 extends StatefulWidget {
   final PageController controller;
-  final UserDocumentDataHN userByDocumentHn;
+  final UserDocumentDataHN? userByDocumentHn;
   const NuevaMenorForm1({
     super.key,
     required this.controller,
@@ -60,25 +60,25 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-    fechaEmisionCedula = widget.userByDocumentHn.fechaEmision;
-    _selectedDate = widget.userByDocumentHn.fechaExpira;
-    fechaNacimiento = widget.userByDocumentHn.fechaNacimiento;
+    fechaEmisionCedula = widget.userByDocumentHn?.fechaEmision;
+    _selectedDate = widget.userByDocumentHn?.fechaExpira;
+    fechaNacimiento = widget.userByDocumentHn?.fechaNacimiento;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
         fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
         fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
-        cedula: widget.userByDocumentHn.cedula,
-        tipoDocumentoCodigo: widget.userByDocumentHn.tipoDocumento,
-        nombre1: widget.userByDocumentHn.primerNombre,
-        nombre2: widget.userByDocumentHn.segundoNombre,
-        apellido1: widget.userByDocumentHn.segundoApellido,
-        sexoCodigo: widget.userByDocumentHn.sexo,
-        paisCasaCodigo: widget.userByDocumentHn.pais,
-        departamentoCasaCodigo: widget.userByDocumentHn.departamento,
-        municipioCasaCodigo: widget.userByDocumentHn.municipio,
-        direccionCasa: widget.userByDocumentHn.direccion,
+        cedula: widget.userByDocumentHn?.cedula,
+        tipoDocumentoCodigo: widget.userByDocumentHn?.tipoDocumento,
+        nombre1: widget.userByDocumentHn?.primerNombre,
+        nombre2: widget.userByDocumentHn?.segundoNombre,
+        apellido1: widget.userByDocumentHn?.segundoApellido,
+        sexoCodigo: widget.userByDocumentHn?.sexo,
+        paisCasaCodigo: widget.userByDocumentHn?.pais,
+        departamentoCasaCodigo: widget.userByDocumentHn?.departamento,
+        municipioCasaCodigo: widget.userByDocumentHn?.municipio,
+        direccionCasa: widget.userByDocumentHn?.direccion,
         tipoPersonaCnbsCodigo: 'NAT',
         tipoClienteCodigo: 'NORMAL',
       ),
@@ -237,7 +237,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHn.primerNombre,
+                  initialValue: widget.userByDocumentHn?.primerNombre,
                   hintText: 'Ingresa Nombre 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [UpperCaseTextFormatter()],
@@ -255,7 +255,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHn.segundoNombre,
+                  initialValue: widget.userByDocumentHn?.segundoNombre,
                   hintText: 'Ingresa Nombre 2',
                   // validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -290,7 +290,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHn.primerApellido,
+                  initialValue: widget.userByDocumentHn?.primerApellido,
                   hintText: 'Ingresa Apellido 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -308,7 +308,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: widget.userByDocumentHn.segundoApellido,
+                  initialValue: widget.userByDocumentHn?.segundoApellido,
                   hintText: 'Ingresa Apellido 2',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [UpperCaseTextFormatter()],
@@ -342,8 +342,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: widget.userByDocumentHn.tipoDocumento,
-                    value: widget.userByDocumentHn.tipoDocumento,
+                    name: widget.userByDocumentHn?.tipoDocumento ?? '',
+                    value: widget.userByDocumentHn?.tipoDocumento,
                   ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -385,7 +385,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   readOnly: true,
-                  initialValue: widget.userByDocumentHn.cedula,
+                  initialValue: widget.userByDocumentHn?.cedula,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Cédula',
                   icon: Icon(Icons.credit_card,
@@ -610,8 +610,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: widget.userByDocumentHn.sexo,
-                    value: widget.userByDocumentHn.sexo,
+                    name: widget.userByDocumentHn?.sexo ?? '',
+                    value: widget.userByDocumentHn?.sexo,
                   ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),

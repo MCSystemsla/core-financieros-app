@@ -113,7 +113,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   hintText: 'Aldea Destino',
                   title: 'objAldeaDestinoID',
                   where: aldeaWhereClause,
-                  codigo: 'AL',
+                  codigo: 'ALD',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     cubit.onFieldChanged(

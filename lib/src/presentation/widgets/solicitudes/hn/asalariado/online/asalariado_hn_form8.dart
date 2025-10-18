@@ -83,7 +83,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          actividadEconomicaDescripcion1: value.name,
+                          actividadEconomicaDescripcion1: value,
                         ),
                       );
                     },
@@ -119,7 +119,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          actividadEconomicaDescripcion2: value.name,
+                          actividadEconomicaDescripcion2: value,
                         ),
                       );
                     },
@@ -139,7 +139,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCiuu3Codigo: value.nombre,
+                        actividadEconomicaCiuu3Codigo: value.valor,
                       ),
                     );
                   },
@@ -156,7 +156,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          actividadEconomicaDescripcion3: value.name,
+                          actividadEconomicaDescripcion3: value,
                         ),
                       );
                     },

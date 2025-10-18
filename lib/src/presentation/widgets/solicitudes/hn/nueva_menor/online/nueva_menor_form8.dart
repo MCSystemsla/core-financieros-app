@@ -62,12 +62,12 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      actividadEconomica1 = item.nombre;
+                      actividadEconomica1 = item.valor;
                       isApnfd = item.esAPNFD;
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCnbs1Codigo: item.nombre,
+                        actividadEconomicaCnbs1Codigo: item.valor,
                       ),
                     );
                   },
@@ -101,7 +101,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      actividadEconomica2 = item.nombre;
+                      actividadEconomica2 = item.valor;
                       isApnfd2 = item.esAPNFD;
                     });
                     cubit.onFieldChanged(
@@ -149,7 +149,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        actividadEconomicaCnbs2Codigo: item.nombre,
+                        actividadEconomicaCnbs3Codigo: item.valor,
                       ),
                     );
                   },

@@ -167,7 +167,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                         ),
                       );
                     },
-                    codigo: 'AL',
+                    codigo: 'ALD',
                   ),
                 ],
                 const Gap(30),

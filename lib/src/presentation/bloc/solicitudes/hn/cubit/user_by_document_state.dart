@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'user_by_document_cubit.dart';
 
+enum UserByDocumentStatus { notStarted, inProgress, done, error, isNewUser }
+
 class UserByDocumentState extends Equatable {
-  final Status status;
+  final UserByDocumentStatus status;
   final String errorMsg;
   final String cedula;
   final String primerNombre;
@@ -20,7 +22,7 @@ class UserByDocumentState extends Equatable {
   final String tipoDocumento;
   const UserByDocumentState({
     this.errorMsg = '',
-    this.status = Status.notStarted,
+    this.status = UserByDocumentStatus.notStarted,
     this.cedula = '',
     this.primerNombre = '',
     this.segundoNombre = '',
@@ -58,7 +60,7 @@ class UserByDocumentState extends Equatable {
       ];
 
   UserByDocumentState copyWith({
-    Status? status,
+    UserByDocumentStatus? status,
     String? errorMsg,
     String? cedula,
     String? primerNombre,

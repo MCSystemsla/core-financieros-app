@@ -3,7 +3,7 @@ part of 'user_by_document_asalariado_cubit.dart';
 
 class UserByDocumentAsalariadoState extends Equatable {
   final String errorMsg;
-  final Status status;
+  final UserByDocumentStatus status;
   final String cedula;
   final String primerNombre;
   final String segundoNombre;
@@ -20,7 +20,7 @@ class UserByDocumentAsalariadoState extends Equatable {
   final String tipoDocumento;
   const UserByDocumentAsalariadoState({
     this.errorMsg = '',
-    this.status = Status.notStarted,
+    this.status = UserByDocumentStatus.notStarted,
     this.cedula = '',
     this.primerNombre = '',
     this.segundoNombre = '',
@@ -59,7 +59,7 @@ class UserByDocumentAsalariadoState extends Equatable {
 
   UserByDocumentAsalariadoState copyWith({
     String? errorMsg,
-    Status? status,
+    UserByDocumentStatus? status,
     String? cedula,
     String? primerNombre,
     String? segundoNombre,

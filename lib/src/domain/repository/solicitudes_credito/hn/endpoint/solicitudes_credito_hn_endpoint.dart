@@ -234,13 +234,13 @@ class ObtenerAutoCompletadoAsalariadoEndpoint extends Endpoint {
       };
 }
 
-class GetSolicitudesByEstado extends Endpoint {
+class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final EstadoCredito estadoCredito;
   final bool isAsignadaToAsesorCredito;
   final String? numeroSolicitud;
   final String? cedulaCliente;
   final int? pagina;
-  GetSolicitudesByEstado({
+  GetSolicitudesByEstadoEndpoint({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
     this.numeroSolicitud,
@@ -265,5 +265,96 @@ class GetSolicitudesByEstado extends Endpoint {
         if (numeroSolicitud != null) 'Numero': numeroSolicitud,
         if (cedulaCliente != null) 'Cedula': cedulaCliente,
         if (pagina != null) 'Pagina': pagina.toString(),
+      };
+}
+
+class AsignSolicitudToAsesorAsalariadoHNEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+
+  AsignSolicitudToAsesorAsalariadoHNEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/solicitud-asalariado/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
+      };
+}
+
+class AsignSolicitudToAsesorNuevaMenorHNEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+
+  AsignSolicitudToAsesorNuevaMenorHNEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitud-nueva-menor/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
+      };
+}
+
+class AsignSolicitudToAsesorReprestamoHNEndpoint extends Endpoint {
+  final int idSolicitud;
+  final int idPromotor;
+
+  AsignSolicitudToAsesorReprestamoHNEndpoint({
+    required this.idSolicitud,
+    required this.idPromotor,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitud-represtamo/asignar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'idSolicitud': idSolicitud,
+        'idPromotor': idPromotor,
+      };
+}
+
+class GetAsesoresHNEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/obtener-asesores';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
       };
 }

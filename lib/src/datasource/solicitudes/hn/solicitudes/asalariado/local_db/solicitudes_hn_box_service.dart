@@ -225,7 +225,7 @@ class SolicitudesHnBoxService {
                   ))
               .toList();
         }
-      case 'AL':
+      case 'ALD':
         if (whereClause.isEmpty) {
           final query = catalogoAldeaBox.query().build();
 

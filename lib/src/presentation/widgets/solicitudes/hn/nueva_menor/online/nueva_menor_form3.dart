@@ -114,7 +114,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     where: munWhereClause,
-                    codigo: 'AL',
+                    codigo: 'ALD',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Aldea Negocio',

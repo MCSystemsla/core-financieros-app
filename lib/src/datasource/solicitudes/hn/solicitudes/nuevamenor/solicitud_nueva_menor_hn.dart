@@ -121,8 +121,10 @@ class SolicitudNuevaMenorHn {
   final String nombre2;
   final String apellido2;
   final String email;
+  final String actividadEconomicaCnbs3Codigo;
 
   SolicitudNuevaMenorHn({
+    required this.actividadEconomicaCnbs3Codigo,
     required this.database,
     required this.origenSolicitudCodigo,
     required this.nombre1,
@@ -328,6 +330,7 @@ class SolicitudNuevaMenorHn {
       'puestoNegocio': puestoNegocio,
       'ActividadEconomicaCNBS1Codigo': actividadEconomicaCnbs1Codigo,
       'ActividadEconomicaCNBS2Codigo': actividadEconomicaCnbs2Codigo,
+      'ActividadEconomicaCNBS3Codigo': actividadEconomicaCnbs3Codigo,
       'ActividadEconomicaDescripcion1': actividaEconomicaDescipcion1,
       'ActividadEconomicaDescripcion2': actividaEconomicaDescipcion2,
       'ActividadEconomicaDescripcion3 ': actividaEconomicaDescipcion3,

@@ -6,7 +6,6 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
@@ -102,14 +101,14 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
         child: Center(
           child: BlocConsumer<UserByDocumentCubit, UserByDocumentState>(
             listener: (context, state) {
-              if (state.status == Status.error) {
+              if (state.status == UserByDocumentStatus.error) {
                 CustomAlertDialog(
                   context: context,
                   title: state.errorMsg,
                   onDone: () => context.pop(),
                 ).showDialog(context);
               }
-              if (state.status == Status.done) {
+              if (state.status == UserByDocumentStatus.done) {
                 CustomAlertDialog(
                   context: context,
                   title:
@@ -128,6 +127,19 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     );
                   },
                 ).showDialog(context, dialogType: DialogType.success);
+              }
+              if (state.status == UserByDocumentStatus.isNewUser) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => BlocProvider.value(
+                      value: context.read<UserByDocumentCubit>(),
+                      child: CrearSolicitudHnScreen(
+                        typeForm: widget.typeForm,
+                      ),
+                    ),
+                  ),
+                );
               }
             },
             builder: (context, state) {
@@ -211,8 +223,9 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       width: double.infinity,
                       child: CustomElevatedButton(
-                        enabled: state.status != Status.inProgress,
-                        text: state.status == Status.inProgress
+                        enabled:
+                            state.status != UserByDocumentStatus.inProgress,
+                        text: state.status == UserByDocumentStatus.inProgress
                             ? 'Cargando...'
                             : 'Enviar',
                         color: AppColors.greenLatern.withOpacity(0.4),

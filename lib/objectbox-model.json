@@ -2877,7 +2877,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "117:9032961029567877457",
+      "lastPropertyId": "118:8264110620895723649",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3464,6 +3464,11 @@
         {
           "id": "117:9032961029567877457",
           "name": "email",
+          "type": 9
+        },
+        {
+          "id": "118:8264110620895723649",
+          "name": "actividadEconomicaCnbs3Codigo",
           "type": 9
         }
       ],

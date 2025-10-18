@@ -122,6 +122,7 @@ class SolicitudNuevaMenorHnLocalDb {
   String? nombre2;
   String? apellido2;
   String? email;
+  String? actividadEconomicaCnbs3Codigo;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.uuid,
@@ -240,5 +241,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.nombre2,
     this.apellido2,
     this.email,
+    this.actividadEconomicaCnbs3Codigo,
   });
 }

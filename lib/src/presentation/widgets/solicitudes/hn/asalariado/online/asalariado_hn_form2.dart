@@ -127,7 +127,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 CatalogoValorNacionalidad(
                   hintText: 'Aldea',
                   title: 'objAldeaID',
-                  codigo: 'AL',
+                  codigo: 'ALD',
                   where: aldeaWhereClause,
                   onChanged: (value) {
                     if (value == null || !mounted) return;

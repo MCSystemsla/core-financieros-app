@@ -66,7 +66,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       //   isConnected: true,
       // );
       await getNacionalidadByCodigo(
-        codigo: 'AL',
+        codigo: 'ALD',
         isConnected: true,
       );
       // await getNacionalidadByCodigo(
@@ -236,7 +236,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
             ));
           }
           break;
-        case 'AL':
+        case 'ALD':
           final query = _objectBoxService.catalogoAldeaBox.query().build();
 
           query.remove();
