@@ -352,7 +352,7 @@ class SolicitudNuevaMenorHn {
       'ProfesionCodigo': profesionCodigo,
       'AldeaCasaCodigo': aldeaCasaCodigo,
       'UbicacionCodigo': ubicacionCodigo,
-      'MedidasConocimientoCodigo': 'NORMAL',
+      'MedidasConocimientoCodigo': 'NORM',
       'CaserioCasa': caserioCasa,
       'CaserioNegocio': caserioNegocio,
       'CaserioDestino': caserioDestino,

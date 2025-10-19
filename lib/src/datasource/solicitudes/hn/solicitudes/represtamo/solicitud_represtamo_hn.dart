@@ -165,7 +165,7 @@ class SolicitudReprestamoHn {
       'TieneVinculoEstadosUnidos': tieneVinculoEstadosUnidos,
       'VinculoEstadosUnidosDescripcion': vinculoEstadosUnidosDescripcion,
       'EjerceActividadAPFND': ejerceActividadApfnd,
-      'MedidasConocimientoCodigo': medidasConocimientoCodigo,
+      'MedidasConocimientoCodigo': 'NORM',
       'NombreEmpleadoFamiliar': nombreEmpleadoFamiliar,
     };
     data.removeWhere(

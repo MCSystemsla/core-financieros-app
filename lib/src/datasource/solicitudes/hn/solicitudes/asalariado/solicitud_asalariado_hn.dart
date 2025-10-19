@@ -352,7 +352,7 @@ class SolicitudAsalariadoHn {
       'BarrioDestino': barrioDestino,
       'CaseriCasa': caseriCasa,
       'AldeaCodigo': aldeaCodigo,
-      // 'MedidasConocimientoCodigo': medidasConocimientoCodigo,
+      'MedidasConocimientoCodigo': 'NORM',
     };
     data.removeWhere(
       (key, value) => value == null || value == '',
