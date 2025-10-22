@@ -121,6 +121,7 @@ class SolicitudAslariadoHnState extends Equatable {
   final String barrioDestino;
   final String caseriCasa;
   final String aldeaCodigo;
+  final String descripcionDestino;
   const SolicitudAslariadoHnState({
     this.imagenFrontal = '',
     this.imagenTrasera = '',
@@ -241,10 +242,12 @@ class SolicitudAslariadoHnState extends Equatable {
     this.barrioDestino = '',
     this.caseriCasa = '',
     this.aldeaCodigo = '',
+    this.descripcionDestino = '',
   });
 
   @override
   List<Object> get props => [
+        descripcionDestino,
         imagenFrontal,
         imagenTrasera,
         numeroSolicitud,
@@ -483,6 +486,7 @@ class SolicitudAslariadoHnState extends Equatable {
     String? barrioDestino,
     String? caseriCasa,
     String? aldeaCodigo,
+    String? descripcionDestino,
   }) {
     return SolicitudAslariadoHnState(
       imagenFrontal: imagenFrontal ?? this.imagenFrontal,
@@ -630,6 +634,7 @@ class SolicitudAslariadoHnState extends Equatable {
       barrioDestino: barrioDestino ?? this.barrioDestino,
       caseriCasa: caseriCasa ?? this.caseriCasa,
       aldeaCodigo: aldeaCodigo ?? this.aldeaCodigo,
+      descripcionDestino: descripcionDestino ?? this.descripcionDestino,
     );
   }
 }

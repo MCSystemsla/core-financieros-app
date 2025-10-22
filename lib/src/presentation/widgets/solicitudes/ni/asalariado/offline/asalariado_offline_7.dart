@@ -25,7 +25,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +60,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   DateTime? fechaPrimerPago;
   DateTime? fechaDesembolso;
   double? tasaInteres;
-  int? montoMinimo;
+  num? montoMinimo;
   double? montoMaximo;
   final formKey = GlobalKey<FormState>();
 
@@ -219,7 +218,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                     fechaPrimerPago?.toUtc().toIso8601String(),
                 fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
                 tasaInteres: tasaInteres,
-                montoMinimo: montoMinimo,
+                montoMinimo: montoMinimo?.toInt(),
                 montoMaximo: montoMaximo?.toInt(),
                 cuota: double.tryParse(cuota ?? '0'),
                 observacion: observacion,
@@ -338,7 +337,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                         objProductoId: item.value,
                         objProductoIdVer: item.name,
                         tasaInteres: item.interes,
-                        montoMinimo: item.montoMinimo,
+                        montoMinimo: item.montoMinimo?.toInt(),
                         montoMaximo: item.montoMaximo?.toInt(),
                         nombreFormularioKiva:
                             nombreFormularioKiva?.formularioKiva,
@@ -466,7 +465,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                         CustomAlertDialog(
                           context: context,
                           title:
-                              'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                              'El monto minimo debe ser mayor a ${montoMinimo?.toString()}',
                           onDone: () => context.pop(),
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
@@ -506,7 +505,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                       await CuotaDataDialog(
                         context: context,
                         title:
-                            'Estimación de la Cuota según los Datos Ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
+                            'Estimación de la Cuota según los Datos Ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
                         onDone: () {
                           context.pop();
 

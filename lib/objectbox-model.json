@@ -2298,7 +2298,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "132:5589645346630404113",
+      "lastPropertyId": "133:8182318345641444706",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2870,6 +2870,11 @@
         {
           "id": "132:5589645346630404113",
           "name": "aldeaCodigo",
+          "type": 9
+        },
+        {
+          "id": "133:8182318345641444706",
+          "name": "descripcionDestino",
           "type": 9
         }
       ],
@@ -3563,7 +3568,7 @@
     },
     {
       "id": "24:2952094495400237",
-      "lastPropertyId": "61:7932802342203269778",
+      "lastPropertyId": "62:9209332083803908732",
       "name": "SolicitudReprestamoHnLocalDb",
       "properties": [
         {
@@ -3845,6 +3850,11 @@
         {
           "id": "61:7932802342203269778",
           "name": "nombreCompleto",
+          "type": 9
+        },
+        {
+          "id": "62:9209332083803908732",
+          "name": "descripcionDestino",
           "type": 9
         }
       ],

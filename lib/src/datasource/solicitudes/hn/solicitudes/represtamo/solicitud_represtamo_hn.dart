@@ -57,6 +57,7 @@ class SolicitudReprestamoHn {
   final bool ejerceActividadApfnd;
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
+  final String descripcionDestino;
 
   SolicitudReprestamoHn({
     required this.origenSolicitudCodigo,
@@ -110,6 +111,7 @@ class SolicitudReprestamoHn {
     required this.ejerceActividadApfnd,
     required this.medidasConocimientoCodigo,
     required this.nombreEmpleadoFamiliar,
+    required this.descripcionDestino,
   });
 
   Map<String, dynamic> toJson() {
@@ -167,6 +169,7 @@ class SolicitudReprestamoHn {
       'EjerceActividadAPFND': ejerceActividadApfnd,
       'MedidasConocimientoCodigo': 'NORM',
       'NombreEmpleadoFamiliar': nombreEmpleadoFamiliar,
+      'DescripcionDestino': descripcionDestino,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

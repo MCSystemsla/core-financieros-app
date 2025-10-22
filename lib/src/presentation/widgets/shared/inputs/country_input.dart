@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+enum CountryCodeInput {
+  hn,
+  ni,
+  pa,
+  cr,
+}
+
 class CountryInput extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function(PointerDownEvent)? onTapOutside;
@@ -26,6 +33,7 @@ class CountryInput extends StatelessWidget {
   final bool isRequired;
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
+  final CountryCodeInput countryCodeInput;
   const CountryInput({
     super.key,
     this.onFieldSubmitted,
@@ -48,6 +56,7 @@ class CountryInput extends StatelessWidget {
     required this.isRequired,
     this.onTap,
     this.inputFormatters,
+    this.countryCodeInput = CountryCodeInput.ni,
   });
 
   @override
@@ -112,7 +121,7 @@ class CountryInput extends StatelessWidget {
                         headerText: 'Seleccionar Pais',
                         padding: const EdgeInsets.all(2),
                         onChanged: onCountryCodeChange,
-                        initialSelection: 'NI',
+                        initialSelection: countryCodeInput.name.toUpperCase(),
                         countryFilter: const [
                           'HN',
                           'NI',

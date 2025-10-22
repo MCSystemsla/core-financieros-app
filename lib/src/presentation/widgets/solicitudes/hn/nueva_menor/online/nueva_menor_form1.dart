@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -79,8 +80,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         departamentoCasaCodigo: widget.userByDocumentHn?.departamento,
         municipioCasaCodigo: widget.userByDocumentHn?.municipio,
         direccionCasa: widget.userByDocumentHn?.direccion,
-        tipoPersonaCnbsCodigo: 'NAT',
+        tipoPersonaCnbsCodigo: 'HNTPCNBS1',
         tipoClienteCodigo: 'NORMAL',
+        nacinalidadCodigo: 'HN',
+        paisEmisorCedulaCodigo: 'HN',
+        paisNacimientoCodigo: 'HN',
+        tipoPersonaCodigo: 'PERSONANATURAL',
       ),
     );
     localDpProvider.saveCedulaClient(
@@ -96,16 +101,16 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
   }
 
   Future<void> selectDate(BuildContext context) async {
-    final DateTime minFechaVencimiento = DateTime(
-      fechaEmisionCedula!.year + 10,
-      fechaEmisionCedula!.month,
-      fechaEmisionCedula!.day,
-    );
+    // final DateTime minFechaVencimiento = DateTime(
+    //   fechaEmisionCedula!.year + 10,
+    //   fechaEmisionCedula!.month,
+    //   fechaEmisionCedula!.day,
+    // );
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       keyboardType: TextInputType.datetime,
-      firstDate: minFechaVencimiento,
+      firstDate: DateTime(1930),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
@@ -220,6 +225,11 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
               children: [
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(
+                    name: 'Persona Natural',
+                    value: 'PERSONANATURAL',
+                  ),
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   enabled: true,
@@ -237,6 +247,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: widget.userByDocumentHn?.primerNombre,
                   hintText: 'Ingresa Nombre 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -290,6 +301,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: widget.userByDocumentHn?.primerApellido,
                   hintText: 'Ingresa Apellido 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -341,6 +353,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   selectedItem: Item(
                     name: widget.userByDocumentHn?.tipoDocumento ?? '',
                     value: widget.userByDocumentHn?.tipoDocumento,
@@ -363,9 +376,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   selectedItem: const Item(
-                    name: 'NATURAL',
-                    value: 'NAT',
+                    name: 'PERSONA NATURAL',
+                    value: 'HNTPCNBS1',
                   ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -384,10 +398,11 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   readOnly: true,
                   initialValue: widget.userByDocumentHn?.cedula,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Cédula',
+                  hintText: 'Ingresa Documento',
                   icon: Icon(Icons.credit_card,
                       color: AppColors.getPrimaryColor()),
                   inputFormatters: [
@@ -396,7 +411,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   ],
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'Cédula',
+                  title: 'Documento',
                   // onChange: (value) {
                   //   cubit.onFieldChanged(
                   //     () => cubit.state.copyWith(
@@ -416,7 +431,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   textCapitalization: TextCapitalization.characters,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(14),
                   ],
                   title: 'RTN',
                   onChange: (value) {
@@ -447,6 +462,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: const ItemNacionalidad(
+                    id: 0,
+                    valor: 'HN',
+                    nombre: 'Honduras',
+                    relacion: '',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'input.select_option'.tr(),
@@ -461,29 +482,33 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     );
                   },
                 ),
+                if (widget.userByDocumentHn?.tipoDocumento != 'DNI') ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    isRequired: true,
+                    initialValue: fechaEmisionCedula?.selectorFormat(),
+                    validator: (value) => ClassValidator.validateRequired(
+                        fechaEmisionCedula?.selectorFormat()),
+                    onTap: () => selectEmisionFecha(context),
+                    readOnly: true,
+                    hintText: fechaEmisionCedula?.selectorFormat() ??
+                        'Ingrese Fecha Emisión Documento',
+                    icon: Icon(Icons.date_range,
+                        color: AppColors.getPrimaryColor()),
+                    textInputType: TextInputType.datetime,
+                    textCapitalization: TextCapitalization.none,
+                    title: 'Fecha Emisión Cédula',
+                  ),
+                ],
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  initialValue: fechaEmisionCedula?.selectorFormat(),
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaEmisionCedula?.selectorFormat()),
-                  onTap: () => selectEmisionFecha(context),
-                  readOnly: true,
-                  hintText: fechaEmisionCedula?.selectorFormat() ??
-                      'Ingrese Fecha Emisión Cédula',
-                  icon: Icon(Icons.date_range,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.datetime,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'Fecha Emisión Cédula',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: _selectedDate?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       _selectedDate?.selectorFormat()),
                   readOnly: true,
                   hintText: _selectedDate?.selectorFormat() ??
-                      'Ingrese Fecha Vencimiento Cédula',
+                      'Ingrese Fecha Vencimiento Documento',
                   onTap: () => selectDate(context),
                   icon: Icon(Icons.date_range,
                       color: AppColors.getPrimaryColor()),
@@ -493,6 +518,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: fechaNacimiento?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),
@@ -506,7 +532,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   title: 'Fecha Nacimiento',
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  countryCodeInput: CountryCodeInput.hn,
+                  maxLength: 10,
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Teléfono',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -525,7 +554,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  countryCodeInput: CountryCodeInput.hn,
+                  maxLength: 10,
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value,
                   ),
@@ -548,6 +580,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Escolaridad',
@@ -587,28 +620,30 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     );
                   },
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Nombre Público',
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  icon: Icon(Icons.account_circle,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'Nombre Público',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        nombrePublico: value,
-                      ),
-                    );
-                  },
-                ),
+                // const Gap(30),
+                // OutlineTextfieldWidget(
+                //   isRequired: true,
+                //   validator: (value) => ClassValidator.validateRequired(value),
+                //   hintText: 'Ingresa Nombre Público',
+                //   inputFormatters: [
+                //     UpperCaseTextFormatter(),
+                //   ],
+                //   icon: Icon(Icons.account_circle,
+                //       color: AppColors.getPrimaryColor()),
+                //   textInputType: TextInputType.text,
+                //   textCapitalization: TextCapitalization.words,
+                //   title: 'Nombre Público',
+                //   onChange: (value) {
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         nombrePublico: value,
+                //       ),
+                //     );
+                //   },
+                // ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   selectedItem: Item(
                     name: widget.userByDocumentHn?.sexo ?? '',
                     value: widget.userByDocumentHn?.sexo,
@@ -630,6 +665,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: const ItemNacionalidad(
+                    id: 0,
+                    valor: 'HN',
+                    nombre: 'Honduras',
+                    relacion: '',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa País Nacimiento',
@@ -686,6 +727,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ],
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  selectedItem: const ItemNacionalidad(
+                    id: 0,
+                    nombre: 'Honduras',
+                    valor: 'HN',
+                    relacion: '',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa Nacionalidad 1',

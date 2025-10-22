@@ -61,6 +61,7 @@ class SolicitudReprestamoHnLocalDb {
   DateTime? fechaSolicitud;
   int? cuotaClientePuedePagar;
   String? nombreCompleto;
+  String? descripcionDestino;
 
   SolicitudReprestamoHnLocalDb({
     required this.id,
@@ -119,5 +120,6 @@ class SolicitudReprestamoHnLocalDb {
     this.fechaSolicitud,
     this.cuotaClientePuedePagar,
     this.nombreCompleto,
+    this.descripcionDestino,
   });
 }

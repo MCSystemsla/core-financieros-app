@@ -55,6 +55,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
             Column(
               children: [
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Profesión',
@@ -73,6 +74,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'OCUPACION',
@@ -91,6 +93,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   flavor: global<FlavorCubit>().state.flavor,
@@ -112,6 +115,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     estadoCivil?.value == 'CAS') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -174,6 +178,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   if (trabajaConyuge) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -195,6 +200,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -216,6 +222,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -226,7 +233,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                           Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.phone,
                       textCapitalization: TextCapitalization.none,
-                      title: 'TelefonoTrabajoConyugue',
+                      title: 'Telefono Trabajo Conyugue',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -238,6 +245,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   ],
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Documento Cónyuge',
@@ -245,7 +253,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,
-                    title: 'DocumentoConyuge',
+                    title: 'Documento Conyugue',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -256,6 +264,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -266,7 +275,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'ActividadDescripcionConyuge',
+                    title: 'Actividad Descripción Conyugue',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -278,10 +287,10 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresos Netos',
-                  icon: Icon(Icons.attach_money,
-                      color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'Ingresos Netos',
@@ -299,6 +308,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Experiencia',
                   icon:
@@ -319,6 +329,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   flavor: global<FlavorCubit>().state.flavor,

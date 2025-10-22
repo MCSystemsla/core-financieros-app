@@ -107,10 +107,10 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
-                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Caserío Destino',
                   title: 'Caserio Destino',
                   onChange: (value) {
@@ -123,10 +123,10 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
-                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio Destino',
                   title: 'Barrio destino',
                   onChange: (value) {

@@ -25,6 +25,7 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
     try {
       final (isOk, msg) = await _repository.createSolicitudReprestamo(
         solicitud: SolicitudReprestamoHn(
+          descripcionDestino: state.descripcionDestino,
           origenSolicitudCodigo: state.origenSolicitudCodigo,
           cedula: state.cedula,
           monto: state.monto,
@@ -219,6 +220,8 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
           _prefer(state.origenSolicitudCodigo, prev?.origenSolicitudCodigo),
       frecuenciaCodigo: _prefer(state.frecuenciaCodigo, prev?.frecuenciaCodigo),
       nombreCompleto: _prefer(state.nombreCompleto, prev?.nombreCompleto),
+      descripcionDestino:
+          _prefer(state.descripcionDestino, prev?.descripcionDestino),
     );
   }
 

@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
             Column(
               children: [
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -76,7 +78,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     where: cubit.state.paisCasaCodigo,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Ingresa Departamento Negocio ID',
+                    hintText: 'Ingresa Departamento Negocio',
                     title: 'Departamento Negocio',
                     codigo: 'DEP',
                     onChanged: (item) {
@@ -145,6 +147,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -165,6 +168,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -185,6 +189,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Tiempo de Funcionamiento',
                   icon: Icon(Icons.access_time,
@@ -206,6 +211,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'SECTORECONOMICO',
@@ -223,6 +229,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'TIPOVIVIENDA',
@@ -240,6 +247,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Teléfono Negocio',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -258,7 +266,10 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  countryCodeInput: CountryCodeInput.hn,
+                  isRequired: true,
+                  maxLength: 9,
                   hintText: 'Ingresa Celular Negocio',
                   icon: Icon(Icons.smartphone,
                       color: AppColors.getPrimaryColor()),
@@ -278,6 +289,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Puesto Negocio',
                   icon: Icon(Icons.storefront,
@@ -294,31 +306,32 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     );
                   },
                 ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) => ClassValidator.validateRequired(
-                    value?.value,
-                  ),
-                  hintText: 'Ingresa Nivel Aproximado Ingresos',
-                  title: 'Nivel Aproximado Ingresos',
-                  codigo: 'NIVELAPROXIMADOINGRESOS',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        nivelAproximadoIngresosCodigo: item.value,
-                      ),
-                    );
-                  },
-                ),
+                // const Gap(30),
+                // SearchDropdownWidget(
+                //   isRequired: true,
+                //   validator: (value) => ClassValidator.validateRequired(
+                //     value?.value,
+                //   ),
+                //   hintText: 'Ingresa Nivel Aproximado Ingresos',
+                //   title: 'Nivel Aproximado Ingresos',
+                //   codigo: 'NIVELAPROXIMADOINGRESOS',
+                //   flavor: global<FlavorCubit>().state.flavor,
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         nivelAproximadoIngresosCodigo: item.value,
+                //       ),
+                //     );
+                //   },
+                // ),
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Horario Trabajo',
                   icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'HorarioTrabajo',
+                  title: 'Horario de Trabajo',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -334,7 +347,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'HorarioVisita',
+                  title: 'Horario de Visita',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(

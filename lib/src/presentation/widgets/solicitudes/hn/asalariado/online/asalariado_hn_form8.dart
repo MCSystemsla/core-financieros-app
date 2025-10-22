@@ -58,7 +58,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                   isRequired: true,
                   enabled: true,
                   hintText: 'Actividad Económica CIUU 1',
-                  title: 'ObjActividadEconomicaCIUU1',
+                  title: 'Actividad Económica CIUU 1',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -78,7 +78,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 1',
-                    title: 'actividadEconomicaDescripcion1',
+                    title: 'Descripción Actividad Económica 1',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -94,7 +94,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                   enabled: true,
                   isRequired: true,
                   hintText: 'Actividad Económica CIUU 2',
-                  title: 'ObjActividadEconomicaCIUU2',
+                  title: 'Actividad Económica CIUU 2',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -114,7 +114,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 2',
-                    title: 'actividadEconomicaDescripcion2',
+                    title: 'Descripción Actividad Económica 2',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -130,7 +130,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                   enabled: true,
                   isRequired: true,
                   hintText: 'Actividad Económica CIUU 3',
-                  title: 'ObjActividadEconomicaCIUU3',
+                  title: 'Actividad Económica CIUU 3',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -151,7 +151,7 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                       value,
                     ),
                     hintText: 'Descripción Actividad Económica 3',
-                    title: 'actividadEconomicaDescripcion3',
+                    title: 'Descripción Actividad Económica 3',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(

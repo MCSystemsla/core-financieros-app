@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -76,12 +77,14 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     estadoCivil?.value == 'CAS') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     hintText: 'Nombre del Cónyuge',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
-                    title: 'NombreConyugue',
+                    title: 'Nombre del Conyugue',
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -95,10 +98,12 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   ),
                   const Gap(30),
                   SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
                     codigo: 'PROFESION',
                     flavor: global<FlavorCubit>().state.flavor,
-                    hintText: 'Profesión del Cónyuge',
-                    title: 'ProfesionConyugue',
+                    hintText: 'Profesión del Cónyugue',
+                    title: 'Profesion del Conyugue',
                     onChanged: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -110,6 +115,8 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   ),
                   const Gap(30),
                   SheetSearchDropdown(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
                     title: 'Trabaja Conyugue?',
                     hintText: 'input.select.option'.tr(),
                     isRequired: true,
@@ -133,12 +140,14 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   if (trabajaConyuge) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Trabajo del Cónyuge',
                       icon: Icon(Icons.business,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
-                      title: 'TrabajoConyugue',
+                      title: 'Tranbajo del Conyugue',
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
@@ -152,6 +161,8 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Dirección del Trabajo del Cónyuge',
                       inputFormatters: [
                         UpperCaseTextFormatter(),
@@ -160,7 +171,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      title: 'DireccionTrabajoConyugue',
+                      title: 'Direccion del Trabajo del Conyugue',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -171,6 +182,8 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Teléfono del Trabajo del Cónyuge',
                       icon:
                           Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -179,7 +192,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
-                      title: 'TelefonoTrabajoConyugue',
+                      title: 'Telefono del Trabajo del Conyugue',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -190,6 +203,8 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       hintText: 'Tiempo de Laborar del Cónyuge',
                       icon: Icon(Icons.access_time,
                           color: AppColors.getPrimaryColor()),
@@ -197,8 +212,9 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       textCapitalization: TextCapitalization.none,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
                       ],
-                      title: 'TiempoLaborarConyugue',
+                      title: 'Tiempo de laborardel Conyugue',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -209,12 +225,14 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      hintText: 'Sueldo Mensual del Cónyuge',
-                      icon: Icon(Icons.attach_money,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Sueldo Mensual del Cónyugue',
+                      icon: Icon(Icons.wallet,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
-                      title: 'SueldoMesConyugue',
+                      title: 'Sueldo Mensual del Cónyugue',
                       inputFormatters: [
                         CurrencyInputFormatter(),
                       ],
@@ -230,12 +248,14 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   ],
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'Otros Ingresos del Cónyuge',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'Otros Ingresos del Cónyugue',
                     icon: Icon(Icons.payments,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.number,
                     textCapitalization: TextCapitalization.none,
-                    title: 'OtrosIngresosConyugue',
+                    title: 'Otros Ingresos del Cónyugue',
                     inputFormatters: [
                       CurrencyInputFormatter(),
                     ],
@@ -250,7 +270,9 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'Fuente de Otros Ingresos del Cónyuge',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'Fuente de Otros Ingresos del Cónyugue',
                     icon:
                         Icon(Icons.source, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
@@ -258,7 +280,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'FuenteOtrosIngresosConyugue',
+                    title: 'Fuente de Otros Ingresos del Cónyugue',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -289,8 +311,10 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   // ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.valor),
                     hintText: 'Nacionalidad del Cónyuge',
-                    title: 'NacionalidadConyugue',
+                    title: 'Nacionalidad del Cónyugue',
                     codigo: 'PAIS',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -308,9 +332,10 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                   icon: Icon(Icons.group, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'personasACargo',
+                  title: 'Personas a Cargo',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(

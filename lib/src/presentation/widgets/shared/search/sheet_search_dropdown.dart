@@ -221,22 +221,12 @@ class _CatalogoActividadesCNBSDropdownState
                       return ListTile(
                         title: Text(
                           dataItem.data.nombre,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: dataItem.data.esAPNFD
-                                ? Colors.deepOrangeAccent
-                                : Colors.black,
+                            color: Colors.black,
                           ),
                         ),
-                        subtitle: dataItem.data.esAPNFD
-                            ? const Text(
-                                'Aplica a APNFD',
-                                style: TextStyle(
-                                  color: Colors.deepOrangeAccent,
-                                ),
-                              )
-                            : null,
                         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
                       );
                     },

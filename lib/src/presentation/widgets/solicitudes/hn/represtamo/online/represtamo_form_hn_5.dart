@@ -39,6 +39,17 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
   bool isApnfd3 = false;
 
   @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        medidasConocimientoCodigo: 'NORM',
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudReprestamoHnCubit>();
@@ -62,7 +73,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   validator: (value) => ClassValidator.validateRequired(
                     value?.valor,
                   ),
-                  title: 'ActividadEconomicaCIUU1',
+                  title: 'Actividad Economica CIUU1',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -79,10 +90,11 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 if (actividadEconomicaCiuu1 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'ActividadEconomicaRealizaCIUU1',
+                    title: 'Actividad Economica Realiza CIUU1',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -103,13 +115,13 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 ],
                 const Gap(30),
                 CatalogoActividadesCNBSDropdown(
-                  isRequired: true,
+                  isRequired: false,
                   hintText: 'Selecciona una actividad',
                   enabled: true,
                   // validator: (value) => ClassValidator.validateRequired(
                   //   value?.valor,
                   // ),
-                  title: 'ActividadEconomicaCIUU2',
+                  title: 'Actividad Economica CIUU2',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -126,10 +138,11 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 if (actividadEconomicaCiuu2 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'ActividadEconomicaRealizaCIUU2',
+                    title: 'Actividad Economica Realiza CIUU2',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -153,7 +166,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   isRequired: true,
                   hintText: 'Selecciona una actividad',
                   enabled: true,
-                  title: 'ActividadEconomicaCIUU3',
+                  title: 'Actividad Economica CIUU3',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -170,10 +183,11 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 if (actividadEconomicaCiuu3 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'ActividadEconomicaRealizaCIUU3',
+                    title: 'Actividad Economica Realiza CIUU3',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -217,10 +231,12 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                 ],
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(name: 'Normal', value: 'NORM'),
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'MEDIDASCONOCIMIENTO',
-                  title: 'objMedidasConocimientoID',
+                  title: 'Medidas Conocimiento',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(

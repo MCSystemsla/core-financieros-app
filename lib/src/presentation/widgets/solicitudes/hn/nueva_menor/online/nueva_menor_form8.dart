@@ -76,6 +76,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 if (actividadEconomica1 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -118,6 +119,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 if (actividadEconomica2 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -160,6 +162,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 if (actividadEconomica3 != null) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],

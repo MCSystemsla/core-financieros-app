@@ -48,7 +48,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
-                  title: 'NombreFamiliarCercano',
+                  title: 'Nombre Familiar Cercano',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -66,7 +66,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.streetAddress,
                   textCapitalization: TextCapitalization.words,
-                  title: 'DireccionFamiliarCercano',
+                  title: 'Dirección Familiar Cercano',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -81,7 +81,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
-                  title: 'TelefonoFamiliarCercano',
+                  title: 'Teléfono Familiar Cercano',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],

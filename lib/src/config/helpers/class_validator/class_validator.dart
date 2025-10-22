@@ -111,4 +111,50 @@ class ClassValidator {
 
     return null;
   }
+
+  static String? hondurasDocumentValidator(
+      String? value, String tipoDocumento) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Este campo es obligatorio';
+    }
+
+    final input = value.trim();
+    final tipo = tipoDocumento;
+
+    final cedulaRegex = RegExp(r'^[0-9]{13}$');
+    final rtnRegex = RegExp(r'^[0-9]{14}$');
+    final pasaporteRegex = RegExp(r'^[A-Z][0-9]{7,8}$');
+    final carnetRegex = RegExp(r'^[A-Za-z0-9\-]{6,15}$');
+
+    switch (tipo) {
+      case 'DNI':
+        if (!cedulaRegex.hasMatch(input)) {
+          return 'La cédula debe tener exactamente 13 dígitos numéricos';
+        }
+        break;
+
+      case 'RTN':
+        if (!rtnRegex.hasMatch(input)) {
+          return 'El RTN debe tener exactamente 14 dígitos numéricos';
+        }
+        break;
+
+      case 'PASAPORTE':
+        if (!pasaporteRegex.hasMatch(input)) {
+          return 'El pasaporte debe tener entre 6 y 9 caracteres alfanuméricos';
+        }
+        break;
+
+      case 'CARNETRESIDENCIA':
+        if (!carnetRegex.hasMatch(input)) {
+          return 'El carné de residencia debe tener entre 6 y 15 caracteres alfanuméricos';
+        }
+        break;
+
+      default:
+        return 'Tipo de documento no reconocido';
+    }
+
+    return null;
+  }
 }

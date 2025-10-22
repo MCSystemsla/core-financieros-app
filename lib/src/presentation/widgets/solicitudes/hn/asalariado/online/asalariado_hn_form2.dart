@@ -36,6 +36,19 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
   String? munWhereClause;
   String? aldeaWhereClause;
   @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        paisCasaCodigo: widget.userByDocumentHnData.pais ?? 'HN',
+        departamentoCasaCodigo: widget.userByDocumentHnData.departamento ?? '',
+        municipioCasaCodigo: widget.userByDocumentHnData.municipio ?? '',
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
@@ -54,14 +67,16 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
               children: [
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
-                    valor: widget.userByDocumentHnData.pais ?? '',
-                    nombre: widget.userByDocumentHnData.pais ?? '',
+                    valor: widget.userByDocumentHnData.pais ?? 'HN',
+                    nombre: widget.userByDocumentHnData.pais ?? 'HN',
                     relacion: '',
                   ),
                   hintText: 'País de Casa',
-                  title: 'objPaisCasaID',
+                  title: 'Pais de Casa',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -77,6 +92,8 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: widget.userByDocumentHnData.departamento ?? '',
@@ -84,7 +101,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                     relacion: '',
                   ),
                   hintText: 'Departamento de Casa',
-                  title: 'objDepartamentoCasaID',
+                  title: 'Departamento de Casa',
                   codigo: 'DEP',
                   where: depWhereClause,
                   onChanged: (item) {
@@ -101,6 +118,8 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: widget.userByDocumentHnData.municipio ?? '',
@@ -109,7 +128,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   ),
                   codigo: 'MUN',
                   hintText: 'Municipio de Casa',
-                  title: 'objMunicipioCasaID',
+                  title: 'Municipio de Casa',
                   where: munWhereClause,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -125,8 +144,10 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.valor),
                   hintText: 'Aldea',
-                  title: 'objAldeaID',
+                  title: 'Aldea de Casa',
                   codigo: 'ALD',
                   where: aldeaWhereClause,
                   onChanged: (value) {
@@ -147,7 +168,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   ),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'CaseriCasa',
+                  title: 'Caserio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -160,12 +181,13 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   },
                 ),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: widget.userByDocumentHnData.direccion,
                   hintText: 'Dirección de Casa',
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
-                  title: 'DireccionCasa',
+                  title: 'Direccion de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -179,12 +201,13 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio de Casa',
                   icon: Icon(Icons.location_city,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'BarrioCasa',
+                  title: 'Barrio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -201,7 +224,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Condición de Casa',
-                  title: 'objCondicionCasaID',
+                  title: 'Condicion de Casa',
                   codigo: 'TIPOVIVIENDA',
                   onChanged: (value) {
                     cubit.onFieldChanged(
@@ -213,12 +236,13 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Años de Residencia en Casa',
                   icon:
                       Icon(Icons.timelapse, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'AnosResidirCasa',
+                  title: 'Años de Residencia en Casa',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),

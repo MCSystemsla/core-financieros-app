@@ -252,7 +252,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                 if (item == null) return;
                 producto = item;
                 tasaInteres = item.interes;
-                montoMinimo = item.montoMinimo;
+                montoMinimo = item.montoMinimo?.toInt();
                 montoMaximo = item.montoMaximo;
                 final nombreFormularioKiva =
                     localDbProvider.kivaConfiguracionBox

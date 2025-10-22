@@ -67,7 +67,7 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Solicitud nueva menor enviada exitosamente!!\n\n',
+                  text: 'Solicitud nueva enviada exitosamente!!\n\n',
                   repeat: false,
                   isUploadingForms: true,
                 ),

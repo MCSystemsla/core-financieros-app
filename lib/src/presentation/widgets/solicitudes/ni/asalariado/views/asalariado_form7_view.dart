@@ -285,7 +285,7 @@ class __FormContentState extends State<_FormContent> {
                     if (item == null) return;
                     producto = item;
                     tasaInteres = item.interes;
-                    montoMinimo = item.montoMinimo;
+                    montoMinimo = item.montoMinimo?.toInt();
                     montoMaximo = item.montoMaximo;
                     final nombreFormularioKiva =
                         localDbProvider.kivaConfiguracionBox
@@ -301,7 +301,7 @@ class __FormContentState extends State<_FormContent> {
                         objProductoId: item.value,
                         objProductoIdVer: item.name,
                         tasaInteres: item.interes,
-                        montoMinimo: item.montoMinimo,
+                        montoMinimo: item.montoMinimo?.toInt(),
                         montoMaximo: item.montoMaximo?.toInt(),
                         nombreFormularioKiva:
                             nombreFormularioKiva?.formularioKiva,

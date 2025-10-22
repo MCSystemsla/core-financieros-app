@@ -26,7 +26,7 @@ class Catalogo {
   final String valor;
   final String nombre;
   final double? interes;
-  final int? montoMinimo;
+  final double? montoMinimo;
   final double? montoMaximo;
   final bool isRecurrente;
   final bool esAPNFD;
@@ -51,8 +51,8 @@ class Catalogo {
             ? (json['montoMaximo'] as num).toDouble()
             : null,
         montoMinimo: json.containsKey('montoMinimo')
-            ? (json['montoMinimo'] as int)
-            : null,
+            ? (json['montoMinimo'] as num).toDouble()
+            : 0.0,
         isRecurrente: json.containsKey('EsRecurrente')
             ? (json['EsRecurrente'] as bool)
             : false,

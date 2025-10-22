@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -239,13 +238,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   setState(() {});
                 },
                 enabled: true,
-                items: [
-                  Branch(
-                    id: 27,
-                    nombre: 'Tegucigalpa',
-                    nombreDb: 'MC_TEGUCIGALPA_COPIA',
-                  ),
-                ],
+                items: const [],
                 hintText: 'Selecciona una sucursal',
               ),
               // BlocBuilder<BranchteamCubit, BranchteamState>(

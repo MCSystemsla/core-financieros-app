@@ -53,12 +53,15 @@ class CrearSolicitudHnScreen extends StatelessWidget {
           ),
         ),
       ],
-      child: Scaffold(
-          body: switch (typeForm) {
-        TypeForm.nueva => const NuevaMenorHnForm(),
-        TypeForm.asalariado => const AsalariadoHnForm(),
-        TypeForm.represtamo => const ReprestamoHnForm(),
-      }),
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+            body: switch (typeForm) {
+          TypeForm.nueva => const NuevaMenorHnForm(),
+          TypeForm.asalariado => const AsalariadoHnForm(),
+          TypeForm.represtamo => const ReprestamoHnForm(),
+        }),
+      ),
     );
   }
 }

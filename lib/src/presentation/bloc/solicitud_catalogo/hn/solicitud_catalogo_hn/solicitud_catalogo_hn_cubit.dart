@@ -130,7 +130,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
               type: codigo,
               interes: item.interes,
               montoMaximo: item.montoMaximo,
-              montoMinimo: item.montoMinimo,
+              montoMinimo: item.montoMinimo?.toInt(),
             ));
           } catch (e) {
             log('Error al guardar item $item del catálogo $codigo: $e');
@@ -161,7 +161,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           nombre: item.nombre,
           interes: item.interes,
           montoMaximo: item.montoMaximo,
-          montoMinimo: item.montoMinimo,
+          montoMinimo: item.montoMinimo?.toInt() ?? 0,
           isRecurrente: item.isRecurrente,
           type: 'PRODUCTO',
         ));

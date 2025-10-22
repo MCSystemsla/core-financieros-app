@@ -314,7 +314,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                     producto = item.value;
                     productoVer = item.name;
                     tasaInteres = item.interes;
-                    montoMinimo = item.montoMinimo;
+                    montoMinimo = item.montoMinimo?.toInt();
                     montoMaximo = item.montoMaximo;
                     final nombreFormularioKiva =
                         localDbProvider.kivaConfiguracionBox

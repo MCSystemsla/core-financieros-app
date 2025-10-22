@@ -118,6 +118,7 @@ class SolicitudAsalariadoHnDbLocal {
   String? barrioDestino;
   String? caseriCasa;
   String? aldeaCodigo;
+  String? descripcionDestino;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -233,5 +234,6 @@ class SolicitudAsalariadoHnDbLocal {
     this.barrioDestino,
     this.caseriCasa,
     this.aldeaCodigo,
+    this.descripcionDestino,
   });
 }

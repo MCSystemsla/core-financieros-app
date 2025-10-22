@@ -171,7 +171,7 @@ class __FormContentState extends State<_FormContent> {
                   ],
                   textInputType: TextInputType.number,
                   title: 'Otros ingresos (C\$)',
-                  icon: const Icon(Icons.attach_money),
+                  icon: const Icon(Icons.wallet),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

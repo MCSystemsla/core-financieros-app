@@ -67,7 +67,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         interes: item.interes,
         type: 'PRODUCTO',
         montoMaximo: item.montoMaximo,
-        montoMinimo: item.montoMinimo,
+        montoMinimo: item.montoMinimo?.toInt(),
         isRecurrente: item.isRecurrente,
       ));
     }
@@ -261,7 +261,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         type: codigo,
         interes: item.interes,
         montoMaximo: item.montoMaximo,
-        montoMinimo: item.montoMinimo,
+        montoMinimo: item.montoMinimo?.toInt(),
       ));
     }
   }

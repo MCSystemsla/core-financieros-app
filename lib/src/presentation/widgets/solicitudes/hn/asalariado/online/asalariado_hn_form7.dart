@@ -52,7 +52,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'País Destino',
-                  title: 'objPaisDestinoID',
+                  title: 'Pais Destino',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -71,7 +71,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Departamento Destino',
-                  title: 'objDepartamentoDestinoID',
+                  title: 'Departamento Destino',
                   where: depWhereClause,
                   codigo: 'DEP',
                   onChanged: (item) {
@@ -91,7 +91,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Municipio Destino',
-                  title: 'objMunicipioDestinoID',
+                  title: 'Municipio Destino',
                   where: munWhereClause,
                   codigo: 'MUN',
                   onChanged: (item) {
@@ -111,7 +111,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Aldea Destino',
-                  title: 'objAldeaDestinoID',
+                  title: 'Aldea Destino',
                   where: aldeaWhereClause,
                   codigo: 'ALD',
                   onChanged: (item) {
@@ -131,7 +131,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                       Icon(Icons.home_work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'CaserioDestino',
+                  title: 'Caserio Destino',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -150,7 +150,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   icon: Icon(Icons.house, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'BarrioDestino',
+                  title: 'Barrio Destino',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],

@@ -42,6 +42,19 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
   String? aldeaWhereClause;
 
   @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        paisCasaCodigo: widget.userByDocumentHn.pais ?? 'HN',
+        departamentoCasaCodigo: widget.userByDocumentHn.departamento ?? '',
+        municipioCasaCodigo: widget.userByDocumentHn.municipio ?? '',
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
@@ -61,8 +74,8 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 CatalogoValorNacionalidad(
                   selectedItem: ItemNacionalidad(
                     id: 0,
-                    nombre: widget.userByDocumentHn.pais ?? '',
-                    valor: widget.userByDocumentHn.pais ?? '',
+                    nombre: widget.userByDocumentHn.pais ?? 'Honduras',
+                    valor: widget.userByDocumentHn.pais ?? 'HN',
                     relacion: '',
                   ),
                   validator: (value) =>
@@ -172,6 +185,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: widget.userByDocumentHn.direccion,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -192,6 +206,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -208,6 +223,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Condición Casa',
@@ -225,6 +241,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Años Residir Casa',
                   icon: Icon(Icons.calendar_today,
@@ -247,6 +264,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Personas a cargo',
                   icon: Icon(Icons.group, color: AppColors.getPrimaryColor()),
@@ -268,6 +286,8 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                 ),
                 const Gap(30),
                 SheetSearchDropdown(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Ubicación',
                   title: 'Ingresa Ubicacion',
                   enabled: true,
@@ -277,10 +297,11 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     Item(name: 'Rural', value: 'RUR'),
                   ],
                   onChanged: (value) {
+                    if (value == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        ubicacion: value?.value,
-                        ubicacionCodigo: value?.value,
+                        ubicacion: value.value,
+                        ubicacionCodigo: value.value,
                       ),
                     );
                   },

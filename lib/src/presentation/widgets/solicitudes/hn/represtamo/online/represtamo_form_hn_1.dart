@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -89,6 +90,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   },
                 ),
                 SearchDropdownWidget(
+                  isRequired: true,
                   selectedItem: Item(
                     name: widget.userByDocumentReprestamoData.tipoPersona,
                     value: widget.userByDocumentReprestamoData.tipoPersona,
@@ -110,6 +112,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   selectedItem: Item(
                     name: widget.userByDocumentReprestamoData.tipoDocumento,
                     value: widget.userByDocumentReprestamoData.tipoDocumento,
@@ -132,14 +135,15 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   initialValue: widget.userByDocumentReprestamoData.cedula,
                   key: const ValueKey('cedula'),
-                  hintText: 'Cedula',
+                  hintText: 'Documento',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   textInputType: TextInputType.number,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Cedula',
+                  title: 'Documento',
                   onChange: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -150,7 +154,10 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  countryCodeInput: CountryCodeInput.hn,
+                  maxLength: 10,
+                  isRequired: true,
                   key: const ValueKey('celular'),
                   hintText: 'Celular Represtamo',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -219,6 +226,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 if (tieneVinculoEstadosUnidos) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     key: const ValueKey('vinculo'),
                     hintText: 'Vinculo Descripcion',
                     icon:
@@ -239,6 +247,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     },
                   ),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     key: const ValueKey('codigoUSA'),
                     hintText: 'Codigo USA',
                     icon:

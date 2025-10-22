@@ -116,6 +116,12 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                             id: 27,
                             nombre: 'Tegucigalpa',
                             nombreDb: 'MC_TEGUCIGALPA_COPIA',
+                          )),
+                          SelectedListItem<Branch>(
+                              data: Branch(
+                            id: 28,
+                            nombre: 'SANTA FE',
+                            nombreDb: 'MC_SF_CIERREM',
                           ))
                         ],
                         onSelected: (selectedItems) {

@@ -16,11 +16,11 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,11 +45,21 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
-  int? montoMinimo;
+  num? montoMinimo;
   double? montoMaximo;
   String? monto;
   String? plazoSolicitud;
   CatalogoFrecuenciaItem? frecuenciaDePago;
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        monedaCodigo: 'CORDOBA',
+      ),
+    );
+  }
 
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
@@ -173,10 +183,11 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
             Column(
               children: [
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: 'Propósito',
-                  title: 'Proposito',
+                  hintText: 'Destino del crédito',
+                  title: 'Destino del crédito',
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(propositoCodigo: value?.value),
@@ -186,7 +197,26 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   codigo: 'DESTINOCREDITO',
                 ),
                 const Gap(30),
+                OutlineTextfieldWidget(
+                  key: const ValueKey('DestinoDescripcion'),
+                  isRequired: true,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  hintText: 'ingresa descripcion del Destino',
+                  icon: Icon(Icons.description_outlined,
+                      color: AppColors.getPrimaryColor()),
+                  title: 'Descripcion del Destino',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        descripcionDestino: value,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(name: 'Lempira', value: 'CORDOBA'),
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'MONEDA',
@@ -203,12 +233,13 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   title: 'Moneda',
                 ),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   readOnly: true,
                   onTap: () => selectFechaDesembolso(context),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaDesembolso.selectorFormat()),
                   hintText: fechaDesembolso.selectorFormat(),
-                  icon: Icon(Icons.attach_money,
+                  icon: Icon(Icons.date_range,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   inputFormatters: [
@@ -219,10 +250,11 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  key: const ValueKey('Monto'),
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Monto',
-                  icon: Icon(Icons.attach_money,
-                      color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -239,9 +271,10 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: 'selecciona producto',
+                  hintText: 'Selecciona producto',
                   codigo: 'PRODUCTO',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -259,6 +292,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Plazo de la solicitud',
                   icon:
@@ -281,6 +315,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   readOnly: true,
                   onTap: () => selectDate(context),
                   validator: (value) => ClassValidator.validateRequired(
@@ -295,6 +330,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 ),
                 const Gap(30),
                 CatalogoFrecuenciaPagoDropdown(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   onChanged: (item) {
@@ -355,7 +391,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -365,7 +401,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -395,7 +431,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
                     onDone: () {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

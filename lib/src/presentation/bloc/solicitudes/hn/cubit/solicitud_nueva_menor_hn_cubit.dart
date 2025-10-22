@@ -36,7 +36,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           apellido1: state.apellido1,
           cedula: state.cedula,
           paisEmisorCedulaCodigo: state.paisEmisorCedulaCodigo,
-          fechaEmisionCedula: DateTime.parse(state.fechaEmisionCedula),
+          fechaEmisionCedula: DateTime.tryParse(state.fechaEmisionCedula),
           fechaVencimientoCedula: DateTime.parse(state.fechaVencimientoCedula),
           fechaNacimiento: DateTime.parse(state.fechaNacimiento),
           telefono: state.telefono,

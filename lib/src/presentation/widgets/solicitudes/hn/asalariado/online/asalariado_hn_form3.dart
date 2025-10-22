@@ -1,7 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
-import 'dart:developer';
-
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
@@ -12,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,8 +50,10 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
             Column(
               children: [
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   hintText: 'Profesión',
-                  title: 'objprofesionID',
+                  title: 'Profesion',
                   codigo: 'PROFESION',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -67,8 +67,10 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
                   hintText: 'Ocupación',
-                  title: 'objOcupacionID',
+                  title: 'Ocupacion',
                   codigo: 'OCUPACION',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -100,12 +102,13 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Nombre del Trabajo',
                   icon:
                       Icon(Icons.business, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'NombreTrabajo',
+                  title: 'Nombre del Trabajo',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -119,12 +122,13 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Dirección del Trabajo',
                   icon: Icon(Icons.location_on,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
-                  title: 'DireccionTrabajo',
+                  title: 'Direccion del Trabajo',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -138,12 +142,13 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Barrio del Trabajo',
                   icon: Icon(Icons.location_city,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'BarrioTrabajo',
+                  title: 'Barrio del Trabajo',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -156,12 +161,15 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  isRequired: false,
+                  maxLength: 10,
+                  countryCodeInput: CountryCodeInput.hn,
                   hintText: 'Teléfono del Trabajo',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
-                  title: 'TelefonoTrabajo',
+                  title: 'Telefono del Trabajo',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -200,7 +208,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'LugarTrabajoAnterior',
+                  title: 'Lugar del Trabajo Anterior',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -214,12 +222,12 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Salario Neto',
-                  icon: Icon(Icons.attach_money,
-                      color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'SalarioNetoCordoba',
+                  title: 'Salario Neto',
                   inputFormatters: [
                     CurrencyInputFormatter(),
                   ],
@@ -242,7 +250,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                       Icon(Icons.payments, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'OtrosIngresosCordoba',
+                  title: 'Otros Ingresos',
                   inputFormatters: [
                     CurrencyInputFormatter(),
                   ],
@@ -256,7 +264,6 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                             (int.tryParse(newValue) ?? 0),
                       ),
                     );
-                    log('otrosIngresosCordoba: $newValue | totalIngresoMes:   ${cubit.state.totalIngresoMes}');
                   },
                 ),
                 const Gap(30),
@@ -265,7 +272,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   icon: Icon(Icons.source, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
-                  title: 'FuenteOtrosIngresos',
+                  title: 'Fuente Otros Ingresos',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -274,41 +281,22 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                     );
                   },
                 ),
-                // const Gap(30),
-                // BlocBuilder<SolicitudAslariadoHnCubit,
-                //     SolicitudAslariadoHnState>(
-                //   builder: (context, state) {
-                //     return OutlineTextfieldWidget(
-                //       key: ValueKey(state.totalIngresoMes),
-                //       textEditingController: TextEditingController(
-                //         text: state.totalIngresoMes.toCurrencyString(),
+                // SearchDropdownWidget(
+                //   validator: (value) =>
+                //       ClassValidator.validateRequired(value?.value),
+                //   hintText: 'Nivel Aproximado de Ingresos',
+                //   title: 'Nivel Aproximado de Ingresos',
+                //   codigo: 'NIVELAPROXIMADOINGRESOS',
+                //   flavor: global<FlavorCubit>().state.flavor,
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         nivelAproximadoDeIngresosCodigo: item.value,
                 //       ),
-                //       readOnly: true,
-                //       icon: Icon(Icons.account_balance_wallet,
-                //           color: AppColors.getPrimaryColor()),
-                //       textInputType: TextInputType.number,
-                //       textCapitalization: TextCapitalization.none,
-                //       title: 'TotalIngresoMes',
                 //     );
                 //   },
                 // ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Nivel Aproximado de Ingresos',
-                  title: 'ObjNivelAproximadoDeIngresosID',
-                  codigo: 'NIVELAPROXIMADOINGRESOS',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        nivelAproximadoDeIngresosCodigo: item.value,
-                      ),
-                    );
-                  },
-                ),
               ],
             ),
             const Gap(30),

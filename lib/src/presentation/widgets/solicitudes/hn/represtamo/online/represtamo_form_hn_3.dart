@@ -15,11 +15,11 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,11 +45,22 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
-  int? montoMinimo;
+  num? montoMinimo;
   double? montoMaximo;
   String? monto;
   String? plazoSolicitud;
   CatalogoFrecuenciaItem? frecuenciaDePago;
+
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        monedaCodigo: 'CORDOBA',
+      ),
+    );
+  }
 
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
@@ -174,11 +185,12 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
             Column(
               children: [
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
                   ),
-                  hintText: 'Propósito',
-                  title: 'Proposito',
+                  hintText: 'Destino',
+                  title: 'Destino del crédito',
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -189,8 +201,29 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                   flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'DESTINOCREDITO',
                 ),
+                if (cubit.state.propositoCodigo.isNotEmpty) ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'ingresa descripcion del Destino',
+                    icon: Icon(Icons.description_outlined,
+                        color: AppColors.getPrimaryColor()),
+                    title: 'Descripcion del Destino',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          descripcionDestino: value,
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(name: 'Lempira', value: 'CORDOBA'),
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'MONEDA',
@@ -207,12 +240,13 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                   title: 'Moneda',
                 ),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   readOnly: true,
                   onTap: () => selectFechaDesembolso(context),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaDesembolso.selectorFormat()),
                   hintText: fechaDesembolso.selectorFormat(),
-                  icon: Icon(Icons.attach_money,
+                  icon: Icon(Icons.date_range,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
@@ -220,10 +254,10 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'ingresa monto',
-                  icon: Icon(Icons.attach_money,
-                      color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -241,6 +275,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Producto',
@@ -261,6 +296,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Plazo de la solicitud (meses)',
                   icon:
@@ -271,7 +307,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  title: 'Plazo de la solicitud',
+                  title: 'Plazo de la solicitud (meses)',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state
@@ -283,6 +319,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  isRequired: true,
                   readOnly: true,
                   onTap: () => selectDate(context),
                   validator: (value) => ClassValidator.validateRequired(
@@ -297,6 +334,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 ),
                 const Gap(30),
                 CatalogoFrecuenciaPagoDropdown(
+                  isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   onChanged: (item) {
@@ -355,7 +393,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()}',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -395,7 +433,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
                     onDone: () {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

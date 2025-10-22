@@ -25,6 +25,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
+          descripcionDestino: state.descripcionDestino,
           database: state.database,
           isOffline: state.isOffline,
           origenSolicitudCodigo: state.origenSolicitudCodigo,
@@ -34,7 +35,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
           apellido2: state.apellido2,
           cedula: state.cedula,
           paisEmisorCedulaCodigo: state.paisEmisorCedulaCodigo,
-          fechaEmisionCedula: DateTime.parse(state.fechaEmisionCedula),
+          fechaEmisionCedula: DateTime.tryParse(state.fechaEmisionCedula),
           fechaVencimientoCedula: DateTime.parse(state.fechaVencimientoCedula),
           fechaNacimiento: DateTime.parse(state.fechaNacimiento),
           telefono: state.telefono,
@@ -420,6 +421,8 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       nacinalidad: _prefer(state.nacinalidad, prev?.nacinalidad),
       propositoCodigo: _prefer(state.propositoCodigo, prev?.propositoCodigo),
       telefono: _prefer(state.telefono, prev?.telefono),
+      descripcionDestino:
+          _prefer(state.descripcionDestino, prev?.descripcionDestino),
     );
   }
 

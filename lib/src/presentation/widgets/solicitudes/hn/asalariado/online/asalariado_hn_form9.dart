@@ -15,12 +15,12 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_sending_form_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,11 +44,22 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
-  int? montoMinimo;
+  num? montoMinimo;
   double? montoMaximo;
   String? monto;
   String? plazoSolicitud;
   CatalogoFrecuenciaItem? frecuenciaDePago;
+
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        monedaCodigo: 'CORDOBA',
+      ),
+    );
+  }
 
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
@@ -176,7 +187,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'SECTORECONOMICO',
                   hintText: 'Sector',
-                  title: 'objSectorID',
+                  title: 'Sector',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -192,8 +203,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
                   ),
-                  hintText: 'Producto',
-                  title: 'objProductoID',
+                  hintText: 'Selecciona un Producto',
+                  title: 'Producto ',
                   flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'PRODUCTO',
                   onChanged: (item) {
@@ -210,10 +221,11 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: const Item(name: 'Lempira', value: 'CORDOBA'),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: 'Moneda',
-                  title: 'objMonedaID',
+                  hintText: 'ingresa Moneda',
+                  title: 'Moneda',
                   codigo: 'MONEDA',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (value) {
@@ -231,8 +243,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     value?.value,
                   ),
                   codigo: 'DESTINOCREDITO',
-                  hintText: 'Propósito',
-                  title: 'objPropositoID',
+                  hintText: 'selecciona un Destino',
+                  title: 'Destino del Credito',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -242,12 +254,32 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     );
                   },
                 ),
+                if (cubit.state.propositoCodigo.isNotEmpty) ...[
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    key: const ValueKey('DestinoDescripcion'),
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'ingresa descripcion del Destino',
+                    icon: Icon(Icons.description_outlined,
+                        color: AppColors.getPrimaryColor()),
+                    title: 'Descripcion del Destino',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          descripcionDestino: value,
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  key: const ValueKey('Monto'),
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Monto',
-                  icon: Icon(Icons.attach_money,
-                      color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
                   title: 'Monto',
@@ -267,8 +299,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                 CatalogoFrecuenciaPagoDropdown(
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
-                  hintText: 'Frecuencia',
-                  title: 'objFrecuenciaID',
+                  hintText: 'ingresa Frecuencia',
+                  title: 'Frecuencia de pago',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -286,14 +318,14 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Plazo de Solicitud',
+                  hintText: 'Plazo de Solicitud (meses)',
                   icon: Icon(
                     Icons.schedule,
                     color: AppColors.getPrimaryColor(),
                   ),
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
-                  title: 'PlazoSolicitud',
+                  title: 'Plazo de Solicitud (meses)',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -337,7 +369,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   ),
                   textInputType: TextInputType.datetime,
                   textCapitalization: TextCapitalization.none,
-                  title: 'FechaPrimerPagoSolicitud',
+                  title: 'Fecha de Primer Pago',
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -379,7 +411,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toIntFormat}',
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -389,7 +421,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -419,7 +451,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} USD',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
                     onDone: () {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

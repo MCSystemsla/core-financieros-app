@@ -194,8 +194,10 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                           UpperCaseTextFormatter(),
                         ],
                         textEditingController: cedulaController,
-                        validator: (value) => ClassValidator.validateRequired(
+                        validator: (value) =>
+                            ClassValidator.hondurasDocumentValidator(
                           value,
+                          tipoDocumento?.value,
                         ),
                         icon: Icon(
                           Icons.credit_card_outlined,

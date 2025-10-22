@@ -2,6 +2,7 @@
 part of 'solicitud_represtamo_hn_cubit.dart';
 
 class SolicitudReprestamoHnState extends Equatable {
+  final String descripcionDestino;
   final String nombreCompleto;
   final String errorMsg;
   final int idLocalResponse;
@@ -59,6 +60,7 @@ class SolicitudReprestamoHnState extends Equatable {
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
   const SolicitudReprestamoHnState({
+    this.descripcionDestino = '',
     this.nombreCompleto = '',
     this.errorMsg = '',
     this.idLocalResponse = 0,
@@ -119,6 +121,7 @@ class SolicitudReprestamoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        descripcionDestino,
         nombreCompleto,
         errorMsg,
         idLocalResponse,
@@ -177,6 +180,7 @@ class SolicitudReprestamoHnState extends Equatable {
       ];
 
   SolicitudReprestamoHnState copyWith({
+    String? descripcionDestino,
     String? nombreCompleto,
     String? errorMsg,
     int? idLocalResponse,
@@ -235,6 +239,7 @@ class SolicitudReprestamoHnState extends Equatable {
     String? nombreEmpleadoFamiliar,
   }) {
     return SolicitudReprestamoHnState(
+      descripcionDestino: descripcionDestino ?? this.descripcionDestino,
       nombreCompleto: nombreCompleto ?? this.nombreCompleto,
       errorMsg: errorMsg ?? this.errorMsg,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,

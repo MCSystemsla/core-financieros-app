@@ -12,7 +12,7 @@ class SolicitudNuevaMenorHn {
   final String apellido1;
   final String cedula;
   final String paisEmisorCedulaCodigo;
-  final DateTime fechaEmisionCedula;
+  final DateTime? fechaEmisionCedula;
   final DateTime fechaVencimientoCedula;
   final DateTime fechaNacimiento;
   final String telefono;
@@ -131,7 +131,7 @@ class SolicitudNuevaMenorHn {
     required this.apellido1,
     required this.cedula,
     required this.paisEmisorCedulaCodigo,
-    required this.fechaEmisionCedula,
+    this.fechaEmisionCedula,
     required this.fechaVencimientoCedula,
     required this.fechaNacimiento,
     required this.telefono,
@@ -250,7 +250,7 @@ class SolicitudNuevaMenorHn {
       'Apellido1': apellido1,
       'Cedula': cedula,
       'PaisEmisorCedulaCodigo': paisEmisorCedulaCodigo,
-      'FechaEmisionCedula': fechaEmisionCedula.toUtc().toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String(),
       'FechaVencimientoCedula':
           fechaVencimientoCedula.toUtc().toIso8601String(),
       'FechaNacimiento': fechaNacimiento.toUtc().toIso8601String(),

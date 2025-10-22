@@ -12,7 +12,7 @@ class Item<T> extends Equatable {
   final String name;
   final T value;
   final double? interes;
-  final int? montoMinimo;
+  final num? montoMinimo;
   final double? montoMaximo;
   final bool isApnfd;
 

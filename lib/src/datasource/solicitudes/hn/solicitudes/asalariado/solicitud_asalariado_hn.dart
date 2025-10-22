@@ -15,9 +15,9 @@ class SolicitudAsalariadoHn {
   final String apellido2;
   final String cedula;
   final String paisEmisorCedulaCodigo;
-  final DateTime fechaEmisionCedula;
+  final DateTime? fechaEmisionCedula;
   final DateTime fechaVencimientoCedula;
-  final DateTime fechaNacimiento;
+  final DateTime? fechaNacimiento;
   final String telefono;
   final String celular;
   final String direccionCasa;
@@ -118,6 +118,7 @@ class SolicitudAsalariadoHn {
   final String barrioDestino;
   final String caseriCasa;
   final String aldeaCodigo;
+  final String descripcionDestino;
   // final String medidasConocimientoCodigo;
 
   SolicitudAsalariadoHn({
@@ -130,9 +131,9 @@ class SolicitudAsalariadoHn {
     required this.apellido2,
     required this.cedula,
     required this.paisEmisorCedulaCodigo,
-    required this.fechaEmisionCedula,
+    this.fechaEmisionCedula,
     required this.fechaVencimientoCedula,
-    required this.fechaNacimiento,
+    this.fechaNacimiento,
     required this.telefono,
     required this.celular,
     required this.direccionCasa,
@@ -233,6 +234,7 @@ class SolicitudAsalariadoHn {
     required this.barrioDestino,
     required this.caseriCasa,
     required this.aldeaCodigo,
+    required this.descripcionDestino,
     // required this.medidasConocimientoCodigo,
   });
 
@@ -247,10 +249,10 @@ class SolicitudAsalariadoHn {
       'Apellido2': apellido2,
       'Cedula': cedula,
       'PaisEmisorCedulaCodigo': paisEmisorCedulaCodigo,
-      'FechaEmisionCedula': fechaEmisionCedula.toUtc().toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String(),
       'FechaVencimientoCedula':
           fechaVencimientoCedula.toUtc().toIso8601String(),
-      'FechaNacimiento': fechaNacimiento.toUtc().toIso8601String(),
+      'FechaNacimiento': fechaNacimiento?.toUtc().toIso8601String(),
       'Telefono': telefono,
       'Celular': celular,
       'DireccionCasa': direccionCasa,
@@ -353,6 +355,7 @@ class SolicitudAsalariadoHn {
       'CaseriCasa': caseriCasa,
       'AldeaCodigo': aldeaCodigo,
       'MedidasConocimientoCodigo': 'NORM',
+      'DescripcionDestino': descripcionDestino,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

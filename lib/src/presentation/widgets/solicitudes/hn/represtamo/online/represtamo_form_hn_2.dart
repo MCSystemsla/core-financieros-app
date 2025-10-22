@@ -77,6 +77,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                 if (tieneFamiliarEmpleado) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Nombre de Familiar Empleado',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -97,6 +98,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Cedula Familiar Empleado',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -144,6 +146,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                 if (esPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Nombre de Entidad PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -180,6 +183,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Periodo PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -201,6 +205,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Cargo Oficial PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -247,7 +252,8 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                 if (tieneFamiliarPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'NombreFamiliarPeps2',
+                    isRequired: true,
+                    hintText: 'Nombre Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [UpperCaseTextFormatter()],
@@ -266,6 +272,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     },
                   ),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     hintText: 'Nombre Entidad Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
@@ -286,7 +293,8 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'ParentescoFamiliarPeps2',
+                    isRequired: true,
+                    hintText: 'Parentesco Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [UpperCaseTextFormatter()],
@@ -306,7 +314,8 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'CargoFamiliarPeps2',
+                    isRequired: true,
+                    hintText: 'Cargo Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [UpperCaseTextFormatter()],
@@ -326,7 +335,8 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
-                    hintText: 'PeriodoPeps2',
+                    isRequired: true,
+                    hintText: 'Periodo PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
@@ -351,7 +361,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Pais PEPS 2',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
-                    title: 'PaisPeps2',
+                    title: 'Pais PEPS 2',
                     onChanged: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(

@@ -81,6 +81,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 if (esPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -91,7 +92,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
-                    title: 'NombreDeEntidadPeps',
+                    title: 'Nombre de Entidad PEPS',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -105,7 +106,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'País PEPS',
-                    title: 'PaisPeps',
+                    title: 'País PEPS',
                     codigo: 'PAIS',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -118,6 +119,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Periodo PEPS',
@@ -128,7 +130,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     textCapitalization: TextCapitalization.none,
-                    title: 'PeriodoPeps',
+                    title: 'Periodo PEPS',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -139,6 +141,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -148,7 +151,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     icon: Icon(Icons.badge, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
-                    title: 'CargoOficialPeps',
+                    title: 'Cargo Oficial PEPS',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -185,6 +188,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 if (tieneFamiliarPeps) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -206,6 +210,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   SearchDropdownWidget(
+                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
                     onChanged: (item) {
@@ -219,10 +224,11 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     flavor: global<FlavorCubit>().state.flavor,
                     codigo: 'PARENTESCO',
                     hintText: 'Parentesco Familiar PEPS 2',
-                    title: 'ParentescoFamiliarPeps2',
+                    title: 'Parentesco Familiar PEPS 2',
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -244,6 +250,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -254,7 +261,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
-                    title: 'NombreEntidadPeps2',
+                    title: 'Nombre Entidad PEPS 2',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -265,6 +272,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Periodo PEPS 2',
@@ -275,7 +283,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    title: 'PeriodoPeps2',
+                    title: 'Periodo PEPS 2',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -330,6 +338,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                 if (esFamiliarEmpleado) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -340,7 +349,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
-                    title: 'NombreFamiliar',
+                    title: 'Nombre Familiar',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -351,6 +360,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'Cédula Familiar',
@@ -361,7 +371,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    title: 'CedulaFamiliar',
+                    title: 'Cédula Familiar',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
