@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_actividad_cnbs_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_aldea_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_barrio_local_db.dart';
@@ -35,6 +36,8 @@ class SolicitudesHnBoxService {
   late final Box<CatalogoCaserioLocalDb> catalogoCaserioBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   late final Box<CatalogoActividadCnbsLocalDb> catalogoActividadCnbsBox;
+  late final Box<ActividadesEconomicasAliasFilteredLocalDb>
+      actividadesEconomicasAliasFilteredBox;
 
   SolicitudesHnBoxService._create(this._store) {
     solicitudesAsalariadoBox = _store.box<SolicitudAsalariadoHnDbLocal>();
@@ -50,6 +53,8 @@ class SolicitudesHnBoxService {
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     solicitudesReprestamoBox = _store.box<SolicitudReprestamoHnLocalDb>();
     catalogoActividadCnbsBox = _store.box<CatalogoActividadCnbsLocalDb>();
+    actividadesEconomicasAliasFilteredBox =
+        _store.box<ActividadesEconomicasAliasFilteredLocalDb>();
   }
 
   static Future<SolicitudesHnBoxService> init() async {

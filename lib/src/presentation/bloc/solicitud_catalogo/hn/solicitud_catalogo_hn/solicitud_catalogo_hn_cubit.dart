@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_actividad_cnbs_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_aldea_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_barrio_local_db.dart';
@@ -75,6 +76,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       // );
       await saveCatalogoFrecuenciaPago();
       await getAndSaveParametros();
+      await saveActividadesEconomicasAlias();
       emit(state.copyWith(status: Status.done));
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
     } catch (e, stack) {
@@ -317,5 +319,28 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       type: 'EDADMAXIMACLIENTE',
       nombre: 'EDADMAXIMACLIENTE',
     ));
+  }
+
+  Future<void> saveActividadesEconomicasAlias() async {
+    try {
+      final resp = await _repository.getActividadesEconomicasAliasFiltered();
+      final query = _objectBoxService.actividadesEconomicasAliasFilteredBox
+          .query()
+          .build();
+      query.remove();
+      for (var item in resp.data) {
+        _objectBoxService.actividadesEconomicasAliasFilteredBox.put(
+          ActividadesEconomicasAliasFilteredLocalDb(
+            alias: item.alias,
+            codActividadEconomica: item.codActividadEconomica,
+            idActividadEconomica: item.id,
+            nombre: item.nombre,
+          ),
+        );
+      }
+    } catch (e, s) {
+      log('Error al guardar actividades economicas alias: $e, $s');
+      rethrow;
+    }
   }
 }

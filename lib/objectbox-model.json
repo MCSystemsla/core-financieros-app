@@ -3893,9 +3893,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "26:503892743731821937",
+      "lastPropertyId": "5:7394777095444133640",
+      "name": "ActividadesEconomicasAliasFilteredLocalDb",
+      "properties": [
+        {
+          "id": "1:2775651527704016861",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5369781027320073030",
+          "name": "idActividadEconomica",
+          "type": 6
+        },
+        {
+          "id": "3:2461285129989763116",
+          "name": "codActividadEconomica",
+          "type": 9
+        },
+        {
+          "id": "4:9078176066834609504",
+          "name": "nombre",
+          "type": 9
+        },
+        {
+          "id": "5:7394777095444133640",
+          "name": "alias",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "25:6325410303592619556",
+  "lastEntityId": "26:503892743731821937",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

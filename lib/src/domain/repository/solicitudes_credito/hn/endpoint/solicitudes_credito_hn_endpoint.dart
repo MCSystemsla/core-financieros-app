@@ -358,3 +358,16 @@ class GetAsesoresHNEndpoint extends Endpoint {
         'database': LocalStorage().database,
       };
 }
+
+class ActividadesEconomicasAliasFilteredEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/ahorro/herramientas/actividades-economicas-alias/get-filtered';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+}

@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
@@ -85,6 +86,8 @@ abstract class SolicitudesCreditoHnRepository {
     required int idPromotor,
   });
   Future<(bool, Asesor)> getAsesores();
+  Future<ActividadesEconomicasAliasFilteredResponse>
+      getActividadesEconomicasAliasFiltered();
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -602,6 +605,29 @@ class SolicitudesCreditoHnRepositoryImpl
       final data = Asesor.fromJson(resp);
       _logger.i(resp);
       return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ActividadesEconomicasAliasFilteredResponse>
+      getActividadesEconomicasAliasFiltered() async {
+    final endpoint = ActividadesEconomicasAliasFilteredEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = ActividadesEconomicasAliasFilteredResponse.fromJson(resp);
+      _logger.i(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;
