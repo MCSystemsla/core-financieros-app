@@ -45,6 +45,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
   void initState() {
     super.initState();
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    depWhereClause = widget.userByDocumentHn.pais ?? 'HN';
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         paisCasaCodigo: widget.userByDocumentHn.pais ?? 'HN',

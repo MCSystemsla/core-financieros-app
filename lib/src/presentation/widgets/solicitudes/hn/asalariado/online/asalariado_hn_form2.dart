@@ -39,6 +39,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
   void initState() {
     super.initState();
     final cubit = context.read<SolicitudAslariadoHnCubit>();
+    depWhereClause = widget.userByDocumentHnData.pais ?? 'HN';
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         paisCasaCodigo: widget.userByDocumentHnData.pais ?? 'HN',
