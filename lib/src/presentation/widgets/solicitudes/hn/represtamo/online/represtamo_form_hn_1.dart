@@ -156,7 +156,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 const Gap(30),
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 10,
+                  maxLength: 15,
                   isRequired: true,
                   key: const ValueKey('celular'),
                   hintText: 'Celular Represtamo',
@@ -252,7 +252,10 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     hintText: 'Codigo USA',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(25),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>

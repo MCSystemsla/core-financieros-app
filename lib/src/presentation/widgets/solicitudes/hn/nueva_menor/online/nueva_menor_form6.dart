@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -110,6 +111,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Caserío Destino',
                   title: 'Caserio Destino',
@@ -126,6 +128,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Barrio Destino',
                   title: 'Barrio destino',
@@ -141,6 +144,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(200),
                   ],
                   hintText: 'Descripción Destino',
                   icon: Icon(Icons.description,

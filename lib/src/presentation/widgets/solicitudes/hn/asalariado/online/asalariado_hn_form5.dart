@@ -86,6 +86,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     hintText: 'Nombre de Entidad PEPS',
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     icon: Icon(Icons.account_balance,
                         color: AppColors.getPrimaryColor()),
@@ -111,6 +112,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     textCapitalization: TextCapitalization.none,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     title: 'Periodo PEPS',
                     onChange: (value) {
@@ -129,6 +131,10 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     title: 'Cargo Oficial PEPS',
                     onChange: (value) {
                       cubit.onFieldChanged(
@@ -190,6 +196,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     textCapitalization: TextCapitalization.words,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     title: 'Nombre Familiar PEPS',
                     onChange: (value) {
@@ -226,6 +233,10 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     title: 'Cargo Familiar PEPS',
                     onChange: (value) {
                       cubit.onFieldChanged(
@@ -244,6 +255,10 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     title: 'Nombre Entidad PEPS 2',
                     onChange: (value) {
                       cubit.onFieldChanged(
@@ -326,6 +341,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     textCapitalization: TextCapitalization.words,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     title: 'Nombre Familiar Empleado',
                     onChange: (value) {
@@ -348,6 +364,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     title: 'Cédula Familiar',
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(25),
                     ],
                     onChange: (value) {
                       cubit.onFieldChanged(

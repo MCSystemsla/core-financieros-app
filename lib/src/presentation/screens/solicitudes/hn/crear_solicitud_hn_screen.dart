@@ -56,11 +56,15 @@ class CrearSolicitudHnScreen extends StatelessWidget {
       child: PopScope(
         canPop: false,
         child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              child: const Icon(Icons.build),
+              onPressed: () {},
+            ),
             body: switch (typeForm) {
-          TypeForm.nueva => const NuevaMenorHnForm(),
-          TypeForm.asalariado => const AsalariadoHnForm(),
-          TypeForm.represtamo => const ReprestamoHnForm(),
-        }),
+              TypeForm.nueva => const NuevaMenorHnForm(),
+              TypeForm.asalariado => const AsalariadoHnForm(),
+              TypeForm.represtamo => const ReprestamoHnForm(),
+            }),
       ),
     );
   }

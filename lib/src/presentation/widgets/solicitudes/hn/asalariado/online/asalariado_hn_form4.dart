@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -87,6 +88,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     title: 'Nombre del Conyugue',
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(250),
                     ],
                     onChange: (value) {
                       cubit.onFieldChanged(
@@ -150,6 +152,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       title: 'Tranbajo del Conyugue',
                       inputFormatters: [
                         UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
@@ -181,7 +184,10 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       },
                     ),
                     const Gap(30),
-                    OutlineTextfieldWidget(
+                    CountryInput(
+                      isRequired: true,
+                      maxLength: 15,
+                      countryCodeInput: CountryCodeInput.hn,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Teléfono del Trabajo del Cónyuge',
@@ -279,6 +285,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     textCapitalization: TextCapitalization.sentences,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     title: 'Fuente de Otros Ingresos del Cónyugue',
                     onChange: (value) {
@@ -289,26 +296,6 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       );
                     },
                   ),
-                  // const Gap(30),
-                  // OutlineTextfieldWidget(
-                  //   hintText: 'Total Ingreso Mensual del Cónyuge',
-                  //   icon: Icon(Icons.account_balance_wallet,
-                  //       color: AppColors.getPrimaryColor()),
-                  //   textInputType: TextInputType.number,
-                  //   textCapitalization: TextCapitalization.none,
-                  //   title: 'TotalIngresoMesConyugue',
-                  //   inputFormatters: [
-                  //     CurrencyInputFormatter(),
-                  //   ],
-                  //   onChange: (value) {
-                  //     final newValue = value.replaceAll(',', '');
-                  //     cubit.onFieldChanged(
-                  //       () => cubit.state.copyWith(
-                  //         totalIngresoMesConyugue: int.tryParse(newValue) ?? 0,
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     validator: (value) =>

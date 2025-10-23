@@ -72,7 +72,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: widget.userByDocumentHnData.pais ?? 'HN',
-                    nombre: widget.userByDocumentHnData.pais ?? 'HN',
+                    nombre: widget.userByDocumentHnData.pais ?? 'Honduras',
                     relacion: '',
                   ),
                   hintText: 'País de Casa',
@@ -171,6 +171,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   title: 'Caserio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -210,6 +211,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   title: 'Barrio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(

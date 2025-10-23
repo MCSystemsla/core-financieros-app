@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -134,6 +135,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   title: 'Caserio Destino',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -153,6 +155,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   title: 'Barrio Destino',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(

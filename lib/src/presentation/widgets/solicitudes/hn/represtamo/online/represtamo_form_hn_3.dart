@@ -185,6 +185,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
             Column(
               children: [
                 SearchDropdownWidget(
+                  key: const ValueKey('Destino'),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
@@ -204,6 +205,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                 if (cubit.state.propositoCodigo.isNotEmpty) ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    key: const ValueKey('DestinoDescripcion'),
                     isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -211,6 +213,10 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     title: 'Descripcion del Destino',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(200),
+                    ],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

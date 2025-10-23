@@ -225,51 +225,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
             const Gap(30),
             Column(
               children: [
-                // SearchDropdownWidget(
-                //   hintText: 'Tipo de Cliente',
-                //   title: 'ObjTipoClienteID',
-                //   codigo: 'TIPOCLIENTE',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         tipoClienteCodigo: item.value,
-                //       ),
-                //     );
-                //   },
-                // ),
-                // const Gap(30),
-                // SearchDropdownWidget(
-                //   selectedItem: const Item(name: 'NORMAL', value: 'NORMAL'),
-                //   hintText: 'input.select_option'.tr(),
-                //   title: 'Estatus Cliente',
-                //   codigo: 'ESTATUSCLIENTE',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         estatusClienteCodigo: item.value,
-                //       ),
-                //     );
-                //   },
-                // ),
-                // SearchDropdownWidget(
-                //   selectedItem: const Item(name: 'SIMPLIFICADO', value: 'SIMP'),
-                //   hintText: 'input.select_option'.tr(),
-                //   title: 'Medidas Conocimiento',
-                //   codigo: 'MEDIDASCONOCIMIENTO',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //           // medi: item.value,
-                //           ),
-                //     );
-                //   },
-                // ),
                 SearchDropdownWidget(
                   selectedItem: const Item(
                     name: 'PERSONA NATURAL',
@@ -298,6 +253,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   textCapitalization: TextCapitalization.characters,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40)
                   ],
                   title: 'Nombre 1',
                   onChange: (value) {
@@ -318,6 +274,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   textCapitalization: TextCapitalization.words,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40)
                   ],
                   title: 'Nombre 2',
                   onChange: (value) {
@@ -339,6 +296,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   title: 'Apellido 1',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40)
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -359,6 +317,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   title: 'Apellido 2',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40)
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -450,6 +409,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   initialValue: widget.userByDocumentHnData?.cedula,
                   hintText: 'Documento',
                   icon: Icon(Icons.credit_card,
@@ -478,7 +438,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   title: 'Rtn',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(14),
+                    LengthLimitingTextInputFormatter(16),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -596,7 +556,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
                   isRequired: true,
-                  maxLength: 10,
+                  maxLength: 15,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Teléfono',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -605,6 +565,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   title: 'Telefono',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -618,7 +579,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                 CountryInput(
                   validator: (value) => ClassValidator.validateRequired(value),
                   countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 10,
+                  maxLength: 15,
                   isRequired: true,
                   hintText: 'Celular',
                   icon: Icon(Icons.smartphone,
@@ -628,6 +589,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   title: 'Celular',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -653,26 +615,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                     );
                   },
                 ),
-                // const Gap(30),
-                // OutlineTextfieldWidget(
-                //   validator: (value) => ClassValidator.validateRequired(value),
-                //   inputFormatters: [
-                //     UpperCaseTextFormatter(),
-                //   ],
-                //   hintText: 'Nombre Público',
-                //   icon: Icon(Icons.account_circle,
-                //       color: AppColors.getPrimaryColor()),
-                //   textInputType: TextInputType.text,
-                //   textCapitalization: TextCapitalization.words,
-                //   title: 'Nombre Publico',
-                //   onChange: (value) {
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         nombrePublico: value,
-                //       ),
-                //     );
-                //   },
-                // ),
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Cantidad de Hijos',

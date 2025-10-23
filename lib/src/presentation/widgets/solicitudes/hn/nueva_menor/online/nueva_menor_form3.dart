@@ -56,6 +56,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Nombre Negocio',
@@ -134,6 +135,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Ingresa Caserio Negocio',
                   title: 'Caserio Negocio',
@@ -150,6 +152,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Dirección Negocio',
@@ -171,6 +174,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Negocio',
@@ -246,7 +250,9 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   title: 'Condicion Negocio',
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  maxLength: 15,
+                  countryCodeInput: CountryCodeInput.hn,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Teléfono Negocio',
@@ -269,7 +275,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
                   isRequired: true,
-                  maxLength: 9,
+                  maxLength: 15,
                   hintText: 'Ingresa Celular Negocio',
                   icon: Icon(Icons.smartphone,
                       color: AppColors.getPrimaryColor()),
@@ -297,7 +303,10 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'Puesto Negocio',
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
+                  ],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -332,6 +341,10 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'Horario de Trabajo',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
+                  ],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -347,6 +360,10 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
+                  ],
                   title: 'Horario de Visita',
                   onChange: (value) {
                     cubit.onFieldChanged(

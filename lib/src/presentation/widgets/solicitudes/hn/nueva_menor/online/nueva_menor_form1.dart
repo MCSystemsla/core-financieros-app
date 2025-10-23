@@ -251,7 +251,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   initialValue: widget.userByDocumentHn?.primerNombre,
                   hintText: 'Ingresa Nombre 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -270,7 +273,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   hintText: 'Ingresa Nombre 2',
                   // validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
                   title: 'Nombre 2',
@@ -286,7 +292,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Nombre 3',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   // validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
@@ -306,7 +315,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   hintText: 'Ingresa Apellido 1',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
                   title: 'Apellido 1',
@@ -323,7 +335,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   initialValue: widget.userByDocumentHn?.segundoApellido,
                   hintText: 'Ingresa Apellido 2',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
                   title: 'Apellido 2',
@@ -339,7 +354,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Apellido 3',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                  inputFormatters: [UpperCaseTextFormatter()],
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
                   textInputType: TextInputType.name,
                   textCapitalization: TextCapitalization.characters,
                   title: 'Apellido 3',
@@ -407,7 +425,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                       color: AppColors.getPrimaryColor()),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(16),
                   ],
                   textInputType: TextInputType.number,
                   textCapitalization: TextCapitalization.none,
@@ -431,7 +449,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   textCapitalization: TextCapitalization.characters,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(14),
+                    LengthLimitingTextInputFormatter(16),
                   ],
                   title: 'RTN',
                   onChange: (value) {
@@ -443,6 +461,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   },
                 ),
                 OutlineTextfieldWidget(
+                  maxLength: 50,
                   validator: (value) => ClassValidator.validateEmail(value),
                   icon: Icon(
                     Icons.email,
@@ -542,8 +561,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   textInputType: TextInputType.phone,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(50),
                   ],
-                  textCapitalization: TextCapitalization.none,
                   title: 'Teléfono',
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -556,7 +575,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 10,
+                  maxLength: 15,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value,

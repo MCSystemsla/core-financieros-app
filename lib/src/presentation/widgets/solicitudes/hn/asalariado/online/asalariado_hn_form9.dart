@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -262,6 +263,10 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     hintText: 'ingresa descripcion del Destino',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(200),
+                    ],
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     title: 'Descripcion del Destino',
@@ -328,6 +333,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   title: 'Plazo de Solicitud (meses)',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   onChange: (value) {
                     plazoSolicitud = value;
@@ -377,6 +383,9 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   icon: Icon(Icons.note, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   title: 'Observacion',
                   onChange: (value) {
                     cubit.onFieldChanged(

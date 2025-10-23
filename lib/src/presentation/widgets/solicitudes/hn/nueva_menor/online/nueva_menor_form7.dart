@@ -353,6 +353,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(200),
                   ],
                   hintText: 'Observación',
                   icon: Icon(Icons.note, color: AppColors.getPrimaryColor()),

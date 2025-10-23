@@ -84,6 +84,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -128,6 +129,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     textInputType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     textCapitalization: TextCapitalization.none,
                     title: 'Periodo PEPS',
@@ -144,6 +146,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -191,6 +194,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -231,6 +235,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -253,6 +258,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -282,6 +288,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     textCapitalization: TextCapitalization.none,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     title: 'Periodo PEPS 2',
                     onChange: (value) {
@@ -341,6 +348,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -370,6 +378,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                     textCapitalization: TextCapitalization.none,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(25),
                     ],
                     title: 'Cédula Familiar',
                     onChange: (value) {

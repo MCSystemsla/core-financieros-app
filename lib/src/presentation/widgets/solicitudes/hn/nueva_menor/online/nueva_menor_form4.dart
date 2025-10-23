@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -118,6 +119,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(250),
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -181,6 +183,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
                       ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -203,6 +206,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
                       ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -221,7 +225,9 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       },
                     ),
                     const Gap(30),
-                    OutlineTextfieldWidget(
+                    CountryInput(
+                      maxLength: 15,
+                      countryCodeInput: CountryCodeInput.hn,
                       isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
@@ -254,6 +260,10 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,
                     title: 'Documento Conyugue',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(50),
+                    ],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

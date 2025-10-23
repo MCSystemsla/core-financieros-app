@@ -111,6 +111,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   title: 'Nombre del Trabajo',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -151,6 +152,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   title: 'Barrio del Trabajo',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -163,7 +165,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                 const Gap(30),
                 CountryInput(
                   isRequired: false,
-                  maxLength: 10,
+                  maxLength: 15,
                   countryCodeInput: CountryCodeInput.hn,
                   hintText: 'Teléfono del Trabajo',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -211,6 +213,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   title: 'Lugar del Trabajo Anterior',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -272,6 +275,10 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   icon: Icon(Icons.source, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(100),
+                  ],
                   title: 'Fuente Otros Ingresos',
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -281,22 +288,6 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                     );
                   },
                 ),
-                // SearchDropdownWidget(
-                //   validator: (value) =>
-                //       ClassValidator.validateRequired(value?.value),
-                //   hintText: 'Nivel Aproximado de Ingresos',
-                //   title: 'Nivel Aproximado de Ingresos',
-                //   codigo: 'NIVELAPROXIMADOINGRESOS',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         nivelAproximadoDeIngresosCodigo: item.value,
-                //       ),
-                //     );
-                //   },
-                // ),
               ],
             ),
             const Gap(30),

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -79,6 +81,10 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                         ClassValidator.validateRequired(value),
                     hintText: 'Descripción Actividad Económica 1',
                     title: 'Descripción Actividad Económica 1',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -113,6 +119,10 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                   OutlineTextfieldWidget(
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     hintText: 'Descripción Actividad Económica 2',
                     title: 'Descripción Actividad Económica 2',
                     onChange: (value) {
@@ -152,6 +162,10 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
                     ),
                     hintText: 'Descripción Actividad Económica 3',
                     title: 'Descripción Actividad Económica 3',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(

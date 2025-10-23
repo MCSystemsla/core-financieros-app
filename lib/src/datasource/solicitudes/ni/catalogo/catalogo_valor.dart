@@ -42,8 +42,8 @@ class Catalogo {
   });
 
   factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
-        valor: json['valor'],
-        nombre: json['nombre'],
+        valor: json['valor'] ?? '',
+        nombre: json['nombre'] ?? 'N/A',
         interes: json.containsKey('interes')
             ? (json['interes'] as num).toDouble()
             : null,

@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +52,7 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
                   title: 'Nombre Familiar Cercano',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(250),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -76,7 +78,9 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
+                CountryInput(
+                  isRequired: false,
+                  maxLength: 15,
                   hintText: 'Teléfono de Familiar Cercano',
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,

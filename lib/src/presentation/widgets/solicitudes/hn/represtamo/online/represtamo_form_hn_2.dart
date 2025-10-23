@@ -81,7 +81,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Nombre de Familiar Empleado',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -102,7 +105,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Cedula Familiar Empleado',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(50),
+                    ],
                     textInputType: TextInputType.number,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -150,7 +156,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Nombre de Entidad PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -189,6 +198,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     textInputType: TextInputType.number,
                     validator: (value) =>
@@ -209,7 +219,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Cargo Oficial PEPS',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -256,7 +269,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Nombre Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -276,7 +292,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Nombre Entidad Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -318,7 +337,10 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     hintText: 'Cargo Familiar PEPS 2',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(100),
+                    ],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
@@ -341,6 +363,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(100),
                     ],
                     textInputType: TextInputType.number,
                     validator: (value) =>
