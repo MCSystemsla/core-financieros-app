@@ -123,6 +123,8 @@ class SolicitudNuevaMenorHnLocalDb {
   String? apellido2;
   String? email;
   String? actividadEconomicaCnbs3Codigo;
+  bool isDone = false;
+  DateTime createdAt = DateTime.now();
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.uuid,
@@ -242,5 +244,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.apellido2,
     this.email,
     this.actividadEconomicaCnbs3Codigo,
+    this.isDone = false,
   });
 }

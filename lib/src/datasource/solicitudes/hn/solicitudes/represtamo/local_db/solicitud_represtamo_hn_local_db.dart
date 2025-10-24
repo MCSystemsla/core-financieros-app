@@ -62,6 +62,10 @@ class SolicitudReprestamoHnLocalDb {
   int? cuotaClientePuedePagar;
   String? nombreCompleto;
   String? descripcionDestino;
+  bool isDone = false;
+  String? errorMsg;
+  DateTime createdAt = DateTime.now();
+  String? nombreCompletoCliente;
 
   SolicitudReprestamoHnLocalDb({
     required this.id,
@@ -121,5 +125,7 @@ class SolicitudReprestamoHnLocalDb {
     this.cuotaClientePuedePagar,
     this.nombreCompleto,
     this.descripcionDestino,
+    this.isDone = false,
+    this.errorMsg,
   });
 }

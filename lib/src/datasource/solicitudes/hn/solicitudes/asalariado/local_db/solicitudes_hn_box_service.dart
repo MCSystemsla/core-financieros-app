@@ -42,6 +42,7 @@ class SolicitudesHnBoxService {
   SolicitudesHnBoxService._create(this._store) {
     solicitudesAsalariadoBox = _store.box<SolicitudAsalariadoHnDbLocal>();
     solicitudesNuevaMenorBox = _store.box<SolicitudNuevaMenorHnLocalDb>();
+    solicitudesReprestamoBox = _store.box<SolicitudReprestamoHnLocalDb>();
     catalogoLocalBox = _store.box<CatalogoLocalDb>();
     cedulaClientBox = _store.box<CedulaClientDb>();
     catalogoNacionalidadPaisBox = _store.box<CatalogoNacionalidadPaisDb>();
@@ -51,7 +52,6 @@ class SolicitudesHnBoxService {
     catalogoAldeaBox = _store.box<CatalogoAldeaLocalDb>();
     catalogoCaserioBox = _store.box<CatalogoCaserioLocalDb>();
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
-    solicitudesReprestamoBox = _store.box<SolicitudReprestamoHnLocalDb>();
     catalogoActividadCnbsBox = _store.box<CatalogoActividadCnbsLocalDb>();
     actividadesEconomicasAliasFilteredBox =
         _store.box<ActividadesEconomicasAliasFilteredLocalDb>();
@@ -312,5 +312,20 @@ class SolicitudesHnBoxService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  List<SolicitudNuevaMenorHnLocalDb> getSolicitudesNueva() {
+    final resp = solicitudesNuevaMenorBox.getAll();
+    return resp.reversed.toList();
+  }
+
+  List<SolicitudAsalariadoHnDbLocal> getSolicitudesAsalariado() {
+    final resp = solicitudesAsalariadoBox.getAll();
+    return resp.reversed.toList();
+  }
+
+  List<SolicitudReprestamoHnLocalDb> getSolicitudesReprestamo() {
+    final resp = solicitudesReprestamoBox.getAll();
+    return resp.reversed.toList();
   }
 }

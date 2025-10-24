@@ -2298,7 +2298,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "133:8182318345641444706",
+      "lastPropertyId": "136:1299036625640684166",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2876,13 +2876,28 @@
           "id": "133:8182318345641444706",
           "name": "descripcionDestino",
           "type": 9
+        },
+        {
+          "id": "134:3670409052737535626",
+          "name": "isDone",
+          "type": 1
+        },
+        {
+          "id": "135:409800506014790918",
+          "name": "errorMsg",
+          "type": 9
+        },
+        {
+          "id": "136:1299036625640684166",
+          "name": "createdAt",
+          "type": 10
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "118:8264110620895723649",
+      "lastPropertyId": "120:1490503176251115680",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3475,6 +3490,16 @@
           "id": "118:8264110620895723649",
           "name": "actividadEconomicaCnbs3Codigo",
           "type": 9
+        },
+        {
+          "id": "119:1251545732027643092",
+          "name": "isDone",
+          "type": 1
+        },
+        {
+          "id": "120:1490503176251115680",
+          "name": "createdAt",
+          "type": 10
         }
       ],
       "relations": []
@@ -3568,7 +3593,7 @@
     },
     {
       "id": "24:2952094495400237",
-      "lastPropertyId": "62:9209332083803908732",
+      "lastPropertyId": "66:8831793132241358167",
       "name": "SolicitudReprestamoHnLocalDb",
       "properties": [
         {
@@ -3855,6 +3880,26 @@
         {
           "id": "62:9209332083803908732",
           "name": "descripcionDestino",
+          "type": 9
+        },
+        {
+          "id": "63:1341002427945035885",
+          "name": "isDone",
+          "type": 1
+        },
+        {
+          "id": "64:1541062916278362626",
+          "name": "errorMsg",
+          "type": 9
+        },
+        {
+          "id": "65:6819221957918462892",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "66:8831793132241358167",
+          "name": "nombreCompletoCliente",
           "type": 9
         }
       ],

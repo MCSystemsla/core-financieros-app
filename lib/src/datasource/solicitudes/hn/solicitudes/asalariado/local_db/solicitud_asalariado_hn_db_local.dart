@@ -119,6 +119,9 @@ class SolicitudAsalariadoHnDbLocal {
   String? caseriCasa;
   String? aldeaCodigo;
   String? descripcionDestino;
+  bool isDone = false;
+  String? errorMsg;
+  DateTime createdAt = DateTime.now();
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -235,5 +238,7 @@ class SolicitudAsalariadoHnDbLocal {
     this.caseriCasa,
     this.aldeaCodigo,
     this.descripcionDestino,
+    this.isDone = false,
+    this.errorMsg,
   });
 }

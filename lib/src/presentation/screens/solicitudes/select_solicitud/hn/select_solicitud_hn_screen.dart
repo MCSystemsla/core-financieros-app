@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:flutter/material.dart';
@@ -190,9 +191,16 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
         const Gap(10),
         Expanded(
           child: SolicitudCard(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const SolicitudesPendientesScreenHN()),
+                ),
+              );
+            },
             svgPath: ImageAsset.nuevaMenorBg4,
-            title: 'Solicitudes Pendientes',
+            title: 'Solicitudes en proceso offline',
           ),
         ),
         const Gap(10),
