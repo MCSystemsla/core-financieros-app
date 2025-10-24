@@ -112,6 +112,8 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       try {
         await _objectBoxService.catalogoLocalBox.removeAllAsync();
         await _objectBoxService.catalogoActividadCnbsBox.removeAllAsync();
+        await _objectBoxService.actividadesEconomicasAliasFilteredBox
+            .removeAllAsync();
       } catch (e) {
         log('Error al limpiar la base ObjectBox: $e');
       }

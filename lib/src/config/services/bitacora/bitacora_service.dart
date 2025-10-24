@@ -8,7 +8,7 @@ class BitacoraService {
   static final _logger = Logger();
   static const bool _isProdMode = bool.fromEnvironment('isProdMode');
   static const String _bitacoraUrl =
-      'https://script.google.com/macros/s/AKfycbxABbtiNUKkXPi62G78YYn5B7syqeMMyb2zMsQ8NIpqmReGp1tJmFhPiXQvLB6-Jtn1/exec';
+      String.fromEnvironment('GOOGLE_SHEET_BITACORA_LOG_URL');
   static Future<void> registerBitacora({
     required String payload,
   }) async {

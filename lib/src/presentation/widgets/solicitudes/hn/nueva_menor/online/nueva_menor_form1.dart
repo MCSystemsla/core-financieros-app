@@ -516,7 +516,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.datetime,
                     textCapitalization: TextCapitalization.none,
-                    title: 'Fecha Emisión Cédula',
+                    title: 'Fecha Emisión Documento',
                   ),
                 ],
                 const Gap(30),
@@ -533,7 +533,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.datetime,
                   textCapitalization: TextCapitalization.none,
-                  title: 'Fecha Vencimiento Cédula',
+                  title: 'Fecha Vencimiento Documento',
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
@@ -553,7 +553,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 10,
+                  maxLength: 50,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Teléfono',
@@ -575,7 +575,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 CountryInput(
                   countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 15,
+                  maxLength: 50,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value,
@@ -639,27 +639,6 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     );
                   },
                 ),
-                // const Gap(30),
-                // OutlineTextfieldWidget(
-                //   isRequired: true,
-                //   validator: (value) => ClassValidator.validateRequired(value),
-                //   hintText: 'Ingresa Nombre Público',
-                //   inputFormatters: [
-                //     UpperCaseTextFormatter(),
-                //   ],
-                //   icon: Icon(Icons.account_circle,
-                //       color: AppColors.getPrimaryColor()),
-                //   textInputType: TextInputType.text,
-                //   textCapitalization: TextCapitalization.words,
-                //   title: 'Nombre Público',
-                //   onChange: (value) {
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         nombrePublico: value,
-                //       ),
-                //     );
-                //   },
-                // ),
                 const Gap(30),
                 SearchDropdownWidget(
                   isRequired: true,

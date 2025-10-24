@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
@@ -242,9 +244,6 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   icon: Icon(Icons.date_range,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(),
-                  ],
                   textCapitalization: TextCapitalization.none,
                   title: 'Fecha de desembolso',
                 ),
@@ -258,6 +257,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
                   ],
                   title: 'Monto',
                   onChange: (value) {
@@ -282,6 +282,8 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     tasaInteres = item.interes;
                     montoMaximo = item.montoMaximo;
                     montoMinimo = item.montoMinimo;
+                    log('Monto minimo: ${montoMinimo?.toString()} - Monto maximo: ${montoMaximo?.toString()}');
+                    log(item.value);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
