@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_offline_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitudes_pendientes/ni/solicitudes_pendientes_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -148,14 +149,14 @@ class SolciitudesEnviadasHNWidget extends StatelessWidget {
       child: AdvanceCardState(
         backgroundColor: Colors.white,
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => CrearSolicitudOfflineScreen(
-          //       responseLocalDb: solicitud,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CrearSolicitudOfflineHnScreen(
+                solicitudNuevaMenorHnLocalDb: solicitud,
+              ),
+            ),
+          );
         },
         title:
             '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}'
