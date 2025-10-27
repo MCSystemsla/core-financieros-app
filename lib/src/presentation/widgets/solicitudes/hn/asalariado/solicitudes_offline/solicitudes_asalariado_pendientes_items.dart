@@ -123,7 +123,7 @@ class _SolicitudesPendientesWidgetAsalariadoHN extends StatelessWidget {
           ),
           const Gap(25),
           Text(
-            'No hay solicitudes pendientes',
+            'No hay solicitudes en proceso',
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ],

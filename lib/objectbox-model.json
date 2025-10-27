@@ -2897,7 +2897,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "120:1490503176251115680",
+      "lastPropertyId": "124:7068237699809228166",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3500,6 +3500,26 @@
           "id": "120:1490503176251115680",
           "name": "createdAt",
           "type": 10
+        },
+        {
+          "id": "121:133342679880624088",
+          "name": "frecuenciaMeses",
+          "type": 9
+        },
+        {
+          "id": "122:6490964078517860295",
+          "name": "fechaDesembolso",
+          "type": 10
+        },
+        {
+          "id": "123:3127428745026210589",
+          "name": "tasaInteres",
+          "type": 8
+        },
+        {
+          "id": "124:7068237699809228166",
+          "name": "tieneVinculosUsa",
+          "type": 9
         }
       ],
       "relations": []

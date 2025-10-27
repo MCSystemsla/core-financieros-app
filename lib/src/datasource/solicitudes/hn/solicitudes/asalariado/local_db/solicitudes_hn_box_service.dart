@@ -328,4 +328,22 @@ class SolicitudesHnBoxService {
     final resp = solicitudesReprestamoBox.getAll();
     return resp.reversed.toList();
   }
+
+  CedulaClientDb? getCedula(
+      {required String cedula, required String tipoSolicitud}) {
+    try {
+      final query = cedulaClientBox
+          .query(CedulaClientDb_.cedula
+              .equals(cedula)
+              .and(CedulaClientDb_.typeSolicitud.equals(tipoSolicitud)))
+          .build();
+
+      final result = query.findFirst();
+      query.close();
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

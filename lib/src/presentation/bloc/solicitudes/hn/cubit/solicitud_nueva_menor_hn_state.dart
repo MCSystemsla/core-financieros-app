@@ -2,6 +2,11 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final double montoMinimo;
+  final double montoMaximo;
+  final String tieneVinculosUsa;
+  final String frecuenciaMeses;
+  final double tasaInteres;
   final String actividadEconomicaCnbs3Codigo;
   final String numeroSolicitud;
   final String email;
@@ -125,7 +130,15 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String barrioDestino;
   final String descripcionDestino;
   final int ingresosNetos;
+  final String fechaDesembolso;
+  final bool isDone;
   const SolicitudNuevaMenorHnState({
+    this.isDone = false,
+    this.tieneVinculosUsa = '',
+    this.frecuenciaMeses = '',
+    this.tasaInteres = 0,
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
     this.actividadEconomicaCnbs3Codigo = '',
     this.numeroSolicitud = '',
     this.email = '',
@@ -249,10 +262,18 @@ class SolicitudNuevaMenorHnState extends Equatable {
     this.barrioDestino = '',
     this.descripcionDestino = '',
     this.ingresosNetos = 0,
+    this.fechaDesembolso = '',
   });
 
   @override
   List<Object> get props => [
+        isDone,
+        tieneVinculosUsa,
+        frecuenciaMeses,
+        tasaInteres,
+        montoMinimo,
+        montoMaximo,
+        fechaDesembolso,
         actividadEconomicaCnbs3Codigo,
         numeroSolicitud,
         email,
@@ -378,6 +399,11 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    double? montoMinimo,
+    double? montoMaximo,
+    String? tieneVinculosUsa,
+    String? frecuenciaMeses,
+    double? tasaInteres,
     String? actividadEconomicaCnbs3Codigo,
     String? numeroSolicitud,
     String? email,
@@ -501,8 +527,15 @@ class SolicitudNuevaMenorHnState extends Equatable {
     String? barrioDestino,
     String? descripcionDestino,
     int? ingresosNetos,
+    String? fechaDesembolso,
+    bool? isDone,
   }) {
     return SolicitudNuevaMenorHnState(
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
+      tieneVinculosUsa: tieneVinculosUsa ?? this.tieneVinculosUsa,
+      frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
+      tasaInteres: tasaInteres ?? this.tasaInteres,
       actividadEconomicaCnbs3Codigo:
           actividadEconomicaCnbs3Codigo ?? this.actividadEconomicaCnbs3Codigo,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -650,6 +683,8 @@ class SolicitudNuevaMenorHnState extends Equatable {
       barrioDestino: barrioDestino ?? this.barrioDestino,
       descripcionDestino: descripcionDestino ?? this.descripcionDestino,
       ingresosNetos: ingresosNetos ?? this.ingresosNetos,
+      fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
+      isDone: isDone ?? this.isDone,
     );
   }
 }

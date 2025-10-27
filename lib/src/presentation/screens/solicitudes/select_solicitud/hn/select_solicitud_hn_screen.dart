@@ -199,7 +199,7 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
                 ),
               );
             },
-            svgPath: ImageAsset.nuevaMenorBg4,
+            svgPath: ImageAsset.cedulaPhoto,
             title: 'Solicitudes en proceso offline',
           ),
         ),

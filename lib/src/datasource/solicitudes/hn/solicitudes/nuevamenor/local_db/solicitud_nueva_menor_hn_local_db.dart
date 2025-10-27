@@ -125,6 +125,12 @@ class SolicitudNuevaMenorHnLocalDb {
   String? actividadEconomicaCnbs3Codigo;
   bool isDone = false;
   DateTime createdAt = DateTime.now();
+  String? frecuenciaMeses;
+  DateTime? fechaDesembolso;
+  double? tasaInteres;
+  double? montoMaximo;
+  double? montoMinimo;
+  String? tieneVinculosUsa;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.uuid,
@@ -245,5 +251,11 @@ class SolicitudNuevaMenorHnLocalDb {
     this.email,
     this.actividadEconomicaCnbs3Codigo,
     this.isDone = false,
+    this.frecuenciaMeses,
+    this.fechaDesembolso,
+    this.tasaInteres,
+    this.montoMaximo,
+    this.montoMinimo,
+    this.tieneVinculosUsa,
   });
 }

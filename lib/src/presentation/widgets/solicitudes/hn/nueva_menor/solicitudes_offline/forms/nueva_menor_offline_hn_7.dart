@@ -22,10 +22,10 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,8 +45,9 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7> {
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
-  num? montoMinimo;
+  double? montoMinimo;
   double? montoMaximo;
+
   String? monto;
   String? plazoSolicitud;
   CatalogoFrecuenciaItem? frecuenciaDePago;
@@ -54,9 +55,26 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7> {
   void initState() {
     super.initState();
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    tasaInteres = cubit.state.tasaInteres;
+    log('tasaInteres: ${cubit.state.tasaInteres} - montoMinimo: ${cubit.state.montoMinimo} - montoMaximo: ${cubit.state.montoMaximo}');
+
+    monto = cubit.state.monto.toString();
+    plazoSolicitud = cubit.state.plazoSolicitud.toString();
+    frecuenciaDePago = CatalogoFrecuenciaItem(
+      valor: cubit.state.frecuenciaCodigo,
+      nombre: cubit.state.frecuenciaCodigo,
+      meses: cubit.state.frecuenciaMeses,
+    );
+    fechaDesembolso =
+        DateTime.tryParse(cubit.state.fechaDesembolso) ?? DateTime.now();
+    fechaPrimerPago = DateTime.tryParse(cubit.state.fechaPrimerPagoSolicitud);
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
+        fechaDesembolso: cubit.state.fechaDesembolso,
+        fechaPrimerPagoSolicitud: cubit.state.fechaPrimerPagoSolicitud,
+        plazoSolicitud: cubit.state.plazoSolicitud,
+        tasaInteres: cubit.state.tasaInteres,
       ),
     );
   }
@@ -157,7 +175,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7> {
       fechaDesembolso = picked;
       context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
             () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
-                // fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
+                  fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -168,306 +186,349 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7> {
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const MiCreditoProgress(
-              currentStep: 7,
-              steps: 7,
-            ),
-            const Gap(30),
-            Column(
+    return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
               children: [
-                SearchDropdownWidget(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Destino del crédito',
-                  title: 'Destino del crédito',
-                  onChanged: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(propositoCodigo: value?.value),
-                    );
-                  },
-                  flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'DESTINOCREDITO',
+                const MiCreditoProgress(
+                  currentStep: 7,
+                  steps: 7,
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  key: const ValueKey('DestinoDescripcion'),
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'ingresa descripcion del Destino',
-                  icon: Icon(Icons.description_outlined,
-                      color: AppColors.getPrimaryColor()),
-                  title: 'Descripcion del Destino',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        descripcionDestino: value,
+                Column(
+                  children: [
+                    SearchDropdownWidget(
+                      selectedItem: Item(
+                        name: cubit.state.propositoCodigo,
+                        value: cubit.state.propositoCodigo,
                       ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  selectedItem: const Item(name: 'Lempira', value: 'CORDOBA'),
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  codigo: 'MONEDA',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        monedaCodigo: item.value,
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Destino del crédito',
+                      title: 'Destino del crédito',
+                      onChanged: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            propositoCodigo: value?.value,
+                          ),
+                        );
+                      },
+                      flavor: global<FlavorCubit>().state.flavor,
+                      codigo: 'DESTINOCREDITO',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cubit.state.descripcionDestino,
+                      key: const ValueKey('DestinoDescripcion'),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'ingresa descripcion del Destino',
+                      icon: Icon(Icons.description_outlined,
+                          color: AppColors.getPrimaryColor()),
+                      title: 'Descripcion del Destino',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            descripcionDestino: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      selectedItem: Item(
+                        name: cubit.state.monedaCodigo,
+                        value: cubit.state.monedaCodigo,
                       ),
-                    );
-                  },
-                  hintText: 'ingresa moneda',
-                  title: 'Moneda',
-                ),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  readOnly: true,
-                  onTap: () => selectFechaDesembolso(context),
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaDesembolso.selectorFormat()),
-                  hintText: fechaDesembolso.selectorFormat(),
-                  icon: Icon(Icons.date_range,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'Fecha de desembolso',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  key: const ValueKey('Monto'),
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Monto',
-                  icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
-                  ],
-                  title: 'Monto',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        monto: int.tryParse(value) ?? 0,
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      codigo: 'MONEDA',
+                      flavor: global<FlavorCubit>().state.flavor,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            monedaCodigo: item.value,
+                          ),
+                        );
+                      },
+                      hintText: 'ingresa moneda',
+                      title: 'Moneda',
+                    ),
+                    OutlineTextfieldWidget(
+                      initialValue: cubit.state.fechaDesembolso,
+                      isRequired: true,
+                      readOnly: true,
+                      onTap: () => selectFechaDesembolso(context),
+                      validator: (value) => ClassValidator.validateRequired(
+                          fechaDesembolso.selectorFormat()),
+                      hintText: fechaDesembolso.selectorFormat(),
+                      icon: Icon(Icons.date_range,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Fecha de desembolso',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cubit.state.monto.toString(),
+                      key: const ValueKey('Monto'),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Monto',
+                      icon: Icon(Icons.wallet,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                      ],
+                      title: 'Monto',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            monto: int.tryParse(value) ?? 0,
+                          ),
+                        );
+                        monto = value;
+                      },
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      selectedItem: Item(
+                        name: cubit.state.productoCodigo,
+                        value: cubit.state.productoCodigo,
+                        interes: cubit.state.tasaInteres,
+                        montoMaximo: cubit.state.montoMaximo,
+                        montoMinimo: cubit.state.montoMinimo,
                       ),
-                    );
-                    monto = value;
-                  },
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Selecciona producto',
-                  codigo: 'PRODUCTO',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null) return;
-                    tasaInteres = item.interes;
-                    montoMaximo = item.montoMaximo;
-                    montoMinimo = item.montoMinimo;
-                    log('Monto minimo: ${montoMinimo?.toString()} - Monto maximo: ${montoMaximo?.toString()}');
-                    log(item.value);
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        productoCodigo: item.value,
-                      ),
-                    );
-                  },
-                  title: 'Producto',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Plazo de la solicitud',
-                  icon:
-                      Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  title: 'Plazo de la solicitud (meses)',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state
-                          .copyWith(plazoSolicitud: int.tryParse(value) ?? 0),
-                    );
-                    plazoSolicitud = value;
-                    setState(() {});
-                  },
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  readOnly: true,
-                  onTap: () => selectDate(context),
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaPrimerPago?.selectorFormat()),
-                  hintText:
-                      fechaPrimerPago?.selectorFormat() ?? 'Fecha primer pago',
-                  icon: Icon(Icons.calendar_today,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.datetime,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'Fecha de primer pago',
-                ),
-                const Gap(30),
-                CatalogoFrecuenciaPagoDropdown(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        frecuenciaCodigo: item.valor,
-                      ),
-                    );
-                    frecuenciaDePago = CatalogoFrecuenciaItem(
-                      valor: item.valor,
-                      nombre: item.nombre,
-                      meses: item.meses,
-                    );
-                  },
-                  hintText: 'Frecuencia',
-                  title: 'Frecuencia de pago',
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  hintText: 'Observación',
-                  icon: Icon(Icons.note, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  title: 'Observacion',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        observacion: value,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            const Gap(30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  if (double.tryParse(monto ?? '0') == 0) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: 'El monto no puede ser 0',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if ((double.tryParse(monto ?? '0') ?? 0) <
-                      montoMinimo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()} L.',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  if (double.tryParse(monto ?? '0')! >
-                      montoMaximo!.toDouble()) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat} L.',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
-                  final plazoSolicitudMount =
-                      (int.tryParse(plazoSolicitud ?? '0') ?? 0);
-                  final frecuenciaPagoMeses =
-                      (double.tryParse(frecuenciaDePago?.meses ?? '0') ?? 0);
-                  if (plazoSolicitudMount < frecuenciaPagoMeses) {
-                    CustomAlertDialog(
-                      context: context,
-                      title:
-                          'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
-                  }
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Selecciona producto',
+                      codigo: 'PRODUCTO',
+                      flavor: global<FlavorCubit>().state.flavor,
+                      onChanged: (item) {
+                        if (item == null) return;
+                        setState(() {
+                          tasaInteres = item.interes;
+                        });
+                        log(item.value);
+                        log(item.interes.toString());
 
-                  calcularCuotaProvider.calcularCantidadCuotas(
-                    fechaDesembolso: fechaDesembolso,
-                    fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
-                    saldoPrincipal: double.parse(monto ?? '0'),
-                    tasaInteresMensual: tasaInteres ?? 0,
-                  );
-                  CuotaDataDialog(
-                    context: context,
-                    title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
-                    onDone: () {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          cuota: calcularCuotaProvider.state.montoPrimeraCuota
-                              .toInt(),
-                        ),
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            productoCodigo: item.value,
+                            tasaInteres: item.interes,
+                            montoMaximo: item.montoMaximo,
+                            montoMinimo: item.montoMinimo?.toDouble(),
+                          ),
+                        );
+                      },
+                      title: 'Producto',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cubit.state.plazoSolicitud.toString(),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Plazo de la solicitud',
+                      icon: Icon(Icons.schedule,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      title: 'Plazo de la solicitud (meses)',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                              plazoSolicitud: int.tryParse(value) ?? 0),
+                        );
+                        plazoSolicitud = value;
+                        setState(() {});
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: fechaPrimerPago?.selectorFormat(),
+                      isRequired: true,
+                      readOnly: true,
+                      onTap: () => selectDate(context),
+                      validator: (value) => ClassValidator.validateRequired(
+                          fechaPrimerPago?.selectorFormat()),
+                      hintText: fechaPrimerPago?.selectorFormat() ??
+                          'Fecha primer pago',
+                      icon: Icon(Icons.calendar_today,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.datetime,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Fecha de primer pago',
+                    ),
+                    const Gap(30),
+                    CatalogoFrecuenciaPagoDropdown(
+                      selectedItem: CatalogoFrecuenciaItem(
+                        nombre: cubit.state.frecuenciaCodigo,
+                        valor: cubit.state.frecuenciaCodigo,
+                        meses: cubit.state.frecuenciaMeses,
+                      ),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        frecuenciaDePago = CatalogoFrecuenciaItem(
+                          valor: item.valor,
+                          nombre: item.nombre,
+                          meses: item.meses,
+                        );
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            frecuenciaCodigo: item.valor,
+                            frecuenciaMeses: item.meses,
+                          ),
+                        );
+                      },
+                      hintText: 'Frecuencia',
+                      title: 'Frecuencia de pago',
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: cubit.state.observacion,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(200),
+                      ],
+                      hintText: 'Observación',
+                      icon:
+                          Icon(Icons.note, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      title: 'Observacion',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            observacion: value,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const Gap(30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      if (double.tryParse(monto ?? '0') == 0) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: 'El monto no puede ser 0',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      // if ((double.tryParse(monto ?? '0') ?? 0) <
+                      //     state.montoMinimo.toDouble()) {
+                      //   CustomAlertDialog(
+                      //     context: context,
+                      //     title:
+                      //         'El monto minimo debe ser mayor a ${state.montoMinimo.toCurrencyString()} L.',
+                      //     onDone: () => context.pop(),
+                      //   ).showDialog(context, dialogType: DialogType.warning);
+                      //   return;
+                      // }
+                      // if (double.tryParse(monto ?? '0')! >
+                      //     state.montoMaximo.toDouble()) {
+                      //   CustomAlertDialog(
+                      //     context: context,
+                      //     title:
+                      //         'El monto maximo debe ser menor o igual a ${state.montoMaximo.toCurrencyString()} L.',
+                      //     onDone: () => context.pop(),
+                      //   ).showDialog(context, dialogType: DialogType.warning);
+                      //   return;
+                      // }
+                      final plazoSolicitudMount =
+                          (int.tryParse(plazoSolicitud ?? '0') ?? 0);
+                      final frecuenciaPagoMeses =
+                          (double.tryParse(frecuenciaDePago?.meses ?? '0') ??
+                              0);
+                      if (plazoSolicitudMount < frecuenciaPagoMeses) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El plazo solicitud debe ser mayor o igual a la frecuencia de pago',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+
+                      calcularCuotaProvider.calcularCantidadCuotas(
+                        fechaDesembolso: fechaDesembolso,
+                        fechaPrimeraCuota: fechaPrimerPago!,
+                        plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
+                        frecuenciaPago: frecuenciaDePago?.meses ?? '0',
+                        saldoPrincipal: double.parse(monto ?? '0'),
+                        tasaInteresMensual: tasaInteres ?? 0,
                       );
-                      widget.controller.nextPage(
+                      CuotaDataDialog(
+                        context: context,
+                        title:
+                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString()} L.',
+                        onDone: () {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cuota: calcularCuotaProvider
+                                  .state.montoPrimeraCuota
+                                  .toInt(),
+                            ),
+                          );
+                          widget.controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                          context.pop();
+                        },
+                      ).showDialog(context);
+                    },
+                  ),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
                       );
-                      context.pop();
                     },
-                  ).showDialog(context);
-                },
-              ),
+                    text: 'Anterior',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
             ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Anterior',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

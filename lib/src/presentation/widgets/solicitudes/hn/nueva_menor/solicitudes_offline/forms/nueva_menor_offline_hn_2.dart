@@ -53,6 +53,12 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
             Column(
               children: [
                 CatalogoValorNacionalidad(
+                  selectedItem: ItemNacionalidad(
+                    id: 0,
+                    valor: cubit.state.paisCasaCodigo,
+                    nombre: cubit.state.paisCasaCodigo,
+                    relacion: '',
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa País Casa',
@@ -89,6 +95,12 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 if (cubit.state.paisCasaCodigo == 'HN') ...[
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.departamentoCasaCodigo,
+                      nombre: cubit.state.departamentoCasaCodigo,
+                      relacion: '',
+                    ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Departamento Casa',
@@ -110,6 +122,12 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.municipioCasaCodigo,
+                      nombre: cubit.state.municipioCasaCodigo,
+                      relacion: '',
+                    ),
                     where: munWhereClause,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
@@ -130,6 +148,12 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.aldeaCasaCodigo,
+                      nombre: cubit.state.aldeaCasaCodigo,
+                      relacion: '',
+                    ),
                     where: aldeaWhereClause,
                     enabled: true,
                     validator: (value) =>
@@ -148,6 +172,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.direccionCasa,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -169,6 +194,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.barrioCasa,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -187,6 +213,10 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.condicionCasaCodigo,
+                    value: cubit.state.condicionCasaCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -205,6 +235,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.anosResidirCasa.toString(),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Años Residir Casa',
@@ -228,6 +259,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.personasACargo.toString(),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Personas a cargo',
@@ -250,10 +282,14 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
                 ),
                 const Gap(30),
                 SheetSearchDropdown(
+                  selectedItem: Item(
+                    name: cubit.state.ubicacionCodigo,
+                    value: cubit.state.ubicacionCodigo,
+                  ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Ubicación',
-                  title: 'Ingresa Ubicacion',
+                  title: 'Ubicacion',
                   enabled: true,
                   isRequired: true,
                   items: const [

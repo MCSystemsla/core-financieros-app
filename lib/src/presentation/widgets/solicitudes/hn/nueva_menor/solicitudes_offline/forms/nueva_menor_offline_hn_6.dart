@@ -44,6 +44,12 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
               children: [
                 if (cubit.state.paisCasaCodigo == 'HN') ...[
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.departamentoDestinoCodigo,
+                      nombre: cubit.state.departamentoDestinoCodigo,
+                      relacion: '',
+                    ),
                     where: cubit.state.paisCasaCodigo,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
@@ -64,6 +70,12 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.municipioDestinoCodigo,
+                      nombre: cubit.state.municipioDestinoCodigo,
+                      relacion: '',
+                    ),
                     where: depWhereClause,
                     validator: (value) => ClassValidator.validateRequired(
                       value?.valor,
@@ -86,6 +98,12 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.aldeaDestinoCodigo,
+                      nombre: cubit.state.aldeaDestinoCodigo,
+                      relacion: '',
+                    ),
                     where: munWhereClause,
                     codigo: 'ALD',
                     validator: (value) =>
@@ -103,6 +121,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.caserioDestino,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -120,6 +139,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.barrioDestino,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -137,6 +157,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.descripcionDestino,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(200),

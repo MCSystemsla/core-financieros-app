@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -48,6 +49,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
             Column(
               children: [
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.nombreNegocio,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -71,6 +73,12 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 if (cubit.state.paisCasaCodigo == 'HN') ...[
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.departamentoNegocioCodigo,
+                      nombre: cubit.state.departamentoNegocioCodigo,
+                      relacion: '',
+                    ),
                     where: cubit.state.paisCasaCodigo,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
@@ -91,6 +99,12 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.municipioNegocioCodigo,
+                      nombre: cubit.state.municipioNegocioCodigo,
+                      relacion: '',
+                    ),
                     where: depWhereClause,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
@@ -111,6 +125,12 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.aldeaNegocioCodigo,
+                      nombre: cubit.state.aldeaNegocioCodigo,
+                      relacion: '',
+                    ),
                     where: munWhereClause,
                     codigo: 'ALD',
                     validator: (value) =>
@@ -128,6 +148,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.caserioNegocio,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),
@@ -144,6 +165,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.direccionNegocio,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -166,6 +188,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.barrioNegocio,
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -188,6 +211,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.tiempoFuncionamientoNegocio,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Tiempo de Funcionamiento',
@@ -210,6 +234,10 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.sectorCodigo,
+                    value: cubit.state.sectorCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -228,6 +256,10 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.condicionNegocioCodigo,
+                    value: cubit.state.condicionNegocioCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -246,6 +278,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 CountryInput(
+                  initialValue: cubit.state.telefonoNegocio,
                   maxLength: 15,
                   countryCodeInput: CountryCodeInput.hn,
                   isRequired: true,
@@ -268,6 +301,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 CountryInput(
+                  initialValue: cubit.state.celularNegocio,
                   countryCodeInput: CountryCodeInput.hn,
                   isRequired: true,
                   maxLength: 15,
@@ -290,6 +324,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.puestoNegocio,
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Puesto Negocio',
@@ -312,6 +347,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.horarioTrabajo,
                   hintText: 'Ingresa Horario Trabajo',
                   icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
@@ -331,6 +367,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.horarioVisita,
                   hintText: 'Ingresa Horario Visita',
                   icon:
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
@@ -378,7 +415,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3> {
                     curve: Curves.easeIn,
                   );
                 },
-                text: 'Cancelar',
+                text: 'Anterior',
                 textColor: AppColors.red,
                 color: AppColors.red,
               ),

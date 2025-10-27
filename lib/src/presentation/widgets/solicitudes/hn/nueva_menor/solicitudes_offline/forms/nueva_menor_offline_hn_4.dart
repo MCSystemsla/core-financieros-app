@@ -18,7 +18,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorOfflineHn4 extends StatefulWidget {
@@ -53,6 +53,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
             Column(
               children: [
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.profesion,
+                    value: cubit.state.profesionCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -72,6 +76,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.ocupacion,
+                    value: cubit.state.ocupacionCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -91,6 +99,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: cubit.state.estadoCivilCodigo,
+                    value: cubit.state.estadoCivilCodigo,
+                  ),
                   isRequired: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -113,6 +125,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                     estadoCivil?.value == 'CAS') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    initialValue: cubit.state.nombreConyugue,
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
@@ -136,9 +149,15 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
+                    selectedItem: ItemNacionalidad(
+                      id: 0,
+                      valor: cubit.state.nacionalidadConyugue,
+                      nombre: cubit.state.nacionalidadConyugue,
+                      relacion: '',
+                    ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Ingresa Nacionalidad Cónyuge',
+                    hintText: 'Ingresa Nacionalidad Cónyugue',
                     title: 'Nacionalidad Conyugue',
                     codigo: 'PAIS',
                     onChanged: (item) {
@@ -152,9 +171,13 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                   ),
                   const Gap(30),
                   SheetSearchDropdown(
+                    selectedItem: Item(
+                      name: cubit.state.trabajaConyugue,
+                      value: cubit.state.trabajaConyugue,
+                    ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
-                    title: '¿Trabaja Cónyuge?',
+                    title: '¿Trabaja Cónyugue?',
                     isRequired: true,
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -177,6 +200,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                   if (trabajaConyuge) ...[
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      initialValue: cubit.state.trabajoConyugue,
                       isRequired: true,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
@@ -184,7 +208,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                       ],
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
-                      hintText: 'Trabajo Cónyuge',
+                      hintText: 'Trabajo Cónyugue',
                       icon: Icon(Icons.work_outline,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
@@ -201,6 +225,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                     const Gap(30),
                     OutlineTextfieldWidget(
                       isRequired: true,
+                      initialValue: cubit.state.direccionTrabajoConyugue,
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                         LengthLimitingTextInputFormatter(100),
@@ -223,6 +248,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                     ),
                     const Gap(30),
                     CountryInput(
+                      initialValue: cubit.state.telefonoTrabajoConyugue,
                       maxLength: 15,
                       countryCodeInput: CountryCodeInput.hn,
                       isRequired: true,
@@ -248,6 +274,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                   ],
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    initialValue: cubit.state.documentoConyuge,
                     isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -271,6 +298,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                   ),
                   const Gap(30),
                   OutlineTextfieldWidget(
+                    initialValue: cubit.state.actividadDescripcionConyugue,
                     isRequired: true,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
@@ -294,6 +322,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.ingresosNetos.toCurrencyString(),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresos Netos',
@@ -315,6 +344,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  initialValue: cubit.state.exeperiencia.toString(),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Experiencia',
@@ -334,25 +364,25 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4> {
                     );
                   },
                 ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'OCUPACION',
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        ocupacionCodigo: item.value,
-                        ocupacion: item.name,
-                      ),
-                    );
-                  },
-                  hintText: 'Ocupación',
-                  title: 'Ocupacion',
-                ),
+                // const Gap(30),
+                // SearchDropdownWidget(
+                //   isRequired: true,
+                //   validator: (value) =>
+                //       ClassValidator.validateRequired(value?.value),
+                //   flavor: global<FlavorCubit>().state.flavor,
+                //   codigo: 'OCUPACION',
+                //   onChanged: (item) {
+                //     if (item == null || !mounted) return;
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //         ocupacionCodigo: item.value,
+                //         ocupacion: item.name,
+                //       ),
+                //     );
+                //   },
+                //   hintText: 'Ocupación',
+                //   title: 'Ocupacion',
+                // ),
               ],
             ),
             const Gap(30),
