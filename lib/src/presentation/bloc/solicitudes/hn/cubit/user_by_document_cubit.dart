@@ -51,6 +51,8 @@ class UserByDocumentCubit extends Cubit<UserByDocumentState> {
       emit(state.copyWith(
         status: UserByDocumentStatus.error,
         errorMsg: e.optionalMsg,
+        cedula: cedula,
+        tipoDocumento: tipoDocumentoCodigo,
       ));
     } catch (e) {
       emit(

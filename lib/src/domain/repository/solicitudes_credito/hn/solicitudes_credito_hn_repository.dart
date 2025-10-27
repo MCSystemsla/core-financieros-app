@@ -163,7 +163,9 @@ class SolicitudesCreditoHnRepositoryImpl
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        return (false, resp.toString(), null);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+
+        return (false, errorMsg, null);
       }
       _logger.i(endpoint.body);
       return (

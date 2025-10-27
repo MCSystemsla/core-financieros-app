@@ -1,10 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -15,6 +18,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorForm8 extends StatefulWidget {
   final PageController controller;
@@ -39,6 +43,8 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final internetConnectionCubit =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -183,23 +189,6 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     },
                   ),
                 ],
-                // const Gap(30),
-                // SearchDropdownWidget(
-                //   validator: (value) =>
-                //       ClassValidator.validateRequired(value?.value),
-                //   hintText: 'Medidas de Conocimiento',
-                //   title: 'Medidas de Conocimiento',
-                //   codigo: 'MEDIDASCONOCIMIENTO',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         medidasConocimientoCodigo: item.value,
-                //       ),
-                //     );
-                //   },
-                // ),
                 if (isApnfd || isApnfd2 || isApnfd3) ...[
                   const Gap(30),
                   SheetSearchDropdown(
@@ -234,6 +223,28 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      isDone: true,
+                    ),
+                  );
+                  if (internetConnectionCubit ==
+                      ConnectionStatus.disconnected) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        isOffline: true,
+                        errorMsg:
+                            'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                      ),
+                    );
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                      onDone: () => context.pushReplacement('/solicitudes'),
+                    ).showDialog(context, dialogType: DialogType.infoReverse);
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

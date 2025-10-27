@@ -1,10 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -15,6 +18,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorOfflineHn8 extends StatefulWidget {
   final PageController controller;
@@ -32,6 +36,8 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    final internetConnectionCubit =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
     return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -235,6 +241,24 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8> {
                           isDone: true,
                         ),
                       );
+                      if (internetConnectionCubit ==
+                          ConnectionStatus.disconnected) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            isOffline: true,
+                            errorMsg:
+                                'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          ),
+                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(

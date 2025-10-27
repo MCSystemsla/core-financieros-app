@@ -1,12 +1,15 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -166,27 +169,21 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
         const Gap(10),
         Expanded(
           child: SolicitudCard(
-              svgPath: ImageAsset.nuevaMenorBg3,
-              title: 'Represtamo',
-              onPressed: () {
-                // if (isConnected != ConnectionStatus.connected) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const AddUserCedulaReprestamoHnScreen(
-                          typeForm: TypeForm.represtamo,
-                        )),
-                  ),
-                );
-                return;
-              }
-              // context.pushTransparentRoute(
-              //   const ReprestamoAddUserCedulaScreen(
-              //     typeForm: TypeForm.represtamo,
-              //   ),
-              // );
-              // },
-              ),
+            svgPath: ImageAsset.nuevaMenorBg3,
+            title: 'Represtamo',
+            onPressed: () {
+              // if (isConnected != ConnectionStatus.connected) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AddUserCedulaReprestamoHnScreen(
+                        typeForm: TypeForm.represtamo,
+                      )),
+                ),
+              );
+              return;
+            },
+          ),
         ),
         const Gap(10),
         Expanded(
@@ -214,15 +211,15 @@ class _SolicitudCardsRow1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+
     return Row(
       children: [
         const Gap(10),
         Expanded(
           child: SolicitudCard(
             onPressed: () {
-              // context.pushTransparentRoute(const AddUserCedulaScreen(
-              //   typeForm: TypeForm.nueva,
-              // ));
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -240,9 +237,17 @@ class _SolicitudCardsRow1 extends StatelessWidget {
         Expanded(
           child: SolicitudCard(
             onPressed: () {
-              // context.pushTransparentRoute(const AddUserCedulaScreen(
-              //   typeForm: TypeForm.asalariado,
-              // ));
+              if (isConnected == ConnectionStatus.disconnected ||
+                  isConnected == ConnectionStatus.handleOfflineActivation) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const CrearSolicitudHnScreen(
+                          typeForm: TypeForm.asalariado,
+                        )),
+                  ),
+                );
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
