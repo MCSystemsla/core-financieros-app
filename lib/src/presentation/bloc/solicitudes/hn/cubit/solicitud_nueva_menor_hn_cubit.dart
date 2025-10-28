@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/hn/nueva_menor_hn_autosave.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
@@ -403,12 +401,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       frecuenciaMeses: _prefer(state.frecuenciaMeses, prev?.frecuenciaMeses),
       tasaInteres:
           state.tasaInteres == 0 ? (prev?.tasaInteres ?? 0) : state.tasaInteres,
-      montoMinimo: state.montoMinimo == 0
-          ? (prev?.montoMinimo ?? 0.00)
-          : state.montoMinimo,
-      montoMaximo: state.montoMaximo == 0
-          ? (prev?.montoMaximo ?? 0.00)
-          : state.montoMaximo,
+      montoMinimo: _preferNum(state.montoMinimo, prev?.montoMinimo),
+      montoMaximo: _preferNum(state.montoMaximo, prev?.montoMaximo),
       tieneVinculosUsa: _prefer(state.tieneVinculosUsa, prev?.tieneVinculosUsa),
       isDone: state.isDone == false ? (prev?.isDone ?? false) : state.isDone,
     );
@@ -426,6 +420,11 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     return parsed ?? previous;
   }
 
+  double _preferNum(double current, double? prev) {
+    if (prev == null) return current;
+    return current != prev ? current : prev;
+  }
+
   void saveCedula({
     String? cedulaFrontPath,
     String? cedulaBackPath,
@@ -439,7 +438,6 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
   }
 
   void loadFromLocalDb(SolicitudNuevaMenorHnLocalDb solicitud) {
-    log('Idone : ${solicitud.isDone}');
     onFieldChanged(
       () => state.copyWith(
         isDone: solicitud.isDone,
@@ -557,6 +555,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         actividaEconomicaDescipcion3: solicitud.actividaEconomicaDescipcion3,
         ejerceApnfd: solicitud.ejerceApnfd,
         esApnfd: solicitud.esApnfd,
+        cuota: solicitud.cuota,
       ),
     );
   }

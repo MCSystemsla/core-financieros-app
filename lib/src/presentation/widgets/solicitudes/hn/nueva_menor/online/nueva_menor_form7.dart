@@ -286,6 +286,9 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
+                        montoMaximo: montoMaximo,
+                        montoMinimo: montoMinimo?.toDouble(),
+                        tasaInteres: item.interes,
                       ),
                     );
                   },
@@ -339,6 +342,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
+                        frecuenciaMeses: item.meses,
                       ),
                     );
                     frecuenciaDePago = CatalogoFrecuenciaItem(

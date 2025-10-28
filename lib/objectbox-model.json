@@ -2897,7 +2897,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "124:7068237699809228166",
+      "lastPropertyId": "126:7135722388525260782",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3520,6 +3520,16 @@
           "id": "124:7068237699809228166",
           "name": "tieneVinculosUsa",
           "type": 9
+        },
+        {
+          "id": "125:7921295803705202298",
+          "name": "montoMaximo",
+          "type": 8
+        },
+        {
+          "id": "126:7135722388525260782",
+          "name": "montoMinimo",
+          "type": 8
         }
       ],
       "relations": []

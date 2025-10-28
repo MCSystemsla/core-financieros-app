@@ -337,25 +337,6 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     );
                   },
                 ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  flavor: global<FlavorCubit>().state.flavor,
-                  codigo: 'OCUPACION',
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        ocupacionCodigo: item.value,
-                        ocupacion: item.name,
-                      ),
-                    );
-                  },
-                  hintText: 'Ocupación',
-                  title: 'Ocupacion',
-                ),
               ],
             ),
             const Gap(30),

@@ -155,27 +155,6 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
                     );
                   },
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  initialValue: cubit.state.descripcionDestino,
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  hintText: 'Descripción Destino',
-                  icon: Icon(Icons.description,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  title: 'Descripción Destino',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        descripcionDestino: value,
-                      ),
-                    );
-                  },
-                ),
               ],
             ),
             const Gap(30),

@@ -695,6 +695,11 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     setState(() {
                       tieneVinculosUsa = item.value == 'input.yes'.tr();
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tieneVinculosUsa: item.value,
+                      ),
+                    );
                   },
                   hintText: 'input.select_option'.tr(),
                   enabled: true,
