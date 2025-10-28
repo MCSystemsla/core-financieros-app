@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
@@ -11,7 +9,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecu
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -22,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,18 +28,19 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class NuevaMenorOfflineHn7 extends StatefulWidget {
+class ReprestamoFormHnOffline3 extends StatefulWidget {
   final PageController controller;
-  const NuevaMenorOfflineHn7({
+  const ReprestamoFormHnOffline3({
     super.key,
     required this.controller,
   });
 
   @override
-  State<NuevaMenorOfflineHn7> createState() => _NuevaMenorOfflineHn7State();
+  State<ReprestamoFormHnOffline3> createState() =>
+      _ReprestamoFormHnOffline3State();
 }
 
-class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
+class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
     with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   DateTime? fechaPrimerPago;
@@ -48,28 +48,24 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
   String? monto;
   String? plazoSolicitud;
   CatalogoFrecuenciaItem? frecuenciaDePago;
+
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    log('tasaInteres: ${cubit.state.tasaInteres} - montoMinimo: ${cubit.state.montoMinimo} - montoMaximo: ${cubit.state.montoMaximo}');
-
-    monto = cubit.state.monto.toString();
-    plazoSolicitud = cubit.state.plazoSolicitud.toString();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
     frecuenciaDePago = CatalogoFrecuenciaItem(
       valor: cubit.state.frecuenciaCodigo,
       nombre: cubit.state.frecuenciaCodigo,
-      meses: cubit.state.frecuenciaMeses,
+      meses: cubit.state.frecuenciaPagoMeses,
     );
+    monto = cubit.state.monto.toString();
+    plazoSolicitud = cubit.state.plazoSolicitud.toString();
+    fechaPrimerPago = DateTime.tryParse(cubit.state.fechaPrimerPagoSolicitud);
     fechaDesembolso =
         DateTime.tryParse(cubit.state.fechaDesembolso) ?? DateTime.now();
-    fechaPrimerPago = DateTime.tryParse(cubit.state.fechaPrimerPagoSolicitud);
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
-        fechaDesembolso: cubit.state.fechaDesembolso,
-        fechaPrimerPagoSolicitud: cubit.state.fechaPrimerPagoSolicitud,
-        plazoSolicitud: cubit.state.plazoSolicitud,
       ),
     );
   }
@@ -123,8 +119,8 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
         return;
       }
       fechaPrimerPago = picked;
-      context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-            () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
+      context.read<SolicitudReprestamoHnCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoHnCubit>().state.copyWith(
                   fechaPrimerPagoSolicitud:
                       fechaPrimerPago?.toUtc().toIso8601String(),
                 ),
@@ -168,8 +164,8 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
         return;
       }
       fechaDesembolso = picked;
-      context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-            () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
+      context.read<SolicitudReprestamoHnCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoHnCubit>().state.copyWith(
                   fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 ),
           );
@@ -180,9 +176,10 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
-    return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
+
+    return BlocBuilder<SolicitudReprestamoHnCubit, SolicitudReprestamoHnState>(
       builder: (context, state) {
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -199,17 +196,19 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                   children: [
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.propositoCodigo,
-                        value: state.propositoCodigo,
+                        name: cubit.state.propositoCodigo,
+                        value: cubit.state.propositoCodigo,
                       ),
+                      key: const ValueKey('Destino'),
                       isRequired: true,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                      hintText: 'Destino del crédito',
+                      validator: (value) => ClassValidator.validateRequired(
+                        value?.value,
+                      ),
+                      hintText: 'Destino',
                       title: 'Destino del crédito',
                       onChanged: (value) {
                         cubit.onFieldChanged(
-                          () => state.copyWith(
+                          () => cubit.state.copyWith(
                             propositoCodigo: value?.value,
                           ),
                         );
@@ -217,29 +216,31 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       flavor: global<FlavorCubit>().state.flavor,
                       codigo: 'DESTINOCREDITO',
                     ),
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      initialValue: state.descripcionDestino,
-                      key: const ValueKey('DestinoDescripcion'),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                        LengthLimitingTextInputFormatter(200),
-                      ],
-                      isRequired: true,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'ingresa descripcion del Destino',
-                      icon: Icon(Icons.description_outlined,
-                          color: AppColors.getPrimaryColor()),
-                      title: 'Descripcion del Destino',
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            descripcionDestino: value,
-                          ),
-                        );
-                      },
-                    ),
+                    if (cubit.state.propositoCodigo.isNotEmpty) ...[
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: cubit.state.descripcionDestino,
+                        key: const ValueKey('DestinoDescripcion'),
+                        isRequired: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'ingresa descripcion del Destino',
+                        icon: Icon(Icons.description_outlined,
+                            color: AppColors.getPrimaryColor()),
+                        title: 'Descripcion del Destino',
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(200),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              descripcionDestino: value,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
@@ -254,7 +255,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => state.copyWith(
+                          () => cubit.state.copyWith(
                             monedaCodigo: item.value,
                           ),
                         );
@@ -268,7 +269,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       onTap: () => selectFechaDesembolso(context),
                       validator: (value) => ClassValidator.validateRequired(
                           fechaDesembolso.selectorFormat()),
-                      hintText: fechaDesembolso.selectorFormat(),
+                      hintText: state.fechaDesembolso,
                       icon: Icon(Icons.date_range,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
@@ -278,23 +279,22 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: state.monto.toString(),
-                      key: const ValueKey('Monto'),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
-                      hintText: 'Monto',
+                      hintText: 'ingresa monto',
                       icon: Icon(Icons.wallet,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(10),
                       ],
+                      textCapitalization: TextCapitalization.none,
                       title: 'Monto',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => state.copyWith(
-                            monto: int.tryParse(value) ?? 0,
+                          () => cubit.state.copyWith(
+                            monto: double.tryParse(value) ?? 0,
                           ),
                         );
                         monto = value;
@@ -305,23 +305,17 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       selectedItem: Item(
                         name: state.productoCodigo,
                         value: state.productoCodigo,
-                        interes: state.tasaInteres,
-                        montoMaximo: state.montoMaximo,
-                        montoMinimo: state.montoMinimo,
                       ),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      hintText: 'Selecciona producto',
+                      hintText: 'Producto',
                       codigo: 'PRODUCTO',
                       flavor: global<FlavorCubit>().state.flavor,
                       onChanged: (item) {
                         if (item == null) return;
-                        log(item.value);
-                        log(item.interes.toString());
-
                         cubit.onFieldChanged(
-                          () => state.copyWith(
+                          () => cubit.state.copyWith(
                             productoCodigo: item.value,
                             tasaInteres: item.interes,
                             montoMaximo: item.montoMaximo,
@@ -333,11 +327,11 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: cubit.state.plazoSolicitud.toString(),
+                      initialValue: state.plazoSolicitud.toString(),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
-                      hintText: 'Plazo de la solicitud',
+                      hintText: 'Plazo de la solicitud (meses)',
                       icon: Icon(Icons.schedule,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
@@ -349,7 +343,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       title: 'Plazo de la solicitud (meses)',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => state.copyWith(
+                          () => cubit.state.copyWith(
                               plazoSolicitud: int.tryParse(value) ?? 0),
                         );
                         plazoSolicitud = value;
@@ -362,9 +356,8 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       readOnly: true,
                       onTap: () => selectDate(context),
                       validator: (value) => ClassValidator.validateRequired(
-                          fechaPrimerPago?.selectorFormat()),
-                      hintText: fechaPrimerPago?.selectorFormat() ??
-                          'Fecha primer pago',
+                          state.fechaPrimerPagoSolicitud),
+                      hintText: state.fechaPrimerPagoSolicitud,
                       icon: Icon(Icons.calendar_today,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.datetime,
@@ -374,25 +367,25 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     const Gap(30),
                     CatalogoFrecuenciaPagoDropdown(
                       selectedItem: CatalogoFrecuenciaItem(
-                        nombre: state.frecuenciaCodigo,
                         valor: state.frecuenciaCodigo,
-                        meses: state.frecuenciaMeses,
+                        nombre: state.frecuenciaCodigo,
+                        meses: state.frecuenciaPagoMeses,
                       ),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.valor),
                       onChanged: (item) {
                         if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            frecuenciaCodigo: item.valor,
+                            frecuenciaPagoMeses: item.meses,
+                          ),
+                        );
                         frecuenciaDePago = CatalogoFrecuenciaItem(
                           valor: item.valor,
                           nombre: item.nombre,
                           meses: item.meses,
-                        );
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            frecuenciaCodigo: item.valor,
-                            frecuenciaMeses: item.meses,
-                          ),
                         );
                       },
                       hintText: 'Frecuencia',
@@ -400,20 +393,17 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: cubit.state.observacion,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                        LengthLimitingTextInputFormatter(200),
-                      ],
+                      initialValue: state.observacion,
                       hintText: 'Observación',
                       icon:
                           Icon(Icons.note, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
+                      inputFormatters: [UpperCaseTextFormatter()],
                       textCapitalization: TextCapitalization.sentences,
                       title: 'Observacion',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => state.copyWith(
+                          () => cubit.state.copyWith(
                             observacion: value,
                           ),
                         );
@@ -438,26 +428,26 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      // if ((double.tryParse(monto ?? '0') ?? 0) <
-                      //     state.montoMinimo.toDouble()) {
-                      //   CustomAlertDialog(
-                      //     context: context,
-                      //     title:
-                      //         'El monto minimo debe ser mayor a ${state.montoMinimo.toCurrencyString()} L.',
-                      //     onDone: () => context.pop(),
-                      //   ).showDialog(context, dialogType: DialogType.warning);
-                      //   return;
-                      // }
-                      // if (double.tryParse(monto ?? '0')! >
-                      //     state.montoMaximo.toDouble()) {
-                      //   CustomAlertDialog(
-                      //     context: context,
-                      //     title:
-                      //         'El monto maximo debe ser menor o igual a ${state.montoMaximo.toCurrencyString()} L.',
-                      //     onDone: () => context.pop(),
-                      //   ).showDialog(context, dialogType: DialogType.warning);
-                      //   return;
-                      // }
+                      if ((double.tryParse(monto ?? '0') ?? 0) <
+                          state.montoMinimo.toDouble()) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El monto minimo debe ser mayor a ${state.montoMinimo.toCurrencyString()} L.',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
+                      if (double.tryParse(monto ?? '0')! >
+                          state.montoMaximo.toDouble()) {
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'El monto maximo debe ser menor o igual a ${state.montoMaximo.toCurrencyString()} L.',
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.warning);
+                        return;
+                      }
                       final plazoSolicitudMount =
                           (int.tryParse(plazoSolicitud ?? '0') ?? 0);
                       final frecuenciaPagoMeses =
@@ -484,13 +474,13 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       CuotaDataDialog(
                         context: context,
                         title:
-                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString()} L.',
+                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
                         onDone: () {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               cuota: calcularCuotaProvider
                                   .state.montoPrimeraCuota
-                                  .toInt(),
+                                  .toDouble(),
                             ),
                           );
                           widget.controller.nextPage(

@@ -43,10 +43,10 @@ class ReprestamoHnForm extends StatelessWidget {
                   tipoDocumento: userByDocumentProvider.tipoDocumento,
                   tipoPersona: userByDocumentProvider.tipoPersona,
                   paisEmisorCedula: userByDocumentProvider.paisEmisorCedula,
-                  fechaVencimientoCedula: DateTime.parse(
+                  fechaVencimientoCedula: DateTime.tryParse(
                     userByDocumentProvider.fechaVencimientoCedula,
                   ),
-                  fechaEmisionCedula: DateTime.parse(
+                  fechaEmisionCedula: DateTime.tryParse(
                     userByDocumentProvider.fechaEmisionCedula,
                   ),
                 ),

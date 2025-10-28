@@ -23,8 +23,8 @@ class UserByDocumentReprestamoData {
   final String tipoDocumento;
   final String tipoPersona;
   final String paisEmisorCedula;
-  final DateTime fechaVencimientoCedula;
-  final DateTime fechaEmisionCedula;
+  final DateTime? fechaVencimientoCedula;
+  final DateTime? fechaEmisionCedula;
 
   UserByDocumentReprestamoData({
     required this.id,
@@ -33,8 +33,8 @@ class UserByDocumentReprestamoData {
     required this.tipoDocumento,
     required this.tipoPersona,
     required this.paisEmisorCedula,
-    required this.fechaVencimientoCedula,
-    required this.fechaEmisionCedula,
+    this.fechaVencimientoCedula,
+    this.fechaEmisionCedula,
   });
 
   factory UserByDocumentReprestamoData.fromJson(Map<String, dynamic> json) =>

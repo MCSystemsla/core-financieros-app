@@ -1,17 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -20,26 +17,27 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMenorOfflineHn5 extends StatefulWidget {
+class ReprestamoFormHnOffline2 extends StatefulWidget {
   final PageController controller;
-  const NuevaMenorOfflineHn5({
+  const ReprestamoFormHnOffline2({
     super.key,
     required this.controller,
   });
 
   @override
-  State<NuevaMenorOfflineHn5> createState() => _NuevaMenorOfflineHn5State();
+  State<ReprestamoFormHnOffline2> createState() =>
+      _ReprestamoFormHnOffline2State();
 }
 
-class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
+class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
     with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
+    final cubit = context.read<SolicitudReprestamoHnCubit>();
+    return BlocBuilder<SolicitudReprestamoHnCubit, SolicitudReprestamoHnState>(
       builder: (context, state) {
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -48,7 +46,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
             child: Column(
               children: [
                 const MiCreditoProgress(
-                  currentStep: 5,
+                  currentStep: 1,
                   steps: 7,
                 ),
                 const Gap(30),
@@ -56,311 +54,19 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                   children: [
                     SheetSearchDropdown(
                       selectedItem: Item(
-                        name: cubit.state.espeps,
-                        value: cubit.state.espeps,
+                        name: state.esFamiliarEmpleado,
+                        value: state.esFamiliarEmpleado,
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      title: 'Es PEPS?',
+                      title: 'Tiene Familiar Empleado?',
                       isRequired: true,
-                      onChanged: (item) {
-                        if (item == null || !mounted) return;
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
 
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            espeps: item.value,
-                          ),
-                        );
-                      },
-                      hintText: 'input.select_option'.tr(),
-                      enabled: true,
-                      items: [
-                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
-                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
-                      ],
-                    ),
-                    if (state.espeps == 'input.yes'.tr()) ...[
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.nombreDeEntidadPeps,
-                        isRequired: true,
-                        inputFormatters: [
-                          UpperCaseTextFormatter(),
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Nombre de Entidad PEPS',
-                        icon: Icon(Icons.apartment,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Nombre de Entidad PEPS',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              nombreDeEntidadPeps: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      CatalogoValorNacionalidad(
-                        selectedItem: ItemNacionalidad(
-                          id: 0,
-                          valor: cubit.state.paisPeps,
-                          nombre: cubit.state.paisPeps,
-                          relacion: '',
-                        ),
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value?.valor),
-                        hintText: 'País PEPS',
-                        title: 'País PEPS',
-                        codigo: 'PAIS',
-                        onChanged: (item) {
-                          if (item == null || !mounted) return;
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              paisPeps: item.valor,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.periodoPeps,
-                        isRequired: true,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Periodo PEPS',
-                        icon: Icon(Icons.calendar_month,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        textCapitalization: TextCapitalization.none,
-                        title: 'Periodo PEPS',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              periodoPeps: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.cargoOficialPeps,
-                        isRequired: true,
-                        inputFormatters: [
-                          UpperCaseTextFormatter(),
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Cargo Oficial PEPS',
-                        icon: Icon(Icons.badge,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Cargo Oficial PEPS',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              cargoOficialPeps: value,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                    const Gap(30),
-                    SheetSearchDropdown(
-                      selectedItem: Item(
-                        name: cubit.state.tieneFamiliarPeps,
-                        value: cubit.state.tieneFamiliarPeps,
-                      ),
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                      title: '¿Tiene Familiar PEPS?',
-                      isRequired: true,
-                      onChanged: (item) {
-                        if (item == null || !mounted) return;
-
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            tieneFamiliarPeps: item.value,
-                          ),
-                        );
-                      },
-                      hintText: 'input.select_option'.tr(),
-                      enabled: true,
-                      items: [
-                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
-                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
-                      ],
-                    ),
-                    if (state.tieneFamiliarPeps == 'input.yes'.tr()) ...[
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.nombreFamiliarPeps2,
-                        isRequired: true,
-                        inputFormatters: [
-                          UpperCaseTextFormatter(),
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Nombre Familiar PEPS 2',
-                        icon: Icon(Icons.person,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.name,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Familiar PEPS 2',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              nombreFamiliarPeps2: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      SearchDropdownWidget(
-                        selectedItem: Item(
-                          name: cubit.state.parentescoFamiliarPeps2Codigo,
-                          value: cubit.state.parentescoFamiliarPeps2Codigo,
-                        ),
-                        isRequired: true,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value?.value),
-                        onChanged: (item) {
-                          if (item == null || !mounted) return;
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              parentescoFamiliarPeps2Codigo: item.value,
-                            ),
-                          );
-                        },
-                        flavor: global<FlavorCubit>().state.flavor,
-                        codigo: 'PARENTESCO',
-                        hintText: 'Parentesco Familiar PEPS 2',
-                        title: 'Parentesco Familiar PEPS 2',
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.cargoFamiliarPeps2,
-                        isRequired: true,
-                        inputFormatters: [
-                          UpperCaseTextFormatter(),
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Cargo Familiar PEPS 2',
-                        icon: Icon(Icons.assignment_ind,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Cargo Familiar PEPS 2',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              cargoFamiliarPeps2: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.nombreEntidadPeps2,
-                        isRequired: true,
-                        inputFormatters: [
-                          UpperCaseTextFormatter(),
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Nombre Entidad PEPS 2',
-                        icon: Icon(Icons.business,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Entidad PEPS 2',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              nombreEntidadPeps2: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: cubit.state.periodoPeps2,
-                        isRequired: true,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Periodo PEPS 2',
-                        icon: Icon(Icons.date_range,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.none,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        title: 'Periodo PEPS 2',
-                        onChange: (value) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              periodoPeps2: value,
-                            ),
-                          );
-                        },
-                      ),
-                      const Gap(30),
-                      CatalogoValorNacionalidad(
-                        selectedItem: ItemNacionalidad(
-                          id: 0,
-                          valor: cubit.state.paisPeps2,
-                          nombre: cubit.state.paisPeps2,
-                          relacion: '',
-                        ),
-                        validator: (value) => ClassValidator.validateRequired(
-                          value?.valor,
-                        ),
-                        hintText: 'País PEPS 2',
-                        title: 'País PEPS 2',
-                        codigo: 'PAIS',
-                        onChanged: (item) {
-                          if (item == null || !mounted) return;
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              paisPeps2: item.valor,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                    const Gap(30),
-                    SheetSearchDropdown(
-                      selectedItem: Item(
-                        name: cubit.state.esFamiliarEmpleado,
-                        value: cubit.state.esFamiliarEmpleado,
-                      ),
-                      validator: (value) => ClassValidator.validateRequired(
-                        value?.value,
-                      ),
-                      title: '¿Es Familiar Empleado?',
-                      isRequired: true,
-                      onChanged: (item) {
-                        if (item == null || !mounted) return;
-
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            esFamiliarEmpleado: item.value,
+                            esFamiliarEmpleado: value.value,
                           ),
                         );
                       },
@@ -374,21 +80,22 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                     if (state.esFamiliarEmpleado == 'input.yes'.tr()) ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.nombreFamiliar,
+                        initialValue: state.nombreFamiliar,
                         isRequired: true,
+                        hintText: 'Nombre de Familiar Empleado',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
                           LengthLimitingTextInputFormatter(100),
                         ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        hintText: 'Nombre Familiar',
-                        icon: Icon(Icons.person_outline,
-                            color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.name,
-                        textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Familiar',
+                        title: 'Nombre de Familiar Empleado',
                         onChange: (value) {
+                          if (value == null || !mounted) return;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               nombreFamiliar: value,
@@ -398,24 +105,320 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.cedulaFamiliar,
+                        initialValue: state.cedulaFamiliar,
                         isRequired: true,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
-                        hintText: 'Cédula Familiar',
-                        icon: Icon(Icons.credit_card,
+                        hintText: 'Cedula Familiar Empleado',
+                        icon: Icon(Icons.person,
                             color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.none,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(25),
+                          LengthLimitingTextInputFormatter(50),
                         ],
-                        title: 'Cédula Familiar',
+                        textInputType: TextInputType.number,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Cedula Familiar Empleado',
                         onChange: (value) {
+                          if (value == null || !mounted) return;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               cedulaFamiliar: value,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    const Gap(30),
+                    SheetSearchDropdown(
+                      selectedItem: Item(
+                        name: state.esPeps,
+                        value: state.esPeps,
+                      ),
+                      validator: (value) => ClassValidator.validateRequired(
+                        value?.value,
+                      ),
+                      title: 'Es PEPS?',
+                      isRequired: true,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            esPeps: value.value,
+                          ),
+                        );
+                      },
+                      hintText: 'input.select_option'.tr(),
+                      enabled: true,
+                      items: [
+                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                      ],
+                    ),
+                    if (state.esPeps == 'input.yes'.tr()) ...[
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.nombreDeEntidadPeps,
+                        isRequired: true,
+                        hintText: 'Nombre de Entidad PEPS',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Nombre de Entidad PEPS',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              nombreDeEntidadPeps: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        selectedItem: ItemNacionalidad(
+                          id: 0,
+                          valor: state.paisPeps,
+                          nombre: state.paisPeps,
+                          relacion: '',
+                        ),
+                        codigo: 'PAIS',
+                        hintText: 'Pais PEPS',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        title: 'Pais Peps',
+                        onChanged: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              paisPeps: value.valor,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.periodoPeps,
+                        isRequired: true,
+                        hintText: 'Periodo PEPS',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.number,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Periodo PEPS',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              periodoPeps: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.cargoOficialPeps,
+                        isRequired: true,
+                        hintText: 'Cargo Oficial PEPS',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Cargo Oficial PEPS',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cargoOficialPeps: value,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    const Gap(30),
+                    SheetSearchDropdown(
+                      selectedItem: Item(
+                        name: state.tieneFamiliarPeps,
+                        value: state.tieneFamiliarPeps,
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      title: '¿Tiene Familiar PEPS?',
+                      isRequired: true,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            tieneFamiliarPeps: value.value,
+                          ),
+                        );
+                      },
+                      hintText: 'input.select_option'.tr(),
+                      enabled: true,
+                      items: [
+                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                      ],
+                    ),
+                    if (state.tieneFamiliarPeps == 'input.yes'.tr()) ...[
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.nombreFamiliarPeps2,
+                        isRequired: true,
+                        hintText: 'Nombre Familiar PEPS 2',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Nombre Familiar PEPS 2',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              nombreFamiliarPeps2: value,
+                            ),
+                          );
+                        },
+                      ),
+                      OutlineTextfieldWidget(
+                        initialValue: state.nombreEntidadPeps2,
+                        isRequired: true,
+                        hintText: 'Nombre Entidad Familiar PEPS 2',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Nombre Familiar PEPS 2',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              nombreEntidadPeps2: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.parentescoFamiliarPeps2Codigo,
+                        isRequired: true,
+                        hintText: 'Parentesco Familiar PEPS 2',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [UpperCaseTextFormatter()],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Parentesco Familiar PEPS 2',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              parentescoFamiliarPeps2Codigo: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.cargoFamiliarPeps2,
+                        isRequired: true,
+                        hintText: 'Cargo Familiar PEPS 2',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Cargo Familiar PEPS 2',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cargoFamiliarPeps2: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.periodoPeps2,
+                        isRequired: true,
+                        hintText: 'Periodo PEPS 2',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        textInputType: TextInputType.number,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Periodo PEPS 2',
+                        onChange: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              periodoPeps2: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        selectedItem: ItemNacionalidad(
+                          id: 0,
+                          valor: state.paisPeps2,
+                          nombre: state.paisPeps2,
+                          relacion: '',
+                        ),
+                        codigo: 'PAIS',
+                        hintText: 'Pais PEPS 2',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        title: 'Pais PEPS 2',
+                        onChanged: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              paisPeps2: value.valor,
                             ),
                           );
                         },
@@ -432,7 +435,6 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

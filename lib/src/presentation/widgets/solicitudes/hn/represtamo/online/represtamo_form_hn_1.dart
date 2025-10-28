@@ -24,11 +24,11 @@ import 'package:go_router/go_router.dart';
 
 class ReprestamoFormHn1 extends StatefulWidget {
   final PageController controller;
-  final UserByDocumentReprestamoData userByDocumentReprestamoData;
+  final UserByDocumentReprestamoData? userByDocumentReprestamoData;
   const ReprestamoFormHn1({
     super.key,
     required this.controller,
-    required this.userByDocumentReprestamoData,
+    this.userByDocumentReprestamoData,
   });
 
   @override
@@ -45,9 +45,9 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
     final cubit = context.read<SolicitudReprestamoHnCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
-        tipoPersonaCodigo: widget.userByDocumentReprestamoData.tipoPersona,
-        tipoDocumentoCodigo: widget.userByDocumentReprestamoData.tipoDocumento,
-        cedula: widget.userByDocumentReprestamoData.cedula,
+        tipoPersonaCodigo: widget.userByDocumentReprestamoData?.tipoPersona,
+        tipoDocumentoCodigo: widget.userByDocumentReprestamoData?.tipoDocumento,
+        cedula: widget.userByDocumentReprestamoData?.cedula,
       ),
     );
   }
@@ -71,9 +71,8 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
               children: [
                 OutlineTextfieldWidget(
                   initialValue:
-                      widget.userByDocumentReprestamoData.nombreCompleto,
+                      widget.userByDocumentReprestamoData?.nombreCompleto,
                   key: const ValueKey('nombreCompleto'),
-                  readOnly: true,
                   hintText: 'Ingresa nombre completo',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
                   inputFormatters: [UpperCaseTextFormatter()],
@@ -92,8 +91,9 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 SearchDropdownWidget(
                   isRequired: true,
                   selectedItem: Item(
-                    name: widget.userByDocumentReprestamoData.tipoPersona,
-                    value: widget.userByDocumentReprestamoData.tipoPersona,
+                    name:
+                        widget.userByDocumentReprestamoData?.tipoPersona ?? '',
+                    value: widget.userByDocumentReprestamoData?.tipoPersona,
                   ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -114,8 +114,9 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 SearchDropdownWidget(
                   isRequired: true,
                   selectedItem: Item(
-                    name: widget.userByDocumentReprestamoData.tipoDocumento,
-                    value: widget.userByDocumentReprestamoData.tipoDocumento,
+                    name: widget.userByDocumentReprestamoData?.tipoDocumento ??
+                        '',
+                    value: widget.userByDocumentReprestamoData?.tipoDocumento,
                   ),
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
@@ -136,7 +137,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   isRequired: true,
-                  initialValue: widget.userByDocumentReprestamoData.cedula,
+                  initialValue: widget.userByDocumentReprestamoData?.cedula,
                   key: const ValueKey('cedula'),
                   hintText: 'Documento',
                   icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),

@@ -66,6 +66,11 @@ class SolicitudReprestamoHnLocalDb {
   String? errorMsg;
   DateTime createdAt = DateTime.now();
   String? nombreCompletoCliente;
+  DateTime? fechaDesembolso;
+  double? montoMinimo;
+  double? montoMaximo;
+  double? tasaInteres;
+  String? frecuenciaPagoMeses;
 
   SolicitudReprestamoHnLocalDb({
     required this.id,
@@ -127,5 +132,10 @@ class SolicitudReprestamoHnLocalDb {
     this.descripcionDestino,
     this.isDone = false,
     this.errorMsg,
+    this.fechaDesembolso,
+    this.montoMinimo,
+    this.montoMaximo,
+    this.tasaInteres,
+    this.frecuenciaPagoMeses,
   });
 }

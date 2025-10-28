@@ -38,7 +38,8 @@ class NuevaMenorOfflineHn1 extends StatefulWidget {
   State<NuevaMenorOfflineHn1> createState() => _NuevaMenorOfflineHn1State();
 }
 
-class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1> {
+class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   CatalogoLocalDb? edadMinima;
   CatalogoLocalDb? edadMaxima;
@@ -152,6 +153,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
       builder: (context, state) {
@@ -791,4 +793,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

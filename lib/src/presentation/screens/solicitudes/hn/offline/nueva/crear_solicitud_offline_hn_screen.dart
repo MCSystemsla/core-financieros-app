@@ -24,11 +24,11 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import '../../../../../bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 
-class CrearSolicitudOfflineHnScreen extends StatelessWidget {
+class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
   final SolicitudNuevaMenorHnLocalDb solicitudNuevaMenorHnLocalDb;
-  const CrearSolicitudOfflineHnScreen({
+  const CrearSolicitudNuevaOfflineHnScreen({
     super.key,
     required this.solicitudNuevaMenorHnLocalDb,
   });

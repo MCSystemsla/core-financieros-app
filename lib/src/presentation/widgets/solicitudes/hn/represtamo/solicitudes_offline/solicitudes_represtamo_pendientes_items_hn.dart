@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/local_db/solicitud_represtamo_hn_local_db.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/offline/represtamo/crear_solicitud_represtamo_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/slide_pageview_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitudes_pendientes/ni/solicitudes_pendientes_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -229,16 +230,16 @@ class SolicitudesReprestamoPendientesWidgetHN extends StatelessWidget {
                 ? Colors.white
                 : AppColors.red.withOpacity(.3).withBlue(170),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) => ReprestamoOfflineView(
-          //       solicitudReprestamoOffline: solicitud,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CrearSolicitudReprestamoOfflineScreen(
+                solicitudReprestamoHnLocalDb: solicitud,
+              ),
+            ),
+          );
         },
-        title: solicitud.nombreCompletoCliente ?? 'N/A',
+        title: solicitud.nombreCompleto ?? 'N/A',
         cedula: solicitud.cedula ?? 'N/A',
         dateToStart: solicitud.createdAt.toLocal().selectorFormat(),
         dateToEnd: solicitud.createdAt

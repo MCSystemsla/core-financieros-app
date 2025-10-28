@@ -105,8 +105,27 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
               if (state.status == Status.error) {
                 CustomAlertDialog(
                   context: context,
-                  title: state.errorMsg,
-                  onDone: () => context.pop(),
+                  title: state.errorMsg.contains('Sin conexión a internet')
+                      ? 'No tienes conexion a internet, pero aun puedes crear solicitudes'
+                      : state.errorMsg,
+                  onDone: () {
+                    if (state.errorMsg.contains('Sin conexión a internet')) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value:
+                                context.read<UserByDocumentReprestamoCubit>(),
+                            child: CrearSolicitudHnScreen(
+                              typeForm: widget.typeForm,
+                            ),
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+                    context.pop();
+                  },
                 ).showDialog(context);
               }
               if (state.status == Status.done) {

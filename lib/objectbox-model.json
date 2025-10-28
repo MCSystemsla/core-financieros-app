@@ -3623,7 +3623,7 @@
     },
     {
       "id": "24:2952094495400237",
-      "lastPropertyId": "66:8831793132241358167",
+      "lastPropertyId": "71:6345576182771622633",
       "name": "SolicitudReprestamoHnLocalDb",
       "properties": [
         {
@@ -3930,6 +3930,31 @@
         {
           "id": "66:8831793132241358167",
           "name": "nombreCompletoCliente",
+          "type": 9
+        },
+        {
+          "id": "67:3391502369875511217",
+          "name": "fechaDesembolso",
+          "type": 10
+        },
+        {
+          "id": "68:4803107680182572483",
+          "name": "montoMinimo",
+          "type": 8
+        },
+        {
+          "id": "69:5415720452156386693",
+          "name": "montoMaximo",
+          "type": 8
+        },
+        {
+          "id": "70:133413805803091016",
+          "name": "tasaInteres",
+          "type": 8
+        },
+        {
+          "id": "71:6345576182771622633",
+          "name": "frecuenciaPagoMeses",
           "type": 9
         }
       ],

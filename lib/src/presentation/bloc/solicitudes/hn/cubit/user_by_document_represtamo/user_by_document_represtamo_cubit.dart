@@ -33,20 +33,24 @@ class UserByDocumentReprestamoCubit
         tipoPersona: resp.data.tipoPersona,
         paisEmisorCedula: resp.data.paisEmisorCedula,
         fechaVencimientoCedula:
-            resp.data.fechaVencimientoCedula.toUtc().toIso8601String(),
+            resp.data.fechaVencimientoCedula?.toUtc().toIso8601String(),
         fechaEmisionCedula:
-            resp.data.fechaEmisionCedula.toUtc().toIso8601String(),
+            resp.data.fechaEmisionCedula?.toUtc().toIso8601String(),
       ));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,
         errorMsg: e.optionalMsg,
+        cedula: cedula,
+        tipoDocumento: tipoDocumentoCodigo,
       ));
     } catch (e) {
       emit(
         state.copyWith(
           status: Status.error,
           errorMsg: e.toString(),
+          cedula: cedula,
+          tipoDocumento: tipoDocumentoCodigo,
         ),
       );
     }

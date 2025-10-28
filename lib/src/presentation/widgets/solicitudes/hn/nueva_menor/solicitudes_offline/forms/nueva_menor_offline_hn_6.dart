@@ -22,12 +22,14 @@ class NuevaMenorOfflineHn6 extends StatefulWidget {
   State<NuevaMenorOfflineHn6> createState() => _NuevaMenorOfflineHn6State();
 }
 
-class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
+class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? depWhereClause;
   String? munWhereClause;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -195,4 +197,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

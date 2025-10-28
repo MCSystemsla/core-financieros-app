@@ -63,7 +63,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tieneFamiliarPeps: value.value,
+                        esFamiliarEmpleado: value.value,
                       ),
                     );
                   },

@@ -222,6 +222,17 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
       nombreCompleto: _prefer(state.nombreCompleto, prev?.nombreCompleto),
       descripcionDestino:
           _prefer(state.descripcionDestino, prev?.descripcionDestino),
+      tasaInteres:
+          state.tasaInteres == 0 ? prev?.tasaInteres : state.tasaInteres,
+      montoMinimo:
+          state.montoMinimo == 0 ? prev?.montoMinimo : state.montoMinimo,
+      montoMaximo:
+          state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
+      fechaDesembolso:
+          _preferDate(state.fechaDesembolso, prev?.fechaDesembolso),
+      frecuenciaPagoMeses:
+          _prefer(state.frecuenciaPagoMeses, prev?.frecuenciaPagoMeses),
+      isDone: state.isDone,
     );
   }
 
@@ -239,5 +250,69 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
   DateTime? _preferDate(String? current, DateTime? previous) {
     final parsed = DateTime.tryParse(current ?? '');
     return parsed ?? previous;
+  }
+
+  void loadFromLocalDb(SolicitudReprestamoHnLocalDb solicitud) {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreCompleto: solicitud.nombreCompleto,
+        tipoPersonaCodigo: solicitud.tipoPersonaCodigo,
+        tipoDocumentoCodigo: solicitud.tipoDocumentoCodigo,
+        cedula: solicitud.cedula,
+        celularReprestamo: solicitud.celularReprestamo,
+        ubicacion: solicitud.ubicacion,
+        vinculoEstadosUnidosDescripcion:
+            solicitud.vinculoEstadosUnidosDescripcion,
+        codigoUsa: solicitud.codigoUsa,
+        tieneIdentificacionEstadosUnidos:
+            solicitud.tieneIdentificacionEstadosUnidos,
+        tieneFamiliarPeps: solicitud.tieneFamiliarPeps,
+        nombreFamiliar: solicitud.nombreFamiliar,
+        cedulaFamiliar: solicitud.cedulaFamiliar,
+        esPeps: solicitud.esPeps,
+        nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps,
+        paisPeps: solicitud.paisPeps,
+        periodoPeps: solicitud.periodoPeps,
+        cargoOficialPeps: solicitud.cargoOficialPeps,
+        esFamiliarEmpleado: solicitud.esFamiliarEmpleado,
+        nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2,
+        nombreEntidadPeps2: solicitud.nombreEntidadPeps2,
+        parentescoFamiliarPeps2Codigo: solicitud.parentescoFamiliarPeps2Codigo,
+        cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2,
+        periodoPeps2: solicitud.periodoPeps2,
+        paisPeps2: solicitud.paisPeps2,
+        propositoCodigo: solicitud.propositoCodigo,
+        descripcionDestino: solicitud.descripcionDestino,
+        monedaCodigo: solicitud.monedaCodigo,
+        monto: solicitud.monto,
+        productoCodigo: solicitud.productoCodigo,
+        plazoSolicitud: solicitud.plazoSolicitud,
+        fechaPrimerPagoSolicitud:
+            solicitud.fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
+        frecuenciaCodigo: solicitud.frecuenciaCodigo,
+        observacion: solicitud.observacion,
+        actividadEconomicaCiuu1: solicitud.actividadEconomicaCiuu1,
+        actividadEconomicaRealizaCiuu1:
+            solicitud.actividadEconomicaRealizaCiuu1,
+        actividadEconomicaCiuu2: solicitud.actividadEconomicaCiuu2,
+        actividadEconomicaRealizaCiuu2:
+            solicitud.actividadEconomicaRealizaCiuu2,
+        actividadEconomicaCiuu3: solicitud.actividadEconomicaCiuu3,
+        actividadEconomicaRealizaCiuu3:
+            solicitud.actividadEconomicaRealizaCiuu3,
+        ejerceActividadApfnd: solicitud.ejerceActividadApfnd,
+        apnfd: solicitud.apnfd,
+        medidasConocimientoCodigo: solicitud.medidasConocimientoCodigo,
+        nombreEmpleadoFamiliar: solicitud.nombreEmpleadoFamiliar,
+        cuota: solicitud.cuota,
+        tieneVinculoEstadosUnidos: solicitud.tieneVinculoEstadosUnidos,
+        fechaDesembolso: solicitud.fechaDesembolso?.toUtc().toIso8601String(),
+        tasaInteres: solicitud.tasaInteres,
+        montoMinimo: solicitud.montoMinimo,
+        montoMaximo: solicitud.montoMaximo,
+        frecuenciaPagoMeses: solicitud.frecuenciaPagoMeses,
+        isDone: solicitud.isDone,
+      ),
+    );
   }
 }

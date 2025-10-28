@@ -30,9 +30,11 @@ class NuevaMenorOfflineHn2 extends StatefulWidget {
   State<NuevaMenorOfflineHn2> createState() => _NuevaMenorOfflineHn2State();
 }
 
-class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
+class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final formKey = GlobalKey<FormState>();
     String? depWhereClause;
     String? munWhereClause;
@@ -346,4 +348,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

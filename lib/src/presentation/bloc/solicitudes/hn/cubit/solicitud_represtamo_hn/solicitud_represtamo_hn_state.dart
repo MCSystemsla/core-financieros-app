@@ -2,6 +2,12 @@
 part of 'solicitud_represtamo_hn_cubit.dart';
 
 class SolicitudReprestamoHnState extends Equatable {
+  final bool isDone;
+  final String frecuenciaPagoMeses;
+  final String fechaDesembolso;
+  final double tasaInteres;
+  final double montoMinimo;
+  final double montoMaximo;
   final String descripcionDestino;
   final String nombreCompleto;
   final String errorMsg;
@@ -60,6 +66,12 @@ class SolicitudReprestamoHnState extends Equatable {
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
   const SolicitudReprestamoHnState({
+    this.isDone = false,
+    this.frecuenciaPagoMeses = '',
+    this.fechaDesembolso = '',
+    this.tasaInteres = 0,
+    this.montoMinimo = 0,
+    this.montoMaximo = 0,
     this.descripcionDestino = '',
     this.nombreCompleto = '',
     this.errorMsg = '',
@@ -121,6 +133,11 @@ class SolicitudReprestamoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        frecuenciaPagoMeses,
+        fechaDesembolso,
+        tasaInteres,
+        montoMinimo,
+        montoMaximo,
         descripcionDestino,
         nombreCompleto,
         errorMsg,
@@ -177,9 +194,16 @@ class SolicitudReprestamoHnState extends Equatable {
         ejerceActividadApfnd,
         medidasConocimientoCodigo,
         nombreEmpleadoFamiliar,
+        isDone,
       ];
 
   SolicitudReprestamoHnState copyWith({
+    bool? isDone,
+    String? frecuenciaPagoMeses,
+    String? fechaDesembolso,
+    double? tasaInteres,
+    double? montoMinimo,
+    double? montoMaximo,
     String? descripcionDestino,
     String? nombreCompleto,
     String? errorMsg,
@@ -239,6 +263,12 @@ class SolicitudReprestamoHnState extends Equatable {
     String? nombreEmpleadoFamiliar,
   }) {
     return SolicitudReprestamoHnState(
+      isDone: isDone ?? this.isDone,
+      frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
+      fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
+      tasaInteres: tasaInteres ?? this.tasaInteres,
+      montoMinimo: montoMinimo ?? this.montoMinimo,
+      montoMaximo: montoMaximo ?? this.montoMaximo,
       descripcionDestino: descripcionDestino ?? this.descripcionDestino,
       nombreCompleto: nombreCompleto ?? this.nombreCompleto,
       errorMsg: errorMsg ?? this.errorMsg,

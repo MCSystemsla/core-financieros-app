@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -156,11 +157,12 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
         return;
       }
       fechaDesembolso = picked;
-      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
-      //           // fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
-      //           ),
-      //     );
+      context.read<SolicitudReprestamoHnCubit>().onFieldChanged(
+            () => context.read<SolicitudReprestamoHnCubit>().state.copyWith(
+                  fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
+                ),
+          );
+
       setState(() {});
     }
   }
@@ -295,6 +297,9 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
+                        tasaInteres: item.interes,
+                        montoMaximo: item.montoMaximo,
+                        montoMinimo: item.montoMinimo?.toDouble(),
                       ),
                     );
                   },
@@ -348,6 +353,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
+                        frecuenciaPagoMeses: item.meses,
                       ),
                     );
                     frecuenciaDePago = CatalogoFrecuenciaItem(
@@ -399,7 +405,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()}',
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toCurrencyString()} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -409,7 +415,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat}',
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toCurrencyString()} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
