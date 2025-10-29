@@ -61,7 +61,7 @@ class SolicitudesReprestamoPendientesItemsHN extends StatelessWidget {
                 ),
                 _SolicitudesEnviadasWidget(
                   solicitudesReprestamoOffline:
-                      solicitudesReprestamoOfflinePending,
+                      solicitudesReprestamoOfflineDone,
                 ),
               ],
             ),
