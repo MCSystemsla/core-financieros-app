@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_on_history/no_images_kivas_on_history_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_items_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_warning/low_storage_warning_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/alert/no_images_kivas_on_history_alert.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/download_catalogos_dialog_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -90,12 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
         return BlocBuilder<DeviceStorageCubit, DeviceStorageState>(
           builder: (context, state) {
             return switch (state.isStorageFull) {
-              StorageDeviceStatus.full => _HomeScreenView(),
-              // StorageDeviceStatus.full => LowStorageWarning(
-              // freeStorage: state.freeStorage,
-              // totalStorage: state.totalStorage / 1000,
-              // usedStoragePercent: state.usedStoragePercent,
-              // ),
+              // StorageDeviceStatus.full => _HomeScreenView(),
+              StorageDeviceStatus.full => LowStorageWarning(
+                  freeStorage: state.freeStorage,
+                  totalStorage: state.totalStorage / 1000,
+                  usedStoragePercent: state.usedStoragePercent,
+                ),
               StorageDeviceStatus.available => _HomeScreenView(),
               StorageDeviceStatus.userGetContinue => _HomeScreenView(),
               _ => const SizedBox(),
