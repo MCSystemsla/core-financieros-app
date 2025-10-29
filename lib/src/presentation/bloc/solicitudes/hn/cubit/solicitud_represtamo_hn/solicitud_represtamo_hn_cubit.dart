@@ -315,4 +315,16 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
       ),
     );
   }
+
+  void saveCedula({
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
+  }) {
+    emit(
+      state.copyWith(
+        cedulaFrontPath: cedulaFrontPath,
+        cedulaBackPath: cedulaBackPath,
+      ),
+    );
+  }
 }

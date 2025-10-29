@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
@@ -6,12 +9,15 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form__hn_offline_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_4.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,36 +77,36 @@ class CrearSolicitudReprestamoOfflineScreen extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     controller: pageController,
                     children: [
-                      // Hero(
-                      //   transitionOnUserGestures: true,
-                      //   tag: 'cedulaFrontal',
-                      //   child: PhotoCedulaClientWidget(
-                      //     onNextPressed: () {},
-                      //     controller: pageController,
-                      //     fotoCedulaFrontal: XFile(
-                      //         imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                      //     fotoCedulaTrasera:
-                      //         XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                      //     onCedulaFrontalPressed: () {
-                      //       context.pushTransparentRoute(
-                      //         PhotoCedulaImagePreview(
-                      //           imagesCedula: File(
-                      //             imagesCedula?.imageFrontCedula ?? '',
-                      //           ),
-                      //         ),
-                      //       );
-                      //     },
-                      //     onCedulaTraseraPressed: () {
-                      //       context.pushTransparentRoute(
-                      //         PhotoCedulaImagePreview(
-                      //           imagesCedula: File(
-                      //             imagesCedula?.imageBackCedula ?? '',
-                      //           ),
-                      //         ),
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
+                      Hero(
+                        transitionOnUserGestures: true,
+                        tag: 'cedulaFrontal',
+                        child: PhotoCedulaClientWidget(
+                          onNextPressed: () {},
+                          controller: pageController,
+                          fotoCedulaFrontal: XFile(
+                              imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                          fotoCedulaTrasera:
+                              XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                          onCedulaFrontalPressed: () {
+                            context.pushTransparentRoute(
+                              PhotoCedulaImagePreview(
+                                imagesCedula: File(
+                                  imagesCedula?.imageFrontCedula ?? '',
+                                ),
+                              ),
+                            );
+                          },
+                          onCedulaTraseraPressed: () {
+                            context.pushTransparentRoute(
+                              PhotoCedulaImagePreview(
+                                imagesCedula: File(
+                                  imagesCedula?.imageBackCedula ?? '',
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                       ReprestamoFormHNOffline1(
                         controller: pageController,
                       ),

@@ -4,7 +4,9 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -38,6 +40,7 @@ class ReprestamoFormHn1 extends StatefulWidget {
 class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
     with AutomaticKeepAliveClientMixin {
   bool tieneVinculoEstadosUnidos = false;
+  final localDpProvider = global<SolicitudesHnBoxService>();
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -48,6 +51,16 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
         tipoPersonaCodigo: widget.userByDocumentReprestamoData?.tipoPersona,
         tipoDocumentoCodigo: widget.userByDocumentReprestamoData?.tipoDocumento,
         cedula: widget.userByDocumentReprestamoData?.cedula,
+      ),
+    );
+    localDpProvider.saveCedulaClient(
+      cedulaClient: CedulaClientDb(
+        typeSolicitud: 'REPRESTAMO',
+        cedula: context.read<SolicitudReprestamoHnCubit>().state.cedula,
+        imageBackCedula:
+            context.read<SolicitudReprestamoHnCubit>().state.cedulaBackPath,
+        imageFrontCedula:
+            context.read<SolicitudReprestamoHnCubit>().state.cedulaFrontPath,
       ),
     );
   }

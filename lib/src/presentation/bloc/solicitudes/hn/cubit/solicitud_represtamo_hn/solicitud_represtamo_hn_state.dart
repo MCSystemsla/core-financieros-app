@@ -2,6 +2,8 @@
 part of 'solicitud_represtamo_hn_cubit.dart';
 
 class SolicitudReprestamoHnState extends Equatable {
+  final String cedulaFrontPath;
+  final String cedulaBackPath;
   final bool isDone;
   final String frecuenciaPagoMeses;
   final String fechaDesembolso;
@@ -66,6 +68,8 @@ class SolicitudReprestamoHnState extends Equatable {
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
   const SolicitudReprestamoHnState({
+    this.cedulaFrontPath = '',
+    this.cedulaBackPath = '',
     this.isDone = false,
     this.frecuenciaPagoMeses = '',
     this.fechaDesembolso = '',
@@ -133,6 +137,8 @@ class SolicitudReprestamoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        cedulaFrontPath,
+        cedulaBackPath,
         frecuenciaPagoMeses,
         fechaDesembolso,
         tasaInteres,
@@ -198,6 +204,8 @@ class SolicitudReprestamoHnState extends Equatable {
       ];
 
   SolicitudReprestamoHnState copyWith({
+    String? cedulaFrontPath,
+    String? cedulaBackPath,
     bool? isDone,
     String? frecuenciaPagoMeses,
     String? fechaDesembolso,
@@ -263,6 +271,8 @@ class SolicitudReprestamoHnState extends Equatable {
     String? nombreEmpleadoFamiliar,
   }) {
     return SolicitudReprestamoHnState(
+      cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
+      cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       isDone: isDone ?? this.isDone,
       frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
