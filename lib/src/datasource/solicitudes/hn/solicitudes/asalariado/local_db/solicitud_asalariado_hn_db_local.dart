@@ -84,16 +84,16 @@ class SolicitudAsalariadoHnDbLocal {
   String? nombreFamiliarCercano;
   String? parentescoFamiliarCercanoCodigo;
   int? otrosIngresosConyugue;
-  int? otrosIngresosCordoba;
+  int otrosIngresosCordoba = 0;
   String? profesionConyugue;
-  int? salarioNetoCordoba;
-  int? sueldoMesConyugue;
+  int salarioNetoCordoba = 0;
+  int sueldoMesConyugue = 0;
   String? telefonoFamiliarCercano;
   String? telefonoTrabajo;
   String? tiempoLaborar;
   String? tiempoLaborarConyugue;
-  int? totalIngresoMes;
-  int? totalIngresoMesConyugue;
+  int totalIngresoMes = 0;
+  int totalIngresoMesConyugue = 0;
   String? rtn;
   String? codigoUsa;
   String? tipoPersonaCnbsidCodigo;
@@ -122,6 +122,10 @@ class SolicitudAsalariadoHnDbLocal {
   bool isDone = false;
   String? errorMsg;
   DateTime createdAt = DateTime.now();
+  String? tieneVinculosUsa;
+  DateTime? fechaDesembolso;
+  String? frecuenciaMeses;
+  double? tasaInteres;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -203,16 +207,16 @@ class SolicitudAsalariadoHnDbLocal {
     this.nombreFamiliarCercano,
     this.parentescoFamiliarCercanoCodigo,
     this.otrosIngresosConyugue,
-    this.otrosIngresosCordoba,
+    this.otrosIngresosCordoba = 0,
     this.profesionConyugue,
-    this.salarioNetoCordoba,
-    this.sueldoMesConyugue,
+    this.salarioNetoCordoba = 0,
+    this.sueldoMesConyugue = 0,
     this.telefonoFamiliarCercano,
     this.telefonoTrabajo,
     this.tiempoLaborar,
     this.tiempoLaborarConyugue,
-    this.totalIngresoMes,
-    this.totalIngresoMesConyugue,
+    this.totalIngresoMes = 0,
+    this.totalIngresoMesConyugue = 0,
     this.rtn,
     this.codigoUsa,
     this.tipoPersonaCnbsidCodigo,
@@ -240,5 +244,9 @@ class SolicitudAsalariadoHnDbLocal {
     this.descripcionDestino,
     this.isDone = false,
     this.errorMsg,
+    this.tieneVinculosUsa,
+    this.fechaDesembolso,
+    this.frecuenciaMeses,
+    this.tasaInteres,
   });
 }

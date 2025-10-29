@@ -36,7 +36,6 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
   bool esPeps = false;
   bool tieneFamiliarPeps = false;
   bool esFamiliarEmpleado = false;
-  bool esApnfd = false;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -314,11 +313,11 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
-                      tieneFamiliarPeps = item.value == 'input.yes'.tr();
+                      esFamiliarEmpleado = item.value == 'input.yes'.tr();
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tieneFamiliarPeps: item.value,
+                        esFamiliarEmpleado: item.value,
                       ),
                     );
                   },
@@ -347,7 +346,7 @@ class _AsalariadoHnForm5State extends State<AsalariadoHnForm5>
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          nombreFamiliarPeps2: value,
+                          nombreFamiliar: value,
                         ),
                       );
                     },

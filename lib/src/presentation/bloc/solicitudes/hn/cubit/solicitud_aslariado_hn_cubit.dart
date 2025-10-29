@@ -361,10 +361,10 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       profesionConyugue:
           _prefer(state.profesionConyugue, prev?.profesionConyugue),
       salarioNetoCordoba: state.salarioNetoCordoba == 0
-          ? (prev?.salarioNetoCordoba)
+          ? (prev?.salarioNetoCordoba ?? 0)
           : state.salarioNetoCordoba,
       sueldoMesConyugue: state.sueldoMesConyugue == 0
-          ? prev?.sueldoMesConyugue
+          ? prev?.sueldoMesConyugue ?? 0
           : state.sueldoMesConyugue,
       telefonoFamiliarCercano:
           _prefer(state.telefonoFamiliarCercano, prev?.telefonoFamiliarCercano),
@@ -423,6 +423,14 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       telefono: _prefer(state.telefono, prev?.telefono),
       descripcionDestino:
           _prefer(state.descripcionDestino, prev?.descripcionDestino),
+      tieneVinculosUsa: _prefer(state.tieneVinculosUsa, prev?.tieneVinculosUsa),
+      isDone: state.isDone,
+      fechaDesembolso: state.fechaDesembolso.isEmpty
+          ? prev?.fechaDesembolso
+          : DateTime.tryParse(state.fechaDesembolso),
+      frecuenciaMeses: _prefer(state.frecuenciaMeses, prev?.frecuenciaMeses),
+      tasaInteres:
+          state.tasaInteres == 0 ? (prev?.tasaInteres ?? 0) : state.tasaInteres,
     );
   }
 
@@ -433,4 +441,123 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
 
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
+
+  loadFromLocalDb(SolicitudAsalariadoHnDbLocal solicitud) {
+    onFieldChanged(
+      () => state.copyWith(
+        fechaVencimientoCedula:
+            solicitud.fechaVencimientoCedula?.toUtc().toIso8601String(),
+        fechaEmisionCedula:
+            solicitud.fechaEmisionCedula?.toUtc().toIso8601String(),
+        fechaNacimiento: solicitud.fechaNacimiento?.toUtc().toIso8601String(),
+        tipoPersonaCnbsidCodigo: solicitud.tipoPersonaCnbsidCodigo,
+        nombre1: solicitud.nombre1,
+        nombre2: solicitud.nombre2,
+        apellido1: solicitud.apellido1,
+        apellido2: solicitud.apellido2,
+        sexoCodigo: solicitud.sexoCodigo,
+        paisNacimientoCodigo: solicitud.paisNacimientoCodigo,
+        tipoDocumentoCodigo: solicitud.tipoDocumentoCodigo,
+        tipoPersonaCodigo: solicitud.tipoPersonaCodigo,
+        cedula: solicitud.cedula,
+        rtn: solicitud.rtn,
+        nacinalidad: solicitud.nacinalidad,
+        escolaridadCodigo: solicitud.escolaridadCodigo,
+        paisEmisorCedulaCodigo: solicitud.paisEmisorCedulaCodigo,
+        telefono: solicitud.telefono,
+        celular: solicitud.celular,
+        email: solicitud.email,
+        cantidadHijos: solicitud.cantidadHijos,
+        tieneVinculosUsa: solicitud.tieneVinculosUsa,
+        codigoUsa: solicitud.codigoUsa,
+        ubicacion: solicitud.ubicacion,
+        paisCasaCodigo: solicitud.paisCasaCodigo,
+        departamentoCasaCodigo: solicitud.departamentoCasaCodigo,
+        municipioCasaCodigo: solicitud.municipioCasaCodigo,
+        aldeaCodigo: solicitud.aldeaCodigo,
+        caseriCasa: solicitud.caseriCasa,
+        direccionCasa: solicitud.direccionCasa,
+        barrioCasa: solicitud.barrioCasa,
+        condicionCasaCodigo: solicitud.condicionCasaCodigo,
+        anosResidirCasa: solicitud.anosResidirCasa,
+        profesionCodigo: solicitud.profesionCodigo,
+        ocupacionCodigo: solicitud.ocupacionCodigo,
+        cargo: solicitud.cargo,
+        nombreTrabajo: solicitud.nombreTrabajo,
+        direccionTrabajo: solicitud.direccionTrabajo,
+        barrioTrabajo: solicitud.barrioTrabajo,
+        telefonoTrabajo: solicitud.telefonoTrabajo,
+        tiempoLaborar: solicitud.tiempoLaborar,
+        lugarTrabajoAnterior: solicitud.lugarTrabajoAnterior,
+        salarioNetoCordoba: solicitud.salarioNetoCordoba,
+        totalIngresoMes: solicitud.totalIngresoMes,
+        otrosIngresosCordoba: solicitud.otrosIngresosCordoba,
+        fuenteOtrosIngresos: solicitud.fuenteOtrosIngresos,
+        espeps: solicitud.espeps,
+        nombreDeEntidadPeps: solicitud.nombreDeEntidadPeps,
+        periodoPeps: solicitud.periodoPeps,
+        cargoOficialPeps: solicitud.cargoOficialPeps,
+        paisPeps: solicitud.paisPeps,
+        tieneFamiliarPeps: solicitud.tieneFamiliarPeps,
+        nombreFamiliarPeps2: solicitud.nombreFamiliarPeps2,
+        parentescoFamiliarPeps2: solicitud.parentescoFamiliarPeps2,
+        cargoFamiliarPeps2: solicitud.cargoFamiliarPeps2,
+        nombreEntidadPeps2: solicitud.nombreEntidadPeps2,
+        periodoPeps2: solicitud.periodoPeps2,
+        paisPeps2: solicitud.paisPeps2,
+        nombreFamiliar: solicitud.nombreFamiliar,
+        cedulaFamiliar: solicitud.cedulaFamiliar,
+        esFamiliarEmpleado: solicitud.esFamiliarEmpleado,
+        estadoCivilCodigo: solicitud.estadoCivilCodigo,
+        nombreConyugue: solicitud.nombreConyugue,
+        profesionConyugue: solicitud.profesionConyugue,
+        trabajaConyugue: solicitud.trabajaConyugue,
+        trabajoConyugue: solicitud.trabajoConyugue,
+        direccionTrabajoConyugue: solicitud.direccionTrabajoConyugue,
+        telefonoTrabajoConyugue: solicitud.telefonoTrabajoConyugue,
+        tiempoLaborarConyugue: solicitud.tiempoLaborarConyugue,
+        sueldoMesConyugue: solicitud.sueldoMesConyugue,
+        otrosIngresosConyugue: solicitud.otrosIngresosConyugue,
+        fuenteOtrosIngresosConyugue: solicitud.fuenteOtrosIngresosConyugue,
+        nacionalidadConyugue: solicitud.nacionalidadConyugue,
+        personasACargo: solicitud.personasACargo,
+        nombreFamiliarCercano: solicitud.nombreFamiliarCercano,
+        direccionFamiliarCercano: solicitud.direccionFamiliarCercano,
+        telefonoFamiliarCercano: solicitud.telefonoFamiliarCercano,
+        paisDestinoCodigo: solicitud.paisDestinoCodigo,
+        departamentoDestinoCodigo: solicitud.departamentoDestinoCodigo,
+        municipioDestinoId: solicitud.municipioDestinoId,
+        aldeaDestinoCodigo: solicitud.aldeaDestinoCodigo,
+        caserioDestino: solicitud.caserioDestino,
+        barrioDestino: solicitud.barrioDestino,
+        actividadEconomicaCiuu1Codigo: solicitud.actividadEconomicaCiuu1Codigo,
+        actividadEconomicaDescripcion1:
+            solicitud.actividadEconomicaDescripcion1,
+        actividadEconomicaCiuu2Codigo: solicitud.actividadEconomicaCiuu2Codigo,
+        actividadEconomicaDescripcion2:
+            solicitud.actividadEconomicaDescripcion2,
+        actividadEconomicaCiuu3Codigo: solicitud.actividadEconomicaCiuu3Codigo,
+        actividadEconomicaDescripcion3:
+            solicitud.actividadEconomicaDescripcion3,
+        ejerceApnfd: solicitud.ejerceApnfd,
+        esApnfd: solicitud.esApnfd,
+        fechaDesembolso: solicitud.fechaDesembolso?.toUtc().toIso8601String(),
+        tasaInteres: solicitud.tasaInteres,
+        frecuenciaMeses: solicitud.frecuenciaMeses,
+        cuota: solicitud.cuota,
+        sectorCodigo: solicitud.sectorCodigo,
+        productoCodigo: solicitud.productoCodigo,
+        monedaCodigo: solicitud.monedaCodigo,
+        propositoCodigo: solicitud.propositoCodigo,
+        descripcionDestino: solicitud.descripcionDestino,
+        monto: solicitud.monto,
+        frecuenciaCodigo: solicitud.frecuenciaCodigo,
+        plazoSolicitud: solicitud.plazoSolicitud,
+        fechaPrimerPagoSolicitud:
+            solicitud.fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
+        observacion: solicitud.observacion,
+        totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue,
+      ),
+    );
+  }
 }

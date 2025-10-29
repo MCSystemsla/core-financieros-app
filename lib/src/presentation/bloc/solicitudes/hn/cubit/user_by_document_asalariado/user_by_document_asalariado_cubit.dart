@@ -54,11 +54,15 @@ class UserByDocumentAsalariadoCubit
       emit(state.copyWith(
         status: UserByDocumentStatus.error,
         errorMsg: e.optionalMsg,
+        cedula: cedula,
+        tipoDocumento: tipoDocumentoCodigo,
       ));
     } catch (e) {
       emit(state.copyWith(
         status: UserByDocumentStatus.error,
         errorMsg: e.toString(),
+        cedula: cedula,
+        tipoDocumento: tipoDocumentoCodigo,
       ));
     }
   }

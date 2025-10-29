@@ -18,7 +18,7 @@ import 'package:gap/gap.dart';
 
 class AsalariadoHnForm2 extends StatefulWidget {
   final PageController controller;
-  final UserDocumentDataHN userByDocumentHnData;
+  final UserDocumentDataHN? userByDocumentHnData;
   const AsalariadoHnForm2({
     super.key,
     required this.controller,
@@ -39,12 +39,12 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
   void initState() {
     super.initState();
     final cubit = context.read<SolicitudAslariadoHnCubit>();
-    depWhereClause = widget.userByDocumentHnData.pais ?? 'HN';
+    depWhereClause = widget.userByDocumentHnData?.pais ?? 'HN';
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
-        paisCasaCodigo: widget.userByDocumentHnData.pais ?? 'HN',
-        departamentoCasaCodigo: widget.userByDocumentHnData.departamento ?? '',
-        municipioCasaCodigo: widget.userByDocumentHnData.municipio ?? '',
+        paisCasaCodigo: widget.userByDocumentHnData?.pais ?? 'HN',
+        departamentoCasaCodigo: widget.userByDocumentHnData?.departamento ?? '',
+        municipioCasaCodigo: widget.userByDocumentHnData?.municipio ?? '',
       ),
     );
   }
@@ -72,8 +72,8 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                       ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
-                    valor: widget.userByDocumentHnData.pais ?? 'HN',
-                    nombre: widget.userByDocumentHnData.pais ?? 'Honduras',
+                    valor: widget.userByDocumentHnData?.pais ?? 'HN',
+                    nombre: widget.userByDocumentHnData?.pais ?? 'Honduras',
                     relacion: '',
                   ),
                   hintText: 'País de Casa',
@@ -97,8 +97,8 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                       ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
-                    valor: widget.userByDocumentHnData.departamento ?? '',
-                    nombre: widget.userByDocumentHnData.departamento ?? '',
+                    valor: widget.userByDocumentHnData?.departamento ?? '',
+                    nombre: widget.userByDocumentHnData?.departamento ?? '',
                     relacion: '',
                   ),
                   hintText: 'Departamento de Casa',
@@ -123,8 +123,8 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                       ClassValidator.validateRequired(value?.valor),
                   selectedItem: ItemNacionalidad(
                     id: 0,
-                    valor: widget.userByDocumentHnData.municipio ?? '',
-                    nombre: widget.userByDocumentHnData.municipio ?? '',
+                    valor: widget.userByDocumentHnData?.municipio ?? '',
+                    nombre: widget.userByDocumentHnData?.municipio ?? '',
                     relacion: '',
                   ),
                   codigo: 'MUN',
@@ -184,7 +184,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                 ),
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(value),
-                  initialValue: widget.userByDocumentHnData.direccion,
+                  initialValue: widget.userByDocumentHnData?.direccion,
                   hintText: 'Dirección de Casa',
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

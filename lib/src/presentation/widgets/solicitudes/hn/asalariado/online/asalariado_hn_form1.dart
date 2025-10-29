@@ -92,7 +92,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
     );
     localDpProvider.saveCedulaClient(
       cedulaClient: CedulaClientDb(
-        typeSolicitud: 'ASLARIADO',
+        typeSolicitud: 'ASALARIADO',
         cedula: context.read<SolicitudAslariadoHnCubit>().state.cedula,
         imageBackCedula:
             context.read<SolicitudAslariadoHnCubit>().state.imagenTrasera,

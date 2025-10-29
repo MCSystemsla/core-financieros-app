@@ -2,6 +2,11 @@
 part of 'solicitud_aslariado_hn_cubit.dart';
 
 class SolicitudAslariadoHnState extends Equatable {
+  final String frecuenciaMeses;
+  final double tasaInteres;
+  final String fechaDesembolso;
+  final bool isDone;
+  final String tieneVinculosUsa;
   final String imagenFrontal;
   final String imagenTrasera;
   final String numeroSolicitud;
@@ -123,6 +128,11 @@ class SolicitudAslariadoHnState extends Equatable {
   final String aldeaCodigo;
   final String descripcionDestino;
   const SolicitudAslariadoHnState({
+    this.frecuenciaMeses = '',
+    this.tasaInteres = 0,
+    this.fechaDesembolso = '',
+    this.isDone = false,
+    this.tieneVinculosUsa = '',
     this.imagenFrontal = '',
     this.imagenTrasera = '',
     this.numeroSolicitud = '',
@@ -247,6 +257,11 @@ class SolicitudAslariadoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        frecuenciaMeses,
+        tasaInteres,
+        fechaDesembolso,
+        isDone,
+        tieneVinculosUsa,
         descripcionDestino,
         imagenFrontal,
         imagenTrasera,
@@ -367,6 +382,11 @@ class SolicitudAslariadoHnState extends Equatable {
       ];
 
   SolicitudAslariadoHnState copyWith({
+    String? frecuenciaMeses,
+    double? tasaInteres,
+    String? fechaDesembolso,
+    bool? isDone,
+    String? tieneVinculosUsa,
     String? imagenFrontal,
     String? imagenTrasera,
     String? numeroSolicitud,
@@ -489,6 +509,11 @@ class SolicitudAslariadoHnState extends Equatable {
     String? descripcionDestino,
   }) {
     return SolicitudAslariadoHnState(
+      frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
+      tasaInteres: tasaInteres ?? this.tasaInteres,
+      fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
+      isDone: isDone ?? this.isDone,
+      tieneVinculosUsa: tieneVinculosUsa ?? this.tieneVinculosUsa,
       imagenFrontal: imagenFrontal ?? this.imagenFrontal,
       imagenTrasera: imagenTrasera ?? this.imagenTrasera,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,

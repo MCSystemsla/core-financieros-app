@@ -74,13 +74,13 @@ class AsalariadoHnForm extends StatelessWidget {
                   primerApellido: userByDocumentProvider.primerApellido,
                   segundoApellido: userByDocumentProvider.segundoApellido,
                   fechaNacimiento:
-                      DateTime.parse(userByDocumentProvider.fechaNacimiento),
+                      DateTime.tryParse(userByDocumentProvider.fechaNacimiento),
                   sexo: userByDocumentProvider.sexo,
                   direccion: userByDocumentProvider.direccion,
                   fechaEmision:
-                      DateTime.parse(userByDocumentProvider.fechaEmision),
+                      DateTime.tryParse(userByDocumentProvider.fechaEmision),
                   fechaExpira:
-                      DateTime.parse(userByDocumentProvider.fechaExpira),
+                      DateTime.tryParse(userByDocumentProvider.fechaExpira),
                   tipoDocumento: userByDocumentProvider.tipoDocumento,
                 ),
               ),

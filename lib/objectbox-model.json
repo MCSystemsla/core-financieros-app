@@ -2298,7 +2298,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "136:1299036625640684166",
+      "lastPropertyId": "140:3922506231837237053",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2891,6 +2891,26 @@
           "id": "136:1299036625640684166",
           "name": "createdAt",
           "type": 10
+        },
+        {
+          "id": "137:3947831272447691969",
+          "name": "tieneVinculosUsa",
+          "type": 9
+        },
+        {
+          "id": "138:3610573224663730160",
+          "name": "fechaDesembolso",
+          "type": 10
+        },
+        {
+          "id": "139:6573525803554848203",
+          "name": "frecuenciaMeses",
+          "type": 9
+        },
+        {
+          "id": "140:3922506231837237053",
+          "name": "tasaInteres",
+          "type": 8
         }
       ],
       "relations": []
