@@ -486,6 +486,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                           () => cubit.state.copyWith(
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            isOffline: true,
+                            isDone: true,
                           ),
                         );
                         CustomAlertDialog(

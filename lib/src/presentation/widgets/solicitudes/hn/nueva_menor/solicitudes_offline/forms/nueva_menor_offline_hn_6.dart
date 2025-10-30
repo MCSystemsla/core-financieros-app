@@ -49,7 +49,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.departamentoDestinoCodigo,
-                      nombre: cubit.state.departamentoDestinoCodigo,
+                      nombre: cubit.state.departamentoDestinoCodigoNombre,
                       relacion: '',
                     ),
                     where: cubit.state.paisCasaCodigo,
@@ -65,6 +65,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           departamentoDestinoCodigo: item.valor,
+                          departamentoDestinoCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -75,7 +76,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.municipioDestinoCodigo,
-                      nombre: cubit.state.municipioDestinoCodigo,
+                      nombre: cubit.state.municipioDestinoCodigoNombre,
                       relacion: '',
                     ),
                     where: depWhereClause,
@@ -94,6 +95,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           municipioDestinoCodigo: item.valor,
+                          municipioDestinoCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -103,7 +105,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.aldeaDestinoCodigo,
-                      nombre: cubit.state.aldeaDestinoCodigo,
+                      nombre: cubit.state.aldeaDestinoCodigoNombre,
                       relacion: '',
                     ),
                     where: munWhereClause,
@@ -116,6 +118,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           aldeaDestinoCodigo: value?.valor,
+                          aldeaDestinoCodigoNombre: value?.nombre,
                         ),
                       );
                     },

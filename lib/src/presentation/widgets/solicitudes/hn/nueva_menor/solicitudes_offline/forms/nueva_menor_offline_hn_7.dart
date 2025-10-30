@@ -53,7 +53,6 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
   void initState() {
     super.initState();
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    log('tasaInteres: ${cubit.state.tasaInteres} - montoMinimo: ${cubit.state.montoMinimo} - montoMaximo: ${cubit.state.montoMaximo}');
 
     monto = cubit.state.monto.toString();
     plazoSolicitud = cubit.state.plazoSolicitud.toString();
@@ -68,6 +67,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
+        monedaCodigoNombre: 'LEMPIRA',
         fechaDesembolso: cubit.state.fechaDesembolso,
         fechaPrimerPagoSolicitud: cubit.state.fechaPrimerPagoSolicitud,
         plazoSolicitud: cubit.state.plazoSolicitud,
@@ -200,7 +200,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                   children: [
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.propositoCodigo,
+                        name: state.propositoCodigoNombre,
                         value: state.propositoCodigo,
                       ),
                       isRequired: true,
@@ -212,6 +212,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             propositoCodigo: value?.value,
+                            propositoCodigoNombre: value?.name,
                           ),
                         );
                       },
@@ -244,7 +245,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.monedaCodigo,
+                        name: state.monedaCodigoNombre,
                         value: state.monedaCodigo,
                       ),
                       isRequired: true,
@@ -257,6 +258,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             monedaCodigo: item.value,
+                            monedaCodigoNombre: item.name,
                           ),
                         );
                       },
@@ -308,7 +310,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.productoCodigo,
+                        name: state.productoCodigoNombre,
                         value: state.productoCodigo,
                         interes: state.tasaInteres,
                         montoMaximo: state.montoMaximo,
@@ -331,6 +333,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                             tasaInteres: item.interes,
                             montoMaximo: item.montoMaximo,
                             montoMinimo: item.montoMinimo?.toDouble(),
+                            productoCodigoNombre: item.name,
                           ),
                         );
                       },
@@ -379,7 +382,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                     const Gap(30),
                     CatalogoFrecuenciaPagoDropdown(
                       selectedItem: CatalogoFrecuenciaItem(
-                        nombre: state.frecuenciaCodigo,
+                        nombre: state.frecuenciaCodigoNombre,
                         valor: state.frecuenciaCodigo,
                         meses: state.frecuenciaMeses,
                       ),
@@ -397,6 +400,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                           () => state.copyWith(
                             frecuenciaCodigo: item.valor,
                             frecuenciaMeses: item.meses,
+                            frecuenciaCodigoNombre: item.nombre,
                           ),
                         );
                       },

@@ -57,7 +57,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                   children: [
                     CatalogoActividadesCNBSDropdown(
                       selectedItem: ActiivdadCNBS(
-                        nombre: cubit.state.actividadEconomicaCnbs1Codigo,
+                        nombre: cubit.state.actividadEconomicaCnbs1CodigoNombre,
                         valor: cubit.state.actividadEconomicaCnbs1Codigo,
                         esAPNFD: false,
                       ),
@@ -74,6 +74,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             actividadEconomicaCnbs1Codigo: item.valor,
+                            actividadEconomicaCnbs1CodigoNombre: item.nombre,
                           ),
                         );
                       },
@@ -107,7 +108,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                     const Gap(30),
                     CatalogoActividadesCNBSDropdown(
                       selectedItem: ActiivdadCNBS(
-                        nombre: cubit.state.actividadEconomicaCnbs2Codigo,
+                        nombre: cubit.state.actividadEconomicaCnbs2CodigoNombre,
                         valor: cubit.state.actividadEconomicaCnbs2Codigo,
                         esAPNFD: false,
                       ),
@@ -119,6 +120,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             actividadEconomicaCnbs2Codigo: item.valor,
+                            actividadEconomicaCnbs2CodigoNombre: item.nombre,
                           ),
                         );
                       },
@@ -239,7 +241,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
                       cubit.onFieldChanged(
-                        () => state.copyWith(
+                        () => cubit.state.copyWith(
                           isDone: true,
                         ),
                       );
@@ -250,6 +252,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                             isOffline: true,
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            isDone: true,
                           ),
                         );
                         CustomAlertDialog(

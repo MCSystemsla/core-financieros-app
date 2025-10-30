@@ -58,7 +58,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: cubit.state.paisCasaCodigo,
-                    nombre: cubit.state.paisCasaCodigo,
+                    nombre: cubit.state.paisCasaCodigoNombre,
                     relacion: '',
                   ),
                   validator: (value) =>
@@ -90,6 +90,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         paisCasaCodigo: item.valor,
+                        paisCasaCodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -100,7 +101,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.departamentoCasaCodigo,
-                      nombre: cubit.state.departamentoCasaCodigo,
+                      nombre: cubit.state.departamentoCasaCodigoNombre,
                       relacion: '',
                     ),
                     validator: (value) =>
@@ -118,6 +119,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           departamentoCasaCodigo: item.valor,
+                          departamentoCasaCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -127,7 +129,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.municipioCasaCodigo,
-                      nombre: cubit.state.municipioCasaCodigo,
+                      nombre: cubit.state.municipioCasaCodigoNombre,
                       relacion: '',
                     ),
                     where: munWhereClause,
@@ -144,6 +146,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           municipioCasaCodigo: item.valor,
+                          municipioCasaCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -153,7 +156,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.aldeaCasaCodigo,
-                      nombre: cubit.state.aldeaCasaCodigo,
+                      nombre: cubit.state.aldeaCasaCodigoNombre,
                       relacion: '',
                     ),
                     where: aldeaWhereClause,
@@ -166,6 +169,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           aldeaCasaCodigo: value?.valor,
+                          aldeaCasaCodigoNombre: value?.nombre,
                         ),
                       );
                     },
@@ -216,7 +220,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: cubit.state.condicionCasaCodigo,
+                    name: cubit.state.condicionCasaCodigoNombre,
                     value: cubit.state.condicionCasaCodigo,
                   ),
                   isRequired: true,
@@ -231,6 +235,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         condicionCasaCodigo: item.value,
+                        condicionCasaCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -285,7 +290,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                 const Gap(30),
                 SheetSearchDropdown(
                   selectedItem: Item(
-                    name: cubit.state.ubicacionCodigo,
+                    name: cubit.state.ubicacionCodigoNombre,
                     value: cubit.state.ubicacionCodigo,
                   ),
                   validator: (value) =>
@@ -304,6 +309,7 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
                       () => cubit.state.copyWith(
                         ubicacion: value.value,
                         ubicacionCodigo: value.value,
+                        ubicacionCodigoNombre: value.name,
                       ),
                     );
                   },

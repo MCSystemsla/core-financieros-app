@@ -57,7 +57,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                   children: [
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.profesion,
+                        name: cubit.state.profesionNombre,
                         value: cubit.state.profesionCodigo,
                       ),
                       isRequired: true,
@@ -73,6 +73,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           () => cubit.state.copyWith(
                             profesionCodigo: item.value,
                             profesion: item.name,
+                            profesionNombre: item.name,
                           ),
                         );
                       },
@@ -80,7 +81,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.ocupacion,
+                        name: cubit.state.ocupacionNombre,
                         value: cubit.state.ocupacionCodigo,
                       ),
                       isRequired: true,
@@ -94,6 +95,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           () => cubit.state.copyWith(
                             ocupacion: item.name,
                             ocupacionCodigo: item.value,
+                            ocupacionNombre: item.name,
                           ),
                         );
                       },
@@ -103,7 +105,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.estadoCivilCodigo,
+                        name: cubit.state.estadoCivilCodigoNombre,
                         value: cubit.state.estadoCivilCodigo,
                       ),
                       isRequired: true,
@@ -118,6 +120,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             estadoCivilCodigo: item.value,
+                            estadoCivilCodigoNombre: item.name,
                           ),
                         );
                       },

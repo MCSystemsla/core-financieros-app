@@ -73,6 +73,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
         cedula: widget.userByDocumentHn?.cedula,
         tipoDocumentoCodigo: widget.userByDocumentHn?.tipoDocumento,
+        tipoDocumentoCodigoNombre: widget.userByDocumentHn?.tipoDocumento,
         nombre1: widget.userByDocumentHn?.primerNombre,
         nombre2: widget.userByDocumentHn?.segundoNombre,
         apellido1: widget.userByDocumentHn?.segundoApellido,
@@ -87,6 +88,10 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         paisEmisorCedulaCodigo: 'HN',
         paisNacimientoCodigo: 'HN',
         tipoPersonaCodigo: 'PERSONANATURAL',
+        tipoPersonaCodigoNombre: 'PERSONA NATURAL',
+        tipoPersonaCnbsCodigoNombre: 'PERSONA NATURAL',
+        paisEmisorCedulaCodigoNombre: 'Honduras',
+        nacinalidadCodigoNombre: 'HN',
       ),
     );
     localDpProvider.saveCedulaClient(
@@ -239,9 +244,11 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   hintText: 'Ingresa Tipo Persona',
                   title: 'Tipo Persona',
                   onChanged: (Item<dynamic>? item) {
+                    if (item == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tipoPersonaCodigo: item?.value,
+                        tipoPersonaCodigo: item.value,
+                        tipoPersonaCnbsCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -387,6 +394,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         tipoDocumentoCodigo: item.value,
+                        tipoDocumentoCodigoNombre: item.name,
                       ),
                     );
                     setState(() {});
@@ -407,6 +415,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         tipoPersonaCnbsCodigo: item.value,
+                        tipoPersonaCnbsCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -498,6 +507,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         paisEmisorCedulaCodigo: item.valor,
+                        paisEmisorCedulaCodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -751,6 +761,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         nacinalidadCodigo: item.valor,
+                        nacinalidadCodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -765,6 +776,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         nacinalidad2Codigo: item.valor,
+                        nacinalidad2CodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -779,6 +791,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         nacinalidad3Codigo: item.valor,
+                        nacinalidad3CodigoNombre: item.nombre,
                       ),
                     );
                   },

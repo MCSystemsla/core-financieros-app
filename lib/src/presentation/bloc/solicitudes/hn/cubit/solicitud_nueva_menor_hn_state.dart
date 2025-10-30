@@ -2,6 +2,40 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final String actividadEconomicaCnbs1CodigoNombre;
+  final String actividadEconomicaCnbs2CodigoNombre;
+  final String aldeaCasaCodigoNombre;
+  final String paisCasaCodigoNombre;
+  final String paisEmisorCedulaCodigoNombre;
+  final String aldeaDestinoCodigoNombre;
+  final String municipioDestinoCodigoNombre;
+  final String aldeaNegocioCodigoNombre;
+  final String departamentoNegocioCodigoNombre;
+  final String ocupacionCodigoNombre;
+  final String profesionCodigoNombre;
+  final String ubicacionCodigoNombre;
+  final String condicionCasaCodigoNombre;
+  final String condicionNegocioCodigoNombre;
+  final String departamentoCasaCodigoNombre;
+  final String departamentoDestinoCodigoNombre;
+  final String estadoCivilCodigoNombre;
+  final String frecuenciaCodigoNombre;
+  final String monedaCodigoNombre;
+  final String municipioCasaCodigoNombre;
+  final String municipioNegocioCodigoNombre;
+  final String nacinalidad2CodigoNombre;
+  final String nacinalidadCodigoNombre;
+  final String nacinalidad3CodigoNombre;
+  final String ocupacionNombre;
+  final String parentescoFamiliarPeps2CodigoNombre;
+  final String productoCodigoNombre;
+  final String profesionNombre;
+  final String propositoCodigoNombre;
+  final String sectorCodigoNombre;
+  final String tipoClienteCodigoNombre;
+  final String tipoDocumentoCodigoNombre;
+  final String tipoPersonaCodigoNombre;
+  final String tipoPersonaCnbsCodigoNombre;
   final double montoMinimo;
   final double montoMaximo;
   final String tieneVinculosUsa;
@@ -133,6 +167,40 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String fechaDesembolso;
   final bool isDone;
   const SolicitudNuevaMenorHnState({
+    this.actividadEconomicaCnbs1CodigoNombre = '',
+    this.actividadEconomicaCnbs2CodigoNombre = '',
+    this.aldeaCasaCodigoNombre = '',
+    this.paisCasaCodigoNombre = '',
+    this.paisEmisorCedulaCodigoNombre = '',
+    this.aldeaDestinoCodigoNombre = '',
+    this.municipioDestinoCodigoNombre = '',
+    this.aldeaNegocioCodigoNombre = '',
+    this.departamentoNegocioCodigoNombre = '',
+    this.ocupacionCodigoNombre = '',
+    this.profesionCodigoNombre = '',
+    this.ubicacionCodigoNombre = '',
+    this.condicionCasaCodigoNombre = '',
+    this.condicionNegocioCodigoNombre = '',
+    this.departamentoCasaCodigoNombre = '',
+    this.departamentoDestinoCodigoNombre = '',
+    this.estadoCivilCodigoNombre = '',
+    this.frecuenciaCodigoNombre = '',
+    this.monedaCodigoNombre = '',
+    this.municipioCasaCodigoNombre = '',
+    this.municipioNegocioCodigoNombre = '',
+    this.nacinalidad2CodigoNombre = '',
+    this.nacinalidadCodigoNombre = '',
+    this.nacinalidad3CodigoNombre = '',
+    this.ocupacionNombre = '',
+    this.parentescoFamiliarPeps2CodigoNombre = '',
+    this.productoCodigoNombre = '',
+    this.profesionNombre = '',
+    this.propositoCodigoNombre = '',
+    this.sectorCodigoNombre = '',
+    this.tipoClienteCodigoNombre = '',
+    this.tipoDocumentoCodigoNombre = '',
+    this.tipoPersonaCodigoNombre = '',
+    this.tipoPersonaCnbsCodigoNombre = '',
     this.isDone = false,
     this.tieneVinculosUsa = '',
     this.frecuenciaMeses = '',
@@ -267,6 +335,40 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        actividadEconomicaCnbs1CodigoNombre,
+        actividadEconomicaCnbs2CodigoNombre,
+        aldeaCasaCodigoNombre,
+        paisCasaCodigoNombre,
+        paisEmisorCedulaCodigoNombre,
+        aldeaDestinoCodigoNombre,
+        municipioDestinoCodigoNombre,
+        aldeaNegocioCodigoNombre,
+        departamentoNegocioCodigoNombre,
+        ocupacionCodigoNombre,
+        profesionCodigoNombre,
+        ubicacionCodigoNombre,
+        condicionCasaCodigoNombre,
+        condicionNegocioCodigoNombre,
+        departamentoCasaCodigoNombre,
+        departamentoDestinoCodigoNombre,
+        estadoCivilCodigoNombre,
+        frecuenciaCodigoNombre,
+        monedaCodigoNombre,
+        municipioCasaCodigoNombre,
+        municipioNegocioCodigoNombre,
+        nacinalidad2CodigoNombre,
+        nacinalidadCodigoNombre,
+        nacinalidad3CodigoNombre,
+        ocupacionNombre,
+        parentescoFamiliarPeps2CodigoNombre,
+        productoCodigoNombre,
+        profesionNombre,
+        propositoCodigoNombre,
+        sectorCodigoNombre,
+        tipoClienteCodigoNombre,
+        tipoDocumentoCodigoNombre,
+        tipoPersonaCodigoNombre,
+        tipoPersonaCnbsCodigoNombre,
         isDone,
         tieneVinculosUsa,
         frecuenciaMeses,
@@ -399,6 +501,40 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    String? actividadEconomicaCnbs1CodigoNombre,
+    String? actividadEconomicaCnbs2CodigoNombre,
+    String? aldeaCasaCodigoNombre,
+    String? paisCasaCodigoNombre,
+    String? paisEmisorCedulaCodigoNombre,
+    String? aldeaDestinoCodigoNombre,
+    String? municipioDestinoCodigoNombre,
+    String? aldeaNegocioCodigoNombre,
+    String? departamentoNegocioCodigoNombre,
+    String? ocupacionCodigoNombre,
+    String? profesionCodigoNombre,
+    String? ubicacionCodigoNombre,
+    String? condicionCasaCodigoNombre,
+    String? condicionNegocioCodigoNombre,
+    String? departamentoCasaCodigoNombre,
+    String? departamentoDestinoCodigoNombre,
+    String? estadoCivilCodigoNombre,
+    String? frecuenciaCodigoNombre,
+    String? monedaCodigoNombre,
+    String? municipioCasaCodigoNombre,
+    String? municipioNegocioCodigoNombre,
+    String? nacinalidad2CodigoNombre,
+    String? nacinalidadCodigoNombre,
+    String? nacinalidad3CodigoNombre,
+    String? ocupacionNombre,
+    String? parentescoFamiliarPeps2CodigoNombre,
+    String? productoCodigoNombre,
+    String? profesionNombre,
+    String? propositoCodigoNombre,
+    String? sectorCodigoNombre,
+    String? tipoClienteCodigoNombre,
+    String? tipoDocumentoCodigoNombre,
+    String? tipoPersonaCodigoNombre,
+    String? tipoPersonaCnbsCodigoNombre,
     double? montoMinimo,
     double? montoMaximo,
     String? tieneVinculosUsa,
@@ -531,6 +667,71 @@ class SolicitudNuevaMenorHnState extends Equatable {
     bool? isDone,
   }) {
     return SolicitudNuevaMenorHnState(
+      actividadEconomicaCnbs1CodigoNombre:
+          actividadEconomicaCnbs1CodigoNombre ??
+              this.actividadEconomicaCnbs1CodigoNombre,
+      actividadEconomicaCnbs2CodigoNombre:
+          actividadEconomicaCnbs2CodigoNombre ??
+              this.actividadEconomicaCnbs2CodigoNombre,
+      aldeaCasaCodigoNombre:
+          aldeaCasaCodigoNombre ?? this.aldeaCasaCodigoNombre,
+      paisCasaCodigoNombre: paisCasaCodigoNombre ?? this.paisCasaCodigoNombre,
+      paisEmisorCedulaCodigoNombre:
+          paisEmisorCedulaCodigoNombre ?? this.paisEmisorCedulaCodigoNombre,
+      aldeaDestinoCodigoNombre:
+          aldeaDestinoCodigoNombre ?? this.aldeaDestinoCodigoNombre,
+      municipioDestinoCodigoNombre:
+          municipioDestinoCodigoNombre ?? this.municipioDestinoCodigoNombre,
+      aldeaNegocioCodigoNombre:
+          aldeaNegocioCodigoNombre ?? this.aldeaNegocioCodigoNombre,
+      departamentoNegocioCodigoNombre: departamentoNegocioCodigoNombre ??
+          this.departamentoNegocioCodigoNombre,
+      ocupacionCodigoNombre:
+          ocupacionCodigoNombre ?? this.ocupacionCodigoNombre,
+      profesionCodigoNombre:
+          profesionCodigoNombre ?? this.profesionCodigoNombre,
+      ubicacionCodigoNombre:
+          ubicacionCodigoNombre ?? this.ubicacionCodigoNombre,
+      condicionCasaCodigoNombre:
+          condicionCasaCodigoNombre ?? this.condicionCasaCodigoNombre,
+      condicionNegocioCodigoNombre:
+          condicionNegocioCodigoNombre ?? this.condicionNegocioCodigoNombre,
+      departamentoCasaCodigoNombre:
+          departamentoCasaCodigoNombre ?? this.departamentoCasaCodigoNombre,
+      departamentoDestinoCodigoNombre: departamentoDestinoCodigoNombre ??
+          this.departamentoDestinoCodigoNombre,
+      estadoCivilCodigoNombre:
+          estadoCivilCodigoNombre ?? this.estadoCivilCodigoNombre,
+      frecuenciaCodigoNombre:
+          frecuenciaCodigoNombre ?? this.frecuenciaCodigoNombre,
+      monedaCodigoNombre: monedaCodigoNombre ?? this.monedaCodigoNombre,
+      municipioCasaCodigoNombre:
+          municipioCasaCodigoNombre ?? this.municipioCasaCodigoNombre,
+      municipioNegocioCodigoNombre:
+          municipioNegocioCodigoNombre ?? this.municipioNegocioCodigoNombre,
+      nacinalidad2CodigoNombre:
+          nacinalidad2CodigoNombre ?? this.nacinalidad2CodigoNombre,
+      nacinalidadCodigoNombre:
+          nacinalidadCodigoNombre ?? this.nacinalidadCodigoNombre,
+      nacinalidad3CodigoNombre:
+          nacinalidad3CodigoNombre ?? this.nacinalidad3CodigoNombre,
+      ocupacionNombre: ocupacionNombre ?? this.ocupacionNombre,
+      parentescoFamiliarPeps2CodigoNombre:
+          parentescoFamiliarPeps2CodigoNombre ??
+              this.parentescoFamiliarPeps2CodigoNombre,
+      productoCodigoNombre: productoCodigoNombre ?? this.productoCodigoNombre,
+      profesionNombre: profesionNombre ?? this.profesionNombre,
+      propositoCodigoNombre:
+          propositoCodigoNombre ?? this.propositoCodigoNombre,
+      sectorCodigoNombre: sectorCodigoNombre ?? this.sectorCodigoNombre,
+      tipoClienteCodigoNombre:
+          tipoClienteCodigoNombre ?? this.tipoClienteCodigoNombre,
+      tipoDocumentoCodigoNombre:
+          tipoDocumentoCodigoNombre ?? this.tipoDocumentoCodigoNombre,
+      tipoPersonaCodigoNombre:
+          tipoPersonaCodigoNombre ?? this.tipoPersonaCodigoNombre,
+      tipoPersonaCnbsCodigoNombre:
+          tipoPersonaCnbsCodigoNombre ?? this.tipoPersonaCnbsCodigoNombre,
       montoMinimo: montoMinimo ?? this.montoMinimo,
       montoMaximo: montoMaximo ?? this.montoMaximo,
       tieneVinculosUsa: tieneVinculosUsa ?? this.tieneVinculosUsa,

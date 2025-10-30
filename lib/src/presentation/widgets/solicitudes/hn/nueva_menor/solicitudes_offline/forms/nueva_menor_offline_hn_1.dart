@@ -174,7 +174,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.tipoPersonaCodigo,
+                        name: cubit.state.tipoPersonaCodigoNombre,
                         value: cubit.state.tipoPersonaCodigo,
                       ),
                       isRequired: true,
@@ -189,6 +189,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tipoPersonaCodigo: item?.value,
+                            tipoPersonaCodigoNombre: item?.name,
                           ),
                         );
                       },
@@ -330,7 +331,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.tipoDocumentoCodigo,
+                        name: cubit.state.tipoDocumentoCodigoNombre,
                         value: cubit.state.tipoDocumentoCodigo,
                       ),
                       isRequired: true,
@@ -344,6 +345,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tipoDocumentoCodigo: item.value,
+                            tipoDocumentoCodigoNombre: item.name,
                           ),
                         );
                         setState(() {});
@@ -354,7 +356,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     SearchDropdownWidget(
                       isRequired: true,
                       selectedItem: Item(
-                        name: cubit.state.tipoPersonaCnbsCodigo,
+                        name: cubit.state.tipoPersonaCnbsCodigoNombre,
                         value: cubit.state.tipoPersonaCnbsCodigo,
                       ),
                       validator: (value) =>
@@ -364,6 +366,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tipoPersonaCnbsCodigo: item.value,
+                            tipoPersonaCnbsCodigoNombre: item.name,
                           ),
                         );
                       },
@@ -439,7 +442,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       selectedItem: ItemNacionalidad(
                         id: 0,
                         valor: cubit.state.paisEmisorCedulaCodigo,
-                        nombre: cubit.state.paisEmisorCedulaCodigo,
+                        nombre: cubit.state.paisEmisorCedulaCodigoNombre,
                         relacion: '',
                       ),
                       validator: (value) =>
@@ -452,6 +455,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             paisEmisorCedulaCodigo: item.valor,
+                            paisEmisorCedulaCodigoNombre: item.nombre,
                           ),
                         );
                       },
@@ -701,7 +705,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     CatalogoValorNacionalidad(
                       selectedItem: ItemNacionalidad(
                         id: 0,
-                        nombre: cubit.state.nacinalidadCodigo,
+                        nombre: cubit.state.nacinalidadCodigoNombre,
                         valor: cubit.state.nacinalidadCodigo,
                         relacion: '',
                       ),
@@ -715,6 +719,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             nacinalidadCodigo: item.valor,
+                            nacinalidadCodigoNombre: item.nombre,
                           ),
                         );
                       },
@@ -723,7 +728,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     CatalogoValorNacionalidad(
                       selectedItem: ItemNacionalidad(
                         id: 0,
-                        nombre: cubit.state.nacinalidad2Codigo,
+                        nombre: cubit.state.nacinalidad2CodigoNombre,
                         valor: cubit.state.nacinalidad2Codigo,
                         relacion: '',
                       ),
@@ -735,6 +740,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             nacinalidad2Codigo: item.valor,
+                            nacinalidad2CodigoNombre: item.nombre,
                           ),
                         );
                       },
@@ -743,7 +749,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     CatalogoValorNacionalidad(
                       selectedItem: ItemNacionalidad(
                         id: 0,
-                        nombre: cubit.state.nacinalidad3Codigo,
+                        nombre: cubit.state.nacinalidad3CodigoNombre,
                         valor: cubit.state.nacinalidad3Codigo,
                         relacion: '',
                       ),
@@ -755,6 +761,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             nacinalidad3Codigo: item.valor,
+                            nacinalidad3CodigoNombre: item.nombre,
                           ),
                         );
                       },

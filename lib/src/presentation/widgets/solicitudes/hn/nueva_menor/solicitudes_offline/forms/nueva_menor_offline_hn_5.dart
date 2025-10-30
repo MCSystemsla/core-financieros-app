@@ -229,7 +229,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                       const Gap(30),
                       SearchDropdownWidget(
                         selectedItem: Item(
-                          name: cubit.state.parentescoFamiliarPeps2Codigo,
+                          name: cubit.state.parentescoFamiliarPeps2CodigoNombre,
                           value: cubit.state.parentescoFamiliarPeps2Codigo,
                         ),
                         isRequired: true,
@@ -240,6 +240,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               parentescoFamiliarPeps2Codigo: item.value,
+                              parentescoFamiliarPeps2CodigoNombre: item.name,
                             ),
                           );
                         },

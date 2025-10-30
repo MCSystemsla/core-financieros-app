@@ -2917,7 +2917,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "126:7135722388525260782",
+      "lastPropertyId": "160:4373483293849729772",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3550,6 +3550,176 @@
           "id": "126:7135722388525260782",
           "name": "montoMinimo",
           "type": 8
+        },
+        {
+          "id": "127:5229120579346460379",
+          "name": "paisEmisorCedulaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "128:4433528188170988013",
+          "name": "municipioCasaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "129:9059583905221348044",
+          "name": "departamentoCasaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "130:8609106694742907605",
+          "name": "paisCasaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "131:5803404703703069065",
+          "name": "profesionNombre",
+          "type": 9
+        },
+        {
+          "id": "132:8693734956300800169",
+          "name": "ocupacionNombre",
+          "type": 9
+        },
+        {
+          "id": "133:2476233490733425905",
+          "name": "condicionCasaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "134:5527003622130348588",
+          "name": "monedaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "135:7975500705937609287",
+          "name": "propositoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "136:4852015864407732442",
+          "name": "frecuenciaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "137:2832655127596207374",
+          "name": "sectorCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "138:6684907627515122775",
+          "name": "municipioNegocioCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "139:4735261116799212154",
+          "name": "condicionNegocioCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "140:8555749696706194495",
+          "name": "estadoCivilCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "141:4096199964203355003",
+          "name": "productoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "142:1076356662793015768",
+          "name": "parentescoFamiliarPeps2CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "143:1968735499292756613",
+          "name": "tipoDocumentoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "144:1651173541822513980",
+          "name": "tipoPersonaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "145:3486486524533371543",
+          "name": "actividadEconomicaCnbs1CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "146:5715271641595228619",
+          "name": "actividadEconomicaCnbs2CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "147:6095148681978070149",
+          "name": "nacinalidadCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "148:1468959257868986830",
+          "name": "nacinalidad2CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "149:2207785304233340789",
+          "name": "nacinalidad3CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "150:438241609908838303",
+          "name": "departamentoDestinoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "151:542493749149103540",
+          "name": "tipoPersonaCnbsCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "152:8251019225479556781",
+          "name": "tipoClienteCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "153:435027336080166981",
+          "name": "aldeaDestinoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "154:2673282692433744352",
+          "name": "municipioDestinoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "155:3857976798734210150",
+          "name": "aldeaNegocioCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "156:802752375169180207",
+          "name": "departamentoNegocioCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "157:2923496980637482112",
+          "name": "ocupacionCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "158:8877470043719252885",
+          "name": "profesionCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "159:3082499126053521205",
+          "name": "aldeaCasaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "160:4373483293849729772",
+          "name": "ubicacionCodigoNombre",
+          "type": 9
         }
       ],
       "relations": []

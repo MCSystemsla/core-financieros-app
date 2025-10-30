@@ -74,6 +74,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCnbs1Codigo: item.valor,
+                        actividadEconomicaCnbs1CodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -114,6 +115,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCnbs2Codigo: item.valor,
+                        actividadEconomicaCnbs2CodigoNombre: item.nombre,
                       ),
                     );
                   },
@@ -235,6 +237,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                         isOffline: true,
                         errorMsg:
                             'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                        isDone: true,
                       ),
                     );
                     CustomAlertDialog(

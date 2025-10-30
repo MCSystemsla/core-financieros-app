@@ -300,6 +300,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                           () => cubit.state.copyWith(
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            isDone: true,
                           ),
                         );
                         CustomAlertDialog(

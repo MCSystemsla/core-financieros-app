@@ -90,6 +90,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           departamentoNegocioCodigo: item.valor,
+                          departamentoNegocioCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -107,6 +108,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           municipioNegocioCodigo: item.valor,
+                          municipioNegocioCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -125,6 +127,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           aldeaNegocioCodigo: value?.valor,
+                          aldeaNegocioCodigoNombre: value?.nombre,
                         ),
                       );
                     },
@@ -225,6 +228,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         sectorCodigo: item.value,
+                        sectorCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -243,6 +247,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         condicionNegocioCodigo: item.value,
+                        condicionNegocioCodigoNombre: item.name,
                       ),
                     );
                   },

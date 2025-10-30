@@ -37,5 +37,8 @@ enum ErrorNetworkCode {
     );
   }
 
-  return (resp.toString(), ErrorNetworkCode.unknownError);
+  return (
+    resp['message']?.toString() ?? resp.toString(),
+    ErrorNetworkCode.unknownError
+  );
 }

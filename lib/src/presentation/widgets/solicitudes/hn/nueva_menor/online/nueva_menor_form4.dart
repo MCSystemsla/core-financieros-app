@@ -69,6 +69,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       () => cubit.state.copyWith(
                         profesionCodigo: item.value,
                         profesion: item.name,
+                        profesionCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -86,6 +87,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       () => cubit.state.copyWith(
                         ocupacion: item.name,
                         ocupacionCodigo: item.value,
+                        ocupacionCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -108,6 +110,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         estadoCivilCodigo: item.value,
+                        estadoCivilCodigoNombre: item.name,
                       ),
                     );
                   },

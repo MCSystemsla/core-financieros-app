@@ -59,6 +59,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
+        monedaCodigoNombre: 'LEMPIRA',
       ),
     );
   }
@@ -192,7 +193,10 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   title: 'Destino del crédito',
                   onChanged: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(propositoCodigo: value?.value),
+                      () => cubit.state.copyWith(
+                        propositoCodigo: value?.value,
+                        propositoCodigoNombre: value?.name,
+                      ),
                     );
                   },
                   flavor: global<FlavorCubit>().state.flavor,
@@ -228,6 +232,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         monedaCodigo: item.value,
+                        monedaCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -288,6 +293,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
+                        productoCodigoNombre: item.name,
                         montoMaximo: montoMaximo,
                         montoMinimo: montoMinimo?.toDouble(),
                         tasaInteres: item.interes,
@@ -345,6 +351,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
                         frecuenciaMeses: item.meses,
+                        frecuenciaCodigoNombre: item.nombre,
                       ),
                     );
                     frecuenciaDePago = CatalogoFrecuenciaItem(

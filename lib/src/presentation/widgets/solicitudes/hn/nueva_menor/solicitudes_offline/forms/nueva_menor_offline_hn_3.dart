@@ -78,7 +78,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.departamentoNegocioCodigo,
-                      nombre: cubit.state.departamentoNegocioCodigo,
+                      nombre: cubit.state.departamentoNegocioCodigoNombre,
                       relacion: '',
                     ),
                     where: cubit.state.paisCasaCodigo,
@@ -95,6 +95,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           departamentoNegocioCodigo: item.valor,
+                          departamentoNegocioCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -104,7 +105,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.municipioNegocioCodigo,
-                      nombre: cubit.state.municipioNegocioCodigo,
+                      nombre: cubit.state.municipioNegocioCodigoNombre,
                       relacion: '',
                     ),
                     where: depWhereClause,
@@ -118,6 +119,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           municipioNegocioCodigo: item.valor,
+                          municipioNegocioCodigoNombre: item.nombre,
                         ),
                       );
                     },
@@ -130,7 +132,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                     selectedItem: ItemNacionalidad(
                       id: 0,
                       valor: cubit.state.aldeaNegocioCodigo,
-                      nombre: cubit.state.aldeaNegocioCodigo,
+                      nombre: cubit.state.aldeaNegocioCodigoNombre,
                       relacion: '',
                     ),
                     where: munWhereClause,
@@ -142,6 +144,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           aldeaNegocioCodigo: value?.valor,
+                          aldeaNegocioCodigoNombre: value?.nombre,
                         ),
                       );
                     },
@@ -237,7 +240,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: cubit.state.sectorCodigo,
+                    name: cubit.state.sectorCodigoNombre,
                     value: cubit.state.sectorCodigo,
                   ),
                   isRequired: true,
@@ -250,6 +253,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         sectorCodigo: item.value,
+                        sectorCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -259,7 +263,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                 const Gap(30),
                 SearchDropdownWidget(
                   selectedItem: Item(
-                    name: cubit.state.condicionNegocioCodigo,
+                    name: cubit.state.condicionNegocioCodigoNombre,
                     value: cubit.state.condicionNegocioCodigo,
                   ),
                   isRequired: true,
@@ -272,6 +276,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         condicionNegocioCodigo: item.value,
+                        condicionNegocioCodigoNombre: item.name,
                       ),
                     );
                   },

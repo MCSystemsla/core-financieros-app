@@ -222,6 +222,7 @@ class _NuevaMenorForm5State extends State<NuevaMenorForm5>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           parentescoFamiliarPeps2Codigo: item.value,
+                          parentescoFamiliarPeps2CodigoNombre: item.name,
                         ),
                       );
                     },

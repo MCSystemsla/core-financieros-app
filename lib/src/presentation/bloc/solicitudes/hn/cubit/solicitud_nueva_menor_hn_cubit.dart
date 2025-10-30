@@ -404,7 +404,143 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       montoMinimo: _preferNum(state.montoMinimo, prev?.montoMinimo),
       montoMaximo: _preferNum(state.montoMaximo, prev?.montoMaximo),
       tieneVinculosUsa: _prefer(state.tieneVinculosUsa, prev?.tieneVinculosUsa),
-      isDone: state.isDone == false ? (prev?.isDone ?? false) : state.isDone,
+      isDone: state.isDone,
+      actividadEconomicaCnbs1CodigoNombre: _prefer(
+        state.actividadEconomicaCnbs1CodigoNombre,
+        prev?.actividadEconomicaCnbs1CodigoNombre,
+      ),
+      actividadEconomicaCnbs2CodigoNombre: _prefer(
+        state.actividadEconomicaCnbs2CodigoNombre,
+        prev?.actividadEconomicaCnbs2CodigoNombre,
+      ),
+      aldeaCasaCodigoNombre: _prefer(
+        state.aldeaCasaCodigoNombre,
+        prev?.aldeaCasaCodigoNombre,
+      ),
+      paisCasaCodigoNombre: _prefer(
+        state.paisCasaCodigoNombre,
+        prev?.paisCasaCodigoNombre,
+      ),
+      paisEmisorCedulaCodigoNombre: _prefer(
+        state.paisEmisorCedulaCodigoNombre,
+        prev?.paisEmisorCedulaCodigoNombre,
+      ),
+      aldeaDestinoCodigoNombre: _prefer(
+        state.aldeaDestinoCodigoNombre,
+        prev?.aldeaDestinoCodigoNombre,
+      ),
+      municipioDestinoCodigoNombre: _prefer(
+        state.municipioDestinoCodigoNombre,
+        prev?.municipioDestinoCodigoNombre,
+      ),
+      aldeaNegocioCodigoNombre: _prefer(
+        state.aldeaNegocioCodigoNombre,
+        prev?.aldeaNegocioCodigoNombre,
+      ),
+      departamentoNegocioCodigoNombre: _prefer(
+        state.departamentoNegocioCodigoNombre,
+        prev?.departamentoNegocioCodigoNombre,
+      ),
+      ocupacionCodigoNombre: _prefer(
+        state.ocupacionCodigoNombre,
+        prev?.ocupacionCodigoNombre,
+      ),
+      profesionCodigoNombre: _prefer(
+        state.profesionCodigoNombre,
+        prev?.profesionCodigoNombre,
+      ),
+      ubicacionCodigoNombre: _prefer(
+        state.ubicacionCodigoNombre,
+        prev?.ubicacionCodigoNombre,
+      ),
+      condicionCasaCodigoNombre: _prefer(
+        state.condicionCasaCodigoNombre,
+        prev?.condicionCasaCodigoNombre,
+      ),
+      condicionNegocioCodigoNombre: _prefer(
+        state.condicionNegocioCodigoNombre,
+        prev?.condicionNegocioCodigoNombre,
+      ),
+      departamentoCasaCodigoNombre: _prefer(
+        state.departamentoCasaCodigoNombre,
+        prev?.departamentoCasaCodigoNombre,
+      ),
+      departamentoDestinoCodigoNombre: _prefer(
+        state.departamentoDestinoCodigoNombre,
+        prev?.departamentoDestinoCodigoNombre,
+      ),
+      estadoCivilCodigoNombre: _prefer(
+        state.estadoCivilCodigoNombre,
+        prev?.estadoCivilCodigoNombre,
+      ),
+      frecuenciaCodigoNombre: _prefer(
+        state.frecuenciaCodigoNombre,
+        prev?.frecuenciaCodigoNombre,
+      ),
+      monedaCodigoNombre: _prefer(
+        state.monedaCodigoNombre,
+        prev?.monedaCodigoNombre,
+      ),
+      municipioCasaCodigoNombre: _prefer(
+        state.municipioCasaCodigoNombre,
+        prev?.municipioCasaCodigoNombre,
+      ),
+      municipioNegocioCodigoNombre: _prefer(
+        state.municipioNegocioCodigoNombre,
+        prev?.municipioNegocioCodigoNombre,
+      ),
+      nacinalidad2CodigoNombre: _prefer(
+        state.nacinalidad2CodigoNombre,
+        prev?.nacinalidad2CodigoNombre,
+      ),
+      nacinalidadCodigoNombre: _prefer(
+        state.nacinalidadCodigoNombre,
+        prev?.nacinalidadCodigoNombre,
+      ),
+      nacinalidad3CodigoNombre: _prefer(
+        state.nacinalidad3CodigoNombre,
+        prev?.nacinalidad3CodigoNombre,
+      ),
+      ocupacionNombre: _prefer(
+        state.ocupacionNombre,
+        prev?.ocupacionNombre,
+      ),
+      parentescoFamiliarPeps2CodigoNombre: _prefer(
+        state.parentescoFamiliarPeps2CodigoNombre,
+        prev?.parentescoFamiliarPeps2CodigoNombre,
+      ),
+      productoCodigoNombre: _prefer(
+        state.productoCodigoNombre,
+        prev?.productoCodigoNombre,
+      ),
+      profesionNombre: _prefer(
+        state.profesionNombre,
+        prev?.profesionNombre,
+      ),
+      propositoCodigoNombre: _prefer(
+        state.propositoCodigoNombre,
+        prev?.propositoCodigoNombre,
+      ),
+      sectorCodigoNombre: _prefer(
+        state.sectorCodigoNombre,
+        prev?.sectorCodigoNombre,
+      ),
+      tipoClienteCodigoNombre: _prefer(
+        state.tipoClienteCodigoNombre,
+        prev?.tipoClienteCodigoNombre,
+      ),
+      tipoDocumentoCodigoNombre: _prefer(
+        state.tipoDocumentoCodigoNombre,
+        prev?.tipoDocumentoCodigoNombre,
+      ),
+      tipoPersonaCodigoNombre: _prefer(
+        state.tipoPersonaCodigoNombre,
+        prev?.tipoPersonaCodigoNombre,
+      ),
+      tipoPersonaCnbsCodigoNombre: _prefer(
+        state.tipoPersonaCnbsCodigoNombre,
+        prev?.tipoPersonaCnbsCodigoNombre,
+      ),
     );
   }
 
@@ -556,6 +692,45 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         ejerceApnfd: solicitud.ejerceApnfd,
         esApnfd: solicitud.esApnfd,
         cuota: solicitud.cuota,
+        actividadEconomicaCnbs1CodigoNombre:
+            solicitud.actividadEconomicaCnbs1CodigoNombre,
+        actividadEconomicaCnbs2CodigoNombre:
+            solicitud.actividadEconomicaCnbs2CodigoNombre,
+        aldeaCasaCodigoNombre: solicitud.aldeaCasaCodigoNombre,
+        paisCasaCodigoNombre: solicitud.paisCasaCodigoNombre,
+        paisEmisorCedulaCodigoNombre: solicitud.paisEmisorCedulaCodigoNombre,
+        aldeaDestinoCodigoNombre: solicitud.aldeaDestinoCodigoNombre,
+        municipioDestinoCodigoNombre: solicitud.municipioDestinoCodigoNombre,
+        aldeaNegocioCodigoNombre: solicitud.aldeaNegocioCodigoNombre,
+        departamentoNegocioCodigoNombre:
+            solicitud.departamentoNegocioCodigoNombre,
+        ocupacionCodigoNombre: solicitud.ocupacionCodigoNombre,
+        profesionCodigoNombre: solicitud.profesionCodigoNombre,
+        ubicacionCodigoNombre: solicitud.ubicacionCodigoNombre,
+        condicionCasaCodigoNombre: solicitud.condicionCasaCodigoNombre,
+        condicionNegocioCodigoNombre: solicitud.condicionNegocioCodigoNombre,
+        departamentoCasaCodigoNombre: solicitud.departamentoCasaCodigoNombre,
+        departamentoDestinoCodigoNombre:
+            solicitud.departamentoDestinoCodigoNombre,
+        estadoCivilCodigoNombre: solicitud.estadoCivilCodigoNombre,
+        frecuenciaCodigoNombre: solicitud.frecuenciaCodigoNombre,
+        monedaCodigoNombre: solicitud.monedaCodigoNombre,
+        municipioCasaCodigoNombre: solicitud.municipioCasaCodigoNombre,
+        municipioNegocioCodigoNombre: solicitud.municipioNegocioCodigoNombre,
+        nacinalidad2CodigoNombre: solicitud.nacinalidad2CodigoNombre,
+        nacinalidadCodigoNombre: solicitud.nacinalidadCodigoNombre,
+        nacinalidad3CodigoNombre: solicitud.nacinalidad3CodigoNombre,
+        ocupacionNombre: solicitud.ocupacionNombre,
+        parentescoFamiliarPeps2CodigoNombre:
+            solicitud.parentescoFamiliarPeps2CodigoNombre,
+        productoCodigoNombre: solicitud.productoCodigoNombre,
+        profesionNombre: solicitud.profesionNombre,
+        propositoCodigoNombre: solicitud.propositoCodigoNombre,
+        sectorCodigoNombre: solicitud.sectorCodigoNombre,
+        tipoClienteCodigoNombre: solicitud.tipoClienteCodigoNombre,
+        tipoDocumentoCodigoNombre: solicitud.tipoDocumentoCodigoNombre,
+        tipoPersonaCodigoNombre: solicitud.tipoPersonaCodigoNombre,
+        tipoPersonaCnbsCodigoNombre: solicitud.tipoPersonaCnbsCodigoNombre,
       ),
     );
   }
