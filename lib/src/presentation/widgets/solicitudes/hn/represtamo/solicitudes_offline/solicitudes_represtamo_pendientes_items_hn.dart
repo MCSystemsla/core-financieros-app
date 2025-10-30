@@ -168,8 +168,6 @@ class SolicitudesReprestamoPendientesWidgetHN extends StatelessWidget {
         respuesta.parentescoBeneficiarioSeguroCodigo,
         respuesta.productoCodigo,
         respuesta.observacion,
-        respuesta.ubicacionLongitud,
-        respuesta.ubicacionLatitud,
         respuesta.ubicacion,
         respuesta.esPeps,
         respuesta.nombreDeEntidadPeps,
@@ -207,11 +205,9 @@ class SolicitudesReprestamoPendientesWidgetHN extends StatelessWidget {
         respuesta.ejerceActividadApfnd,
         respuesta.medidasConocimientoCodigo,
         respuesta.nombreEmpleadoFamiliar,
-        respuesta.fechaSolicitud,
         respuesta.cuotaClientePuedePagar,
         respuesta.nombreCompleto,
         respuesta.descripcionDestino,
-        respuesta.nombreCompletoCliente,
       ];
 
       int camposLlenos = valores
