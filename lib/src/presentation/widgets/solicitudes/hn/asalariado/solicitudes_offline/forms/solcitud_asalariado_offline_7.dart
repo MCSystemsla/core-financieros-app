@@ -26,8 +26,8 @@ class SolcitudAsalariadoOffline7 extends StatefulWidget {
       _SolcitudAsalariadoOffline7State();
 }
 
-class _SolcitudAsalariadoOffline7State
-    extends State<SolcitudAsalariadoOffline7> {
+class _SolcitudAsalariadoOffline7State extends State<SolcitudAsalariadoOffline7>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? depWhereClause;
   String? munWhereClause;
@@ -35,6 +35,7 @@ class _SolcitudAsalariadoOffline7State
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     return BlocBuilder<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
       builder: (context, state) {
@@ -238,4 +239,7 @@ class _SolcitudAsalariadoOffline7State
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

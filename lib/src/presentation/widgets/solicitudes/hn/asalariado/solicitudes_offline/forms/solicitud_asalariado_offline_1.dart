@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
@@ -42,7 +43,8 @@ class SolicitudAsalariadoOffline1 extends StatefulWidget {
 }
 
 class _SolicitudAsalariadoOffline1State
-    extends State<SolicitudAsalariadoOffline1> {
+    extends State<SolicitudAsalariadoOffline1>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   CatalogoLocalDb? edadMinima;
   CatalogoLocalDb? edadMaxima;
@@ -183,6 +185,7 @@ class _SolicitudAsalariadoOffline1State
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     return BlocBuilder<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
       builder: (context, state) {
@@ -551,11 +554,13 @@ class _SolicitudAsalariadoOffline1State
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(15),
+                        DashFormatter(),
                       ],
                       onChange: (value) {
+                        final newValue = value.replaceAll('-', '');
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            telefono: value,
+                            telefono: newValue,
                           ),
                         );
                       },
@@ -577,11 +582,13 @@ class _SolicitudAsalariadoOffline1State
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(15),
+                        DashFormatter(),
                       ],
                       onChange: (value) {
+                        final newValue = value.replaceAll('-', '');
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            celular: value,
+                            celular: newValue,
                           ),
                         );
                       },
@@ -740,4 +747,7 @@ class _SolicitudAsalariadoOffline1State
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

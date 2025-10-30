@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -154,16 +155,20 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                       hintText: 'Celular Represtamo',
                       icon: Icon(Icons.person,
                           color: AppColors.getPrimaryColor()),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        DashFormatter(),
+                      ],
                       textInputType: TextInputType.phone,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       title: 'Celular Represtamo',
                       onChange: (value) {
                         if (value == null || !mounted) return;
+                        final newValue = value.replaceAll('-', '');
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            celularReprestamo: value,
+                            celularReprestamo: newValue,
                           ),
                         );
                       },

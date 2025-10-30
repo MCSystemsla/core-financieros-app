@@ -42,7 +42,8 @@ class SolicitudAsalariadoOffline9 extends StatefulWidget {
 }
 
 class _SolicitudAsalariadoOffline9State
-    extends State<SolicitudAsalariadoOffline9> {
+    extends State<SolicitudAsalariadoOffline9>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   DateTime? fechaPrimerPago;
   DateTime fechaDesembolso = DateTime.now();
@@ -182,6 +183,7 @@ class _SolicitudAsalariadoOffline9State
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     return BlocBuilder<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
@@ -559,4 +561,7 @@ class _SolicitudAsalariadoOffline9State
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
