@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -278,7 +279,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: state.monto.toString(),
+                      initialValue: state.monto.toCurrencyString(),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -287,17 +288,22 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
                       ],
                       textCapitalization: TextCapitalization.none,
                       title: 'Monto',
                       onChange: (value) {
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final montoTotal = double.tryParse(newValue) ?? 0;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            monto: double.tryParse(value) ?? 0,
+                            monto: montoTotal,
                           ),
                         );
-                        monto = value;
+                        monto = newValue;
                       },
                     ),
                     const Gap(30),

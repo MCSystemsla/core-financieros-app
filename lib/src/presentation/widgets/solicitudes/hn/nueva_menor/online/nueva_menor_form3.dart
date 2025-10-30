@@ -315,25 +315,6 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     );
                   },
                 ),
-                // const Gap(30),
-                // SearchDropdownWidget(
-                //   isRequired: true,
-                //   validator: (value) => ClassValidator.validateRequired(
-                //     value?.value,
-                //   ),
-                //   hintText: 'Ingresa Nivel Aproximado Ingresos',
-                //   title: 'Nivel Aproximado Ingresos',
-                //   codigo: 'NIVELAPROXIMADOINGRESOS',
-                //   flavor: global<FlavorCubit>().state.flavor,
-                //   onChanged: (item) {
-                //     if (item == null || !mounted) return;
-                //     cubit.onFieldChanged(
-                //       () => cubit.state.copyWith(
-                //         nivelAproximadoIngresosCodigo: item.value,
-                //       ),
-                //     );
-                //   },
-                // ),
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: 'Ingresa Horario Trabajo',

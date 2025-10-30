@@ -240,13 +240,17 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       textCapitalization: TextCapitalization.none,
                       title: 'Sueldo Mensual del Cónyugue',
                       inputFormatters: [
-                        CurrencyInputFormatter(),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
                       ],
                       onChange: (value) {
-                        final newValue = value.replaceAll(',', '');
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final sueldoMensual = int.tryParse(newValue) ?? 0;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            sueldoMesConyugue: int.tryParse(newValue) ?? 0,
+                            sueldoMesConyugue: sueldoMensual,
                           ),
                         );
                       },
@@ -263,13 +267,16 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     textCapitalization: TextCapitalization.none,
                     title: 'Otros Ingresos del Cónyugue',
                     inputFormatters: [
-                      CurrencyInputFormatter(),
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
                     ],
                     onChange: (value) {
-                      final newValue = value.replaceAll(',', '');
+                      final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                      final otrosIngresos = int.tryParse(newValue) ?? 0;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          otrosIngresosConyugue: int.tryParse(newValue) ?? 0,
+                          otrosIngresosConyugue: otrosIngresos,
                         ),
                       );
                     },

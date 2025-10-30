@@ -26,6 +26,7 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -255,17 +256,18 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
+                    CurrencyInputFormatter(mantissaLength: 0),
                   ],
                   title: 'Monto',
                   onChange: (value) {
+                    final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                    final montoTotal = int.tryParse(newValue) ?? 0;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        monto: int.tryParse(value) ?? 0,
+                        monto: montoTotal,
                       ),
                     );
-                    monto = value;
+                    monto = newValue;
                   },
                 ),
                 const Gap(30),

@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
-  // initialLocation: '/loading',
-  initialLocation: '/',
+  initialLocation: '/loading',
+  // initialLocation: '/',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

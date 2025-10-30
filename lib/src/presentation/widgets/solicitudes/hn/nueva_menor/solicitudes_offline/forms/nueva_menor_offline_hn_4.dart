@@ -333,13 +333,15 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       textCapitalization: TextCapitalization.none,
                       title: 'Ingresos Netos',
                       inputFormatters: [
-                        CurrencyInputFormatter(),
+                        CurrencyInputFormatter(mantissaLength: 0),
                       ],
                       onChange: (value) {
-                        final newValue = value.replaceAll(',', '');
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final ingresosNetos = int.tryParse(newValue) ?? 0;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            ingresosNetos: int.tryParse(newValue) ?? 0,
+                            ingresosNetos: ingresosNetos,
                           ),
                         );
                       },

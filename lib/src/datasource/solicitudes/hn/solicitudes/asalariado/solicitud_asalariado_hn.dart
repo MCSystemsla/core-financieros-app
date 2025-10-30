@@ -334,7 +334,7 @@ class SolicitudAsalariadoHn {
       'CodigoUSA': codigoUsa,
       'TipoPersonaCNBSIDCodigo': tipoPersonaCnbsidCodigo,
       'EstatusClienteCodigo': 'NORMAL',
-      'TipoClienteCodigo': tipoClienteCodigo,
+      'TipoClienteCodigo': 'NORMAL',
       'ActividadEconomicaCIUU1Codigo': actividadEconomicaCiuu1Codigo,
       'ActividadEconomicaCIUU2Codigo': actividadEconomicaCiuu2Codigo,
       'ActividadEconomicaCIUU3Codigo': actividadEconomicaCiuu3Codigo,

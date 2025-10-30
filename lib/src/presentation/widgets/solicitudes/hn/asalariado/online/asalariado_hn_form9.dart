@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
@@ -25,6 +26,8 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -158,7 +161,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
       fechaDesembolso = picked;
       context.read<SolicitudAslariadoHnCubit>().onFieldChanged(
             () => context.read<SolicitudAslariadoHnCubit>().state.copyWith(
-                // fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
+                  fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -170,6 +173,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
     super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    final internetConnectionCubit =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -216,6 +221,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
+                        tasaInteres: item.interes,
                       ),
                     );
                   },
@@ -289,13 +295,17 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   textCapitalization: TextCapitalization.none,
                   title: 'Monto',
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
+                    CurrencyInputFormatter(
+                      mantissaLength: 0,
+                    ),
                   ],
                   onChange: (value) {
-                    monto = value;
+                    final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                    final montoCredito = int.tryParse(newValue) ?? 0;
+                    monto = newValue;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        monto: int.tryParse(value) ?? 0,
+                        monto: montoCredito,
                       ),
                     );
                   },
@@ -311,6 +321,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
+                        frecuenciaMeses: item.meses,
                       ),
                     );
                     frecuenciaDePago = CatalogoFrecuenciaItem(
@@ -460,14 +471,32 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString()} L.',
                     onDone: () {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
+                          isDone: true,
                           cuota: calcularCuotaProvider.state.montoPrimeraCuota
                               .toInt(),
                         ),
                       );
+                      if (internetConnectionCubit ==
+                          ConnectionStatus.disconnected) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            errorMsg:
+                                'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          ),
+                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(

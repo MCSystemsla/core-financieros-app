@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -312,7 +313,7 @@ class _SolicitudAsalariadoOffline9State
                     ],
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: state.monto.toString(),
+                      initialValue: state.monto.toCurrencyString(),
                       key: const ValueKey('Monto'),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -323,13 +324,16 @@ class _SolicitudAsalariadoOffline9State
                       textCapitalization: TextCapitalization.none,
                       title: 'Monto',
                       inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyInputFormatter(mantissaLength: 0),
                       ],
                       onChange: (value) {
-                        monto = value;
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final montoTotal = int.tryParse(newValue) ?? 0;
+                        monto = newValue;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            monto: int.tryParse(value) ?? 0,
+                            monto: montoTotal,
                           ),
                         );
                       },

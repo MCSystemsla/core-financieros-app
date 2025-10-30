@@ -232,10 +232,12 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   textCapitalization: TextCapitalization.none,
                   title: 'Salario Neto',
                   inputFormatters: [
-                    CurrencyInputFormatter(),
+                    CurrencyInputFormatter(
+                      mantissaLength: 0,
+                    ),
                   ],
                   onChange: (value) {
-                    final newValue = value.replaceAll(',', '');
+                    final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
                     final salarioNeto = int.tryParse(newValue) ?? 0;
                     final total = cubit.state.salarioNetoCordoba + salarioNeto;
                     cubit.onFieldChanged(
@@ -255,14 +257,17 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   textCapitalization: TextCapitalization.none,
                   title: 'Otros Ingresos',
                   inputFormatters: [
-                    CurrencyInputFormatter(),
+                    CurrencyInputFormatter(
+                      mantissaLength: 0,
+                    ),
                   ],
                   onChange: (value) {
-                    final newValue = value.replaceAll(',', '');
+                    final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                    final otrosIngresos = int.tryParse(newValue) ?? 0;
 
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        otrosIngresosCordoba: int.tryParse(newValue) ?? 0,
+                        otrosIngresosCordoba: otrosIngresos,
                         totalIngresoMes: cubit.state.totalIngresoMes +
                             (int.tryParse(newValue) ?? 0),
                       ),

@@ -2,7 +2,6 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
@@ -20,6 +19,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorForm4 extends StatefulWidget {
@@ -305,13 +305,14 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                   textCapitalization: TextCapitalization.none,
                   title: 'Ingresos Netos',
                   inputFormatters: [
-                    CurrencyInputFormatter(),
+                    CurrencyInputFormatter(mantissaLength: 0),
                   ],
                   onChange: (value) {
-                    final newValue = value.replaceAll(',', '');
+                    final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                    final ingresosNetos = int.tryParse(newValue) ?? 0;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        ingresosNetos: int.tryParse(newValue) ?? 0,
+                        ingresosNetos: ingresosNetos,
                       ),
                     );
                   },
