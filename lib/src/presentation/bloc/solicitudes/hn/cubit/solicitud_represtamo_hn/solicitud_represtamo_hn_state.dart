@@ -2,6 +2,19 @@
 part of 'solicitud_represtamo_hn_cubit.dart';
 
 class SolicitudReprestamoHnState extends Equatable {
+  final String actividadEconomicaCiuu1Nombre;
+  final String actividadEconomicaCiuu2Nombre;
+  final String actividadEconomicaCiuu3Nombre;
+  final String propositoCodigoNombre;
+  final String productoCodigoNombre;
+  final String paisPepsNombre;
+  final String paisPeps2Nombre;
+  final String tipoDocumentoCodigoNombre;
+  final String tipoPersonaCodigoNombre;
+  final String frecuenciaCodigoNombre;
+  final String monedaCodigoNombre;
+  final String parentescoFamiliarPeps2CodigoNombre;
+  final String ubicacionNombre;
   final String cedulaFrontPath;
   final String cedulaBackPath;
   final bool isDone;
@@ -68,6 +81,19 @@ class SolicitudReprestamoHnState extends Equatable {
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
   const SolicitudReprestamoHnState({
+    this.actividadEconomicaCiuu1Nombre = '',
+    this.actividadEconomicaCiuu2Nombre = '',
+    this.actividadEconomicaCiuu3Nombre = '',
+    this.propositoCodigoNombre = '',
+    this.productoCodigoNombre = '',
+    this.paisPepsNombre = '',
+    this.paisPeps2Nombre = '',
+    this.tipoDocumentoCodigoNombre = '',
+    this.tipoPersonaCodigoNombre = '',
+    this.frecuenciaCodigoNombre = '',
+    this.monedaCodigoNombre = '',
+    this.parentescoFamiliarPeps2CodigoNombre = '',
+    this.ubicacionNombre = '',
     this.cedulaFrontPath = '',
     this.cedulaBackPath = '',
     this.isDone = false,
@@ -137,6 +163,19 @@ class SolicitudReprestamoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        actividadEconomicaCiuu1Nombre,
+        actividadEconomicaCiuu2Nombre,
+        actividadEconomicaCiuu3Nombre,
+        propositoCodigoNombre,
+        productoCodigoNombre,
+        paisPepsNombre,
+        paisPeps2Nombre,
+        tipoDocumentoCodigoNombre,
+        tipoPersonaCodigoNombre,
+        frecuenciaCodigoNombre,
+        monedaCodigoNombre,
+        parentescoFamiliarPeps2CodigoNombre,
+        ubicacionNombre,
         cedulaFrontPath,
         cedulaBackPath,
         frecuenciaPagoMeses,
@@ -204,6 +243,19 @@ class SolicitudReprestamoHnState extends Equatable {
       ];
 
   SolicitudReprestamoHnState copyWith({
+    String? actividadEconomicaCiuu1Nombre,
+    String? actividadEconomicaCiuu2Nombre,
+    String? actividadEconomicaCiuu3Nombre,
+    String? propositoCodigoNombre,
+    String? productoCodigoNombre,
+    String? paisPepsNombre,
+    String? paisPeps2Nombre,
+    String? tipoDocumentoCodigoNombre,
+    String? tipoPersonaCodigoNombre,
+    String? frecuenciaCodigoNombre,
+    String? monedaCodigoNombre,
+    String? parentescoFamiliarPeps2CodigoNombre,
+    String? ubicacionNombre,
     String? cedulaFrontPath,
     String? cedulaBackPath,
     bool? isDone,
@@ -271,6 +323,28 @@ class SolicitudReprestamoHnState extends Equatable {
     String? nombreEmpleadoFamiliar,
   }) {
     return SolicitudReprestamoHnState(
+      actividadEconomicaCiuu1Nombre:
+          actividadEconomicaCiuu1Nombre ?? this.actividadEconomicaCiuu1Nombre,
+      actividadEconomicaCiuu2Nombre:
+          actividadEconomicaCiuu2Nombre ?? this.actividadEconomicaCiuu2Nombre,
+      actividadEconomicaCiuu3Nombre:
+          actividadEconomicaCiuu3Nombre ?? this.actividadEconomicaCiuu3Nombre,
+      propositoCodigoNombre:
+          propositoCodigoNombre ?? this.propositoCodigoNombre,
+      productoCodigoNombre: productoCodigoNombre ?? this.productoCodigoNombre,
+      paisPepsNombre: paisPepsNombre ?? this.paisPepsNombre,
+      paisPeps2Nombre: paisPeps2Nombre ?? this.paisPeps2Nombre,
+      tipoDocumentoCodigoNombre:
+          tipoDocumentoCodigoNombre ?? this.tipoDocumentoCodigoNombre,
+      tipoPersonaCodigoNombre:
+          tipoPersonaCodigoNombre ?? this.tipoPersonaCodigoNombre,
+      frecuenciaCodigoNombre:
+          frecuenciaCodigoNombre ?? this.frecuenciaCodigoNombre,
+      monedaCodigoNombre: monedaCodigoNombre ?? this.monedaCodigoNombre,
+      parentescoFamiliarPeps2CodigoNombre:
+          parentescoFamiliarPeps2CodigoNombre ??
+              this.parentescoFamiliarPeps2CodigoNombre,
+      ubicacionNombre: ubicacionNombre ?? this.ubicacionNombre,
       cedulaFrontPath: cedulaFrontPath ?? this.cedulaFrontPath,
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       isDone: isDone ?? this.isDone,

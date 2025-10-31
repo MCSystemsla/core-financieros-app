@@ -126,6 +126,7 @@ class SolicitudAsalariadoHnDbLocal {
   DateTime? fechaDesembolso;
   String? frecuenciaMeses;
   double? tasaInteres;
+  bool hasVerified = false;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -248,5 +249,6 @@ class SolicitudAsalariadoHnDbLocal {
     this.fechaDesembolso,
     this.frecuenciaMeses,
     this.tasaInteres,
+    this.hasVerified = false,
   });
 }

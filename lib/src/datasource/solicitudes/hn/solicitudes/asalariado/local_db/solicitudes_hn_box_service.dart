@@ -346,4 +346,54 @@ class SolicitudesHnBoxService {
       rethrow;
     }
   }
+
+  List<dynamic> sendSolicitudesWhenIsDone() {
+    try {
+      final nuevas = solicitudesNuevaMenorBox
+          .query(SolicitudNuevaMenorHnLocalDb_.isDone
+              .equals(true)
+              .and(SolicitudNuevaMenorHnLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+
+      final represtamos = sendSolicitudReprestamoWhenIsDone();
+      final asalariados = sendSolicitudAsalariadoWhenIsDone();
+
+      return [...nuevas, ...represtamos, ...asalariados];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  List<dynamic> sendSolicitudReprestamoWhenIsDone() {
+    try {
+      final represtamo = solicitudesReprestamoBox
+          .query(SolicitudReprestamoHnLocalDb_.isDone
+              .equals(true)
+              .and(SolicitudReprestamoHnLocalDb_.hasVerified.equals(false)))
+          .build()
+          .find();
+
+      return represtamo;
+    } catch (e) {
+      // _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  List<dynamic> sendSolicitudAsalariadoWhenIsDone() {
+    try {
+      final asalariado = solicitudesAsalariadoBox
+          .query(SolicitudAsalariadoHnDbLocal_.isDone
+              .equals(true)
+              .and(SolicitudAsalariadoHnDbLocal_.hasVerified.equals(false)))
+          .build()
+          .find();
+
+      return asalariado;
+    } catch (e) {
+      // _logger.e(e.toString());
+      rethrow;
+    }
+  }
 }

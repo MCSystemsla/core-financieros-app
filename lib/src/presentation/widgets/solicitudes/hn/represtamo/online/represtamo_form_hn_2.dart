@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -186,6 +187,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps: value.valor,
+                          paisPepsNombre: value.nombre,
                         ),
                       );
                     },
@@ -311,22 +313,19 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     },
                   ),
                   const Gap(30),
-                  OutlineTextfieldWidget(
+                  SearchDropdownWidget(
+                    codigo: 'PARENTESCO',
                     isRequired: true,
                     hintText: 'Parentesco Familiar PEPS 2',
-                    icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    inputFormatters: [UpperCaseTextFormatter()],
-                    textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
-                        ClassValidator.validateRequired(value),
+                        ClassValidator.validateRequired(value?.value),
                     title: 'Parentesco Familiar PEPS 2',
-                    onChange: (value) {
+                    onChanged: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          parentescoFamiliarPeps2Codigo: value,
+                          parentescoFamiliarPeps2Codigo: value.value,
+                          parentescoFamiliarPeps2CodigoNombre: value.name,
                         ),
                       );
                     },
@@ -390,6 +389,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           paisPeps2: value.valor,
+                          paisPeps2Nombre: value.nombre,
                         ),
                       );
                     },

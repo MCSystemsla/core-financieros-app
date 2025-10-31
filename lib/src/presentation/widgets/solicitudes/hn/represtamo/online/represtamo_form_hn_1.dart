@@ -50,7 +50,11 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         tipoPersonaCodigo: widget.userByDocumentReprestamoData?.tipoPersona,
+        tipoPersonaCodigoNombre:
+            widget.userByDocumentReprestamoData?.tipoPersona,
         tipoDocumentoCodigo: widget.userByDocumentReprestamoData?.tipoDocumento,
+        tipoDocumentoCodigoNombre:
+            widget.userByDocumentReprestamoData?.tipoDocumento,
         cedula: widget.userByDocumentReprestamoData?.cedula,
       ),
     );
@@ -120,6 +124,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         tipoPersonaCodigo: value.value,
+                        tipoPersonaCodigoNombre: value.name,
                       ),
                     );
                   },
@@ -144,6 +149,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         tipoDocumentoCodigo: value.value,
+                        tipoDocumentoCodigoNombre: value.name,
                       ),
                     );
                   },
@@ -206,6 +212,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         ubicacion: value.value,
+                        ubicacionNombre: value.name,
                       ),
                     );
                   },

@@ -78,7 +78,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                     CatalogoActividadesCNBSDropdown(
                       selectedItem: ActiivdadCNBS(
                         valor: state.actividadEconomicaCiuu1,
-                        nombre: state.actividadEconomicaCiuu1,
+                        nombre: state.actividadEconomicaCiuu1Nombre,
                         esAPNFD: false,
                       ),
                       isRequired: true,
@@ -97,6 +97,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             actividadEconomicaCiuu1: value.valor,
+                            actividadEconomicaCiuu1Nombre: value.nombre,
                           ),
                         );
                       },
@@ -132,7 +133,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                     CatalogoActividadesCNBSDropdown(
                       selectedItem: ActiivdadCNBS(
                         valor: state.actividadEconomicaCiuu2,
-                        nombre: state.actividadEconomicaCiuu2,
+                        nombre: state.actividadEconomicaCiuu2Nombre,
                         esAPNFD: false,
                       ),
                       isRequired: false,
@@ -151,6 +152,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             actividadEconomicaCiuu2: value.valor,
+                            actividadEconomicaCiuu2Nombre: value.nombre,
                           ),
                         );
                       },
@@ -186,7 +188,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                     CatalogoActividadesCNBSDropdown(
                       selectedItem: ActiivdadCNBS(
                         valor: state.actividadEconomicaCiuu3,
-                        nombre: state.actividadEconomicaCiuu3,
+                        nombre: state.actividadEconomicaCiuu3Nombre,
                         esAPNFD: false,
                       ),
                       isRequired: true,
@@ -202,6 +204,7 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             actividadEconomicaCiuu3: value.valor,
+                            actividadEconomicaCiuu3Nombre: value.nombre,
                           ),
                         );
                       },

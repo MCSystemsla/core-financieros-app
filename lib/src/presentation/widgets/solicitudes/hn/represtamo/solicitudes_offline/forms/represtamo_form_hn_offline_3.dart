@@ -67,6 +67,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
+        monedaCodigoNombre: 'LEMPIRA',
       ),
     );
   }
@@ -197,7 +198,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                   children: [
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: cubit.state.propositoCodigo,
+                        name: cubit.state.propositoCodigoNombre,
                         value: cubit.state.propositoCodigo,
                       ),
                       key: const ValueKey('Destino'),
@@ -211,6 +212,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             propositoCodigo: value?.value,
+                            propositoCodigoNombre: value?.name,
                           ),
                         );
                       },
@@ -245,7 +247,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.monedaCodigo,
+                        name: state.monedaCodigoNombre,
                         value: state.monedaCodigo,
                       ),
                       isRequired: true,
@@ -258,6 +260,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             monedaCodigo: item.value,
+                            monedaCodigoNombre: item.name,
                           ),
                         );
                       },
@@ -309,7 +312,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.productoCodigo,
+                        name: state.productoCodigoNombre,
                         value: state.productoCodigo,
                       ),
                       isRequired: true,
@@ -323,6 +326,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             productoCodigo: item.value,
+                            productoCodigoNombre: item.name,
                             tasaInteres: item.interes,
                             montoMaximo: item.montoMaximo,
                             montoMinimo: item.montoMinimo?.toDouble(),
@@ -374,7 +378,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                     CatalogoFrecuenciaPagoDropdown(
                       selectedItem: CatalogoFrecuenciaItem(
                         valor: state.frecuenciaCodigo,
-                        nombre: state.frecuenciaCodigo,
+                        nombre: state.frecuenciaCodigoNombre,
                         meses: state.frecuenciaPagoMeses,
                       ),
                       isRequired: true,
@@ -386,6 +390,7 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
                           () => cubit.state.copyWith(
                             frecuenciaCodigo: item.valor,
                             frecuenciaPagoMeses: item.meses,
+                            frecuenciaCodigoNombre: item.nombre,
                           ),
                         );
                         frecuenciaDePago = CatalogoFrecuenciaItem(

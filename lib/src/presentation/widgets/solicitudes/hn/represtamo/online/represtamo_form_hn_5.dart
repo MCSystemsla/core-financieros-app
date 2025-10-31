@@ -89,6 +89,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCiuu1: value.valor,
+                        actividadEconomicaCiuu1Nombre: value.nombre,
                       ),
                     );
                   },
@@ -137,6 +138,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCiuu2: value.valor,
+                        actividadEconomicaCiuu2Nombre: value.nombre,
                       ),
                     );
                   },
@@ -182,6 +184,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCiuu3: value.valor,
+                        actividadEconomicaCiuu3Nombre: value.nombre,
                       ),
                     );
                   },

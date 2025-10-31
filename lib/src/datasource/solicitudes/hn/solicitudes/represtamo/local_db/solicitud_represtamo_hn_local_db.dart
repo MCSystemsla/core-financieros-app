@@ -11,30 +11,39 @@ class SolicitudReprestamoHnLocalDb {
   String? cedula;
   double? monto;
   String? monedaCodigo;
+  String? monedaCodigoNombre;
   String? propositoCodigo;
+  String? propositoCodigoNombre;
   String? frecuenciaCodigo;
+  String? frecuenciaCodigoNombre;
   double? cuota;
   String? beneficiarioSeguro;
   String? cedulaBeneficiarioSeguro;
   String? parentescoBeneficiarioSeguroCodigo;
   String? productoCodigo;
+  String? productoCodigoNombre;
   String? observacion;
   String? ubicacionLongitud;
   String? ubicacionLatitud;
   String? ubicacion;
+  String? ubicacionNombre;
   String? esPeps;
   String? nombreDeEntidadPeps;
   String? paisPeps;
+  String? paisPepsNombre;
   String? periodoPeps;
   String? cargoOficialPeps;
   String? tieneFamiliarPeps;
   String? nombreFamiliarPeps2;
   String? parentescoFamiliarPeps2Codigo;
+  String? parentescoFamiliarPeps2CodigoNombre;
   String? cargoFamiliarPeps2;
   String? nombreEntidadPeps2;
   String? periodoPeps2;
   String? paisPeps2;
+  String? paisPeps2Nombre;
   String? tipoDocumentoCodigo;
+  String? tipoDocumentoCodigoNombre;
   String? celularReprestamo;
   String? esFamiliarEmpleado;
   String? nombreFamiliar;
@@ -42,11 +51,15 @@ class SolicitudReprestamoHnLocalDb {
   int? plazoSolicitud;
   DateTime? fechaPrimerPagoSolicitud;
   String? tipoPersonaCodigo;
+  String? tipoPersonaCodigoNombre;
   bool? cargaAnalisisAutomatico;
   String? motivoRevisionCodigo;
   String? actividadEconomicaCiuu1;
+  String? actividadEconomicaCiuu1Nombre;
   String? actividadEconomicaCiuu2;
+  String? actividadEconomicaCiuu2Nombre;
   String? actividadEconomicaCiuu3;
+  String? actividadEconomicaCiuu3Nombre;
   String? codigoUsa;
   String? apnfd;
   String? actividadEconomicaRealizaCiuu1;
@@ -71,6 +84,7 @@ class SolicitudReprestamoHnLocalDb {
   double? montoMaximo;
   double? tasaInteres;
   String? frecuenciaPagoMeses;
+  bool hasVerified = false;
 
   SolicitudReprestamoHnLocalDb({
     required this.id,
@@ -79,30 +93,39 @@ class SolicitudReprestamoHnLocalDb {
     this.cedula,
     this.monto,
     this.monedaCodigo,
+    this.monedaCodigoNombre,
     this.propositoCodigo,
+    this.propositoCodigoNombre,
     this.frecuenciaCodigo,
+    this.frecuenciaCodigoNombre,
     this.cuota,
     this.beneficiarioSeguro,
     this.cedulaBeneficiarioSeguro,
     this.parentescoBeneficiarioSeguroCodigo,
     this.productoCodigo,
+    this.productoCodigoNombre,
     this.observacion,
     this.ubicacionLongitud,
     this.ubicacionLatitud,
     this.ubicacion,
+    this.ubicacionNombre,
     this.esPeps,
     this.nombreDeEntidadPeps,
     this.paisPeps,
+    this.paisPepsNombre,
     this.periodoPeps,
     this.cargoOficialPeps,
     this.tieneFamiliarPeps,
     this.nombreFamiliarPeps2,
     this.parentescoFamiliarPeps2Codigo,
+    this.parentescoFamiliarPeps2CodigoNombre,
     this.cargoFamiliarPeps2,
     this.nombreEntidadPeps2,
     this.periodoPeps2,
     this.paisPeps2,
+    this.paisPeps2Nombre,
     this.tipoDocumentoCodigo,
+    this.tipoDocumentoCodigoNombre,
     this.celularReprestamo,
     this.esFamiliarEmpleado,
     this.nombreFamiliar,
@@ -110,11 +133,15 @@ class SolicitudReprestamoHnLocalDb {
     this.plazoSolicitud,
     this.fechaPrimerPagoSolicitud,
     this.tipoPersonaCodigo,
+    this.tipoPersonaCodigoNombre,
     this.cargaAnalisisAutomatico,
     this.motivoRevisionCodigo,
     this.actividadEconomicaCiuu1,
+    this.actividadEconomicaCiuu1Nombre,
     this.actividadEconomicaCiuu2,
+    this.actividadEconomicaCiuu2Nombre,
     this.actividadEconomicaCiuu3,
+    this.actividadEconomicaCiuu3Nombre,
     this.codigoUsa,
     this.apnfd,
     this.actividadEconomicaRealizaCiuu1,
@@ -132,10 +159,12 @@ class SolicitudReprestamoHnLocalDb {
     this.descripcionDestino,
     this.isDone = false,
     this.errorMsg,
+    this.nombreCompletoCliente,
     this.fechaDesembolso,
     this.montoMinimo,
     this.montoMaximo,
     this.tasaInteres,
     this.frecuenciaPagoMeses,
+    this.hasVerified = false,
   });
 }

@@ -60,6 +60,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         monedaCodigo: 'CORDOBA',
+        monedaCodigoNombre: 'LEMPIRA',
       ),
     );
   }
@@ -199,6 +200,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         propositoCodigo: value?.value,
+                        propositoCodigoNombre: value?.name,
                       ),
                     );
                   },
@@ -242,6 +244,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         monedaCodigo: item.value,
+                        monedaCodigoNombre: item.name,
                       ),
                     );
                   },
@@ -302,6 +305,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         productoCodigo: item.value,
+                        productoCodigoNombre: item.name,
                         tasaInteres: item.interes,
                         montoMaximo: item.montoMaximo,
                         montoMinimo: item.montoMinimo?.toDouble(),
@@ -358,6 +362,7 @@ class _ReprestamoFormHn3State extends State<ReprestamoFormHn3>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
+                        frecuenciaCodigoNombre: item.nombre,
                         frecuenciaPagoMeses: item.meses,
                       ),
                     );

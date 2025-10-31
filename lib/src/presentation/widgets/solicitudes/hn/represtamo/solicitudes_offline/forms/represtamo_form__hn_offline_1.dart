@@ -81,7 +81,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.tipoPersonaCodigo,
+                        name: state.tipoPersonaCodigoNombre,
                         value: state.tipoPersonaCodigo,
                       ),
                       isRequired: true,
@@ -96,6 +96,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tipoPersonaCodigo: value.value,
+                            tipoPersonaCodigoNombre: value.name,
                           ),
                         );
                       },
@@ -103,7 +104,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                     const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
-                        name: state.tipoDocumentoCodigo,
+                        name: state.tipoDocumentoCodigoNombre,
                         value: state.tipoDocumentoCodigo,
                       ),
                       isRequired: true,
@@ -119,6 +120,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tipoDocumentoCodigo: value.value,
+                            tipoDocumentoCodigoNombre: value.name,
                           ),
                         );
                       },
@@ -176,7 +178,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                     const Gap(30),
                     SheetSearchDropdown(
                       selectedItem: Item(
-                        name: state.ubicacion,
+                        name: state.ubicacionNombre,
                         value: state.ubicacion,
                       ),
                       key: const ValueKey('ubicacion'),
@@ -190,6 +192,7 @@ class _ReprestamoFormHNOffline1State extends State<ReprestamoFormHNOffline1>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             ubicacion: value.value,
+                            ubicacionNombre: value.name,
                           ),
                         );
                       },

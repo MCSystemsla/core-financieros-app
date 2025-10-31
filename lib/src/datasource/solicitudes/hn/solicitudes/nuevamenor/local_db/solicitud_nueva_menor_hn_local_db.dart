@@ -165,6 +165,7 @@ class SolicitudNuevaMenorHnLocalDb {
   double? montoMaximo;
   double? montoMinimo;
   String? tieneVinculosUsa;
+  bool hasVerified = false;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.uuid,
@@ -325,5 +326,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.montoMaximo,
     this.montoMinimo,
     this.tieneVinculosUsa,
+    this.hasVerified = false,
   });
 }

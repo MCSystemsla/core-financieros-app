@@ -2298,7 +2298,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "140:3922506231837237053",
+      "lastPropertyId": "141:5499856262447660809",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2911,13 +2911,18 @@
           "id": "140:3922506231837237053",
           "name": "tasaInteres",
           "type": 8
+        },
+        {
+          "id": "141:5499856262447660809",
+          "name": "hasVerified",
+          "type": 1
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "160:4373483293849729772",
+      "lastPropertyId": "161:5522360194022516825",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3720,6 +3725,11 @@
           "id": "160:4373483293849729772",
           "name": "ubicacionCodigoNombre",
           "type": 9
+        },
+        {
+          "id": "161:5522360194022516825",
+          "name": "hasVerified",
+          "type": 1
         }
       ],
       "relations": []
@@ -3813,7 +3823,7 @@
     },
     {
       "id": "24:2952094495400237",
-      "lastPropertyId": "71:6345576182771622633",
+      "lastPropertyId": "85:3652553557306261492",
       "name": "SolicitudReprestamoHnLocalDb",
       "properties": [
         {
@@ -4146,6 +4156,76 @@
           "id": "71:6345576182771622633",
           "name": "frecuenciaPagoMeses",
           "type": 9
+        },
+        {
+          "id": "72:147398311332577018",
+          "name": "monedaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "73:3408464717097220714",
+          "name": "propositoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "74:4537412386003084146",
+          "name": "frecuenciaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "75:5612843963042732706",
+          "name": "productoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "76:771216773638249542",
+          "name": "ubicacionNombre",
+          "type": 9
+        },
+        {
+          "id": "77:8474696510606696137",
+          "name": "paisPepsNombre",
+          "type": 9
+        },
+        {
+          "id": "78:7441495480447965696",
+          "name": "parentescoFamiliarPeps2CodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "79:6179129913278835761",
+          "name": "paisPeps2Nombre",
+          "type": 9
+        },
+        {
+          "id": "80:7250886680157349161",
+          "name": "tipoDocumentoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "81:1850375930021127861",
+          "name": "tipoPersonaCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "82:8819477388285782288",
+          "name": "actividadEconomicaCiuu1Nombre",
+          "type": 9
+        },
+        {
+          "id": "83:6146916268246942244",
+          "name": "actividadEconomicaCiuu2Nombre",
+          "type": 9
+        },
+        {
+          "id": "84:833387599449459970",
+          "name": "actividadEconomicaCiuu3Nombre",
+          "type": 9
+        },
+        {
+          "id": "85:3652553557306261492",
+          "name": "hasVerified",
+          "type": 1
         }
       ],
       "relations": []

@@ -233,6 +233,47 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
       frecuenciaPagoMeses:
           _prefer(state.frecuenciaPagoMeses, prev?.frecuenciaPagoMeses),
       isDone: state.isDone,
+      actividadEconomicaCiuu1Nombre: _prefer(
+        state.actividadEconomicaCiuu1Nombre,
+        prev?.actividadEconomicaCiuu1Nombre,
+      ),
+      actividadEconomicaCiuu2Nombre: _prefer(
+        state.actividadEconomicaCiuu2Nombre,
+        prev?.actividadEconomicaCiuu2Nombre,
+      ),
+      actividadEconomicaCiuu3Nombre: _prefer(
+        state.actividadEconomicaCiuu3Nombre,
+        prev?.actividadEconomicaCiuu3Nombre,
+      ),
+      propositoCodigoNombre: _prefer(
+        state.propositoCodigoNombre,
+        prev?.propositoCodigoNombre,
+      ),
+      productoCodigoNombre: _prefer(
+        state.productoCodigoNombre,
+        prev?.productoCodigoNombre,
+      ),
+      paisPepsNombre: _prefer(state.paisPepsNombre, prev?.paisPepsNombre),
+      paisPeps2Nombre: _prefer(state.paisPeps2Nombre, prev?.paisPeps2Nombre),
+      tipoDocumentoCodigoNombre: _prefer(
+        state.tipoDocumentoCodigoNombre,
+        prev?.tipoDocumentoCodigoNombre,
+      ),
+      tipoPersonaCodigoNombre: _prefer(
+        state.tipoPersonaCodigoNombre,
+        prev?.tipoPersonaCodigoNombre,
+      ),
+      frecuenciaCodigoNombre: _prefer(
+        state.frecuenciaCodigoNombre,
+        prev?.frecuenciaCodigoNombre,
+      ),
+      monedaCodigoNombre:
+          _prefer(state.monedaCodigoNombre, prev?.monedaCodigoNombre),
+      parentescoFamiliarPeps2CodigoNombre: _prefer(
+        state.parentescoFamiliarPeps2CodigoNombre,
+        prev?.parentescoFamiliarPeps2CodigoNombre,
+      ),
+      ubicacionNombre: _prefer(state.ubicacionNombre, prev?.ubicacionNombre),
     );
   }
 
@@ -312,6 +353,20 @@ class SolicitudReprestamoHnCubit extends Cubit<SolicitudReprestamoHnState> {
         montoMaximo: solicitud.montoMaximo,
         frecuenciaPagoMeses: solicitud.frecuenciaPagoMeses,
         isDone: solicitud.isDone,
+        actividadEconomicaCiuu1Nombre: solicitud.actividadEconomicaCiuu1Nombre,
+        actividadEconomicaCiuu2Nombre: solicitud.actividadEconomicaCiuu2Nombre,
+        actividadEconomicaCiuu3Nombre: solicitud.actividadEconomicaCiuu3Nombre,
+        propositoCodigoNombre: solicitud.propositoCodigoNombre,
+        productoCodigoNombre: solicitud.productoCodigoNombre,
+        paisPepsNombre: solicitud.paisPepsNombre,
+        paisPeps2Nombre: solicitud.paisPeps2Nombre,
+        tipoDocumentoCodigoNombre: solicitud.tipoDocumentoCodigoNombre,
+        tipoPersonaCodigoNombre: solicitud.tipoPersonaCodigoNombre,
+        frecuenciaCodigoNombre: solicitud.frecuenciaCodigoNombre,
+        monedaCodigoNombre: solicitud.monedaCodigoNombre,
+        parentescoFamiliarPeps2CodigoNombre:
+            solicitud.parentescoFamiliarPeps2CodigoNombre,
+        ubicacionNombre: solicitud.ubicacionNombre,
       ),
     );
   }
