@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/represtamo_autosave.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
@@ -77,6 +78,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
           celularReprestamo: state.celularReprestamo,
           fechaPrimerPagoSolicitud:
               DateTime.parse(state.fechaPrimerPagoSolicitud),
+          historialCredito: state.historialCredito,
         ),
       );
       if (!isOk) {
@@ -302,6 +304,48 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       state.copyWith(
         cedulaFrontPath: cedulaFrontPath,
         cedulaBackPath: cedulaBackPath,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

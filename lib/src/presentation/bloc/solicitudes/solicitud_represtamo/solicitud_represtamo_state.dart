@@ -2,6 +2,7 @@
 part of 'solicitud_represtamo_cubit.dart';
 
 class SolicitudReprestamoState extends Equatable {
+  final List<HistorialCredito> historialCredito;
   final String nombreFormularioKiva;
   final String numeroSolicitud;
   final bool isDone;
@@ -96,6 +97,7 @@ class SolicitudReprestamoState extends Equatable {
   final String frecuenciaPagoMeses;
 
   const SolicitudReprestamoState({
+    this.historialCredito = const [],
     this.nombreFormularioKiva = '',
     this.numeroSolicitud = '',
     this.paisPeps2Ver = '',
@@ -192,6 +194,7 @@ class SolicitudReprestamoState extends Equatable {
 
   @override
   List<Object> get props => [
+        historialCredito,
         nombreFormularioKiva,
         paisPepsVer,
         paisPeps2Ver,
@@ -282,6 +285,7 @@ class SolicitudReprestamoState extends Equatable {
       ];
 
   SolicitudReprestamoState copyWith({
+    List<HistorialCredito>? historialCredito,
     String? nombreFormularioKiva,
     String? numeroSolicitud,
     bool? isDone,
@@ -376,6 +380,7 @@ class SolicitudReprestamoState extends Equatable {
     String? frecuenciaPagoMeses,
   }) {
     return SolicitudReprestamoState(
+      historialCredito: historialCredito ?? this.historialCredito,
       nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       isDone: isDone ?? this.isDone,

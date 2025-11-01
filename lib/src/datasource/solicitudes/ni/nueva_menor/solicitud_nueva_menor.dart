@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 
 String solicitudNuevaMenorToJson(SolicitudNuevaMenor data) =>
     json.encode(data.toJson());
@@ -104,6 +105,8 @@ class SolicitudNuevaMenor {
   final String telefonoBeneficiarioSeguro1;
   final int plazoSolicitud;
   final String fechaPrimerPagoSolicitud;
+  final List<HistorialCredito> historialCredito;
+
   SolicitudNuevaMenor({
     required this.isOffline,
     required this.objOrigenSolicitudId,
@@ -203,6 +206,7 @@ class SolicitudNuevaMenor {
     required this.telefonoBeneficiarioSeguro1,
     required this.plazoSolicitud,
     required this.fechaPrimerPagoSolicitud,
+    required this.historialCredito,
   });
 
   Map<String, dynamic> toJson() {
@@ -305,6 +309,8 @@ class SolicitudNuevaMenor {
       'PlazoSolicitud': plazoSolicitud,
       'FechaPrimerPagoSolicitud': fechaPrimerPagoSolicitud,
       'IsOffline': isOffline,
+      'historialCredito':
+          List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

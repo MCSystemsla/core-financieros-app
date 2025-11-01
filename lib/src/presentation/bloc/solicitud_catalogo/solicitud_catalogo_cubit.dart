@@ -154,6 +154,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
       'TIPOSPERSONACREDITO',
       'ACTIVIDADECONOMICA',
       'TIPODOCUMENTOPERSONA',
+      'ESTADOPRESTAMO',
     ];
 
     for (final codigo in codigos) {

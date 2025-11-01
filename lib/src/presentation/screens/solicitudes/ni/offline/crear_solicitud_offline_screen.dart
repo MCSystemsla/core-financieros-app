@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocatio
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_historial_crediticio_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline1_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline2_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline3_widget.dart';
@@ -117,6 +118,10 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
                     NuevaMenorOffline6Widget(
                       pageController: pageController,
                       responseLocalDb: responseLocalDb,
+                    ),
+                    NuevaMenorHistorialCrediticioOffline(
+                      controller: pageController,
+                      uuid: responseLocalDb.uuid ?? '',
                     ),
                     NuevaMenorOffline7Widget(
                       pageController: pageController,

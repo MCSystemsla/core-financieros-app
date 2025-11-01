@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/asalariado_autosave.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
@@ -141,6 +142,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           tiempoLaborarConyugue: state.tiempoLaborarConyugue,
           totalIngresoMes: state.totalIngresoMes,
           totalIngresoMesConyugue: state.totalIngresoMesConyugue,
+          historialCredito: state.historialCredito,
         ),
       );
       if (!isOk) {
@@ -489,5 +491,47 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
       cedulaFrontPath: cedulaFrontPath,
       cedulaBackPath: cedulaBackPath,
     ));
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
+      ),
+    );
   }
 }

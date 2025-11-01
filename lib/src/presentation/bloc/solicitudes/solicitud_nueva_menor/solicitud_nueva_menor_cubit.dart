@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/autosave_helper.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
@@ -125,6 +126,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
         telefonoBeneficiarioSeguro1: state.telefonoBeneficiarioSeguro1,
         plazoSolicitud: state.plazoSolicitud,
         fechaPrimerPagoSolicitud: state.fechaPrimerPagoSolicitud,
+        historialCredito: state.historialCredito,
       ));
       if (!isOk) {
         return emit(state.copyWith(status: Status.error, errorMsg: msg));
@@ -450,6 +452,48 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       state.copyWith(
         cedulaFrontPath: cedulaFrontPath,
         cedulaBackPath: cedulaBackPath,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

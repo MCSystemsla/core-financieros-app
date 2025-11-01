@@ -4297,9 +4297,63 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "27:3416496866580165552",
+      "lastPropertyId": "9:670671469511863237",
+      "name": "HistorialCrediticioLocalDb",
+      "properties": [
+        {
+          "id": "1:5549863100659094844",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7199718926795288584",
+          "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "3:8978239469512198233",
+          "name": "entidad",
+          "type": 9
+        },
+        {
+          "id": "4:7017993580658396779",
+          "name": "monto",
+          "type": 6
+        },
+        {
+          "id": "5:8490181417596661833",
+          "name": "tipoMonedaCodigo",
+          "type": 9
+        },
+        {
+          "id": "6:2923813063172884924",
+          "name": "tipoFrecuenciaCodigo",
+          "type": 9
+        },
+        {
+          "id": "7:324586813151303770",
+          "name": "cuota",
+          "type": 6
+        },
+        {
+          "id": "8:419921211424648567",
+          "name": "saldo",
+          "type": 6
+        },
+        {
+          "id": "9:670671469511863237",
+          "name": "estadoCodigo",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "26:503892743731821937",
+  "lastEntityId": "27:3416496866580165552",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/asalariado_form5.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/asalariado_form6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/asalariado_form7.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/asalariado_historial_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -62,6 +63,9 @@ class AsalariadoForm extends StatelessWidget {
                 controller: controller,
               ),
               AsalariadoForm6(
+                controller: controller,
+              ),
+              AsalariadoHistorialCredito(
                 controller: controller,
               ),
               AsalariadoForm7(

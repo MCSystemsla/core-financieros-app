@@ -154,6 +154,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String nacionalidadConyugueVer;
   final bool isOffline;
   final String nombreFormularioKiva;
+  final List<HistorialCredito> historialCredito;
   const SolicitudNuevaMenorState({
     this.isOffline = false,
     this.numeroSolicitud = '',
@@ -307,10 +308,12 @@ class SolicitudNuevaMenorState extends Equatable {
     this.prestamoInteres = 0,
     this.fechaDesembolso = '',
     this.nombreFormularioKiva = '',
+    this.historialCredito = const [],
   });
 
   @override
   List<Object> get props => [
+        historialCredito,
         nombreFormularioKiva,
         departamentoNegocio,
         departamentoNegocioVer,
@@ -609,6 +612,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? nacionalidadConyugueVer,
     bool? isOffline,
     String? nombreFormularioKiva,
+    List<HistorialCredito>? historialCredito,
   }) {
     return SolicitudNuevaMenorState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -803,6 +807,7 @@ class SolicitudNuevaMenorState extends Equatable {
           nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
       isOffline: isOffline ?? this.isOffline,
       nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
+      historialCredito: historialCredito ?? this.historialCredito,
     );
   }
 }

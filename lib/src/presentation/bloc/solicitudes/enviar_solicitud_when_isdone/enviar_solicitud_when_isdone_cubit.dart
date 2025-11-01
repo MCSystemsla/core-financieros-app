@@ -346,6 +346,7 @@ class EnviarSolicitudWhenIsdoneCubit
       telefonoBeneficiarioSeguro1: solicitud.telefonoBeneficiarioSeguro1 ?? '',
       plazoSolicitud: solicitud.plazoSolicitud ?? 0,
       fechaPrimerPagoSolicitud: solicitud.fechaPrimerPagoSolicitud ?? '',
+      historialCredito: [],
     );
   }
 
@@ -406,6 +407,7 @@ class EnviarSolicitudWhenIsdoneCubit
       celularReprestamo: solicitud.celularReprestamo ?? '',
       fechaPrimerPagoSolicitud:
           DateTime.tryParse(solicitud.fechaPrimerPagoSolicitud.toString()),
+      historialCredito: [],
     );
   }
 
@@ -527,6 +529,7 @@ class EnviarSolicitudWhenIsdoneCubit
       tiempoLaborarConyugue: solicitud.tiempoLaborarConyugue ?? '',
       totalIngresoMes: solicitud.totalIngresoMes ?? 0,
       totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue ?? 0,
+      historialCredito: [],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/kiva/kiva_solicitud_model.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
@@ -34,6 +35,7 @@ class ObjectBoxService {
   late final Box<CedulaClientDb> cedulaClientBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   late final Box<KivaConfiguracionLocalDb> kivaConfiguracionBox;
+  late final Box<HistorialCrediticioLocalDb> historialCrediticioBox;
   final _logger = Logger();
 
   ObjectBoxService._create(this._store) {
@@ -50,6 +52,7 @@ class ObjectBoxService {
     cedulaClientBox = _store.box<CedulaClientDb>();
     catalogoFrecuenciaPagoBox = _store.box<CatalogoFrecuenciaPagoDb>();
     kivaConfiguracionBox = _store.box<KivaConfiguracionLocalDb>();
+    historialCrediticioBox = _store.box<HistorialCrediticioLocalDb>();
     // cedulaClientBox.removeAll();
     // solicitudesAsalariadoResponsesBox.removeAll();
     // solicitudesResponsesBox.removeAll();
@@ -602,6 +605,28 @@ class ObjectBoxService {
           .findFirst();
 
       return result;
+    } catch (e) {
+      _logger.e(e.toString());
+      rethrow;
+    }
+  }
+
+  List<HistorialCrediticioLocalDb> getHistorialCredito({required String uuid}) {
+    final query = historialCrediticioBox
+        .query(HistorialCrediticioLocalDb_.uuid.equals(uuid))
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  void saveHistorialCredito({
+    required HistorialCrediticioLocalDb historialCreditoLocalDb,
+  }) {
+    try {
+      historialCrediticioBox.put(historialCreditoLocalDb);
     } catch (e) {
       _logger.e(e.toString());
       rethrow;

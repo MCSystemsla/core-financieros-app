@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 
 String solicitudAsalariadoToJson(SolicitudAsalariado data) =>
     json.encode(data.toJson());
@@ -117,6 +118,7 @@ class SolicitudAsalariado {
   final String tiempoLaborarConyugue;
   final double totalIngresoMes;
   final double totalIngresoMesConyugue;
+  final List<HistorialCredito> historialCredito;
 
   SolicitudAsalariado({
     required this.isOffline,
@@ -230,6 +232,7 @@ class SolicitudAsalariado {
     required this.tiempoLaborarConyugue,
     required this.totalIngresoMes,
     required this.totalIngresoMesConyugue,
+    required this.historialCredito,
   });
 
   Map<String, dynamic> toJson() {
@@ -347,6 +350,8 @@ class SolicitudAsalariado {
       'TotalIngresoMes': totalIngresoMes,
       'TotalIngresoMesConyugue': totalIngresoMesConyugue,
       'IsOffline': isOffline,
+      'historialCredito':
+          List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

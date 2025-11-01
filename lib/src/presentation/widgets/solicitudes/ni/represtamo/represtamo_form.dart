@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/represtamo_historial_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
@@ -54,6 +55,9 @@ class ReprestamoForm extends StatelessWidget {
               ReprestamoForm2(controller: controller),
               ReprestamoForm3(controller: controller),
               ReprestamoForm4(controller: controller),
+              ReprestamoHistorialCredito(
+                controller: controller,
+              ),
               ReprestamoForm5(controller: controller),
             ],
           ),

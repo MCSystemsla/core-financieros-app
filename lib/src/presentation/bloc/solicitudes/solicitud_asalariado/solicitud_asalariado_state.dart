@@ -2,6 +2,7 @@
 part of 'solicitud_asalariado_cubit.dart';
 
 class SolicitudAsalariadoState extends Equatable {
+  final List<HistorialCredito> historialCredito;
   final String numeroSolicitud;
   final String? uuid;
   final bool hasVerified;
@@ -161,6 +162,7 @@ class SolicitudAsalariadoState extends Equatable {
   final String nombreFormularioKiva;
   final String nacionalidadConyugueVer;
   const SolicitudAsalariadoState({
+    this.historialCredito = const [],
     this.nombreFormularioKiva = '',
     this.uuid,
     this.frecuenciaPagoMeses = '',
@@ -323,6 +325,7 @@ class SolicitudAsalariadoState extends Equatable {
 
   @override
   List<Object> get props => [
+        historialCredito,
         nacionalidadConyugueVer,
         nombreFormularioKiva,
         frecuenciaPagoMeses,
@@ -487,6 +490,7 @@ class SolicitudAsalariadoState extends Equatable {
       ];
 
   SolicitudAsalariadoState copyWith({
+    List<HistorialCredito>? historialCredito,
     String? numeroSolicitud,
     String? uuid,
     bool? hasVerified,
@@ -647,6 +651,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? nacionalidadConyugueVer,
   }) {
     return SolicitudAsalariadoState(
+      historialCredito: historialCredito ?? this.historialCredito,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       hasVerified: hasVerified ?? this.hasVerified,

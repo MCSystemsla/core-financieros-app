@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cu
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_historial_credito_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_offline_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_offline_form2.dart';
@@ -112,6 +113,10 @@ class ReprestamoOfflineView extends StatelessWidget {
                     ReprestamoOfflineForm4(
                       controller: controller,
                       solicitud: solicitudReprestamoOffline,
+                    ),
+                    ReprestamoHistorialCreditoOffline(
+                      controller: controller,
+                      uuid: solicitudReprestamoOffline.uuid ?? '',
                     ),
                     ReprestamoOfflineForm5(
                       controller: controller,

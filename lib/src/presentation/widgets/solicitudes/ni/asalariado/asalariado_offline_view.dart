@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cu
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_historial_credito_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_3.dart';
@@ -124,6 +125,10 @@ class AsalariadoOfflineView extends StatelessWidget {
                     AsalariadoOffline6(
                       controller: controller,
                       asalariadoResponsesLocalDb: asalariadoResponsesLocalDb,
+                    ),
+                    AsalariadoHistorialCreditoOffline(
+                      controller: controller,
+                      uuid: asalariadoResponsesLocalDb.uuid ?? '',
                     ),
                     AsalariadoOffline7(
                       controller: controller,
