@@ -64,7 +64,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       hintText: 'Ingresa Profesión',
-                      title: 'Profesión',
+                      title: 'Profesión del Cliente',
                       codigo: 'PROFESION',
                       flavor: global<FlavorCubit>().state.flavor,
                       onChanged: (item) {
@@ -100,7 +100,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         );
                       },
                       hintText: 'Ingresa Ocupación',
-                      title: 'Ocupación',
+                      title: 'Ocupación Actual',
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
@@ -142,7 +142,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.name,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Conyugue',
+                        title: 'Nombre del Cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -162,7 +162,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
                         hintText: 'Ingresa Nacionalidad Cónyugue',
-                        title: 'Nacionalidad Conyugue',
+                        title: 'Nacionalidad del Cónyuge',
                         codigo: 'PAIS',
                         onChanged: (item) {
                           if (item == null || !mounted) return;
@@ -181,7 +181,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),
-                        title: '¿Trabaja Cónyugue?',
+                        title: '¿El Cónyuge Trabaja?',
                         isRequired: true,
                         onChanged: (item) {
                           if (item == null || !mounted) return;
@@ -215,7 +215,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
-                          title: 'Trabajo Conyugue',
+                          title: 'Centro de Trabajo del Cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
@@ -239,7 +239,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.streetAddress,
                           textCapitalization: TextCapitalization.words,
-                          title: 'Dirección Trabajo Conyugue',
+                          title: 'Dirección del Trabajo del Cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
@@ -264,7 +264,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.phone,
                           textCapitalization: TextCapitalization.none,
-                          title: 'Telefono Trabajo Conyugue',
+                          title: 'Teléfono del Trabajo del Cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
@@ -285,7 +285,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.characters,
-                        title: 'Documento Conyugue',
+                        title: 'Número de Documento del Cónyuge',
                         inputFormatters: [
                           UpperCaseTextFormatter(),
                           LengthLimitingTextInputFormatter(50),
@@ -312,7 +312,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        title: 'Actividad Descripción Conyugue',
+                        title: 'Descripción de Actividad del Cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -334,7 +334,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
-                      title: 'Ingresos Netos',
+                      title: 'Ingresos Netos Mensuales',
                       inputFormatters: [
                         CurrencyInputFormatter(mantissaLength: 0),
                       ],
@@ -359,7 +359,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       icon: Icon(Icons.timeline,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
-                      title: 'Experiencia',
+                      title: 'Años de Experiencia Laboral',
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],

@@ -60,7 +60,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      title: 'Tiene Familiar Empleado?',
+                      title: '¿Algún familiar trabaja en nuestra institución?',
                       isRequired: true,
                       onChanged: (value) {
                         if (value == null || !mounted) return;
@@ -94,7 +94,8 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Nombre de Familiar Empleado',
+                        title:
+                            'Nombre completo del familiar que trabaja en la institución',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -119,7 +120,8 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Cedula Familiar Empleado',
+                        title:
+                            'Número de documento del familiar que trabaja en la institución',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -139,7 +141,8 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                       validator: (value) => ClassValidator.validateRequired(
                         value?.value,
                       ),
-                      title: 'Es PEPS?',
+                      title:
+                          '¿Es usted una Persona Expuesta Políticamente (PEPS)?',
                       isRequired: true,
                       onChanged: (value) {
                         if (value == null || !mounted) return;
@@ -173,7 +176,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Nombre de Entidad PEPS',
+                        title: 'Nombre de la entidad donde ocupa cargo PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -195,7 +198,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         hintText: 'Pais PEPS',
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
-                        title: 'Pais Peps',
+                        title: 'País de la entidad PEPS',
                         onChanged: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -220,7 +223,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textInputType: TextInputType.number,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Periodo PEPS',
+                        title: 'Periodo de vinculación a la entidad PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -245,7 +248,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Cargo Oficial PEPS',
+                        title: 'Cargo oficial que ocupa en la entidad PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -264,7 +267,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      title: '¿Tiene Familiar PEPS?',
+                      title: '¿Tiene algún familiar PEPS?',
                       isRequired: true,
                       onChanged: (value) {
                         if (value == null || !mounted) return;
@@ -298,7 +301,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Nombre Familiar PEPS 2',
+                        title: 'Nombre completo del familiar PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -322,7 +325,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Nombre Familiar PEPS 2',
+                        title: 'Entidad donde trabaja el familiar PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -343,7 +346,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         hintText: 'Parentesco Familiar PEPS 2',
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),
-                        title: 'Parentesco Familiar PEPS 2',
+                        title: 'Parentesco con el familiar PEPS',
                         onChanged: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -369,7 +372,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textCapitalization: TextCapitalization.characters,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Cargo Familiar PEPS 2',
+                        title: 'Cargo del familiar PEPS en la entidad',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -393,7 +396,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         textInputType: TextInputType.number,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        title: 'Periodo PEPS 2',
+                        title: 'Periodo de vinculación del familiar PEPS',
                         onChange: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(
@@ -415,7 +418,8 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         hintText: 'Pais PEPS 2',
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
-                        title: 'Pais PEPS 2',
+                        title:
+                            'País de residencia de la entidad del familiar PEPS',
                         onChanged: (value) {
                           if (value == null || !mounted) return;
                           cubit.onFieldChanged(

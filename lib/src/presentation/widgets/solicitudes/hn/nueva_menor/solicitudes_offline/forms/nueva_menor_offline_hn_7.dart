@@ -207,7 +207,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       hintText: 'Destino del crédito',
-                      title: 'Destino del crédito',
+                      title: 'Destino del Crédito',
                       onChanged: (value) {
                         cubit.onFieldChanged(
                           () => state.copyWith(
@@ -233,7 +233,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                       hintText: 'ingresa descripcion del Destino',
                       icon: Icon(Icons.description_outlined,
                           color: AppColors.getPrimaryColor()),
-                      title: 'Descripcion del Destino',
+                      title: 'Descripción del Destino del Crédito',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => state.copyWith(
@@ -263,7 +263,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         );
                       },
                       hintText: 'ingresa moneda',
-                      title: 'Moneda',
+                      title: 'Moneda de la Operación',
                     ),
                     OutlineTextfieldWidget(
                       isRequired: true,
@@ -294,7 +294,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                           mantissaLength: 0,
                         ),
                       ],
-                      title: 'Monto',
+                      title: 'Monto Solicitado',
                       onChange: (value) {
                         final newValue =
                             value.replaceAll(RegExp(r'[^0-9]'), '');
@@ -337,7 +337,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                           ),
                         );
                       },
-                      title: 'Producto',
+                      title: 'Producto Crediticio',
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -354,7 +354,7 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(2),
                       ],
-                      title: 'Plazo de la solicitud (meses)',
+                      title: 'Plazo de la Solicitud (meses)',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => state.copyWith(

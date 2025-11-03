@@ -61,7 +61,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      title: 'Es PEPS?',
+                      title: '¿Es Persona Expuesta Políticamente (PEPS)?',
                       isRequired: true,
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -90,7 +90,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                         ],
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        hintText: 'Nombre de Entidad PEPS',
+                        hintText: 'Nombre de la Entidad Relacionada (PEPS)',
                         icon: Icon(Icons.apartment,
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
@@ -115,7 +115,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
                         hintText: 'País PEPS',
-                        title: 'País PEPS',
+                        title: 'País de la Entidad (PEPS)',
                         codigo: 'PAIS',
                         onChanged: (item) {
                           if (item == null || !mounted) return;
@@ -141,7 +141,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                           LengthLimitingTextInputFormatter(100),
                         ],
                         textCapitalization: TextCapitalization.none,
-                        title: 'Periodo PEPS',
+                        title: 'Periodo de Ejercicio (PEPS)',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -165,7 +165,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Cargo Oficial PEPS',
+                        title: 'Cargo Oficial Ocupado (PEPS)',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -183,7 +183,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      title: '¿Tiene Familiar PEPS?',
+                      title: '¿Tiene Familiar con Condición PEPS?',
                       isRequired: true,
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -217,7 +217,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.name,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Familiar PEPS 2',
+                        title: 'Nombre del Familiar PEPS',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -247,7 +247,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                         flavor: global<FlavorCubit>().state.flavor,
                         codigo: 'PARENTESCO',
                         hintText: 'Parentesco Familiar PEPS 2',
-                        title: 'Parentesco Familiar PEPS 2',
+                        title: 'Parentesco con el Familiar PEPS',
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
@@ -264,7 +264,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Cargo Familiar PEPS 2',
+                        title: 'Cargo del Familiar PEPS',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -288,7 +288,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Entidad PEPS 2',
+                        title: 'Entidad del Familiar PEPS',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -312,7 +312,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(100),
                         ],
-                        title: 'Periodo PEPS 2',
+                        title: 'Periodo de Ejercicio del Familiar PEPS',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -333,7 +333,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                           value?.valor,
                         ),
                         hintText: 'País PEPS 2',
-                        title: 'País PEPS 2',
+                        title: 'País de la Entidad del Familiar PEPS',
                         codigo: 'PAIS',
                         onChanged: (item) {
                           if (item == null || !mounted) return;
@@ -354,7 +354,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                       validator: (value) => ClassValidator.validateRequired(
                         value?.value,
                       ),
-                      title: '¿Es Familiar Empleado?',
+                      title: '¿Es Familiar de un Empleado de la Institución?',
                       isRequired: true,
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -388,7 +388,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.name,
                         textCapitalization: TextCapitalization.words,
-                        title: 'Nombre Familiar',
+                        title: 'Nombre del Familiar Empleado',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -412,7 +412,7 @@ class _NuevaMenorOfflineHn5State extends State<NuevaMenorOfflineHn5>
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(25),
                         ],
-                        title: 'Cédula Familiar',
+                        title: 'Número de Identificación del Familiar',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(

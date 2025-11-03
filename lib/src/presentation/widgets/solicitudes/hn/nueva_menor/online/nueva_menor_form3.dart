@@ -64,7 +64,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       Icon(Icons.business, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Nombre Negocio',
+                  title: 'Nombre del negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -80,7 +80,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Departamento Negocio',
-                    title: 'Departamento Negocio',
+                    title: 'Departamento donde Opera el Negocio',
                     codigo: 'DEP',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -114,7 +114,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     },
                     codigo: 'MUN',
                     hintText: 'Ingresa Municipio Negocio',
-                    title: 'Municipio Negocio',
+                    title: 'Municipio donde Opera el Negocio',
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
@@ -131,7 +131,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                         ),
                       );
                     },
-                    title: 'Aldea Negocio',
+                    title: 'Aldea del Negocio',
                   ),
                 ],
                 const Gap(30),
@@ -141,7 +141,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Ingresa Caserio Negocio',
-                  title: 'Caserio Negocio',
+                  title: 'Caserío del Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -163,7 +163,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.streetAddress,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Dirección Negocio',
+                  title: 'Dirección Comercial Completa del negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -185,7 +185,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       Icon(Icons.apartment, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Barrio Negocio',
+                  title: 'Barrio o Colonia del Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -207,7 +207,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  title: 'Tiempo de Funcionamiento de Negocio',
+                  title: 'Años de Operación del Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -233,7 +233,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     );
                   },
                   hintText: 'Ingresa Sector',
-                  title: 'Sector',
+                  title: 'Sector Económico del Negocio',
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
@@ -252,7 +252,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     );
                   },
                   hintText: 'Ingresa Condición Negocio',
-                  title: 'Condicion Negocio',
+                  title: 'Condición del negocio',
                 ),
                 const Gap(30),
                 CountryInput(
@@ -267,7 +267,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  title: 'Telefono Negocio',
+                  title: 'Teléfono del Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -286,7 +286,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
-                  title: 'Celular Negocio',
+                  title: 'Celular del Negocio',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -307,7 +307,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Puesto Negocio',
+                  title: 'Puesto o Cargo dentro del Negocio',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(100),
@@ -326,7 +326,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Horario de Trabajo',
+                  title: 'Horario de Atención',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),
@@ -350,7 +350,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),
                   ],
-                  title: 'Horario de Visita',
+                  title: 'Horario de Visita al Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(

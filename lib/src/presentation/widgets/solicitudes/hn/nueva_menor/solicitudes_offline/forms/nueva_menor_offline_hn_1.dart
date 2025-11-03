@@ -184,7 +184,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       flavor: global<FlavorCubit>().state.flavor,
                       codigo: 'TIPOSPERSONACREDITO',
                       hintText: 'Ingresa Tipo Persona',
-                      title: 'Tipo Persona',
+                      title: 'Tipo de Persona',
                       onChanged: (Item<dynamic>? item) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -209,7 +209,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       textCapitalization: TextCapitalization.characters,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
-                      title: 'Nombre 1',
+                      title: 'Primer Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -231,7 +231,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       ],
                       textInputType: TextInputType.name,
                       textCapitalization: TextCapitalization.characters,
-                      title: 'Nombre 2',
+                      title: 'Segundo Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -253,7 +253,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       // validator: (value) => ClassValidator.validateRequired(value),
                       textInputType: TextInputType.name,
                       textCapitalization: TextCapitalization.characters,
-                      title: 'Nombre 3',
+                      title: 'Tercer Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -277,7 +277,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       ],
                       textInputType: TextInputType.name,
                       textCapitalization: TextCapitalization.characters,
-                      title: 'Apellido 1',
+                      title: 'Primer Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -298,7 +298,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       ],
                       textInputType: TextInputType.name,
                       textCapitalization: TextCapitalization.characters,
-                      title: 'Apellido 2',
+                      title: 'Segundo Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -319,7 +319,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       ],
                       textInputType: TextInputType.name,
                       textCapitalization: TextCapitalization.characters,
-                      title: 'Apellido 3',
+                      title: 'Tercer Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -350,7 +350,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         );
                         setState(() {});
                       },
-                      title: 'Tipo Documento',
+                      title: 'Tipo de Documento',
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
@@ -373,7 +373,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       flavor: global<FlavorCubit>().state.flavor,
                       codigo: 'TIPOPERSONACNBS',
                       hintText: 'Ingresa Tipo Persona CNBS',
-                      title: 'Tipo Persona CNBS',
+                      title: 'Tipo de persona en CNBS',
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -391,7 +391,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       ],
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
-                      title: 'Documento',
+                      title: 'Número de Documento',
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -407,7 +407,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(16),
                       ],
-                      title: 'RTN',
+                      title: 'Registro Tributario Nacional (RTN)',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
@@ -425,7 +425,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         Icons.email,
                         color: AppColors.getPrimaryColor(),
                       ),
-                      title: 'Email',
+                      title: 'Correo Electrónico',
                       hintText: 'Ingrese Email',
                       textInputType: TextInputType.emailAddress,
                       textCapitalization: TextCapitalization.none,
@@ -448,7 +448,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.valor),
                       hintText: 'input.select_option'.tr(),
-                      title: 'País Emisor Cédula',
+                      title: 'País Emisor del Documento',
                       codigo: 'PAIS',
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -474,7 +474,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.datetime,
                         textCapitalization: TextCapitalization.none,
-                        title: 'Fecha Emisión Documento',
+                        title: 'Fecha de Emisión del Documento',
                       ),
                     ],
                     const Gap(30),
@@ -490,7 +490,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.datetime,
                       textCapitalization: TextCapitalization.none,
-                      title: 'Fecha Vencimiento Documento',
+                      title: 'Fecha de Vencimiento del Documento',
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -505,7 +505,35 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                           Icon(Icons.cake, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.datetime,
                       textCapitalization: TextCapitalization.none,
-                      title: 'Fecha Nacimiento',
+                      title: 'Fecha de Nacimiento',
+                    ),
+                    const Gap(30),
+                    CountryInput(
+                      initialValue: cubit.state.celular,
+                      countryCodeInput: CountryCodeInput.hn,
+                      maxLength: 50,
+                      isRequired: true,
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      hintText: 'Ingresa Celular',
+                      icon: Icon(Icons.phone_android,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.phone,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Numero de Celular',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        DashFormatter(),
+                      ],
+                      onChange: (value) {
+                        final newValue = value.replaceAll('-', '');
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            celular: newValue,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     CountryInput(
@@ -513,8 +541,6 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       countryCodeInput: CountryCodeInput.hn,
                       maxLength: 50,
                       isRequired: true,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
                       hintText: 'Ingresa Teléfono',
                       icon:
                           Icon(Icons.phone, color: AppColors.getPrimaryColor()),
@@ -535,34 +561,6 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       },
                     ),
                     const Gap(30),
-                    CountryInput(
-                      initialValue: cubit.state.celular,
-                      countryCodeInput: CountryCodeInput.hn,
-                      maxLength: 50,
-                      isRequired: true,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
-                      ),
-                      hintText: 'Ingresa Celular',
-                      icon: Icon(Icons.phone_android,
-                          color: AppColors.getPrimaryColor()),
-                      textInputType: TextInputType.phone,
-                      textCapitalization: TextCapitalization.none,
-                      title: 'Celular',
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        DashFormatter(),
-                      ],
-                      onChange: (value) {
-                        final newValue = value.replaceAll('-', '');
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            celular: newValue,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(30),
                     SearchDropdownWidget(
                       selectedItem: Item(
                         name: cubit.state.escolaridadCodigo,
@@ -572,7 +570,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       hintText: 'Ingresa Escolaridad',
-                      title: 'Escolaridad',
+                      title: 'Nivel de Escolaridad',
                       codigo: 'ESCOLARIDAD',
                       flavor: global<FlavorCubit>().state.flavor,
                       onChanged: (item) {
@@ -598,7 +596,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(2),
                       ],
-                      title: 'Cantidad Hijos',
+                      title: 'Número de Hijos',
                       onChange: (value) {
                         final newValue = value.replaceAll(',', '');
 
@@ -619,7 +617,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       hintText: 'Ingresa Sexo',
-                      title: 'Genero de cliente',
+                      title: 'Género',
                       codigo: 'SEXO',
                       flavor: global<FlavorCubit>().state.flavor,
                       onChanged: (item) {
@@ -642,7 +640,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.valor),
                       hintText: 'Ingresa País Nacimiento',
-                      title: 'País Nacimiento',
+                      title: 'País de Nacimiento',
                       codigo: 'PAIS',
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -662,7 +660,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) => ClassValidator.validateRequired(
                         value?.value,
                       ),
-                      title: 'Tiene vinculos con USA?',
+                      title: '¿Posee Vínculos con EE.UU.?',
                       isRequired: true,
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -691,7 +689,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.characters,
-                        title: 'Código USA',
+                        title: 'Código de Identificación EE.UU.',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -712,7 +710,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.valor),
                       hintText: 'Ingresa Nacionalidad 1',
-                      title: 'Nacionalidad 1',
+                      title: 'Nacionalidad Principal',
                       codigo: 'PAIS',
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -733,7 +731,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         relacion: '',
                       ),
                       hintText: 'Ingresa Nacionalidad 2',
-                      title: 'Nacionalidad 2',
+                      title: 'Segunda Nacionalidad',
                       codigo: 'PAIS',
                       onChanged: (item) {
                         if (item == null || !mounted) return;
@@ -754,7 +752,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         relacion: '',
                       ),
                       hintText: 'Ingresa Nacionalidad 3',
-                      title: 'Nacionalidad 3',
+                      title: 'Tercera Nacionalidad',
                       codigo: 'PAIS',
                       onChanged: (item) {
                         if (item == null || !mounted) return;

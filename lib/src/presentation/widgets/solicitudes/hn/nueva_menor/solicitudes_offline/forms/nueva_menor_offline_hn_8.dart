@@ -78,7 +78,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                           ),
                         );
                       },
-                      title: 'Actividad Económica CNBS 1',
+                      title: 'Actividad Económica CNBS',
                     ),
                     if (state.actividadEconomicaCnbs1Codigo.isNotEmpty) ...[
                       const Gap(30),
@@ -95,7 +95,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        title: 'Descripción Actividad Económica 1',
+                        title: 'Descripción de la Actividad Económica',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -144,7 +144,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        title: 'Descripción Actividad Económica 2',
+                        title: 'Descripción de la Actividad Económica',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -192,7 +192,7 @@ class _NuevaMenorOfflineHn8State extends State<NuevaMenorOfflineHn8>
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        title: 'Descripción Actividad Económica 3',
+                        title: 'Descripción de la Actividad Económica',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(

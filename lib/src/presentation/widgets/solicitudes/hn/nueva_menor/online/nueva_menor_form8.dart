@@ -78,7 +78,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                       ),
                     );
                   },
-                  title: 'Actividad Económica CNBS 1',
+                  title: 'Actividad Económica CNBS',
                 ),
                 if (actividadEconomica1 != null) ...[
                   const Gap(30),
@@ -94,7 +94,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Descripción Actividad Económica 1',
+                    title: 'Descripción de la Actividad Económica',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -138,7 +138,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Descripción Actividad Económica 2',
+                    title: 'Descripción de la Actividad Económica',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -181,7 +181,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    title: 'Descripción Actividad Económica 3',
+                    title: 'Descripción de la Actividad Económica',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

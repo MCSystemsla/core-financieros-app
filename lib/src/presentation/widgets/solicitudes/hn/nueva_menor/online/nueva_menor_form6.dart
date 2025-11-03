@@ -52,7 +52,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                     where: cubit.state.paisCasaCodigo,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Departamento Destino',
+                    hintText: 'Departamento de Destino',
                     codigo: 'DEP',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -66,7 +66,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                         ),
                       );
                     },
-                    title: 'Departamento Destino',
+                    title: 'Departamento de Destino',
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
@@ -75,7 +75,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                       value?.valor,
                     ),
                     hintText: 'Municipio Destino',
-                    title: 'Municipio Destino',
+                    title: 'Municipio de Destino',
                     codigo: 'MUN',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -98,7 +98,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Aldea Destino',
-                    title: 'Aldea Destino',
+                    title: 'Aldea o Localidad de Destino',
                     onChanged: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -117,7 +117,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                     LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Caserío Destino',
-                  title: 'Caserio Destino',
+                  title: 'Caserío de Destino',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -134,7 +134,7 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
                     LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Barrio Destino',
-                  title: 'Barrio destino',
+                  title: 'Barrio o Colonia de Destino',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(

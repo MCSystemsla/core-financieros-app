@@ -96,7 +96,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   inputFormatters: [UpperCaseTextFormatter()],
                   textInputType: TextInputType.text,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Nombre Completo',
+                  title: 'Nombre Completo del Cliente',
                   onChange: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -118,7 +118,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   key: const ValueKey('tipoPersona'),
                   flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'TIPOSPERSONACREDITO',
-                  title: 'Tipo Persona',
+                  title: 'Tipo de Persona',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -143,7 +143,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   key: const ValueKey('tipoDocumento'),
                   flavor: global<FlavorCubit>().state.flavor,
                   codigo: 'TIPODOCUMENTOPERSONA',
-                  title: 'Tipo Documento Persona',
+                  title: 'Tipo de Documento del Cliente',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -164,7 +164,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   textInputType: TextInputType.number,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Documento',
+                  title: 'Número de Documento del Cliente',
                   onChange: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(
@@ -188,7 +188,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   ],
                   textInputType: TextInputType.phone,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Celular Represtamo',
+                  title: 'Teléfono Celular del Cliente',
                   onChange: (value) {
                     if (value == null || !mounted) return;
                     final newValue = value.replaceAll('-', '');
@@ -205,7 +205,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,
                   ),
-                  title: 'Ubicacion',
+                  title: 'Ubicación del Cliente',
                   isRequired: true,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -228,7 +228,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   key: const ValueKey('tieneVinculo'),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  title: 'Tiene vinculos con USA?',
+                  title: 'Tiene vinculos con Estados Unidos?',
                   isRequired: true,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -262,7 +262,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'Vinculo Descripcion',
+                    title: 'Descripción del Vínculo con EE.UU.',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -286,7 +286,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    title: 'Codigo USA',
+                    title: 'Código de Identificación USA',
                     onChange: (value) {
                       if (value == null || !mounted) return;
                       cubit.onFieldChanged(
@@ -300,7 +300,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     key: const ValueKey('tieneIdentificacion'),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
-                    title: 'Tiene identificacion de Estados unidos?',
+                    title: 'Posee Identificación Oficial de EE.UU.?',
                     isRequired: true,
                     onChanged: (value) {
                       if (value == null || !mounted) return;

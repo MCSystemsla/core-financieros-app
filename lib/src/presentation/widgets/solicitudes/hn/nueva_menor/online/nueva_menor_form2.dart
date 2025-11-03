@@ -86,7 +86,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'Ingresa País Casa',
-                  title: 'País Casa de cliente',
+                  title: 'País de domicilio del cliente',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -129,7 +129,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Departamento Casa',
-                    title: 'Departamento Casa de cliente',
+                    title: 'Departamento de domicilio del cliente',
                     codigo: 'DEP',
                     where: depWhereClause,
                     onChanged: (item) {
@@ -158,7 +158,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Municipio Casa',
-                    title: 'Municipio Casa de cliente',
+                    title: 'Municipio de domicilio del cliente',
                     codigo: 'MUN',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -180,7 +180,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Ingresa Aldea Casa',
-                    title: 'Ingresa Aldea Casa de cliente',
+                    title: 'Aldea de domicilio del cliente',
                     onChanged: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -205,7 +205,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.streetAddress,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Dirección Casa de cliente',
+                  title: 'Dirección de domicilio del cliente',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -223,7 +223,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Casa',
-                  title: 'Barrio Casa de cliente',
+                  title: 'Barrio o colonia de residencia',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -238,7 +238,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Condición Casa',
-                  title: 'Condicion Casa',
+                  title: 'Condición de vivienda',
                   codigo: 'TIPOVIVIENDA',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -264,7 +264,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  title: 'Años Residir Casa',
+                  title: 'Años de residencia en el domicilio actual',
                   onChange: (value) {
                     final newValue = value.replaceAll(',', '');
                     cubit.onFieldChanged(
@@ -301,7 +301,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ingresa Ubicación',
-                  title: 'Ingresa Ubicacion',
+                  title: 'Ubicación del domicilio',
                   enabled: true,
                   isRequired: true,
                   items: const [

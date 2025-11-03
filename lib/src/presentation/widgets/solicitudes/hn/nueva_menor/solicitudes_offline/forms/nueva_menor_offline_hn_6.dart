@@ -69,7 +69,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                         ),
                       );
                     },
-                    title: 'Departamento Destino',
+                    title: 'Departamento de Destino',
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
@@ -84,7 +84,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                       value?.valor,
                     ),
                     hintText: 'Municipio Destino',
-                    title: 'Municipio Destino',
+                    title: 'Municipio de Destino',
                     codigo: 'MUN',
                     onChanged: (item) {
                       if (item == null || !mounted) return;
@@ -113,7 +113,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     hintText: 'Aldea Destino',
-                    title: 'Aldea Destino',
+                    title: 'Aldea o Localidad de Destino',
                     onChanged: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -133,7 +133,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Caserío Destino',
-                  title: 'Caserio Destino',
+                  title: 'Caserío de Destino',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -151,7 +151,7 @@ class _NuevaMenorOfflineHn6State extends State<NuevaMenorOfflineHn6>
                     LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Barrio Destino',
-                  title: 'Barrio destino',
+                  title: 'Barrio o Colonia de Destino',
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
