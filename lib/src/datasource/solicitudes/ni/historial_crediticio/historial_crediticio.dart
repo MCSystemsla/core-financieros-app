@@ -7,6 +7,7 @@ class HistorialCredito {
   final int cuota;
   final int saldo;
   final String estadoCodigo;
+  final DateTime fechaDesembolso;
 
   HistorialCredito({
     required this.entidad,
@@ -17,6 +18,7 @@ class HistorialCredito {
     required this.saldo,
     required this.estadoCodigo,
     required this.uuid,
+    required this.fechaDesembolso,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,5 +29,6 @@ class HistorialCredito {
         'Cuota': cuota,
         'Saldo': saldo,
         'EstadoCodigo': estadoCodigo,
+        'FechaDesembolso': fechaDesembolso.toUtc().toIso8601String(),
       };
 }

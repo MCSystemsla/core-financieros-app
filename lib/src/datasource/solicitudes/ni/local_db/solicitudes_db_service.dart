@@ -632,4 +632,21 @@ class ObjectBoxService {
       rethrow;
     }
   }
+
+  void deleteHistorialByUuid(String uuid) {
+    final query = historialCrediticioBox
+        .query(HistorialCrediticioLocalDb_.uuid.equals(uuid))
+        .build();
+
+    final item = query.findFirst();
+    query.close();
+
+    // Si se encontró, eliminarlo
+    if (item == null) {
+      log('No se encontró registro con ese UUID');
+      return;
+    }
+
+    historialCrediticioBox.remove(item.id);
+  }
 }

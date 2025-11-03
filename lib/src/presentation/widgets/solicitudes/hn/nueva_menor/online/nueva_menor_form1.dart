@@ -566,30 +566,6 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   countryCodeInput: CountryCodeInput.hn,
                   maxLength: 50,
                   isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Teléfono',
-                  icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(50),
-                    DashFormatter(),
-                  ],
-                  title: 'Teléfono',
-                  onChange: (value) {
-                    final newValue = value.replaceAll('-', '');
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        telefono: newValue,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                CountryInput(
-                  countryCodeInput: CountryCodeInput.hn,
-                  maxLength: 50,
-                  isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(
                     value,
                   ),
@@ -608,6 +584,29 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         celular: newValue,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                CountryInput(
+                  countryCodeInput: CountryCodeInput.hn,
+                  maxLength: 50,
+                  isRequired: true,
+                  hintText: 'Ingresa Teléfono',
+                  icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
+                  textInputType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(50),
+                    DashFormatter(),
+                  ],
+                  title: 'Teléfono',
+                  onChange: (value) {
+                    final newValue = value.replaceAll('-', '');
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        telefono: newValue,
                       ),
                     );
                   },

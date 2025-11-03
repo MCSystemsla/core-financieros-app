@@ -5,17 +5,22 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
@@ -59,6 +64,7 @@ class _ReprestamoHistorialCreditoOfflineState
           cuota: e.cuota ?? 0,
           saldo: e.saldo ?? 0,
           estadoCodigo: e.estadoCodigo ?? '',
+          fechaDesembolso: e.fechaDesembolso ?? DateTime.now(),
         );
       }).toList(),
     );
@@ -68,6 +74,8 @@ class _ReprestamoHistorialCreditoOfflineState
   Widget build(BuildContext context) {
     final historialesCreditos =
         context.watch<SolicitudReprestamoCubit>().state.historialCredito;
+    final localDbProvider = global<ObjectBoxService>();
+
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
@@ -94,12 +102,26 @@ class _ReprestamoHistorialCreditoOfflineState
               onTap: () => showHistorialCreditoOptionsBottomSheet(
                 context: context,
                 onEdit: () {
-                  // cubit.editHistorialCredito(e);
+                  _createCreditoModalBottomSheet(
+                    context,
+                    cubit: context.read<SolicitudReprestamoCubit>(),
+                    isUpdate: true,
+                    cuota: e.cuota,
+                    saldo: e.saldo,
+                    estadoCodigo: e.estadoCodigo,
+                    fechaDesembolso: e.fechaDesembolso,
+                    entidad: e.entidad,
+                    tipoFrecuenciaCodigo: e.tipoFrecuenciaCodigo,
+                    tipoMonedaCodigo: e.tipoMonedaCodigo,
+                    monto: e.monto,
+                    uuid: e.uuid,
+                  );
                 },
                 onDelete: () {
                   context
                       .read<SolicitudReprestamoCubit>()
                       .deleteHistorialCredito(uuid: e.uuid);
+                  localDbProvider.deleteHistorialByUuid(e.uuid);
                 },
               ),
             ),
@@ -194,21 +216,61 @@ class _ReprestamoHistorialCreditoOfflineState
 _createCreditoModalBottomSheet(
   BuildContext context, {
   required SolicitudReprestamoCubit cubit,
+  String? entidad,
+  int? monto,
+  String? tipoMonedaCodigo,
+  String? tipoFrecuenciaCodigo,
+  int? cuota,
+  int? saldo,
+  String? estadoCodigo,
+  DateTime? fechaDesembolso,
+  bool isUpdate = false,
+  String? uuid,
 }) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) => CreateCreditoContainerForm(
       cubit: cubit,
+      cuota: cuota ?? 0,
+      fechaDesembolso: fechaDesembolso,
+      estadoCodigo: estadoCodigo ?? '',
+      entidad: entidad ?? '',
+      monto: monto ?? 0,
+      saldo: saldo ?? 0,
+      tipoFrecuenciaCodigo: tipoFrecuenciaCodigo ?? '',
+      tipoMonedaCodigo: tipoMonedaCodigo ?? '',
+      isUpdate: isUpdate,
+      uuid: uuid ?? '',
     ),
   );
 }
 
 class CreateCreditoContainerForm extends StatefulWidget {
+  final bool isUpdate;
   final SolicitudReprestamoCubit cubit;
+  final String entidad;
+  final int monto;
+  final String tipoMonedaCodigo;
+  final String tipoFrecuenciaCodigo;
+  final int cuota;
+  final int saldo;
+  final String estadoCodigo;
+  final DateTime? fechaDesembolso;
+  final String uuid;
   const CreateCreditoContainerForm({
     super.key,
     required this.cubit,
+    this.entidad = '',
+    this.monto = 0,
+    this.tipoMonedaCodigo = '',
+    this.tipoFrecuenciaCodigo = '',
+    this.cuota = 0,
+    this.saldo = 0,
+    this.estadoCodigo = '',
+    this.fechaDesembolso,
+    this.isUpdate = false,
+    required this.uuid,
   });
 
   @override
@@ -218,6 +280,19 @@ class CreateCreditoContainerForm extends StatefulWidget {
 
 class _CreateCreditoContainerFormState
     extends State<CreateCreditoContainerForm> {
+  @override
+  void initState() {
+    super.initState();
+    entidad = widget.entidad;
+    monto = widget.monto;
+    tipoMonedaCodigo = widget.tipoMonedaCodigo;
+    tipoFrecuenciaCodigo = widget.tipoFrecuenciaCodigo;
+    cuota = widget.cuota;
+    saldo = widget.saldo;
+    estadoCodigo = widget.estadoCodigo;
+    fechaDesembolso = widget.fechaDesembolso;
+  }
+
   String entidad = '';
   int monto = 0;
   String tipoMonedaCodigo = '';
@@ -225,7 +300,37 @@ class _CreateCreditoContainerFormState
   int cuota = 0;
   int saldo = 0;
   String estadoCodigo = '';
+  DateTime? fechaDesembolso;
   final formKey = GlobalKey<FormState>();
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+
+    if (picked == null) return;
+
+    final today = DateTime.now();
+
+    if (!context.mounted) return;
+    if (picked.isAfter(today)) {
+      CustomAlertDialog(
+        context: context,
+        title: 'La Fecha de desembolso no puede ser despues de la fecha actual',
+        onDone: () => context.pop(),
+      ).showDialog(context);
+      return;
+    }
+
+    if (picked != fechaDesembolso) {
+      setState(() {
+        fechaDesembolso = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
@@ -257,6 +362,7 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    initialValue: entidad,
                     title: 'Nombre de Entidad',
                     icon: const Icon(Icons.business),
                     textInputType: TextInputType.text,
@@ -272,6 +378,7 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    initialValue: monto.toCurrencyString(),
                     title: 'Monto',
                     icon: const Icon(Icons.wallet),
                     textInputType: TextInputType.number,
@@ -289,6 +396,7 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    initialValue: cuota.toCurrencyString(),
                     title: 'Cuota',
                     icon: const Icon(Icons.wallet),
                     textInputType: TextInputType.number,
@@ -307,6 +415,7 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
+                    initialValue: saldo.toCurrencyString(),
                     title: 'Saldo',
                     icon: const Icon(Icons.wallet),
                     textInputType: TextInputType.number,
@@ -324,6 +433,10 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   SearchDropdownWidget(
+                    selectedItem: Item(
+                      name: tipoMonedaCodigo,
+                      value: tipoMonedaCodigo,
+                    ),
                     codigo: 'MONEDA',
                     title: 'Tipo Moneda',
                     validator: (value) =>
@@ -335,6 +448,11 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   CatalogoFrecuenciaPagoDropdown(
+                    selectedItem: CatalogoFrecuenciaItem(
+                      valor: tipoFrecuenciaCodigo,
+                      nombre: tipoFrecuenciaCodigo,
+                      meses: 0.toString(),
+                    ),
                     title: 'Tipo Frecuencia Pago',
                     validator: (value) => ClassValidator.validateRequired(
                       value?.valor,
@@ -346,6 +464,10 @@ class _CreateCreditoContainerFormState
                   ),
                   const Gap(20),
                   SearchDropdownWidget(
+                    selectedItem: Item(
+                      name: estadoCodigo,
+                      value: estadoCodigo,
+                    ),
                     codigo: 'ESTADOPRESTAMO',
                     title: 'Estado de Credito',
                     validator: (value) =>
@@ -354,6 +476,16 @@ class _CreateCreditoContainerFormState
                       if (value == null || !mounted) return;
                       estadoCodigo = value.value;
                     },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    readOnly: true,
+                    title: 'Fecha de desembolso',
+                    icon: const Icon(Icons.calendar_month),
+                    validator: (value) => ClassValidator.validateRequired(
+                        fechaDesembolso?.selectorFormat()),
+                    hintText: fechaDesembolso?.selectorFormat() ?? '',
+                    onTap: () => selectDate(context),
                   ),
                   const Gap(20),
                   Container(
@@ -365,6 +497,23 @@ class _CreateCreditoContainerFormState
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
+                        if (widget.isUpdate) {
+                          widget.cubit.updateHistorialCredito(
+                            updated: HistorialCredito(
+                              uuid: widget.uuid,
+                              entidad: entidad,
+                              monto: monto,
+                              tipoMonedaCodigo: tipoMonedaCodigo,
+                              tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
+                              cuota: cuota,
+                              saldo: saldo,
+                              estadoCodigo: estadoCodigo,
+                              fechaDesembolso: fechaDesembolso!,
+                            ),
+                          );
+                          context.pop();
+                          return;
+                        }
                         widget.cubit.saveHistorialCredito(
                           historialCredito: HistorialCredito(
                             uuid: const Uuid().v4(),
@@ -375,6 +524,7 @@ class _CreateCreditoContainerFormState
                             cuota: cuota,
                             saldo: saldo,
                             estadoCodigo: estadoCodigo,
+                            fechaDesembolso: fechaDesembolso!,
                           ),
                         );
                         localDbProvider.saveHistorialCredito(
@@ -387,6 +537,7 @@ class _CreateCreditoContainerFormState
                           saldo: saldo,
                           tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
                           tipoMonedaCodigo: tipoMonedaCodigo,
+                          fechaDesembolso: fechaDesembolso,
                         ));
 
                         context.pop();

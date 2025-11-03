@@ -13,6 +13,7 @@ class HistorialCrediticioLocalDb {
   int? cuota;
   int? saldo;
   String? estadoCodigo;
+  DateTime? fechaDesembolso;
   HistorialCrediticioLocalDb({
     this.uuid,
     this.entidad,
@@ -22,5 +23,6 @@ class HistorialCrediticioLocalDb {
     this.cuota,
     this.saldo,
     this.estadoCodigo,
+    this.fechaDesembolso,
   });
 }

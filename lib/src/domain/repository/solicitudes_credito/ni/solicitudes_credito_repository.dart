@@ -147,7 +147,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       return (
         true,
         resp['message'] as String,
-        resp['data']['Numero'] as String,
+        resp['data']['NumeroSolicitud'] as String,
         resp['data']['ID'] as String,
         resp['data']['objTipoSolicitudID'] as int,
       );
@@ -325,7 +325,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String,
+        resp['data']['NumeroSolicitud'] as String,
         resp['data']['ID'] as String,
         resp['data']['objTipoSolicitudID'] as int,
       );

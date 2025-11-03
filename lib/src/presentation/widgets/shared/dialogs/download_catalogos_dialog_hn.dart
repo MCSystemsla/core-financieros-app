@@ -31,7 +31,7 @@ class _DownloadCatalogosDialogHnState extends State<DownloadCatalogosDialogHn> {
           return switch (state.status) {
             Status.inProgress => const DownloadCatalogoLoading(
                 lottieAsset: ImageAsset.downloadCatalogoLoading,
-                text: 'Sincronizando catalogos HN...',
+                text: 'Sincronizando...',
               ),
             Status.done => DownloadCatalogoLoading(
                 lottieAsset: ImageAsset.downloadCatalogosSuccess,
