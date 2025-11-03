@@ -377,6 +377,21 @@ class _CreateCreditoContainerFormState
                     },
                   ),
                   const Gap(20),
+                  SearchDropdownWidget(
+                    selectedItem: Item(
+                      name: tipoMonedaCodigo,
+                      value: tipoMonedaCodigo,
+                    ),
+                    codigo: 'MONEDA',
+                    title: 'Tipo Moneda',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
+                      tipoMonedaCodigo = value.value;
+                    },
+                  ),
+                  const Gap(20),
                   OutlineTextfieldWidget(
                     initialValue: monto.toCurrencyString(),
                     title: 'Monto',
@@ -429,21 +444,6 @@ class _CreateCreditoContainerFormState
                     onChange: (value) {
                       String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
                       saldo = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  SearchDropdownWidget(
-                    selectedItem: Item(
-                      name: tipoMonedaCodigo,
-                      value: tipoMonedaCodigo,
-                    ),
-                    codigo: 'MONEDA',
-                    title: 'Tipo Moneda',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      tipoMonedaCodigo = value.value;
                     },
                   ),
                   const Gap(20),
