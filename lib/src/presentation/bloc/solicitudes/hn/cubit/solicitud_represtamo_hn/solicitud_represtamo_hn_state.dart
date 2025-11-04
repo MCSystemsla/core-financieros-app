@@ -80,6 +80,7 @@ class SolicitudReprestamoHnState extends Equatable {
   final String ejerceActividadApfnd;
   final String medidasConocimientoCodigo;
   final String nombreEmpleadoFamiliar;
+  final List<HistorialCredito> historialCredito;
   const SolicitudReprestamoHnState({
     this.actividadEconomicaCiuu1Nombre = '',
     this.actividadEconomicaCiuu2Nombre = '',
@@ -159,10 +160,12 @@ class SolicitudReprestamoHnState extends Equatable {
     this.ejerceActividadApfnd = '',
     this.medidasConocimientoCodigo = '',
     this.nombreEmpleadoFamiliar = '',
+    this.historialCredito = const [],
   });
 
   @override
   List<Object> get props => [
+        historialCredito,
         actividadEconomicaCiuu1Nombre,
         actividadEconomicaCiuu2Nombre,
         actividadEconomicaCiuu3Nombre,
@@ -321,6 +324,7 @@ class SolicitudReprestamoHnState extends Equatable {
     String? ejerceActividadApfnd,
     String? medidasConocimientoCodigo,
     String? nombreEmpleadoFamiliar,
+    List<HistorialCredito>? historialCredito,
   }) {
     return SolicitudReprestamoHnState(
       actividadEconomicaCiuu1Nombre:
@@ -427,6 +431,7 @@ class SolicitudReprestamoHnState extends Equatable {
           medidasConocimientoCodigo ?? this.medidasConocimientoCodigo,
       nombreEmpleadoFamiliar:
           nombreEmpleadoFamiliar ?? this.nombreEmpleadoFamiliar,
+      historialCredito: historialCredito ?? this.historialCredito,
     );
   }
 }

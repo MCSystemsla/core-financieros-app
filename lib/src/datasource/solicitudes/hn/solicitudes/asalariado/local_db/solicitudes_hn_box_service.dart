@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/cata
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/local_db/solicitud_represtamo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_dep.db.dart';
@@ -36,6 +37,8 @@ class SolicitudesHnBoxService {
   late final Box<CatalogoCaserioLocalDb> catalogoCaserioBox;
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   late final Box<CatalogoActividadCnbsLocalDb> catalogoActividadCnbsBox;
+  late final Box<HistorialCrediticioLocalDb> historialCrediticioBox;
+
   late final Box<ActividadesEconomicasAliasFilteredLocalDb>
       actividadesEconomicasAliasFilteredBox;
 
@@ -55,6 +58,7 @@ class SolicitudesHnBoxService {
     catalogoActividadCnbsBox = _store.box<CatalogoActividadCnbsLocalDb>();
     actividadesEconomicasAliasFilteredBox =
         _store.box<ActividadesEconomicasAliasFilteredLocalDb>();
+    historialCrediticioBox = _store.box<HistorialCrediticioLocalDb>();
   }
 
   static Future<SolicitudesHnBoxService> init() async {
@@ -395,5 +399,43 @@ class SolicitudesHnBoxService {
       // _logger.e(e.toString());
       rethrow;
     }
+  }
+
+  List<HistorialCrediticioLocalDb> getHistorialCredito({required String uuid}) {
+    final query = historialCrediticioBox
+        .query(HistorialCrediticioLocalDb_.uuid.equals(uuid))
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  void saveHistorialCredito({
+    required HistorialCrediticioLocalDb historialCreditoLocalDb,
+  }) {
+    try {
+      historialCrediticioBox.put(historialCreditoLocalDb);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  void deleteHistorialByUuid(String uuid) {
+    final query = historialCrediticioBox
+        .query(HistorialCrediticioLocalDb_.uuid.equals(uuid))
+        .build();
+
+    final item = query.findFirst();
+    query.close();
+
+    // Si se encontró, eliminarlo
+    if (item == null) {
+      log('No se encontró registro con ese UUID');
+      return;
+    }
+
+    historialCrediticioBox.remove(item.id);
   }
 }

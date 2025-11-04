@@ -4300,7 +4300,7 @@
     },
     {
       "id": "27:3416496866580165552",
-      "lastPropertyId": "9:670671469511863237",
+      "lastPropertyId": "10:4149909249079998520",
       "name": "HistorialCrediticioLocalDb",
       "properties": [
         {
@@ -4348,6 +4348,11 @@
           "id": "9:670671469511863237",
           "name": "estadoCodigo",
           "type": 9
+        },
+        {
+          "id": "10:4149909249079998520",
+          "name": "fechaDesembolso",
+          "type": 10
         }
       ],
       "relations": []

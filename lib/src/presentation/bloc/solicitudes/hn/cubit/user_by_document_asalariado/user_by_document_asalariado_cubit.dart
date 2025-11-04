@@ -13,14 +13,17 @@ class UserByDocumentAsalariadoCubit
       : super(UserByDocumentAsalariadoInitial());
 
   Future<void> getUserByDocument({
-    required String nombre,
+    required String primerNombre,
+    required String segundoNombre,
+    required String primerApellido,
+    required String segundoApellido,
     required String cedula,
     required String tipoDocumentoCodigo,
   }) async {
     emit(state.copyWith(status: UserByDocumentStatus.inProgress));
     try {
       final (resp, isNewUser) = await _repository.getUserByDocumentAsalariado(
-        nombre: nombre,
+        nombre: primerNombre,
         cedula: cedula,
         tipoDocumentoCodigo: tipoDocumentoCodigo,
       );
@@ -29,14 +32,18 @@ class UserByDocumentAsalariadoCubit
           status: UserByDocumentStatus.isNewUser,
           cedula: cedula,
           tipoDocumento: tipoDocumentoCodigo,
+          primerNombre: primerNombre,
+          segundoNombre: segundoNombre,
+          primerApellido: primerApellido,
+          segundoApellido: segundoApellido,
         ));
         return;
       }
 
       emit(state.copyWith(
         status: UserByDocumentStatus.done,
-        primerNombre: resp?.data.primerNombre,
-        segundoNombre: resp?.data.segundoNombre,
+        primerNombre: resp?.data.primerNombre ?? primerNombre,
+        segundoNombre: resp?.data.segundoNombre ?? segundoNombre,
         fechaNacimiento: resp?.data.fechaNacimiento?.toUtc().toIso8601String(),
         tipoDocumento: resp?.data.tipoDocumento,
         cedula: resp?.data.cedula,
@@ -46,8 +53,8 @@ class UserByDocumentAsalariadoCubit
         fechaEmision: resp?.data.fechaEmision?.toUtc().toIso8601String(),
         municipio: resp?.data.municipio,
         pais: resp?.data.pais,
-        primerApellido: resp?.data.primerApellido,
-        segundoApellido: resp?.data.segundoApellido,
+        primerApellido: resp?.data.primerApellido ?? primerApellido,
+        segundoApellido: resp?.data.segundoApellido ?? segundoApellido,
         sexo: resp?.data.sexo,
       ));
     } on AppException catch (e) {
@@ -56,6 +63,10 @@ class UserByDocumentAsalariadoCubit
         errorMsg: e.optionalMsg,
         cedula: cedula,
         tipoDocumento: tipoDocumentoCodigo,
+        primerNombre: primerNombre,
+        segundoNombre: segundoNombre,
+        primerApellido: primerApellido,
+        segundoApellido: segundoApellido,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -63,6 +74,10 @@ class UserByDocumentAsalariadoCubit
         errorMsg: e.toString(),
         cedula: cedula,
         tipoDocumento: tipoDocumentoCodigo,
+        primerNombre: primerNombre,
+        segundoNombre: segundoNombre,
+        primerApellido: primerApellido,
+        segundoApellido: segundoApellido,
       ));
     }
   }

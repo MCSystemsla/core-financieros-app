@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cu
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_historial_crediticio_offline_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_3.dart';
@@ -132,6 +133,10 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                       ),
                       NuevaMenorOfflineHn7(
                         controller: pageController,
+                      ),
+                      NuevaMenorHistorialCrediticioOfflineHn(
+                        controller: pageController,
+                        uuid: solicitudNuevaMenorHnLocalDb.uuid ?? '',
                       ),
                       NuevaMenorOfflineHn8(
                         controller: pageController,

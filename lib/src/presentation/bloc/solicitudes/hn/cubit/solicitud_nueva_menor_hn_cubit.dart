@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/autosave/hn/nueva_menor_h
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -26,6 +27,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
+          historialCredito: state.historialCredito,
           actividadEconomicaCnbs3Codigo: state.actividadEconomicaCnbs3Codigo,
           email: state.email,
           nombre2: state.nombre2,
@@ -731,6 +733,48 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         tipoDocumentoCodigoNombre: solicitud.tipoDocumentoCodigoNombre,
         tipoPersonaCodigoNombre: solicitud.tipoPersonaCodigoNombre,
         tipoPersonaCnbsCodigoNombre: solicitud.tipoPersonaCnbsCodigoNombre,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

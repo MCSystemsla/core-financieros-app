@@ -62,22 +62,10 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
   final formKey = GlobalKey<FormState>();
 
   final cedulaController = TextEditingController();
-  final nombreController = TextEditingController();
-
-  int determineDocumentoLength({
-    String? tipoDocumento,
-    String? paisEmisor,
-  }) {
-    return switch ((tipoDocumento, paisEmisor)) {
-      ('CEDULAIDENTIDAD', 'HN') => 13,
-      ('CEDULAIDENTIDAD', 'NIC') => 14,
-      ('PASAPORTE', 'NIC') => 9,
-      ('PASAPORTE', 'HN') => 7,
-      ('RTN', 'HN') => 14,
-      ('CARNETRESIDENCIA', 'HN') => 8,
-      _ => 0
-    };
-  }
+  final primerNombreController = TextEditingController();
+  final segundoNombreController = TextEditingController();
+  final primerApellidoController = TextEditingController();
+  final segundoApellidoController = TextEditingController();
 
   TextInputType determineInputType({
     String? tipoDocumento,
@@ -189,7 +177,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
-                      textEditingController: nombreController,
+                      textEditingController: primerNombreController,
                       validator: (value) => ClassValidator.validateRequired(
                         value,
                       ),
@@ -197,7 +185,58 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         Icons.person,
                         color: AppColors.getPrimaryColor(),
                       ),
-                      title: 'Nombre de cliente',
+                      title: 'Primer Nombre de cliente',
+                      hintText: 'Ingresa el nombre de cliente',
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      textEditingController: segundoNombreController,
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      icon: Icon(
+                        Icons.person,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Segundo Nombre de cliente',
+                      hintText: 'Ingresa el nombre de cliente',
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      textEditingController: primerApellidoController,
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      icon: Icon(
+                        Icons.person,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Primer Apellido de cliente',
+                      hintText: 'Ingresa el nombre de cliente',
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      textEditingController: segundoApellidoController,
+                      validator: (value) => ClassValidator.validateRequired(
+                        value,
+                      ),
+                      icon: Icon(
+                        Icons.person,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      title: 'Segundo Apellido de cliente',
                       hintText: 'Ingresa el nombre de cliente',
                     ),
                     const Gap(20),
@@ -252,8 +291,15 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           context.read<UserByDocumentCubit>().getUserByDocument(
+                                primerNombre:
+                                    primerNombreController.text.trim(),
+                                segundoNombre:
+                                    segundoNombreController.text.trim(),
+                                primerApellido:
+                                    primerApellidoController.text.trim(),
+                                segundoApellido:
+                                    segundoApellidoController.text.trim(),
                                 cedula: cedulaController.text.trim(),
-                                nombre: nombreController.text.trim(),
                                 tipoDocumentoCodigo: tipoDocumento?.value,
                               );
                         },

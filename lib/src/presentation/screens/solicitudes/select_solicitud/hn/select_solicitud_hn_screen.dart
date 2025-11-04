@@ -169,7 +169,6 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
             svgPath: ImageAsset.nuevaMenorBg3,
             title: 'Represtamo',
             onPressed: () {
-              // if (isConnected != ConnectionStatus.connected) {
               Navigator.push(
                 context,
                 MaterialPageRoute(

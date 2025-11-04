@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nuev
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form7.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form8.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_historial_crediticio_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
@@ -95,6 +96,9 @@ class NuevaMenorHnForm extends StatelessWidget {
                 controller: pageController,
               ),
               NuevaMenorForm7(
+                controller: pageController,
+              ),
+              NuevaMenorHistorialCrediticioHn(
                 controller: pageController,
               ),
               NuevaMenorForm8(

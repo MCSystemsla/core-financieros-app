@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 
 String solicitudAsalariadoHnToJson(SolicitudAsalariadoHn data) =>
     json.encode(data.toJson());
@@ -119,7 +120,7 @@ class SolicitudAsalariadoHn {
   final String caseriCasa;
   final String aldeaCodigo;
   final String descripcionDestino;
-  // final String medidasConocimientoCodigo;
+  final List<HistorialCredito> historialCredito;
 
   SolicitudAsalariadoHn({
     required this.database,
@@ -235,7 +236,7 @@ class SolicitudAsalariadoHn {
     required this.caseriCasa,
     required this.aldeaCodigo,
     required this.descripcionDestino,
-    // required this.medidasConocimientoCodigo,
+    required this.historialCredito,
   });
 
   Map<String, dynamic> toJson() {
@@ -356,6 +357,8 @@ class SolicitudAsalariadoHn {
       'AldeaCodigo': aldeaCodigo,
       'MedidasConocimientoCodigo': 'NORM',
       'DescripcionDestino': descripcionDestino,
+      'historialCredito':
+          List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

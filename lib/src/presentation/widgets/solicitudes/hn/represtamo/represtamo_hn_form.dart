@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/repr
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_form_hn_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_form_hn_3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_form_hn_5.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_historial_credito_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,6 +70,9 @@ class ReprestamoHnForm extends StatelessWidget {
               // ReprestamoFormHn4(
               //   controller: pageController,
               // ),
+              ReprestamoHistorialCreditoHn(
+                controller: pageController,
+              ),
               ReprestamoFormHn5(
                 controller: pageController,
               ),

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/autosave/hn/aslariado_hn_
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -25,6 +26,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
+          historialCredito: state.historialCredito,
           descripcionDestino: state.descripcionDestino,
           database: state.database,
           isOffline: state.isOffline,
@@ -557,6 +559,48 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
             solicitud.fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
         observacion: solicitud.observacion,
         totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

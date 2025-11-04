@@ -2,6 +2,7 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final List<HistorialCredito> historialCredito;
   final String actividadEconomicaCnbs1CodigoNombre;
   final String actividadEconomicaCnbs2CodigoNombre;
   final String aldeaCasaCodigoNombre;
@@ -167,6 +168,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String fechaDesembolso;
   final bool isDone;
   const SolicitudNuevaMenorHnState({
+    this.historialCredito = const [],
     this.actividadEconomicaCnbs1CodigoNombre = '',
     this.actividadEconomicaCnbs2CodigoNombre = '',
     this.aldeaCasaCodigoNombre = '',
@@ -335,6 +337,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        historialCredito,
         actividadEconomicaCnbs1CodigoNombre,
         actividadEconomicaCnbs2CodigoNombre,
         aldeaCasaCodigoNombre,
@@ -501,6 +504,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    List<HistorialCredito>? historialCredito,
     String? actividadEconomicaCnbs1CodigoNombre,
     String? actividadEconomicaCnbs2CodigoNombre,
     String? aldeaCasaCodigoNombre,
@@ -667,6 +671,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     bool? isDone,
   }) {
     return SolicitudNuevaMenorHnState(
+      historialCredito: historialCredito ?? this.historialCredito,
       actividadEconomicaCnbs1CodigoNombre:
           actividadEconomicaCnbs1CodigoNombre ??
               this.actividadEconomicaCnbs1CodigoNombre,

@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/repr
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_form_hn_offline_4.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/forms/represtamo_historial_credito_offline_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,10 @@ class CrearSolicitudReprestamoOfflineScreen extends StatelessWidget {
                       ),
                       ReprestamoFormHnOffline3(
                         controller: pageController,
+                      ),
+                      ReprestamoHistorialCreditoOfflineHn(
+                        controller: pageController,
+                        uuid: solicitudReprestamoHnLocalDb.uuid ?? '',
                       ),
                       ReprestamoFormHnOffline4(
                         controller: pageController,

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_historial_credito_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form3.dart';
@@ -100,6 +101,9 @@ class AsalariadoHnForm extends StatelessWidget {
                 controller: pageController,
               ),
               AsalariadoHnForm8(
+                controller: pageController,
+              ),
+              AsalariadoHistorialCreditoHn(
                 controller: pageController,
               ),
               AsalariadoHnForm9(

@@ -127,6 +127,7 @@ class SolicitudAslariadoHnState extends Equatable {
   final String caseriCasa;
   final String aldeaCodigo;
   final String descripcionDestino;
+  final List<HistorialCredito> historialCredito;
   const SolicitudAslariadoHnState({
     this.frecuenciaMeses = '',
     this.tasaInteres = 0,
@@ -253,10 +254,12 @@ class SolicitudAslariadoHnState extends Equatable {
     this.caseriCasa = '',
     this.aldeaCodigo = '',
     this.descripcionDestino = '',
+    this.historialCredito = const [],
   });
 
   @override
   List<Object> get props => [
+        historialCredito,
         frecuenciaMeses,
         tasaInteres,
         fechaDesembolso,
@@ -507,6 +510,7 @@ class SolicitudAslariadoHnState extends Equatable {
     String? caseriCasa,
     String? aldeaCodigo,
     String? descripcionDestino,
+    List<HistorialCredito>? historialCredito,
   }) {
     return SolicitudAslariadoHnState(
       frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
@@ -660,6 +664,7 @@ class SolicitudAslariadoHnState extends Equatable {
       caseriCasa: caseriCasa ?? this.caseriCasa,
       aldeaCodigo: aldeaCodigo ?? this.aldeaCodigo,
       descripcionDestino: descripcionDestino ?? this.descripcionDestino,
+      historialCredito: historialCredito ?? this.historialCredito,
     );
   }
 }

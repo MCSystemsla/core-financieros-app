@@ -67,18 +67,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
   final cedulaController = TextEditingController();
   final nombreController = TextEditingController();
 
-  int determineDocumentoLength({
-    String? tipoDocumento,
-  }) {
-    return switch ((tipoDocumento)) {
-      ('CEDULAIDENTIDAD') => 13,
-      ('PASAPORTE') => 7,
-      ('RTN') => 14,
-      ('CARNETRESIDENCIA') => 8,
-      _ => 0
-    };
-  }
-
   TextInputType determineInputType({
     String? tipoDocumento,
   }) {

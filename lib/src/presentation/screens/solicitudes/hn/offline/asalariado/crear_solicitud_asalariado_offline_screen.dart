@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offl
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solcitud_asalariado_offline_7.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_historial_credito_offline_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_3.dart';
@@ -135,6 +136,10 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
                       ),
                       SolicitudAsalariadoOffline8(
                         controller: pageController,
+                      ),
+                      SolicitudAsalariadoHistorialCreditoOfflineHn(
+                        controller: pageController,
+                        uuid: solicitudAsalariadoHnDbLocal.uuid ?? '',
                       ),
                       SolicitudAsalariadoOffline9(
                         controller: pageController,
