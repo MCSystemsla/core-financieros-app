@@ -1,18 +1,17 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_venta_day_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/compras_week_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_months_card_hn.dart';
 import 'package:flutter/material.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_costo_y_consumo_familiar.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_nivel_produccion.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_credit_card.dart';
 import 'package:gap/gap.dart';
 
-class AnalisisSolicitudNuevaMayorAMil extends StatefulWidget {
+class AnalisisSolicitudNuevaMayorAMilHn extends StatefulWidget {
   final int index;
   final String title;
   final String subtitle;
   final String description;
-  const AnalisisSolicitudNuevaMayorAMil({
+  const AnalisisSolicitudNuevaMayorAMilHn({
     super.key,
     required this.index,
     required this.title,
@@ -21,12 +20,12 @@ class AnalisisSolicitudNuevaMayorAMil extends StatefulWidget {
   });
 
   @override
-  State<AnalisisSolicitudNuevaMayorAMil> createState() =>
-      _AnalisisSolicitudNuevaMayorAMilState();
+  State<AnalisisSolicitudNuevaMayorAMilHn> createState() =>
+      _AnalisisSolicitudNuevaMayorAMilHnState();
 }
 
-class _AnalisisSolicitudNuevaMayorAMilState
-    extends State<AnalisisSolicitudNuevaMayorAMil> {
+class _AnalisisSolicitudNuevaMayorAMilHnState
+    extends State<AnalisisSolicitudNuevaMayorAMilHn> {
   final pageController = PageController();
   int activeStep = 0;
 
@@ -54,7 +53,7 @@ class _AnalisisSolicitudNuevaMayorAMilState
       ),
       body: Column(
         children: [
-          AnalisisCreditCard(
+          AnalisisCreditCardHn(
             enabled: false,
             index: widget.index,
             animate: false,
@@ -64,28 +63,29 @@ class _AnalisisSolicitudNuevaMayorAMilState
             numeroSolicitud: '',
           ),
           Expanded(
-            child: AnalisisSolicitudNuevaMayorAMilStepper(
-              activeStep: activeStep,
-            ),
-          ),
-          const Gap(20),
-          Expanded(
             flex: 3,
             child: PageView(
               controller: pageController,
               children: [
-                NuevaMayorAMilCicloVentas(
-                  pageController: pageController,
-                ),
-                NuevaMayorNivelProduccion(
-                  pageController: pageController,
-                ),
-                NuevaMayorCostoYConsumoFamiliar(
-                  pageController: pageController,
-                ),
                 SingleChildScrollView(
                   child: Column(
                     children: [
+                      AnalisisCardVentasDaydHn(
+                        title: 'Estado de ventas: Bueno (B)',
+                        subtitle: 'Lunes',
+                        description: 'C\$. 50,000',
+                        onTap: () {},
+                      ),
+                      const VentasMonthsCardHn(
+                        mesesBuenos: 5000,
+                        mesesNormales: 3500,
+                        mesesMalos: 2500,
+                      ),
+                      const ComprasWeekCardHn(
+                        semanasBuenas: 5000,
+                        semanasNormales: 3500,
+                        semanasMalos: 2500,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: CustomElevatedButton(

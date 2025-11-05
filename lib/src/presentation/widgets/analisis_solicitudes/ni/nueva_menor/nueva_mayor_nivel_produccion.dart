@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nivel_produccion/nivel_produccion_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/cuenta_por_cobrar_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/cuenta_por_cobrar_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

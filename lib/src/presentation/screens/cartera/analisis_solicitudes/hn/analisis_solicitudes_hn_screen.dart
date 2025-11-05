@@ -1,23 +1,27 @@
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/solicitudes/analisis_solicitudes_cubit.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_credit_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
-class AnalisisSolicitudesScreen extends StatelessWidget {
-  const AnalisisSolicitudesScreen({super.key});
+class AnalisisSolicitudesHnScreen extends StatelessWidget {
+  const AnalisisSolicitudesHnScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => AnalisisSolicitudesCubit(
-        SolicitudCreditoRepositoryImpl(),
-      )..getSolicitudesByEstado(),
+      create: (ctx) => SolicitudesByEstadoHnCubit(
+        SolicitudesCreditoHnRepositoryImpl(),
+      )..getSolicitudesByEstado(
+          isAsignadaToAsesorCredito: true,
+          estadoCredito: EstadoCredito.asignada,
+        ),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Analisis de solicitudes'),
@@ -29,7 +33,7 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
             const Expanded(
               child: _AnalisisSolicitudesTitle(),
             ),
-            BlocBuilder<AnalisisSolicitudesCubit, AnalisisSolicitudesState>(
+            BlocBuilder<SolicitudesByEstadoHnCubit, SolicitudesByEstadoHnState>(
               builder: (context, state) {
                 return switch (state.status) {
                   Status.inProgress => const Expanded(child: LoadingWidget()),
@@ -37,22 +41,24 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
                   Status.done => Expanded(
                       flex: 5,
                       child: ListView.builder(
-                        itemCount: state.data.length,
+                        itemCount: state.solicitudes.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
-                          return AnalisisCreditCard(
-                            numeroSolicitud: state.data[index].numero,
+                          return AnalisisCreditCardHn(
+                            numeroSolicitud: state.solicitudes[index].numero,
                             tipoSolicitud: getTipoSolicitud(
-                              tipoSolicitud: state.data[index].tipoSolicitud,
-                              monto: state.data[index].monto!,
+                              tipoSolicitud:
+                                  state.solicitudes[index].tipoSolicitud,
+                              monto: state.solicitudes[index].monto!,
                             ),
                             index: index,
                             title:
-                                'Numero Solicitud: ${state.data[index].numero} ${state.data[index].tipoSolicitud}',
-                            subtitle: state.data[index].nombreCompleto ?? 'N/A',
-                            description:
-                                state.data[index].monto?.toCurrencyString() ??
-                                    'N/A',
+                                'Numero Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
+                            subtitle: state.solicitudes[index].nombreCompleto ??
+                                'N/A',
+                            description: state.solicitudes[index].monto
+                                    ?.toCurrencyString() ??
+                                'N/A',
                           );
                         },
                       ),

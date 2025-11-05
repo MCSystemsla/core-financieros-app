@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ventas_days_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ventas_months_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/ventas_days_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/ventas_months_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

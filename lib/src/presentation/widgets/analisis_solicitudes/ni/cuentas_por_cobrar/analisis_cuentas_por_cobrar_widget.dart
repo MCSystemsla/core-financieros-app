@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/cuentas_por_cobrar/analisis_cuenta_card_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/cuenta_por_cobrar_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/cuenta_por_cobrar_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

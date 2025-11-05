@@ -1,5 +1,5 @@
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_card_ventas_day.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ventas_days_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/ventas_days_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

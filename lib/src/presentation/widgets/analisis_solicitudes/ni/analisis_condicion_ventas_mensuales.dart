@@ -1,7 +1,8 @@
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_card_ventas_day.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ventas_months_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
+import '../../shared/cards/analisis_credit/ni/ventas_months_card.dart';
 
 class AnalisisCondicionVentasMensuales extends StatelessWidget {
   const AnalisisCondicionVentasMensuales({super.key});

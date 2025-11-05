@@ -1,10 +1,10 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
-
-class AnalisisCreditCard extends StatelessWidget {
+class AnalisisCreditCardHn extends StatelessWidget {
   final int index;
   final bool animate;
   final bool enabled;
@@ -13,7 +13,7 @@ class AnalisisCreditCard extends StatelessWidget {
   final String description;
   final String numeroSolicitud;
   final AnalisisSolicitudesInterceptorType? tipoSolicitud;
-  const AnalisisCreditCard({
+  const AnalisisCreditCardHn({
     super.key,
     required this.index,
     this.animate = true,
@@ -44,7 +44,7 @@ class AnalisisCreditCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => AnalisisSolicitudesInterceptor(
+                        builder: (_) => AnalisisSolicitudesInterceptorHN(
                           index: index,
                           type: tipoSolicitud!,
                           title: title,
@@ -62,7 +62,6 @@ class AnalisisCreditCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Icono leading
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -76,15 +75,12 @@ class AnalisisCreditCard extends StatelessWidget {
                       color: Colors.indigo,
                     ),
                   ),
-                  const SizedBox(width: 16),
-
-                  // Info principal
+                  const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          // 'Numero Solicitud #12345',
                           title,
                           style: TextStyle(
                             fontSize: 14,
@@ -103,8 +99,7 @@ class AnalisisCreditCard extends StatelessWidget {
                         ),
                         const Gap(4),
                         Text(
-                          // 'C\$. 50,000',
-                          description,
+                          'L. $description',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.green.shade700,
@@ -114,7 +109,6 @@ class AnalisisCreditCard extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const Icon(
                     Icons.chevron_right,
                     color: Colors.grey,

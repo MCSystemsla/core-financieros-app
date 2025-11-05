@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/agua_y_saneamiento_model.dart';
 import 'package:core_financiero_app/src/datasource/forms/agua_y_saneamiento/recurrente_agua_y_saneamiento.dart';
 import 'package:core_financiero_app/src/datasource/forms/energia_limpia/energia_limpia_model.dart';
@@ -21,6 +22,7 @@ import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/mujer_em
 import 'package:core_financiero_app/src/datasource/forms/mujer_emprende/recurrente_mujer_emprende.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/endpoint/responses_endpoint.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -674,6 +676,12 @@ class ResponsesRepositoryImpl extends ResponsesRepository {
   @override
   Future<KivaRequestNotSavedResponse> getNoImagesKivasOnHistory() async {
     final endpoint = GetNoImagesKivasOnHistoryEndpoint();
+    final flavor = global<FlavorCubit>().state.flavor;
+    const flavorsSupported = [Flavor.nicaragua, Flavor.costaRica];
+    if (!flavorsSupported.contains(flavor)) {
+      return throw AppException(optionalMsg: 'No soportado');
+    }
+
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
