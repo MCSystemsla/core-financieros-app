@@ -1,7 +1,7 @@
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_asalariado_form_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_form_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitudes_nueva_mayor_a_mil.dart';
 import 'package:flutter/material.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solciitud_form/analisis_solicitud_asalariado_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solciitud_form/analisis_solicitud_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solciitud_form/analisis_solicitudes_nueva_mayor_a_mil.dart';
 
 enum AnalisisSolicitudesInterceptorType {
   nueva,

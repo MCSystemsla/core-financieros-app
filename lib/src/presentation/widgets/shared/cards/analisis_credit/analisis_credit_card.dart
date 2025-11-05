@@ -1,7 +1,8 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../../../screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 
 class AnalisisCreditCard extends StatelessWidget {
   final int index;

@@ -1,10 +1,10 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nivel_produccion/nivel_produccion_articulo_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nivel_produccion/nivel_produccion_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/cuentas_por_cobrar/analisis_cuenta_card_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/cuenta_por_cobrar_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class NivelProduccionWidgetView extends StatelessWidget {
-  const NivelProduccionWidgetView({super.key});
+class AnalisisCuentasPorCobrarWidget extends StatelessWidget {
+  const AnalisisCuentasPorCobrarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class NivelProduccionWidgetView extends StatelessWidget {
           color: Colors.white,
         ),
         label: const Text(
-          'Agregar Producto',
+          'Agregar Credito',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -26,29 +26,30 @@ class NivelProduccionWidgetView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const NivelProduccionCard(
-              ventasMensuales: 100,
+            const CuentaPorCobrarCard(
+              totalAbonoPorCobrar: 100,
+              totalCuentasPorCobrar: 100,
             ),
             const Gap(20),
             Padding(
               padding: const EdgeInsets.all(14),
               child: Text(
-                'Productos',
+                'Creditos',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
-            NivelProduccionArticuloCard(
+            AnalisisCuentaCreditosCardWidget(
               title: 'Frecuencia Credito: Anual',
-              subtitle: 'Nombre Articulo',
+              subtitle: 'Nombre credito',
               description: 'Total: C\$. 50,000',
-              precioVentaUnidad: 33000,
+              montoCredito: 33000,
               onTap: () {},
             ),
-            NivelProduccionArticuloCard(
+            AnalisisCuentaCreditosCardWidget(
               title: 'Frecuencia Credito: Anual',
-              subtitle: 'Chapodadora',
+              subtitle: 'ESTANDAR NUEVO',
               description: 'Total: C\$. 5,000',
-              precioVentaUnidad: 33000,
+              montoCredito: 33000,
               onTap: () {},
             ),
             const Gap(20),

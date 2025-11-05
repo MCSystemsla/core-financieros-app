@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_a_mil_proveedores.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_a_mil_proveedores.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/compras_week_card.dart';
 import 'package:flutter/material.dart';

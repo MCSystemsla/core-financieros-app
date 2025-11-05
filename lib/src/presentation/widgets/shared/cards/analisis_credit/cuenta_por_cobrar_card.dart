@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/cuentas_por_cobrar/analisis_cuentas_por_cobrar_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/cuentas_por_cobrar/analisis_cuentas_por_cobrar_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';

@@ -80,26 +80,26 @@ class _CarteraContentWidget extends StatelessWidget {
                   size: 35,
                 ),
               ),
-              // if (!isProdMode)
-              //   ModuleCard(
-              //     onTap: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (_) => const AnalisisSolicitudesScreen(),
-              //         ),
-              //       );
-              //     },
-              //     title: 'Analisis'.tr(),
-              //     subtitle: 'Analisis de solicitudes de credito',
-              //     firstColor: const Color.fromARGB(255, 48, 47, 47),
-              //     secondColor: const Color(0xFFBDBDBD),
-              //     icon: const Icon(
-              //       Icons.analytics,
-              //       color: AppColors.white,
-              //       size: 35,
-              //     ),
-              //   ),
+              if (!isProdMode)
+                ModuleCard(
+                  onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const AnalisisSolicitudesScreen(),
+                    //   ),
+                    // );
+                  },
+                  title: 'Analisis'.tr(),
+                  subtitle: 'Analisis de solicitudes de credito',
+                  firstColor: const Color.fromARGB(255, 48, 47, 47),
+                  secondColor: const Color(0xFFBDBDBD),
+                  icon: const Icon(
+                    Icons.analytics,
+                    color: AppColors.white,
+                    size: 35,
+                  ),
+                ),
               if (actions.contains('LLENARKIVAMOVIL'))
                 ModuleCard(
                   onTap: () {

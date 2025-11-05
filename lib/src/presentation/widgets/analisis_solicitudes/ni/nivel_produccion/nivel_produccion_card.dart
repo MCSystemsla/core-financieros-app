@@ -1,13 +1,13 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/analisis_condicion_ventas_mensuales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nivel_produccion/nivel_produccion_widget_view.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
+class NivelProduccionCard extends StatelessWidget {
   final int ventasMensuales;
 
-  const NuevaMayorAMilComprasAProveedores({
+  const NivelProduccionCard({
     super.key,
     required this.ventasMensuales,
   });
@@ -20,16 +20,16 @@ class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Compras por proveedores o articulos',
+            'Nivel de producción',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const Gap(10),
           InkWell(
             onTap: () => context.pushTransparentRoute(
-              const AnalisisCondicionVentasMensuales(),
+              const NivelProduccionWidgetView(),
             ),
             child: Hero(
-              tag: 'analisis-credito-compras-proveedores',
+              tag: 'nivel-produccion',
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
@@ -46,7 +46,7 @@ class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              'Crear estadisticas',
+                              'Ver detalles',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w500),
@@ -59,13 +59,14 @@ class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Divider(),
                       _buildItem(
-                        icon: Icons.sell,
-                        label: 'Ventas Mensuales segun compras',
+                        icon: Icons.monetization_on,
+                        label:
+                            'Ventas mensuales (segun el nivel de producción)',
                         value: ventasMensuales,
-                        color: Colors.green,
+                        color: Colors.blueGrey,
                       ),
+                      const Divider(),
                     ],
                   ),
                 ),

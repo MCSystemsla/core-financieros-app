@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/asalariado/analisis_asalariados_form_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/stepper/analisis_solicitud_asalariado_stepper.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/asalariado/analisis_asalariados_form_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_solicitud_asalariado_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_credit_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/expandable/expansion_tile.dart';
 import 'package:gap/gap.dart';

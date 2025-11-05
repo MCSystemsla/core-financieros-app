@@ -5,8 +5,8 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/inventario/inventario_bottom_sheet.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/inventario/nueva_inventario.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/inventario/inventario_bottom_sheet.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/inventario/nueva_inventario.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_card_ventas_day.dart';

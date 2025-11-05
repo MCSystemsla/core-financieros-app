@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/inventario/nueva_inventario_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/inventario/nueva_inventario_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

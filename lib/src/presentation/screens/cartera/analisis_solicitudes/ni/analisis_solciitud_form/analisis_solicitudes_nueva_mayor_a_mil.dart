@@ -1,9 +1,9 @@
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_costo_y_consumo_familiar.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/nueva_menor/nueva_mayor_nivel_produccion.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/stepper/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_costo_y_consumo_familiar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_nivel_produccion.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/analisis_credit_card.dart';
 import 'package:gap/gap.dart';
 
