@@ -1,17 +1,13 @@
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
-class VentasMonthsCardHn extends StatelessWidget {
-  final int mesesBuenos;
-  final int mesesNormales;
-  final int mesesMalos;
+class AnalisisMayorAMilNivelProduccionHn extends StatelessWidget {
+  final int ventasMensuales;
   final VoidCallback onTap;
-  const VentasMonthsCardHn({
+  const AnalisisMayorAMilNivelProduccionHn({
     super.key,
-    required this.mesesBuenos,
-    required this.mesesNormales,
-    required this.mesesMalos,
+    required this.ventasMensuales,
     required this.onTap,
   });
 
@@ -23,14 +19,14 @@ class VentasMonthsCardHn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Ciclo de ventas mensuales',
+            'Nivel de producción',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const Gap(10),
           InkWell(
             onTap: onTap,
             child: Hero(
-              tag: 'analisis-credito-mes',
+              tag: 'nivel-produccion',
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
@@ -47,7 +43,7 @@ class VentasMonthsCardHn extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              'Crear estadisticas',
+                              'Ver detalles',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.w500),
@@ -61,25 +57,13 @@ class VentasMonthsCardHn extends StatelessWidget {
                         ),
                       ),
                       _buildItem(
-                        icon: Icons.arrow_upward,
-                        label: 'Meses buenos (B)',
-                        value: mesesBuenos,
-                        color: Colors.green,
-                      ),
-                      const Divider(),
-                      _buildItem(
-                        icon: Icons.horizontal_rule,
-                        label: 'Meses normales (N)',
-                        value: mesesNormales,
+                        icon: Icons.monetization_on,
+                        label:
+                            'Ventas mensuales (segun el nivel de producción)',
+                        value: ventasMensuales,
                         color: Colors.blueGrey,
                       ),
                       const Divider(),
-                      _buildItem(
-                        icon: Icons.arrow_downward,
-                        label: 'Meses malos (M)',
-                        value: mesesMalos,
-                        color: Colors.red,
-                      ),
                     ],
                   ),
                 ),
@@ -115,7 +99,7 @@ class VentasMonthsCardHn extends StatelessWidget {
           duration: const Duration(milliseconds: 800),
           builder: (context, val, _) {
             return Text(
-              val.toCurrencyFormat,
+              val.toCurrencyString(mantissaLength: 0, leadingSymbol: 'L'),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

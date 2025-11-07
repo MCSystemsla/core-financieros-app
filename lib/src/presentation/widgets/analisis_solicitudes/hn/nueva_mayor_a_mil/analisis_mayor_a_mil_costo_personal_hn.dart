@@ -1,17 +1,13 @@
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
-class VentasMonthsCardHn extends StatelessWidget {
-  final int mesesBuenos;
-  final int mesesNormales;
-  final int mesesMalos;
+class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
+  final int totalCostoPersonal;
   final VoidCallback onTap;
-  const VentasMonthsCardHn({
+  const AnalisisMayorAMilCostoPersonalHn({
     super.key,
-    required this.mesesBuenos,
-    required this.mesesNormales,
-    required this.mesesMalos,
+    required this.totalCostoPersonal,
     required this.onTap,
   });
 
@@ -23,14 +19,14 @@ class VentasMonthsCardHn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Ciclo de ventas mensuales',
+            'Costo de personal (salarios por unidad producida)',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const Gap(10),
           InkWell(
             onTap: onTap,
             child: Hero(
-              tag: 'analisis-credito-mes',
+              tag: 'analisis-credito-compras-proveedores',
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
@@ -60,25 +56,12 @@ class VentasMonthsCardHn extends StatelessWidget {
                           ],
                         ),
                       ),
-                      _buildItem(
-                        icon: Icons.arrow_upward,
-                        label: 'Meses buenos (B)',
-                        value: mesesBuenos,
-                        color: Colors.green,
-                      ),
                       const Divider(),
                       _buildItem(
-                        icon: Icons.horizontal_rule,
-                        label: 'Meses normales (N)',
-                        value: mesesNormales,
-                        color: Colors.blueGrey,
-                      ),
-                      const Divider(),
-                      _buildItem(
-                        icon: Icons.arrow_downward,
-                        label: 'Meses malos (M)',
-                        value: mesesMalos,
-                        color: Colors.red,
+                        icon: Icons.person_2_rounded,
+                        label: 'Total costo personal',
+                        value: totalCostoPersonal,
+                        color: Colors.indigo,
                       ),
                     ],
                   ),
@@ -115,7 +98,10 @@ class VentasMonthsCardHn extends StatelessWidget {
           duration: const Duration(milliseconds: 800),
           builder: (context, val, _) {
             return Text(
-              val.toCurrencyFormat,
+              val.toCurrencyString(
+                mantissaLength: 0,
+                leadingSymbol: 'L',
+              ),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

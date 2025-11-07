@@ -2,16 +2,16 @@ import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart'
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class VentasMonthsCardHn extends StatelessWidget {
-  final int mesesBuenos;
-  final int mesesNormales;
-  final int mesesMalos;
+class VentasCardDaysHn extends StatelessWidget {
+  final int diasBuenos;
+  final int diasNormales;
+  final int diasMalos;
   final VoidCallback onTap;
-  const VentasMonthsCardHn({
+  const VentasCardDaysHn({
     super.key,
-    required this.mesesBuenos,
-    required this.mesesNormales,
-    required this.mesesMalos,
+    required this.diasBuenos,
+    required this.diasNormales,
+    required this.diasMalos,
     required this.onTap,
   });
 
@@ -23,14 +23,14 @@ class VentasMonthsCardHn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Ciclo de ventas mensuales',
+            'Ciclo de ventas diarias',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const Gap(10),
           InkWell(
             onTap: onTap,
             child: Hero(
-              tag: 'analisis-credito-mes',
+              tag: 'analisis-credito',
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
@@ -50,7 +50,9 @@ class VentasMonthsCardHn extends StatelessWidget {
                               'Crear estadisticas',
                               textAlign: TextAlign.right,
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             Gap(10),
                             Icon(
@@ -62,22 +64,22 @@ class VentasMonthsCardHn extends StatelessWidget {
                       ),
                       _buildItem(
                         icon: Icons.arrow_upward,
-                        label: 'Meses buenos (B)',
-                        value: mesesBuenos,
+                        label: 'Días buenos (B)',
+                        value: diasBuenos,
                         color: Colors.green,
                       ),
                       const Divider(),
                       _buildItem(
                         icon: Icons.horizontal_rule,
-                        label: 'Meses normales (N)',
-                        value: mesesNormales,
+                        label: 'Días normales (N)',
+                        value: diasNormales,
                         color: Colors.blueGrey,
                       ),
                       const Divider(),
                       _buildItem(
                         icon: Icons.arrow_downward,
-                        label: 'Meses malos (M)',
-                        value: mesesMalos,
+                        label: 'Días malos (M)',
+                        value: diasMalos,
                         color: Colors.red,
                       ),
                     ],

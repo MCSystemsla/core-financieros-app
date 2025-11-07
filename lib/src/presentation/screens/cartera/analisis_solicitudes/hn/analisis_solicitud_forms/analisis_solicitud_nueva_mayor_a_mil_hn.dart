@@ -1,10 +1,14 @@
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_venta_day_hn.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/compras_week_card_hn.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_months_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_estado_resultado_hn.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_ciclo_de_compras_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_constancias_licencias_permisos_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_consumo_familiar_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_creditos_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_referencias_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_nueva_mayor_a_mil_balance_general_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_ciclo_de_ventas_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_cuentas_por_cobrar_hn.dart';
 
 class AnalisisSolicitudNuevaMayorAMilHn extends StatefulWidget {
   final int index;
@@ -67,41 +71,32 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
             child: PageView(
               controller: pageController,
               children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      AnalisisCardVentasDaydHn(
-                        title: 'Estado de ventas: Bueno (B)',
-                        subtitle: 'Lunes',
-                        description: 'C\$. 50,000',
-                        onTap: () {},
-                      ),
-                      const VentasMonthsCardHn(
-                        mesesBuenos: 5000,
-                        mesesNormales: 3500,
-                        mesesMalos: 2500,
-                      ),
-                      const ComprasWeekCardHn(
-                        semanasBuenas: 5000,
-                        semanasNormales: 3500,
-                        semanasMalos: 2500,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomElevatedButton(
-                          onPressed: () {
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          },
-                          text: 'Siguiente',
-                          color: Colors.green,
-                        ),
-                      ),
-                      const Gap(20),
-                    ],
-                  ),
+                AnalisisMayorAMilCicloDeVentasHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilCuentasPorCobrarHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilCicloDeCompras(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilConsumoFamiliares(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilConstanciasLicenciasPermisosHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilCreditosHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilReferenciasHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilBalanceGeneralHN(
+                  pageController: pageController,
+                ),
+                AnalisisMayorAMilEstadoResultadoHN(
+                  pageController: pageController,
                 ),
               ],
             ),

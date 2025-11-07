@@ -1,18 +1,32 @@
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class VentasMonthsCardHn extends StatelessWidget {
-  final int mesesBuenos;
-  final int mesesNormales;
-  final int mesesMalos;
+class AnalisisCardItem {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  AnalisisCardItem({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+}
+
+class AnalisisCardListHn extends StatelessWidget {
   final VoidCallback onTap;
-  const VentasMonthsCardHn({
+  final List<AnalisisCardItem> items;
+  final String title;
+  final int maxLines;
+  const AnalisisCardListHn({
     super.key,
-    required this.mesesBuenos,
-    required this.mesesNormales,
-    required this.mesesMalos,
     required this.onTap,
+    required this.items,
+    required this.title,
+    this.maxLines = 2,
   });
 
   @override
@@ -22,15 +36,18 @@ class VentasMonthsCardHn extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Ciclo de ventas mensuales',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
           ),
           const Gap(10),
           InkWell(
             onTap: onTap,
             child: Hero(
-              tag: 'analisis-credito-mes',
+              tag: 'analisis-credito-compras-proveedores',
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
@@ -60,25 +77,16 @@ class VentasMonthsCardHn extends StatelessWidget {
                           ],
                         ),
                       ),
-                      _buildItem(
-                        icon: Icons.arrow_upward,
-                        label: 'Meses buenos (B)',
-                        value: mesesBuenos,
-                        color: Colors.green,
-                      ),
                       const Divider(),
-                      _buildItem(
-                        icon: Icons.horizontal_rule,
-                        label: 'Meses normales (N)',
-                        value: mesesNormales,
-                        color: Colors.blueGrey,
-                      ),
-                      const Divider(),
-                      _buildItem(
-                        icon: Icons.arrow_downward,
-                        label: 'Meses malos (M)',
-                        value: mesesMalos,
-                        color: Colors.red,
+                      if (items.isEmpty) const Text('Ingesa items para ver'),
+                      ...items.map(
+                        (e) => _buildItem(
+                          icon: e.icon,
+                          label: e.label,
+                          value: e.value,
+                          color: e.color,
+                          maxLines: maxLines,
+                        ).fadeIn(duration: const Duration(milliseconds: 500)),
                       ),
                     ],
                   ),
@@ -94,8 +102,9 @@ class VentasMonthsCardHn extends StatelessWidget {
   Widget _buildItem({
     required IconData icon,
     required String label,
-    required int value,
+    required String value,
     required Color color,
+    int maxLines = 2,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -106,23 +115,30 @@ class VentasMonthsCardHn extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         leading: Icon(icon, color: color),
-        title: Text(
-          label,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 60),
+          child: Text(
+            label,
+            maxLines: maxLines,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
-        trailing: TweenAnimationBuilder<int>(
-          tween: IntTween(begin: 0, end: value),
-          duration: const Duration(milliseconds: 800),
-          builder: (context, val, _) {
-            return Text(
-              val.toCurrencyFormat,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            );
-          },
+        trailing: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 120),
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
         ),
       ),
     );

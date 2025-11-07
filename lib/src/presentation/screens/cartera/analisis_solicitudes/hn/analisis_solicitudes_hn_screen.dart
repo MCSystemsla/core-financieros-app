@@ -39,7 +39,7 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
                   Status.inProgress => const Expanded(child: LoadingWidget()),
                   Status.error => Text('Error : ${state.errorMsg} '),
                   Status.done => Expanded(
-                      flex: 5,
+                      flex: 4,
                       child: ListView.builder(
                         itemCount: state.solicitudes.length,
                         shrinkWrap: true,
