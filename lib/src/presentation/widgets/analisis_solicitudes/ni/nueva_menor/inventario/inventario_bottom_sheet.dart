@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';

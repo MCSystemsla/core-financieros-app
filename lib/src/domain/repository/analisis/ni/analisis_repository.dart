@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/endpoint/analisis_endpoint.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/endpoint/analisis_endpoint.dart';
 import 'package:logger/web.dart';
 
 abstract class AnalisisRepository {

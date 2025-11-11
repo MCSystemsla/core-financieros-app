@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 
 class AnalisisGetNuevaMenorByNumeroSolicitud extends Endpoint {
   final String numeroSolicitud;

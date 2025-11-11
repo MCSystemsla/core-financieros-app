@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_sol
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/solicitudes_asesor/solicitudes_asesor_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
@@ -248,33 +247,33 @@ class _MySolicitudesAsignmentsCard extends StatelessWidget {
   }
 }
 
-class _SolicitudesCardsRow4 extends StatelessWidget {
-  const _SolicitudesCardsRow4();
+// class _SolicitudesCardsRow4 extends StatelessWidget {
+//   const _SolicitudesCardsRow4();
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg6,
-            title: 'Autorizacion de Solicitudes Crédito',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AutorizacionSolcitudScreen()),
-                ),
-              );
-            },
-          ),
-        ),
-        const Gap(10),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         const Gap(10),
+//         Expanded(
+//           child: SolicitudCard(
+//             svgPath: ImageAsset.nuevaMenorBg6,
+//             title: 'Autorizacion de Solicitudes Crédito',
+//             onPressed: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: ((_) => const AutorizacionSolcitudScreen()),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//         const Gap(10),
+//       ],
+//     );
+//   }
+// }
 
 class _SolicitudesCardsRow2 extends StatelessWidget {
   const _SolicitudesCardsRow2();

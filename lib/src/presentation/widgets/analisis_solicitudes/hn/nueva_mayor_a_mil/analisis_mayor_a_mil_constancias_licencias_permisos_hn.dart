@@ -1,8 +1,12 @@
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+
+import '../../../../bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 
 class AnalisisMayorAMilConstanciasLicenciasPermisosHN extends StatelessWidget {
   const AnalisisMayorAMilConstanciasLicenciasPermisosHN({
@@ -14,6 +18,7 @@ class AnalisisMayorAMilConstanciasLicenciasPermisosHN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,21 +34,37 @@ class AnalisisMayorAMilConstanciasLicenciasPermisosHN extends StatelessWidget {
             ),
           ),
           OutlineTextfieldWidget(
+            initialValue: cubit.state.permisoOperacionNumero,
             title: 'Numero de permiso de operación',
             icon: const Icon(Icons.document_scanner),
             textInputType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
+            onChange: (value) {
+              cubit.onFieldChanged(
+                () {
+                  return cubit.state.copyWith(
+                    permisoOperacionNumero: value,
+                  );
+                },
+              );
+            },
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            initialValue: cubit.state.nombreInstitucionLicencia,
             title: 'Nombre de institución',
             icon: const Icon(Icons.business),
             textInputType: TextInputType.number,
             inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
+              UpperCaseTextFormatter(),
             ],
+            onChange: (value) {
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(nombreInstitucionLicencia: value),
+              );
+            },
           ),
           const Gap(20),
           const OutlineTextfieldWidget(

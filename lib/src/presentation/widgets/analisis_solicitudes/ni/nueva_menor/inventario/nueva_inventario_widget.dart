@@ -3,7 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/inventario/inventario_bottom_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/inventario/nueva_inventario.dart';

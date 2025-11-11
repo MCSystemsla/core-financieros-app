@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/analisis_repository.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 

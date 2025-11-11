@@ -38,7 +38,6 @@ class SolicitudesHnBoxService {
   late final Box<CatalogoFrecuenciaPagoDb> catalogoFrecuenciaPagoBox;
   late final Box<CatalogoActividadCnbsLocalDb> catalogoActividadCnbsBox;
   late final Box<HistorialCrediticioLocalDb> historialCrediticioBox;
-
   late final Box<ActividadesEconomicasAliasFilteredLocalDb>
       actividadesEconomicasAliasFilteredBox;
 

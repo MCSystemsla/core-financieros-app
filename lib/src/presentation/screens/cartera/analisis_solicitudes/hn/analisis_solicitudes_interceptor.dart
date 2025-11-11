@@ -28,6 +28,7 @@ class AnalisisSolicitudesInterceptorHN extends StatelessWidget {
           subtitle: subtitle,
           description: description,
           index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
         ),
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil => const Text(
           'represtamo Analisis mayor a mil',

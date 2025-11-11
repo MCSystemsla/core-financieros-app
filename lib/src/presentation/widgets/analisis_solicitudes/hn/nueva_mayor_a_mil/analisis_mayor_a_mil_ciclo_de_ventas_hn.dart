@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_card_days_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_months_card_hn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AnalisisMayorAMilCicloDeVentasHN extends StatelessWidget {
@@ -14,6 +18,11 @@ class AnalisisMayorAMilCicloDeVentasHN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>().state.uuid;
+    final numero =
+        context.read<AnalisisNuevaMayorMilHnCubit>().state.numeroSolicitud;
+    log(cubit.toString());
+    log(numero.toString());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

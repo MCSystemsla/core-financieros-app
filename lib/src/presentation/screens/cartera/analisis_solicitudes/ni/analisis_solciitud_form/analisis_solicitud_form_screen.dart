@@ -1,5 +1,5 @@
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/analisis_repository.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/solicitud_by_numero/solicitud_by_numero_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
