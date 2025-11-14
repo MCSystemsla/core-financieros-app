@@ -89,7 +89,7 @@ class _CreateValorizacionMesHNState extends State<_CreateValorizacionMesHN> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.55,
+      initialChildSize: 0.44,
       maxChildSize: 0.7,
       builder: (context, scrollController) {
         return Container(
