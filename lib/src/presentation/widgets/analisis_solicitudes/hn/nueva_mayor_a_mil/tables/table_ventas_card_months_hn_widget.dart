@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -51,6 +52,7 @@ class _TableVentasCardMonthsHnWidgetState
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
+                          isScrollControlled: true,
                           builder: (ctx) => CreateValorizacionMesHN(
                             cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
                             numeroSolicitud: state.numeroSolicitud,
@@ -95,10 +97,13 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.65,
-      maxChildSize: 0.9,
+      initialChildSize: 0.55,
+      maxChildSize: 0.7,
       builder: (context, scrollController) {
         return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -145,6 +150,7 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                       CurrencyInputFormatter(
                         mantissaLength: 0,
                       ),

@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
@@ -29,6 +30,7 @@ class TableCuentasPorCobrarHnWidget extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
                 builder: (ctx) => _CreateCuentasPorCobrarHn(
                   cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
                   numeroSolicitud: state.numeroSolicitud,
@@ -122,10 +124,13 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.8,
-      maxChildSize: 0.9,
+      initialChildSize: 0.55,
+      maxChildSize: 0.7,
       builder: (context, scrollController) {
         return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -150,7 +155,6 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                   OutlineTextfieldWidget(
                     title: 'Nombre',
                     icon: const Icon(Icons.comment_bank_sharp),
-                    textInputType: TextInputType.number,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
@@ -168,6 +172,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                       CurrencyInputFormatter(
                         mantissaLength: 0,
                       ),
@@ -185,6 +190,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                       CurrencyInputFormatter(
                         mantissaLength: 0,
                       ),

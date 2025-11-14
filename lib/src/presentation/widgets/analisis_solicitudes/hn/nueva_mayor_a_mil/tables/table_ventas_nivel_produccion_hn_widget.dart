@@ -32,7 +32,8 @@ class TableVentasNivelProduccionHnWidget extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                builder: (ctx) => _CreateCuentasPorCobrarHn(
+                isScrollControlled: true,
+                builder: (ctx) => _NivelProduccionSheetrHn(
                   cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
                   numeroSolicitud: state.numeroSolicitud,
                 ),
@@ -101,20 +102,20 @@ class _NivelProduccionWidget extends StatelessWidget {
   }
 }
 
-class _CreateCuentasPorCobrarHn extends StatefulWidget {
+class _NivelProduccionSheetrHn extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
   final int numeroSolicitud;
-  const _CreateCuentasPorCobrarHn({
+  const _NivelProduccionSheetrHn({
     required this.cubit,
     required this.numeroSolicitud,
   });
 
   @override
-  State<_CreateCuentasPorCobrarHn> createState() =>
-      _CreateCuentasPorCobrarHnState();
+  State<_NivelProduccionSheetrHn> createState() =>
+      _NivelProduccionSheetrHnState();
 }
 
-class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
+class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
   final formKey = GlobalKey<FormState>();
   int? montoCredito;
   int? abonoCredito;
@@ -127,8 +128,8 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.8,
-      maxChildSize: 0.9,
+      initialChildSize: 0.55,
+      maxChildSize: 0.7,
       builder: (context, scrollController) {
         return Container(
           decoration: const BoxDecoration(
@@ -155,7 +156,6 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                   OutlineTextfieldWidget(
                     title: 'Articulo de produccion',
                     icon: const Icon(Icons.comment_bank_sharp),
-                    textInputType: TextInputType.number,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
@@ -188,6 +188,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                       CurrencyInputFormatter(
                         mantissaLength: 0,
                       ),
