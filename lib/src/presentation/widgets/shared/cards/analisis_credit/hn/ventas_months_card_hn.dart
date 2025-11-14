@@ -1,5 +1,5 @@
-import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
 class VentasMonthsCardHn extends StatelessWidget {
@@ -115,7 +115,7 @@ class VentasMonthsCardHn extends StatelessWidget {
           duration: const Duration(milliseconds: 800),
           builder: (context, val, _) {
             return Text(
-              val.toCurrencyFormat,
+              val.toCurrencyString(mantissaLength: 0, leadingSymbol: 'L.'),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

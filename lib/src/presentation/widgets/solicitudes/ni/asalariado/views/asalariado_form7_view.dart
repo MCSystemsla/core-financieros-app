@@ -478,6 +478,7 @@ class __FormContentState extends State<_FormContent> {
                                 cubit.onFieldChanged(
                                   () => cubit.state.copyWith(
                                     isOffline: true,
+                                    isDone: true,
                                     errorMsg:
                                         'No tienes conexion a internet, La solicitud se a guardado de manera local',
                                   ),

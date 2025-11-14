@@ -67,6 +67,18 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
             isApnfd: e.isAPNFD,
           );
         }).toList(),
+      Flavor.costaRica =>
+        localDbProvider.findParentescosByNombre(type: widget.codigo).map((e) {
+          return Item(
+            id: uuid,
+            value: e.valor,
+            name: e.nombre,
+            interes: e.interes ?? 0,
+            montoMaximo: e.montoMaximo ?? 0,
+            montoMinimo: e.montoMinimo ?? 0,
+            isApnfd: e.isAPNFD,
+          );
+        }).toList(),
       Flavor.honduras =>
         localDbProviderHN.findCatalogoByCodigo(codigo: widget.codigo).map((e) {
           return Item(

@@ -11,6 +11,7 @@ class AnalisisCuentasPorCobrarHn {
   String? frecuenciaAbonoCodigo;
   int? totalMensualCredito;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisCuentasPorCobrarHn({
     this.nombre,
     this.montoCredito,
@@ -18,5 +19,6 @@ class AnalisisCuentasPorCobrarHn {
     this.frecuenciaAbonoCodigo,
     this.totalMensualCredito,
     this.uuid,
+    this.numeroSolicitud,
   });
 }

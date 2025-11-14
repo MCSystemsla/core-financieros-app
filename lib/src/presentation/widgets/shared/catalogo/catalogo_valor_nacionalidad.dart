@@ -92,6 +92,10 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
           codigo: widget.codigo,
           whereClause: whereClause,
         ),
+      Flavor.costaRica => localDbProvider.getNacionalidadPaises(
+          codigo: widget.codigo,
+          whereClause: whereClause,
+        ),
       Flavor.honduras => localDbProviderHN.getNacionalidadPaises(
           codigo: widget.codigo,
           whereClause: whereClause,

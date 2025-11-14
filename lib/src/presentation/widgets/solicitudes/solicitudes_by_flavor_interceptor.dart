@@ -13,8 +13,9 @@ class SolicitudesByFlavorInterceptor extends StatelessWidget {
     final flavor = global<FlavorCubit>().state.flavor;
     return switch (flavor) {
       Flavor.nicaragua => const SelectSolicitudScreenNi(),
+      Flavor.costaRica => const SelectSolicitudScreenNi(),
       Flavor.honduras => const SelectSolicitudScreenHN(),
-      Flavor.costaRica => const Text('This is costa rica'),
+      // Flavor.costaRica => const Text('This is costa rica'),
       _ => const SizedBox(),
     };
   }

@@ -8,18 +8,18 @@ class AnalisisCicloVentaHnLocalDb {
   String? dia;
   int? venta;
   String? valorizacion;
-  int? totalVentasDiaria;
   String? mes;
   String? uuid;
   String? typeFormAnalisis;
+  int? numeroSolicitud;
 
   AnalisisCicloVentaHnLocalDb({
     this.dia,
     this.venta,
     this.valorizacion,
-    this.totalVentasDiaria,
     this.mes,
     this.uuid,
     this.typeFormAnalisis,
+    this.numeroSolicitud,
   });
 }

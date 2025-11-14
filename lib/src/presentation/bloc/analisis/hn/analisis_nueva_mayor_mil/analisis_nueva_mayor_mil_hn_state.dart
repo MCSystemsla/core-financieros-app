@@ -118,8 +118,8 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
   final String permisoOperacionNombreInstitucion;
   final String permisoOperacionFechaEmision;
   final String permisoOperacionFechaVencimiento;
-  final List<CicloVentaHN> cicloVentaMensual;
-  final List<CicloVentaHN> cicloVentaDiaria;
+  final CicloVentaHN cicloVentaMensual;
+  final CicloVentaDiaria cicloVentaDiaria;
   final List<NivelProduccionHN> nivelProduccion;
   final List<CuentasPorCobrarHN> cuentasPorCobrar;
   final List<CicloDeComprasSemanalHN> cicloDeComprasSemanales;
@@ -246,8 +246,14 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     this.permisoOperacionNombreInstitucion = '',
     this.permisoOperacionFechaEmision = '',
     this.permisoOperacionFechaVencimiento = '',
-    this.cicloVentaMensual = const [],
-    this.cicloVentaDiaria = const [],
+    this.cicloVentaMensual = const CicloVentaHN(
+      totalVentasDiaria: 0,
+      ciclo: [],
+    ),
+    this.cicloVentaDiaria = const CicloVentaDiaria(
+      totalVentasDiaria: 0,
+      cicloVentas: [],
+    ),
     this.nivelProduccion = const [],
     this.cuentasPorCobrar = const [],
     this.cicloDeComprasSemanales = const [],
@@ -261,6 +267,7 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        cicloVentaMensual,
         valorAltaRotacion,
         numeroSolicitud,
         idLocalResponse,
@@ -376,7 +383,6 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
         permisoOperacionNombreInstitucion,
         permisoOperacionFechaEmision,
         permisoOperacionFechaVencimiento,
-        cicloVentaMensual,
         cicloVentaDiaria,
         nivelProduccion,
         cuentasPorCobrar,
@@ -506,8 +512,8 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     String? permisoOperacionNombreInstitucion,
     String? permisoOperacionFechaEmision,
     String? permisoOperacionFechaVencimiento,
-    List<CicloVentaHN>? cicloVentaMensual,
-    List<CicloVentaHN>? cicloVentaDiaria,
+    CicloVentaHN? cicloVentaMensual,
+    CicloVentaDiaria? cicloVentaDiaria,
     List<NivelProduccionHN>? nivelProduccion,
     List<CuentasPorCobrarHN>? cuentasPorCobrar,
     List<CicloDeComprasSemanalHN>? cicloDeComprasSemanales,

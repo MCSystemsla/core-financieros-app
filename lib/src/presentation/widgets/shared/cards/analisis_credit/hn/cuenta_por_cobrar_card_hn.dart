@@ -61,14 +61,14 @@ class CuentaPorCobrarCardHn extends StatelessWidget {
                       _buildItem(
                         icon: Icons.account_balance,
                         label: 'Total abono credito',
-                        value: totalCuentasPorCobrar,
+                        value: totalAbonoPorCobrar,
                         color: Colors.green,
                       ),
                       const Divider(),
                       _buildItem(
                         icon: Icons.account_balance_wallet,
                         label: 'Total cuentas por cobrar',
-                        value: totalAbonoPorCobrar,
+                        value: totalCuentasPorCobrar,
                         color: Colors.red,
                       ),
                     ],

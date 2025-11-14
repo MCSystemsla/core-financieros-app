@@ -11,6 +11,7 @@ class AnalisisNivelProduccionLocalDb {
   double? precioVentaUnidad;
   int? totalMensualProduccion;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisNivelProduccionLocalDb({
     this.articuloProduccion,
     this.frecuenciaProduccionCodigo,
@@ -18,5 +19,6 @@ class AnalisisNivelProduccionLocalDb {
     this.precioVentaUnidad,
     this.totalMensualProduccion,
     this.uuid,
+    this.numeroSolicitud,
   });
 }

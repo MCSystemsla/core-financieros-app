@@ -1,6 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/analisis/nueva_mayor_a_mil_autosave.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_venta_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_cuentas_por_cobrar_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nivel_produccion_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nueva_mayor_a_mil_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -624,5 +629,400 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         vestimentaCalzadoFam: solicitud?.vestimentaCalzadoFam,
       ),
     );
+  }
+
+  loadVentasMensualesFromLocalDb({required CicloVentaHN cicloVenta}) {
+    emit(
+      state.copyWith(
+        cicloVentaMensual: cicloVenta,
+      ),
+    );
+  }
+
+  void initCicloVentasMensuales(int numeroSolicitud) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    final existing = localDbProvider.analisisCicloVentasMensualesHnBox
+        .query(AnalisisCicloVentaHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisCicloVentaHnLocalDb_.typeFormAnalisis
+                .equals('VENTAS_MESES')))
+        .build()
+        .find();
+
+    if (existing.isNotEmpty) {
+      emit(state.copyWith(
+        cicloVentaMensual: CicloVentaHN(
+          totalVentasDiaria: 0,
+          ciclo: existing
+              .map((e) => Ciclo(
+                    mes: e.mes ?? '',
+                    venta: e.venta ?? 0,
+                    valorizacion: e.valorizacion ?? '',
+                  ))
+              .toList(),
+        ),
+      ));
+    } else {
+      final defaultCiclo = [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre'
+      ].map((mes) => Ciclo(mes: mes, venta: 0, valorizacion: 'N/A')).toList();
+
+      // Guardar en BD
+      final entities = defaultCiclo
+          .map((c) => AnalisisCicloVentaHnLocalDb(
+                mes: c.mes,
+                venta: c.venta,
+                valorizacion: c.valorizacion,
+                typeFormAnalisis: 'VENTAS_MESES',
+                numeroSolicitud: numeroSolicitud,
+                uuid: const Uuid().v4(),
+              ))
+          .toList();
+
+      localDbProvider.analisisCicloVentasMensualesHnBox.putMany(entities);
+
+      emit(state.copyWith(
+        cicloVentaMensual:
+            CicloVentaHN(totalVentasDiaria: 0, ciclo: defaultCiclo),
+      ));
+    }
+  }
+
+  void initCicloVentasDiarias(int numeroSolicitud) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    final existing = localDbProvider.cicloVentaDiariasHNBox
+        .query(AnalisisCicloVentaHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisCicloVentaHnLocalDb_.typeFormAnalisis
+                .equals('VENTAS_DIAS')))
+        .build()
+        .find();
+
+    if (existing.isNotEmpty) {
+      emit(state.copyWith(
+        cicloVentaDiaria: CicloVentaDiaria(
+          totalVentasDiaria: 0,
+          cicloVentas: existing
+              .map((e) => CicloVenta(
+                    dia: e.dia ?? '',
+                    venta: e.venta ?? 0,
+                    valorizacion: e.valorizacion ?? '',
+                    maquinaCreacion: '',
+                  ))
+              .toList(),
+        ),
+      ));
+    } else {
+      final defaultCiclo = [
+        'Lunes',
+        'Martes',
+        'Miércoles',
+        'Jueves',
+        'Viernes',
+        'Sábado',
+        'Domingo',
+      ]
+          .map((dia) => CicloVenta(
+              dia: dia, venta: 0, valorizacion: 'N/A', maquinaCreacion: ''))
+          .toList();
+
+      // Guardar en BD
+      final entities = defaultCiclo
+          .map((c) => AnalisisCicloVentaHnLocalDb(
+                dia: c.dia,
+                venta: c.venta,
+                valorizacion: c.valorizacion,
+                typeFormAnalisis: 'VENTAS_DIAS',
+                numeroSolicitud: numeroSolicitud,
+                uuid: const Uuid().v4(),
+              ))
+          .toList();
+
+      localDbProvider.cicloVentaDiariasHNBox.putMany(entities);
+
+      emit(state.copyWith(
+        cicloVentaDiaria: CicloVentaDiaria(
+          totalVentasDiaria: 0,
+          cicloVentas: defaultCiclo,
+        ),
+      ));
+    }
+  }
+
+  void updateMesByName({
+    required String mes,
+    required int venta,
+    required String valorizacion,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Buscar si ya existe ese mes para esa solicitud
+    final query = localDbProvider.analisisCicloVentasMensualesHnBox
+        .query(AnalisisCicloVentaHnLocalDb_.mes.equals(mes).and(
+            AnalisisCicloVentaHnLocalDb_.numeroSolicitud
+                .equals(numeroSolicitud)))
+        .build();
+
+    final existing = query.findFirst();
+    query.close();
+
+    final entity = existing ?? AnalisisCicloVentaHnLocalDb();
+
+    // Actualizar o crear el registro
+    entity.mes = mes;
+    entity.venta = venta;
+    entity.valorizacion = valorizacion;
+    entity.numeroSolicitud = numeroSolicitud;
+    entity.typeFormAnalisis = 'VENTAS_MESES';
+    entity.uuid = mes; // usamos el nombre del mes como identificador lógico
+
+    localDbProvider.analisisCicloVentasMensualesHnBox.put(entity);
+
+    // Actualizar en memoria (state)
+    final updatedCiclo = state.cicloVentaMensual.ciclo.map((c) {
+      if (c.mes == mes) {
+        return Ciclo(
+          mes: mes,
+          venta: venta,
+          valorizacion: valorizacion,
+        );
+      }
+      return c;
+    }).toList();
+
+    emit(
+      state.copyWith(
+        cicloVentaMensual: CicloVentaHN(
+          totalVentasDiaria: updatedCiclo.fold(0, (sum, e) => sum + e.venta),
+          ciclo: updatedCiclo,
+        ),
+        // otros campos si tu state tiene más
+      ),
+    );
+  }
+
+  void updateDayByName({
+    required String dia,
+    required int venta,
+    required String valorizacion,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Buscar si ya existe ese mes para esa solicitud
+    final query = localDbProvider.cicloVentaDiariasHNBox
+        .query(AnalisisCicloVentaHnLocalDb_.dia.equals(dia).and(
+            AnalisisCicloVentaHnLocalDb_.numeroSolicitud
+                .equals(numeroSolicitud)))
+        .build();
+
+    final existing = query.findFirst();
+    query.close();
+
+    final entity = existing ?? AnalisisCicloVentaHnLocalDb();
+
+    // Actualizar o crear el registro
+    entity.dia = dia;
+    entity.venta = venta;
+    entity.valorizacion = valorizacion;
+    entity.numeroSolicitud = numeroSolicitud;
+    entity.typeFormAnalisis = 'VENTAS_DIAS';
+    entity.uuid = dia; // usamos el nombre del dia como identificador lógico
+
+    localDbProvider.cicloVentaDiariasHNBox.put(entity);
+
+    // Actualizar en memoria (state)
+    final updatedCiclo = state.cicloVentaDiaria.cicloVentas.map((c) {
+      if (c.dia == dia) {
+        return CicloVenta(
+            dia: dia,
+            venta: venta,
+            valorizacion: valorizacion,
+            maquinaCreacion: '');
+      }
+      return c;
+    }).toList();
+
+    emit(
+      state.copyWith(
+        cicloVentaDiaria: CicloVentaDiaria(
+          totalVentasDiaria: updatedCiclo.fold(0, (sum, e) => sum + e.venta),
+          cicloVentas: updatedCiclo,
+        ),
+        // otros campos si tu state tiene más
+      ),
+    );
+  }
+
+  Map<String, dynamic> getCicloVentasMensuales() {
+    if (state.cicloVentaMensual.ciclo.isEmpty) {
+      return {'mesBueno': 0, 'mesNormal': 0, 'mesMalo': 0};
+    }
+
+    final sorted = state.cicloVentaMensual.ciclo
+        .map((e) => e.venta)
+        .toSet()
+        .toList()
+      ..sort((b, a) => a.compareTo(b));
+
+    final uniqueCiclos = sorted
+        .map((v) =>
+            state.cicloVentaMensual.ciclo.firstWhere((c) => c.venta == v))
+        .toList();
+
+    final mesBueno = uniqueCiclos.first;
+    final mesNormal = uniqueCiclos[uniqueCiclos.length ~/ 2];
+    final mesMalo = uniqueCiclos.last;
+
+    return {
+      'mesBueno': mesBueno.venta,
+      'mesNormal': mesNormal.venta,
+      'mesMalo': mesMalo.venta,
+    };
+  }
+
+  Map<String, dynamic> getCicloVentasDiarios() {
+    if (state.cicloVentaDiaria.cicloVentas.isEmpty) {
+      return {'diasBuenos': 0, 'diasNormales': 0, 'diasMalos': 0};
+    }
+
+    final sorted = state.cicloVentaDiaria.cicloVentas
+        .map((e) => e.venta)
+        .toSet()
+        .toList()
+      ..sort((b, a) => a.compareTo(b));
+
+    final uniqueCiclos = sorted
+        .map((v) =>
+            state.cicloVentaDiaria.cicloVentas.firstWhere((c) => c.venta == v))
+        .toList();
+
+    final diasBuenos = uniqueCiclos.first;
+    final diasNormales = uniqueCiclos[uniqueCiclos.length ~/ 2];
+    final diasMalos = uniqueCiclos.last;
+
+    return {
+      'diasBuenos': diasBuenos.venta,
+      'diasNormales': diasNormales.venta,
+      'diasMalos': diasMalos.venta,
+    };
+  }
+
+  saveCuentaPorCobrar({
+    required CuentasPorCobrarHN cuentasPorCobrar,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.cuentasPorCobrarHnBox.put(
+      AnalisisCuentasPorCobrarHn(
+        abonoCredito: cuentasPorCobrar.abonoCredito,
+        frecuenciaAbonoCodigo: cuentasPorCobrar.frecuenciaAbonoCodigo,
+        totalMensualCredito: cuentasPorCobrar.totalMensualCredito,
+        nombre: cuentasPorCobrar.nombre,
+        montoCredito: cuentasPorCobrar.montoCredito,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        cuentasPorCobrar: [
+          ...state.cuentasPorCobrar,
+          cuentasPorCobrar,
+        ],
+      ),
+    );
+  }
+
+  saveCuentaNivelProduccion({
+    required NivelProduccionHN nivelProduccion,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.nivelProduccionHnBox.put(
+      AnalisisNivelProduccionLocalDb(
+        articuloProduccion: nivelProduccion.articuloProduccion,
+        frecuenciaProduccionCodigo: nivelProduccion.frecuenciaProduccionCodigo,
+        cantidadProduccion: nivelProduccion.cantidadProduccion,
+        precioVentaUnidad: nivelProduccion.precioVentaUnidad,
+        totalMensualProduccion: nivelProduccion.totalMensualProduccion,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        nivelProduccion: [
+          ...state.nivelProduccion,
+          nivelProduccion,
+        ],
+      ),
+    );
+  }
+
+  void loadCuentasPorCobrar({required int numeroSolicitud}) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final cuentasGuardadas = localDbProvider.cuentasPorCobrarHnBox
+        .query(
+            AnalisisCuentasPorCobrarHn_.numeroSolicitud.equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final cuentasPorCobrarList = cuentasGuardadas
+        .map((c) => CuentasPorCobrarHN(
+              abonoCredito: c.abonoCredito ?? 0,
+              frecuenciaAbonoCodigo: c.frecuenciaAbonoCodigo ?? '',
+              totalMensualCredito: c.totalMensualCredito ?? 0,
+              nombre: c.nombre ?? '',
+              montoCredito: c.montoCredito ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      cuentasPorCobrar: cuentasPorCobrarList,
+    ));
+  }
+
+  void loadNivelProduccionFromLocalDb({required int numeroSolicitud}) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final nivelProduccion = localDbProvider.nivelProduccionHnBox
+        .query(AnalisisNivelProduccionLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final nivelProduccionList = nivelProduccion
+        .map((c) => NivelProduccionHN(
+              articuloProduccion: c.articuloProduccion ?? '',
+              cantidadProduccion: c.cantidadProduccion ?? 0,
+              precioVentaUnidad: c.precioVentaUnidad ?? 0,
+              frecuenciaProduccionCodigo: c.frecuenciaProduccionCodigo ?? '',
+              totalMensualProduccion: c.totalMensualProduccion ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      nivelProduccion: nivelProduccionList,
+    ));
   }
 }

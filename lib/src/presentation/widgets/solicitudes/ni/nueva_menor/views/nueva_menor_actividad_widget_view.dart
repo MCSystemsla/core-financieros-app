@@ -287,14 +287,15 @@ class __FormContentState extends State<_FormContent> {
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
                       cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
+                        () => state.copyWith(
                           isDone: true,
                         ),
                       );
                       if (widget.state.connectionStatus ==
                           ConnectionStatus.disconnected) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
+                            isDone: true,
                             isOffline: true,
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',

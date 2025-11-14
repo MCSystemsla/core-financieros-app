@@ -118,8 +118,8 @@ class AnalisisNuevaMayorMilHn {
   final String permisoOperacionNombreInstitucion;
   final DateTime? permisoOperacionFechaEmision;
   final DateTime? permisoOperacionFechaVencimiento;
-  final List<CicloVentaHN> cicloVentaMensual;
-  final List<CicloVentaHN> cicloVentaDiaria;
+  final CicloVentaHN cicloVentaMensual;
+  final CicloVentaDiaria cicloVentaDiaria;
   final List<NivelProduccionHN> nivelProduccion;
   final List<CuentasPorCobrarHN> cuentasPorCobrar;
   final List<CicloDeComprasSemanalHN> cicloDeComprasSemanales;
@@ -373,10 +373,8 @@ class AnalisisNuevaMayorMilHn {
             permisoOperacionFechaEmision?.toUtc().toIso8601String(),
         'PermisoOperacionFechaVencimiento':
             permisoOperacionFechaVencimiento?.toUtc().toIso8601String(),
-        'CicloVentaMensual':
-            List<dynamic>.from(cicloVentaMensual.map((x) => x.toJson())),
-        'CicloVentaDiaria':
-            List<dynamic>.from(cicloVentaDiaria.map((x) => x.toJson())),
+        'CicloVentaMensual': cicloVentaMensual.toJson(),
+        'CicloVentaDiaria': cicloVentaDiaria.toJson(),
         'NivelProduccion':
             List<dynamic>.from(nivelProduccion.map((x) => x.toJson())),
         'CuentasPorCobrar':
@@ -393,6 +391,42 @@ class AnalisisNuevaMayorMilHn {
             List<dynamic>.from(otrosCreditos.map((x) => x.toJson())),
         'Pasivos': List<dynamic>.from(pasivos.map((x) => x.toJson())),
         'Activos': List<dynamic>.from(activos.map((x) => x.toJson())),
+      };
+}
+
+class CicloVentaDiaria {
+  final int totalVentasDiaria;
+  final List<CicloVenta> cicloVentas;
+
+  const CicloVentaDiaria({
+    required this.totalVentasDiaria,
+    required this.cicloVentas,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'TotalVentasDiaria': totalVentasDiaria,
+        'cicloVentas': List<dynamic>.from(cicloVentas.map((x) => x.toJson())),
+      };
+}
+
+class CicloVenta {
+  final String dia;
+  final int venta;
+  final String valorizacion;
+  final String maquinaCreacion;
+
+  CicloVenta({
+    required this.dia,
+    required this.venta,
+    required this.valorizacion,
+    required this.maquinaCreacion,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'Dia': dia,
+        'venta': venta,
+        'valorizacion': valorizacion,
+        'MaquinaCreacion': maquinaCreacion,
       };
 }
 
@@ -433,26 +467,35 @@ class CicloDeComprasSemanalHN {
 }
 
 class CicloVentaHN {
-  final String dia;
-  final int venta;
-  final String valorizacion;
   final int totalVentasDiaria;
-  final String mes;
+  final List<Ciclo> ciclo;
 
-  CicloVentaHN({
-    required this.dia,
-    required this.venta,
-    required this.valorizacion,
+  const CicloVentaHN({
     required this.totalVentasDiaria,
-    required this.mes,
+    required this.ciclo,
   });
 
   Map<String, dynamic> toJson() => {
-        'Dia': dia,
+        'TotalVentasDiaria': totalVentasDiaria,
+        'ciclo': List<dynamic>.from(ciclo.map((x) => x.toJson())),
+      };
+}
+
+class Ciclo {
+  final String mes;
+  final int venta;
+  final String valorizacion;
+
+  const Ciclo({
+    required this.mes,
+    required this.venta,
+    required this.valorizacion,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'Mes': mes,
         'Venta': venta,
         'Valorizacion': valorizacion,
-        'TotalVentasDiaria': totalVentasDiaria,
-        'Mes': mes,
       };
 }
 

@@ -140,12 +140,16 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
     String? paisEmisor,
   }) {
     return switch ((tipoDocumento, paisEmisor)) {
-      ('CEDULAIDENTIDAD', 'HN') => 13,
       ('CEDULAIDENTIDAD', 'NIC') => 14,
       ('PASAPORTE', 'NIC') => 9,
       ('PASAPORTE', 'HN') => 7,
       ('RTN', 'HN') => 14,
+      ('CEDULAIDENTIDAD', 'HN') => 13,
       ('CARNETRESIDENCIA', 'HN') => 8,
+      ('CEDULARESIDENCIA', 'CR') => 12,
+      ('PASAPORTE', 'CR') => 9,
+      ('CEDULAIDENTIDAD', 'CR') => 9,
+      ('RUC', 'CR') => 10,
       _ => 0
     };
   }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
@@ -65,9 +63,6 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
         localDbProvider.getAnalisisNuevaMayorMilByNumeroSolicitud(
       numeroSolicitud: widget.numeroSolicitud,
     );
-    final offlineAnalisis =
-        localDbProvider.analisisNuevaMayorAMilHnLocalDb.getAll();
-    log(offlineAnalisis.toString());
 
     return BlocProvider(
       create: (ctx) => AnalisisNuevaMayorMilHnCubit(
@@ -81,7 +76,7 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
         ..loadFromLocalDb(currentSolicitud),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Nueva Mayor a Mil'),
+          title: const Text('Analisis Solicitud Nueva'),
         ),
         body: Column(
           children: [
@@ -104,6 +99,7 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
                   ),
                   AnalisisMayorAMilCuentasPorCobrarHN(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                   AnalisisMayorAMilCicloDeCompras(
                     pageController: pageController,

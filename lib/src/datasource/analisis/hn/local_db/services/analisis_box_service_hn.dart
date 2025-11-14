@@ -15,12 +15,13 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_pasivo_hn_local_db.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AnalisisBoxServiceHn {
   late final Store _store;
   late final Box<AnalisisNuevaMayorAMilHnLocalDb>
       analisisNuevaMayorAMilHnLocalDb;
-  late final Box<AnalisisCicloVentaHnLocalDb> analisisCicloVentaDiariasHNBox;
+  late final Box<AnalisisCicloVentaHnLocalDb> analisisCicloVentasMensualesHnBox;
   late final Box<AnalisisCicloVentaHnLocalDb> cicloVentaDiariasHNBox;
   late final Box<AnalisisNivelProduccionLocalDb> nivelProduccionHnBox;
   late final Box<AnalisisCuentasPorCobrarHn> cuentasPorCobrarHnBox;
@@ -37,7 +38,8 @@ class AnalisisBoxServiceHn {
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
         _store.box<AnalisisNuevaMayorAMilHnLocalDb>();
-    analisisCicloVentaDiariasHNBox = _store.box<AnalisisCicloVentaHnLocalDb>();
+    analisisCicloVentasMensualesHnBox =
+        _store.box<AnalisisCicloVentaHnLocalDb>();
     cicloVentaDiariasHNBox = _store.box<AnalisisCicloVentaHnLocalDb>();
     nivelProduccionHnBox = _store.box<AnalisisNivelProduccionLocalDb>();
     cuentasPorCobrarHnBox = _store.box<AnalisisCuentasPorCobrarHn>();
@@ -112,5 +114,28 @@ class AnalisisBoxServiceHn {
     query.close();
 
     return results;
+  }
+
+  int createAnalisisCicloVentaHnLocalDb({
+    required AnalisisCicloVentaHnLocalDb analisisCicloVentaHnLocalDb,
+  }) {
+    return analisisCicloVentasMensualesHnBox.put(analisisCicloVentaHnLocalDb);
+  }
+
+  void createCicloVentasModelEntities(
+      List<AnalisisCicloVentaHnLocalDb> cicloVentas, int numeroSolicitud) {
+    final entities = cicloVentas.map((mes) {
+      return AnalisisCicloVentaHnLocalDb(
+        mes: mes.mes,
+        typeFormAnalisis: 'VENTAS_MESES',
+        valorizacion: mes.valorizacion,
+        venta: mes.venta,
+        numeroSolicitud: numeroSolicitud,
+        dia: mes.dia,
+        uuid: const Uuid().v4(),
+      );
+    }).toList();
+
+    analisisCicloVentasMensualesHnBox.putMany(entities);
   }
 }

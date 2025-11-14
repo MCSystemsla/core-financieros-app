@@ -46,6 +46,7 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
           context.read<SolicitudAsalariadoCubit>().onFieldChanged(
                 () => state.copyWith(
                   hasVerified: true,
+                  isDone: true,
                 ),
               );
           // dbProvider.removeSolicitudAsalariadoWhenisUploaded(

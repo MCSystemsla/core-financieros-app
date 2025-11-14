@@ -39,6 +39,7 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
               .read<SolicitudNuevaMenorCubit>()
               .onFieldChanged(() => state.copyWith(
                     hasVerified: true,
+                    isDone: true,
                   ));
         }
       },

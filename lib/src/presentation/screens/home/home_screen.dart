@@ -187,6 +187,9 @@ Widget saveCatalogoByFlavor(
     Flavor.nicaragua => DownsloadingCatalogosWidget(
         onDownloadComplete: onDownloadComplete,
       ),
+    Flavor.costaRica => DownsloadingCatalogosWidget(
+        onDownloadComplete: onDownloadComplete,
+      ),
     Flavor.honduras => DownloadCatalogosDialogHn(
         onDownloadComplete: onDownloadComplete,
       ),

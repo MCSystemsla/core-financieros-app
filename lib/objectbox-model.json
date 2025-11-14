@@ -4938,7 +4938,7 @@
     },
     {
       "id": "29:1559709785993862028",
-      "lastPropertyId": "8:6674479648642747557",
+      "lastPropertyId": "9:3096892811004885483",
       "name": "AnalisisCicloVentaHnLocalDb",
       "properties": [
         {
@@ -4963,11 +4963,6 @@
           "type": 9
         },
         {
-          "id": "5:1464668389370668239",
-          "name": "totalVentasDiaria",
-          "type": 6
-        },
-        {
           "id": "6:9002063327701902923",
           "name": "mes",
           "type": 9
@@ -4981,13 +4976,18 @@
           "id": "8:6674479648642747557",
           "name": "typeFormAnalisis",
           "type": 9
+        },
+        {
+          "id": "9:3096892811004885483",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "30:3750081469833294035",
-      "lastPropertyId": "7:2704124802260442499",
+      "lastPropertyId": "8:4237717279406905389",
       "name": "AnalisisCuentasPorCobrarHn",
       "properties": [
         {
@@ -5025,13 +5025,18 @@
           "id": "7:2704124802260442499",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "8:4237717279406905389",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "31:1014953646872915825",
-      "lastPropertyId": "7:880010116614418270",
+      "lastPropertyId": "8:6769057813839707557",
       "name": "AnalisisNivelProduccionLocalDb",
       "properties": [
         {
@@ -5069,6 +5074,11 @@
           "id": "7:880010116614418270",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "8:6769057813839707557",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
@@ -5402,7 +5412,8 @@
     4069237034866042174,
     4429542478296847884,
     2461506611566591568,
-    9133716231844339991
+    9133716231844339991,
+    1464668389370668239
   ],
   "retiredRelationUids": [],
   "version": 1

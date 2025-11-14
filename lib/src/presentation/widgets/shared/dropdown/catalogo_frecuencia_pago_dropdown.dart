@@ -60,6 +60,13 @@ class _CatalogoFrecuenciaPagoDropdownState
             meses: e.meses,
           );
         }).toList(),
+      Flavor.costaRica => localDbProvider.getCatalogoFrecuenciaPago().map((e) {
+          return CatalogoFrecuenciaItem(
+            valor: e.valor,
+            nombre: e.nombre,
+            meses: e.meses,
+          );
+        }).toList(),
       Flavor.honduras => localDbProviderHn.getCatalogoFrecuenciaPago().map(
           (e) {
             return CatalogoFrecuenciaItem(

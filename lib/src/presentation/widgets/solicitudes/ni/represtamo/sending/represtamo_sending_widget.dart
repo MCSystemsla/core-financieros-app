@@ -54,6 +54,7 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
           context.read<SolicitudReprestamoCubit>().onFieldChanged(
                 () => state.copyWith(
                   hasVerified: true,
+                  isDone: true,
                 ),
               );
           // dbProvider.removeSolicitudReprestamoWhenisUploaded(

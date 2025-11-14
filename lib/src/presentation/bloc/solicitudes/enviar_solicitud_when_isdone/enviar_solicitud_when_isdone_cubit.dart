@@ -59,7 +59,6 @@ class EnviarSolicitudWhenIsdoneCubit
         emit(EnviarSolicitudWhenIsdoneInitial());
         return;
       }
-      await Future.delayed(const Duration(seconds: 3));
       for (var solicitud in solicitudes) {
         result = await _sendSolicitud(solicitud: solicitud);
 
@@ -238,7 +237,7 @@ class EnviarSolicitudWhenIsdoneCubit
           solicitudAsalariado: _mapToSolicitudAsalariado(solicitud),
         ),
       _ => throw UnsupportedError(
-          'Solicitud de tipo ${solicitud.runtimeType} no soportado en el envío automático.',
+          'Error en envio Solicitud de tipo ${solicitud.runtimeType} no soportado en el envío automático.',
         )
     };
   }
