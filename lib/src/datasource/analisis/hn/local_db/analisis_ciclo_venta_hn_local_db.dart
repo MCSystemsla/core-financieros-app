@@ -9,6 +9,7 @@ class AnalisisCicloVentaHnLocalDb {
   int? venta;
   String? valorizacion;
   String? mes;
+  String? semana;
   String? uuid;
   String? typeFormAnalisis;
   int? numeroSolicitud;
@@ -21,5 +22,6 @@ class AnalisisCicloVentaHnLocalDb {
     this.uuid,
     this.typeFormAnalisis,
     this.numeroSolicitud,
+    this.semana,
   });
 }

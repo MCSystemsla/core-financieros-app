@@ -122,15 +122,17 @@ class AnalisisNuevaMayorMilHn {
   final CicloVentaDiaria cicloVentaDiaria;
   final List<NivelProduccionHN> nivelProduccion;
   final List<CuentasPorCobrarHN> cuentasPorCobrar;
-  final List<CicloDeComprasSemanalHN> cicloDeComprasSemanales;
+  final CicloDeComprasSemanalesHN cicloDeComprasSemanales;
   final List<ComprasProveedorArticuloHN> comprasProveedorArticulo;
   final List<CostoDePersonalHN> costoDePersonal;
   final List<IngresosFamilaresFueraNegocioHN> ingeresosFamilaresFueraNegocio;
   final List<OtrosCreditoHN> otrosCreditos;
   final List<PasivoHN> pasivos;
   final List<ActivoHN> activos;
+  final List<InventarioHN> inventario;
 
   AnalisisNuevaMayorMilHn({
+    required this.inventario,
     required this.database,
     required this.numeroSolicitud,
     required this.totalIngresosFueraNegocio,
@@ -256,141 +258,174 @@ class AnalisisNuevaMayorMilHn {
     required this.activos,
   });
 
+  Map<String, dynamic> toJson() {
+    final data = {
+      'database': LocalStorage().database,
+      'NumeroSolicitud': numeroSolicitud,
+      'TotalIngresosFueraNegocio': totalIngresosFueraNegocio,
+      'AlimentacionFam': alimentacionFam,
+      'EducacionFam': educacionFam,
+      'AguaFam': aguaFam,
+      'AlquilerFam': alquilerFam,
+      'AseoLimpiezaFam': aseoLimpiezaFam,
+      'VestimentaCalzadoFam': vestimentaCalzadoFam,
+      'TransporteFam': transporteFam,
+      'OtrosGastosFam': otrosGastosFam,
+      'PagoCreditosFam': pagoCreditosFam,
+      'TotalConsumoFamiliar': totalConsumoFamiliar,
+      'NumeroLicencia': numeroLicencia,
+      'NombreInstitucionLicencia': nombreInstitucionLicencia,
+      'FechaEmisionLicencia': fechaEmisionLicencia?.toUtc().toIso8601String(),
+      'FechaVencimientoLicencia':
+          fechaVencimientoLicencia?.toUtc().toIso8601String(),
+      'IngresoAnual': ingresoAnual,
+      'Cliente1': cliente1,
+      'Cliente2': cliente2,
+      'Cliente3': cliente3,
+      'Proveedor1': proveedor1,
+      'Proveedor2': proveedor2,
+      'Proveedor3': proveedor3,
+      'FechaVerificacion1': fechaVerificacion1?.toUtc().toIso8601String(),
+      'NombreReferencia1': nombreReferencia1,
+      'CedulaReferencia1': cedulaReferencia1,
+      'DireccionReferencia1': direccionReferencia1,
+      'TelefonoReferencia1': telefonoReferencia1,
+      'LugarTrabajoReferencia1': lugarTrabajoReferencia1,
+      'AniosConocerReferido1': aniosConocerReferido1,
+      'ParentescoReferenciaCodigo1': parentescoReferenciaCodigo1,
+      'ResultadoVerificacion1': resultadoVerificacion1,
+      'FechaVerificacion2': fechaVerificacion2?.toUtc().toIso8601String(),
+      'NombreReferencia2': nombreReferencia2,
+      'CedulaReferencia2': cedulaReferencia2,
+      'DireccionReferencia2': direccionReferencia2,
+      'TelefonoReferencia2': telefonoReferencia2,
+      'LugarTrabajoReferencia2': lugarTrabajoReferencia2,
+      'AniosConocerReferido2': aniosConocerReferido2,
+      'ParentescoReferenciaCodigo2': parentescoReferenciaCodigo2,
+      'ResultadoVerificacion2': resultadoVerificacion2,
+      'SemanasBuenas': semanasBuenas,
+      'SemanasNormales': semanasNormales,
+      'SemanasMalas': semanasMalas,
+      'TotalComprasMensuales': totalComprasMensuales,
+      'TotalVentasSegunCompras': totalVentasSegunCompras,
+      'TotalCostoPersonal': totalCostoPersonal,
+      'TotalUltimaCompra': totalUltimaCompra,
+      'DiasBuenosVenta': diasBuenosVenta,
+      'DiasNormalesVenta': diasNormalesVenta,
+      'DiasMalosVenta': diasMalosVenta,
+      'TotalVentasDiarias': totalVentasDiarias,
+      'TotalVentasMensuales': totalVentasMensuales,
+      'TotalAbono': totalAbono,
+      'TotalVentasMensualSegunNumClientes': totalVentasMensualSegunNumClientes,
+      'TotalVentasSegunNivelProduccion': totalVentasSegunNivelProduccion,
+      'PorcentajeProdAltaRotacion': porcentajeProdAltaRotacion,
+      'ValorAltaRotacion': valorAltaRotacion,
+      'PorcentajeProdBajaRotacion': porcentajeProdBajaRotacion,
+      'ValorBajaRotacion': valorBajaRotacion,
+      'Caja': caja,
+      'Reservas': reservas,
+      'CuentasAhorro': cuentasAhorro,
+      'TotalDisponibleActivo': totalDisponibleActivo,
+      'Incobrables': incobrables,
+      'TotalClientes': totalClientes,
+      'AdelantoProveedores': adelantoProveedores,
+      'TotalCuentasXCobrar': totalCuentasXCobrar,
+      'TotalInventario': totalInventario,
+      'TotalActivosCorrientes': totalActivosCorrientes,
+      'TotalActivosFijos': totalActivosFijos,
+      'TotalActivos': totalActivos,
+      'TotalProveedoresAdelantos': totalProveedoresAdelantos,
+      'TotalCreditosInstAmigos': totalCreditosInstAmigos,
+      'TotalPasivos': totalPasivos,
+      'Patrimonio': patrimonio,
+      'PasivosMasPatrimonio': pasivosMasPatrimonio,
+      'VentasContado': ventasContado,
+      'Recuperaciones': recuperaciones,
+      'TotalIngresos': totalIngresos,
+      'CostoVentaProduccion': costoVentaProduccion,
+      'UtilidadBruta': utilidadBruta,
+      'GastosPersonalAlimentacion': gastosPersonalAlimentacion,
+      'SubContratos': subContratos,
+      'Alquilerlocal': alquilerlocal,
+      'Agua': agua,
+      'Combustible': combustible,
+      'Transporte': transporte,
+      'PagoCuotaCredito': pagoCuotaCredito,
+      'Impuesto': impuesto,
+      'Otros': otros,
+      'TotalCostosOperativos': totalCostosOperativos,
+      'ResultadoLiquido': resultadoLiquido,
+      'ConsumoFamiliar': consumoFamiliar,
+      'IngresosFueraNegocio': ingresosFueraNegocio,
+      'SaldoDisponibleUF': saldoDisponibleUf,
+      'CostoVentaPorcentaje':
+          double.tryParse(costoVentaPorcentaje.toStringAsFixed(2)),
+      'FechaVerificacion3': fechaVerificacion3?.toUtc().toIso8601String(),
+      'NombreReferencia3': nombreReferencia3,
+      'CedulaReferencia3': cedulaReferencia3,
+      'DireccionReferencia3': direccionReferencia3,
+      'TelefonoReferencia3': telefonoReferencia3,
+      'LugarTrabajoReferencia3': lugarTrabajoReferencia3,
+      'AniosConocerReferido3': aniosConocerReferido3,
+      'ParentescoReferenciaCodigo3': parentescoReferenciaCodigo3,
+      'ResultadoVerificacion3': resultadoVerificacion3,
+      'Salud': salud,
+      'PermisoOperacionNumero': permisoOperacionNumero,
+      'PermisoOperacionNombreInstitucion': permisoOperacionNombreInstitucion,
+      'PermisoOperacionFechaEmision':
+          permisoOperacionFechaEmision?.toUtc().toIso8601String(),
+      'PermisoOperacionFechaVencimiento':
+          permisoOperacionFechaVencimiento?.toUtc().toIso8601String(),
+      'CicloVentaMensual': cicloVentaMensual.toJson(),
+      'CicloVentaDiaria': cicloVentaDiaria.toJson(),
+      'NivelProduccion':
+          List<dynamic>.from(nivelProduccion.map((x) => x.toJson())),
+      'CuentasPorCobrar':
+          List<dynamic>.from(cuentasPorCobrar.map((x) => x.toJson())),
+      'CicloDeComprasSemanales': cicloDeComprasSemanales.toJson(),
+      'ComprasProveedorArticulo':
+          List<dynamic>.from(comprasProveedorArticulo.map((x) => x.toJson())),
+      'CostoDePersonal':
+          List<dynamic>.from(costoDePersonal.map((x) => x.toJson())),
+      'IngresosFamilaresFueraNegocio': List<dynamic>.from(
+          ingeresosFamilaresFueraNegocio.map((x) => x.toJson())),
+      'OtrosCreditos': List<dynamic>.from(otrosCreditos.map((x) => x.toJson())),
+      'Pasivos': List<dynamic>.from(pasivos.map((x) => x.toJson())),
+      'Activos': List<dynamic>.from(activos.map((x) => x.toJson())),
+      'Inventario': List<dynamic>.from(inventario.map((x) => x.toJson())),
+    };
+    data.removeWhere(
+      (key, value) => value == null || value == '' || value == 0,
+    );
+    return data;
+  }
+}
+
+class InventarioHN {
+  final int cantidad;
+  final String articulo;
+  final double costoCompra;
+  final int precioVenta;
+  final double costoVentaPorcentaje;
+  final int total;
+
+  InventarioHN({
+    required this.cantidad,
+    required this.articulo,
+    required this.costoCompra,
+    required this.precioVenta,
+    required this.costoVentaPorcentaje,
+    required this.total,
+  });
+
   Map<String, dynamic> toJson() => {
-        'database': LocalStorage().database,
-        'NumeroSolicitud': numeroSolicitud,
-        'TotalIngresosFueraNegocio': totalIngresosFueraNegocio,
-        'AlimentacionFam': alimentacionFam,
-        'EducacionFam': educacionFam,
-        'AguaFam': aguaFam,
-        'AlquilerFam': alquilerFam,
-        'AseoLimpiezaFam': aseoLimpiezaFam,
-        'VestimentaCalzadoFam': vestimentaCalzadoFam,
-        'TransporteFam': transporteFam,
-        'OtrosGastosFam': otrosGastosFam,
-        'PagoCreditosFam': pagoCreditosFam,
-        'TotalConsumoFamiliar': totalConsumoFamiliar,
-        'NumeroLicencia': numeroLicencia,
-        'NombreInstitucionLicencia': nombreInstitucionLicencia,
-        'FechaEmisionLicencia': fechaEmisionLicencia?.toUtc().toIso8601String(),
-        'FechaVencimientoLicencia':
-            fechaVencimientoLicencia?.toUtc().toIso8601String(),
-        'IngresoAnual': ingresoAnual,
-        'Cliente1': cliente1,
-        'Cliente2': cliente2,
-        'Cliente3': cliente3,
-        'Proveedor1': proveedor1,
-        'Proveedor2': proveedor2,
-        'Proveedor3': proveedor3,
-        'FechaVerificacion1': fechaVerificacion1?.toUtc().toIso8601String(),
-        'NombreReferencia1': nombreReferencia1,
-        'CedulaReferencia1': cedulaReferencia1,
-        'DireccionReferencia1': direccionReferencia1,
-        'TelefonoReferencia1': telefonoReferencia1,
-        'LugarTrabajoReferencia1': lugarTrabajoReferencia1,
-        'AniosConocerReferido1': aniosConocerReferido1,
-        'ParentescoReferenciaCodigo1': parentescoReferenciaCodigo1,
-        'ResultadoVerificacion1': resultadoVerificacion1,
-        'FechaVerificacion2': fechaVerificacion2?.toUtc().toIso8601String(),
-        'NombreReferencia2': nombreReferencia2,
-        'CedulaReferencia2': cedulaReferencia2,
-        'DireccionReferencia2': direccionReferencia2,
-        'TelefonoReferencia2': telefonoReferencia2,
-        'LugarTrabajoReferencia2': lugarTrabajoReferencia2,
-        'AniosConocerReferido2': aniosConocerReferido2,
-        'ParentescoReferenciaCodigo2': parentescoReferenciaCodigo2,
-        'ResultadoVerificacion2': resultadoVerificacion2,
-        'SemanasBuenas': semanasBuenas,
-        'SemanasNormales': semanasNormales,
-        'SemanasMalas': semanasMalas,
-        'TotalComprasMensuales': totalComprasMensuales,
-        'TotalVentasSegunCompras': totalVentasSegunCompras,
-        'TotalCostoPersonal': totalCostoPersonal,
-        'TotalUltimaCompra': totalUltimaCompra,
-        'DiasBuenosVenta': diasBuenosVenta,
-        'DiasNormalesVenta': diasNormalesVenta,
-        'DiasMalosVenta': diasMalosVenta,
-        'TotalVentasDiarias': totalVentasDiarias,
-        'TotalVentasMensuales': totalVentasMensuales,
-        'TotalAbono': totalAbono,
-        'TotalVentasMensualSegunNumClientes':
-            totalVentasMensualSegunNumClientes,
-        'TotalVentasSegunNivelProduccion': totalVentasSegunNivelProduccion,
-        'PorcentajeProdAltaRotacion': porcentajeProdAltaRotacion,
-        'ValorAltaRotacion': valorAltaRotacion,
-        'PorcentajeProdBajaRotacion': porcentajeProdBajaRotacion,
-        'ValorBajaRotacion': valorBajaRotacion,
-        'Caja': caja,
-        'Reservas': reservas,
-        'CuentasAhorro': cuentasAhorro,
-        'TotalDisponibleActivo': totalDisponibleActivo,
-        'Incobrables': incobrables,
-        'TotalClientes': totalClientes,
-        'AdelantoProveedores': adelantoProveedores,
-        'TotalCuentasXCobrar': totalCuentasXCobrar,
-        'TotalInventario': totalInventario,
-        'TotalActivosCorrientes': totalActivosCorrientes,
-        'TotalActivosFijos': totalActivosFijos,
-        'TotalActivos': totalActivos,
-        'TotalProveedoresAdelantos': totalProveedoresAdelantos,
-        'TotalCreditosInstAmigos': totalCreditosInstAmigos,
-        'TotalPasivos': totalPasivos,
-        'Patrimonio': patrimonio,
-        'PasivosMasPatrimonio': pasivosMasPatrimonio,
-        'VentasContado': ventasContado,
-        'Recuperaciones': recuperaciones,
-        'TotalIngresos': totalIngresos,
-        'CostoVentaProduccion': costoVentaProduccion,
-        'UtilidadBruta': utilidadBruta,
-        'GastosPersonalAlimentacion': gastosPersonalAlimentacion,
-        'SubContratos': subContratos,
-        'Alquilerlocal': alquilerlocal,
-        'Agua': agua,
-        'Combustible': combustible,
-        'Transporte': transporte,
-        'PagoCuotaCredito': pagoCuotaCredito,
-        'Impuesto': impuesto,
-        'Otros': otros,
-        'TotalCostosOperativos': totalCostosOperativos,
-        'ResultadoLiquido': resultadoLiquido,
-        'ConsumoFamiliar': consumoFamiliar,
-        'IngresosFueraNegocio': ingresosFueraNegocio,
-        'SaldoDisponibleUF': saldoDisponibleUf,
-        'CostoVentaPorcentaje': costoVentaPorcentaje,
-        'FechaVerificacion3': fechaVerificacion3?.toUtc().toIso8601String(),
-        'NombreReferencia3': nombreReferencia3,
-        'CedulaReferencia3': cedulaReferencia3,
-        'DireccionReferencia3': direccionReferencia3,
-        'TelefonoReferencia3': telefonoReferencia3,
-        'LugarTrabajoReferencia3': lugarTrabajoReferencia3,
-        'AniosConocerReferido3': aniosConocerReferido3,
-        'ParentescoReferenciaCodigo3': parentescoReferenciaCodigo3,
-        'ResultadoVerificacion3': resultadoVerificacion3,
-        'Salud': salud,
-        'PermisoOperacionNumero': permisoOperacionNumero,
-        'PermisoOperacionNombreInstitucion': permisoOperacionNombreInstitucion,
-        'PermisoOperacionFechaEmision':
-            permisoOperacionFechaEmision?.toUtc().toIso8601String(),
-        'PermisoOperacionFechaVencimiento':
-            permisoOperacionFechaVencimiento?.toUtc().toIso8601String(),
-        'CicloVentaMensual': cicloVentaMensual.toJson(),
-        'CicloVentaDiaria': cicloVentaDiaria.toJson(),
-        'NivelProduccion':
-            List<dynamic>.from(nivelProduccion.map((x) => x.toJson())),
-        'CuentasPorCobrar':
-            List<dynamic>.from(cuentasPorCobrar.map((x) => x.toJson())),
-        'CicloDeComprasSemanales':
-            List<dynamic>.from(cicloDeComprasSemanales.map((x) => x.toJson())),
-        'ComprasProveedorArticulo':
-            List<dynamic>.from(comprasProveedorArticulo.map((x) => x.toJson())),
-        'CostoDePersonal':
-            List<dynamic>.from(costoDePersonal.map((x) => x.toJson())),
-        'IngresosFamilaresFueraNegocio': List<dynamic>.from(
-            ingeresosFamilaresFueraNegocio.map((x) => x.toJson())),
-        'OtrosCreditos':
-            List<dynamic>.from(otrosCreditos.map((x) => x.toJson())),
-        'Pasivos': List<dynamic>.from(pasivos.map((x) => x.toJson())),
-        'Activos': List<dynamic>.from(activos.map((x) => x.toJson())),
+        'Cantidad': cantidad,
+        'Articulo': articulo,
+        'CostoCompra': costoCompra,
+        'PrecioVenta': precioVenta,
+        'CostoVentaPorcentaje':
+            double.parse(costoVentaPorcentaje.toStringAsFixed(2)),
+        'Total': total,
       };
 }
 
@@ -424,9 +459,8 @@ class CicloVenta {
 
   Map<String, dynamic> toJson() => {
         'Dia': dia,
-        'venta': venta,
-        'valorizacion': valorizacion,
-        'MaquinaCreacion': maquinaCreacion,
+        'Venta': venta,
+        'Valorizacion': valorizacion,
       };
 }
 
@@ -445,23 +479,35 @@ class ActivoHN {
       };
 }
 
-class CicloDeComprasSemanalHN {
+class CicloDeComprasSemanalesHN {
+  final int totalComprasMensualSemanal;
+  final List<CicloCompraSemanal> cicloCompra;
+
+  const CicloDeComprasSemanalesHN({
+    required this.totalComprasMensualSemanal,
+    required this.cicloCompra,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'TotalComprasMensualSemanal': totalComprasMensualSemanal,
+        'cicloCompra': List<dynamic>.from(cicloCompra.map((x) => x.toJson())),
+      };
+}
+
+class CicloCompraSemanal {
   final String semanaDelMes;
   final int cantidadCompra;
-  final int totalComprasMensualSemanal;
   final String valorizacion;
 
-  CicloDeComprasSemanalHN({
+  CicloCompraSemanal({
     required this.semanaDelMes,
     required this.cantidadCompra,
-    required this.totalComprasMensualSemanal,
     required this.valorizacion,
   });
 
   Map<String, dynamic> toJson() => {
         'SemanaDelMes': semanaDelMes,
         'CantidadCompra': cantidadCompra,
-        'TotalComprasMensualSemanal': totalComprasMensualSemanal,
         'Valorizacion': valorizacion,
       };
 }
@@ -477,7 +523,7 @@ class CicloVentaHN {
 
   Map<String, dynamic> toJson() => {
         'TotalVentasDiaria': totalVentasDiaria,
-        'ciclo': List<dynamic>.from(ciclo.map((x) => x.toJson())),
+        'cicloVentas': List<dynamic>.from(ciclo.map((x) => x.toJson())),
       };
 }
 
@@ -544,7 +590,7 @@ class CostoDePersonalHN {
   });
 
   Map<String, dynamic> toJson() => {
-        'NumeroEmpleado': numeroEmpleado,
+        'NumeroEmpleado': numeroEmpleado.toString(),
         'LugarProceso': lugarProceso,
         'Permanente': permanente,
         'Temporal': temporal,

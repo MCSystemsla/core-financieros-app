@@ -4938,7 +4938,7 @@
     },
     {
       "id": "29:1559709785993862028",
-      "lastPropertyId": "9:3096892811004885483",
+      "lastPropertyId": "10:2807367681494859239",
       "name": "AnalisisCicloVentaHnLocalDb",
       "properties": [
         {
@@ -4981,6 +4981,11 @@
           "id": "9:3096892811004885483",
           "name": "numeroSolicitud",
           "type": 6
+        },
+        {
+          "id": "10:2807367681494859239",
+          "name": "semana",
+          "type": 9
         }
       ],
       "relations": []
@@ -5129,7 +5134,7 @@
     },
     {
       "id": "33:2083404668007123575",
-      "lastPropertyId": "8:3784692718217441301",
+      "lastPropertyId": "9:4036461290721765747",
       "name": "AnalisisComprasProveedorArticuloHnLocalDb",
       "properties": [
         {
@@ -5172,13 +5177,18 @@
           "id": "8:3784692718217441301",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "9:4036461290721765747",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "34:2805436014549026327",
-      "lastPropertyId": "8:4103968018660071334",
+      "lastPropertyId": "9:358916658472210124",
       "name": "AnalisisCostoDePersonalHnLocalDb",
       "properties": [
         {
@@ -5221,13 +5231,18 @@
           "id": "8:4103968018660071334",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "9:358916658472210124",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "35:5503473363858687994",
-      "lastPropertyId": "4:5375849697290485070",
+      "lastPropertyId": "5:553996865304548510",
       "name": "AnalisisIngresosFamiliaresFueraNegocioHnLocalDb",
       "properties": [
         {
@@ -5250,13 +5265,18 @@
           "id": "4:5375849697290485070",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "5:553996865304548510",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "36:1572556062592245834",
-      "lastPropertyId": "4:3378212551224834945",
+      "lastPropertyId": "5:6049136708467351285",
       "name": "AnalisisActivoHnLocalDb",
       "properties": [
         {
@@ -5279,13 +5299,18 @@
           "id": "4:3378212551224834945",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "5:6049136708467351285",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "37:4233595270970733102",
-      "lastPropertyId": "4:6443558417536732524",
+      "lastPropertyId": "5:1070234269766899977",
       "name": "AnalisisOtrosCreditoHnLocalDb",
       "properties": [
         {
@@ -5308,13 +5333,18 @@
           "id": "4:6443558417536732524",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "5:1070234269766899977",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     },
     {
       "id": "38:1760988909253839465",
-      "lastPropertyId": "4:6992175290874707817",
+      "lastPropertyId": "5:876255431732721775",
       "name": "AnalisisPasivoHnLocalDb",
       "properties": [
         {
@@ -5337,12 +5367,110 @@
           "id": "4:6992175290874707817",
           "name": "uuid",
           "type": 9
+        },
+        {
+          "id": "5:876255431732721775",
+          "name": "numeroSolicitud",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "39:740856037941244079",
+      "lastPropertyId": "7:1967292750117259785",
+      "name": "AnalisisCicloComprasSemanalesHnLocalDb",
+      "properties": [
+        {
+          "id": "1:6148405530520507501",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:1120777980454628068",
+          "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "3:7532016924514300387",
+          "name": "numerSolicitud",
+          "type": 6
+        },
+        {
+          "id": "4:1684587307704281485",
+          "name": "semanaDelMes",
+          "type": 9
+        },
+        {
+          "id": "5:2250821779032339134",
+          "name": "cantidadCompra",
+          "type": 6
+        },
+        {
+          "id": "6:1801085816787157492",
+          "name": "totalComprasMensualSemanal",
+          "type": 6
+        },
+        {
+          "id": "7:1967292750117259785",
+          "name": "valorizacion",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "40:2708399357371822122",
+      "lastPropertyId": "8:5153197946707980638",
+      "name": "AnalisisInventarioHnLocalDb",
+      "properties": [
+        {
+          "id": "1:8718487001266158104",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8623559564423655138",
+          "name": "cantidad",
+          "type": 6
+        },
+        {
+          "id": "3:2556651069264758385",
+          "name": "articulo",
+          "type": 9
+        },
+        {
+          "id": "4:2431451955536394548",
+          "name": "costoCompra",
+          "type": 8
+        },
+        {
+          "id": "5:7322771902414701399",
+          "name": "precioVenta",
+          "type": 6
+        },
+        {
+          "id": "6:4548815660251980506",
+          "name": "costoVentaPorcentaje",
+          "type": 8
+        },
+        {
+          "id": "7:7398304213821224440",
+          "name": "total",
+          "type": 6
+        },
+        {
+          "id": "8:5153197946707980638",
+          "name": "numeroSolicitud",
+          "type": 6
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "38:1760988909253839465",
+  "lastEntityId": "40:2708399357371822122",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

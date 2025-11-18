@@ -103,24 +103,29 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
                   ),
                   AnalisisMayorAMilCicloDeCompras(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                   AnalisisMayorAMilConsumoFamiliares(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                   AnalisisMayorAMilConstanciasLicenciasPermisosHN(
                     pageController: pageController,
                   ),
                   AnalisisMayorAMilCreditosHN(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                   AnalisisMayorAMilReferenciasHN(
                     pageController: pageController,
                   ),
                   AnalisisMayorAMilBalanceGeneralHN(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                   AnalisisMayorAMilEstadoResultadoHN(
                     pageController: pageController,
+                    numeroSolicitud: widget.numeroSolicitud,
                   ),
                 ],
               ),

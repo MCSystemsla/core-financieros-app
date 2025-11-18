@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_costo_personal_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_costo_personal_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
-class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
+class AnalisisMayorAMilConsumoFamiliares extends StatefulWidget {
   const AnalisisMayorAMilConsumoFamiliares({
     super.key,
     required this.pageController,
+    required this.numeroSolicitud,
   });
 
   final PageController pageController;
+  final int numeroSolicitud;
+
+  @override
+  State<AnalisisMayorAMilConsumoFamiliares> createState() =>
+      _AnalisisMayorAMilConsumoFamiliaresState();
+}
+
+class _AnalisisMayorAMilConsumoFamiliaresState
+    extends State<AnalisisMayorAMilConsumoFamiliares> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    cubit.loadCostoPersonalFromLocalDb(numeroSolicitud: widget.numeroSolicitud);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +38,26 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
     return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
         AnalisisNuevaMayorMilHnState>(
       builder: (context, state) {
+        final totalCostoPersonal = state.costoDePersonal
+            .fold<double>(0, (sum, e) => sum + e.salarioMensual);
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnalisisMayorAMilCostoPersonalHn(
-                onTap: () {},
-                totalCostoPersonal: 2500,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                        child: const TableCostoPersonalHnWidget(),
+                      ),
+                    ),
+                  );
+                },
+                totalCostoPersonal: totalCostoPersonal.toInt(),
               ),
               const Gap(20),
               Container(
@@ -54,7 +84,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       alimentacionFam: double.tryParse(newValue),
                     );
                   });
@@ -76,8 +106,8 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
                   cubit.onFieldChanged(
                     () {
-                      return cubit.state
-                          .copyWith(educacionFam: double.tryParse(newValue));
+                      return state.copyWith(
+                          educacionFam: double.tryParse(newValue));
                     },
                   );
                 },
@@ -98,7 +128,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       aguaFam: double.tryParse(newValue),
                     );
                   });
@@ -120,7 +150,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       alquilerFam: double.tryParse(newValue),
                     );
                   });
@@ -142,7 +172,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       aseoLimpiezaFam: double.tryParse(newValue),
                     );
                   });
@@ -164,7 +194,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       vestimentaCalzadoFam: double.tryParse(newValue),
                     );
                   });
@@ -186,7 +216,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       transporteFam: double.tryParse(newValue),
                     );
                   });
@@ -208,7 +238,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       otrosGastosFam: double.tryParse(newValue),
                     );
                   });
@@ -230,7 +260,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       pagoCreditosFam: double.tryParse(newValue),
                     );
                   });
@@ -252,7 +282,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
 
                   cubit.onFieldChanged(() {
-                    return cubit.state.copyWith(
+                    return state.copyWith(
                       totalConsumoFamiliar: double.tryParse(newValue),
                     );
                   });
@@ -265,7 +295,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                   children: [
                     CustomElevatedButton(
                       onPressed: () {
-                        pageController.nextPage(
+                        widget.pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         );
@@ -276,7 +306,7 @@ class AnalisisMayorAMilConsumoFamiliares extends StatelessWidget {
                     const Gap(10),
                     CustomElevatedButton(
                       onPressed: () {
-                        pageController.previousPage(
+                        widget.pageController.previousPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         );

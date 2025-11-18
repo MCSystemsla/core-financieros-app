@@ -8,4 +8,11 @@ class AnalisisIngresosFamiliaresFueraNegocioHnLocalDb {
   String? fuenteOtrosIngresosFamiliar;
   int? ingresosFamiliaresFueraNegocio;
   String? uuid;
+  int? numeroSolicitud;
+  AnalisisIngresosFamiliaresFueraNegocioHnLocalDb({
+    this.fuenteOtrosIngresosFamiliar,
+    this.ingresosFamiliaresFueraNegocio,
+    this.uuid,
+    this.numeroSolicitud,
+  });
 }

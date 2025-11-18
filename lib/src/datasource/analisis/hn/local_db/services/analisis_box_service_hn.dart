@@ -5,11 +5,13 @@ import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_activo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_compras_semanales_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_venta_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_compras_proveedor_articulo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_costo_de_personal_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_cuentas_por_cobrar_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ingresos_familiares_fuera_negocio_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_inventario_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nivel_produccion_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nueva_mayor_a_mil_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_otros_credito_hn_local_db.dart';
@@ -23,6 +25,8 @@ class AnalisisBoxServiceHn {
       analisisNuevaMayorAMilHnLocalDb;
   late final Box<AnalisisCicloVentaHnLocalDb> analisisCicloVentasMensualesHnBox;
   late final Box<AnalisisCicloVentaHnLocalDb> cicloVentaDiariasHNBox;
+  late final Box<AnalisisCicloComprasSemanalesHnLocalDb>
+      cicloComprasSemanalesHnBox;
   late final Box<AnalisisNivelProduccionLocalDb> nivelProduccionHnBox;
   late final Box<AnalisisCuentasPorCobrarHn> cuentasPorCobrarHnBox;
   late final Box<AnalisisComprasProveedorArticuloHnLocalDb>
@@ -34,6 +38,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisOtrosCreditoHnLocalDb> analisisOtrosCreditoHnLocalDb;
   late final Box<AnalisisPasivoHnLocalDb> analisisPasivoHnLocalDb;
   late final Box<AnalisisActivoHnLocalDb> analisisActivoHnLocalDb;
+  late final Box<AnalisisInventarioHnLocalDb> analisisInventarioHnLocalDb;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -52,6 +57,9 @@ class AnalisisBoxServiceHn {
     analisisOtrosCreditoHnLocalDb = _store.box<AnalisisOtrosCreditoHnLocalDb>();
     analisisPasivoHnLocalDb = _store.box<AnalisisPasivoHnLocalDb>();
     analisisActivoHnLocalDb = _store.box<AnalisisActivoHnLocalDb>();
+    cicloComprasSemanalesHnBox =
+        _store.box<AnalisisCicloComprasSemanalesHnLocalDb>();
+    analisisInventarioHnLocalDb = _store.box<AnalisisInventarioHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {

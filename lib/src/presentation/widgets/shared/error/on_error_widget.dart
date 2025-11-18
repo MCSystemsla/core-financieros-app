@@ -35,72 +35,30 @@ class OnErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Lottie.asset(
-            ImageAsset.error,
-            width: 280,
-          ),
-          const Gap(5),
-          Text(
-            'Ha ocurrido un error. Por favor, inténtalo de nuevo.',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const Gap(5),
-          Text(
-            errorMsg,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
-                ),
-          ),
-          const Gap(5),
-          ...errors.map(
-            (error) => ListTile(
-              title: Text(
-                error,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              leading: const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 20,
-              ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              ImageAsset.error,
+              width: 280,
             ),
-          ),
-          const Gap(5),
-          if (areUnsentCedulas) ...[
             const Gap(5),
             Text(
-              'Errores al enviar las cédulas al expediente digital:',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 16,
-                  ),
+              'Ha ocurrido un error. Por favor, inténtalo de nuevo.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            ...unsentCedulas.map(
-              (error) => ListTile(
-                title: Text(
-                  error,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                leading: const Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-          if (areUnsentKivaForms) ...[
+            const Gap(5),
             Text(
-              'Errores al enviar historias Kiva:',
+              errorMsg,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16,
                   ),
             ),
-            ...unsentKivaForms.map(
+            const Gap(5),
+            ...errors.map(
               (error) => ListTile(
                 title: Text(
                   error,
@@ -113,57 +71,101 @@ class OnErrorWidget extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-          if (solicitudesSent.isNotEmpty) ...[
-            const Gap(10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Solicitudes Enviadas Exitosamente:',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.getSecondaryColor(),
-                      ),
-                ),
-                const Gap(5),
-                ...solicitudesSent.map(
-                  (solicitud) => ListTile(
-                    title: Text(
-                      solicitud,
-                      style: Theme.of(context).textTheme.bodyMedium,
+            const Gap(5),
+            if (areUnsentCedulas) ...[
+              const Gap(5),
+              Text(
+                'Errores al enviar las cédulas al expediente digital:',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 16,
                     ),
-                    leading: const Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 20,
-                    ),
+              ),
+              ...unsentCedulas.map(
+                (error) => ListTile(
+                  title: Text(
+                    error,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  leading: const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 20,
                   ),
                 ),
-              ],
-            ),
-          ],
-          const Gap(10),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: CustomElevatedButton(
-              onPressed: onPressed,
-              text: btnTitle,
-              color: AppColors.getPrimaryColor(),
-            ),
-          ),
-          if (needToGoBack) ...[
+              ),
+            ],
+            if (areUnsentKivaForms) ...[
+              Text(
+                'Errores al enviar historias Kiva:',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 16,
+                    ),
+              ),
+              ...unsentKivaForms.map(
+                (error) => ListTile(
+                  title: Text(
+                    error,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  leading: const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+            if (solicitudesSent.isNotEmpty) ...[
+              const Gap(10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Solicitudes Enviadas Exitosamente:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getSecondaryColor(),
+                        ),
+                  ),
+                  const Gap(5),
+                  ...solicitudesSent.map(
+                    (solicitud) => ListTile(
+                      title: Text(
+                        solicitud,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      leading: const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const Gap(10),
             Padding(
               padding: const EdgeInsets.all(20),
               child: CustomElevatedButton(
-                onPressed: () => context.pop(),
-                text: 'Regresar',
-                color: AppColors.getSecondaryColor(),
+                onPressed: onPressed,
+                text: btnTitle,
+                color: AppColors.getPrimaryColor(),
               ),
-            )
+            ),
+            if (needToGoBack) ...[
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomElevatedButton(
+                  onPressed: () => context.pop(),
+                  text: 'Regresar',
+                  color: AppColors.getSecondaryColor(),
+                ),
+              )
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

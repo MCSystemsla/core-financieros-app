@@ -122,14 +122,16 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
   final CicloVentaDiaria cicloVentaDiaria;
   final List<NivelProduccionHN> nivelProduccion;
   final List<CuentasPorCobrarHN> cuentasPorCobrar;
-  final List<CicloDeComprasSemanalHN> cicloDeComprasSemanales;
+  final CicloDeComprasSemanalesHN cicloDeComprasSemanales;
   final List<ComprasProveedorArticuloHN> comprasProveedorArticulo;
   final List<CostoDePersonalHN> costoDePersonal;
   final List<IngresosFamilaresFueraNegocioHN> ingeresosFamilaresFueraNegocio;
   final List<OtrosCreditoHN> otrosCreditos;
   final List<PasivoHN> pasivos;
   final List<ActivoHN> activos;
+  final List<InventarioHN> inventario;
   const AnalisisNuevaMayorMilHnState({
+    this.inventario = const [],
     this.numeroSolicitud = 0,
     this.idLocalResponse = 0,
     this.uuid,
@@ -256,7 +258,10 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     ),
     this.nivelProduccion = const [],
     this.cuentasPorCobrar = const [],
-    this.cicloDeComprasSemanales = const [],
+    this.cicloDeComprasSemanales = const CicloDeComprasSemanalesHN(
+      totalComprasMensualSemanal: 0,
+      cicloCompra: [],
+    ),
     this.comprasProveedorArticulo = const [],
     this.costoDePersonal = const [],
     this.ingeresosFamilaresFueraNegocio = const [],
@@ -267,6 +272,7 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        inventario,
         cicloVentaMensual,
         valorAltaRotacion,
         numeroSolicitud,
@@ -516,13 +522,14 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     CicloVentaDiaria? cicloVentaDiaria,
     List<NivelProduccionHN>? nivelProduccion,
     List<CuentasPorCobrarHN>? cuentasPorCobrar,
-    List<CicloDeComprasSemanalHN>? cicloDeComprasSemanales,
+    CicloDeComprasSemanalesHN? cicloDeComprasSemanales,
     List<ComprasProveedorArticuloHN>? comprasProveedorArticulo,
     List<CostoDePersonalHN>? costoDePersonal,
     List<IngresosFamilaresFueraNegocioHN>? ingeresosFamilaresFueraNegocio,
     List<OtrosCreditoHN>? otrosCreditos,
     List<PasivoHN>? pasivos,
     List<ActivoHN>? activos,
+    List<InventarioHN>? inventario,
   }) {
     return AnalisisNuevaMayorMilHnState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -686,6 +693,7 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
       otrosCreditos: otrosCreditos ?? this.otrosCreditos,
       pasivos: pasivos ?? this.pasivos,
       activos: activos ?? this.activos,
+      inventario: inventario ?? this.inventario,
     );
   }
 }

@@ -12,6 +12,7 @@ class AnalisisComprasProveedorArticuloHnLocalDb {
   int? montoCompraCredito;
   int? totalCompraMensual;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisComprasProveedorArticuloHnLocalDb({
     this.proveedorArticulo,
     this.frecuenciaCompraContadoCodigo,
@@ -20,5 +21,6 @@ class AnalisisComprasProveedorArticuloHnLocalDb {
     this.montoCompraCredito,
     this.totalCompraMensual,
     this.uuid,
+    this.numeroSolicitud,
   });
 }

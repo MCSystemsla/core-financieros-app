@@ -3,11 +3,20 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/analisis/nueva_mayor_a_mil_autosave.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_activo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_compras_semanales_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_venta_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_compras_proveedor_articulo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_costo_de_personal_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_cuentas_por_cobrar_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ingresos_familiares_fuera_negocio_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_inventario_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nivel_produccion_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nueva_mayor_a_mil_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_otros_credito_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_pasivo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -29,13 +38,19 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
   Future<void> createAnalisisNuevaMayorMil({
     required int numeroSolicitud,
   }) async {
+    final semanas = getcomprasSemanasMensuales();
+    final dias = getCicloVentasDiarios();
+    final incobrablesxCobrar = global<SolicitudesHnBoxService>()
+        .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.createAnalisisNuevaMayorMil(
         analisisSolicitudNuevaMenor: AnalisisNuevaMayorMilHn(
           database: state.database,
           numeroSolicitud: numeroSolicitud,
-          totalIngresosFueraNegocio: state.totalIngresosFueraNegocio,
+          totalIngresosFueraNegocio: state.ingeresosFamilaresFueraNegocio
+              .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio),
           alimentacionFam: state.alimentacionFam,
           educacionFam: state.educacionFam,
           aguaFam: state.aguaFam,
@@ -76,19 +91,20 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           aniosConocerReferido2: state.aniosConocerReferido2.toInt(),
           parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
           resultadoVerificacion2: state.resultadoVerificacion2,
-          semanasBuenas: state.semanasBuenas,
-          semanasNormales: state.semanasNormales,
-          semanasMalas: state.semanasMalas,
+          semanasBuenas: semanas['semanasBuenas'],
+          semanasNormales: semanas['semanasNormales'],
+          semanasMalas: semanas['semanasMalas'],
           totalComprasMensuales: state.totalComprasMensuales,
           totalVentasSegunCompras: state.totalVentasSegunCompras,
           totalCostoPersonal: state.totalCostoPersonal,
           totalUltimaCompra: state.totalUltimaCompra,
-          diasBuenosVenta: state.diasBuenosVenta,
-          diasNormalesVenta: state.diasNormalesVenta,
-          diasMalosVenta: state.diasMalosVenta,
-          totalVentasDiarias: state.totalVentasDiarias,
-          totalVentasMensuales: state.totalVentasMensuales,
-          totalAbono: state.totalAbono,
+          diasBuenosVenta: dias['diasBuenos'],
+          diasNormalesVenta: dias['diasNormales'],
+          diasMalosVenta: dias['diasMalos'],
+          totalVentasDiarias: state.cicloVentaDiaria.totalVentasDiaria,
+          totalVentasMensuales: state.cicloVentaMensual.totalVentasDiaria,
+          totalAbono:
+              state.cuentasPorCobrar.fold(0, (sum, e) => sum + e.abonoCredito),
           totalVentasMensualSegunNumClientes:
               state.totalVentasMensualSegunNumClientes,
           totalVentasSegunNivelProduccion:
@@ -101,23 +117,49 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           reservas: state.reservas,
           cuentasAhorro: state.cuentasAhorro,
           totalDisponibleActivo: state.totalDisponibleActivo,
-          incobrables: state.incobrables,
-          totalClientes: state.totalClientes,
+          incobrables: state.cuentasPorCobrar
+                  .fold(0, (sum, e) => sum + e.totalMensualCredito) *
+              (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0),
+          totalClientes: state.cuentasPorCobrar
+              .fold(0, (sum, e) => sum + e.totalMensualCredito),
           adelantoProveedores: state.adelantoProveedores,
-          totalCuentasXCobrar: state.totalCuentasXCobrar,
-          totalInventario: state.totalInventario,
-          totalActivosCorrientes: state.totalActivosCorrientes,
-          totalActivosFijos: state.totalActivosFijos,
-          totalActivos: state.totalActivos,
-          totalProveedoresAdelantos: state.totalProveedoresAdelantos,
-          totalCreditosInstAmigos: state.totalCreditosInstAmigos,
-          totalPasivos: state.totalPasivos,
-          patrimonio: state.patrimonio,
-          pasivosMasPatrimonio: state.pasivosMasPatrimonio,
+          totalCuentasXCobrar: state.cuentasPorCobrar
+                  .fold(0, (sum, e) => sum + e.totalMensualCredito) -
+              state.cuentasPorCobrar
+                      .fold(0, (sum, e) => sum + e.totalMensualCredito) *
+                  (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0) +
+              state.totalProveedoresAdelantos,
+          totalInventario: state.inventario
+              .fold(0, (sum, element) => sum + element.total.toInt()),
+          totalActivosCorrientes:
+              state.activos.fold(0, (sum, e) => sum + e.monto) +
+                  state.cuentasPorCobrar
+                      .fold(0, (sum, e) => sum + e.totalMensualCredito) +
+                  state.totalInventario,
+          totalActivosFijos: state.activos.fold(0, (sum, e) => sum + e.monto) +
+              state.totalActivosCorrientes,
+          totalActivos: state.caja + state.reservas + state.cuentasAhorro,
+          totalProveedoresAdelantos: state.comprasProveedorArticulo
+              .fold(0, (sum, e) => sum + e.totalCompraMensual),
+          totalCreditosInstAmigos:
+              state.otrosCreditos.fold(0, (sum, e) => sum + e.monto),
+          totalPasivos: state.pasivos.fold(0, (sum, e) => sum + e.monto) +
+              state.totalActivosCorrientes,
+          patrimonio: state.activos.fold(0, (sum, e) => sum + e.monto) +
+              state.pasivos.fold(0, (sum, e) => sum + e.monto),
+          pasivosMasPatrimonio:
+              state.pasivos.fold(0, (sum, e) => sum + e.monto) +
+                  (state.activos.fold(0, (sum, e) => sum + e.monto) +
+                      state.pasivos.fold(0, (sum, e) => sum + e.monto)),
           ventasContado: state.ventasContado,
-          recuperaciones: state.recuperaciones,
-          totalIngresos: state.totalIngresos,
-          costoVentaProduccion: state.costoVentaProduccion,
+          recuperaciones:
+              state.cuentasPorCobrar.fold(0, (sum, e) => sum + e.abonoCredito),
+          totalIngresos: state.ventasContado +
+              state.cuentasPorCobrar.fold(0, (sum, e) => sum + e.abonoCredito),
+          costoVentaProduccion: state.nivelProduccion.fold(
+            0,
+            (sum, e) => sum + e.totalMensualProduccion,
+          ),
           utilidadBruta: state.utilidadBruta,
           gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
           subContratos: state.subContratos,
@@ -128,12 +170,23 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           pagoCuotaCredito: state.pagoCuotaCredito,
           impuesto: state.impuesto,
           otros: state.otros,
-          totalCostosOperativos: state.totalCostosOperativos,
+          totalCostosOperativos: state.gastosPersonalAlimentacion +
+              state.alquilerlocal +
+              state.agua +
+              state.combustible +
+              state.transporte +
+              state.pagoCuotaCredito +
+              state.impuesto +
+              state.otros +
+              state.resultadoLiquido +
+              state.utilidadBruta,
           resultadoLiquido: state.resultadoLiquido,
           consumoFamiliar: state.consumoFamiliar,
           ingresosFueraNegocio: state.ingresosFueraNegocio,
           saldoDisponibleUf: state.saldoDisponibleUf,
-          costoVentaPorcentaje: state.costoVentaPorcentaje,
+          costoVentaPorcentaje: state.inventario.fold(
+                  0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
+              state.inventario.length,
           fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
           nombreReferencia3: state.nombreReferencia3,
           cedulaReferencia3: state.cedulaReferencia3,
@@ -151,19 +204,38 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               DateTime.tryParse(state.permisoOperacionFechaEmision),
           permisoOperacionFechaVencimiento:
               DateTime.tryParse(state.permisoOperacionFechaVencimiento),
-          cicloVentaMensual: state.cicloVentaMensual,
-          cicloVentaDiaria: state.cicloVentaDiaria,
+          cicloVentaMensual: CicloVentaHN(
+            totalVentasDiaria: state.cicloVentaMensual.ciclo.fold(
+              0,
+              (sum, e) => sum + e.venta.toInt(),
+            ),
+            ciclo: state.cicloVentaMensual.ciclo,
+          ),
+          cicloVentaDiaria: CicloVentaDiaria(
+            totalVentasDiaria: state.cicloVentaDiaria.cicloVentas
+                .fold(0, (sum, e) => sum + e.venta.toInt()),
+            cicloVentas: state.cicloVentaDiaria.cicloVentas,
+          ),
           nivelProduccion: state.nivelProduccion,
           cuentasPorCobrar: state.cuentasPorCobrar,
-          cicloDeComprasSemanales: state.cicloDeComprasSemanales,
+          cicloDeComprasSemanales: CicloDeComprasSemanalesHN(
+            totalComprasMensualSemanal: state
+                .cicloDeComprasSemanales.cicloCompra
+                .fold(0, (sum, e) => sum + e.cantidadCompra),
+            cicloCompra: state.cicloDeComprasSemanales.cicloCompra,
+          ),
           comprasProveedorArticulo: state.comprasProveedorArticulo,
           costoDePersonal: state.costoDePersonal,
           ingeresosFamilaresFueraNegocio: state.ingeresosFamilaresFueraNegocio,
           otrosCreditos: state.otrosCreditos,
           pasivos: state.pasivos,
           activos: state.activos,
+          inventario: state.inventario,
         ),
       );
+      emit(state.copyWith(
+        status: Status.done,
+      ));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -652,7 +724,8 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     if (existing.isNotEmpty) {
       emit(state.copyWith(
         cicloVentaMensual: CicloVentaHN(
-          totalVentasDiaria: 0,
+          totalVentasDiaria:
+              existing.fold(0, (sum, e) => (sum) + (e.venta?.toInt() ?? 0)),
           ciclo: existing
               .map((e) => Ciclo(
                     mes: e.mes ?? '',
@@ -693,8 +766,13 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       localDbProvider.analisisCicloVentasMensualesHnBox.putMany(entities);
 
       emit(state.copyWith(
-        cicloVentaMensual:
-            CicloVentaHN(totalVentasDiaria: 0, ciclo: defaultCiclo),
+        totalVentasMensuales:
+            defaultCiclo.fold(0, (sum, e) => (sum ?? 0) + e.venta.toInt()),
+        cicloVentaMensual: CicloVentaHN(
+          totalVentasDiaria:
+              defaultCiclo.fold(0, (sum, e) => sum + e.venta.toInt()),
+          ciclo: defaultCiclo,
+        ),
       ));
     }
   }
@@ -712,7 +790,8 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     if (existing.isNotEmpty) {
       emit(state.copyWith(
         cicloVentaDiaria: CicloVentaDiaria(
-          totalVentasDiaria: 0,
+          totalVentasDiaria:
+              existing.fold(0, (sum, e) => (sum) + (e.venta ?? 0)),
           cicloVentas: existing
               .map((e) => CicloVenta(
                     dia: e.dia ?? '',
@@ -727,10 +806,10 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       final defaultCiclo = [
         'Lunes',
         'Martes',
-        'Miércoles',
+        'Miercoles',
         'Jueves',
         'Viernes',
-        'Sábado',
+        'Sabado',
         'Domingo',
       ]
           .map((dia) => CicloVenta(
@@ -755,6 +834,71 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         cicloVentaDiaria: CicloVentaDiaria(
           totalVentasDiaria: 0,
           cicloVentas: defaultCiclo,
+        ),
+      ));
+    }
+  }
+
+  void initCicloComprasSemanales(int numeroSolicitud) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    final existing = localDbProvider.cicloComprasSemanalesHnBox
+        .query(AnalisisCicloComprasSemanalesHnLocalDb_.numerSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    if (existing.isNotEmpty) {
+      emit(
+        state.copyWith(
+          cicloDeComprasSemanales: CicloDeComprasSemanalesHN(
+            totalComprasMensualSemanal:
+                existing.fold(0, (sum, e) => sum + (e.cantidadCompra ?? 0)),
+            cicloCompra: existing
+                .map(
+                  (e) => CicloCompraSemanal(
+                    cantidadCompra: e.cantidadCompra ?? 0,
+                    semanaDelMes: e.semanaDelMes ?? '',
+                    valorizacion: e.valorizacion ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+    } else {
+      final defaultCiclo = [
+        'Primera Semana',
+        'Segunda Semana',
+        'Tercera Semana',
+        'Cuarta Semana',
+      ]
+          .map(
+            (semana) => CicloCompraSemanal(
+              semanaDelMes: semana,
+              cantidadCompra: 0,
+              valorizacion: 'N/A',
+            ),
+          )
+          .toList();
+
+      // Guardar en BD
+      final entities = defaultCiclo
+          .map((c) => AnalisisCicloComprasSemanalesHnLocalDb(
+                cantidadCompra: c.cantidadCompra,
+                semanaDelMes: c.semanaDelMes,
+                valorizacion: c.valorizacion,
+                uuid: c.semanaDelMes,
+                numerSolicitud: numeroSolicitud,
+              ))
+          .toList();
+
+      localDbProvider.cicloComprasSemanalesHnBox.putMany(entities);
+
+      emit(state.copyWith(
+        cicloDeComprasSemanales: CicloDeComprasSemanalesHN(
+          totalComprasMensualSemanal:
+              defaultCiclo.fold(0, (sum, e) => sum + (e.cantidadCompra)),
+          cicloCompra: defaultCiclo,
         ),
       ));
     }
@@ -805,7 +949,8 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     emit(
       state.copyWith(
         cicloVentaMensual: CicloVentaHN(
-          totalVentasDiaria: updatedCiclo.fold(0, (sum, e) => sum + e.venta),
+          totalVentasDiaria:
+              state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta),
           ciclo: updatedCiclo,
         ),
         // otros campos si tu state tiene más
@@ -858,8 +1003,66 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     emit(
       state.copyWith(
         cicloVentaDiaria: CicloVentaDiaria(
-          totalVentasDiaria: updatedCiclo.fold(0, (sum, e) => sum + e.venta),
           cicloVentas: updatedCiclo,
+          totalVentasDiaria: state.cicloVentaDiaria.cicloVentas
+              .fold(0, (sum, e) => sum + e.venta),
+        ),
+        // otros campos si tu state tiene más
+      ),
+    );
+  }
+
+  void updateCompraSemana({
+    required int cantidadCompra,
+    required int venta,
+    required String valorizacion,
+    required String semanaDelMes,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Buscar si ya existe ese mes para esa solicitud
+    final query = localDbProvider.cicloComprasSemanalesHnBox
+        .query(AnalisisCicloComprasSemanalesHnLocalDb_.numerSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisCicloComprasSemanalesHnLocalDb_.uuid
+                .equals(semanaDelMes)))
+        .build();
+
+    final existing = query.findFirst();
+    query.close();
+
+    final entity = existing ?? AnalisisCicloComprasSemanalesHnLocalDb();
+
+    // Actualizar o crear el registro
+    entity.cantidadCompra = cantidadCompra;
+    entity.semanaDelMes = semanaDelMes;
+    entity.valorizacion = valorizacion;
+    entity.numerSolicitud = numeroSolicitud;
+    entity.totalComprasMensualSemanal = venta;
+    entity.uuid =
+        semanaDelMes; // usamos el nombre del dia como identificador lógico
+
+    localDbProvider.cicloComprasSemanalesHnBox.put(entity);
+
+    // Actualizar en memoria (state)
+    final updatedCiclo = state.cicloDeComprasSemanales.cicloCompra.map((c) {
+      if (c.semanaDelMes == semanaDelMes) {
+        return CicloCompraSemanal(
+          cantidadCompra: cantidadCompra,
+          valorizacion: valorizacion,
+          semanaDelMes: semanaDelMes,
+        );
+      }
+      return c;
+    }).toList();
+
+    emit(
+      state.copyWith(
+        cicloDeComprasSemanales: CicloDeComprasSemanalesHN(
+          totalComprasMensualSemanal:
+              updatedCiclo.fold(0, (sum, e) => sum + (e.cantidadCompra)),
+          cicloCompra: updatedCiclo,
         ),
         // otros campos si tu state tiene más
       ),
@@ -920,11 +1123,44 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     };
   }
 
+  Map<String, dynamic> getcomprasSemanasMensuales() {
+    if (state.cicloVentaDiaria.cicloVentas.isEmpty) {
+      return {'semanasBuenas': 0, 'semanasNormales': 0, 'semanasMalas': 0};
+    }
+
+    final sorted = state.cicloDeComprasSemanales.cicloCompra
+        .map((e) => e.cantidadCompra)
+        .toSet()
+        .toList()
+      ..sort((b, a) => a.compareTo(b));
+
+    final uniqueCiclos = sorted
+        .map((v) => state.cicloDeComprasSemanales.cicloCompra
+            .firstWhere((c) => c.cantidadCompra == v))
+        .toList();
+
+    final semanasBuenas = uniqueCiclos.first;
+    final semanasNormales = uniqueCiclos[uniqueCiclos.length ~/ 2];
+    final semanasMalas = uniqueCiclos.last;
+
+    return {
+      'semanasBuenas': semanasBuenas.cantidadCompra,
+      'semanasNormales': semanasNormales.cantidadCompra,
+      'semanasMalas': semanasMalas.cantidadCompra,
+    };
+  }
+
   saveCuentaPorCobrar({
     required CuentasPorCobrarHN cuentasPorCobrar,
     required int numeroSolicitud,
   }) {
     final localDbProvider = global<AnalisisBoxServiceHn>();
+    final solicitudesDbService = global<SolicitudesHnBoxService>()
+        .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+
+    final cuentasPorCobrarIncobrables =
+        double.tryParse(solicitudesDbService?.valor ?? '0') ?? 0;
+
     localDbProvider.cuentasPorCobrarHnBox.put(
       AnalisisCuentasPorCobrarHn(
         abonoCredito: cuentasPorCobrar.abonoCredito,
@@ -938,6 +1174,16 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     );
     emit(
       state.copyWith(
+        totalCuentasXCobrar: state.cuentasPorCobrar
+            .fold(0, (sum, e) => (sum ?? 0) + e.totalMensualCredito),
+        totalClientes: state.cuentasPorCobrar
+            .fold(0, (sum, e) => (sum ?? 0) + e.totalMensualCredito),
+        incobrables: state.cuentasPorCobrar
+                .fold(0, (sum, e) => (sum) + e.totalMensualCredito) *
+            cuentasPorCobrarIncobrables,
+        totalActivosCorrientes: (state.totalActivos +
+            state.totalCuentasXCobrar +
+            state.totalInventario),
         cuentasPorCobrar: [
           ...state.cuentasPorCobrar,
           cuentasPorCobrar,
@@ -972,6 +1218,182 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     );
   }
 
+  saveComprasPorProveedor({
+    required ComprasProveedorArticuloHN comprasPorProveedor,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisComprasProveedorArticuloHnLocalDb.put(
+      AnalisisComprasProveedorArticuloHnLocalDb(
+        frecuenciaCompraContadoCodigo:
+            comprasPorProveedor.frecuenciaCompraContadoCodigo,
+        frecuenciaCompraCreditoCodigo:
+            comprasPorProveedor.frecuenciaCompraCreditoCodigo,
+        montoCompraContado: comprasPorProveedor.montoCompraContado,
+        montoCompraCredito: comprasPorProveedor.montoCompraCredito,
+        proveedorArticulo: comprasPorProveedor.proveedorArticulo,
+        totalCompraMensual: comprasPorProveedor.totalCompraMensual,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        comprasProveedorArticulo: [
+          ...state.comprasProveedorArticulo,
+          comprasPorProveedor,
+        ],
+      ),
+    );
+  }
+
+  saveCostoPersonal({
+    required CostoDePersonalHN costoDePersonal,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisCostoDePersonalHnLocalDb.put(
+      AnalisisCostoDePersonalHnLocalDb(
+        formaDePago: costoDePersonal.formaDePago,
+        salarioMensual: costoDePersonal.salarioMensual,
+        numeroEmpleado: costoDePersonal.numeroEmpleado,
+        lugarProceso: costoDePersonal.lugarProceso,
+        permanente: costoDePersonal.permanente,
+        temporal: costoDePersonal.temporal,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        costoDePersonal: [
+          ...state.costoDePersonal,
+          costoDePersonal,
+        ],
+      ),
+    );
+  }
+
+  saveIngresosFamiliaresFueraDelNegocio({
+    required IngresosFamilaresFueraNegocioHN ingresosFamiliaresFueraNegocio,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisIngresosFamiliaresFueraNegocioHnLocalDb.put(
+      AnalisisIngresosFamiliaresFueraNegocioHnLocalDb(
+        fuenteOtrosIngresosFamiliar:
+            ingresosFamiliaresFueraNegocio.fuenteOtrosIngresosFamiliar,
+        ingresosFamiliaresFueraNegocio:
+            ingresosFamiliaresFueraNegocio.ingresosFamiliaresFueraNegocio,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        ingeresosFamilaresFueraNegocio: [
+          ...state.ingeresosFamilaresFueraNegocio,
+          ingresosFamiliaresFueraNegocio,
+        ],
+      ),
+    );
+  }
+
+  saveActivosFijos({
+    required ActivoHN activoFijo,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisActivoHnLocalDb.put(
+      AnalisisActivoHnLocalDb(
+        monto: activoFijo.monto,
+        nombreActivo: activoFijo.nombreActivo,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        activos: [
+          ...state.activos,
+          activoFijo,
+        ],
+      ),
+    );
+  }
+
+  saveOtrosCredito({
+    required OtrosCreditoHN otroCredito,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisOtrosCreditoHnLocalDb.put(
+      AnalisisOtrosCreditoHnLocalDb(
+        nombreOtrosCreditos: otroCredito.nombreOtrosCreditos,
+        monto: otroCredito.monto,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        otrosCreditos: [
+          ...state.otrosCreditos,
+          otroCredito,
+        ],
+      ),
+    );
+  }
+
+  savePasivo({
+    required PasivoHN pasivo,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisPasivoHnLocalDb.put(
+      AnalisisPasivoHnLocalDb(
+        nombreProveedores: pasivo.nombreProveedores,
+        monto: pasivo.monto,
+        uuid: const Uuid().v4(),
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        pasivos: [
+          ...state.pasivos,
+          pasivo,
+        ],
+      ),
+    );
+  }
+
+  saveInventario({
+    required InventarioHN inventario,
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    localDbProvider.analisisInventarioHnLocalDb.put(
+      AnalisisInventarioHnLocalDb(
+        articulo: inventario.articulo,
+        costoCompra: inventario.costoCompra,
+        precioVenta: inventario.precioVenta,
+        cantidad: inventario.cantidad,
+        costoVentaPorcentaje: inventario.costoVentaPorcentaje,
+        total: inventario.total,
+        numeroSolicitud: numeroSolicitud,
+      ),
+    );
+    emit(
+      state.copyWith(
+        inventario: [
+          ...state.inventario,
+          inventario,
+        ],
+      ),
+    );
+  }
+
   void loadCuentasPorCobrar({required int numeroSolicitud}) {
     final localDbProvider = global<AnalisisBoxServiceHn>();
 
@@ -996,6 +1418,14 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     // Actualizar el state
     emit(state.copyWith(
       cuentasPorCobrar: cuentasPorCobrarList,
+      totalClientes: cuentasPorCobrarList.fold(
+        0,
+        (sum, e) => (sum ?? 0) + e.totalMensualCredito,
+      ),
+      totalCuentasXCobrar: cuentasPorCobrarList.fold(
+        0,
+        (sum, e) => (sum ?? 0) + e.totalMensualCredito,
+      ),
     ));
   }
 
@@ -1023,6 +1453,201 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     // Actualizar el state
     emit(state.copyWith(
       nivelProduccion: nivelProduccionList,
+    ));
+  }
+
+  void loadComprasProveedorFromLocalDb({required int numeroSolicitud}) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final comprasProveedorDb = localDbProvider
+        .analisisComprasProveedorArticuloHnLocalDb
+        .query(AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final comprasProveedorList = comprasProveedorDb
+        .map((c) => ComprasProveedorArticuloHN(
+              frecuenciaCompraContadoCodigo:
+                  c.frecuenciaCompraContadoCodigo ?? '',
+              frecuenciaCompraCreditoCodigo:
+                  c.frecuenciaCompraCreditoCodigo ?? '',
+              montoCompraContado: c.montoCompraContado ?? 0,
+              montoCompraCredito: c.montoCompraCredito ?? 0,
+              proveedorArticulo: c.proveedorArticulo ?? '',
+              totalCompraMensual: c.totalCompraMensual ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      comprasProveedorArticulo: comprasProveedorList,
+    ));
+  }
+
+  void loadCostoPersonalFromLocalDb({required int numeroSolicitud}) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final costoPersonalDb = localDbProvider.analisisCostoDePersonalHnLocalDb
+        .query(AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final costoPersonalList = costoPersonalDb
+        .map((c) => CostoDePersonalHN(
+              numeroEmpleado: c.numeroEmpleado ?? 0,
+              lugarProceso: c.lugarProceso ?? '',
+              permanente: c.permanente ?? false,
+              temporal: c.temporal ?? false,
+              formaDePago: c.formaDePago ?? '',
+              salarioMensual: c.salarioMensual ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      costoDePersonal: costoPersonalList,
+    ));
+  }
+
+  void loadNegocioFamiliarFueraNegocioFromLocalDb({
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final analisisIngresosFamiliaresFueraNegocioHnLocalDb = localDbProvider
+        .analisisIngresosFamiliaresFueraNegocioHnLocalDb
+        .query(AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final analisisIngresosFamiliaresList =
+        analisisIngresosFamiliaresFueraNegocioHnLocalDb
+            .map((c) => IngresosFamilaresFueraNegocioHN(
+                  fuenteOtrosIngresosFamiliar:
+                      c.fuenteOtrosIngresosFamiliar ?? '',
+                  ingresosFamiliaresFueraNegocio:
+                      c.ingresosFamiliaresFueraNegocio ?? 0,
+                ))
+            .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      ingeresosFamilaresFueraNegocio: analisisIngresosFamiliaresList,
+    ));
+  }
+
+  void loadActivosFijosFromLocalDb({
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final activosFijosDb = localDbProvider.analisisActivoHnLocalDb
+        .query(AnalisisActivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final activosFijosList = activosFijosDb
+        .map((c) => ActivoHN(
+              nombreActivo: c.nombreActivo ?? '',
+              monto: c.monto ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      activos: activosFijosList,
+    ));
+  }
+
+  void loadPasivosFromLocalDb({
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final pasivosFijosDb = localDbProvider.analisisPasivoHnLocalDb
+        .query(AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final pasivosFijosList = pasivosFijosDb
+        .map((c) => PasivoHN(
+              nombreProveedores: c.nombreProveedores ?? '',
+              monto: c.monto ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      pasivos: pasivosFijosList,
+    ));
+  }
+
+  void loadOtrosCreditosFromLocalDb({
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final otrosCreditosDb = localDbProvider.analisisOtrosCreditoHnLocalDb
+        .query(AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final otrosCreditosList = otrosCreditosDb
+        .map((c) => OtrosCreditoHN(
+              nombreOtrosCreditos: c.nombreOtrosCreditos ?? '',
+              monto: c.monto ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      otrosCreditos: otrosCreditosList,
+    ));
+  }
+
+  void loadInventarioFromLocalDb({
+    required int numeroSolicitud,
+  }) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+
+    // Traer todos los registros de la base local
+    final inventarioDb = localDbProvider.analisisInventarioHnLocalDb
+        .query(AnalisisInventarioHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build()
+        .find();
+
+    // Convertirlos a tu modelo del state si hace falta
+    final inventarioList = inventarioDb
+        .map((c) => InventarioHN(
+              cantidad: c.cantidad ?? 0,
+              articulo: c.articulo ?? '',
+              costoCompra: c.costoCompra ?? 0,
+              precioVenta: c.precioVenta ?? 0,
+              costoVentaPorcentaje: c.costoVentaPorcentaje ?? 0,
+              total: c.total ?? 0,
+            ))
+        .toList();
+
+    // Actualizar el state
+    emit(state.copyWith(
+      inventario: inventarioList,
     ));
   }
 }

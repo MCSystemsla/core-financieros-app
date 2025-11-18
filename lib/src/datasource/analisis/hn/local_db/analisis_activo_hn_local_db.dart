@@ -8,9 +8,11 @@ class AnalisisActivoHnLocalDb {
   String? nombreActivo;
   int? monto;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisActivoHnLocalDb({
     this.nombreActivo,
     this.monto,
     this.uuid,
+    this.numeroSolicitud,
   });
 }

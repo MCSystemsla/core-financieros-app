@@ -12,6 +12,7 @@ class AnalisisCostoDePersonalHnLocalDb {
   String? formaDePago;
   int? salarioMensual;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisCostoDePersonalHnLocalDb({
     this.numeroEmpleado,
     this.lugarProceso,
@@ -20,5 +21,6 @@ class AnalisisCostoDePersonalHnLocalDb {
     this.formaDePago,
     this.salarioMensual,
     this.uuid,
+    this.numeroSolicitud,
   });
 }

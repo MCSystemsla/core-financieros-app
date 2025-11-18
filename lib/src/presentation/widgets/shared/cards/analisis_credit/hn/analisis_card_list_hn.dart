@@ -46,50 +46,47 @@ class AnalisisCardListHn extends StatelessWidget {
           const Gap(10),
           InkWell(
             onTap: onTap,
-            child: Hero(
-              tag: 'analisis-credito-compras-proveedores',
-              child: Card(
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const Gap(10),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Crear estadisticas',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
-                            ),
-                            Gap(10),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Gap(10),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Crear estadisticas',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          Gap(10),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.grey,
+                          ),
+                        ],
                       ),
-                      const Divider(),
-                      if (items.isEmpty) const Text('Ingesa items para ver'),
-                      ...items.map(
-                        (e) => _buildItem(
-                          icon: e.icon,
-                          label: e.label,
-                          value: e.value,
-                          color: e.color,
-                          maxLines: maxLines,
-                        ).fadeIn(duration: const Duration(milliseconds: 500)),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const Divider(),
+                    if (items.isEmpty) const Text('Ingesa items para ver'),
+                    ...items.map(
+                      (e) => _buildItem(
+                        icon: e.icon,
+                        label: e.label,
+                        value: e.value,
+                        color: e.color,
+                        maxLines: maxLines,
+                      ).fadeIn(duration: const Duration(milliseconds: 500)),
+                    ),
+                  ],
                 ),
               ),
             ),

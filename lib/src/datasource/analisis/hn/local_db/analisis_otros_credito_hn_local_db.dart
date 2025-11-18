@@ -8,9 +8,11 @@ class AnalisisOtrosCreditoHnLocalDb {
   String? nombreOtrosCreditos;
   int? monto;
   String? uuid;
+  int? numeroSolicitud;
   AnalisisOtrosCreditoHnLocalDb({
     this.nombreOtrosCreditos,
     this.monto,
     this.uuid,
+    this.numeroSolicitud,
   });
 }
