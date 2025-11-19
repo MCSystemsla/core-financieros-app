@@ -4,18 +4,19 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_activo_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_compras_semanales_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ciclo_venta_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_compras_proveedor_articulo_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_costo_de_personal_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_cuentas_por_cobrar_hn.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_ingresos_familiares_fuera_negocio_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_inventario_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nivel_produccion_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_nueva_mayor_a_mil_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_otros_credito_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_pasivo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_activo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ciclo_compras_semanales_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ciclo_venta_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_compras_proveedor_articulo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_costo_de_personal_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_cuentas_por_cobrar_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ingresos_familiares_fuera_negocio_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_nivel_produccion_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_mayor_mil/analisis_nueva_mayor_a_mil_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_pasivo_hn_local_db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -39,6 +40,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisPasivoHnLocalDb> analisisPasivoHnLocalDb;
   late final Box<AnalisisActivoHnLocalDb> analisisActivoHnLocalDb;
   late final Box<AnalisisInventarioHnLocalDb> analisisInventarioHnLocalDb;
+  late final Box<AnalisisAsalariadoHnLocalDb> analisisAsalariadoHnLocalDb;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -60,6 +62,7 @@ class AnalisisBoxServiceHn {
     cicloComprasSemanalesHnBox =
         _store.box<AnalisisCicloComprasSemanalesHnLocalDb>();
     analisisInventarioHnLocalDb = _store.box<AnalisisInventarioHnLocalDb>();
+    analisisAsalariadoHnLocalDb = _store.box<AnalisisAsalariadoHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
@@ -115,6 +118,20 @@ class AnalisisBoxServiceHn {
   }) {
     final query = analisisNuevaMayorAMilHnLocalDb
         .query(AnalisisNuevaMayorAMilHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build();
+
+    final results = query.findFirst();
+    query.close();
+
+    return results;
+  }
+
+  AnalisisAsalariadoHnLocalDb? getAnalisisAsalariadoByNumeroSolicitud({
+    required int numeroSolicitud,
+  }) {
+    final query = analisisAsalariadoHnLocalDb
+        .query(AnalisisAsalariadoHnLocalDb_.numeroSolicitud
             .equals(numeroSolicitud))
         .build();
 

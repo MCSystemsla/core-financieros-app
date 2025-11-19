@@ -93,6 +93,19 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
           child: BlocConsumer<UserByDocumentAsalariadoCubit,
               UserByDocumentAsalariadoState>(
             listener: (context, state) {
+              if (state.status == UserByDocumentStatus.isNewUser) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => BlocProvider.value(
+                      value: context.read<UserByDocumentAsalariadoCubit>(),
+                      child: CrearSolicitudHnScreen(
+                        typeForm: widget.typeForm,
+                      ),
+                    ),
+                  ),
+                );
+              }
               if (state.status == UserByDocumentStatus.error) {
                 CustomAlertDialog(
                   context: context,

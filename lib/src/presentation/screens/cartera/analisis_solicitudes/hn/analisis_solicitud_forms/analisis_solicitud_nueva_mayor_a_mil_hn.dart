@@ -15,7 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_cuentas_por_cobrar_hn.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AnalisisSolicitudNuevaMayorAMilHn extends StatefulWidget {
+class AnalisisSolicitudNuevaMayorAMilHn extends StatelessWidget {
   final int index;
   final String title;
   final String subtitle;
@@ -31,37 +31,12 @@ class AnalisisSolicitudNuevaMayorAMilHn extends StatefulWidget {
   });
 
   @override
-  State<AnalisisSolicitudNuevaMayorAMilHn> createState() =>
-      _AnalisisSolicitudNuevaMayorAMilHnState();
-}
-
-class _AnalisisSolicitudNuevaMayorAMilHnState
-    extends State<AnalisisSolicitudNuevaMayorAMilHn> {
-  final pageController = PageController();
-  int activeStep = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    pageController.addListener(() {
-      final page = pageController.page?.round() ?? 0;
-      if (page == activeStep) return;
-      setState(() => activeStep = page);
-    });
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final pageController = PageController();
     final localDbProvider = global<AnalisisBoxServiceHn>();
     final currentSolicitud =
         localDbProvider.getAnalisisNuevaMayorMilByNumeroSolicitud(
-      numeroSolicitud: widget.numeroSolicitud,
+      numeroSolicitud: numeroSolicitud,
     );
 
     return BlocProvider(
@@ -71,7 +46,7 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
       )
         ..initAutoSave(
           uuid: currentSolicitud?.uuid,
-          numeroSolicitud: widget.numeroSolicitud,
+          numeroSolicitud: numeroSolicitud,
         )
         ..loadFromLocalDb(currentSolicitud),
       child: Scaffold(
@@ -82,11 +57,11 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
           children: [
             AnalisisCreditCardHn(
               enabled: false,
-              index: widget.index,
+              index: index,
               animate: false,
-              title: widget.title,
-              subtitle: widget.subtitle,
-              description: widget.description,
+              title: title,
+              subtitle: subtitle,
+              description: description,
               numeroSolicitud: '',
             ),
             Expanded(
@@ -99,33 +74,33 @@ class _AnalisisSolicitudNuevaMayorAMilHnState
                   ),
                   AnalisisMayorAMilCuentasPorCobrarHN(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                   AnalisisMayorAMilCicloDeCompras(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                   AnalisisMayorAMilConsumoFamiliares(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                   AnalisisMayorAMilConstanciasLicenciasPermisosHN(
                     pageController: pageController,
                   ),
                   AnalisisMayorAMilCreditosHN(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                   AnalisisMayorAMilReferenciasHN(
                     pageController: pageController,
                   ),
                   AnalisisMayorAMilBalanceGeneralHN(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                   AnalisisMayorAMilEstadoResultadoHN(
                     pageController: pageController,
-                    numeroSolicitud: widget.numeroSolicitud,
+                    numeroSolicitud: numeroSolicitud,
                   ),
                 ],
               ),

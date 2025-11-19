@@ -100,28 +100,34 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
       initialChildSize: 0.44,
       maxChildSize: 0.7,
       builder: (context, scrollController) {
-        return Container(
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-          ),
-          child: SingleChildScrollView(
-            controller: scrollController,
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            ),
             child: Form(
               key: formKey,
-              child: Column(
+              child: ListView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                controller: scrollController,
                 children: [
                   const Gap(15),
-                  Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                   const Gap(20),
@@ -151,9 +157,7 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
                         ClassValidator.validateRequired(value),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
+                      CurrencyInputFormatter(mantissaLength: 0),
                     ],
                     onChange: (value) {
                       String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
@@ -161,23 +165,25 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
                     },
                   ),
                   const Gap(20),
-                  Container(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.updateMesByName(
-                          mes: widget.mes,
-                          venta: venta!,
-                          valorizacion: valorizacion!,
-                          numeroSolicitud: widget.numeroSolicitud,
-                        );
-                        context.pop();
-                      },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.updateMesByName(
+                            mes: widget.mes,
+                            venta: venta!,
+                            valorizacion: valorizacion!,
+                            numeroSolicitud: widget.numeroSolicitud,
+                          );
+                          context.pop();
+                        },
+                      ),
                     ),
                   ),
                   const Gap(20),

@@ -2,19 +2,19 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:core_financiero_app/objectbox.g.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_mayor_mil/analisis_nueva_mayor_a_mil_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
 
-class NuevaMayorAMilAutosaveHN {
-  final Box<AnalisisNuevaMayorAMilHnLocalDb> box;
+class AnalisisAsalariadoHnAutosave {
+  final Box<AnalisisAsalariadoHnLocalDb> box;
   final String uuid;
   final int numeroSolicitud;
-  final AnalisisNuevaMayorAMilHnLocalDb Function(
-      AnalisisNuevaMayorAMilHnLocalDb? existing) buildModel;
-  final void Function(AnalisisNuevaMayorAMilHnLocalDb model) onSaved;
+  final AnalisisAsalariadoHnLocalDb Function(
+      AnalisisAsalariadoHnLocalDb? existing) buildModel;
+  final void Function(AnalisisAsalariadoHnLocalDb model) onSaved;
 
   Timer? _debounce;
 
-  NuevaMayorAMilAutosaveHN({
+  AnalisisAsalariadoHnAutosave({
     required this.box,
     required this.uuid,
     required this.buildModel,
@@ -30,7 +30,7 @@ class NuevaMayorAMilAutosaveHN {
   void _save() {
     try {
       final existing = box
-          .query(AnalisisNuevaMayorAMilHnLocalDb_.numeroSolicitud
+          .query(AnalisisAsalariadoHnLocalDb_.numeroSolicitud
               .equals(numeroSolicitud))
           .build()
           .findFirst();

@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 
 class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
@@ -19,4 +20,22 @@ class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => analisisSolicitudNuevaMenor.toJson();
+}
+
+class CreateAnalisisAsalariadoEndpoint extends Endpoint {
+  final AnalisisAsalariadoHn analisisSolicitudAsalariado;
+  CreateAnalisisAsalariadoEndpoint({
+    required this.analisisSolicitudAsalariado,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-asalariado/crear-analisis-asalariado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
 }
