@@ -20,3 +20,16 @@ extension CapitalizeString on String {
     return formattedText;
   }
 }
+
+extension EmptyOrZeroStringToNull on String? {
+  String? toNullIfEmptyOrZero() {
+    if (this == null ||
+        this!.trim().isEmpty ||
+        this == '0' ||
+        this == '0.0' ||
+        this == '0.00') {
+      return null;
+    }
+    return this;
+  }
+}

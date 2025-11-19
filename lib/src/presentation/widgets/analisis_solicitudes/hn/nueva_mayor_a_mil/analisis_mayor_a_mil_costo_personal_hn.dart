@@ -4,11 +4,13 @@ import 'package:gap/gap.dart';
 
 class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
   final int totalCostoPersonal;
+  final int numeroEmpleados;
   final VoidCallback onTap;
   const AnalisisMayorAMilCostoPersonalHn({
     super.key,
     required this.totalCostoPersonal,
     required this.onTap,
+    this.numeroEmpleados = 0,
   });
 
   @override
@@ -63,6 +65,14 @@ class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
                         value: totalCostoPersonal,
                         color: Colors.indigo,
                       ),
+                      const Divider(),
+                      _buildItem(
+                        icon: Icons.person_pin,
+                        isCurrencyField: false,
+                        label: 'Numero de empleados',
+                        value: numeroEmpleados,
+                        color: Colors.green,
+                      ),
                     ],
                   ),
                 ),
@@ -79,6 +89,7 @@ class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
     required String label,
     required int value,
     required Color color,
+    bool isCurrencyField = true,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -100,7 +111,7 @@ class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
             return Text(
               val.toCurrencyString(
                 mantissaLength: 0,
-                leadingSymbol: 'L',
+                leadingSymbol: isCurrencyField ? 'L' : '',
               ),
               style: TextStyle(
                 fontSize: 16,

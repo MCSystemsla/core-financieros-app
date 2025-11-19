@@ -1086,12 +1086,18 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .toList();
 
     final mesBueno = uniqueCiclos.first;
-    final mesNormal = uniqueCiclos[uniqueCiclos.length ~/ 2];
     final mesMalo = uniqueCiclos.last;
+    final ventaNormales = state.cicloVentaMensual.ciclo
+        .where((c) => c.valorizacion == 'N')
+        .toList();
+
+    final mesNormal = ventaNormales.isNotEmpty
+        ? (ventaNormales..sort((b, a) => a.venta.compareTo(b.venta))).first
+        : null;
 
     return {
       'mesBueno': mesBueno.venta,
-      'mesNormal': mesNormal.venta,
+      'mesNormal': mesNormal?.venta ?? 0,
       'mesMalo': mesMalo.venta,
     };
   }
@@ -1113,12 +1119,17 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .toList();
 
     final diasBuenos = uniqueCiclos.first;
-    final diasNormales = uniqueCiclos[uniqueCiclos.length ~/ 2];
     final diasMalos = uniqueCiclos.last;
+    final ventaNormales = state.cicloVentaDiaria.cicloVentas
+        .where((c) => c.valorizacion == 'N')
+        .toList();
 
+    final diasNormales = ventaNormales.isNotEmpty
+        ? (ventaNormales..sort((b, a) => a.venta.compareTo(b.venta))).first
+        : null;
     return {
       'diasBuenos': diasBuenos.venta,
-      'diasNormales': diasNormales.venta,
+      'diasNormales': diasNormales?.venta ?? 0,
       'diasMalos': diasMalos.venta,
     };
   }
@@ -1140,12 +1151,20 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .toList();
 
     final semanasBuenas = uniqueCiclos.first;
-    final semanasNormales = uniqueCiclos[uniqueCiclos.length ~/ 2];
     final semanasMalas = uniqueCiclos.last;
+    final ventaNormales = state.cicloDeComprasSemanales.cicloCompra
+        .where((c) => c.valorizacion == 'N')
+        .toList();
+
+    final semanasNormales = ventaNormales.isNotEmpty
+        ? (ventaNormales
+              ..sort((b, a) => a.cantidadCompra.compareTo(b.cantidadCompra)))
+            .first
+        : null;
 
     return {
       'semanasBuenas': semanasBuenas.cantidadCompra,
-      'semanasNormales': semanasNormales.cantidadCompra,
+      'semanasNormales': semanasNormales?.cantidadCompra ?? 0,
       'semanasMalas': semanasMalas.cantidadCompra,
     };
   }

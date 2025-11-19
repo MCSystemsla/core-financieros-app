@@ -11,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -105,96 +104,81 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 controller: scrollController,
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  SheetSearchDropdown(
-                    enabled: true,
-                    items: const [
-                      Item(name: 'Buena', value: 'B'),
-                      Item(name: 'Normal', value: 'N'),
-                      Item(name: 'Mala', value: 'M'),
-                    ],
-                    hintText: 'Selecciona una opcion',
-                    isRequired: true,
-                    title: 'Valorizacion',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      valorizacion = value.value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Cantidad de compra',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      cantidad = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Total compra mensual semanal',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      totalCompra = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
+                    const Gap(20),
+                    SheetSearchDropdown(
                       enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.updateCompraSemana(
-                          semanaDelMes: widget.semana,
-                          cantidadCompra: cantidad!,
-                          venta: totalCompra!,
-                          valorizacion: valorizacion!,
-                          numeroSolicitud: widget.numeroSolicitud,
-                        );
-                        context.pop();
+                      items: const [
+                        Item(name: 'Buena', value: 'B'),
+                        Item(name: 'Normal', value: 'N'),
+                        Item(name: 'Mala', value: 'M'),
+                      ],
+                      hintText: 'Selecciona una opcion',
+                      isRequired: true,
+                      title: 'Valorizacion',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        valorizacion = value.value;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Valor de compra',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        cantidad = int.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.updateCompraSemana(
+                            semanaDelMes: widget.semana,
+                            cantidadCompra: cantidad!,
+                            venta: totalCompra!,
+                            valorizacion: valorizacion!,
+                            numeroSolicitud: widget.numeroSolicitud,
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,7 +150,9 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                 ),
               ),
               OutlineTextfieldWidget(
-                initialValue: state.permisoOperacionNumero,
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.permisoOperacionNumero.toNullIfEmptyOrZero(),
                 title: 'Numero de permiso de operación',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -168,7 +171,8 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.nombreInstitucionLicencia,
+                initialValue:
+                    state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
                 title: 'Nombre de institución',
                 icon: const Icon(Icons.business),
                 inputFormatters: [
@@ -209,7 +213,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.numeroLicencia,
+                initialValue: state.numeroLicencia.toNullIfEmptyOrZero(),
                 title: 'Numero de licencia',
                 icon: const Icon(Icons.business),
                 textInputType: TextInputType.number,
@@ -224,7 +228,8 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.nombreInstitucionLicencia,
+                initialValue:
+                    state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
                 title: 'Nombre de institución',
                 icon: const Icon(Icons.business),
                 inputFormatters: [UpperCaseTextFormatter()],

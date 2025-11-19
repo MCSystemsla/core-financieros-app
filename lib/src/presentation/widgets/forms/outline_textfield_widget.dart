@@ -29,6 +29,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final EdgeInsetsGeometry padding;
   final Icon? suffixIcon;
+  final TextAlign textAlign;
   const OutlineTextfieldWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -51,6 +52,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.inputFormatters,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
     this.suffixIcon,
+    this.textAlign = TextAlign.left,
   }) : haveCounter = false;
   const OutlineTextfieldWidget.withCounter({
     super.key,
@@ -74,6 +76,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.inputFormatters,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
     this.suffixIcon,
+    this.textAlign = TextAlign.left,
   }) : haveCounter = true;
 
   @override
@@ -110,6 +113,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    textAlign: textAlign,
                     inputFormatters: inputFormatters,
                     contextMenuBuilder: (context, editableTextState) =>
                         const SizedBox(),

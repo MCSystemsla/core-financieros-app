@@ -124,115 +124,120 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 controller: scrollController,
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Cantidad',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      cantidad = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Articulo',
-                    icon: const Icon(Icons.wallet),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      articulo = value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Costo Compra',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      costoCompra = double.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Precio venta',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      precioVenta = double.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.saveInventario(
-                          numeroSolicitud: widget.numeroSolicitud,
-                          inventario: InventarioHN(
-                            cantidad: cantidad!,
-                            articulo: articulo!,
-                            costoCompra: costoCompra!,
-                            precioVenta: precioVenta?.toInt() ?? 0,
-                            costoVentaPorcentaje:
-                                (costoCompra ?? 0) / (precioVenta ?? 0),
-                            total:
-                                ((costoCompra ?? 0) * (cantidad ?? 0)).toInt(),
-                          ),
-                        );
-                        context.pop();
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Cantidad',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        cantidad = int.tryParse(newValue) ?? 0;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Articulo',
+                      icon: const Icon(Icons.wallet),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        articulo = value;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Costo Compra',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        costoCompra = double.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Precio venta',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        precioVenta = double.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.saveInventario(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            inventario: InventarioHN(
+                              cantidad: cantidad!,
+                              articulo: articulo!,
+                              costoCompra: costoCompra!,
+                              precioVenta: precioVenta?.toInt() ?? 0,
+                              costoVentaPorcentaje:
+                                  (costoCompra ?? 0) / (precioVenta ?? 0),
+                              total: ((costoCompra ?? 0) * (cantidad ?? 0))
+                                  .toInt(),
+                            ),
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),

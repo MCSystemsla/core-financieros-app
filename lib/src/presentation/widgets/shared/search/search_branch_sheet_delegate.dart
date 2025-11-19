@@ -101,16 +101,16 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                           );
                         },
                         data: [
-                          ...widget.items.map(
-                            (e) {
-                              return SelectedListItem<Branch>(
-                                  data: Branch(
-                                id: e.id,
-                                nombre: e.nombre,
-                                nombreDb: e.nombreDb,
-                              ));
-                            },
-                          ),
+                          // ...widget.items.map(
+                          //   (e) {
+                          //     return SelectedListItem<Branch>(
+                          //         data: Branch(
+                          //       id: e.id,
+                          //       nombre: e.nombre,
+                          //       nombreDb: e.nombreDb,
+                          //     ));
+                          //   },
+                          // ),
                           SelectedListItem<Branch>(
                               data: Branch(
                             id: 27,

@@ -6,6 +6,7 @@ class VentasCardDaysHn extends StatelessWidget {
   final int diasBuenos;
   final int diasNormales;
   final int diasMalos;
+  final int totalVentasDiarias;
   final VoidCallback onTap;
   const VentasCardDaysHn({
     super.key,
@@ -13,6 +14,7 @@ class VentasCardDaysHn extends StatelessWidget {
     required this.diasNormales,
     required this.diasMalos,
     required this.onTap,
+    this.totalVentasDiarias = 0,
   });
 
   @override
@@ -82,6 +84,15 @@ class VentasCardDaysHn extends StatelessWidget {
                         value: diasMalos,
                         color: Colors.red,
                       ),
+                      if (totalVentasDiarias > 0) ...[
+                        const Divider(),
+                        _buildItem(
+                          icon: Icons.data_thresholding,
+                          label: 'Ventas diarias (segun ventas diarias)',
+                          value: totalVentasDiarias,
+                          color: Colors.indigo,
+                        ),
+                      ],
                     ],
                   ),
                 ),

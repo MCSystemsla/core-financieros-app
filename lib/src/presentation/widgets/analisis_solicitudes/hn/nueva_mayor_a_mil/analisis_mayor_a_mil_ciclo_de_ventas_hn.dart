@@ -42,6 +42,16 @@ class _AnalisisMayorAMilCicloDeVentasHNState
         final cicloDiarios = context
             .read<AnalisisNuevaMayorMilHnCubit>()
             .getCicloVentasDiarios();
+        final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) /
+            12);
+        final totalVentasDiarias = (state.cicloVentaDiaria.cicloVentas.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) /
+            7);
 
         return SingleChildScrollView(
           child: Column(
@@ -52,6 +62,7 @@ class _AnalisisMayorAMilCicloDeVentasHNState
                 mesesBuenos: cicloMeses['mesBueno'],
                 mesesNormales: cicloMeses['mesNormal'],
                 mesesMalos: cicloMeses['mesMalo'],
+                totalVentasMensuales: totalVentasMensuales.toInt(),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -68,6 +79,7 @@ class _AnalisisMayorAMilCicloDeVentasHNState
                 diasBuenos: cicloDiarios['diasBuenos'],
                 diasNormales: cicloDiarios['diasNormales'],
                 diasMalos: cicloDiarios['diasMalos'],
+                totalVentasDiarias: totalVentasDiarias.toInt(),
                 onTap: () {
                   Navigator.push(
                     context,

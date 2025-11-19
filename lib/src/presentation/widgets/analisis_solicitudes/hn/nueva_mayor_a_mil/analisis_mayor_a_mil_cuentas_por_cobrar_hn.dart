@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/cuenta_por_cobrar_card_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,6 +60,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
             .fold<double>(0, (sum, e) => sum + e.totalMensualProduccion);
 
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
               CuentaPorCobrarCardHn(
@@ -102,7 +104,11 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                 ),
               ),
               OutlineTextfieldWidget(
-                initialValue: state.porcentajeProdAltaRotacion.toString(),
+                initialValue: state.porcentajeProdAltaRotacion
+                    .toCurrencyString(
+                      mantissaLength: 0,
+                    )
+                    .toNullIfEmptyOrZero(),
                 title: 'Porcentaje de venta de los productos de alta rotacion',
                 icon: const Icon(Icons.percent),
                 textInputType: TextInputType.number,
@@ -123,7 +129,13 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.valorAltaRotacion.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.valorAltaRotacion
+                    .toString()
+                    .toNullIfEmptyOrZero()
+                    ?.toCurrencyString(
+                      mantissaLength: 0,
+                    ),
                 title: 'Valor en L.',
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -145,7 +157,11 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: cubit.state.porcentajeProdBajaRotacion.toString(),
+                initialValue: cubit.state.porcentajeProdBajaRotacion
+                    .toCurrencyString(
+                      mantissaLength: 0,
+                    )
+                    .toNullIfEmptyOrZero(),
                 title: 'Porcentaje de venta de los productos de baja rotacion',
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -166,7 +182,10 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.valorBajaRotacion.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.valorBajaRotacion
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Valor en L.',
                 icon: const Icon(Icons.wallet),
                 textInputType: TextInputType.number,

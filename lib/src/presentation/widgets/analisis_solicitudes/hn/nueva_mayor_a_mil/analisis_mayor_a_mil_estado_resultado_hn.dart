@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_n
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
@@ -26,6 +27,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
         AnalisisNuevaMayorMilHnState>(
       builder: (context, state) {
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,14 +50,16 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 ),
               ),
               OutlineTextfieldWidget(
-                initialValue: state.ventasContado.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.ventasContado
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Ventas de contado:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   )
                 ],
                 onChange: (value) {
@@ -128,7 +132,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               // ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.utilidadBruta.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.utilidadBruta
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Utilidad bruta:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -157,8 +164,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue:
-                    state.gastosPersonalAlimentacion.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.gastosPersonalAlimentacion
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Gastos de alimentacion personal:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -179,7 +188,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.subContratos.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.subContratos.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Subcontratos / Otros serv de personal:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -199,7 +210,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.alquilerlocal.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.alquilerlocal
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Alquiler de local / depositos:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -219,7 +233,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.agua.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.agua.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Agua / Electricidad / Telefono:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -238,7 +254,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.combustible.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.combustible.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Combustible / Lubricantes:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -258,7 +276,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.transporte.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.transporte.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Transporte / carga:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -278,7 +298,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.pagoCuotaCredito.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.pagoCuotaCredito
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Pago de cuotas de creditos:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -298,7 +321,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.impuesto.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.impuesto.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Impuestos / tributos / licencia:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -318,7 +343,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.otros.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue:
+                    state.otros.toCurrencyString().toNullIfEmptyOrZero(),
                 title: 'Otros:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -357,7 +384,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               // ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.resultadoLiquido.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.resultadoLiquido
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Resultados liquido del negocio:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -377,7 +407,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.consumoFamiliar.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.consumoFamiliar
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Consumo familiar:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -417,7 +450,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               // ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.saldoDisponibleUf.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.saldoDisponibleUf
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Saldo disponible de la unidad familiar:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,

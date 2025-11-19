@@ -102,77 +102,81 @@ class _CreateValorizacionMesHNState extends State<_CreateValorizacionMesHN> {
           ),
           child: Form(
             key: formKey,
-            child: ListView(
+            child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              children: [
-                const Gap(15),
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
+              controller: scrollController,
+              child: Column(
+                children: [
+                  const Gap(15),
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                ),
-                const Gap(20),
-                SheetSearchDropdown(
-                  enabled: true,
-                  items: const [
-                    Item(name: 'Buena', value: 'B'),
-                    Item(name: 'Normal', value: 'N'),
-                    Item(name: 'Mala', value: 'M'),
-                  ],
-                  hintText: 'Selecciona una opcion',
-                  isRequired: true,
-                  title: 'Valorizacion',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  onChanged: (value) {
-                    if (value == null || !mounted) return;
-                    valorizacion = value.value;
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  title: 'Venta',
-                  icon: const Icon(Icons.wallet),
-                  textInputType: TextInputType.number,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                    venta = int.tryParse(newValue) ?? 0;
-                  },
-                ),
-                const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
+                  const Gap(20),
+                  SheetSearchDropdown(
                     enabled: true,
-                    text: 'Crear',
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      widget.cubit.updateDayByName(
-                        dia: widget.dia,
-                        venta: venta!,
-                        valorizacion: valorizacion!,
-                        numeroSolicitud: widget.numeroSolicitud,
-                      );
-                      context.pop();
+                    items: const [
+                      Item(name: 'Buena', value: 'B'),
+                      Item(name: 'Normal', value: 'N'),
+                      Item(name: 'Mala', value: 'M'),
+                    ],
+                    hintText: 'Selecciona una opcion',
+                    isRequired: true,
+                    title: 'Valorizacion',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
+                      valorizacion = value.value;
                     },
                   ),
-                ),
-                const Gap(20),
-              ],
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    title: 'Venta',
+                    icon: const Icon(Icons.wallet),
+                    textInputType: TextInputType.number,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                      venta = int.tryParse(newValue) ?? 0;
+                    },
+                  ),
+                  const Gap(20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    child: CustomElevatedButton(
+                      enabled: true,
+                      text: 'Crear',
+                      color: AppColors.greenLatern.withOpacity(0.4),
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) return;
+                        widget.cubit.updateDayByName(
+                          dia: widget.dia,
+                          venta: venta!,
+                          valorizacion: valorizacion!,
+                          numeroSolicitud: widget.numeroSolicitud,
+                        );
+                        context.pop();
+                      },
+                    ),
+                  ),
+                  const Gap(20),
+                ],
+              ),
             ),
           ),
         );

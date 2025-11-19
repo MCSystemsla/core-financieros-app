@@ -6,6 +6,7 @@ class VentasMonthsCardHn extends StatelessWidget {
   final int mesesBuenos;
   final int mesesNormales;
   final int mesesMalos;
+  final int totalVentasMensuales;
   final VoidCallback onTap;
   const VentasMonthsCardHn({
     super.key,
@@ -13,6 +14,7 @@ class VentasMonthsCardHn extends StatelessWidget {
     required this.mesesNormales,
     required this.mesesMalos,
     required this.onTap,
+    this.totalVentasMensuales = 0,
   });
 
   @override
@@ -80,6 +82,16 @@ class VentasMonthsCardHn extends StatelessWidget {
                         value: mesesMalos,
                         color: Colors.red,
                       ),
+                      if (totalVentasMensuales > 0) ...[
+                        const Divider(),
+                        _buildItem(
+                          icon: Icons.data_thresholding,
+                          label:
+                              'Ventas mensuales (segun estacionalidad anual)',
+                          value: totalVentasMensuales,
+                          color: Colors.indigo,
+                        ),
+                      ],
                     ],
                   ),
                 ),

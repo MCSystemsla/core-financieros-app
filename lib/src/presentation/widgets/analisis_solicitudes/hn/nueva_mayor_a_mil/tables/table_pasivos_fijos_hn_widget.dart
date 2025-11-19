@@ -137,75 +137,77 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 controller: scrollController,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Nombre',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      nombre = value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Monto',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      monto = int.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.savePasivo(
-                          numeroSolicitud: widget.numeroSolicitud,
-                          pasivo: PasivoHN(
-                            nombreProveedores: nombre!,
-                            monto: monto!,
-                          ),
-                        );
-                        context.pop();
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Nombre',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        nombre = value;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Monto',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        monto = int.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.savePasivo(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            pasivo: PasivoHN(
+                              nombreProveedores: nombre!,
+                              monto: monto!,
+                            ),
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +46,8 @@ class _AnalisisMayorAMilCreditosHNState
       builder: (context, state) {
         final totalIngresosFueraNegocio = state.ingeresosFamilaresFueraNegocio
             .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
+        final totalIngresosAnual =
+            state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
@@ -61,7 +64,11 @@ class _AnalisisMayorAMilCreditosHNState
                 ),
               ),
               OutlineTextfieldWidget(
-                initialValue: state.ingresoAnual.toCurrencyString(),
+                textAlign: TextAlign.end,
+                hintText: totalIngresosAnual.toCurrencyString(
+                  mantissaLength: 0,
+                  leadingSymbol: 'L.',
+                ),
                 title: 'Ingreso anual y/o volumen de venta',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -87,7 +94,7 @@ class _AnalisisMayorAMilCreditosHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.cliente1,
+                initialValue: state.cliente1.toNullIfEmptyOrZero(),
                 title: 'Cliente 1',
                 icon: const Icon(Icons.person),
                 inputFormatters: [
@@ -115,7 +122,7 @@ class _AnalisisMayorAMilCreditosHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.cliente3,
+                initialValue: state.cliente3.toNullIfEmptyOrZero(),
                 title: 'Cliente 3',
                 icon: const Icon(Icons.person),
                 inputFormatters: [

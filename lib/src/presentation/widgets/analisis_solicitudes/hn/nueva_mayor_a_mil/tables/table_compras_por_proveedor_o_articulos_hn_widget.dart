@@ -145,123 +145,125 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 controller: scrollController,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Proveedor de articulo',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      proveedorArticulo = value;
-                    },
-                  ),
-                  const Gap(20),
-                  CatalogoFrecuenciaPagoDropdown(
-                    title: 'Frecuencia de contado',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    onChanged: (value) {
-                      frecuenciaCompraContado = value?.valor;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Monto de contado',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      montoCompraContado = int.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  CatalogoFrecuenciaPagoDropdown(
-                    enabled: true,
-                    hintText: 'Selecciona una opcion',
-                    isRequired: true,
-                    title: 'Frecuencia de Credito',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      frecuenciaCompraCredito = value.valor;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Monto de credito',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      montoCompraCredito = int.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.saveComprasPorProveedor(
-                          numeroSolicitud: widget.numeroSolicitud,
-                          comprasPorProveedor: ComprasProveedorArticuloHN(
-                            frecuenciaCompraContadoCodigo:
-                                frecuenciaCompraContado!,
-                            frecuenciaCompraCreditoCodigo:
-                                frecuenciaCompraCredito!,
-                            montoCompraContado: montoCompraContado!,
-                            montoCompraCredito: montoCompraCredito!,
-                            proveedorArticulo: proveedorArticulo!,
-                            totalCompraMensual: (montoCompraContado ?? 0) +
-                                (montoCompraCredito ?? 0),
-                          ),
-                        );
-                        context.pop();
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Proveedor de articulo',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        proveedorArticulo = value;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    CatalogoFrecuenciaPagoDropdown(
+                      title: 'Frecuencia de contado',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      onChanged: (value) {
+                        frecuenciaCompraContado = value?.valor;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Monto de contado',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        montoCompraContado = int.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    CatalogoFrecuenciaPagoDropdown(
+                      enabled: true,
+                      hintText: 'Selecciona una opcion',
+                      isRequired: true,
+                      title: 'Frecuencia de Credito',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        frecuenciaCompraCredito = value.valor;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Monto de credito',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        montoCompraCredito = int.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.saveComprasPorProveedor(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            comprasPorProveedor: ComprasProveedorArticuloHN(
+                              frecuenciaCompraContadoCodigo:
+                                  frecuenciaCompraContado!,
+                              frecuenciaCompraCreditoCodigo:
+                                  frecuenciaCompraCredito!,
+                              montoCompraContado: montoCompraContado!,
+                              montoCompraCredito: montoCompraCredito!,
+                              proveedorArticulo: proveedorArticulo!,
+                              totalCompraMensual: (montoCompraContado ?? 0) +
+                                  (montoCompraCredito ?? 0),
+                            ),
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),

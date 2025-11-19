@@ -56,7 +56,7 @@ class TableCostoPersonalHnWidget extends StatelessWidget {
             backgroundColor: Colors.black,
           ),
           appBar: AppBar(
-            title: const Text('Compras por proveedor o articulo'),
+            title: const Text('Costos de personal'),
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -145,125 +145,138 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 controller: scrollController,
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Numero de empleado',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onChange: (value) {
-                      numeroEmpleado = value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Lugar de proceso',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      lugarProceso = value;
-                    },
-                  ),
-                  const Gap(20),
-                  CustomSwitch(
-                    value: esEmpleadoPermanente,
-                    onChanged: (value) {
-                      setState(() {
-                        esEmpleadoPermanente = value;
-                      });
-                    },
-                    title: 'Permanente',
-                    subtitle: 'El empleado es permanente?',
-                  ),
-                  const Gap(20),
-                  CustomSwitch(
-                    value: esEmpleadoTemporal,
-                    onChanged: (value) {
-                      setState(() {
-                        esEmpleadoTemporal = value;
-                      });
-                    },
-                    title: 'Temporal',
-                    subtitle: 'El Empleado es temporal?',
-                  ),
-                  const Gap(20),
-                  CatalogoFrecuenciaPagoDropdown(
-                    title: 'Forma de pago a empleado',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    onChanged: (value) {
-                      formaDePago = value?.valor;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Salario Mensual',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      )
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      salarioMensual = int.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.saveCostoPersonal(
-                          numeroSolicitud: widget.numeroSolicitud,
-                          costoDePersonal: CostoDePersonalHN(
-                            numeroEmpleado:
-                                int.tryParse(numeroEmpleado ?? '0') ?? 0,
-                            lugarProceso: lugarProceso ?? '',
-                            formaDePago: formaDePago ?? '',
-                            permanente: esEmpleadoPermanente,
-                            temporal: esEmpleadoTemporal,
-                            salarioMensual: salarioMensual!,
-                          ),
-                        );
-                        context.pop();
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      key: const Key('numeroEmpleado'),
+                      title: 'Numero de empleado',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChange: (value) {
+                        numeroEmpleado = value;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      key: const Key('lugarProceso'),
+                      title: 'Lugar de proceso',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        lugarProceso = value;
+                      },
+                    ),
+                    const Gap(20),
+                    CustomSwitch(
+                      key: const Key('esEmpleadoPermanente'),
+                      value: esEmpleadoPermanente,
+                      onChanged: (value) {
+                        if (value) {
+                          esEmpleadoTemporal = false;
+                        }
+                        setState(() {
+                          esEmpleadoPermanente = value;
+                        });
+                      },
+                      title: 'Permanente',
+                      subtitle: 'El empleado es permanente?',
+                    ),
+                    const Gap(20),
+                    CustomSwitch(
+                      key: const Key('esEmpleadoTemporal'),
+                      value: esEmpleadoTemporal,
+                      onChanged: (value) {
+                        if (value) {
+                          esEmpleadoPermanente = false;
+                        }
+                        setState(() {
+                          esEmpleadoTemporal = value;
+                        });
+                      },
+                      title: 'Temporal',
+                      subtitle: 'El Empleado es temporal?',
+                    ),
+                    const Gap(20),
+                    CatalogoFrecuenciaPagoDropdown(
+                      title: 'Forma de pago a empleado',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      onChanged: (value) {
+                        formaDePago = value?.valor;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      key: const Key('salarioMensual'),
+                      title: 'Salario Mensual',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        )
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        salarioMensual = int.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.saveCostoPersonal(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            costoDePersonal: CostoDePersonalHN(
+                              numeroEmpleado:
+                                  int.tryParse(numeroEmpleado ?? '0') ?? 0,
+                              lugarProceso: lugarProceso ?? '',
+                              formaDePago: formaDePago ?? '',
+                              permanente: esEmpleadoPermanente,
+                              temporal: esEmpleadoTemporal,
+                              salarioMensual: salarioMensual!,
+                            ),
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),

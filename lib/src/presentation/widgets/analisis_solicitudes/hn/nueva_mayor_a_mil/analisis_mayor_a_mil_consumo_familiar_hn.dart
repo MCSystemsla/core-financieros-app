@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_costo_personal_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -42,6 +43,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
             .fold<double>(0, (sum, e) => sum + e.salarioMensual);
 
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -58,6 +60,8 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                   );
                 },
                 totalCostoPersonal: totalCostoPersonal.toInt(),
+                numeroEmpleados: state.costoDePersonal
+                    .fold(0, (sum, e) => sum + e.numeroEmpleado),
               ),
               const Gap(20),
               Container(
@@ -70,14 +74,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                 ),
               ),
               OutlineTextfieldWidget(
-                initialValue: state.alimentacionFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.alimentacionFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Alimentacion',
                 icon: const Icon(Icons.food_bank),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -92,14 +98,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.educacionFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.educacionFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Educacion',
                 icon: const Icon(Icons.school),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -114,14 +122,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.aguaFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.aguaFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Agua, electricidad, telefono, gas, kerosen',
                 icon: const Icon(Icons.eco),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -136,14 +146,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.alquilerFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.alquilerFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Alquiler',
                 icon: const Icon(Icons.house),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -158,14 +170,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.aseoLimpiezaFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.aseoLimpiezaFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Aseo y limpieza',
                 icon: const Icon(Icons.clean_hands),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -180,14 +194,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.vestimentaCalzadoFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.vestimentaCalzadoFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Vestimenta y calzado',
                 icon: const Icon(Icons.emoji_objects),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -202,14 +218,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.transporteFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.transporteFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Transporte',
                 icon: const Icon(Icons.emoji_transportation),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -224,14 +242,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.otrosGastosFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.otrosGastosFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Otros gastos / imprevistos (Reserva)',
                 icon: const Icon(Icons.chalet_rounded),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -246,14 +266,16 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.pagoCreditosFam.toCurrencyString(),
+                textAlign: TextAlign.end,
+                initialValue: state.pagoCreditosFam
+                    .toCurrencyString(mantissaLength: 0)
+                    .toNullIfEmptyOrZero(),
                 title: 'Pago de creditos privados',
                 icon: const Icon(Icons.credit_card),
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {
@@ -268,14 +290,28 @@ class _AnalisisMayorAMilConsumoFamiliaresState
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.totalConsumoFamiliar.toCurrencyString(),
+                textAlign: TextAlign.end,
+                hintText: (state.alimentacionFam +
+                        state.educacionFam +
+                        state.aguaFam +
+                        state.alquilerFam +
+                        state.aseoLimpiezaFam +
+                        state.vestimentaCalzadoFam +
+                        state.transporteFam +
+                        state.otrosGastosFam +
+                        state.pagoCreditosFam)
+                    .toCurrencyString(
+                  mantissaLength: 0,
+                  leadingSymbol: 'L',
+                  thousandSeparator: ThousandSeparator.Comma,
+                ),
                 title: 'Total consumo familiar',
                 icon: const Icon(Icons.wallet),
+                readOnly: true,
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   ),
                 ],
                 onChange: (value) {

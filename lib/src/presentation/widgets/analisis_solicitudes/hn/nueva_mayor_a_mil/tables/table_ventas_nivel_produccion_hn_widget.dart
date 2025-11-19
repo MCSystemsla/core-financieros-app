@@ -144,109 +144,111 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
             ),
             child: Form(
               key: formKey,
-              child: ListView(
+              child: SingleChildScrollView(
                 controller: scrollController,
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  const Gap(15),
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Articulo de produccion',
-                    icon: const Icon(Icons.comment_bank_sharp),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      articuloDeProduccion = value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Cantidad de productos',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      cantidadProductos = int.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    title: 'Precio Venta Unidad',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      final newValue = toNumericString(value);
-                      precioVenta = double.tryParse(newValue);
-                    },
-                  ),
-                  const Gap(20),
-                  CatalogoFrecuenciaPagoDropdown(
-                    enabled: true,
-                    hintText: 'Selecciona una opcion',
-                    isRequired: true,
-                    title: 'Frecuenca de Abono a Credito',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      frecuenciaPago = value.valor;
-                    },
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        widget.cubit.saveCuentaNivelProduccion(
-                          numeroSolicitud: widget.numeroSolicitud,
-                          nivelProduccion: NivelProduccionHN(
-                            articuloProduccion: articuloDeProduccion!,
-                            frecuenciaProduccionCodigo: frecuenciaPago!,
-                            cantidadProduccion: cantidadProductos!,
-                            precioVentaUnidad: precioVenta!,
-                            totalMensualProduccion:
-                                ((precioVenta ?? 0) * (cantidadProductos ?? 0))
-                                    .toInt(),
-                          ),
-                        );
-                        context.pop();
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Articulo de produccion',
+                      icon: const Icon(Icons.comment_bank_sharp),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        articuloDeProduccion = value;
                       },
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Cantidad de productos',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        cantidadProductos = int.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      title: 'Precio Venta Unidad',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        precioVenta = double.tryParse(newValue);
+                      },
+                    ),
+                    const Gap(20),
+                    CatalogoFrecuenciaPagoDropdown(
+                      enabled: true,
+                      hintText: 'Selecciona una opcion',
+                      isRequired: true,
+                      title: 'Frecuenca de Abono a Credito',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        frecuenciaPago = value.valor;
+                      },
+                    ),
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.cubit.saveCuentaNivelProduccion(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            nivelProduccion: NivelProduccionHN(
+                              articuloProduccion: articuloDeProduccion!,
+                              frecuenciaProduccionCodigo: frecuenciaPago!,
+                              cantidadProduccion: cantidadProductos!,
+                              precioVentaUnidad: precioVenta!,
+                              totalMensualProduccion: ((precioVenta ?? 0) *
+                                      (cantidadProductos ?? 0))
+                                  .toInt(),
+                            ),
+                          );
+                          context.pop();
+                        },
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
           ),
