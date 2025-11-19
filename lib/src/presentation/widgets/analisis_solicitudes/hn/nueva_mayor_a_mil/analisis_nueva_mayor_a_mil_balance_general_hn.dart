@@ -195,6 +195,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
                 title: 'Total activos disponibles:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -220,6 +221,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
                 title: 'Total clientes:',
                 hintText: totalClientes.toCurrencyString(
                   leadingSymbol: 'L.',
@@ -266,8 +268,11 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
                 title: 'Incobrables:',
-                hintText: incobrables.toCurrencyString(),
+                hintText: incobrables.toCurrencyString(
+                  leadingSymbol: 'L',
+                ),
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
                 textInputType: TextInputType.number,
@@ -290,7 +295,9 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 hintText: (state.totalClientes -
                         incobrables +
                         state.adelantoProveedores)
-                    .toCurrencyString()
+                    .toCurrencyString(
+                      leadingSymbol: 'L',
+                    )
                     .toNullIfEmptyOrZero(),
                 title: 'Total cuentas por cobrar:',
                 icon: const Icon(Icons.document_scanner),
@@ -312,12 +319,13 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
                 hintText: (state.caja +
                         state.reservas +
                         state.cuentasAhorro +
                         totalCuentasxCobrar +
                         totalInventario)
-                    .toCurrencyString(),
+                    .toCurrencyString(leadingSymbol: 'L', mantissaLength: 0),
                 title: 'Total activos corrientes:',
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
