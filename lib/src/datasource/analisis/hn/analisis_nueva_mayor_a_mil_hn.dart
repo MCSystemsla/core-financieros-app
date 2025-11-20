@@ -30,7 +30,7 @@ class AnalisisNuevaMayorMilHn {
   final String proveedor1;
   final String proveedor2;
   final String proveedor3;
-  final DateTime? fechaVerificacion1;
+  final DateTime fechaVerificacion1;
   final String nombreReferencia1;
   final String cedulaReferencia1;
   final String direccionReferencia1;
@@ -39,7 +39,7 @@ class AnalisisNuevaMayorMilHn {
   final num aniosConocerReferido1;
   final String parentescoReferenciaCodigo1;
   final String resultadoVerificacion1;
-  final DateTime? fechaVerificacion2;
+  final DateTime fechaVerificacion2;
   final String nombreReferencia2;
   final String cedulaReferencia2;
   final String direccionReferencia2;
@@ -104,7 +104,7 @@ class AnalisisNuevaMayorMilHn {
   final double ingresosFueraNegocio;
   final num saldoDisponibleUf;
   final double costoVentaPorcentaje;
-  final DateTime? fechaVerificacion3;
+  final DateTime fechaVerificacion3;
   final String nombreReferencia3;
   final String cedulaReferencia3;
   final String direccionReferencia3;
@@ -130,8 +130,14 @@ class AnalisisNuevaMayorMilHn {
   final List<PasivoHN> pasivos;
   final List<ActivoHN> activos;
   final List<InventarioHN> inventario;
+  final String objEmpleadoVerificaReferenciaID1;
+  final String objEmpleadoVerificaReferenciaID2;
+  final String objEmpleadoVerificaReferenciaID3;
 
   AnalisisNuevaMayorMilHn({
+    required this.objEmpleadoVerificaReferenciaID1,
+    required this.objEmpleadoVerificaReferenciaID2,
+    required this.objEmpleadoVerificaReferenciaID3,
     required this.inventario,
     required this.database,
     required this.numeroSolicitud,
@@ -157,7 +163,7 @@ class AnalisisNuevaMayorMilHn {
     required this.proveedor1,
     required this.proveedor2,
     required this.proveedor3,
-    this.fechaVerificacion1,
+    required this.fechaVerificacion1,
     required this.nombreReferencia1,
     required this.cedulaReferencia1,
     required this.direccionReferencia1,
@@ -166,7 +172,7 @@ class AnalisisNuevaMayorMilHn {
     required this.aniosConocerReferido1,
     required this.parentescoReferenciaCodigo1,
     required this.resultadoVerificacion1,
-    this.fechaVerificacion2,
+    required this.fechaVerificacion2,
     required this.nombreReferencia2,
     required this.cedulaReferencia2,
     required this.direccionReferencia2,
@@ -231,7 +237,7 @@ class AnalisisNuevaMayorMilHn {
     required this.ingresosFueraNegocio,
     required this.saldoDisponibleUf,
     required this.costoVentaPorcentaje,
-    this.fechaVerificacion3,
+    required this.fechaVerificacion3,
     required this.nombreReferencia3,
     required this.cedulaReferencia3,
     required this.direccionReferencia3,
@@ -285,7 +291,7 @@ class AnalisisNuevaMayorMilHn {
       'Proveedor1': proveedor1,
       'Proveedor2': proveedor2,
       'Proveedor3': proveedor3,
-      'FechaVerificacion1': fechaVerificacion1?.toUtc().toIso8601String(),
+      'FechaVerificacion1': fechaVerificacion1.toUtc().toIso8601String(),
       'NombreReferencia1': nombreReferencia1,
       'CedulaReferencia1': cedulaReferencia1,
       'DireccionReferencia1': direccionReferencia1,
@@ -294,7 +300,7 @@ class AnalisisNuevaMayorMilHn {
       'AniosConocerReferido1': aniosConocerReferido1,
       'ParentescoReferenciaCodigo1': parentescoReferenciaCodigo1,
       'ResultadoVerificacion1': resultadoVerificacion1,
-      'FechaVerificacion2': fechaVerificacion2?.toUtc().toIso8601String(),
+      'FechaVerificacion2': fechaVerificacion2.toUtc().toIso8601String(),
       'NombreReferencia2': nombreReferencia2,
       'CedulaReferencia2': cedulaReferencia2,
       'DireccionReferencia2': direccionReferencia2,
@@ -360,7 +366,7 @@ class AnalisisNuevaMayorMilHn {
       'SaldoDisponibleUF': saldoDisponibleUf,
       'CostoVentaPorcentaje':
           double.tryParse(costoVentaPorcentaje.toStringAsFixed(2)),
-      'FechaVerificacion3': fechaVerificacion3?.toUtc().toIso8601String(),
+      'FechaVerificacion3': fechaVerificacion3.toUtc().toIso8601String(),
       'NombreReferencia3': nombreReferencia3,
       'CedulaReferencia3': cedulaReferencia3,
       'DireccionReferencia3': direccionReferencia3,
@@ -393,6 +399,9 @@ class AnalisisNuevaMayorMilHn {
       'Pasivos': List<dynamic>.from(pasivos.map((x) => x.toJson())),
       'Activos': List<dynamic>.from(activos.map((x) => x.toJson())),
       'Inventario': List<dynamic>.from(inventario.map((x) => x.toJson())),
+      'objEmpleadoVerificaReferenciaID1': objEmpleadoVerificaReferenciaID1,
+      'objEmpleadoVerificaReferenciaID2': objEmpleadoVerificaReferenciaID2,
+      'objEmpleadoVerificaReferenciaID3': objEmpleadoVerificaReferenciaID3,
     };
     data.removeWhere(
       (key, value) => value == null || value == '' || value == 0,

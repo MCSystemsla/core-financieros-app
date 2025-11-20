@@ -130,6 +130,9 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
   final List<PasivoHN> pasivos;
   final List<ActivoHN> activos;
   final List<InventarioHN> inventario;
+  final String objEmpleadoVerificaReferenciaID1;
+  final String objEmpleadoVerificaReferenciaID2;
+  final String objEmpleadoVerificaReferenciaID3;
   const AnalisisNuevaMayorMilHnState({
     this.inventario = const [],
     this.numeroSolicitud = 0,
@@ -268,10 +271,16 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     this.otrosCreditos = const [],
     this.pasivos = const [],
     this.activos = const [],
+    this.objEmpleadoVerificaReferenciaID1 = '',
+    this.objEmpleadoVerificaReferenciaID2 = '',
+    this.objEmpleadoVerificaReferenciaID3 = '',
   });
 
   @override
   List<Object> get props => [
+        objEmpleadoVerificaReferenciaID1,
+        objEmpleadoVerificaReferenciaID2,
+        objEmpleadoVerificaReferenciaID3,
         inventario,
         cicloVentaMensual,
         valorAltaRotacion,
@@ -530,6 +539,9 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
     List<PasivoHN>? pasivos,
     List<ActivoHN>? activos,
     List<InventarioHN>? inventario,
+    String? objEmpleadoVerificaReferenciaID1,
+    String? objEmpleadoVerificaReferenciaID2,
+    String? objEmpleadoVerificaReferenciaID3,
   }) {
     return AnalisisNuevaMayorMilHnState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -694,6 +706,12 @@ class AnalisisNuevaMayorMilHnState extends Equatable {
       pasivos: pasivos ?? this.pasivos,
       activos: activos ?? this.activos,
       inventario: inventario ?? this.inventario,
+      objEmpleadoVerificaReferenciaID1: objEmpleadoVerificaReferenciaID1 ??
+          this.objEmpleadoVerificaReferenciaID1,
+      objEmpleadoVerificaReferenciaID2: objEmpleadoVerificaReferenciaID2 ??
+          this.objEmpleadoVerificaReferenciaID2,
+      objEmpleadoVerificaReferenciaID3: objEmpleadoVerificaReferenciaID3 ??
+          this.objEmpleadoVerificaReferenciaID3,
     );
   }
 }

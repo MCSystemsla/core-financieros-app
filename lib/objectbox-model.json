@@ -4359,7 +4359,7 @@
     },
     {
       "id": "28:5769133704515450244",
-      "lastPropertyId": "114:5908668082797333579",
+      "lastPropertyId": "117:2283046132546155185",
       "name": "AnalisisNuevaMayorAMilHnLocalDb",
       "properties": [
         {
@@ -4932,6 +4932,21 @@
           "id": "114:5908668082797333579",
           "name": "salud",
           "type": 8
+        },
+        {
+          "id": "115:8417392147910364252",
+          "name": "objEmpleadoVerificaReferenciaID1",
+          "type": 9
+        },
+        {
+          "id": "116:8833132802468870718",
+          "name": "objEmpleadoVerificaReferenciaID2",
+          "type": 9
+        },
+        {
+          "id": "117:2283046132546155185",
+          "name": "objEmpleadoVerificaReferenciaID3",
+          "type": 9
         }
       ],
       "relations": []

@@ -1,10 +1,12 @@
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/add_item_card/add_item_custom_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +30,72 @@ class AnalisisMayorAMilReferenciasHN extends StatefulWidget {
 class _AnalisisMayorAMilReferenciasHNState
     extends State<AnalisisMayorAMilReferenciasHN> {
   bool isAddReferenciaAditionalClicked = false;
+  DateTime fechaVerificacion = DateTime.now();
+  DateTime fechaVerificacion2 = DateTime.now();
+  DateTime fechaVerificacion3 = DateTime.now();
+  Future<void> selectFechaVerificacion(BuildContext context) async {
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaVerificacion,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaVerificacion) {
+      fechaVerificacion = picked;
+      cubit.onFieldChanged(
+        () => cubit.state.copyWith(
+          fechaVerificacion1: fechaVerificacion.toUtc().toIso8601String(),
+        ),
+      );
+      setState(() {});
+    }
+  }
+
+  Future<void> selectFechaVerificacion2(BuildContext context) async {
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaVerificacion2,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaVerificacion) {
+      fechaVerificacion2 = picked;
+      cubit.onFieldChanged(
+        () => cubit.state.copyWith(
+          fechaVerificacion2: fechaVerificacion2.toUtc().toIso8601String(),
+        ),
+      );
+      setState(() {});
+    }
+  }
+
+  Future<void> selectFechaVerificacion3(BuildContext context) async {
+    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaVerificacion3,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaVerificacion) {
+      fechaVerificacion3 = picked;
+      cubit.onFieldChanged(
+        () => cubit.state.copyWith(
+          fechaVerificacion3: fechaVerificacion3.toUtc().toIso8601String(),
+        ),
+      );
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
@@ -166,6 +234,31 @@ class _AnalisisMayorAMilReferenciasHNState
                 },
               ),
               const Gap(20),
+              SearchDropdownWidget(
+                selectedItem: Item(
+                  name: state.objEmpleadoVerificaReferenciaID1,
+                  value: state.objEmpleadoVerificaReferenciaID1,
+                ),
+                codigo: 'EMPLEADOS',
+                title: 'Empleado que verifica',
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                      objEmpleadoVerificaReferenciaID1: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaVerificacion.selectorFormat(),
+                title: 'Fecha de verificación',
+                onTap: () => selectFechaVerificacion(context),
+                icon: const Icon(Icons.date_range),
+                readOnly: true,
+                onChange: (value) {},
+              ),
+              const Gap(20),
               Container(
                 margin: const EdgeInsets.all(18),
                 child: Text(
@@ -294,6 +387,31 @@ class _AnalisisMayorAMilReferenciasHNState
                     () => state.copyWith(resultadoVerificacion2: value),
                   );
                 },
+              ),
+              const Gap(20),
+              SearchDropdownWidget(
+                selectedItem: Item(
+                  name: state.objEmpleadoVerificaReferenciaID2,
+                  value: state.objEmpleadoVerificaReferenciaID2,
+                ),
+                codigo: 'EMPLEADOS',
+                title: 'Empleado que verifica 2',
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                      objEmpleadoVerificaReferenciaID2: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaVerificacion2.selectorFormat(),
+                title: 'Fecha de verificación 2',
+                onTap: () => selectFechaVerificacion2(context),
+                icon: const Icon(Icons.date_range),
+                readOnly: true,
+                onChange: (value) {},
               ),
               const Gap(20),
               AddItemCustomCard(
@@ -437,6 +555,31 @@ class _AnalisisMayorAMilReferenciasHNState
                       () => state.copyWith(resultadoVerificacion3: value),
                     );
                   },
+                ),
+                const Gap(20),
+                SearchDropdownWidget(
+                  selectedItem: Item(
+                    name: state.objEmpleadoVerificaReferenciaID3,
+                    value: state.objEmpleadoVerificaReferenciaID3,
+                  ),
+                  codigo: 'EMPLEADOS',
+                  title: 'Empleado que verifica 3',
+                  onChanged: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(
+                        objEmpleadoVerificaReferenciaID3: value?.value,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  hintText: fechaVerificacion3.selectorFormat(),
+                  title: 'Fecha de verificación 3',
+                  onTap: () => selectFechaVerificacion3(context),
+                  icon: const Icon(Icons.date_range),
+                  readOnly: true,
+                  onChange: (value) {},
                 ),
               ],
               const Gap(20),

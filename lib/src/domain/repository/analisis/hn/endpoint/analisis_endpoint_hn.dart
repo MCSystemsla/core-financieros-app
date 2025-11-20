@@ -39,3 +39,19 @@ class CreateAnalisisAsalariadoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
 }
+
+class CatalogoEmpleadosActivos extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/catalogo/empleados-activos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

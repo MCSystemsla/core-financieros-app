@@ -73,7 +73,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           proveedor1: state.proveedor1,
           proveedor2: state.proveedor2,
           proveedor3: state.proveedor3,
-          fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
+          fechaVerificacion1: state.fechaVerificacion1.isEmpty
+              ? DateTime.now()
+              : DateTime.parse(state.fechaVerificacion1),
           nombreReferencia1: state.nombreReferencia1,
           cedulaReferencia1: state.cedulaReferencia1,
           direccionReferencia1: state.direccionReferencia1,
@@ -82,7 +84,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           aniosConocerReferido1: state.aniosConocerReferido1,
           parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
           resultadoVerificacion1: state.resultadoVerificacion1,
-          fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
+          fechaVerificacion2: state.fechaVerificacion2.isEmpty
+              ? DateTime.now()
+              : DateTime.parse(state.fechaVerificacion2),
           nombreReferencia2: state.nombreReferencia2,
           cedulaReferencia2: state.cedulaReferencia2,
           direccionReferencia2: state.direccionReferencia2,
@@ -187,7 +191,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           costoVentaPorcentaje: state.inventario.fold(
                   0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
               state.inventario.length,
-          fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
+          fechaVerificacion3: state.fechaVerificacion3.isEmpty
+              ? DateTime.now()
+              : DateTime.parse(state.fechaVerificacion3),
           nombreReferencia3: state.nombreReferencia3,
           cedulaReferencia3: state.cedulaReferencia3,
           direccionReferencia3: state.direccionReferencia3,
@@ -231,6 +237,12 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           pasivos: state.pasivos,
           activos: state.activos,
           inventario: state.inventario,
+          objEmpleadoVerificaReferenciaID1:
+              state.objEmpleadoVerificaReferenciaID1,
+          objEmpleadoVerificaReferenciaID2:
+              state.objEmpleadoVerificaReferenciaID2,
+          objEmpleadoVerificaReferenciaID3:
+              state.objEmpleadoVerificaReferenciaID3,
         ),
       );
       emit(state.copyWith(
@@ -334,6 +346,18 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           _prefer(state.telefonoReferencia2, prev?.telefonoReferencia2),
       telefonoReferencia3:
           _prefer(state.telefonoReferencia3, prev?.telefonoReferencia3),
+      objEmpleadoVerificaReferenciaID1: _prefer(
+        state.objEmpleadoVerificaReferenciaID1,
+        prev?.objEmpleadoVerificaReferenciaID1,
+      ),
+      objEmpleadoVerificaReferenciaID2: _prefer(
+        state.objEmpleadoVerificaReferenciaID2,
+        prev?.objEmpleadoVerificaReferenciaID2,
+      ),
+      objEmpleadoVerificaReferenciaID3: _prefer(
+        state.objEmpleadoVerificaReferenciaID3,
+        prev?.objEmpleadoVerificaReferenciaID3,
+      ),
       fechaEmisionLicencia: _preferDate(
         state.fechaEmisionLicencia,
         prev?.fechaEmisionLicencia,

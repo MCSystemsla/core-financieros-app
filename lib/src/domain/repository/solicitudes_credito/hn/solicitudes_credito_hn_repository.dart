@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/c
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/endpoint/solicitudes_credito_hn_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:http_parser/http_parser.dart';
@@ -88,6 +89,7 @@ abstract class SolicitudesCreditoHnRepository {
   Future<(bool, Asesor)> getAsesores();
   Future<ActividadesEconomicasAliasFilteredResponse>
       getActividadesEconomicasAliasFiltered();
+  Future<CatalogoValor> getEmpleadosActivos();
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -631,6 +633,27 @@ class SolicitudesCreditoHnRepositoryImpl
       }
       final data = ActividadesEconomicasAliasFilteredResponse.fromJson(resp);
       _logger.i(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getEmpleadosActivos() async {
+    final endpoint = CatalogoEmpleadosActivos();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = CatalogoValor.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

@@ -118,6 +118,9 @@ class AnalisisNuevaMayorAMilHnLocalDb {
   DateTime? permisoOperacionFechaEmision;
   DateTime? permisoOperacionFechaVencimiento;
   String? uuid;
+  String? objEmpleadoVerificaReferenciaID1;
+  String? objEmpleadoVerificaReferenciaID2;
+  String? objEmpleadoVerificaReferenciaID3;
   AnalisisNuevaMayorAMilHnLocalDb({
     required this.id,
     this.database,
@@ -233,5 +236,8 @@ class AnalisisNuevaMayorAMilHnLocalDb {
     this.permisoOperacionFechaEmision,
     this.permisoOperacionFechaVencimiento,
     this.uuid,
+    this.objEmpleadoVerificaReferenciaID1,
+    this.objEmpleadoVerificaReferenciaID2,
+    this.objEmpleadoVerificaReferenciaID3,
   });
 }

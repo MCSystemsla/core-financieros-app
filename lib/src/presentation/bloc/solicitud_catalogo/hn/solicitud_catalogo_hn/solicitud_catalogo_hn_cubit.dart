@@ -171,6 +171,18 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           type: 'PRODUCTO',
         ));
       }
+      final catalogoEmpleadosActivos = await _repository.getEmpleadosActivos();
+      for (var item in catalogoEmpleadosActivos.data) {
+        _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+          valor: item.valor.toString(),
+          nombre: item.nombre,
+          interes: 0,
+          montoMaximo: 0,
+          montoMinimo: 0,
+          isRecurrente: false,
+          type: 'EMPLEADOS',
+        ));
+      }
     } catch (e, stack) {
       log('Error general al guardar catálogos: $e\n$stack');
       rethrow;
