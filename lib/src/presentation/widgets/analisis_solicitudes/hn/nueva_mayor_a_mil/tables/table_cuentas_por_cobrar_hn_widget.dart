@@ -1,9 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_cuentas_por_cobrar_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -16,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 class TableCuentasPorCobrarHnWidget extends StatelessWidget {
   const TableCuentasPorCobrarHnWidget({super.key});
@@ -61,6 +65,8 @@ class TableCuentasPorCobrarHnWidget extends StatelessWidget {
                 const Gap(20),
                 _CuentasPorCobrarItemsWidget(
                   cuentasPorCobrar: state.cuentasPorCobrar,
+                  numeroSolicitud: state.numeroSolicitud,
+                  cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
                 ),
                 const Gap(20),
               ],
@@ -74,8 +80,12 @@ class TableCuentasPorCobrarHnWidget extends StatelessWidget {
 
 class _CuentasPorCobrarItemsWidget extends StatelessWidget {
   final List<CuentasPorCobrarHN> cuentasPorCobrar;
+  final AnalisisNuevaMayorMilHnCubit cubit;
+  final int numeroSolicitud;
   const _CuentasPorCobrarItemsWidget({
     required this.cuentasPorCobrar,
+    required this.cubit,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -93,7 +103,29 @@ class _CuentasPorCobrarItemsWidget extends StatelessWidget {
           subtitle: e.nombre,
           title: e.frecuenciaAbonoCodigo,
           description: e.totalMensualCredito.toCurrencyString(),
-          onTap: () {},
+          onTap: () => {
+            showHistorialCreditoOptionsBottomSheet(
+              context: context,
+              onEdit: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (ctx) => _CreateCuentasPorCobrarHn(
+                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    numeroSolicitud: numeroSolicitud,
+                    isUpdated: true,
+                    cuentaPorCobrar: e,
+                  ),
+                );
+              },
+              onDelete: () {
+                cubit.deleteCuentaPorCobrar(
+                  uuid: e.uuid,
+                  numeroSolicitud: numeroSolicitud,
+                );
+              },
+            ),
+          },
         );
       },
     );
@@ -102,10 +134,14 @@ class _CuentasPorCobrarItemsWidget extends StatelessWidget {
 
 class _CreateCuentasPorCobrarHn extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
+  final CuentasPorCobrarHN? cuentaPorCobrar;
   final int numeroSolicitud;
+  final bool isUpdated;
   const _CreateCuentasPorCobrarHn({
     required this.cubit,
     required this.numeroSolicitud,
+    this.isUpdated = false,
+    this.cuentaPorCobrar,
   });
 
   @override
@@ -119,6 +155,17 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
   int? abonoCredito;
   String? nombre;
   String? frecuenciaPago;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isUpdated) {
+      final cuentaPorCobrar = widget.cuentaPorCobrar;
+      nombre = cuentaPorCobrar?.nombre;
+      frecuenciaPago = cuentaPorCobrar?.frecuenciaAbonoCodigo;
+      montoCredito = cuentaPorCobrar?.totalMensualCredito;
+      abonoCredito = cuentaPorCobrar?.abonoCredito;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +206,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: nombre,
                       title: 'Nombre',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
@@ -172,6 +220,9 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: montoCredito?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Monto del credito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -190,6 +241,9 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: abonoCredito?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Abono del credito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -208,6 +262,11 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     CatalogoFrecuenciaPagoDropdown(
+                      selectedItem: CatalogoFrecuenciaItem(
+                        valor: frecuenciaPago!,
+                        nombre: frecuenciaPago ?? '',
+                        meses: '0',
+                      ),
                       enabled: true,
                       hintText: 'Selecciona una opcion',
                       isRequired: true,
@@ -229,9 +288,26 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (widget.isUpdated) {
+                            widget.cubit.updateCuentaPorCobrar(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              cuentasPorCobrar: AnalisisCuentasPorCobrarHn(
+                                uuid: widget.cuentaPorCobrar?.uuid,
+                                nombre: nombre!,
+                                montoCredito: montoCredito!,
+                                abonoCredito: abonoCredito!,
+                                frecuenciaAbonoCodigo: frecuenciaPago!,
+                                totalMensualCredito:
+                                    (montoCredito ?? 0) - (abonoCredito ?? 0),
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.saveCuentaPorCobrar(
                             numeroSolicitud: widget.numeroSolicitud,
                             cuentasPorCobrar: CuentasPorCobrarHN(
+                              uuid: const Uuid().v4(),
                               nombre: nombre!,
                               montoCredito: montoCredito!,
                               abonoCredito: abonoCredito!,

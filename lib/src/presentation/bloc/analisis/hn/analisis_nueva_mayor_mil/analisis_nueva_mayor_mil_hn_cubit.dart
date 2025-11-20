@@ -1173,13 +1173,6 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     required CuentasPorCobrarHN cuentasPorCobrar,
     required int numeroSolicitud,
   }) {
-    final localDbProvider = global<AnalisisBoxServiceHn>();
-    final solicitudesDbService = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
-
-    final cuentasPorCobrarIncobrables =
-        double.tryParse(solicitudesDbService?.valor ?? '0') ?? 0;
-
     localDbProvider.cuentasPorCobrarHnBox.put(
       AnalisisCuentasPorCobrarHn(
         abonoCredito: cuentasPorCobrar.abonoCredito,
@@ -1187,26 +1180,104 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         totalMensualCredito: cuentasPorCobrar.totalMensualCredito,
         nombre: cuentasPorCobrar.nombre,
         montoCredito: cuentasPorCobrar.montoCredito,
-        uuid: const Uuid().v4(),
+        uuid: cuentasPorCobrar.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
     emit(
       state.copyWith(
-        totalCuentasXCobrar: state.cuentasPorCobrar
-            .fold(0, (sum, e) => (sum ?? 0) + e.totalMensualCredito),
-        totalClientes: state.cuentasPorCobrar
-            .fold(0, (sum, e) => (sum ?? 0) + e.totalMensualCredito),
-        incobrables: state.cuentasPorCobrar
-                .fold(0, (sum, e) => (sum) + e.totalMensualCredito) *
-            cuentasPorCobrarIncobrables,
-        totalActivosCorrientes: (state.totalActivos +
-            state.totalCuentasXCobrar +
-            state.totalInventario),
         cuentasPorCobrar: [
           ...state.cuentasPorCobrar,
           cuentasPorCobrar,
         ],
+      ),
+    );
+  }
+
+  void updateCuentaPorCobrar({
+    required AnalisisCuentasPorCobrarHn cuentasPorCobrar,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.cuentasPorCobrarHnBox;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisCuentasPorCobrarHn_.uuid.equals(cuentasPorCobrar.uuid!) &
+              AnalisisCuentasPorCobrarHn_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..nombre = cuentasPorCobrar.nombre
+      ..montoCredito = cuentasPorCobrar.montoCredito
+      ..abonoCredito = cuentasPorCobrar.abonoCredito
+      ..frecuenciaAbonoCodigo = cuentasPorCobrar.frecuenciaAbonoCodigo
+      ..totalMensualCredito = cuentasPorCobrar.totalMensualCredito;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final cuentaPorCobrar = CuentasPorCobrarHN(
+      abonoCredito: cuentasPorCobrar.abonoCredito ?? 0,
+      frecuenciaAbonoCodigo: cuentasPorCobrar.frecuenciaAbonoCodigo ?? '',
+      totalMensualCredito: cuentasPorCobrar.totalMensualCredito ?? 0,
+      nombre: cuentasPorCobrar.nombre ?? '',
+      montoCredito: cuentasPorCobrar.montoCredito ?? 0,
+      uuid: cuentasPorCobrar.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        cuentasPorCobrar: state.cuentasPorCobrar
+            .map((e) => e.uuid == cuentasPorCobrar.uuid ? cuentaPorCobrar : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void deleteCuentaPorCobrar({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.cuentasPorCobrarHnBox;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisCuentasPorCobrarHn_.uuid.equals(uuid) &
+              AnalisisCuentasPorCobrarHn_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        cuentasPorCobrar:
+            state.cuentasPorCobrar.where((e) => e.uuid != uuid).toList(),
       ),
     );
   }
@@ -1431,6 +1502,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               totalMensualCredito: c.totalMensualCredito ?? 0,
               nombre: c.nombre ?? '',
               montoCredito: c.montoCredito ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 

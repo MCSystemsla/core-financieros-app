@@ -605,6 +605,7 @@ class CuentasPorCobrarHN {
   final int abonoCredito;
   final String frecuenciaAbonoCodigo;
   final int totalMensualCredito;
+  final String uuid;
 
   CuentasPorCobrarHN({
     required this.nombre,
@@ -612,6 +613,7 @@ class CuentasPorCobrarHN {
     required this.abonoCredito,
     required this.frecuenciaAbonoCodigo,
     required this.totalMensualCredito,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
