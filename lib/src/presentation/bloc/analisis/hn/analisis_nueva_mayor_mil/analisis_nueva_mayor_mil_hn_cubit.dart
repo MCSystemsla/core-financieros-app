@@ -190,7 +190,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           saldoDisponibleUf: state.saldoDisponibleUf,
           costoVentaPorcentaje: state.inventario.fold(
                   0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-              state.inventario.length,
+              (state.inventario.length),
           fechaVerificacion3: state.fechaVerificacion3.isEmpty
               ? DateTime.now()
               : DateTime.parse(state.fechaVerificacion3),

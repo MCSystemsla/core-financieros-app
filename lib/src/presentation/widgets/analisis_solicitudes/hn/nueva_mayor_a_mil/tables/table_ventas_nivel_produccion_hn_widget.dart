@@ -222,7 +222,9 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: cantidadProductos.toString(),
+                      initialValue: cantidadProductos
+                          ?.toCurrencyString()
+                          .toNullIfEmptyOrZero(),
                       title: 'Cantidad de productos',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -263,7 +265,7 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     const Gap(20),
                     CatalogoFrecuenciaPagoDropdown(
                       selectedItem: CatalogoFrecuenciaItem(
-                        valor: frecuenciaPago!,
+                        valor: frecuenciaPago ?? '',
                         nombre: frecuenciaPago ?? '',
                         meses: '0',
                       ),

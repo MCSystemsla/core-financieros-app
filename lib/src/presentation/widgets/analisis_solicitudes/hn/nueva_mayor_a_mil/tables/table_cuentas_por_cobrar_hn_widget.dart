@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -162,7 +163,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
       final cuentaPorCobrar = widget.cuentaPorCobrar;
       nombre = cuentaPorCobrar?.nombre;
       frecuenciaPago = cuentaPorCobrar?.frecuenciaAbonoCodigo;
-      montoCredito = cuentaPorCobrar?.totalMensualCredito;
+      montoCredito = cuentaPorCobrar?.montoCredito;
       abonoCredito = cuentaPorCobrar?.abonoCredito;
     }
   }
@@ -220,9 +221,11 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: montoCredito?.toCurrencyString(
-                        mantissaLength: 0,
-                      ),
+                      initialValue: montoCredito
+                          ?.toCurrencyString(
+                            mantissaLength: 0,
+                          )
+                          .toNullIfEmptyOrZero(),
                       title: 'Monto del credito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -241,9 +244,9 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: abonoCredito?.toCurrencyString(
-                        mantissaLength: 0,
-                      ),
+                      initialValue: abonoCredito
+                          ?.toCurrencyString()
+                          .toNullIfEmptyOrZero(),
                       title: 'Abono del credito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -263,7 +266,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     const Gap(20),
                     CatalogoFrecuenciaPagoDropdown(
                       selectedItem: CatalogoFrecuenciaItem(
-                        valor: frecuenciaPago!,
+                        valor: frecuenciaPago ?? '',
                         nombre: frecuenciaPago ?? '',
                         meses: '0',
                       ),

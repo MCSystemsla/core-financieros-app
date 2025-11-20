@@ -364,8 +364,9 @@ class AnalisisNuevaMayorMilHn {
       'ConsumoFamiliar': consumoFamiliar,
       'IngresosFueraNegocio': ingresosFueraNegocio,
       'SaldoDisponibleUF': saldoDisponibleUf,
-      'CostoVentaPorcentaje':
-          double.tryParse(costoVentaPorcentaje.toStringAsFixed(2)),
+      'CostoVentaPorcentaje': costoVentaPorcentaje.isNaN
+          ? null
+          : double.parse(costoVentaPorcentaje.toStringAsFixed(2)),
       'FechaVerificacion3': fechaVerificacion3.toUtc().toIso8601String(),
       'NombreReferencia3': nombreReferencia3,
       'CedulaReferencia3': cedulaReferencia3,
