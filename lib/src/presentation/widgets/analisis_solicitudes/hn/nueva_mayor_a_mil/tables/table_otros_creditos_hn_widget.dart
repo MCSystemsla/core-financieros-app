@@ -1,14 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
@@ -16,6 +19,7 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 class TableOtrosCreditosHnWidget extends StatelessWidget {
   const TableOtrosCreditosHnWidget({super.key});
@@ -61,6 +65,7 @@ class TableOtrosCreditosHnWidget extends StatelessWidget {
                 const Gap(20),
                 _NivelProduccionWidget(
                   otrosCreditos: state.otrosCreditos,
+                  numeroSolicitud: state.numeroSolicitud,
                 ),
                 const Gap(20),
               ],
@@ -74,8 +79,10 @@ class TableOtrosCreditosHnWidget extends StatelessWidget {
 
 class _NivelProduccionWidget extends StatelessWidget {
   final List<OtrosCreditoHN> otrosCreditos;
+  final int numeroSolicitud;
   const _NivelProduccionWidget({
     required this.otrosCreditos,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -93,7 +100,29 @@ class _NivelProduccionWidget extends StatelessWidget {
           subtitle: e.nombreOtrosCreditos,
           description: 'Monto: ${e.monto.toCurrencyString()}',
           title: '',
-          onTap: () {},
+          onTap: () => {
+            showHistorialCreditoOptionsBottomSheet(
+              context: context,
+              onEdit: () => {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (ctx) => _CompraPorArticuloSheetHn(
+                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    numeroSolicitud: numeroSolicitud,
+                    otroCredito: e,
+                    isUpdate: true,
+                  ),
+                ),
+              },
+              onDelete: () {
+                context.read<AnalisisNuevaMayorMilHnCubit>().deleteOtroCredito(
+                      numeroSolicitud: numeroSolicitud,
+                      uuid: e.uuid,
+                    );
+              },
+            ),
+          },
         );
       },
     );
@@ -103,9 +132,13 @@ class _NivelProduccionWidget extends StatelessWidget {
 class _CompraPorArticuloSheetHn extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
   final int numeroSolicitud;
+  final OtrosCreditoHN? otroCredito;
+  final bool isUpdate;
   const _CompraPorArticuloSheetHn({
     required this.cubit,
     required this.numeroSolicitud,
+    this.otroCredito,
+    this.isUpdate = false,
   });
 
   @override
@@ -117,6 +150,15 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
   final formKey = GlobalKey<FormState>();
   String? nombre;
   int? monto;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isUpdate) {
+      nombre = widget.otroCredito?.nombreOtrosCreditos;
+      monto = widget.otroCredito?.monto;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -156,6 +198,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: nombre,
                       title: 'Nombre institucion',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
@@ -169,6 +212,12 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      initialValue: monto
+                          ?.toCurrencyString(
+                            mantissaLength: 0,
+                          )
+                          .toNullIfEmptyOrZero(),
                       title: 'Monto',
                       icon: const Icon(Icons.comment_bank_sharp),
                       textInputType: TextInputType.number,
@@ -194,11 +243,24 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (widget.isUpdate) {
+                            widget.cubit.updateOtrosCredito(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              pasivo: AnalisisOtrosCreditoHnLocalDb(
+                                uuid: widget.otroCredito!.uuid,
+                                nombreOtrosCreditos: nombre!,
+                                monto: monto!,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.saveOtrosCredito(
                             numeroSolicitud: widget.numeroSolicitud,
                             otroCredito: OtrosCreditoHN(
                               nombreOtrosCreditos: nombre!,
                               monto: monto!,
+                              uuid: const Uuid().v4(),
                             ),
                           );
                           context.pop();

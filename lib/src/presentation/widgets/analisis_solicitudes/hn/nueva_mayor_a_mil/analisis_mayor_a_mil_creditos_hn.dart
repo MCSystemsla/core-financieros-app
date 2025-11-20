@@ -70,6 +70,7 @@ class _AnalisisMayorAMilCreditosHNState
                   leadingSymbol: 'L.',
                 ),
                 title: 'Ingreso anual y/o volumen de venta',
+                readOnly: true,
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [

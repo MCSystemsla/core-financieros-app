@@ -1,12 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 
@@ -58,6 +62,10 @@ class TableInventarioHnWidget extends StatelessWidget {
       body: BlocBuilder<AnalisisNuevaMayorMilHnCubit,
           AnalisisNuevaMayorMilHnState>(
         builder: (context, state) {
+          if (state.inventario.isEmpty) {
+            return const EmptyListWidget(
+                message: 'No hay inventario para mostrar');
+          }
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -70,9 +78,35 @@ class TableInventarioHnWidget extends StatelessWidget {
                     final e = state.inventario[index];
                     return AnalisisCardVentasDay(
                       subtitle: e.articulo,
-                      title: 'Costo de venta: ${e.costoVentaPorcentaje}%',
+                      title:
+                          'Costo de venta: ${e.costoVentaPorcentaje.toStringAsFixed(2)}%',
                       description: e.precioVenta.toCurrencyString(),
-                      onTap: () {},
+                      onTap: () {
+                        showHistorialCreditoOptionsBottomSheet(
+                          context: context,
+                          onEdit: () => {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (ctx) => _CompraSemanalHN(
+                                cubit: context
+                                    .read<AnalisisNuevaMayorMilHnCubit>(),
+                                numeroSolicitud: numeroSolicitud,
+                                inventorio: e,
+                                isUpdate: true,
+                              ),
+                            ),
+                          },
+                          onDelete: () {
+                            context
+                                .read<AnalisisNuevaMayorMilHnCubit>()
+                                .deleteInventario(
+                                  uuid: e.uuid,
+                                  numeroSolicitud: numeroSolicitud,
+                                );
+                          },
+                        );
+                      },
                     );
                   },
                 ),
@@ -89,9 +123,13 @@ class TableInventarioHnWidget extends StatelessWidget {
 class _CompraSemanalHN extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
   final int numeroSolicitud;
+  final InventarioHN? inventorio;
+  final bool isUpdate;
   const _CompraSemanalHN({
     required this.cubit,
     required this.numeroSolicitud,
+    this.inventorio,
+    this.isUpdate = false,
   });
 
   @override
@@ -104,6 +142,17 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
   String? articulo;
   double? costoCompra;
   double? precioVenta;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isUpdate) {
+      cantidad = widget.inventorio?.cantidad;
+      articulo = widget.inventorio?.articulo;
+      costoCompra = widget.inventorio?.costoCompra;
+      precioVenta = widget.inventorio?.precioVenta.toDouble();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -143,6 +192,9 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: cantidad?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Cantidad',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -159,6 +211,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: articulo,
                       title: 'Articulo',
                       icon: const Icon(Icons.wallet),
                       validator: (value) =>
@@ -172,6 +225,10 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      initialValue: costoCompra?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Costo Compra',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -191,6 +248,10 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      initialValue: precioVenta?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Precio venta',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -218,9 +279,28 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (widget.isUpdate) {
+                            widget.cubit.updateInventario(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              inventario: AnalisisInventarioHnLocalDb(
+                                uuid: widget.inventorio!.uuid,
+                                cantidad: cantidad!,
+                                articulo: articulo!,
+                                costoCompra: costoCompra!,
+                                precioVenta: precioVenta!.toInt(),
+                                costoVentaPorcentaje:
+                                    (costoCompra ?? 0) / (precioVenta ?? 0),
+                                total: ((costoCompra ?? 0) * (cantidad ?? 0))
+                                    .toInt(),
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.saveInventario(
                             numeroSolicitud: widget.numeroSolicitud,
                             inventario: InventarioHN(
+                              uuid: const Uuid().v4(),
                               cantidad: cantidad!,
                               articulo: articulo!,
                               costoCompra: costoCompra!,

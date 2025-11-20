@@ -5422,7 +5422,7 @@
     },
     {
       "id": "40:2708399357371822122",
-      "lastPropertyId": "8:5153197946707980638",
+      "lastPropertyId": "9:8767336729557076225",
       "name": "AnalisisInventarioHnLocalDb",
       "properties": [
         {
@@ -5465,6 +5465,11 @@
           "id": "8:5153197946707980638",
           "name": "numeroSolicitud",
           "type": 6
+        },
+        {
+          "id": "9:8767336729557076225",
+          "name": "uuid",
+          "type": 9
         }
       ],
       "relations": []

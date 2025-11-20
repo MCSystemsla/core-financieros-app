@@ -12,6 +12,7 @@ class AnalisisInventarioHnLocalDb {
   double? costoVentaPorcentaje;
   int? total;
   int? numeroSolicitud;
+  String? uuid;
   AnalisisInventarioHnLocalDb({
     this.cantidad,
     this.articulo,
@@ -20,5 +21,6 @@ class AnalisisInventarioHnLocalDb {
     this.costoVentaPorcentaje,
     this.total,
     this.numeroSolicitud,
+    this.uuid,
   });
 }

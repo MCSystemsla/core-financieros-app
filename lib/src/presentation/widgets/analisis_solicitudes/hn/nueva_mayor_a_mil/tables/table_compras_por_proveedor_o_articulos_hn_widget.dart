@@ -1,15 +1,19 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_compras_proveedor_articulo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +22,7 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 class TableComprasPorProveedorOArticulosHnWidget extends StatelessWidget {
   const TableComprasPorProveedorOArticulosHnWidget({super.key});
@@ -63,6 +68,7 @@ class TableComprasPorProveedorOArticulosHnWidget extends StatelessWidget {
                 const Gap(20),
                 _NivelProduccionWidget(
                   cuentasPorCobrar: state.comprasProveedorArticulo,
+                  numeroSolicitud: state.numeroSolicitud,
                 ),
                 const Gap(20),
               ],
@@ -76,8 +82,10 @@ class TableComprasPorProveedorOArticulosHnWidget extends StatelessWidget {
 
 class _NivelProduccionWidget extends StatelessWidget {
   final List<ComprasProveedorArticuloHN> cuentasPorCobrar;
+  final int numeroSolicitud;
   const _NivelProduccionWidget({
     required this.cuentasPorCobrar,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -97,7 +105,31 @@ class _NivelProduccionWidget extends StatelessWidget {
               'Monto Compra credito: ${e.montoCompraCredito.toCurrencyString()}',
           description:
               'Total compra mensual: ${e.totalCompraMensual.toCurrencyString()}',
-          onTap: () {},
+          onTap: () => {
+            showHistorialCreditoOptionsBottomSheet(
+              context: context,
+              onEdit: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (ctx) => _CompraPorArticuloSheetHn(
+                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    numeroSolicitud: numeroSolicitud,
+                    isUpdate: true,
+                    proveedorArticulo: e,
+                  ),
+                );
+              },
+              onDelete: () {
+                context
+                    .read<AnalisisNuevaMayorMilHnCubit>()
+                    .deleteComprasPorProveedor(
+                      numeroSolicitud: numeroSolicitud,
+                      uuid: e.uuid,
+                    );
+              },
+            ),
+          },
         );
       },
     );
@@ -107,9 +139,14 @@ class _NivelProduccionWidget extends StatelessWidget {
 class _CompraPorArticuloSheetHn extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
   final int numeroSolicitud;
+  final bool isUpdate;
+
+  final ComprasProveedorArticuloHN? proveedorArticulo;
   const _CompraPorArticuloSheetHn({
     required this.cubit,
     required this.numeroSolicitud,
+    this.isUpdate = false,
+    this.proveedorArticulo,
   });
 
   @override
@@ -124,6 +161,19 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
   String? frecuenciaCompraCredito;
   int? montoCompraContado;
   int? montoCompraCredito;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isUpdate) {
+      proveedorArticulo = widget.proveedorArticulo?.proveedorArticulo;
+      frecuenciaCompraContado =
+          widget.proveedorArticulo?.frecuenciaCompraContadoCodigo;
+      frecuenciaCompraCredito =
+          widget.proveedorArticulo?.frecuenciaCompraCreditoCodigo;
+      montoCompraContado = widget.proveedorArticulo?.montoCompraContado;
+      montoCompraCredito = widget.proveedorArticulo?.montoCompraCredito;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +214,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: proveedorArticulo,
                       title: 'Proveedor de articulo',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
@@ -177,6 +228,11 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     CatalogoFrecuenciaPagoDropdown(
+                      selectedItem: CatalogoFrecuenciaItem(
+                        valor: frecuenciaCompraContado ?? '',
+                        nombre: frecuenciaCompraContado ?? '',
+                        meses: '0',
+                      ),
                       title: 'Frecuencia de contado',
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.valor),
@@ -186,6 +242,10 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      initialValue: montoCompraContado
+                          ?.toCurrencyString(mantissaLength: 0)
+                          .toNullIfEmptyOrZero(),
                       title: 'Monto de contado',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -204,6 +264,11 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     CatalogoFrecuenciaPagoDropdown(
+                      selectedItem: CatalogoFrecuenciaItem(
+                        valor: frecuenciaCompraCredito ?? '',
+                        nombre: frecuenciaCompraCredito ?? '',
+                        meses: '0',
+                      ),
                       enabled: true,
                       hintText: 'Selecciona una opcion',
                       isRequired: true,
@@ -217,6 +282,10 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: montoCompraCredito
+                          ?.toCurrencyString(mantissaLength: 0)
+                          .toNullIfEmptyOrZero(),
+                      textAlign: TextAlign.end,
                       title: 'Monto de credito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -243,9 +312,30 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (widget.isUpdate) {
+                            widget.cubit.updateComprasPorProveedor(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              comprasPorProveedor:
+                                  AnalisisComprasProveedorArticuloHnLocalDb(
+                                uuid: widget.proveedorArticulo!.uuid,
+                                frecuenciaCompraContadoCodigo:
+                                    frecuenciaCompraContado!,
+                                frecuenciaCompraCreditoCodigo:
+                                    frecuenciaCompraCredito!,
+                                montoCompraContado: montoCompraContado!,
+                                montoCompraCredito: montoCompraCredito!,
+                                proveedorArticulo: proveedorArticulo!,
+                                totalCompraMensual: (montoCompraContado ?? 0) +
+                                    (montoCompraCredito ?? 0),
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.saveComprasPorProveedor(
                             numeroSolicitud: widget.numeroSolicitud,
                             comprasPorProveedor: ComprasProveedorArticuloHN(
+                              uuid: const Uuid().v4(),
                               frecuenciaCompraContadoCodigo:
                                   frecuenciaCompraContado!,
                               frecuenciaCompraCreditoCodigo:

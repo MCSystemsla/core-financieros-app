@@ -408,6 +408,7 @@ class InventarioHN {
   final int precioVenta;
   final double costoVentaPorcentaje;
   final int total;
+  final String uuid;
 
   InventarioHN({
     required this.cantidad,
@@ -416,6 +417,7 @@ class InventarioHN {
     required this.precioVenta,
     required this.costoVentaPorcentaje,
     required this.total,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -467,10 +469,12 @@ class CicloVenta {
 class ActivoHN {
   final String nombreActivo;
   final int monto;
+  final String uuid;
 
   ActivoHN({
     required this.nombreActivo,
     required this.monto,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -552,6 +556,7 @@ class ComprasProveedorArticuloHN {
   final String frecuenciaCompraCreditoCodigo;
   final int montoCompraCredito;
   final int totalCompraMensual;
+  final String uuid;
 
   ComprasProveedorArticuloHN({
     required this.proveedorArticulo,
@@ -560,6 +565,7 @@ class ComprasProveedorArticuloHN {
     required this.frecuenciaCompraCreditoCodigo,
     required this.montoCompraCredito,
     required this.totalCompraMensual,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -579,6 +585,7 @@ class CostoDePersonalHN {
   final bool temporal;
   final String formaDePago;
   final int salarioMensual;
+  final String uuid;
 
   CostoDePersonalHN({
     required this.numeroEmpleado,
@@ -587,6 +594,7 @@ class CostoDePersonalHN {
     required this.temporal,
     required this.formaDePago,
     required this.salarioMensual,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -628,10 +636,12 @@ class CuentasPorCobrarHN {
 class IngresosFamilaresFueraNegocioHN {
   final String fuenteOtrosIngresosFamiliar;
   final int ingresosFamiliaresFueraNegocio;
+  final String uuid;
 
   IngresosFamilaresFueraNegocioHN({
     required this.fuenteOtrosIngresosFamiliar,
     required this.ingresosFamiliaresFueraNegocio,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -646,6 +656,7 @@ class NivelProduccionHN {
   final int cantidadProduccion;
   final double precioVentaUnidad;
   final int totalMensualProduccion;
+  final String? uuid;
 
   NivelProduccionHN({
     required this.articuloProduccion,
@@ -653,6 +664,7 @@ class NivelProduccionHN {
     required this.cantidadProduccion,
     required this.precioVentaUnidad,
     required this.totalMensualProduccion,
+    this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -667,10 +679,12 @@ class NivelProduccionHN {
 class OtrosCreditoHN {
   final String nombreOtrosCreditos;
   final int monto;
+  final String uuid;
 
   OtrosCreditoHN({
     required this.nombreOtrosCreditos,
     required this.monto,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -682,10 +696,12 @@ class OtrosCreditoHN {
 class PasivoHN {
   final String nombreProveedores;
   final int monto;
+  final String uuid;
 
   PasivoHN({
     required this.nombreProveedores,
     required this.monto,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {

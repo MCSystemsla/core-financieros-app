@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ingresos_familiares_fuera_negocio_hn_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 
@@ -62,6 +65,7 @@ class TableIngresosFamiliaresFueraNegocioHnWidget extends StatelessWidget {
                 const Gap(20),
                 _NivelProduccionWidget(
                   cuentasPorCobrar: state.ingeresosFamilaresFueraNegocio,
+                  numeroSolicitud: state.numeroSolicitud,
                 ),
                 const Gap(20),
               ],
@@ -75,8 +79,10 @@ class TableIngresosFamiliaresFueraNegocioHnWidget extends StatelessWidget {
 
 class _NivelProduccionWidget extends StatelessWidget {
   final List<IngresosFamilaresFueraNegocioHN> cuentasPorCobrar;
+  final int numeroSolicitud;
   const _NivelProduccionWidget({
     required this.cuentasPorCobrar,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -95,7 +101,31 @@ class _NivelProduccionWidget extends StatelessWidget {
           description:
               'Ingresos ${e.ingresosFamiliaresFueraNegocio.toCurrencyString()}',
           title: '',
-          onTap: () {},
+          onTap: () => {
+            showHistorialCreditoOptionsBottomSheet(
+              context: context,
+              onEdit: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (ctx) => _CompraPorArticuloSheetHn(
+                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    numeroSolicitud: numeroSolicitud,
+                    isUpdate: true,
+                    ingresosFamiliaresFueraNegocio: e,
+                  ),
+                );
+              },
+              onDelete: () {
+                context
+                    .read<AnalisisNuevaMayorMilHnCubit>()
+                    .deleteIngresosFamiliaresFueraDelNegocio(
+                      numeroSolicitud: numeroSolicitud,
+                      uuid: e.uuid,
+                    );
+              },
+            ),
+          },
         );
       },
     );
@@ -105,9 +135,13 @@ class _NivelProduccionWidget extends StatelessWidget {
 class _CompraPorArticuloSheetHn extends StatefulWidget {
   final AnalisisNuevaMayorMilHnCubit cubit;
   final int numeroSolicitud;
+  final IngresosFamilaresFueraNegocioHN? ingresosFamiliaresFueraNegocio;
+  final bool isUpdate;
   const _CompraPorArticuloSheetHn({
     required this.cubit,
     required this.numeroSolicitud,
+    this.ingresosFamiliaresFueraNegocio,
+    this.isUpdate = false,
   });
 
   @override
@@ -119,6 +153,17 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
   final formKey = GlobalKey<FormState>();
   int? montoIngreso;
   String? fuenteIngreso;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isUpdate) {
+      montoIngreso =
+          widget.ingresosFamiliaresFueraNegocio?.ingresosFamiliaresFueraNegocio;
+      fuenteIngreso =
+          widget.ingresosFamiliaresFueraNegocio?.fuenteOtrosIngresosFamiliar;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -158,6 +203,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      initialValue: fuenteIngreso,
                       title: 'Ingreso familiar fuera del negocio',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
@@ -171,6 +217,10 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      initialValue: montoIngreso?.toCurrencyString(
+                        mantissaLength: 0,
+                      ),
                       title: 'Monto ingreso',
                       icon: const Icon(Icons.comment_bank_sharp),
                       textInputType: TextInputType.number,
@@ -196,12 +246,28 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (widget.isUpdate) {
+                            widget.cubit
+                                .updateIngresosFamiliaresFueraDelNegocio(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              ingresosFamiliaresFueraNegocio:
+                                  AnalisisIngresosFamiliaresFueraNegocioHnLocalDb(
+                                fuenteOtrosIngresosFamiliar: fuenteIngreso!,
+                                ingresosFamiliaresFueraNegocio: montoIngreso!,
+                                uuid:
+                                    widget.ingresosFamiliaresFueraNegocio!.uuid,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.saveIngresosFamiliaresFueraDelNegocio(
                             numeroSolicitud: widget.numeroSolicitud,
                             ingresosFamiliaresFueraNegocio:
                                 IngresosFamilaresFueraNegocioHN(
                               fuenteOtrosIngresosFamiliar: fuenteIngreso!,
                               ingresosFamiliaresFueraNegocio: montoIngreso!,
+                              uuid: const Uuid().v4(),
                             ),
                           );
                           context.pop();

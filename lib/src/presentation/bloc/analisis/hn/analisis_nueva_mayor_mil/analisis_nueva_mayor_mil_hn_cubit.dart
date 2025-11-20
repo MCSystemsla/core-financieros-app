@@ -1294,7 +1294,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         cantidadProduccion: nivelProduccion.cantidadProduccion,
         precioVentaUnidad: nivelProduccion.precioVentaUnidad,
         totalMensualProduccion: nivelProduccion.totalMensualProduccion,
-        uuid: const Uuid().v4(),
+        uuid: nivelProduccion.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1304,6 +1304,338 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           ...state.nivelProduccion,
           nivelProduccion,
         ],
+      ),
+    );
+  }
+
+  void updateNivelProduccion({
+    required AnalisisNivelProduccionLocalDb nivelProduccion,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.nivelProduccionHnBox;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisNivelProduccionLocalDb_.uuid.equals(nivelProduccion.uuid!) &
+              AnalisisNivelProduccionLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..articuloProduccion = nivelProduccion.articuloProduccion
+      ..frecuenciaProduccionCodigo = nivelProduccion.frecuenciaProduccionCodigo
+      ..cantidadProduccion = nivelProduccion.cantidadProduccion
+      ..precioVentaUnidad = nivelProduccion.precioVentaUnidad
+      ..totalMensualProduccion = nivelProduccion.totalMensualProduccion;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final nivelProduccionUpdated = NivelProduccionHN(
+      articuloProduccion: nivelProduccion.articuloProduccion ?? '',
+      frecuenciaProduccionCodigo:
+          nivelProduccion.frecuenciaProduccionCodigo ?? '',
+      cantidadProduccion: nivelProduccion.cantidadProduccion ?? 0,
+      precioVentaUnidad: nivelProduccion.precioVentaUnidad ?? 0,
+      totalMensualProduccion: nivelProduccion.totalMensualProduccion ?? 0,
+      uuid: nivelProduccion.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        nivelProduccion: state.nivelProduccion
+            .map((e) =>
+                e.uuid == nivelProduccion.uuid ? nivelProduccionUpdated : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void deleteNivelProduccion({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.nivelProduccionHnBox;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisNivelProduccionLocalDb_.uuid.equals(uuid) &
+              AnalisisNivelProduccionLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        nivelProduccion:
+            state.nivelProduccion.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deleteComprasPorProveedor({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisComprasProveedorArticuloHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisComprasProveedorArticuloHnLocalDb_.uuid.equals(uuid) &
+              AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        comprasProveedorArticulo: state.comprasProveedorArticulo
+            .where((e) => e.uuid != uuid)
+            .toList(),
+      ),
+    );
+  }
+
+  void deleteCostoPersonal({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisCostoDePersonalHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisCostoDePersonalHnLocalDb_.uuid.equals(uuid) &
+              AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        costoDePersonal:
+            state.costoDePersonal.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deleteInventario({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisInventarioHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisInventarioHnLocalDb_.uuid.equals(uuid) &
+              AnalisisInventarioHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        inventario: state.inventario.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deleteActivo({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisActivoHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisActivoHnLocalDb_.uuid.equals(uuid) &
+              AnalisisActivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        activos: state.activos.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deletePasivo({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisPasivoHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisPasivoHnLocalDb_.uuid.equals(uuid) &
+              AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        pasivos: state.pasivos.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deleteOtroCredito({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisOtrosCreditoHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisOtrosCreditoHnLocalDb_.uuid.equals(uuid) &
+              AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        otrosCreditos:
+            state.otrosCreditos.where((e) => e.uuid != uuid).toList(),
+      ),
+    );
+  }
+
+  void deleteIngresosFamiliaresFueraDelNegocio({
+    required String uuid,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisIngresosFamiliaresFueraNegocioHnLocalDb;
+
+    // 1. Buscar el registro por uuid + solicitud
+    final query = box
+        .query(
+          AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.uuid.equals(uuid) &
+              AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No hay nada que borrar
+      return;
+    }
+
+    // 2. Eliminarlo por ID
+    box.remove(existente.id);
+
+    // 3. Eliminar también del estado
+    emit(
+      state.copyWith(
+        ingeresosFamilaresFueraNegocio: state.ingeresosFamilaresFueraNegocio
+            .where((e) => e.uuid != uuid)
+            .toList(),
       ),
     );
   }
@@ -1323,7 +1655,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         montoCompraCredito: comprasPorProveedor.montoCompraCredito,
         proveedorArticulo: comprasPorProveedor.proveedorArticulo,
         totalCompraMensual: comprasPorProveedor.totalCompraMensual,
-        uuid: const Uuid().v4(),
+        uuid: comprasPorProveedor.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1333,6 +1665,372 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           ...state.comprasProveedorArticulo,
           comprasPorProveedor,
         ],
+      ),
+    );
+  }
+
+  void updateComprasPorProveedor({
+    required AnalisisComprasProveedorArticuloHnLocalDb comprasPorProveedor,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisComprasProveedorArticuloHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisComprasProveedorArticuloHnLocalDb_.uuid
+                  .equals(comprasPorProveedor.uuid!) &
+              AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..frecuenciaCompraContadoCodigo =
+          comprasPorProveedor.frecuenciaCompraContadoCodigo
+      ..frecuenciaCompraCreditoCodigo =
+          comprasPorProveedor.frecuenciaCompraCreditoCodigo
+      ..montoCompraContado = comprasPorProveedor.montoCompraContado
+      ..montoCompraCredito = comprasPorProveedor.montoCompraCredito
+      ..proveedorArticulo = comprasPorProveedor.proveedorArticulo;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final comprasPorProveedorList = ComprasProveedorArticuloHN(
+      frecuenciaCompraContadoCodigo:
+          comprasPorProveedor.frecuenciaCompraContadoCodigo ?? '',
+      montoCompraContado: comprasPorProveedor.montoCompraContado ?? 0,
+      proveedorArticulo: comprasPorProveedor.proveedorArticulo ?? '',
+      frecuenciaCompraCreditoCodigo:
+          comprasPorProveedor.frecuenciaCompraCreditoCodigo ?? '',
+      montoCompraCredito: comprasPorProveedor.montoCompraCredito ?? 0,
+      totalCompraMensual: comprasPorProveedor.totalCompraMensual ?? 0,
+      uuid: comprasPorProveedor.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        comprasProveedorArticulo: state.comprasProveedorArticulo
+            .map((e) => e.uuid == comprasPorProveedor.uuid
+                ? comprasPorProveedorList
+                : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updateCostoPersonal({
+    required AnalisisCostoDePersonalHnLocalDb costoPersonal,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisCostoDePersonalHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisCostoDePersonalHnLocalDb_.uuid.equals(costoPersonal.uuid!) &
+              AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..formaDePago = costoPersonal.formaDePago
+      ..salarioMensual = costoPersonal.salarioMensual
+      ..numeroEmpleado = costoPersonal.numeroEmpleado
+      ..lugarProceso = costoPersonal.lugarProceso
+      ..permanente = costoPersonal.permanente
+      ..temporal = costoPersonal.temporal;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final comprasPorProveedorList = CostoDePersonalHN(
+      formaDePago: costoPersonal.formaDePago ?? '',
+      salarioMensual: costoPersonal.salarioMensual ?? 0,
+      numeroEmpleado: costoPersonal.numeroEmpleado ?? 0,
+      lugarProceso: costoPersonal.lugarProceso ?? '',
+      permanente: costoPersonal.permanente ?? false,
+      temporal: costoPersonal.temporal ?? false,
+      uuid: costoPersonal.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        costoDePersonal: state.costoDePersonal
+            .map((e) =>
+                e.uuid == costoPersonal.uuid ? comprasPorProveedorList : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updateIngresosFamiliaresFueraDelNegocio({
+    required AnalisisIngresosFamiliaresFueraNegocioHnLocalDb
+        ingresosFamiliaresFueraNegocio,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisIngresosFamiliaresFueraNegocioHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.uuid
+                  .equals(ingresosFamiliaresFueraNegocio.uuid!) &
+              AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..fuenteOtrosIngresosFamiliar =
+          ingresosFamiliaresFueraNegocio.fuenteOtrosIngresosFamiliar
+      ..ingresosFamiliaresFueraNegocio =
+          ingresosFamiliaresFueraNegocio.ingresosFamiliaresFueraNegocio;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final comprasPorProveedorList = IngresosFamilaresFueraNegocioHN(
+      fuenteOtrosIngresosFamiliar:
+          ingresosFamiliaresFueraNegocio.fuenteOtrosIngresosFamiliar ?? '',
+      ingresosFamiliaresFueraNegocio:
+          ingresosFamiliaresFueraNegocio.ingresosFamiliaresFueraNegocio ?? 0,
+      uuid: ingresosFamiliaresFueraNegocio.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        ingeresosFamilaresFueraNegocio: state.ingeresosFamilaresFueraNegocio
+            .map((e) => e.uuid == ingresosFamiliaresFueraNegocio.uuid
+                ? comprasPorProveedorList
+                : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updateInventario({
+    required AnalisisInventarioHnLocalDb inventario,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisInventarioHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisInventarioHnLocalDb_.uuid.equals(inventario.uuid!) &
+              AnalisisInventarioHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..articulo = inventario.articulo
+      ..cantidad = inventario.cantidad
+      ..costoCompra = inventario.costoCompra
+      ..precioVenta = inventario.precioVenta
+      ..costoVentaPorcentaje = inventario.costoVentaPorcentaje
+      ..total = inventario.total;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final comprasPorProveedorList = InventarioHN(
+      cantidad: inventario.cantidad ?? 0,
+      articulo: inventario.articulo ?? '',
+      costoCompra: inventario.costoCompra ?? 0,
+      precioVenta: inventario.precioVenta ?? 0,
+      costoVentaPorcentaje: inventario.costoVentaPorcentaje ?? 0,
+      total: inventario.total ?? 0,
+      uuid: inventario.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        inventario: state.inventario
+            .map((e) => e.uuid == inventario.uuid ? comprasPorProveedorList : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updateActivosFijos({
+    required AnalisisActivoHnLocalDb activo,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisActivoHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisActivoHnLocalDb_.uuid.equals(activo.uuid!) &
+              AnalisisActivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..nombreActivo = activo.nombreActivo
+      ..monto = activo.monto;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final inventarioUpdated = ActivoHN(
+      nombreActivo: activo.nombreActivo ?? '',
+      monto: activo.monto ?? 0,
+      uuid: activo.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        activos: state.activos
+            .map((e) => e.uuid == activo.uuid ? inventarioUpdated : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updatePasivosFijos({
+    required AnalisisPasivoHnLocalDb pasivo,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisPasivoHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisPasivoHnLocalDb_.uuid.equals(pasivo.uuid!) &
+              AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..nombreProveedores = pasivo.nombreProveedores
+      ..monto = pasivo.monto;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final pasivoUpdated = PasivoHN(
+      nombreProveedores: pasivo.nombreProveedores ?? '',
+      monto: pasivo.monto ?? 0,
+      uuid: pasivo.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        pasivos: state.pasivos
+            .map((e) => e.uuid == pasivo.uuid ? pasivoUpdated : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void updateOtrosCredito({
+    required AnalisisOtrosCreditoHnLocalDb pasivo,
+    required int numeroSolicitud,
+  }) {
+    final box = localDbProvider.analisisOtrosCreditoHnLocalDb;
+
+    // 1. Buscar registro existente en la base local
+    final query = box
+        .query(
+          AnalisisOtrosCreditoHnLocalDb_.uuid.equals(pasivo.uuid!) &
+              AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud
+                  .equals(numeroSolicitud),
+        )
+        .build();
+
+    final existente = query.findFirst();
+    query.close();
+
+    if (existente == null) {
+      // No existe → no hay nada que actualizar
+      return;
+    }
+
+    // 2. Actualizar campos
+    existente
+      ..nombreOtrosCreditos = pasivo.nombreOtrosCreditos
+      ..monto = pasivo.monto;
+
+    // 3. Guardar UPDATE en ObjectBox
+    box.put(existente);
+
+    final otrosCrditosUpdated = OtrosCreditoHN(
+      monto: pasivo.monto ?? 0,
+      nombreOtrosCreditos: pasivo.nombreOtrosCreditos ?? '',
+      uuid: pasivo.uuid ?? '',
+    );
+
+    // 4. Actualizar lista en el estado usando tu línea preferida
+    emit(
+      state.copyWith(
+        otrosCreditos: state.otrosCreditos
+            .map((e) => e.uuid == pasivo.uuid ? otrosCrditosUpdated : e)
+            .toList(),
       ),
     );
   }
@@ -1350,7 +2048,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         lugarProceso: costoDePersonal.lugarProceso,
         permanente: costoDePersonal.permanente,
         temporal: costoDePersonal.temporal,
-        uuid: const Uuid().v4(),
+        uuid: costoDePersonal.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1375,7 +2073,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
             ingresosFamiliaresFueraNegocio.fuenteOtrosIngresosFamiliar,
         ingresosFamiliaresFueraNegocio:
             ingresosFamiliaresFueraNegocio.ingresosFamiliaresFueraNegocio,
-        uuid: const Uuid().v4(),
+        uuid: ingresosFamiliaresFueraNegocio.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1398,7 +2096,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       AnalisisActivoHnLocalDb(
         monto: activoFijo.monto,
         nombreActivo: activoFijo.nombreActivo,
-        uuid: const Uuid().v4(),
+        uuid: activoFijo.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1421,7 +2119,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       AnalisisOtrosCreditoHnLocalDb(
         nombreOtrosCreditos: otroCredito.nombreOtrosCreditos,
         monto: otroCredito.monto,
-        uuid: const Uuid().v4(),
+        uuid: otroCredito.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1444,7 +2142,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       AnalisisPasivoHnLocalDb(
         nombreProveedores: pasivo.nombreProveedores,
         monto: pasivo.monto,
-        uuid: const Uuid().v4(),
+        uuid: pasivo.uuid,
         numeroSolicitud: numeroSolicitud,
       ),
     );
@@ -1462,7 +2160,6 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     required InventarioHN inventario,
     required int numeroSolicitud,
   }) {
-    final localDbProvider = global<AnalisisBoxServiceHn>();
     localDbProvider.analisisInventarioHnLocalDb.put(
       AnalisisInventarioHnLocalDb(
         articulo: inventario.articulo,
@@ -1472,6 +2169,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         costoVentaPorcentaje: inventario.costoVentaPorcentaje,
         total: inventario.total,
         numeroSolicitud: numeroSolicitud,
+        uuid: inventario.uuid,
       ),
     );
     emit(
@@ -1538,6 +2236,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               precioVentaUnidad: c.precioVentaUnidad ?? 0,
               frecuenciaProduccionCodigo: c.frecuenciaProduccionCodigo ?? '',
               totalMensualProduccion: c.totalMensualProduccion ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1569,6 +2268,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               montoCompraCredito: c.montoCompraCredito ?? 0,
               proveedorArticulo: c.proveedorArticulo ?? '',
               totalCompraMensual: c.totalCompraMensual ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1597,6 +2297,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               temporal: c.temporal ?? false,
               formaDePago: c.formaDePago ?? '',
               salarioMensual: c.salarioMensual ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1627,6 +2328,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
                       c.fuenteOtrosIngresosFamiliar ?? '',
                   ingresosFamiliaresFueraNegocio:
                       c.ingresosFamiliaresFueraNegocio ?? 0,
+                  uuid: c.uuid ?? '',
                 ))
             .toList();
 
@@ -1652,6 +2354,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .map((c) => ActivoHN(
               nombreActivo: c.nombreActivo ?? '',
               monto: c.monto ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1677,6 +2380,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .map((c) => PasivoHN(
               nombreProveedores: c.nombreProveedores ?? '',
               monto: c.monto ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1703,6 +2407,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .map((c) => OtrosCreditoHN(
               nombreOtrosCreditos: c.nombreOtrosCreditos ?? '',
               monto: c.monto ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
@@ -1733,6 +2438,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               precioVenta: c.precioVenta ?? 0,
               costoVentaPorcentaje: c.costoVentaPorcentaje ?? 0,
               total: c.total ?? 0,
+              uuid: c.uuid ?? '',
             ))
         .toList();
 
