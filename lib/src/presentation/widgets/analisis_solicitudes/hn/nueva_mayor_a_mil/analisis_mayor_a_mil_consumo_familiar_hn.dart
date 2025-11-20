@@ -302,7 +302,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                         state.pagoCreditosFam)
                     .toCurrencyString(
                   mantissaLength: 0,
-                  leadingSymbol: 'L',
                   thousandSeparator: ThousandSeparator.Comma,
                 ),
                 title: 'Total consumo familiar',

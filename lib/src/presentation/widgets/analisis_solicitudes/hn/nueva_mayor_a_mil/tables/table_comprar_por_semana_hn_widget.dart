@@ -168,7 +168,6 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                           widget.cubit.updateCompraSemana(
                             semanaDelMes: widget.semana,
                             cantidadCompra: cantidad!,
-                            venta: totalCompra!,
                             valorizacion: valorizacion!,
                             numeroSolicitud: widget.numeroSolicitud,
                           );

@@ -1038,7 +1038,6 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
 
   void updateCompraSemana({
     required int cantidadCompra,
-    required int venta,
     required String valorizacion,
     required String semanaDelMes,
     required int numeroSolicitud,
@@ -1063,7 +1062,6 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     entity.semanaDelMes = semanaDelMes;
     entity.valorizacion = valorizacion;
     entity.numerSolicitud = numeroSolicitud;
-    entity.totalComprasMensualSemanal = venta;
     entity.uuid =
         semanaDelMes; // usamos el nombre del dia como identificador lógico
 

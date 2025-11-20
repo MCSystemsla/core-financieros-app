@@ -67,7 +67,6 @@ class _AnalisisMayorAMilCreditosHNState
                 textAlign: TextAlign.end,
                 hintText: totalIngresosAnual.toCurrencyString(
                   mantissaLength: 0,
-                  leadingSymbol: 'L.',
                 ),
                 title: 'Ingreso anual y/o volumen de venta',
                 readOnly: true,

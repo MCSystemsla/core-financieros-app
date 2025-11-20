@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/a
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
@@ -291,6 +292,15 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if ((abonoCredito ?? 0) > (montoCredito ?? 0)) {
+                            CustomAlertDialog(
+                              context: context,
+                              title:
+                                  'No puedes abonar más que el monto del credito',
+                              onDone: () => context.pop(),
+                            ).showDialog(context);
+                            return;
+                          }
                           if (widget.isUpdated) {
                             widget.cubit.updateCuentaPorCobrar(
                               numeroSolicitud: widget.numeroSolicitud,

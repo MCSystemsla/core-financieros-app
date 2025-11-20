@@ -203,12 +203,10 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 hintText: (state.caja + state.reservas + state.cuentasAhorro)
                     .toCurrencyString(
                   mantissaLength: 0,
-                  leadingSymbol: 'L',
                 ),
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   )
                 ],
                 onChange: (value) {
@@ -224,7 +222,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 textAlign: TextAlign.end,
                 title: 'Total clientes:',
                 hintText: totalClientes.toCurrencyString(
-                  leadingSymbol: 'L.',
                   mantissaLength: 0,
                 ),
                 readOnly: true,
@@ -270,9 +267,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
                 title: 'Incobrables:',
-                hintText: incobrables.toCurrencyString(
-                  leadingSymbol: 'L',
-                ),
+                hintText: incobrables.toCurrencyString(),
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
                 textInputType: TextInputType.number,
@@ -295,9 +290,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 hintText: (state.totalClientes -
                         incobrables +
                         state.adelantoProveedores)
-                    .toCurrencyString(
-                      leadingSymbol: 'L',
-                    )
+                    .toCurrencyString()
                     .toNullIfEmptyOrZero(),
                 title: 'Total cuentas por cobrar:',
                 icon: const Icon(Icons.document_scanner),
@@ -325,7 +318,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                         state.cuentasAhorro +
                         totalCuentasxCobrar +
                         totalInventario)
-                    .toCurrencyString(leadingSymbol: 'L', mantissaLength: 0),
+                    .toCurrencyString(mantissaLength: 0),
                 title: 'Total activos corrientes:',
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
@@ -333,7 +326,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   )
                 ],
                 onChange: (value) {
@@ -376,9 +368,13 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                   AnalisisCardItem(
                     icon: Icons.money,
                     label: 'Total Activos',
-                    value:
-                        (state.totalActivosFijos + state.totalActivosCorrientes)
-                            .toCurrencyString(),
+                    value: (totalActivosFijos +
+                            (state.caja +
+                                state.reservas +
+                                state.cuentasAhorro +
+                                totalCuentasxCobrar +
+                                totalInventario))
+                        .toCurrencyString(),
                     color: Colors.blueGrey,
                   ),
                 ],
@@ -447,14 +443,14 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                   AnalisisCardItem(
                     icon: Icons.business,
                     label: 'Patrimonio',
-                    value: (state.totalActivos - state.totalPasivos)
-                        .toCurrencyString(),
+                    value:
+                        (totalActivosFijos - totalPasivos).toCurrencyString(),
                     color: Colors.brown,
                   ),
                   AnalisisCardItem(
                     icon: Icons.calculate,
                     label: 'Pasivos + Patrimonio',
-                    value: (state.totalPasivos + state.patrimonio)
+                    value: (totalPasivos + (totalActivosFijos - totalPasivos))
                         .toCurrencyString(),
                     color: Colors.green,
                   ),
