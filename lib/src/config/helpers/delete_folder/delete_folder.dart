@@ -30,7 +30,7 @@ class DeleteFolderImpl extends DeleteFolder {
   Future<bool> deleteCoreFinancieroFolderByDetermineDate() async {
     try {
       final needsDelete =
-          await shouldDeleteFolder(determiningTime: const Duration(days: 12));
+          await shouldDeleteFolder(determiningTime: const Duration(days: 30));
 
       if (!needsDelete) return false;
       final folder = Directory('/storage/emulated/0/Core_Financiero_App/');

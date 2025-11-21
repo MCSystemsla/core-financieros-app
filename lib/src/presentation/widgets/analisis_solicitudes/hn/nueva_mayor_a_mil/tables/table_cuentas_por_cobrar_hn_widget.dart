@@ -222,12 +222,13 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
                       initialValue: montoCredito
                           ?.toCurrencyString(
                             mantissaLength: 0,
                           )
                           .toNullIfEmptyOrZero(),
-                      title: 'Monto del credito',
+                      title: 'Monto del crédito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
                       validator: (value) =>
@@ -245,10 +246,11 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
                       initialValue: abonoCredito
                           ?.toCurrencyString()
                           .toNullIfEmptyOrZero(),
-                      title: 'Abono del credito',
+                      title: 'Abono del crédito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
                       validator: (value) =>
@@ -296,7 +298,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                             CustomAlertDialog(
                               context: context,
                               title:
-                                  'No puedes abonar más que el monto del credito',
+                                  'No puedes abonar más que el monto del crédito',
                               onDone: () => context.pop(),
                             ).showDialog(context);
                             return;

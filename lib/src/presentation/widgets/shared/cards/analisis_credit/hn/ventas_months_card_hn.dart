@@ -87,7 +87,7 @@ class VentasMonthsCardHn extends StatelessWidget {
                         _buildItem(
                           icon: Icons.data_thresholding,
                           label:
-                              'Ventas mensuales (segun estacionalidad anual)',
+                              'Ventas mensuales (según estacionalidad anual)',
                           value: totalVentasMensuales,
                           color: Colors.indigo,
                         ),

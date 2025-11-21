@@ -102,7 +102,7 @@ class _NivelProduccionWidget extends StatelessWidget {
         return AnalisisCardVentasDay(
           subtitle: e.proveedorArticulo,
           title:
-              'Monto Compra credito: ${e.montoCompraCredito.toCurrencyString()}',
+              'Monto Compra crédito: ${e.montoCompraCredito.toCurrencyString()}',
           description:
               'Total compra mensual: ${e.totalCompraMensual.toCurrencyString()}',
           onTap: () => {
@@ -286,7 +286,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                           ?.toCurrencyString(mantissaLength: 0)
                           .toNullIfEmptyOrZero(),
                       textAlign: TextAlign.end,
-                      title: 'Monto de credito',
+                      title: 'Monto de crédito',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
                       validator: (value) =>

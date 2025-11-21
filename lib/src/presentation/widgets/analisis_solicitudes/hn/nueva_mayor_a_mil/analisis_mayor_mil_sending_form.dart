@@ -1,12 +1,12 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorMilSendingForm extends StatefulWidget {
   final int numeroSolicitud;
@@ -44,7 +44,12 @@ class _AnalisisMayorMilSendingFormState
                   context: context,
                   title: '¿Estás seguro de que quieres salir?',
                   onYes: () {
-                    context.pushReplacement('/');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AnalisisInterceptorByFlavor(),
+                      ),
+                    );
                   },
                 ).showDialog(context);
               },
@@ -56,14 +61,22 @@ class _AnalisisMayorMilSendingFormState
                 lottieAsset: ImageAsset.nuevaMenorUploading,
                 text: 'Enviando analisis a servidor...',
               ),
-            Status.done => const Padding(
-                padding: EdgeInsets.all(10),
+            Status.done => Padding(
+                padding: const EdgeInsets.all(10),
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
                   text: 'Analisis Nueva enviada exitosamente!!\n\n',
                   repeat: false,
                   isUploadingForms: true,
+                  onDownloadComplete: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AnalisisInterceptorByFlavor(),
+                      ),
+                    );
+                  },
                 ),
               ),
             Status.error => OnErrorWidget(

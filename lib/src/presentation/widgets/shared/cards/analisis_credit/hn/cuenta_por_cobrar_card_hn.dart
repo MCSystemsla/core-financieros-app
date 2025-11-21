@@ -60,7 +60,7 @@ class CuentaPorCobrarCardHn extends StatelessWidget {
                       ),
                       _buildItem(
                         icon: Icons.account_balance,
-                        label: 'Total abono credito',
+                        label: 'Total abono crédito',
                         value: totalAbonoPorCobrar,
                         color: Colors.green,
                       ),

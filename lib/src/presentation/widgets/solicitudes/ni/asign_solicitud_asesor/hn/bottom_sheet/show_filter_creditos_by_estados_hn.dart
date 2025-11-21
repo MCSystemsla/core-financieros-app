@@ -75,9 +75,9 @@ void showFilterCreditosByEstadoHN(
                         if (!context.mounted) return;
                         context.pop();
                       },
-                      title: const Text('Asignado a un oficial de credito'),
+                      title: const Text('Asignado a un oficial de crédito'),
                       subtitle: const Text(
-                        'Puedes filtrar las solicitudes que estan asignadas a un oficial de credito',
+                        'Puedes filtrar las solicitudes que estan asignadas a un oficial de crédito',
                       ),
                     ),
                     const Gap(27),

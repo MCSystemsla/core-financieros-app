@@ -57,6 +57,15 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         .fold(0, (sum, element) => sum + element.totalMensualCredito);
     final incobrables = totalCuentasxCobrar.toDouble() *
         (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
+    final totalActivosFijos = state.activos.fold(0, (sum, e) => sum + e.monto);
+    final totalActivos = (totalActivosFijos +
+        (totalClientes -
+            incobrables +
+            state.adelantoProveedores +
+            state.caja +
+            state.reservas +
+            state.cuentasAhorro +
+            totalInventario));
 
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -74,16 +83,15 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           transporteFam: state.transporteFam,
           otrosGastosFam: state.otrosGastosFam,
           pagoCreditosFam: state.pagoCreditosFam,
-          totalConsumoFamiliar: state.aguaFam +
+          totalConsumoFamiliar: state.alimentacionFam +
+              state.educacionFam +
+              state.aguaFam +
               state.alquilerFam +
               state.aseoLimpiezaFam +
+              state.vestimentaCalzadoFam +
               state.transporteFam +
               state.otrosGastosFam +
-              state.pagoCreditosFam +
-              state.alimentacionFam +
-              state.educacionFam +
-              state.consumoFamiliar +
-              state.vestimentaCalzadoFam,
+              state.pagoCreditosFam,
           numeroLicencia: state.numeroLicencia,
           nombreInstitucionLicencia: state.nombreInstitucionLicencia,
           fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
@@ -155,11 +163,13 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           totalCuentasXCobrar:
               totalClientes - incobrables + state.adelantoProveedores,
           totalInventario: totalInventario,
-          totalActivosCorrientes:
-              state.activos.fold(0, (sum, e) => sum + e.monto) +
-                  state.cuentasPorCobrar
-                      .fold(0, (sum, e) => sum + e.totalMensualCredito) +
-                  state.totalInventario,
+          totalActivosCorrientes: (totalClientes -
+              incobrables +
+              state.adelantoProveedores +
+              state.caja +
+              state.reservas +
+              state.cuentasAhorro +
+              totalInventario),
           totalActivosFijos: state.activos.fold(0, (sum, e) => sum + e.monto) +
               state.totalActivosCorrientes,
           totalActivos: state.caja + state.reservas + state.cuentasAhorro,
@@ -167,8 +177,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               .fold(0, (sum, e) => sum + e.totalCompraMensual),
           totalCreditosInstAmigos: otrosCreditos,
           totalPasivos: totalPasivos,
-          patrimonio: state.activos.fold(0, (sum, e) => sum + e.monto) -
-              state.pasivos.fold(0, (sum, e) => sum + e.monto),
+          patrimonio: (totalActivos - (totalPasivos + otrosCreditos)),
           pasivosMasPatrimonio:
               state.pasivos.fold(0, (sum, e) => sum + e.monto) +
                   (state.activos.fold(0, (sum, e) => sum + e.monto) +
@@ -743,6 +752,12 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         utilidadBruta: solicitud?.utilidadBruta,
         ventasContado: solicitud?.ventasContado,
         vestimentaCalzadoFam: solicitud?.vestimentaCalzadoFam,
+        objEmpleadoVerificaReferenciaID1:
+            solicitud?.objEmpleadoVerificaReferenciaID1,
+        objEmpleadoVerificaReferenciaID2:
+            solicitud?.objEmpleadoVerificaReferenciaID2,
+        objEmpleadoVerificaReferenciaID3:
+            solicitud?.objEmpleadoVerificaReferenciaID3,
       ),
     );
   }
@@ -793,7 +808,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         'Octubre',
         'Noviembre',
         'Diciembre'
-      ].map((mes) => Ciclo(mes: mes, venta: 0, valorizacion: 'N/A')).toList();
+      ].map((mes) => Ciclo(mes: mes, venta: 0, valorizacion: 'M')).toList();
 
       // Guardar en BD
       final entities = defaultCiclo

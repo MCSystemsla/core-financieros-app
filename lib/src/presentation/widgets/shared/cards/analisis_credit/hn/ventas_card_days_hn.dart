@@ -88,7 +88,7 @@ class VentasCardDaysHn extends StatelessWidget {
                         const Divider(),
                         _buildItem(
                           icon: Icons.data_thresholding,
-                          label: 'Ventas diarias (segun ventas diarias)',
+                          label: 'Ventas diarias (según ventas diarias)',
                           value: totalVentasDiarias,
                           color: Colors.indigo,
                         ),

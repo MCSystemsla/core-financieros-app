@@ -199,7 +199,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     const Gap(20),
                     OutlineTextfieldWidget(
                       initialValue: nombre,
-                      title: 'Nombre institucion',
+                      title: 'Nombre institución',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),

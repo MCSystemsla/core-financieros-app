@@ -77,7 +77,7 @@ void showFilterCreditosByEstado(
                       },
                       title: const Text('Asignado a un oficial de credito'),
                       subtitle: const Text(
-                        'Puedes filtrar las solicitudes que estan asignadas a un oficial de credito',
+                        'Puedes filtrar las solicitudes que estan asignadas a un oficial de crédito',
                       ),
                     ),
                     const Gap(27),

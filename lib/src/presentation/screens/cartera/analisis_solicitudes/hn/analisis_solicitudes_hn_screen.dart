@@ -53,7 +53,7 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
                             ),
                             index: index,
                             title:
-                                'Numero Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
+                                'Número Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
                             subtitle: state.solicitudes[index].nombreCompleto ??
                                 'N/A',
                             description: state.solicitudes[index].monto
@@ -111,7 +111,7 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Analisis de solicitudes credito',
+            'Analisis de solicitudes crédito',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

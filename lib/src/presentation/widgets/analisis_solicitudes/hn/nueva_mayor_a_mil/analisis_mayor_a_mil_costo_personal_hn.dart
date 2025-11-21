@@ -69,7 +69,7 @@ class AnalisisMayorAMilCostoPersonalHn extends StatelessWidget {
                       _buildItem(
                         icon: Icons.person_pin,
                         isCurrencyField: false,
-                        label: 'Numero de empleados',
+                        label: 'Número de empleados',
                         value: numeroEmpleados,
                         color: Colors.green,
                       ),

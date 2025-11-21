@@ -6,6 +6,7 @@ class ComprasWeekCardPerWeekHn extends StatelessWidget {
   final int semanasBuenas;
   final int semanasNormales;
   final int semanasMalos;
+  final int comprasMensuales;
   final VoidCallback onTap;
 
   const ComprasWeekCardPerWeekHn({
@@ -14,6 +15,7 @@ class ComprasWeekCardPerWeekHn extends StatelessWidget {
     required this.semanasNormales,
     required this.semanasMalos,
     required this.onTap,
+    required this.comprasMensuales,
   });
 
   @override
@@ -80,6 +82,13 @@ class ComprasWeekCardPerWeekHn extends StatelessWidget {
                         label: 'Semanas malos (M)',
                         value: semanasMalos,
                         color: Colors.red,
+                      ),
+                      const Divider(),
+                      _buildItem(
+                        icon: Icons.dashboard,
+                        label: 'Compras mensuales',
+                        value: comprasMensuales,
+                        color: Colors.indigo,
                       ),
                     ],
                   ),

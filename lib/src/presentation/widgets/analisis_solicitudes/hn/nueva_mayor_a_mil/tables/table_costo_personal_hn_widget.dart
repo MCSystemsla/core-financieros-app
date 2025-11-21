@@ -214,7 +214,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     OutlineTextfieldWidget(
                       initialValue: numeroEmpleado,
                       key: const Key('numeroEmpleado'),
-                      title: 'Numero de empleado',
+                      title: 'Número de empleado',
                       icon: const Icon(Icons.comment_bank_sharp),
                       textInputType: TextInputType.number,
                       validator: (value) =>
@@ -287,6 +287,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
                       initialValue: salarioMensual
                           ?.toCurrencyString(
                             mantissaLength: 0,

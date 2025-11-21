@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -30,6 +31,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   DateTime? fechaVencimientoPermiso;
   DateTime? fechaEmisionLicencia;
   DateTime? fechaVencimientoLicencia;
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -134,158 +136,174 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
     return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
         AnalisisNuevaMayorMilHnState>(
       builder: (context, state) {
-        return SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'Permiso de operación',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+        return Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(20),
+                Container(
+                  margin: const EdgeInsets.all(18),
+                  child: Text(
+                    'Permiso de operación',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
                 ),
-              ),
-              OutlineTextfieldWidget(
-                textAlign: TextAlign.end,
-                initialValue:
-                    state.permisoOperacionNumero.toNullIfEmptyOrZero(),
-                title: 'Numero de permiso de operación',
-                icon: const Icon(Icons.document_scanner),
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () {
-                      return state.copyWith(
-                        permisoOperacionNumero: value,
-                      );
-                    },
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue:
-                    state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
-                title: 'Nombre de institución',
-                icon: const Icon(Icons.business),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(
-                        permisoOperacionNombreInstitucion: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                hintText: fechaEmisionPermiso?.selectorFormat() ?? '',
-                title: 'Fecha de emision de permiso',
-                onTap: () => selectDateFechaEmision(context),
-                icon: const Icon(Icons.calendar_month),
-                readOnly: true,
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                onTap: () => selectDateFechaVencimiento(context),
-                hintText: fechaVencimientoPermiso?.selectorFormat() ?? '',
-                title: 'Fecha de vencimiento de permiso',
-                icon: const Icon(Icons.calendar_month),
-                readOnly: true,
-              ),
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'Licencia',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.numeroLicencia.toNullIfEmptyOrZero(),
-                title: 'Numero de licencia',
-                icon: const Icon(Icons.business),
-                textInputType: TextInputType.number,
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(numeroLicencia: value),
-                  );
-                },
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue:
-                    state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
-                title: 'Nombre de institución',
-                icon: const Icon(Icons.business),
-                inputFormatters: [UpperCaseTextFormatter()],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(nombreInstitucionLicencia: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                onTap: () => selectDateFechaEmisionLicencia(context),
-                hintText: fechaEmisionLicencia?.selectorFormat() ?? '',
-                title: 'Fecha de emision de licencia',
-                icon: const Icon(Icons.calendar_month),
-                readOnly: true,
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                onTap: () => selectDateFechaVencimientoLicencia(context),
-                hintText: fechaVencimientoLicencia?.selectorFormat() ?? '',
-                title: 'Fecha de vencimiento de licencia',
-                icon: const Icon(Icons.calendar_month),
-                readOnly: true,
-              ),
-              const Gap(20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    CustomElevatedButton(
-                      onPressed: () {
-                        widget.pageController.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
+                OutlineTextfieldWidget(
+                  textAlign: TextAlign.end,
+                  initialValue:
+                      state.permisoOperacionNumero.toNullIfEmptyOrZero(),
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  title: 'Número de permiso de operación',
+                  icon: const Icon(Icons.document_scanner),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () {
+                        return state.copyWith(
+                          permisoOperacionNumero: value,
                         );
                       },
-                      text: 'Siguiente',
-                      color: Colors.green,
-                    ),
-                    const Gap(10),
-                    CustomElevatedButton(
-                      onPressed: () {
-                        widget.pageController.previousPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      text: 'Anterior',
-                      color: Colors.red,
-                    ),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue:
+                      state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
+                  title: 'Nombre de institución',
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  icon: const Icon(Icons.business),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(
+                          permisoOperacionNombreInstitucion: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  hintText: fechaEmisionPermiso?.selectorFormat() ?? '',
+                  title: 'Fecha de emisión de permiso',
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaEmisionPermiso?.selectorFormat()),
+                  onTap: () => selectDateFechaEmision(context),
+                  icon: const Icon(Icons.calendar_month),
+                  readOnly: true,
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  onTap: () => selectDateFechaVencimiento(context),
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaVencimientoPermiso?.selectorFormat()),
+                  hintText: fechaVencimientoPermiso?.selectorFormat() ?? '',
+                  title: 'Fecha de vencimiento de permiso',
+                  icon: const Icon(Icons.calendar_month),
+                  readOnly: true,
+                ),
+                const Gap(20),
+                Container(
+                  margin: const EdgeInsets.all(18),
+                  child: Text(
+                    'Licencia',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: state.numeroLicencia.toNullIfEmptyOrZero(),
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  title: 'Número de licencia',
+                  icon: const Icon(Icons.business),
+                  textInputType: TextInputType.number,
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(numeroLicencia: value),
+                    );
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                 ),
-              ),
-              const Gap(20),
-            ],
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue:
+                      state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  title: 'Nombre de institución',
+                  icon: const Icon(Icons.business),
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(nombreInstitucionLicencia: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  onTap: () => selectDateFechaEmisionLicencia(context),
+                  hintText: fechaEmisionLicencia?.selectorFormat() ?? '',
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaEmisionLicencia?.selectorFormat()),
+                  title: 'Fecha de emisión de licencia',
+                  icon: const Icon(Icons.calendar_month),
+                  readOnly: true,
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  onTap: () => selectDateFechaVencimientoLicencia(context),
+                  hintText: fechaVencimientoLicencia?.selectorFormat() ?? '',
+                  title: 'Fecha de vencimiento de licencia',
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaVencimientoLicencia?.selectorFormat()),
+                  icon: const Icon(Icons.calendar_month),
+                  readOnly: true,
+                ),
+                const Gap(20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      CustomElevatedButton(
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        text: 'Siguiente',
+                        color: Colors.green,
+                      ),
+                      const Gap(10),
+                      CustomElevatedButton(
+                        onPressed: () {
+                          widget.pageController.previousPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        text: 'Anterior',
+                        color: Colors.red,
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(20),
+              ],
+            ),
           ),
         );
       },

@@ -52,8 +52,8 @@ class _AnalisisMayorAMilCicloDeVentasHNState
         final totalVentasDiarias = (state.cicloVentaDiaria.cicloVentas.fold(
               0,
               (sum, e) => sum + e.venta,
-            ) /
-            7);
+            ) *
+            4);
 
         return SingleChildScrollView(
           child: Column(

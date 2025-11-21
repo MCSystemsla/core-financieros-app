@@ -20,7 +20,7 @@ class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Compras por proveedores o articulos',
+            'Compras por proveedores o artículos',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const Gap(10),
@@ -62,7 +62,7 @@ class NuevaMayorAMilComprasAProveedores extends StatelessWidget {
                       const Divider(),
                       _buildItem(
                         icon: Icons.sell,
-                        label: 'Ventas Mensuales segun compras',
+                        label: 'Ventas Mensuales según compras',
                         value: ventasMensuales,
                         color: Colors.green,
                       ),

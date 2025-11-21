@@ -119,7 +119,7 @@ class _Licencia extends StatelessWidget {
         ),
         OutlineTextfieldWidget(
           initialValue: cubit.nombreInstitucionLicencia,
-          title: 'Nombre de institucion:',
+          title: 'Nombre de institución:',
           inputFormatters: [
             UpperCaseTextFormatter(),
           ],
@@ -172,7 +172,7 @@ class _Matricula extends StatelessWidget {
           inputFormatters: [
             UpperCaseTextFormatter(),
           ],
-          title: 'Nombre de institucion:',
+          title: 'Nombre de institución:',
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {

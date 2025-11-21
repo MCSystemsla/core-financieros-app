@@ -141,7 +141,7 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
                       ],
                       hintText: 'Selecciona una opcion',
                       isRequired: true,
-                      title: 'Valorizacion',
+                      title: 'Valorización',
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       onChanged: (value) {
@@ -151,6 +151,7 @@ class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
                       title: 'Venta',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,

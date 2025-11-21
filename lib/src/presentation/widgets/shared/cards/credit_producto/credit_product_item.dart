@@ -60,7 +60,7 @@ class CreditProductItem extends StatelessWidget {
             CustomAlertDialog(
               context: context,
               title:
-                  'No puedes asignar una solicitud que ya está asignada a un asesor de credito',
+                  'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
               onDone: () => context.pop(),
             ).showDialog(context);
             return;

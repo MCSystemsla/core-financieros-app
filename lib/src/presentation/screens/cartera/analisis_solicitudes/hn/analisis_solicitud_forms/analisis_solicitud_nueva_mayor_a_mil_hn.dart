@@ -68,7 +68,7 @@ class AnalisisSolicitudNuevaMayorAMilHn extends StatelessWidget {
               flex: 3,
               child: PageView(
                 controller: pageController,
-                // physics: const NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   AnalisisMayorAMilCicloDeVentasHN(
                     pageController: pageController,

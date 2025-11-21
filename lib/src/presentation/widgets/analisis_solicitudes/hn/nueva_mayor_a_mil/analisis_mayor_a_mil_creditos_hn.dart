@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ingresos_familiares_fuera_negocio_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -29,6 +30,7 @@ class AnalisisMayorAMilCreditosHN extends StatefulWidget {
 
 class _AnalisisMayorAMilCreditosHNState
     extends State<AnalisisMayorAMilCreditosHN> {
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -50,198 +52,204 @@ class _AnalisisMayorAMilCreditosHNState
             state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'Detalle del crédito',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              OutlineTextfieldWidget(
-                textAlign: TextAlign.end,
-                hintText: totalIngresosAnual.toCurrencyString(
-                  mantissaLength: 0,
-                ),
-                title: 'Ingreso anual y/o volumen de venta',
-                readOnly: true,
-                icon: const Icon(Icons.document_scanner),
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(
-                        ingresoAnual: double.tryParse(value) ?? 0),
-                  );
-                },
-              ),
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'Nombre de sus principales clientes',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.cliente1.toNullIfEmptyOrZero(),
-                title: 'Cliente 1',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(cliente1: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.cliente2,
-                title: 'Cliente 2',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(cliente2: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.cliente3.toNullIfEmptyOrZero(),
-                title: 'Cliente 3',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(cliente3: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'Nombre de sus proveedores',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.proveedor1,
-                title: 'Proveedor 1',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(proveedor1: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.proveedor2,
-                title: 'Proveedor 2',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(proveedor2: value),
-                  );
-                },
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                initialValue: state.proveedor3,
-                title: 'Proveedor 3',
-                icon: const Icon(Icons.person),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => state.copyWith(proveedor3: value),
-                  );
-                },
-              ),
-              AnalisisCardListHn(
-                title: 'Ingresos Familiares Fuera del negocio',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
-                        child:
-                            const TableIngresosFamiliaresFueraNegocioHnWidget(),
-                      ),
-                    ),
-                  );
-                },
-                items: [
-                  AnalisisCardItem(
-                    icon: Icons.sell,
-                    label: 'Total Ingresos',
-                    value: totalIngresosFueraNegocio.toCurrencyString(
-                      leadingSymbol: 'L.',
-                      mantissaLength: 0,
-                    ),
-                    color: Colors.indigo,
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(20),
+                Container(
+                  margin: const EdgeInsets.all(18),
+                  child: Text(
+                    'Detalle del crédito',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    CustomElevatedButton(
-                      onPressed: () {
-                        widget.pageController.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      text: 'Siguiente',
-                      color: Colors.green,
+                ),
+                OutlineTextfieldWidget(
+                  textAlign: TextAlign.end,
+                  hintText: totalIngresosAnual.toCurrencyString(
+                    mantissaLength: 0,
+                  ),
+                  title: 'Ingreso anual y/o volumen de venta',
+                  readOnly: true,
+                  icon: const Icon(Icons.document_scanner),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(
+                          ingresoAnual: double.tryParse(value) ?? 0),
+                    );
+                  },
+                ),
+                const Gap(20),
+                Container(
+                  margin: const EdgeInsets.all(18),
+                  child: Text(
+                    'Nombre de sus principales clientes',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  initialValue: state.cliente1.toNullIfEmptyOrZero(),
+                  title: 'Cliente 1',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(cliente1: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: state.cliente2,
+                  title: 'Cliente 2',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(cliente2: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: state.cliente3.toNullIfEmptyOrZero(),
+                  title: 'Cliente 3',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(cliente3: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                Container(
+                  margin: const EdgeInsets.all(18),
+                  child: Text(
+                    'Nombre de sus proveedores',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  initialValue: state.proveedor1,
+                  title: 'Proveedor 1',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(proveedor1: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: state.proveedor2,
+                  title: 'Proveedor 2',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(proveedor2: value),
+                    );
+                  },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  initialValue: state.proveedor3,
+                  title: 'Proveedor 3',
+                  icon: const Icon(Icons.person),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(proveedor3: value),
+                    );
+                  },
+                ),
+                AnalisisCardListHn(
+                  title: 'Ingresos familiares fuera del negocio',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          child:
+                              const TableIngresosFamiliaresFueraNegocioHnWidget(),
+                        ),
+                      ),
+                    );
+                  },
+                  items: [
+                    AnalisisCardItem(
+                      icon: Icons.sell,
+                      label: 'Total de ingresos',
+                      value: totalIngresosFueraNegocio.toCurrencyString(
+                        leadingSymbol: 'L.',
+                        mantissaLength: 0,
+                      ),
+                      color: Colors.indigo,
                     ),
-                    const Gap(10),
-                    CustomElevatedButton(
-                      onPressed: () {
-                        widget.pageController.previousPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      text: 'Anterior',
-                      color: Colors.red,
-                    ),
-                    const Gap(20),
                   ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      CustomElevatedButton(
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          widget.pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        text: 'Siguiente',
+                        color: Colors.green,
+                      ),
+                      const Gap(10),
+                      CustomElevatedButton(
+                        onPressed: () {
+                          widget.pageController.previousPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        text: 'Anterior',
+                        color: Colors.red,
+                      ),
+                      const Gap(20),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

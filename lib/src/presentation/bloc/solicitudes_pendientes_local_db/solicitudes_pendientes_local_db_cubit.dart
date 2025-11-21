@@ -177,7 +177,7 @@ class SolicitudesPendientesLocalDbCubit
   bool _shouldDeleteSolicitud(SolicitudesPendientes solicitud) {
     if (solicitud.dateSended == null) return false;
     final daysPassed = DateTime.now().difference(solicitud.dateSended!).inDays;
-    return daysPassed >= 15;
+    return daysPassed >= 30;
   }
 
   Future<void> _deleteSolicitudYAsociada(

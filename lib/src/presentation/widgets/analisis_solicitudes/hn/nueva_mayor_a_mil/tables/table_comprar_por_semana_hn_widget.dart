@@ -131,7 +131,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       ],
                       hintText: 'Selecciona una opcion',
                       isRequired: true,
-                      title: 'Valorizacion',
+                      title: 'Valorización',
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       onChanged: (value) {
@@ -141,6 +141,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
                       title: 'Valor de compra',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,

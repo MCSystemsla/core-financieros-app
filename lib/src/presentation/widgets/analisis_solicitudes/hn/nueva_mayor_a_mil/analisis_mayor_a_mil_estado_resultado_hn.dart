@@ -26,6 +26,64 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
     return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
         AnalisisNuevaMayorMilHnState>(
       builder: (context, state) {
+        final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) /
+            12);
+        final totalVentasDiarias = (state.cicloVentaDiaria.cicloVentas.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) *
+            4);
+        final nivelProduccion = state.nivelProduccion.fold(
+          0,
+          (sum, e) => sum + e.totalMensualProduccion,
+        );
+        final ventasDeContado =
+            (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+        final recuperaciones = state.cuentasPorCobrar.fold(
+          0,
+          (total, e) => total + e.abonoCredito,
+        );
+        final porcentajeDeVenta = (state.inventario.fold(0.0,
+                    (sum, element) => sum + (element.costoVentaPorcentaje)) /
+                (state.inventario.length))
+            .toStringAsFixed(2);
+
+        final totalIngresos = ((state.ventasContado + recuperaciones) *
+                double.parse(porcentajeDeVenta))
+            .round();
+        final utilidadBruta = totalIngresos -
+            (totalIngresos * double.parse(porcentajeDeVenta)).round();
+        final subContratos =
+            state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
+
+        final totalCostosOperativos = subContratos +
+            (state.gastosPersonalAlimentacion +
+                state.alquilerlocal +
+                state.agua +
+                state.combustible +
+                state.transporte +
+                state.pagoCuotaCredito +
+                state.impuesto +
+                state.otros);
+        final resultadoLiquido = utilidadBruta - totalCostosOperativos;
+        final totalConsumoFamiliar = (state.alimentacionFam +
+            state.educacionFam +
+            state.aguaFam +
+            state.alquilerFam +
+            state.aseoLimpiezaFam +
+            state.vestimentaCalzadoFam +
+            state.transporteFam +
+            state.otrosGastosFam +
+            state.pagoCreditosFam);
+        final ingresosFueraDeNegocio = state.ingeresosFamilaresFueraNegocio
+            .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
+
+        final saldoDisponibleUnidadFamiliar =
+            resultadoLiquido - totalConsumoFamiliar + ingresosFueraDeNegocio;
+
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
@@ -51,9 +109,8 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               ),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue: state.ventasContado
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: ventasDeContado.toCurrencyString(),
+                readOnly: true,
                 title: 'Ventas de contado:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -70,72 +127,78 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                   );
                 },
               ),
-              // const Gap(20),
-              // OutlineTextfieldWidget(
-              //   initialValue: state.recuperaciones.toCurrencyString(),
-              //   title: 'Recuperaciones:',
-              //   icon: const Icon(Icons.document_scanner),
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     CurrencyInputFormatter(
-              //       mantissaLength: 0,
-              //       leadingSymbol: 'L',
-              //     )
-              //   ],
-              //   onChange: (value) {
-              //     final newValue = toNumericString(value);
-              //     cubit.onFieldChanged(
-              //       () => state.copyWith(
-              //           recuperaciones: double.tryParse(newValue) ?? 0),
-              //     );
-              //   },
-              // ),
-              // const Gap(20),
-              // OutlineTextfieldWidget(
-              //   initialValue: state.totalIngresos.toCurrencyString(),
-              //   title: 'Total ingresos:',
-              //   icon: const Icon(Icons.document_scanner),
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     CurrencyInputFormatter(
-              //       mantissaLength: 0,
-              //       leadingSymbol: 'L',
-              //     )
-              //   ],
-              //   onChange: (value) {
-              //     final newValue = toNumericString(value);
-              //     cubit.onFieldChanged(
-              //       () => state.copyWith(
-              //           totalIngresos: double.tryParse(newValue) ?? 0),
-              //     );
-              //   },
-              // ),
-              // const Gap(20),
-              // OutlineTextfieldWidget(
-              //   initialValue: state.costoVentaProduccion.toCurrencyString(),
-              //   title: 'Costos de ventas / produccion:',
-              //   icon: const Icon(Icons.document_scanner),
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     CurrencyInputFormatter(
-              //       mantissaLength: 0,
-              //       leadingSymbol: 'L',
-              //     )
-              //   ],
-              //   onChange: (value) {
-              //     final newValue = toNumericString(value);
-              //     cubit.onFieldChanged(
-              //       () => state.copyWith(
-              //           costoVentaProduccion: double.tryParse(newValue) ?? 0),
-              //     );
-              //   },
-              // ),
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue: state.utilidadBruta
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: recuperaciones.toCurrencyString(),
+                title: 'Recuperaciones:',
+                readOnly: true,
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                    leadingSymbol: 'L',
+                  )
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                        recuperaciones: double.tryParse(newValue) ?? 0),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
+                hintText: totalIngresos.toCurrencyString(),
+                title: 'Total ingresos:',
+                readOnly: true,
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                    leadingSymbol: 'L',
+                  )
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                        totalIngresos: double.tryParse(newValue) ?? 0),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
+                title: 'Costos de ventas / produccion: $porcentajeDeVenta',
+                hintText: (totalIngresos * double.parse(porcentajeDeVenta))
+                    .toCurrencyString(mantissaLength: 0),
+                readOnly: true,
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                    leadingSymbol: 'L',
+                  )
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                        costoVentaProduccion: double.tryParse(newValue) ?? 0),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
+                hintText: utilidadBruta.toCurrencyString(),
+                readOnly: true,
                 title: 'Utilidad bruta:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -168,7 +231,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 initialValue: state.gastosPersonalAlimentacion
                     .toCurrencyString()
                     .toNullIfEmptyOrZero(),
-                title: 'Gastos de alimentacion personal:',
+                title: 'Gastos de alimentación personal:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -189,9 +252,9 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue:
-                    state.subContratos.toCurrencyString().toNullIfEmptyOrZero(),
-                title: 'Subcontratos / Otros serv de personal:',
+                readOnly: true,
+                hintText: subContratos.toCurrencyString(),
+                title: 'Subcontratos / Otros servicios de personal:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -214,7 +277,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 initialValue: state.alquilerlocal
                     .toCurrencyString()
                     .toNullIfEmptyOrZero(),
-                title: 'Alquiler de local / depositos:',
+                title: 'Alquiler de local / depósitos:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -236,7 +299,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 textAlign: TextAlign.end,
                 initialValue:
                     state.agua.toCurrencyString().toNullIfEmptyOrZero(),
-                title: 'Agua / Electricidad / Telefono:',
+                title: 'Agua / Electricidad / Teléfono:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -302,7 +365,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 initialValue: state.pagoCuotaCredito
                     .toCurrencyString()
                     .toNullIfEmptyOrZero(),
-                title: 'Pago de cuotas de creditos:',
+                title: 'Pago de cuotas de créditos:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -362,33 +425,34 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                   );
                 },
               ),
-              // const Gap(20),
-              // OutlineTextfieldWidget(
-              //   initialValue: state.totalCostosOperativos.toCurrencyString(),
-              //   title: 'Total costo operativo:',
-              //   icon: const Icon(Icons.document_scanner),
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     CurrencyInputFormatter(
-              //       mantissaLength: 0,
-              //       leadingSymbol: 'L',
-              //     )
-              //   ],
-              //   onChange: (value) {
-              //     final newValue = toNumericString(value);
-              //     cubit.onFieldChanged(
-              //       () => state.copyWith(
-              //           totalCostosOperativos: double.tryParse(newValue) ?? 0),
-              //     );
-              //   },
-              // ),
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue: state.resultadoLiquido
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
-                title: 'Resultados liquido del negocio:',
+                readOnly: true,
+                hintText: totalCostosOperativos.toCurrencyString(),
+                title: 'Total costo operativo:',
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                    leadingSymbol: 'L',
+                  )
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                        totalCostosOperativos: double.tryParse(newValue) ?? 0),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
+                hintText: resultadoLiquido.toCurrencyString(),
+                readOnly: true,
+                title: 'Resultados líquido del negocio:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -408,9 +472,8 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue: state.consumoFamiliar
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: totalConsumoFamiliar.toCurrencyString(),
+                readOnly: true,
                 title: 'Consumo familiar:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -428,33 +491,34 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                   );
                 },
               ),
-              // const Gap(20),
-              // OutlineTextfieldWidget(
-              //   initialValue: state.ingresosFueraNegocio.toCurrencyString(),
-              //   title: 'Ingresos fuera del negocio:',
-              //   icon: const Icon(Icons.document_scanner),
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     CurrencyInputFormatter(
-              //       mantissaLength: 0,
-              //       leadingSymbol: 'L',
-              //     )
-              //   ],
-              //   onChange: (value) {
-              //     final newValue = toNumericString(value);
-              //     cubit.onFieldChanged(
-              //       () => state.copyWith(
-              //           ingresosFueraNegocio: double.tryParse(newValue) ?? 0),
-              //     );
-              //   },
-              // ),
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                initialValue: state.saldoDisponibleUf
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: ingresosFueraDeNegocio.toCurrencyString(),
+                title: 'Ingresos fuera del negocio:',
+                readOnly: true,
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                    leadingSymbol: 'L',
+                  )
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                        ingresosFueraNegocio: double.tryParse(newValue) ?? 0),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                textAlign: TextAlign.end,
+                hintText: saldoDisponibleUnidadFamiliar.toCurrencyString(),
                 title: 'Saldo disponible de la unidad familiar:',
+                readOnly: true,
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [

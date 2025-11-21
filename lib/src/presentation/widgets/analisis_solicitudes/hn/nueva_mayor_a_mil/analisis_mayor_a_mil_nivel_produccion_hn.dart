@@ -59,7 +59,7 @@ class AnalisisMayorAMilNivelProduccionHn extends StatelessWidget {
                       _buildItem(
                         icon: Icons.monetization_on,
                         label:
-                            'Ventas mensuales (segun el nivel de producción)',
+                            'Ventas mensuales (según el nivel de producción)',
                         value: ventasMensuales,
                         color: Colors.blueGrey,
                       ),
