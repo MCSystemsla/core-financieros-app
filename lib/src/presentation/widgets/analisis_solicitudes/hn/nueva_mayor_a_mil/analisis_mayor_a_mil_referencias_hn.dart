@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -32,7 +34,8 @@ class _AnalisisMayorAMilReferenciasHNState
   bool isAddReferenciaAditionalClicked = false;
   DateTime fechaVerificacion = DateTime.now();
   DateTime fechaVerificacion2 = DateTime.now();
-  DateTime fechaVerificacion3 = DateTime.now();
+  late DateTime? fechaVerificacion3 =
+      isAddReferenciaAditionalClicked ? DateTime.now() : null;
   Future<void> selectFechaVerificacion(BuildContext context) async {
     final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
 
@@ -89,7 +92,7 @@ class _AnalisisMayorAMilReferenciasHNState
       fechaVerificacion3 = picked;
       cubit.onFieldChanged(
         () => cubit.state.copyWith(
-          fechaVerificacion3: fechaVerificacion3.toUtc().toIso8601String(),
+          fechaVerificacion3: fechaVerificacion3?.toUtc().toIso8601String(),
         ),
       );
       setState(() {});
@@ -247,6 +250,7 @@ class _AnalisisMayorAMilReferenciasHNState
                       objEmpleadoVerificaReferenciaID1: value?.value,
                     ),
                   );
+                  log('objEmpleadoVerificaReferenciaID1: ${value?.value}');
                 },
               ),
               const Gap(20),
@@ -574,7 +578,7 @@ class _AnalisisMayorAMilReferenciasHNState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  hintText: fechaVerificacion3.selectorFormat(),
+                  hintText: fechaVerificacion3?.selectorFormat(),
                   title: 'Fecha de verificación 3',
                   onTap: () => selectFechaVerificacion3(context),
                   icon: const Icon(Icons.date_range),

@@ -400,9 +400,12 @@ class AnalisisNuevaMayorMilHn {
       'Pasivos': List<dynamic>.from(pasivos.map((x) => x.toJson())),
       'Activos': List<dynamic>.from(activos.map((x) => x.toJson())),
       'Inventario': List<dynamic>.from(inventario.map((x) => x.toJson())),
-      'objEmpleadoVerificaReferenciaID1': objEmpleadoVerificaReferenciaID1,
-      'objEmpleadoVerificaReferenciaID2': objEmpleadoVerificaReferenciaID2,
-      'objEmpleadoVerificaReferenciaID3': objEmpleadoVerificaReferenciaID3,
+      'objEmpleadoVerificaReferenciaID1':
+          int.tryParse(objEmpleadoVerificaReferenciaID1),
+      'objEmpleadoVerificaReferenciaID2':
+          int.tryParse(objEmpleadoVerificaReferenciaID2),
+      'objEmpleadoVerificaReferenciaID3':
+          int.tryParse(objEmpleadoVerificaReferenciaID3),
     };
     data.removeWhere(
       (key, value) => value == null || value == '' || value == 0,

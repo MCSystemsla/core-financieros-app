@@ -182,7 +182,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,
-                    leadingSymbol: 'L',
                   )
                 ],
                 onChange: (value) {
@@ -287,11 +286,10 @@ class _AnalisisMayorAMilBalanceGeneralHNState
               const Gap(20),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                hintText: (state.totalClientes -
-                        incobrables +
-                        state.adelantoProveedores)
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText:
+                    (totalClientes - incobrables + state.adelantoProveedores)
+                        .toCurrencyString()
+                        .toNullIfEmptyOrZero(),
                 title: 'Total cuentas por cobrar:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -443,14 +441,16 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                   AnalisisCardItem(
                     icon: Icons.business,
                     label: 'Patrimonio',
-                    value:
-                        (totalActivosFijos - totalPasivos).toCurrencyString(),
+                    value: (totalActivosFijos - (totalPasivos + otrosCreditos))
+                        .toCurrencyString(),
                     color: Colors.brown,
                   ),
                   AnalisisCardItem(
                     icon: Icons.calculate,
                     label: 'Pasivos + Patrimonio',
-                    value: (totalPasivos + (totalActivosFijos - totalPasivos))
+                    value: ((totalPasivos + otrosCreditos) +
+                            (totalActivosFijos -
+                                (totalPasivos + otrosCreditos)))
                         .toCurrencyString(),
                     color: Colors.green,
                   ),

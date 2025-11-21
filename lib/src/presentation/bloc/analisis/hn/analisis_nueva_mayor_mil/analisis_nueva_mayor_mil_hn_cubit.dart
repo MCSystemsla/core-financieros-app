@@ -42,6 +42,21 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
     final dias = getCicloVentasDiarios();
     final incobrablesxCobrar = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+    final totalIngresosAnual =
+        state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);
+    final totalIngresosFueraNegocio = state.ingeresosFamilaresFueraNegocio
+        .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
+    final totalPasivos = state.pasivos.fold(0, (sum, e) => sum + e.monto);
+    final otrosCreditos =
+        state.otrosCreditos.fold(0, (sum, e) => sum + e.monto);
+    final totalInventario =
+        state.inventario.fold(0, (sum, element) => sum + element.total);
+    final totalClientes = state.cuentasPorCobrar
+        .fold(0, (sum, element) => sum + element.totalMensualCredito);
+    final totalCuentasxCobrar = state.cuentasPorCobrar
+        .fold(0, (sum, element) => sum + element.totalMensualCredito);
+    final incobrables = totalCuentasxCobrar.toDouble() *
+        (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
 
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -49,8 +64,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         analisisSolicitudNuevaMenor: AnalisisNuevaMayorMilHn(
           database: state.database,
           numeroSolicitud: numeroSolicitud,
-          totalIngresosFueraNegocio: state.ingeresosFamilaresFueraNegocio
-              .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio),
+          totalIngresosFueraNegocio: totalIngresosFueraNegocio,
           alimentacionFam: state.alimentacionFam,
           educacionFam: state.educacionFam,
           aguaFam: state.aguaFam,
@@ -60,13 +74,22 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           transporteFam: state.transporteFam,
           otrosGastosFam: state.otrosGastosFam,
           pagoCreditosFam: state.pagoCreditosFam,
-          totalConsumoFamiliar: state.totalConsumoFamiliar,
+          totalConsumoFamiliar: state.aguaFam +
+              state.alquilerFam +
+              state.aseoLimpiezaFam +
+              state.transporteFam +
+              state.otrosGastosFam +
+              state.pagoCreditosFam +
+              state.alimentacionFam +
+              state.educacionFam +
+              state.consumoFamiliar +
+              state.vestimentaCalzadoFam,
           numeroLicencia: state.numeroLicencia,
           nombreInstitucionLicencia: state.nombreInstitucionLicencia,
           fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
           fechaVencimientoLicencia:
               DateTime.tryParse(state.fechaVencimientoLicencia),
-          ingresoAnual: state.ingresoAnual,
+          ingresoAnual: totalIngresosAnual,
           cliente1: state.cliente1,
           cliente2: state.cliente2,
           cliente3: state.cliente3,
@@ -98,15 +121,20 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           semanasBuenas: semanas['semanasBuenas'],
           semanasNormales: semanas['semanasNormales'],
           semanasMalas: semanas['semanasMalas'],
-          totalComprasMensuales: state.totalComprasMensuales,
+          totalComprasMensuales: state.cicloDeComprasSemanales.cicloCompra
+              .fold(0, (sum, e) => sum + e.cantidadCompra),
           totalVentasSegunCompras: state.totalVentasSegunCompras,
           totalCostoPersonal: state.totalCostoPersonal,
           totalUltimaCompra: state.totalUltimaCompra,
           diasBuenosVenta: dias['diasBuenos'],
           diasNormalesVenta: dias['diasNormales'],
           diasMalosVenta: dias['diasMalos'],
-          totalVentasDiarias: state.cicloVentaDiaria.totalVentasDiaria,
-          totalVentasMensuales: state.cicloVentaMensual.totalVentasDiaria,
+          totalVentasDiarias: (state.cicloVentaDiaria.cicloVentas
+                  .fold(0, (sum, e) => sum + e.venta)) /
+              7,
+          totalVentasMensuales: (state.cicloVentaMensual.ciclo
+                  .fold(0, (sum, e) => sum + e.venta)) /
+              12,
           totalAbono:
               state.cuentasPorCobrar.fold(0, (sum, e) => sum + e.abonoCredito),
           totalVentasMensualSegunNumClientes:
@@ -121,20 +149,12 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           reservas: state.reservas,
           cuentasAhorro: state.cuentasAhorro,
           totalDisponibleActivo: state.totalDisponibleActivo,
-          incobrables: state.cuentasPorCobrar
-                  .fold(0, (sum, e) => sum + e.totalMensualCredito) *
-              (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0),
-          totalClientes: state.cuentasPorCobrar
-              .fold(0, (sum, e) => sum + e.totalMensualCredito),
+          incobrables: incobrables,
+          totalClientes: totalClientes,
           adelantoProveedores: state.adelantoProveedores,
-          totalCuentasXCobrar: state.cuentasPorCobrar
-                  .fold(0, (sum, e) => sum + e.totalMensualCredito) -
-              state.cuentasPorCobrar
-                      .fold(0, (sum, e) => sum + e.totalMensualCredito) *
-                  (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0) +
-              state.totalProveedoresAdelantos,
-          totalInventario: state.inventario
-              .fold(0, (sum, element) => sum + element.total.toInt()),
+          totalCuentasXCobrar:
+              totalClientes - incobrables + state.adelantoProveedores,
+          totalInventario: totalInventario,
           totalActivosCorrientes:
               state.activos.fold(0, (sum, e) => sum + e.monto) +
                   state.cuentasPorCobrar
@@ -145,11 +165,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           totalActivos: state.caja + state.reservas + state.cuentasAhorro,
           totalProveedoresAdelantos: state.comprasProveedorArticulo
               .fold(0, (sum, e) => sum + e.totalCompraMensual),
-          totalCreditosInstAmigos:
-              state.otrosCreditos.fold(0, (sum, e) => sum + e.monto),
-          totalPasivos: state.pasivos.fold(0, (sum, e) => sum + e.monto) +
-              state.totalActivosCorrientes,
-          patrimonio: state.activos.fold(0, (sum, e) => sum + e.monto) +
+          totalCreditosInstAmigos: otrosCreditos,
+          totalPasivos: totalPasivos,
+          patrimonio: state.activos.fold(0, (sum, e) => sum + e.monto) -
               state.pasivos.fold(0, (sum, e) => sum + e.monto),
           pasivosMasPatrimonio:
               state.pasivos.fold(0, (sum, e) => sum + e.monto) +
@@ -164,7 +182,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
             0,
             (sum, e) => sum + e.totalMensualProduccion,
           ),
-          utilidadBruta: state.utilidadBruta,
+          utilidadBruta: state.ventasContado +
+              state.cuentasPorCobrar.fold(0, (sum, e) => sum + e.abonoCredito) -
+              state.costoVentaProduccion,
           gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
           subContratos: state.subContratos,
           alquilerlocal: state.alquilerlocal,
@@ -186,7 +206,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
               state.utilidadBruta,
           resultadoLiquido: state.resultadoLiquido,
           consumoFamiliar: state.consumoFamiliar,
-          ingresosFueraNegocio: state.ingresosFueraNegocio,
+          ingresosFueraNegocio: totalIngresosFueraNegocio.toDouble(),
           saldoDisponibleUf: state.saldoDisponibleUf,
           costoVentaPorcentaje: state.inventario.fold(
                   0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
