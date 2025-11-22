@@ -90,17 +90,6 @@ class _AnalisisMayorAMilCicloDeComprasState
                   children: [
                     CustomElevatedButton(
                       onPressed: () {
-                        widget.pageController.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      text: 'Siguiente',
-                      color: Colors.green,
-                    ),
-                    const Gap(10),
-                    CustomElevatedButton(
-                      onPressed: () {
                         final semanasVacias = state
                             .cicloDeComprasSemanales.cicloCompra
                             .every((e) => e.cantidadCompra == 0);
@@ -121,6 +110,17 @@ class _AnalisisMayorAMilCicloDeComprasState
                           ).showDialog(context);
                           return;
                         }
+                        widget.pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      text: 'Siguiente',
+                      color: Colors.green,
+                    ),
+                    const Gap(10),
+                    CustomElevatedButton(
+                      onPressed: () {
                         widget.pageController.previousPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
