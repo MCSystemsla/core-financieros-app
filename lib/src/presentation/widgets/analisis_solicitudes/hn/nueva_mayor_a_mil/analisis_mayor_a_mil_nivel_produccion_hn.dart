@@ -57,7 +57,7 @@ class AnalisisMayorAMilNivelProduccionHn extends StatelessWidget {
                         ),
                       ),
                       _buildItem(
-                        icon: Icons.monetization_on,
+                        icon: Icons.production_quantity_limits,
                         label:
                             'Ventas mensuales (según el nivel de producción)',
                         value: ventasMensuales,

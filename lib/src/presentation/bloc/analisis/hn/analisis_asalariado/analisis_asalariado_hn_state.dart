@@ -2,6 +2,9 @@
 part of 'analisis_asalariado_hn_cubit.dart';
 
 class AnalisisAsalariadoHnState extends Equatable {
+  final String objEmpleadoVerificaReferenciaID1;
+  final String objEmpleadoVerificaReferenciaID2;
+  final String objEmpleadoVerificaReferenciaID3;
   final int idLocalResponse;
   final String? uuid;
   final String errorMsg;
@@ -65,6 +68,9 @@ class AnalisisAsalariadoHnState extends Equatable {
   final String parentescoReferenciaCodigo3;
   final String resultadoVerificacion3;
   const AnalisisAsalariadoHnState({
+    this.objEmpleadoVerificaReferenciaID1 = '',
+    this.objEmpleadoVerificaReferenciaID2 = '',
+    this.objEmpleadoVerificaReferenciaID3 = '',
     this.idLocalResponse = 0,
     this.uuid,
     this.errorMsg = '',
@@ -131,6 +137,9 @@ class AnalisisAsalariadoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        objEmpleadoVerificaReferenciaID1,
+        objEmpleadoVerificaReferenciaID2,
+        objEmpleadoVerificaReferenciaID3,
         idLocalResponse,
         errorMsg,
         status,
@@ -195,6 +204,9 @@ class AnalisisAsalariadoHnState extends Equatable {
       ];
 
   AnalisisAsalariadoHnState copyWith({
+    String? objEmpleadoVerificaReferenciaID1,
+    String? objEmpleadoVerificaReferenciaID2,
+    String? objEmpleadoVerificaReferenciaID3,
     int? idLocalResponse,
     String? uuid,
     String? errorMsg,
@@ -259,6 +271,12 @@ class AnalisisAsalariadoHnState extends Equatable {
     String? resultadoVerificacion3,
   }) {
     return AnalisisAsalariadoHnState(
+      objEmpleadoVerificaReferenciaID1: objEmpleadoVerificaReferenciaID1 ??
+          this.objEmpleadoVerificaReferenciaID1,
+      objEmpleadoVerificaReferenciaID2: objEmpleadoVerificaReferenciaID2 ??
+          this.objEmpleadoVerificaReferenciaID2,
+      objEmpleadoVerificaReferenciaID3: objEmpleadoVerificaReferenciaID3 ??
+          this.objEmpleadoVerificaReferenciaID3,
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
       uuid: uuid ?? this.uuid,
       errorMsg: errorMsg ?? this.errorMsg,

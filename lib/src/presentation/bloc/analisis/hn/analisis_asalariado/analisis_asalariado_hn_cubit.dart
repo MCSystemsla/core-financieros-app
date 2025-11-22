@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/helpers/autosave/analisis/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -19,10 +20,65 @@ class AnalisisAsalariadoHnCubit extends Cubit<AnalisisAsalariadoHnState> {
       : super(AnalisisAsalariadoHnInitial());
 
   Future<void> createAnalisisAsalariado() async {
+    final incobrablesxCobrar = global<SolicitudesHnBoxService>()
+        .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+    final totalActivosCalc = state.activo +
+        state.cuentasXCobrar +
+        state.valoresAcciones +
+        state.menajeHogar +
+        state.vehiculo +
+        state.maquinaria +
+        state.bienesInmuebles;
+    final totalPasivosCalc = state.cuentasXPagar +
+        state.prestamoBancoCp +
+        state.prestamoBancoLp +
+        state.otrasCuentasXPagar;
+
+    final totalPatrimonioCalc = totalActivosCalc - totalPasivosCalc;
+
+    final totalPasivosPatrimonioCalc = totalPasivosCalc + totalPatrimonioCalc;
+
+    final totalIngresosCalc = state.ingresoNetoSalario + state.otrosIngresos;
+
+    final imprevistosCalc = (state.alimentacion +
+            state.educacion +
+            state.serviciosBasicos +
+            state.aseoLimpieza +
+            state.vestimentaCalzado +
+            state.transporteCombustibleMtto) *
+        double.parse(incobrablesxCobrar?.valor ?? '0');
+
+    final totalEgresosCalc = (state.alimentacion +
+        state.educacion +
+        state.serviciosBasicos +
+        state.aseoLimpieza +
+        state.vestimentaCalzado +
+        state.transporteCombustibleMtto +
+        imprevistosCalc +
+        state.otrosEgresos +
+        state.amortizacionesDeudas);
+
+    final disponiblesCalc = totalIngresosCalc - totalEgresosCalc;
+
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.createAnalisisAsalariado(
         analisisSolicitudAsalariado: AnalisisAsalariadoHn(
+          fechaVerificacion1: state.fechaVerificacion1.isEmpty
+              ? DateTime.now()
+              : DateTime.parse(state.fechaVerificacion1),
+          fechaVerificacion2: state.fechaVerificacion2.isEmpty
+              ? DateTime.now()
+              : DateTime.parse(state.fechaVerificacion2),
+          fechaVerificacion3: state.fechaVerificacion3.isNotEmpty
+              ? DateTime.tryParse(state.fechaVerificacion3)
+              : null,
+          objEmpleadoVerificaReferenciaID1:
+              state.objEmpleadoVerificaReferenciaID1,
+          objEmpleadoVerificaReferenciaID2:
+              state.objEmpleadoVerificaReferenciaID2,
+          objEmpleadoVerificaReferenciaID3:
+              state.objEmpleadoVerificaReferenciaID3,
           database: state.database,
           numeroSolicitud: state.numeroSolicitud,
           activo: state.activo,
@@ -32,28 +88,28 @@ class AnalisisAsalariadoHnCubit extends Cubit<AnalisisAsalariadoHnState> {
           vehiculo: state.vehiculo,
           maquinaria: state.maquinaria,
           bienesInmuebles: state.bienesInmuebles,
-          totalActivo: state.totalActivo,
+          totalActivo: totalActivosCalc,
           cuentasXPagar: state.cuentasXPagar,
           prestamoBancoCp: state.prestamoBancoCp,
           prestamoBancoLp: state.prestamoBancoLp,
           otrasCuentasXPagar: state.otrasCuentasXPagar,
-          totalPasivo: state.totalPasivo,
-          patrimonio: state.patrimonio,
-          pasivoPatrimonio: state.pasivoPatrimonio,
+          totalPasivo: totalPasivosCalc,
+          patrimonio: totalPatrimonioCalc.toInt(),
+          pasivoPatrimonio: totalPasivosPatrimonioCalc,
           ingresoNetoSalario: state.ingresoNetoSalario,
           otrosIngresos: state.otrosIngresos,
-          totalIngresos: state.totalIngresos,
+          totalIngresos: totalIngresosCalc,
           alimentacion: state.alimentacion,
           educacion: state.educacion,
           serviciosBasicos: state.serviciosBasicos,
           aseoLimpieza: state.aseoLimpieza,
           vestimentaCalzado: state.vestimentaCalzado,
           transporteCombustibleMtto: state.transporteCombustibleMtto,
-          imprevistos: state.imprevistos,
+          imprevistos: imprevistosCalc.toInt(),
           amortizacionesDeudas: state.amortizacionesDeudas,
           otrosEgresos: state.otrosEgresos,
-          totalEgresos: state.totalEgresos,
-          disponible: state.disponible,
+          totalEgresos: totalEgresosCalc.toInt(),
+          disponible: disponiblesCalc,
           nombreReferencia1: state.nombreReferencia1,
           cedulaReferencia1: state.cedulaReferencia1,
           direccionReferencia1: state.direccionReferencia1,
@@ -174,6 +230,18 @@ class AnalisisAsalariadoHnCubit extends Cubit<AnalisisAsalariadoHnState> {
         uuid: solicitud?.uuid,
         vehiculo: solicitud?.vehiculo,
         vestimentaCalzado: solicitud?.vestimentaCalzado,
+        objEmpleadoVerificaReferenciaID1:
+            solicitud?.objEmpleadoVerificaReferenciaID1,
+        objEmpleadoVerificaReferenciaID2:
+            solicitud?.objEmpleadoVerificaReferenciaID2,
+        objEmpleadoVerificaReferenciaID3:
+            solicitud?.objEmpleadoVerificaReferenciaID3,
+        fechaVerificacion1:
+            solicitud?.fechaVerificacion1?.toUtc().toIso8601String(),
+        fechaVerificacion2:
+            solicitud?.fechaVerificacion2?.toUtc().toIso8601String(),
+        fechaVerificacion3:
+            solicitud?.fechaVerificacion3?.toUtc().toIso8601String(),
       ),
     );
   }
@@ -186,6 +254,15 @@ class AnalisisAsalariadoHnCubit extends Cubit<AnalisisAsalariadoHnState> {
     return AnalisisAsalariadoHnLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      objEmpleadoVerificaReferenciaID1: _prefer(
+          state.objEmpleadoVerificaReferenciaID1,
+          prev?.objEmpleadoVerificaReferenciaID1),
+      objEmpleadoVerificaReferenciaID2: _prefer(
+          state.objEmpleadoVerificaReferenciaID2,
+          prev?.objEmpleadoVerificaReferenciaID2),
+      objEmpleadoVerificaReferenciaID3: _prefer(
+          state.objEmpleadoVerificaReferenciaID3,
+          prev?.objEmpleadoVerificaReferenciaID3),
       activo: state.activo == 0 ? (prev?.activo ?? 0) : state.activo,
       cuentasXCobrar: state.cuentasXCobrar == 0
           ? (prev?.cuentasXCobrar ?? 0)
@@ -316,12 +393,25 @@ class AnalisisAsalariadoHnCubit extends Cubit<AnalisisAsalariadoHnState> {
       transporteCombustibleMtto: state.transporteCombustibleMtto == 0
           ? (prev?.transporteCombustibleMtto ?? 0)
           : state.transporteCombustibleMtto,
+      fechaVerificacion1: state.fechaVerificacion1.isEmpty
+          ? DateTime.now()
+          : DateTime.parse(state.fechaVerificacion1),
+      fechaVerificacion2: state.fechaVerificacion2.isEmpty
+          ? DateTime.now()
+          : DateTime.parse(state.fechaVerificacion2),
+      fechaVerificacion3:
+          _preferDate(state.fechaVerificacion3, prev?.fechaVerificacion3),
     );
   }
 
   void onFieldChanged(AnalisisAsalariadoHnState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();
+  }
+
+  DateTime? _preferDate(String? current, DateTime? previous) {
+    final parsed = DateTime.tryParse(current ?? '');
+    return parsed ?? previous;
   }
 
   String _prefer(String? current, String? previous) =>

@@ -72,9 +72,6 @@ class AnalisisAsalariadoHnForm extends StatelessWidget {
                   AnalisisAsalariadoEstadoResultadoHn(
                     pageController: pageController,
                   ),
-                  AnalisisAsalariadoEstadoResultadoHn(
-                    pageController: pageController,
-                  ),
                   AnalisisAsalariadoReferenciasHn(
                     pageController: pageController,
                   ),

@@ -86,18 +86,18 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
   int? totalCompra;
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.44,
-      maxChildSize: 0.7,
-      builder: (context, scrollController) {
-        return AnimatedPadding(
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.easeOut,
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.44,
+        maxChildSize: 0.7,
+        builder: (context, scrollController) {
+          return Container(
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -181,9 +181,9 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

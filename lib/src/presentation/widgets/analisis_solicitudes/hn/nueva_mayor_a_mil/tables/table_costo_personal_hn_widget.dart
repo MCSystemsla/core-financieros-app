@@ -6,13 +6,11 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_costo_de_personal_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -273,17 +271,14 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                       subtitle: 'El Empleado es temporal?',
                     ),
                     const Gap(20),
-                    CatalogoFrecuenciaPagoDropdown(
-                      selectedItem: CatalogoFrecuenciaItem(
-                        valor: formaDePago ?? '',
-                        nombre: formaDePago ?? '',
-                        meses: '0',
-                      ),
+                    OutlineTextfieldWidget(
+                      initialValue: formaDePago,
                       title: 'Forma de pago a empleado',
+                      icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
-                          ClassValidator.validateRequired(value?.valor),
-                      onChanged: (value) {
-                        formaDePago = value?.valor;
+                          ClassValidator.validateRequired(value),
+                      onChange: (value) {
+                        formaDePago = value;
                       },
                     ),
                     const Gap(20),

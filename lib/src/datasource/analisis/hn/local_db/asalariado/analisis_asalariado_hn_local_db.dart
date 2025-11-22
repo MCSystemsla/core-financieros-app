@@ -64,6 +64,9 @@ class AnalisisAsalariadoHnLocalDb {
   int? aniosConocerReferido3;
   String? parentescoReferenciaCodigo3;
   String? resultadoVerificacion3;
+  String? objEmpleadoVerificaReferenciaID1;
+  String? objEmpleadoVerificaReferenciaID2;
+  String? objEmpleadoVerificaReferenciaID3;
   AnalisisAsalariadoHnLocalDb({
     required this.id,
     this.uuid,
@@ -125,5 +128,8 @@ class AnalisisAsalariadoHnLocalDb {
     this.aniosConocerReferido3,
     this.parentescoReferenciaCodigo3,
     this.resultadoVerificacion3,
+    this.objEmpleadoVerificaReferenciaID1,
+    this.objEmpleadoVerificaReferenciaID2,
+    this.objEmpleadoVerificaReferenciaID3,
   });
 }

@@ -51,11 +51,16 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 (state.inventario.length))
             .toStringAsFixed(2);
 
-        final totalIngresos = ((state.ventasContado + recuperaciones) *
-                double.parse(porcentajeDeVenta))
-            .round();
-        final utilidadBruta = totalIngresos -
-            (totalIngresos * double.parse(porcentajeDeVenta)).round();
+        final totalIngresos = state.inventario.isNotEmpty
+            ? ((state.ventasContado + recuperaciones) *
+                    double.parse(porcentajeDeVenta))
+                .round()
+            : (state.ventasContado + recuperaciones).round();
+
+        final utilidadBruta = state.inventario.isNotEmpty
+            ? (totalIngresos -
+                (totalIngresos * double.parse(porcentajeDeVenta)).round())
+            : totalIngresos;
         final subContratos =
             state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
 

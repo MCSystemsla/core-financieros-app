@@ -5491,7 +5491,7 @@
     },
     {
       "id": "41:8943522521069133746",
-      "lastPropertyId": "60:5002375980086711103",
+      "lastPropertyId": "63:3278058806048576825",
       "name": "AnalisisAsalariadoHnLocalDb",
       "properties": [
         {
@@ -5793,6 +5793,21 @@
         {
           "id": "60:5002375980086711103",
           "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "61:5914546795212743328",
+          "name": "objEmpleadoVerificaReferenciaID1",
+          "type": 9
+        },
+        {
+          "id": "62:1428670838310425809",
+          "name": "objEmpleadoVerificaReferenciaID2",
+          "type": 9
+        },
+        {
+          "id": "63:3278058806048576825",
+          "name": "objEmpleadoVerificaReferenciaID3",
           "type": 9
         }
       ],
