@@ -91,11 +91,10 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
             (state.inventario.length))
         .toStringAsFixed(2);
 
-    final totalIngresos = ((state.ventasContado + recuperaciones) *
-            double.parse(porcentajeDeVenta))
-        .round();
-    final utilidadBruta = totalIngresos -
-        (totalIngresos * double.parse(porcentajeDeVenta)).round();
+    final totalIngresos = (ventasDeContado + recuperaciones).round();
+
+    final utilidadBruta =
+        (totalIngresos - (totalIngresos * double.parse(porcentajeDeVenta)));
     final subContratos =
         state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
 

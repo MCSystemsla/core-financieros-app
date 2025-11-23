@@ -51,16 +51,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                 (state.inventario.length))
             .toStringAsFixed(2);
 
-        final totalIngresos = state.inventario.isNotEmpty
-            ? ((state.ventasContado + recuperaciones) *
-                    double.parse(porcentajeDeVenta))
-                .round()
-            : (state.ventasContado + recuperaciones).round();
+        final totalIngresos = (ventasDeContado + recuperaciones);
 
-        final utilidadBruta = state.inventario.isNotEmpty
-            ? (totalIngresos -
-                (totalIngresos * double.parse(porcentajeDeVenta)).round())
-            : totalIngresos;
+        final utilidadBruta =
+            (totalIngresos - (totalIngresos * double.parse(porcentajeDeVenta)));
         final subContratos =
             state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
 
@@ -88,7 +82,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
 
         final saldoDisponibleUnidadFamiliar =
             resultadoLiquido - totalConsumoFamiliar + ingresosFueraDeNegocio;
-
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
