@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_asalariado_hn_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_represtamo_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_solicitud_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,13 @@ class AnalisisSolicitudesInterceptorHN extends StatelessWidget {
           index: index,
           numeroSolicitud: int.parse(numeroSolicitud),
         ),
-      AnalisisSolicitudesInterceptorType.represtamoMayorAMil => const Text(
-          'represtamo Analisis mayor a mil',
+      AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
+        AnalisisReprestamoHnForm(
+          description: description,
+          index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          subtitle: subtitle,
+          title: title,
         ),
       AnalisisSolicitudesInterceptorType.asalariado => AnalisisAsalariadoHnForm(
           description: description,
