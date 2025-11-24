@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/cuenta_por_cobrar_card_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,12 +49,6 @@ class _AnalisisBalanceGeneralReprestamoHNState
     final cubit = context.read<AnalisisReprestamoCubit>();
     return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
       builder: (context, state) {
-        final totalCuentasPorCobrar = state.cuentasPorCobrar
-            .fold<double>(0, (sum, e) => sum + e.totalMensualCredito);
-
-        final totalAbonoCredito = state.cuentasPorCobrar
-            .fold<double>(0, (sum, e) => sum + e.abonoCredito);
-
         final totalInventario =
             state.inventario.fold(0, (sum, element) => sum + element.total);
 
@@ -72,8 +65,11 @@ class _AnalisisBalanceGeneralReprestamoHNState
         final totalClientes = state.cuentasPorCobrar
             .fold(0, (sum, element) => sum + element.totalMensualCredito);
 
-        final incobrables = totalCuentasxCobrar.toDouble() *
-            (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
+        // final incobrables = totalCuentasxCobrar.toDouble() *
+        //     (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
+        final incobrables =
+            (totalCuentasxCobrar.toDouble() + state.adelantoProveedores) *
+                (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
 
         final totalActivos = (totalActivosFijos +
             (totalClientes -
@@ -84,7 +80,26 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 state.cuentasAhorro +
                 totalInventario));
 
+        final totalActivosCalc =
+            state.caja + state.reservas + state.cuentasAhorro;
+
+        final totalCuentasxCobrarCalc = state.adelantoProveedores - incobrables;
+
+        final totalProveedoresAdelantoCalc =
+            state.proveedores + state.adelantoClientes;
+
+        final totalInstAmigosCalc =
+            state.creditosInstFinancieras + state.prestamosAmigos;
+
+        final totalPasivosCalc =
+            totalProveedoresAdelantoCalc + totalInstAmigosCalc;
+
+        final patimonioCalc = totalActivos - totalPasivosCalc;
+
+        final pasivosPatraimonioCalc = totalPasivosCalc + patimonioCalc;
+
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -176,8 +191,9 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue:
-                    state.totalActivos.toCurrencyString().toNullIfEmptyOrZero(),
+                hintText: totalActivosCalc.toCurrencyString(
+                  mantissaLength: 0,
+                ),
                 textAlign: TextAlign.end,
                 title: 'Total:',
                 icon: const Icon(Icons.document_scanner),
@@ -196,9 +212,8 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   );
                 },
               ),
-              CuentaPorCobrarCardHn(
-                totalAbonoPorCobrar: totalAbonoCredito.toInt(),
-                totalCuentasPorCobrar: totalCuentasPorCobrar.toInt(),
+              AnalisisCardListHn(
+                title: 'Cuentas por cobrar',
                 onTap: () {
                   Navigator.push(
                     context,
@@ -210,6 +225,17 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     ),
                   );
                 },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.sell,
+                    label: 'Total Cuentas por cobrar',
+                    value: totalCuentasxCobrar.toCurrencyString(
+                      leadingSymbol: 'L.',
+                      mantissaLength: 0,
+                    ),
+                    color: Colors.indigo,
+                  ),
+                ],
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -236,10 +262,32 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue:
-                    state.incobrables.toCurrencyString().toNullIfEmptyOrZero(),
+                readOnly: true,
+                hintText: incobrables.toCurrencyString(),
                 textAlign: TextAlign.end,
                 title: 'Incobrables:',
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    mantissaLength: 0,
+                  ),
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                      incobrables: int.tryParse(newValue),
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                readOnly: true,
+                hintText: totalCuentasxCobrarCalc.toCurrencyString(),
+                textAlign: TextAlign.end,
+                title: 'Total:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -350,9 +398,10 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   ),
                 ],
                 onChange: (value) {
+                  final newValue = toNumericString(value);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      proveedores: int.tryParse(value),
+                      proveedores: int.tryParse(newValue),
                     ),
                   );
                 },
@@ -372,19 +421,21 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   ),
                 ],
                 onChange: (value) {
+                  final newValue = toNumericString(value);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      adelantoClientes: int.tryParse(value),
+                      adelantoClientes: int.tryParse(newValue),
                     ),
                   );
                 },
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.proveedoresAdelantosOtros
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: totalProveedoresAdelantoCalc.toCurrencyString(
+                  mantissaLength: 0,
+                ),
                 textAlign: TextAlign.end,
+                readOnly: true,
                 title: 'Total proveedores adelantos, otros:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -447,9 +498,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.totalInstFinancierasAmigosOtros
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: totalInstAmigosCalc.toCurrencyString(),
                 textAlign: TextAlign.end,
                 title: 'Total inst finac, amigos y otros:',
                 icon: const Icon(Icons.document_scanner),
@@ -470,8 +519,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue:
-                    state.totalPasivos.toCurrencyString().toNullIfEmptyOrZero(),
+                hintText: totalPasivosCalc.toCurrencyString(),
                 textAlign: TextAlign.end,
                 title: 'Total pasivos:',
                 icon: const Icon(Icons.document_scanner),
@@ -492,8 +540,8 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue:
-                    state.patrimonio.toCurrencyString().toNullIfEmptyOrZero(),
+                hintText: patimonioCalc.toCurrencyString(),
+                readOnly: true,
                 textAlign: TextAlign.end,
                 title: 'Patrimonio:',
                 icon: const Icon(Icons.document_scanner),
@@ -514,9 +562,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.pasivosMasPatrimonio
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: pasivosPatraimonioCalc.toCurrencyString(),
                 textAlign: TextAlign.end,
                 title: 'Pasivos + patrimonio:',
                 icon: const Icon(Icons.document_scanner),

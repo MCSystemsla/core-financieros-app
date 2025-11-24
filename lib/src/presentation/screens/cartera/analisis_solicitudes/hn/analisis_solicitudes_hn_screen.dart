@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AnalisisSolicitudesHnScreen extends StatelessWidget {
   const AnalisisSolicitudesHnScreen({super.key});
@@ -22,53 +23,60 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
           isAsignadaToAsesorCredito: true,
           estadoCredito: EstadoCredito.asignada,
         ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Analisis de solicitudes'),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(10),
-            const Expanded(
-              child: _AnalisisSolicitudesTitle(),
-            ),
-            BlocBuilder<SolicitudesByEstadoHnCubit, SolicitudesByEstadoHnState>(
-              builder: (context, state) {
-                return switch (state.status) {
-                  Status.inProgress => const Expanded(child: LoadingWidget()),
-                  Status.error => Text('Error : ${state.errorMsg} '),
-                  Status.done => Expanded(
-                      flex: 4,
-                      child: ListView.builder(
-                        itemCount: state.solicitudes.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return AnalisisCreditCardHn(
-                            numeroSolicitud: state.solicitudes[index].numero,
-                            tipoSolicitud: getTipoSolicitud(
-                              tipoSolicitud:
-                                  state.solicitudes[index].tipoSolicitud,
-                              monto: state.solicitudes[index].monto!,
-                            ),
-                            index: index,
-                            title:
-                                'Número Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
-                            subtitle: state.solicitudes[index].nombreCompleto ??
-                                'N/A',
-                            description: state.solicitudes[index].monto
-                                    ?.toCurrencyString() ??
-                                'N/A',
-                          );
-                        },
+      child: PopScope(
+        onPopInvokedWithResult: (pop, result) {
+          context.push('/');
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Analisis de solicitudes'),
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(10),
+              const Expanded(
+                child: _AnalisisSolicitudesTitle(),
+              ),
+              BlocBuilder<SolicitudesByEstadoHnCubit,
+                  SolicitudesByEstadoHnState>(
+                builder: (context, state) {
+                  return switch (state.status) {
+                    Status.inProgress => const Expanded(child: LoadingWidget()),
+                    Status.error => Text('Error : ${state.errorMsg} '),
+                    Status.done => Expanded(
+                        flex: 4,
+                        child: ListView.builder(
+                          itemCount: state.solicitudes.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return AnalisisCreditCardHn(
+                              numeroSolicitud: state.solicitudes[index].numero,
+                              tipoSolicitud: getTipoSolicitud(
+                                tipoSolicitud:
+                                    state.solicitudes[index].tipoSolicitud,
+                                monto: state.solicitudes[index].monto!,
+                              ),
+                              index: index,
+                              title:
+                                  'Número Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
+                              subtitle:
+                                  state.solicitudes[index].nombreCompleto ??
+                                      'N/A',
+                              description: state.solicitudes[index].monto
+                                      ?.toCurrencyString() ??
+                                  'N/A',
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  _ => const SizedBox(),
-                };
-              },
-            ),
-            const Gap(15),
-          ],
+                    _ => const SizedBox(),
+                  };
+                },
+              ),
+              const Gap(15),
+            ],
+          ),
         ),
       ),
     );

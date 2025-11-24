@@ -21,7 +21,35 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
     final cubit = context.read<AnalisisReprestamoCubit>();
     return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
       builder: (context, state) {
+        final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) /
+            12);
+        final totalVentasDiarias = (state.cicloVentaDiaria.cicloVentas.fold(
+              0,
+              (sum, e) => sum + e.venta,
+            ) *
+            4);
+        final nivelProduccion = state.nivelProduccion.fold(
+          0,
+          (sum, e) => sum + e.totalMensualProduccion,
+        );
+
+        final ventasDeContado =
+            (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+
+        final totalIngresos = ventasDeContado + state.recuperaciones;
+
+        final porcentajeDeVenta = (state.inventario.fold(0.0,
+                    (sum, element) => sum + (element.costoVentaPorcentaje)) /
+                (state.inventario.length))
+            .toStringAsFixed(2);
+
+        final porcentajeDeVentaTotalCal =
+            (totalIngresos * double.parse(porcentajeDeVenta));
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,9 +77,8 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.ventasContado
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: ventasDeContado.toCurrencyString(),
+                readOnly: true,
                 textAlign: TextAlign.end,
                 title: 'Ventas de contado L:',
                 icon: const Icon(Icons.document_scanner),
@@ -89,9 +116,8 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.totalIngresos
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: totalIngresos.toCurrencyString(),
+                readOnly: true,
                 textAlign: TextAlign.end,
                 title: 'Total ingresos L:',
                 icon: const Icon(Icons.document_scanner),
@@ -106,12 +132,30 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
                   );
                 },
               ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: porcentajeDeVentaTotalCal.toCurrencyString(
+                  mantissaLength: 0,
+                ),
+                textAlign: TextAlign.end,
+                title: porcentajeDeVenta,
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
+                onChange: (value) {
+                  final newValue = toNumericString(value);
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                      costoVentaProduccion: int.tryParse(newValue),
+                    ),
+                  );
+                },
+              ),
 
-              // ====== COSTO DE VENTAS ======
               Container(
                 margin: const EdgeInsets.all(18),
                 child: Text(
-                  'Costo de ventas/producción',
+                  'Costo operativos',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -120,9 +164,9 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.costoVentaProduccion
-                    .toCurrencyString()
-                    .toNullIfEmptyOrZero(),
+                hintText: porcentajeDeVentaTotalCal.toCurrencyString(
+                  mantissaLength: 0,
+                ),
                 textAlign: TextAlign.end,
                 title: 'Costo de ventas/producción L:',
                 icon: const Icon(Icons.document_scanner),

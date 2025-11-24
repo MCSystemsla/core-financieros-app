@@ -40,8 +40,10 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
           0,
           (sum, e) => sum + e.totalMensualProduccion,
         );
+
         final ventasDeContado =
             (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+
         final recuperaciones = state.cuentasPorCobrar.fold(
           0,
           (total, e) => total + e.abonoCredito,
@@ -82,6 +84,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
 
         final saldoDisponibleUnidadFamiliar =
             resultadoLiquido - totalConsumoFamiliar + ingresosFueraDeNegocio;
+
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(

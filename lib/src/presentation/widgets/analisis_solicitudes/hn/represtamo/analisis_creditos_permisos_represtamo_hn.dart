@@ -162,6 +162,7 @@ class AnalisisCreditosPermisosReprestamoHN extends StatelessWidget {
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                initialValue: state.proveedor3,
                 title: 'Proveedor 3',
                 icon: const Icon(Icons.person),
                 inputFormatters: [

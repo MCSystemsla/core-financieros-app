@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 
 class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
   final AnalisisNuevaMayorMilHn analisisSolicitudNuevaMenor;
@@ -74,4 +75,23 @@ class CatalogoEmpleadosActivos extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
       };
+}
+
+class PlanDeInversionEndpointHN extends Endpoint {
+  final AnalisisPlanDeInversion analisisPlanDeInversion;
+
+  PlanDeInversionEndpointHN({
+    required this.analisisPlanDeInversion,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-plan-inversion/crear';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisPlanDeInversion.toJson();
 }

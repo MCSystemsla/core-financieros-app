@@ -40,6 +40,7 @@ class AnalisisAsalariadoPasivosHn extends StatelessWidget {
             totalPasivosCalc + totalPatrimonioCalc;
 
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

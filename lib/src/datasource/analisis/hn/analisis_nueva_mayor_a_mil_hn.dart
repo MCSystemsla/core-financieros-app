@@ -627,6 +627,7 @@ class CuentasPorCobrarHN {
   final String frecuenciaAbonoCodigo;
   final int totalMensualCredito;
   final String uuid;
+  final bool isReprestamoForm;
 
   CuentasPorCobrarHN({
     required this.nombre,
@@ -635,15 +636,25 @@ class CuentasPorCobrarHN {
     required this.frecuenciaAbonoCodigo,
     required this.totalMensualCredito,
     required this.uuid,
+    this.isReprestamoForm = false,
   });
 
-  Map<String, dynamic> toJson() => {
-        'Nombre': nombre,
-        'MontoCredito': montoCredito,
-        'AbonoCredito': abonoCredito,
-        'FrecuenciaAbonoCodigo': frecuenciaAbonoCodigo,
-        'TotalMensualCredito': totalMensualCredito,
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = isReprestamoForm
+        ? {
+            'Cliente': nombre,
+            'Monto': montoCredito,
+          }
+        : {
+            'Nombre': nombre,
+            'MontoCredito': montoCredito,
+            'AbonoCredito': abonoCredito,
+            'FrecuenciaAbonoCodigo': frecuenciaAbonoCodigo,
+            'TotalMensualCredito': totalMensualCredito,
+          };
+
+    return data;
+  }
 }
 
 class IngresosFamilaresFueraNegocioHN {

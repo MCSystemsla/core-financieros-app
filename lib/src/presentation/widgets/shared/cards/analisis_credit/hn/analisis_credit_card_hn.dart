@@ -1,6 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:animate_do/animate_do.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/select_type_analisis_modal_sheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -40,21 +42,22 @@ class AnalisisCreditCardHn extends StatelessWidget {
           ),
           child: InkWell(
             onTap: enabled
-                ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AnalisisSolicitudesInterceptorHN(
+                ? () => {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (ctx) => SelectTypeAnalisisModalSheetWidget(
                           index: index,
-                          type: tipoSolicitud!,
+                          animate: false,
+                          enabled: true,
+                          numeroSolicitud: numeroSolicitud,
+                          tipoSolicitud: tipoSolicitud,
                           title: title,
                           subtitle: subtitle,
                           description: description,
-                          numeroSolicitud: numeroSolicitud,
                         ),
                       ),
-                    );
-                  }
+                    }
                 : null,
             borderRadius: BorderRadius.circular(20),
             child: Padding(
@@ -65,7 +68,6 @@ class AnalisisCreditCardHn extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      // ignore: deprecated_member_use
                       color: Colors.indigo.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),

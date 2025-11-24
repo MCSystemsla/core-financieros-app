@@ -48,6 +48,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
         final disponiblesCalc = totalIngresosCalc - totalEgresosCalc;
 
         return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

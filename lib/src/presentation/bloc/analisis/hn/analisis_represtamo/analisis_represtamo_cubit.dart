@@ -214,7 +214,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
           aniosConocerReferido3: state.aniosConocerReferido3,
           parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
           resultadoVerificacion3: state.resultadoVerificacion3,
-          salud: 111,
+          salud: state.salud,
           permisoOperacionNombreInstitucion:
               state.permisoOperacionNombreInstitucion,
           permisoOperacionFechaEmision:
@@ -1430,6 +1430,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
       nombre: cuentasPorCobrar.nombre ?? '',
       montoCredito: cuentasPorCobrar.montoCredito ?? 0,
       uuid: cuentasPorCobrar.uuid ?? '',
+      isReprestamoForm: true,
     );
 
     // 4. Actualizar lista en el estado usando tu línea preferida
@@ -1719,6 +1720,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
               nombre: c.nombre ?? '',
               montoCredito: c.montoCredito ?? 0,
               uuid: c.uuid ?? '',
+              isReprestamoForm: true,
             ))
         .toList();
 

@@ -6,13 +6,10 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_cuentas_por_cobrar_hn.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -155,18 +152,14 @@ class _CreateCuentasPorCobrarHn extends StatefulWidget {
 class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
   final formKey = GlobalKey<FormState>();
   int? montoCredito;
-  int? abonoCredito;
   String? nombre;
-  String? frecuenciaPago;
   @override
   void initState() {
     super.initState();
     if (widget.isUpdated) {
       final cuentaPorCobrar = widget.cuentaPorCobrar;
       nombre = cuentaPorCobrar?.nombre;
-      frecuenciaPago = cuentaPorCobrar?.frecuenciaAbonoCodigo;
       montoCredito = cuentaPorCobrar?.montoCredito;
-      abonoCredito = cuentaPorCobrar?.abonoCredito;
     }
   }
 
@@ -210,7 +203,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                     const Gap(20),
                     OutlineTextfieldWidget(
                       initialValue: nombre,
-                      title: 'Nombre',
+                      title: 'Cliente',
                       icon: const Icon(Icons.comment_bank_sharp),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -246,46 +239,6 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                       },
                     ),
                     const Gap(20),
-                    OutlineTextfieldWidget(
-                      textAlign: TextAlign.end,
-                      initialValue: abonoCredito
-                          ?.toCurrencyString()
-                          .toNullIfEmptyOrZero(),
-                      title: 'Abono del crédito',
-                      icon: const Icon(Icons.wallet),
-                      textInputType: TextInputType.number,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
-                        CurrencyInputFormatter(
-                          mantissaLength: 0,
-                        ),
-                      ],
-                      onChange: (value) {
-                        final newValue = toNumericString(value);
-                        abonoCredito = int.tryParse(newValue);
-                      },
-                    ),
-                    const Gap(20),
-                    CatalogoFrecuenciaPagoDropdown(
-                      selectedItem: CatalogoFrecuenciaItem(
-                        valor: frecuenciaPago ?? '',
-                        nombre: frecuenciaPago ?? '',
-                        meses: '0',
-                      ),
-                      enabled: true,
-                      hintText: 'Selecciona una opcion',
-                      isRequired: true,
-                      title: 'Frecuenca de Abono a Credito',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.valor),
-                      onChanged: (value) {
-                        if (value == null || !mounted) return;
-                        frecuenciaPago = value.valor;
-                      },
-                    ),
-                    const Gap(20),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       width: double.infinity,
@@ -295,15 +248,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          if ((abonoCredito ?? 0) > (montoCredito ?? 0)) {
-                            CustomAlertDialog(
-                              context: context,
-                              title:
-                                  'No puedes abonar más que el monto del crédito',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
+
                           if (widget.isUpdated) {
                             widget.cubit.updateCuentaPorCobrar(
                               numeroSolicitud: widget.numeroSolicitud,
@@ -311,10 +256,9 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                                 uuid: widget.cuentaPorCobrar?.uuid,
                                 nombre: nombre!,
                                 montoCredito: montoCredito!,
-                                abonoCredito: abonoCredito!,
-                                frecuenciaAbonoCodigo: frecuenciaPago!,
-                                totalMensualCredito:
-                                    (montoCredito ?? 0) - (abonoCredito ?? 0),
+                                abonoCredito: 0,
+                                frecuenciaAbonoCodigo: '',
+                                totalMensualCredito: montoCredito,
                               ),
                             );
                             context.pop();
@@ -326,10 +270,9 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                               uuid: const Uuid().v4(),
                               nombre: nombre!,
                               montoCredito: montoCredito!,
-                              abonoCredito: abonoCredito!,
-                              frecuenciaAbonoCodigo: frecuenciaPago!,
-                              totalMensualCredito:
-                                  (montoCredito ?? 0) - (abonoCredito ?? 0),
+                              abonoCredito: 0,
+                              frecuenciaAbonoCodigo: '',
+                              totalMensualCredito: montoCredito!,
                             ),
                           );
                           context.pop();
