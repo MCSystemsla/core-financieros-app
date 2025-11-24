@@ -1,0 +1,201 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
+class CicloVentasMensualesReprestamoHn extends StatefulWidget {
+  const CicloVentasMensualesReprestamoHn({super.key});
+
+  @override
+  State<CicloVentasMensualesReprestamoHn> createState() =>
+      _CicloVentasMensualesReprestamoHnState();
+}
+
+class _CicloVentasMensualesReprestamoHnState
+    extends State<CicloVentasMensualesReprestamoHn> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ciclo de ventas mensuales'),
+      ),
+      body: BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                const Gap(20),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.cicloVentaMensual.ciclo.length,
+                  itemBuilder: (context, index) {
+                    final e = state.cicloVentaMensual.ciclo[index];
+                    return AnalisisCardVentasDay(
+                      subtitle: e.mes,
+                      title: e.valorizacion,
+                      description: e.venta.toCurrencyString(),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (ctx) => CreateValorizacionMesHN(
+                            cubit: context.read<AnalisisReprestamoCubit>(),
+                            numeroSolicitud: state.numeroSolicitud,
+                            mes: e.mes,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Gap(20),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CreateValorizacionMesHN extends StatefulWidget {
+  final AnalisisReprestamoCubit cubit;
+  final String mes;
+  final int numeroSolicitud;
+  const CreateValorizacionMesHN({
+    super.key,
+    required this.cubit,
+    required this.numeroSolicitud,
+    required this.mes,
+  });
+
+  @override
+  State<CreateValorizacionMesHN> createState() =>
+      _CreateValorizacionMesHNState();
+}
+
+class _CreateValorizacionMesHNState extends State<CreateValorizacionMesHN> {
+  final formKey = GlobalKey<FormState>();
+  int? venta;
+  String? valorizacion;
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.44,
+        maxChildSize: 0.7,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            ),
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const Gap(20),
+                    SheetSearchDropdown(
+                      enabled: true,
+                      items: const [
+                        Item(name: 'Buena', value: 'B'),
+                        Item(name: 'Normal', value: 'N'),
+                        Item(name: 'Mala', value: 'M'),
+                      ],
+                      hintText: 'Selecciona una opcion',
+                      isRequired: true,
+                      title: 'Valorización',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        valorizacion = value.value;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      textAlign: TextAlign.end,
+                      title: 'Venta',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
+                        CurrencyInputFormatter(mantissaLength: 0),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        venta = int.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: CustomElevatedButton(
+                          enabled: true,
+                          text: 'Crear',
+                          color: AppColors.greenLatern.withOpacity(0.4),
+                          onPressed: () {
+                            if (!formKey.currentState!.validate()) return;
+                            widget.cubit.updateMesByName(
+                              mes: widget.mes,
+                              venta: venta!,
+                              valorizacion: valorizacion!,
+                              numeroSolicitud: widget.numeroSolicitud,
+                            );
+                            context.pop();
+                          },
+                        ),
+                      ),
+                    ),
+                    const Gap(20),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

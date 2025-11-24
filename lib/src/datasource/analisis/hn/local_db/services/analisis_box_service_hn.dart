@@ -5,6 +5,7 @@ import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/represtamo/analisis_represtamo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_activo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ciclo_compras_semanales_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_ciclo_venta_hn_local_db.dart';
@@ -41,6 +42,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisActivoHnLocalDb> analisisActivoHnLocalDb;
   late final Box<AnalisisInventarioHnLocalDb> analisisInventarioHnLocalDb;
   late final Box<AnalisisAsalariadoHnLocalDb> analisisAsalariadoHnLocalDb;
+  late final Box<AnalisisReprestamoHnLocalDb> analisisReprestamoHnLocalDb;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -63,6 +65,7 @@ class AnalisisBoxServiceHn {
         _store.box<AnalisisCicloComprasSemanalesHnLocalDb>();
     analisisInventarioHnLocalDb = _store.box<AnalisisInventarioHnLocalDb>();
     analisisAsalariadoHnLocalDb = _store.box<AnalisisAsalariadoHnLocalDb>();
+    analisisReprestamoHnLocalDb = _store.box<AnalisisReprestamoHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
@@ -132,6 +135,20 @@ class AnalisisBoxServiceHn {
   }) {
     final query = analisisAsalariadoHnLocalDb
         .query(AnalisisAsalariadoHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud))
+        .build();
+
+    final results = query.findFirst();
+    query.close();
+
+    return results;
+  }
+
+  AnalisisReprestamoHnLocalDb? getAnalisisReprestamoByNumeroSolicitud({
+    required int numeroSolicitud,
+  }) {
+    final query = analisisReprestamoHnLocalDb
+        .query(AnalisisReprestamoHnLocalDb_.numeroSolicitud
             .equals(numeroSolicitud))
         .build();
 

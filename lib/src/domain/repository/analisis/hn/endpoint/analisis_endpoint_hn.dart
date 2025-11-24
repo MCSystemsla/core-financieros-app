@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 
 class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
   final AnalisisNuevaMayorMilHn analisisSolicitudNuevaMenor;
@@ -38,6 +39,25 @@ class CreateAnalisisAsalariadoEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
+}
+
+class CreateAnalisisReprestamoEndpoint extends Endpoint {
+  final AnalisisReprestamoHn analisisSolicitudReprestamo;
+  CreateAnalisisReprestamoEndpoint({
+    required this.analisisSolicitudReprestamo,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path =>
+      '/cartera/analisis-represtamo/crear-analisis-represtamo-mayor-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudReprestamo.toJson();
 }
 
 class CatalogoEmpleadosActivos extends Endpoint {

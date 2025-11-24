@@ -5812,9 +5812,573 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "42:2304388623674565835",
+      "lastPropertyId": "111:7690887922722482782",
+      "name": "AnalisisReprestamoHnLocalDb",
+      "properties": [
+        {
+          "id": "1:7381190142100025333",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5325627502071156157",
+          "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "3:4775317696862758926",
+          "name": "database",
+          "type": 9
+        },
+        {
+          "id": "4:7493155855916673253",
+          "name": "numeroSolicitud",
+          "type": 6
+        },
+        {
+          "id": "5:7949314572425885872",
+          "name": "diasBuenosVenta",
+          "type": 6
+        },
+        {
+          "id": "6:4505908084374689282",
+          "name": "diasNormalesVenta",
+          "type": 6
+        },
+        {
+          "id": "7:8562872418021919149",
+          "name": "diasMalosVenta",
+          "type": 6
+        },
+        {
+          "id": "8:7255299843675711453",
+          "name": "totalVentasDiarias",
+          "type": 6
+        },
+        {
+          "id": "9:7003221975506032931",
+          "name": "totalVentasMensuales",
+          "type": 6
+        },
+        {
+          "id": "10:1591136374816836593",
+          "name": "semanasBuenas",
+          "type": 6
+        },
+        {
+          "id": "11:1814547748656352523",
+          "name": "semanasNormales",
+          "type": 6
+        },
+        {
+          "id": "12:1272076962283953026",
+          "name": "semanasMalas",
+          "type": 6
+        },
+        {
+          "id": "13:5201681586595427834",
+          "name": "totalComprasMensuales",
+          "type": 6
+        },
+        {
+          "id": "14:8762601973671273942",
+          "name": "ventasMensualesCompras",
+          "type": 6
+        },
+        {
+          "id": "15:8606794729974701361",
+          "name": "ventasMensualesProduccion",
+          "type": 6
+        },
+        {
+          "id": "16:6142679644828588765",
+          "name": "caja",
+          "type": 6
+        },
+        {
+          "id": "17:1968458446268816880",
+          "name": "reservas",
+          "type": 6
+        },
+        {
+          "id": "18:4374369513957026053",
+          "name": "cuentasAhorro",
+          "type": 6
+        },
+        {
+          "id": "19:8767334739519332114",
+          "name": "totalDisponibleActivo",
+          "type": 6
+        },
+        {
+          "id": "20:1616118403821458271",
+          "name": "adelantoProveedores",
+          "type": 6
+        },
+        {
+          "id": "21:2885416905705613715",
+          "name": "incobrables",
+          "type": 6
+        },
+        {
+          "id": "22:6980054484637865328",
+          "name": "totalCuentasXCobrar",
+          "type": 6
+        },
+        {
+          "id": "23:8397237029946788325",
+          "name": "totalInventario",
+          "type": 8
+        },
+        {
+          "id": "24:12638163948515640",
+          "name": "totalActivosFijos",
+          "type": 6
+        },
+        {
+          "id": "25:3845568901365079972",
+          "name": "totalActivos",
+          "type": 8
+        },
+        {
+          "id": "26:3375302956243241495",
+          "name": "proveedores",
+          "type": 6
+        },
+        {
+          "id": "27:5297050473190781672",
+          "name": "adelantoClientes",
+          "type": 6
+        },
+        {
+          "id": "28:3473075392981124618",
+          "name": "proveedoresAdelantosOtros",
+          "type": 6
+        },
+        {
+          "id": "29:5944846960170157690",
+          "name": "creditosInstFinancieras",
+          "type": 6
+        },
+        {
+          "id": "30:7360226881732969156",
+          "name": "prestamosAmigos",
+          "type": 6
+        },
+        {
+          "id": "31:1733975775892285044",
+          "name": "totalInstFinancierasAmigosOtros",
+          "type": 6
+        },
+        {
+          "id": "32:6830356613501133612",
+          "name": "totalPasivos",
+          "type": 6
+        },
+        {
+          "id": "33:6989408343156088074",
+          "name": "patrimonio",
+          "type": 8
+        },
+        {
+          "id": "34:3264797436054223031",
+          "name": "pasivosMasPatrimonio",
+          "type": 8
+        },
+        {
+          "id": "35:8340106417886038232",
+          "name": "ventasContado",
+          "type": 6
+        },
+        {
+          "id": "36:3837713627011906016",
+          "name": "recuperaciones",
+          "type": 6
+        },
+        {
+          "id": "37:2361818286815394685",
+          "name": "totalIngresos",
+          "type": 6
+        },
+        {
+          "id": "38:8255706655816287979",
+          "name": "costoVentaProduccionValor",
+          "type": 6
+        },
+        {
+          "id": "39:1261964957346400132",
+          "name": "costoVentaProduccion",
+          "type": 6
+        },
+        {
+          "id": "40:2304990416255559120",
+          "name": "gastosPersonalAlimentacion",
+          "type": 6
+        },
+        {
+          "id": "41:6944429862588363192",
+          "name": "subContratos",
+          "type": 6
+        },
+        {
+          "id": "42:4211561857599903359",
+          "name": "alquilerlocal",
+          "type": 6
+        },
+        {
+          "id": "43:4786476140976077013",
+          "name": "aguaElectricidad",
+          "type": 6
+        },
+        {
+          "id": "44:3972796811992517241",
+          "name": "combustible",
+          "type": 6
+        },
+        {
+          "id": "45:979783141815263911",
+          "name": "transporte",
+          "type": 6
+        },
+        {
+          "id": "46:1913894346109223116",
+          "name": "pagoCuotaCredito",
+          "type": 6
+        },
+        {
+          "id": "47:4211050779403775115",
+          "name": "impuesto",
+          "type": 6
+        },
+        {
+          "id": "48:3205119020362807529",
+          "name": "otros",
+          "type": 6
+        },
+        {
+          "id": "49:4906759699649688296",
+          "name": "totalCostosOperativos",
+          "type": 6
+        },
+        {
+          "id": "50:8854440587848783274",
+          "name": "resultadoLiquido",
+          "type": 6
+        },
+        {
+          "id": "51:6495846931017187048",
+          "name": "alimentacion",
+          "type": 6
+        },
+        {
+          "id": "52:2171828572168524739",
+          "name": "educacion",
+          "type": 6
+        },
+        {
+          "id": "53:4198998238764244090",
+          "name": "aguaElectricidadGas",
+          "type": 6
+        },
+        {
+          "id": "54:6259387144762220528",
+          "name": "alquilerFamiliar",
+          "type": 6
+        },
+        {
+          "id": "55:1424084299052327827",
+          "name": "aseoLimpieza",
+          "type": 6
+        },
+        {
+          "id": "56:4950336369020540162",
+          "name": "vestimentaCalzado",
+          "type": 6
+        },
+        {
+          "id": "57:576637633927403981",
+          "name": "transporteFamiliar",
+          "type": 6
+        },
+        {
+          "id": "58:656645775339708801",
+          "name": "otrosGastosImprevistos",
+          "type": 6
+        },
+        {
+          "id": "59:616819294001242146",
+          "name": "pagoCreditosPrivados",
+          "type": 6
+        },
+        {
+          "id": "60:7547217465511777974",
+          "name": "totalConsumoFamiliar",
+          "type": 6
+        },
+        {
+          "id": "61:2535651216628681040",
+          "name": "ingresosFueraNegocio",
+          "type": 6
+        },
+        {
+          "id": "62:3697679095803391488",
+          "name": "saldoDisponibleUf",
+          "type": 6
+        },
+        {
+          "id": "63:8406259883632120147",
+          "name": "destinoExcedentes",
+          "type": 9
+        },
+        {
+          "id": "64:8534453476265640832",
+          "name": "numeroLicencia",
+          "type": 9
+        },
+        {
+          "id": "65:23883261765058422",
+          "name": "nombreInstitucionLicencia",
+          "type": 9
+        },
+        {
+          "id": "66:7602443471673795030",
+          "name": "fechaEmisionLicencia",
+          "type": 10
+        },
+        {
+          "id": "67:6716321684516872977",
+          "name": "fechaVencimientoLicencia",
+          "type": 10
+        },
+        {
+          "id": "68:5812489795643300536",
+          "name": "ingresoAnual",
+          "type": 6
+        },
+        {
+          "id": "69:6897316530755575640",
+          "name": "cliente1",
+          "type": 9
+        },
+        {
+          "id": "70:4292837024961664278",
+          "name": "cliente2",
+          "type": 9
+        },
+        {
+          "id": "71:1117274167834778875",
+          "name": "cliente3",
+          "type": 9
+        },
+        {
+          "id": "72:5574996807365083129",
+          "name": "proveedor1",
+          "type": 9
+        },
+        {
+          "id": "73:3300313979340191366",
+          "name": "proveedor2",
+          "type": 9
+        },
+        {
+          "id": "74:8469048417752993356",
+          "name": "proveedor3",
+          "type": 9
+        },
+        {
+          "id": "75:7726183365023309514",
+          "name": "fechaVerificacion1",
+          "type": 10
+        },
+        {
+          "id": "76:5081322052388377354",
+          "name": "nombreReferencia1",
+          "type": 9
+        },
+        {
+          "id": "77:3733996081763864470",
+          "name": "cedulaReferencia1",
+          "type": 9
+        },
+        {
+          "id": "78:7020360617348126394",
+          "name": "direccionReferencia1",
+          "type": 9
+        },
+        {
+          "id": "79:3508593969246344360",
+          "name": "telefonoReferencia1",
+          "type": 9
+        },
+        {
+          "id": "80:7414967045776049302",
+          "name": "lugarTrabajoReferencia1",
+          "type": 9
+        },
+        {
+          "id": "81:2863800552637236502",
+          "name": "aniosConocerReferido1",
+          "type": 6
+        },
+        {
+          "id": "82:5691713494611455469",
+          "name": "parentescoReferenciaCodigo1",
+          "type": 9
+        },
+        {
+          "id": "83:5005897273890532120",
+          "name": "resultadoVerificacion1",
+          "type": 9
+        },
+        {
+          "id": "84:6996484873977480390",
+          "name": "fechaVerificacion2",
+          "type": 10
+        },
+        {
+          "id": "85:5962468211434792917",
+          "name": "nombreReferencia2",
+          "type": 9
+        },
+        {
+          "id": "86:7073528799040119580",
+          "name": "cedulaReferencia2",
+          "type": 9
+        },
+        {
+          "id": "87:8371704688300626577",
+          "name": "direccionReferencia2",
+          "type": 9
+        },
+        {
+          "id": "88:427914485424833600",
+          "name": "telefonoReferencia2",
+          "type": 9
+        },
+        {
+          "id": "89:4077438174501985445",
+          "name": "lugarTrabajoReferencia2",
+          "type": 9
+        },
+        {
+          "id": "90:2536403937938955132",
+          "name": "aniosConocerReferido2",
+          "type": 6
+        },
+        {
+          "id": "91:6327704077486711823",
+          "name": "parentescoReferenciaCodigo2",
+          "type": 9
+        },
+        {
+          "id": "92:2604675598571724577",
+          "name": "resultadoVerificacion2",
+          "type": 9
+        },
+        {
+          "id": "93:4456010135222331707",
+          "name": "usuarioCreacion",
+          "type": 9
+        },
+        {
+          "id": "94:3368727304840581801",
+          "name": "maquinaCreacion",
+          "type": 9
+        },
+        {
+          "id": "95:9022428812818966633",
+          "name": "fechaVerificacion3",
+          "type": 10
+        },
+        {
+          "id": "96:3470592732361510715",
+          "name": "nombreReferencia3",
+          "type": 9
+        },
+        {
+          "id": "97:6013815562659516294",
+          "name": "cedulaReferencia3",
+          "type": 9
+        },
+        {
+          "id": "98:5879120863305840199",
+          "name": "direccionReferencia3",
+          "type": 9
+        },
+        {
+          "id": "99:7647279473877475234",
+          "name": "telefonoReferencia3",
+          "type": 9
+        },
+        {
+          "id": "100:5494651002219111658",
+          "name": "lugarTrabajoReferencia3",
+          "type": 9
+        },
+        {
+          "id": "101:6429076033581876597",
+          "name": "aniosConocerReferido3",
+          "type": 6
+        },
+        {
+          "id": "102:8976349350460288298",
+          "name": "parentescoReferenciaCodigo3",
+          "type": 9
+        },
+        {
+          "id": "103:647672199789565712",
+          "name": "resultadoVerificacion3",
+          "type": 9
+        },
+        {
+          "id": "104:3156848277958449595",
+          "name": "salud",
+          "type": 6
+        },
+        {
+          "id": "105:4746597222491699990",
+          "name": "permisoOperacionNombreInstitucion",
+          "type": 9
+        },
+        {
+          "id": "106:7866690379058766683",
+          "name": "permisoOperacionFechaEmision",
+          "type": 10
+        },
+        {
+          "id": "107:8891361480571017025",
+          "name": "permisoOperacionFechaVencimiento",
+          "type": 10
+        },
+        {
+          "id": "108:1877667460915232210",
+          "name": "permisoOperacionNumero",
+          "type": 9
+        },
+        {
+          "id": "109:3512944322690313468",
+          "name": "objEmpleadoVerificaReferenciaID1",
+          "type": 9
+        },
+        {
+          "id": "110:4405107681834466133",
+          "name": "objEmpleadoVerificaReferenciaID2",
+          "type": 9
+        },
+        {
+          "id": "111:7690887922722482782",
+          "name": "objEmpleadoVerificaReferenciaID3",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "41:8943522521069133746",
+  "lastEntityId": "42:2304388623674565835",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
