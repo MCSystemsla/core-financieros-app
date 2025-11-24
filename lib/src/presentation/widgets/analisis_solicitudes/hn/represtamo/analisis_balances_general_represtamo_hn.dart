@@ -131,7 +131,8 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.reservas.toCurrencyString(),
+                initialValue:
+                    state.reservas.toCurrencyString().toNullIfEmptyOrZero(),
                 textAlign: TextAlign.end,
                 title: 'Reservas:',
                 icon: const Icon(Icons.document_scanner),
@@ -152,7 +153,9 @@ class _AnalisisBalanceGeneralReprestamoHNState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                initialValue: state.cuentasAhorro.toCurrencyString(),
+                initialValue: state.cuentasAhorro
+                    .toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 textAlign: TextAlign.end,
                 title: 'Cuentas ahorro:',
                 icon: const Icon(Icons.document_scanner),
