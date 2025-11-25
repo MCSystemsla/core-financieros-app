@@ -2,8 +2,10 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +42,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            color: const Color(0xfff9fafb), // gris premium
+            color: const Color(0xfff9fafb),
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(28),
             ),
@@ -67,7 +69,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                 child: ListView(
                   controller: controller,
                   children: [
-                    _item(
+                    SelectableCardItem(
                       icon: Icons.dashboard_customize_rounded,
                       color: const Color(0xff1554F6),
                       title: 'Registrar Analisis',
@@ -89,7 +91,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         ),
                       },
                     ),
-                    _item(
+                    SelectableCardItem(
                       icon: Icons.business_center_outlined,
                       color: const Color(0xffF6153F),
                       title: 'Registrar Plan de inversion',
@@ -106,14 +108,22 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         ),
                       },
                     ),
-                    _item(
+                    SelectableCardItem(
                       icon: Icons.swap_horiz_rounded,
                       color: const Color(0xff0D9488),
                       title: 'Registar Fiadores',
                       subtitle: 'Crear Terceros',
-                      onTap: () => Navigator.pop(context, 'transferencia'),
+                      onTap: () => {
+                        context.pop(),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => const FiadoresHnScreen(),
+                          ),
+                        )
+                      },
                     ),
-                    _item(
+                    SelectableCardItem(
                       icon: Icons.pie_chart_rounded,
                       color: const Color(0xff6D28D9),
                       title: 'Registrar Garantias',
@@ -129,57 +139,4 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
       },
     );
   }
-}
-
-Widget _item({
-  required IconData icon,
-  required Color color,
-  required String title,
-  required String subtitle,
-  required VoidCallback onTap,
-}) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 14),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.04),
-          blurRadius: 12,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
-    child: ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      leading: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Icon(icon, size: 26, color: color),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: Color(0xff1F2937),
-        ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          fontSize: 13,
-          color: Color(0xff6B7280),
-        ),
-      ),
-      onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
-    ),
-  );
 }

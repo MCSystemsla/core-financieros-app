@@ -1,0 +1,378 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
+class AnalisisFiadoresDatosGenerales extends StatefulWidget {
+  final String? cedula;
+  final String? primerNombre;
+  final String? segundoNombre;
+  final String? primerApellido;
+  final String? segundoApellido;
+  final DateTime? fechaNacimiento;
+  final String? sexo;
+  final String? pais;
+  final String? departamento;
+  final String? municipio;
+  final String? direccion;
+  final DateTime? fechaEmision;
+  final DateTime? fechaExpira;
+  final String? tipoDocumento;
+  final PageController pageController;
+  const AnalisisFiadoresDatosGenerales({
+    super.key,
+    required this.pageController,
+    this.cedula,
+    this.primerNombre,
+    this.segundoNombre,
+    this.primerApellido,
+    this.segundoApellido,
+    this.fechaNacimiento,
+    this.sexo,
+    this.pais,
+    this.departamento,
+    this.municipio,
+    this.direccion,
+    this.fechaEmision,
+    this.fechaExpira,
+    this.tipoDocumento,
+  });
+
+  @override
+  State<AnalisisFiadoresDatosGenerales> createState() =>
+      _AnalisisFiadoresDatosGeneralesState();
+}
+
+class _AnalisisFiadoresDatosGeneralesState
+    extends State<AnalisisFiadoresDatosGenerales> {
+  CatalogoLocalDb? edadMinima;
+  CatalogoLocalDb? edadMaxima;
+  final localDpProvider = global<SolicitudesHnBoxService>();
+  DateTime? _selectedDate;
+  DateTime? fechaVencimientoCedula;
+  DateTime? fechaEmisionCedula;
+  DateTime? fechaNacimiento;
+
+  @override
+  void initState() {
+    super.initState();
+    edadMinima = global<SolicitudesHnBoxService>()
+        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+    edadMaxima = global<SolicitudesHnBoxService>()
+        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+    fechaEmisionCedula = widget.fechaEmision;
+    fechaVencimientoCedula = widget.fechaExpira;
+    fechaNacimiento = widget.fechaNacimiento;
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    // final DateTime minFechaVencimiento = DateTime(
+    //   fechaEmisionCedula!.year + 10,
+    //   fechaEmisionCedula!.month,
+    //   fechaEmisionCedula!.day,
+    // );
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      keyboardType: TextInputType.datetime,
+      firstDate: DateTime(1930),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != _selectedDate) {
+      if (!context.mounted) return;
+      if (picked.isBefore(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser antes a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+
+      _selectedDate = picked;
+      fechaVencimientoCedula = picked;
+      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
+      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
+      //             fechaVencimientoCedula:
+      //                 _selectedDate?.toUtc().toIso8601String(),
+      //           ),
+      //     );
+      setState(() {});
+    }
+  }
+
+  Future<void> selectEmisionFecha(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaEmisionCedula,
+      firstDate: DateTime(1930),
+      lastDate: DateTime(2101),
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null && picked != fechaEmisionCedula) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+      fechaEmisionCedula = picked;
+      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
+      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
+      //             fechaEmisionCedula:
+      //                 fechaEmisionCedula?.toUtc().toIso8601String(),
+      //           ),
+      //     );
+      setState(() {});
+    }
+  }
+
+  Future<void> selectFechaNacimiento(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime eighteenYearsAgo = DateTime(
+      now.year - int.parse(edadMinima?.valor ?? '0'),
+      now.month,
+      now.day,
+    );
+    final DateTime maxAgeClient = DateTime(
+      now.year - int.parse(edadMaxima?.valor ?? '0'),
+      now.month,
+      now.day,
+    );
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: fechaNacimiento,
+      firstDate: maxAgeClient,
+      lastDate: eighteenYearsAgo,
+      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
+    );
+    if (picked != null) {
+      if (!context.mounted) return;
+      if (picked.isAfter(DateTime.now())) {
+        CustomAlertDialog(
+          onDone: () => context.pop(),
+          context: context,
+          title: 'La Fecha no puede ser despues a la fecha actual',
+        ).showDialog(context, dialogType: DialogType.warning);
+        return;
+      }
+
+      fechaNacimiento = picked;
+      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
+      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
+      //             fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+      //           ),
+      //     );
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Gap(20),
+          Container(
+            margin: const EdgeInsets.all(18),
+            child: Text(
+              'Datos Generales',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
+          OutlineTextfieldWidget(
+            initialValue: widget.cedula,
+            readOnly: true,
+            title: 'Cedula Identidad:',
+            icon: const Icon(Icons.document_scanner),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            initialValue: widget.primerNombre,
+            title: 'Primer Nombre:',
+            icon: const Icon(Icons.document_scanner),
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            initialValue: widget.segundoNombre,
+            title: 'Segundo Nombre:',
+            icon: const Icon(Icons.document_scanner),
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            initialValue: widget.primerApellido,
+            title: 'Primer Apellido:',
+            icon: const Icon(Icons.document_scanner),
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            initialValue: widget.segundoApellido,
+            title: 'Segundo Apellido:',
+            icon: const Icon(Icons.document_scanner),
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'TIPODOCUMENTOPERSONA',
+            selectedItem: Item(
+              name: widget.tipoDocumento ?? '',
+              value: widget.tipoDocumento ?? '',
+            ),
+            title: 'Tipo de Documento:',
+            onChanged: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            hintText: fechaNacimiento?.selectorFormat(),
+            title: 'Fecha de Nacimiento:',
+            icon: const Icon(Icons.document_scanner),
+            readOnly: true,
+            onTap: () => selectFechaNacimiento(context),
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            title: 'Personas a su cargo:',
+            icon: const Icon(Icons.document_scanner),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          CatalogoValorNacionalidad(
+            codigo: 'PAIS',
+            title: 'Pais de nacimiento:',
+            onChanged: (value) {},
+            hintText: 'Selecciona una opcion',
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            hintText: fechaEmisionCedula?.selectorFormat(),
+            title: 'Fecha emision cedula:',
+            icon: const Icon(Icons.document_scanner),
+            readOnly: true,
+            onChange: (value) {},
+            onTap: () => selectEmisionFecha(context),
+          ),
+          if (widget.tipoDocumento != 'DNI') ...[
+            const Gap(20),
+            OutlineTextfieldWidget(
+              hintText: fechaVencimientoCedula?.selectorFormat(),
+              title: 'Fecha Vencimiento cedula:',
+              icon: const Icon(Icons.document_scanner),
+              readOnly: true,
+              onChange: (value) {},
+              onTap: () => selectDate(context),
+            ),
+          ],
+          const Gap(20),
+          SearchDropdownWidget(
+            selectedItem: Item(
+              name: widget.sexo ?? '',
+              value: widget.sexo ?? '',
+            ),
+            codigo: 'SEXO',
+            title: 'Sexo:',
+            onChanged: (value) {},
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'ESTADOCIVIL',
+            title: 'Estado civil:',
+            onChanged: (value) {},
+          ),
+          const Gap(20),
+          SearchDropdownWidget(
+            codigo: 'RELACIONPERSONAS',
+            title: 'Relacion con el cliente:',
+            onChanged: (value) {},
+          ),
+          const Gap(20),
+          OutlineTextfieldWidget(
+            title: 'RTN:',
+            icon: const Icon(Icons.document_scanner),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChange: (value) {},
+          ),
+          const Gap(20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CustomElevatedButton(
+              onPressed: () {
+                widget.pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+              text: 'Siguiente',
+              color: Colors.green,
+            ),
+          ),
+          const Gap(20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CustomOutLineButton(
+              onPressed: () {
+                context.pop();
+              },
+              text: 'Cancelar',
+              textColor: AppColors.red,
+              color: AppColors.red,
+            ),
+          ),
+          const Gap(20),
+        ],
+      ),
+    );
+  }
+}

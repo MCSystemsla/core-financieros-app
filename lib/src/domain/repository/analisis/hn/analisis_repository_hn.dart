@@ -4,6 +4,8 @@ import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
@@ -21,6 +23,13 @@ abstract class AnalisisRepositoryHn {
   });
   Future<void> createAnalisisPlanInversion({
     required AnalisisPlanDeInversion analisisPlanDeInversion,
+  });
+  Future<void> createAnalisisFiador({
+    required AnalisisFiadoresHn analisisFiadoresHn,
+  });
+  Future<AnalisisFiadoresSearchClientByDocument?> getAnalisisFiadorByDocument({
+    required String cedula,
+    required String tipoDocumentoCodigo,
   });
 }
 
@@ -101,6 +110,51 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisFiador({
+    required AnalisisFiadoresHn analisisFiadoresHn,
+  }) async {
+    final endpoint = CreateAnalisisFiadorEndpoinHN(
+      analisisFiadoresHn: analisisFiadoresHn,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisFiadoresSearchClientByDocument?> getAnalisisFiadorByDocument({
+    required String cedula,
+    required String tipoDocumentoCodigo,
+  }) async {
+    final endpoint = AnalisisObtenerAutoCompletadoEndpointHN(
+      cedula: cedula,
+      tipoDocumentoCodigo: tipoDocumentoCodigo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = AnalisisFiadoresSearchClientByDocument.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 
 class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
@@ -94,4 +95,50 @@ class PlanDeInversionEndpointHN extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => analisisPlanDeInversion.toJson();
+}
+
+class AnalisisObtenerAutoCompletadoEndpointHN extends Endpoint {
+  final String cedula;
+  final String tipoDocumentoCodigo;
+
+  AnalisisObtenerAutoCompletadoEndpointHN({
+    required this.cedula,
+    required this.tipoDocumentoCodigo,
+  });
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-fiador/obtener-auto-completado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'tipoDocumentoCodigo': tipoDocumentoCodigo,
+        'cedula': cedula,
+      };
+}
+
+class CreateAnalisisFiadorEndpoinHN extends Endpoint {
+  final AnalisisFiadoresHn analisisFiadoresHn;
+
+  CreateAnalisisFiadorEndpoinHN({
+    required this.analisisFiadoresHn,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-fiador/create';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisFiadoresHn.toJson();
 }
