@@ -86,9 +86,11 @@ class PlanInversionScreen extends StatelessWidget {
                       final e = state.planInversion[index];
 
                       return AnalisisCardVentasDay(
-                        subtitle: e.descripcion,
+                        subtitle: e.total.toCurrencyString(
+                          mantissaLength: 0,
+                        ),
                         title: e.cantidad.toString(),
-                        description: e.total.toCurrencyString(),
+                        description: e.descripcion,
                         onTap: () => {
                           showHistorialCreditoOptionsBottomSheet(
                             context: context,
