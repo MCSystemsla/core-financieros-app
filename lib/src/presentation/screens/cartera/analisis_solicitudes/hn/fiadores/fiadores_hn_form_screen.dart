@@ -21,9 +21,11 @@ enum FiadoresHnFormType {
 
 class FiadoresHnFormScreen extends StatelessWidget {
   final FiadoresHnFormType type;
+  final int numeroSolicitud;
   const FiadoresHnFormScreen({
     super.key,
     required this.type,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -35,7 +37,7 @@ class FiadoresHnFormScreen extends StatelessWidget {
         return BlocProvider(
           create: (ctx) => AnalisisFiadoresCubit(
             AnalisisRepositoryHNImpl(),
-          )..setRelacionCliente(type.codigo),
+          )..setRelacionCliente(type.codigo, numeroSolicitud),
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Crear Fiador'),

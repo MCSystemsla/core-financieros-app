@@ -118,7 +118,10 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (ctx) => const FiadoresHnScreen(),
+                            builder: (ctx) => FiadoresHnScreen(
+                              numeroSolicitud:
+                                  int.tryParse(numeroSolicitud) ?? 0,
+                            ),
                           ),
                         )
                       },

@@ -207,6 +207,8 @@ class AnalisisFiadoresState extends Equatable {
 
   @override
   List<Object> get props => [
+        status,
+        errorMsg,
         database,
         numeroSolicitud,
         nombre1,

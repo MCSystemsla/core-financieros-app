@@ -23,7 +23,12 @@ import 'package:go_router/go_router.dart';
 
 class FiadoresSearchByDocumentScreen extends StatelessWidget {
   final FiadoresHnFormType typeForm;
-  const FiadoresSearchByDocumentScreen({super.key, required this.typeForm});
+  final int numeroSolicitud;
+  const FiadoresSearchByDocumentScreen({
+    super.key,
+    required this.typeForm,
+    required this.numeroSolicitud,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,7 @@ class FiadoresSearchByDocumentScreen extends StatelessWidget {
         ),
         body: _UserCedulaForm(
           typeForm: typeForm,
+          numeroSolicitud: numeroSolicitud,
         ),
       ),
     );
@@ -45,8 +51,10 @@ class FiadoresSearchByDocumentScreen extends StatelessWidget {
 
 class _UserCedulaForm extends StatefulWidget {
   final FiadoresHnFormType typeForm;
+  final int numeroSolicitud;
   const _UserCedulaForm({
     required this.typeForm,
+    required this.numeroSolicitud,
   });
 
   @override
@@ -103,6 +111,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                                 context.read<AnalisisSearchByDocumentCubit>(),
                             child: FiadoresHnFormScreen(
                               type: widget.typeForm,
+                              numeroSolicitud: widget.numeroSolicitud,
                             ),
                           ),
                         ),
@@ -126,6 +135,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                           value: context.read<AnalisisSearchByDocumentCubit>(),
                           child: FiadoresHnFormScreen(
                             type: widget.typeForm,
+                            numeroSolicitud: widget.numeroSolicitud,
                           ),
                         ),
                       ),
@@ -141,6 +151,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                       value: context.read<AnalisisSearchByDocumentCubit>(),
                       child: FiadoresHnFormScreen(
                         type: widget.typeForm,
+                        numeroSolicitud: widget.numeroSolicitud,
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -10,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AnalisisFiadoresActividades extends StatefulWidget {
@@ -26,7 +28,8 @@ class AnalisisFiadoresActividades extends StatefulWidget {
 }
 
 class _AnalisisFiadoresActividadesState
-    extends State<AnalisisFiadoresActividades> {
+    extends State<AnalisisFiadoresActividades>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   String? actividadEconomica1;
   String? actividadEconomica2;
@@ -36,6 +39,8 @@ class _AnalisisFiadoresActividadesState
   bool isApnfd3 = false;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<AnalisisFiadoresCubit>();
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -55,6 +60,11 @@ class _AnalisisFiadoresActividadesState
                   actividadEconomica1 = item.valor;
                   isApnfd = item.esAPNFD;
                 });
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    actividadEconomicaCnbs1Codigo: item.valor,
+                  ),
+                );
               },
               title: 'Actividad Económica CNBS',
             ),
@@ -72,7 +82,13 @@ class _AnalisisFiadoresActividadesState
                 textInputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 title: 'Descripción de la Actividad Económica',
-                onChange: (value) {},
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      actividadEconomicaDescripcion1: value,
+                    ),
+                  );
+                },
               ),
             ],
             const Gap(30),
@@ -83,6 +99,11 @@ class _AnalisisFiadoresActividadesState
                   actividadEconomica2 = item.valor;
                   isApnfd2 = item.esAPNFD;
                 });
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    actividadEconomicaCnbs2Codigo: item.valor,
+                  ),
+                );
               },
               hintText: 'selecciona actividad economica',
               title: 'Actividad Económica CNBS 2',
@@ -103,7 +124,13 @@ class _AnalisisFiadoresActividadesState
                 textInputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 title: 'Descripción de la Actividad Económica',
-                onChange: (value) {},
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      actividadEconomicaDescripcion2: value,
+                    ),
+                  );
+                },
               ),
             ],
             const Gap(30),
@@ -115,6 +142,11 @@ class _AnalisisFiadoresActividadesState
                   actividadEconomica3 = item.nombre;
                   isApnfd3 = item.esAPNFD;
                 });
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    actividadEconomicaCnbs3Codigo: item.valor,
+                  ),
+                );
               },
               title: 'Actividad Económica CNBS 3',
               isRequired: true,
@@ -134,7 +166,13 @@ class _AnalisisFiadoresActividadesState
                 textInputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 title: 'Descripción de la Actividad Económica',
-                onChange: (value) {},
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      actividadEconomicaDescripcion3: value,
+                    ),
+                  );
+                },
               ),
             ],
             if (isApnfd || isApnfd2 || isApnfd3) ...[
@@ -150,7 +188,13 @@ class _AnalisisFiadoresActividadesState
                 ],
                 hintText: '¿Ejerce APNFD?',
                 title: '¿Ejerce APNFD?',
-                onChanged: (value) {},
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      ejerceApnfd: value?.value,
+                    ),
+                  );
+                },
               ),
             ],
             const Gap(30),
@@ -191,4 +235,7 @@ class _AnalisisFiadoresActividadesState
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

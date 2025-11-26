@@ -13,9 +13,17 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
   AnalisisFiadoresCubit(this._repository) : super(AnalisisFiadoresInitial());
 
   Future<void> createAnalisisFiador() async {
+    final totalIngresosFamiliares =
+        state.salarioNetoCordoba + state.otrosIngresosCordoba;
+    final ganaciasNegocio =
+        state.ventaNegocio + state.costoVenta - state.gastosOperativos;
+    final saldoDisponible = totalIngresosFamiliares +
+        ganaciasNegocio +
+        state.otrosIngresos -
+        state.consumoFamiliar;
     emit(state.copyWith(status: Status.inProgress));
     try {
-      _repository.createAnalisisFiador(
+      await _repository.createAnalisisFiador(
         analisisFiadoresHn: AnalisisFiadoresHn(
           database: state.database,
           numeroSolicitud: state.numeroSolicitud,
@@ -62,15 +70,15 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           telefonoFamiliarCercano: state.telefonoFamiliarCercano,
           salarioNetoCordoba: state.salarioNetoCordoba,
           otrosIngresosCordoba: state.otrosIngresosCordoba,
-          totalIngresosFamiliares: state.totalIngresosFamiliares,
+          totalIngresosFamiliares: totalIngresosFamiliares,
           ventaNegocio: state.ventaNegocio,
           costoVenta: state.costoVenta,
           gastosOperativos: state.gastosOperativos,
-          gananciaNegocio: state.gananciaNegocio,
+          gananciaNegocio: ganaciasNegocio,
           otrosIngresos: state.otrosIngresos,
           fuenteOtrosIngresos: state.fuenteOtrosIngresos,
           consumoFamiliar: state.consumoFamiliar,
-          saldoDisponible: state.saldoDisponible,
+          saldoDisponible: saldoDisponible.toInt(),
           activo: state.activo,
           sucursal: state.sucursal,
           usuarioCreacion: state.usuarioCreacion,
@@ -138,9 +146,38 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
     // autoSaveHelper.trigger();
   }
 
-  void setRelacionCliente(String? relacionClienteCodigo) {
+  void setRelacionCliente(String? tipoFiadorCodigo, int numeroSolicitud) {
     emit(state.copyWith(
-      relacionClienteCodigo: relacionClienteCodigo,
+      tipoFiadorCodigo: tipoFiadorCodigo,
+      numeroSolicitud: numeroSolicitud,
     ));
+  }
+
+  void createHistorialCredito({required HistorialCredito historialCredito}) {
+    emit(
+      state.copyWith(
+        historialCredito: [...state.historialCredito, historialCredito],
+      ),
+    );
+  }
+
+  void editHistorialCredito({required HistorialCredito historialCredito}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito
+            .map((e) => e.uuid == historialCredito.uuid ? historialCredito : e)
+            .toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.where((e) {
+          return e.uuid != uuid;
+        }).toList(),
+      ),
+    );
   }
 }

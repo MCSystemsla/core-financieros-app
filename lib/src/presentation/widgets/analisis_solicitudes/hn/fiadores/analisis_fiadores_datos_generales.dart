@@ -1,9 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -60,7 +62,8 @@ class AnalisisFiadoresDatosGenerales extends StatefulWidget {
 }
 
 class _AnalisisFiadoresDatosGeneralesState
-    extends State<AnalisisFiadoresDatosGenerales> {
+    extends State<AnalisisFiadoresDatosGenerales>
+    with AutomaticKeepAliveClientMixin {
   CatalogoLocalDb? edadMinima;
   CatalogoLocalDb? edadMaxima;
   final localDpProvider = global<SolicitudesHnBoxService>();
@@ -79,6 +82,22 @@ class _AnalisisFiadoresDatosGeneralesState
     fechaEmisionCedula = widget.fechaEmision;
     fechaVencimientoCedula = widget.fechaExpira;
     fechaNacimiento = widget.fechaNacimiento;
+    final cubit = context.read<AnalisisFiadoresCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
+        fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+        fechaVencimientoCedula: _selectedDate?.toUtc().toIso8601String(),
+        cedula: widget.cedula,
+        nombre1: widget.primerNombre,
+        nombre2: widget.segundoNombre,
+        apellido1: widget.primerApellido,
+        apellido2: widget.segundoApellido,
+        sexoCodigo: widget.sexo,
+        tipoDocumentoCodigo: widget.tipoDocumento,
+        direccion: widget.direccion,
+      ),
+    );
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -108,12 +127,12 @@ class _AnalisisFiadoresDatosGeneralesState
 
       _selectedDate = picked;
       fechaVencimientoCedula = picked;
-      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
-      //             fechaVencimientoCedula:
-      //                 _selectedDate?.toUtc().toIso8601String(),
-      //           ),
-      //     );
+      context.read<AnalisisFiadoresCubit>().onFieldChanged(
+            () => context.read<AnalisisFiadoresCubit>().state.copyWith(
+                  fechaVencimientoCedula:
+                      _selectedDate?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -137,12 +156,12 @@ class _AnalisisFiadoresDatosGeneralesState
         return;
       }
       fechaEmisionCedula = picked;
-      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
-      //             fechaEmisionCedula:
-      //                 fechaEmisionCedula?.toUtc().toIso8601String(),
-      //           ),
-      //     );
+      context.read<AnalisisFiadoresCubit>().onFieldChanged(
+            () => context.read<AnalisisFiadoresCubit>().state.copyWith(
+                  fechaEmisionCedula:
+                      fechaEmisionCedula?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
@@ -179,200 +198,289 @@ class _AnalisisFiadoresDatosGeneralesState
       }
 
       fechaNacimiento = picked;
-      // context.read<SolicitudNuevaMenorHnCubit>().onFieldChanged(
-      //       () => context.read<SolicitudNuevaMenorHnCubit>().state.copyWith(
-      //             fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
-      //           ),
-      //     );
+      context.read<AnalisisFiadoresCubit>().onFieldChanged(
+            () => context.read<AnalisisFiadoresCubit>().state.copyWith(
+                  fechaNacimiento: fechaNacimiento?.toUtc().toIso8601String(),
+                ),
+          );
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Gap(20),
-          Container(
-            margin: const EdgeInsets.all(18),
-            child: Text(
-              'Datos Generales',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
-          ),
-          OutlineTextfieldWidget(
-            initialValue: widget.cedula,
-            readOnly: true,
-            title: 'Cedula Identidad:',
-            icon: const Icon(Icons.document_scanner),
-            textInputType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
+    super.build(context);
+    final cubit = context.read<AnalisisFiadoresCubit>();
+    return BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(20),
+              Container(
+                margin: const EdgeInsets.all(18),
+                child: Text(
+                  'Datos Generales',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+              ),
+              OutlineTextfieldWidget(
+                initialValue: widget.cedula,
+                // readOnly: true,
+                title: 'Cedula Identidad:',
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChange: (value) {
+                  cubit.onFieldChanged(() => cubit.state.copyWith(
+                        cedula: value,
+                      ));
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: widget.primerNombre,
+                title: 'Primer Nombre:',
+                icon: const Icon(Icons.document_scanner),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombre1: value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: widget.segundoNombre,
+                title: 'Segundo Nombre:',
+                icon: const Icon(Icons.document_scanner),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      nombre2: value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: widget.primerApellido,
+                title: 'Primer Apellido:',
+                icon: const Icon(Icons.document_scanner),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                validator: (value) => ClassValidator.validateRequired(value),
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      apellido1: value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: widget.segundoApellido,
+                title: 'Segundo Apellido:',
+                icon: const Icon(Icons.document_scanner),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      apellido2: value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              SearchDropdownWidget(
+                codigo: 'TIPODOCUMENTOPERSONA',
+                selectedItem: Item(
+                  name: widget.tipoDocumento ?? '',
+                  value: widget.tipoDocumento ?? '',
+                ),
+                title: 'Tipo de Documento:',
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tipoDocumentoCodigo: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaNacimiento?.selectorFormat(),
+                title: 'Fecha de Nacimiento:',
+                icon: const Icon(Icons.document_scanner),
+                readOnly: true,
+                validator: (value) => ClassValidator.validateRequired(
+                    fechaNacimiento?.selectorFormat()),
+                onTap: () => selectFechaNacimiento(context),
+                onChange: (value) {},
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                title: 'Personas a su cargo:',
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      personasACargo: int.tryParse(value) ?? 0,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              CatalogoValorNacionalidad(
+                codigo: 'PAIS',
+                title: 'Pais de nacimiento:',
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      paisNacimientoCodigo: value?.valor,
+                    ),
+                  );
+                },
+                hintText: 'Selecciona una opcion',
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaEmisionCedula?.selectorFormat(),
+                title: 'Fecha emision cedula:',
+                icon: const Icon(Icons.document_scanner),
+                readOnly: true,
+                onChange: (value) {},
+                onTap: () => selectEmisionFecha(context),
+              ),
+              if (widget.tipoDocumento != 'DNI') ...[
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  hintText: fechaVencimientoCedula?.selectorFormat(),
+                  title: 'Fecha Vencimiento cedula:',
+                  icon: const Icon(Icons.document_scanner),
+                  readOnly: true,
+                  onChange: (value) {},
+                  onTap: () => selectDate(context),
+                ),
+              ],
+              const Gap(20),
+              SearchDropdownWidget(
+                selectedItem: Item(
+                  name: widget.sexo ?? '',
+                  value: widget.sexo ?? '',
+                ),
+                codigo: 'SEXO',
+                title: 'Sexo:',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      sexoCodigo: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              SearchDropdownWidget(
+                codigo: 'ESTADOCIVIL',
+                title: 'Estado civil:',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      estadoCivilCodigo: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              SearchDropdownWidget(
+                codigo: 'RELACIONPERSONAS',
+                title: 'Relacion con el cliente:',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                onChanged: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      relacionClienteCodigo: value?.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                title: 'RTN:',
+                icon: const Icon(Icons.document_scanner),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      rtn: value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomElevatedButton(
+                  onPressed: () {
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  text: 'Siguiente',
+                  color: Colors.green,
+                ),
+              ),
+              const Gap(20),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomOutLineButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  text: 'Cancelar',
+                  textColor: AppColors.red,
+                  color: AppColors.red,
+                ),
+              ),
+              const Gap(20),
             ],
-            onChange: (value) {},
           ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            initialValue: widget.primerNombre,
-            title: 'Primer Nombre:',
-            icon: const Icon(Icons.document_scanner),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            initialValue: widget.segundoNombre,
-            title: 'Segundo Nombre:',
-            icon: const Icon(Icons.document_scanner),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            initialValue: widget.primerApellido,
-            title: 'Primer Apellido:',
-            icon: const Icon(Icons.document_scanner),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            initialValue: widget.segundoApellido,
-            title: 'Segundo Apellido:',
-            icon: const Icon(Icons.document_scanner),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            codigo: 'TIPODOCUMENTOPERSONA',
-            selectedItem: Item(
-              name: widget.tipoDocumento ?? '',
-              value: widget.tipoDocumento ?? '',
-            ),
-            title: 'Tipo de Documento:',
-            onChanged: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            hintText: fechaNacimiento?.selectorFormat(),
-            title: 'Fecha de Nacimiento:',
-            icon: const Icon(Icons.document_scanner),
-            readOnly: true,
-            onTap: () => selectFechaNacimiento(context),
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            title: 'Personas a su cargo:',
-            icon: const Icon(Icons.document_scanner),
-            textInputType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          CatalogoValorNacionalidad(
-            codigo: 'PAIS',
-            title: 'Pais de nacimiento:',
-            onChanged: (value) {},
-            hintText: 'Selecciona una opcion',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            hintText: fechaEmisionCedula?.selectorFormat(),
-            title: 'Fecha emision cedula:',
-            icon: const Icon(Icons.document_scanner),
-            readOnly: true,
-            onChange: (value) {},
-            onTap: () => selectEmisionFecha(context),
-          ),
-          if (widget.tipoDocumento != 'DNI') ...[
-            const Gap(20),
-            OutlineTextfieldWidget(
-              hintText: fechaVencimientoCedula?.selectorFormat(),
-              title: 'Fecha Vencimiento cedula:',
-              icon: const Icon(Icons.document_scanner),
-              readOnly: true,
-              onChange: (value) {},
-              onTap: () => selectDate(context),
-            ),
-          ],
-          const Gap(20),
-          SearchDropdownWidget(
-            selectedItem: Item(
-              name: widget.sexo ?? '',
-              value: widget.sexo ?? '',
-            ),
-            codigo: 'SEXO',
-            title: 'Sexo:',
-            onChanged: (value) {},
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            codigo: 'ESTADOCIVIL',
-            title: 'Estado civil:',
-            onChanged: (value) {},
-          ),
-          const Gap(20),
-          SearchDropdownWidget(
-            codigo: 'RELACIONPERSONAS',
-            title: 'Relacion con el cliente:',
-            onChanged: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            title: 'RTN:',
-            icon: const Icon(Icons.document_scanner),
-            textInputType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomElevatedButton(
-              onPressed: () {
-                widget.pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                );
-              },
-              text: 'Siguiente',
-              color: Colors.green,
-            ),
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomOutLineButton(
-              onPressed: () {
-                context.pop();
-              },
-              text: 'Cancelar',
-              textColor: AppColors.red,
-              color: AppColors.red,
-            ),
-          ),
-          const Gap(20),
-        ],
-      ),
+        );
+      },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

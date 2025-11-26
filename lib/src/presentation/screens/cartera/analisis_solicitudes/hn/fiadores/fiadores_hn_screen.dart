@@ -5,7 +5,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/select
 import 'package:flutter/material.dart';
 
 class FiadoresHnScreen extends StatelessWidget {
-  const FiadoresHnScreen({super.key});
+  final int numeroSolicitud;
+  const FiadoresHnScreen({super.key, required this.numeroSolicitud});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,9 @@ class FiadoresHnScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => const FiadoresSearchByDocumentScreen(
+              builder: (ctx) => FiadoresSearchByDocumentScreen(
                 typeForm: FiadoresHnFormType.conyugue,
+                numeroSolicitud: numeroSolicitud,
               ),
             ),
           );
@@ -35,8 +37,9 @@ class FiadoresHnScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => const FiadoresSearchByDocumentScreen(
+              builder: (ctx) => FiadoresSearchByDocumentScreen(
                 typeForm: FiadoresHnFormType.aval,
+                numeroSolicitud: numeroSolicitud,
               ),
             ),
           );
@@ -51,8 +54,9 @@ class FiadoresHnScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => const FiadoresSearchByDocumentScreen(
+              builder: (ctx) => FiadoresSearchByDocumentScreen(
                 typeForm: FiadoresHnFormType.codeudor,
+                numeroSolicitud: numeroSolicitud,
               ),
             ),
           );
