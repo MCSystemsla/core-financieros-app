@@ -113,6 +113,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -183,6 +184,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -279,6 +281,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -417,8 +420,9 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
-                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
+                textInputType: TextInputType.phone,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
@@ -433,8 +437,9 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
-                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
+                textInputType: TextInputType.phone,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(

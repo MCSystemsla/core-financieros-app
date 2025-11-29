@@ -164,7 +164,7 @@ class AnalisisAsalariadoHn {
       'AmortizacionesDeudas': amortizacionesDeudas,
       'OtrosEgresos': otrosEgresos,
       'TotalEgresos': totalEgresos,
-      'Disponible': disponible,
+      'Disponible': disponible.round(),
       'NombreReferencia1': nombreReferencia1,
       'CedulaReferencia1': cedulaReferencia1,
       'DireccionReferencia1': direccionReferencia1,
@@ -200,7 +200,7 @@ class AnalisisAsalariadoHn {
       'FechaVerificacion3': fechaVerificacion3?.toUtc().toIso8601String(),
     };
     data.removeWhere(
-      (key, value) => value == null || value == '' || value == 0,
+      (key, value) => value == null || value == '',
     );
     return data;
   }

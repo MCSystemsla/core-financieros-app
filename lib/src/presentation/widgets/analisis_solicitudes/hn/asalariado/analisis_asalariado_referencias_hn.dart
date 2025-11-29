@@ -218,7 +218,9 @@ class _AnalisisAsalariadoReferenciasHnState
                   title: 'Resultado verificación',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
-                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(resultadoVerificacion1: value),
@@ -405,7 +407,9 @@ class _AnalisisAsalariadoReferenciasHnState
                   title: 'Resultado verificación 2',
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
-                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(resultadoVerificacion2: value),
@@ -591,7 +595,9 @@ class _AnalisisAsalariadoReferenciasHnState
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
-                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => state.copyWith(resultadoVerificacion3: value),

@@ -32,7 +32,6 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
   Future<void> createAnalisisReprestamo() async {
     final incobrablesxCobrar = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
-    // final cicloVenta = getCicloVentasMensuales();
     final cicloVentaDiario = getCicloVentasDiarios();
     final totalComprasSemanas = getcomprasSemanasMensuales();
     final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
@@ -52,14 +51,8 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
     final comprasMensuales = state.cicloDeComprasSemanales.cicloCompra
         .fold(0, (sum, e) => sum + e.cantidadCompra);
 
-    // final totalComprasProveedores = state.comprasProveedorArticulo
-    //     .fold(0.0, (sum, e) => sum + e.totalCompraMensual);
-
-    final totalCuentasPorCobrar = state.cuentasPorCobrar
-        .fold<double>(0, (sum, e) => sum + e.totalMensualCredito);
-
-    // final totalAbonoCredito = state.cuentasPorCobrar
-    //     .fold<double>(0, (sum, e) => sum + e.abonoCredito);
+    // final totalCuentasPorCobrar = state.cuentasPorCobrar
+    //     .fold<double>(0, (sum, e) => sum + e.totalMensualCredito);
 
     final totalInventario =
         state.inventario.fold(0, (sum, element) => sum + element.total);
@@ -76,14 +69,9 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
     final totalClientes = state.cuentasPorCobrar
         .fold(0, (sum, element) => sum + element.totalMensualCredito);
 
-    final incobrables = totalCuentasxCobrar.toDouble() *
-        (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
-
-    final totalComprasMensuales = (state.cicloDeComprasSemanales.cicloCompra
-            .fold(0, (sum, e) => sum + e.cantidadCompra) /
-        4);
-    final ventasMensualProduccion = state.nivelProduccion
-        .fold(0, (sum, e) => sum + e.totalMensualProduccion);
+    final incobrables =
+        (totalCuentasxCobrar.toDouble() + state.adelantoProveedores) *
+            (double.tryParse(incobrablesxCobrar?.valor ?? '0') ?? 0);
 
     final totalActivos = (totalActivosFijos +
         (totalClientes -
@@ -94,13 +82,81 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
             state.cuentasAhorro +
             totalInventario));
 
-    final totalDisponibleActivo =
-        state.caja + state.reservas + state.cuentasAhorro;
+    final totalActivosCalc = state.caja + state.reservas + state.cuentasAhorro;
+
+    final totalMontosCuentasxCobrarSum = state.cuentasPorCobrar
+        .fold(0, (sum, element) => sum + element.montoCredito);
+
+    final totalCuentasxCobrarCalc =
+        (totalMontosCuentasxCobrarSum + state.adelantoProveedores) -
+            incobrables;
+
+    final totalProveedoresAdelantoCalc =
+        state.proveedores + state.adelantoClientes;
+
+    final totalInstAmigosCalc =
+        state.creditosInstFinancieras + state.prestamosAmigos;
+
+    final totalPasivosCalc = totalProveedoresAdelantoCalc + totalInstAmigosCalc;
+
+    final patimonioCalc = totalActivos - totalPasivosCalc;
+
+    final pasivosPatraimonioCalc = totalPasivosCalc + patimonioCalc;
+
+    final nivelProduccion = state.nivelProduccion.fold(
+      0,
+      (sum, e) => sum + e.totalMensualProduccion,
+    );
+
+    final ventasDeContado =
+        (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+
+    final totalIngresos = ventasDeContado + state.recuperaciones;
+
+    final porcentajeDeVenta = (state.inventario.fold(
+                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
+            (state.inventario.length))
+        .toStringAsFixed(2);
+
+    final totalCostosOperativosCal = (state.gastosPersonalAlimentacion +
+        state.subContratos +
+        state.alquilerlocal +
+        state.aguaElectricidad +
+        state.combustible +
+        state.transporte +
+        state.pagoCuotaCredito +
+        state.impuesto +
+        state.otros);
+
+    final porcentajeDeVentaTotalCal =
+        (totalIngresos * double.parse(porcentajeDeVenta));
+
+    final totalResultadoLiquido =
+        (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
+
+    final totalConsumoFamiliarCalc = state.alimentacion +
+        state.educacion +
+        state.aguaElectricidadGas +
+        state.alquilerFamiliar +
+        state.aseoLimpieza +
+        state.vestimentaCalzado +
+        state.transporteFamiliar +
+        state.otrosGastosImprevistos +
+        state.pagoCreditosPrivados;
+
+    final totalSaldoDisponibleUnidadFamiliarCal = porcentajeDeVentaTotalCal -
+        totalCostosOperativosCal -
+        totalConsumoFamiliarCalc +
+        state.ingresosFueraNegocio;
+
+    final totalIngresosAnual =
+        state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);
 
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.createAnalisisReprestamo(
         analisisSolicitudReprestamo: AnalisisReprestamoHn(
+          recuperaciones: state.recuperaciones,
           objEmpleadoVerificaReferenciaID1:
               state.objEmpleadoVerificaReferenciaID1,
           objEmpleadoVerificaReferenciaID2:
@@ -118,31 +174,31 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
           semanasNormales: totalComprasSemanas['semanasNormales'],
           semanasMalas: totalComprasSemanas['semanasMalas'],
           totalComprasMensuales: comprasMensuales,
-          ventasMensualesCompras: totalComprasMensuales.toInt(),
-          ventasMensualesProduccion: ventasMensualProduccion,
+          ventasMensualesCompras: state.cicloDeComprasSemanales.cicloCompra
+              .fold(0, (sum, e) => sum + e.cantidadCompra),
+          ventasMensualesProduccion: state.nivelProduccion
+              .fold(0, (sum, e) => sum + e.totalMensualProduccion),
           caja: state.caja,
           reservas: state.reservas,
           cuentasAhorro: state.cuentasAhorro,
-          totalDisponibleActivo: totalDisponibleActivo,
+          totalDisponibleActivo: totalActivosCalc,
           adelantoProveedores: state.adelantoProveedores,
           incobrables: incobrables.toInt(),
-          totalCuentasXCobrar: totalCuentasPorCobrar.toInt(),
+          totalCuentasXCobrar: totalCuentasxCobrarCalc.toInt(),
           totalInventario: totalInventario.toDouble(),
           totalActivosFijos: totalActivosFijos,
           totalActivos: totalActivos,
           proveedores: state.proveedores,
           adelantoClientes: state.adelantoClientes,
-          proveedoresAdelantosOtros: state.proveedoresAdelantosOtros,
+          proveedoresAdelantosOtros: totalProveedoresAdelantoCalc,
           creditosInstFinancieras: state.creditosInstFinancieras,
           prestamosAmigos: state.prestamosAmigos,
-          totalInstFinancierasAmigosOtros:
-              state.totalInstFinancierasAmigosOtros,
-          totalPasivos: state.totalPasivos,
-          patrimonio: state.patrimonio,
-          pasivosMasPatrimonio: state.pasivosMasPatrimonio,
-          ventasContado: state.ventasContado,
-          recuperaciones: state.recuperaciones,
-          totalIngresos: state.totalIngresos,
+          totalInstFinancierasAmigosOtros: totalInstAmigosCalc,
+          totalPasivos: totalPasivosCalc,
+          patrimonio: patimonioCalc,
+          pasivosMasPatrimonio: pasivosPatraimonioCalc,
+          ventasContado: ventasDeContado.toInt(),
+          totalIngresos: totalIngresos.toInt(),
           costoVentaProduccionValor: costoPorcentajeVenta,
           costoVentaProduccion: totalNivelProduccionCalc,
           gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
@@ -154,8 +210,8 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
           pagoCuotaCredito: state.pagoCuotaCredito,
           impuesto: state.impuesto,
           otros: state.otros,
-          totalCostosOperativos: state.totalCostosOperativos,
-          resultadoLiquido: state.resultadoLiquido,
+          totalCostosOperativos: totalCostosOperativosCal,
+          resultadoLiquido: totalResultadoLiquido.toInt(),
           alimentacion: state.alimentacion,
           educacion: state.educacion,
           aguaElectricidadGas: state.aguaElectricidadGas,
@@ -165,16 +221,16 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
           transporteFamiliar: state.transporteFamiliar,
           otrosGastosImprevistos: state.otrosGastosImprevistos,
           pagoCreditosPrivados: state.pagoCreditosPrivados,
-          totalConsumoFamiliar: state.totalConsumoFamiliar,
+          totalConsumoFamiliar: totalConsumoFamiliarCalc,
           ingresosFueraNegocio: state.ingresosFueraNegocio,
-          saldoDisponibleUf: state.saldoDisponibleUf,
+          saldoDisponibleUf: totalSaldoDisponibleUnidadFamiliarCal.toInt(),
           destinoExcedentes: state.destinoExcedentes,
           numeroLicencia: state.numeroLicencia,
           nombreInstitucionLicencia: state.nombreInstitucionLicencia,
           fechaEmisionLicencia: DateTime.parse(state.fechaEmisionLicencia),
           fechaVencimientoLicencia:
               DateTime.parse(state.fechaVencimientoLicencia),
-          ingresoAnual: state.ingresoAnual,
+          ingresoAnual: totalIngresosAnual,
           cliente1: state.cliente1,
           cliente2: state.cliente2,
           cliente3: state.cliente3,
@@ -799,7 +855,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
         'Domingo',
       ]
           .map((dia) => CicloVenta(
-              dia: dia, venta: 0, valorizacion: 'N/A', maquinaCreacion: ''))
+              dia: dia, venta: 0, valorizacion: 'M', maquinaCreacion: ''))
           .toList();
 
       // Guardar en BD
@@ -1243,7 +1299,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
             (semana) => CicloCompraSemanal(
               semanaDelMes: semana,
               cantidadCompra: 0,
-              valorizacion: 'N/A',
+              valorizacion: 'M',
             ),
           )
           .toList();

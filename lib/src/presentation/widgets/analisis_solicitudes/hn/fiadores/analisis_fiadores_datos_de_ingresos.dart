@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_sending_widget.dart';
@@ -86,6 +87,9 @@ class _AnalisisFiadoresDatosDeIngresosState
 
               OutlineTextfieldWidget(
                 title: 'Fuentes otros ingresos:',
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 onChange: (v) {
                   cubit.onFieldChanged(
                     () => state.copyWith(

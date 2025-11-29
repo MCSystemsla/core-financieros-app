@@ -22,6 +22,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
@@ -425,20 +426,23 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                   },
                 ),
                 const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: ubicacion,
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: AppColors.getPrimaryColor(),
+                SheetSearchDropdown(
+                  validator: (value) => ClassValidator.validateRequired(
+                    value?.value,
                   ),
+                  enabled: true,
+                  isRequired: true,
+                  items: const [
+                    Item(name: 'Urbano', value: 'URB'),
+                    Item(name: 'Rural', value: 'RUR'),
+                  ],
+                  hintText: 'Ubicación',
                   title: 'Ubicacion',
-                  hintText: 'Ingresa Ubicacion',
-                  isValid: null,
-                  onChange: (value) {
-                    ubicacion = value;
+                  onChanged: (value) {
+                    if (value == null || !mounted) return;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        ubicacion: ubicacion,
+                        ubicacion: value.value,
                       ),
                     );
                   },

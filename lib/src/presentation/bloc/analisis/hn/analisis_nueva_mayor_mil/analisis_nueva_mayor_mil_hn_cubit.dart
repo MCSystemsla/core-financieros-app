@@ -80,8 +80,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       0,
       (sum, e) => sum + e.totalMensualProduccion,
     );
-    final ventasDeContado =
-        (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+    final ventasDeContado = nivelProduccion > 0
+        ? (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3
+        : (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 2;
     final recuperaciones = state.cuentasPorCobrar.fold(
       0,
       (total, e) => total + e.abonoCredito,
@@ -122,6 +123,9 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
 
     final saldoDisponibleUnidadFamiliar =
         resultadoLiquido - totalConsumoFamiliar + ingresosFueraDeNegocio;
+
+    final nivelProduccionVentaMensual = state.nivelProduccion
+        .fold<double>(0, (sum, e) => sum + e.totalMensualProduccion);
 
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -179,7 +183,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
           semanasMalas: semanas['semanasMalas'],
           totalComprasMensuales: state.cicloDeComprasSemanales.cicloCompra
               .fold(0, (sum, e) => sum + e.cantidadCompra),
-          totalVentasSegunCompras: state.totalVentasSegunCompras,
+          totalVentasSegunCompras: nivelProduccionVentaMensual,
           totalCostoPersonal: state.totalCostoPersonal,
           totalUltimaCompra: state.totalUltimaCompra,
           diasBuenosVenta: dias['diasBuenos'],
@@ -899,7 +903,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         'Domingo',
       ]
           .map((dia) => CicloVenta(
-              dia: dia, venta: 0, valorizacion: 'N/A', maquinaCreacion: ''))
+              dia: dia, venta: 0, valorizacion: 'M', maquinaCreacion: ''))
           .toList();
 
       // Guardar en BD
@@ -962,7 +966,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
             (semana) => CicloCompraSemanal(
               semanaDelMes: semana,
               cantidadCompra: 0,
-              valorizacion: 'N/A',
+              valorizacion: 'M',
             ),
           )
           .toList();

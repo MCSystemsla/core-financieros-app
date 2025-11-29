@@ -230,7 +230,7 @@ class _AnalisisFiadoresDatosGeneralesState
               ),
               OutlineTextfieldWidget(
                 initialValue: widget.cedula,
-                // readOnly: true,
+                readOnly: true,
                 title: 'Cedula Identidad:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
@@ -356,6 +356,8 @@ class _AnalisisFiadoresDatosGeneralesState
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
                 title: 'Pais de nacimiento:',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
@@ -371,6 +373,8 @@ class _AnalisisFiadoresDatosGeneralesState
                 title: 'Fecha emision cedula:',
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
+                validator: (value) => ClassValidator.validateRequired(
+                    fechaEmisionCedula?.selectorFormat()),
                 onChange: (value) {},
                 onTap: () => selectEmisionFecha(context),
               ),
@@ -380,6 +384,8 @@ class _AnalisisFiadoresDatosGeneralesState
                   hintText: fechaVencimientoCedula?.selectorFormat(),
                   title: 'Fecha Vencimiento cedula:',
                   icon: const Icon(Icons.document_scanner),
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaVencimientoCedula?.selectorFormat()),
                   readOnly: true,
                   onChange: (value) {},
                   onTap: () => selectDate(context),

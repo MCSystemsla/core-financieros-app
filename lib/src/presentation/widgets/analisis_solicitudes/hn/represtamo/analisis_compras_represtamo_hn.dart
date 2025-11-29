@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_r
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_compras_a_proveedores_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/represtamo/tables/compras_por_proveedor_represtamo_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/represtamo/tables/compras_por_semana_represtamo_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/compras_week_card_per_week_hn.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,24 @@ class _AnalisisComprasReprestamoHNState
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomElevatedButton(
                   onPressed: () {
+                    final semanasVacias = state.cicloVentaMensual.ciclo.every(
+                      (e) => e.venta == 0,
+                    );
+                    if (semanasVacias) {
+                      CustomAlertDialog(
+                        context: context,
+                        title: 'Las compras por semana son requeridas',
+                      ).showDialog(context);
+                      return;
+                    }
+                    if (state.comprasProveedorArticulo.isEmpty) {
+                      CustomAlertDialog(
+                        context: context,
+                        title: 'Las Compras por proveedor son requeridas',
+                      ).showDialog(context);
+                      return;
+                    }
+
                     widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,

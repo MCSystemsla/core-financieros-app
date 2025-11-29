@@ -373,8 +373,7 @@ class AnalisisReprestamoHn {
       'objEmpleadoVerificaReferenciaID3':
           num.tryParse(objEmpleadoVerificaReferenciaID3!),
     };
-    data.removeWhere(
-        (key, value) => value == null || value == '' || value == 0);
+    data.removeWhere((key, value) => value == null || value == '');
     return data;
   }
 }

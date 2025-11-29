@@ -165,7 +165,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Nacionalidad:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -296,6 +296,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 title: 'Numero de dependientes',
                 hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                textInputType: TextInputType.number,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
@@ -309,6 +313,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 title: 'Numero de hijos',
                 validator: (value) => ClassValidator.validateRequired(value),
                 hintText: 'input_select_option'.tr(),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                textInputType: TextInputType.number,
                 icon: const Icon(Icons.person),
                 onChange: (value) {
                   cubit.onFieldChanged(

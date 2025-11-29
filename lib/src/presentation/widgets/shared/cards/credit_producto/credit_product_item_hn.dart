@@ -21,6 +21,7 @@ class CreditProductItemHN extends StatelessWidget {
   final String? nombrePromotor;
   final String? tipoSolicitud;
   final bool isAsesorAsignado;
+  final VoidCallback? onTap;
 
   const CreditProductItemHN({
     super.key,
@@ -34,6 +35,7 @@ class CreditProductItemHN extends StatelessWidget {
     this.nombrePromotor,
     this.tipoSolicitud,
     this.isAsesorAsignado = false,
+    this.onTap,
   });
 
   @override
@@ -56,34 +58,36 @@ class CreditProductItemHN extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
       ),
       child: InkWell(
-        onTap: () {
-          if (isAsesorAsignado) {
-            CustomAlertDialog(
-              context: context,
-              title:
-                  'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
-              onDone: () => context.pop(),
-            ).showDialog(context);
-            return;
-          }
-          if (estadoCodigo != 'REG') {
-            CustomAlertDialog(
-              context: context,
-              title:
-                  'Solo se puede asignar una solicitud cuando el estado es REGISTRADA',
-              onDone: () => context.pop(),
-            ).showDialog(context);
-            return;
-          }
-          showAsignarSolicitudBottomSheetHN(
-            context,
-            int.tryParse(solicitudId) ?? 0,
-            title,
-            nombreCliente ?? 'N/A',
-            typeForm!,
-            cubit,
-          );
-        },
+        onTap: onTap != null
+            ? onTap!
+            : () {
+                if (isAsesorAsignado) {
+                  CustomAlertDialog(
+                    context: context,
+                    title:
+                        'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
+                    onDone: () => context.pop(),
+                  ).showDialog(context);
+                  return;
+                }
+                if (estadoCodigo != 'REG') {
+                  CustomAlertDialog(
+                    context: context,
+                    title:
+                        'Solo se puede asignar una solicitud cuando el estado es REGISTRADA',
+                    onDone: () => context.pop(),
+                  ).showDialog(context);
+                  return;
+                }
+                showAsignarSolicitudBottomSheetHN(
+                  context,
+                  int.tryParse(solicitudId) ?? 0,
+                  title,
+                  nombreCliente ?? 'N/A',
+                  typeForm!,
+                  cubit,
+                );
+              },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -108,8 +112,7 @@ class CreditProductItemHN extends StatelessWidget {
                   label: 'Fecha',
                   value: fecha.selectorFormat(),
                 ),
-                _InfoTag(
-                    icon: Icons.monetization_on, label: 'Monto', value: monto),
+                _InfoTag(icon: Icons.wallet, label: 'Monto', value: monto),
                 _InfoTag(
                   icon: Icons.star_outline,
                   label: 'Estado',
@@ -164,8 +167,12 @@ class _TagInfoPerson extends StatelessWidget {
         const SizedBox(width: 4),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 200),
-          child: Text(nombre,
-              maxLines: 3, overflow: TextOverflow.ellipsis, style: style),
+          child: Text(
+            nombre,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: style,
+          ),
         ),
         if (haveLocation) ...[
           const Spacer(),
@@ -176,7 +183,7 @@ class _TagInfoPerson extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 70),
+            constraints: const BoxConstraints(maxWidth: 50),
             child: Text(
               typeForm ?? 'N/A',
               maxLines: 2,

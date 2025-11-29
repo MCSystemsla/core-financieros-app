@@ -9,9 +9,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -148,11 +147,12 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        )
                       ],
                       onChange: (value) {
-                        String newValue =
-                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        String newValue = toNumericString(value);
                         cantidad = int.tryParse(newValue) ?? 0;
                       },
                     ),

@@ -274,6 +274,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
                     children: [
                       CustomElevatedButton(
                         onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
                           widget.pageController.nextPage(
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut,

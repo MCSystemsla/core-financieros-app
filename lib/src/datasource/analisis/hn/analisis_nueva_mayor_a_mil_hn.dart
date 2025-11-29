@@ -365,7 +365,7 @@ class AnalisisNuevaMayorMilHn {
       'IngresosFueraNegocio': ingresosFueraNegocio,
       'SaldoDisponibleUF': saldoDisponibleUf,
       'CostoVentaPorcentaje': costoVentaPorcentaje.isNaN
-          ? null
+          ? 0
           : double.parse(costoVentaPorcentaje.toStringAsFixed(2)),
       'FechaVerificacion3': fechaVerificacion3.toUtc().toIso8601String(),
       'NombreReferencia3': nombreReferencia3,
@@ -408,7 +408,7 @@ class AnalisisNuevaMayorMilHn {
           int.tryParse(objEmpleadoVerificaReferenciaID3),
     };
     data.removeWhere(
-      (key, value) => value == null || value == '' || value == 0,
+      (key, value) => value == null || value == '',
     );
     return data;
   }
