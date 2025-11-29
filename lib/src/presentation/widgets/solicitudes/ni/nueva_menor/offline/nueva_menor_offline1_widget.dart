@@ -14,7 +14,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -612,14 +611,14 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   // initialValue: paisEmisor ?? '',
                 ),
                 const Gap(30),
-                CatalogoValorDropdownWidget(
+                SearchDropdownWidget(
                   validator: (value) => ClassValidator.validateRequired(sexo),
                   hintText: sexoVer ?? 'input.select_option'.tr(),
                   codigo: 'SEXO',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
-                    sexo = item.valor;
-                    sexoVer = item.nombre;
+                    sexo = item.value;
+                    sexoVer = item.name;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         objSexoId: sexo,
@@ -628,7 +627,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     );
                   },
                   title: 'Sexo',
-                  initialValue: sexoVer,
+                  selectedItem: Item(name: sexoVer ?? '', value: sexo ?? ''),
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(

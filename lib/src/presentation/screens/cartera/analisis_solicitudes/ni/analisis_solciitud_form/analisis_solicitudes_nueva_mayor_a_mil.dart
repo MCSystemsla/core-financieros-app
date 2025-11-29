@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_solicitud_nueva_mayor_a_mil_stepper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nueva_menor/nueva_mayor_a_mil_ciclo_ventas.dart';
@@ -62,11 +61,6 @@ class _AnalisisSolicitudNuevaMayorAMilState
             subtitle: widget.subtitle,
             description: widget.description,
             numeroSolicitud: '',
-          ),
-          Expanded(
-            child: AnalisisSolicitudNuevaMayorAMilStepper(
-              activeStep: activeStep,
-            ),
           ),
           const Gap(20),
           Expanded(
