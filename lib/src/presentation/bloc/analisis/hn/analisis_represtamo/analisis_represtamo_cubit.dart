@@ -1432,6 +1432,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
         montoCredito: cuentasPorCobrar.montoCredito,
         uuid: cuentasPorCobrar.uuid,
         numeroSolicitud: numeroSolicitud,
+        isReprestamoForm: true,
       ),
     );
     emit(

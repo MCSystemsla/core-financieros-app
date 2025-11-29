@@ -267,6 +267,7 @@ class _CreateCuentasPorCobrarHnState extends State<_CreateCuentasPorCobrarHn> {
                           widget.cubit.saveCuentaPorCobrar(
                             numeroSolicitud: widget.numeroSolicitud,
                             cuentasPorCobrar: CuentasPorCobrarHN(
+                              isReprestamoForm: true,
                               uuid: const Uuid().v4(),
                               nombre: nombre!,
                               montoCredito: montoCredito!,

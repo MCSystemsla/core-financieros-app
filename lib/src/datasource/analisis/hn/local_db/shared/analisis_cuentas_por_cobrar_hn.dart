@@ -12,6 +12,7 @@ class AnalisisCuentasPorCobrarHn {
   int? totalMensualCredito;
   String? uuid;
   int? numeroSolicitud;
+  bool isReprestamoForm = false;
   AnalisisCuentasPorCobrarHn({
     this.nombre,
     this.montoCredito,
@@ -20,5 +21,6 @@ class AnalisisCuentasPorCobrarHn {
     this.totalMensualCredito,
     this.uuid,
     this.numeroSolicitud,
+    this.isReprestamoForm = false,
   });
 }

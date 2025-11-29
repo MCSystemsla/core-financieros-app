@@ -59,7 +59,7 @@ class _SendingAnalisisReprestamoHnState
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Analisis Asalariado enviada exitosamente!!\n\n',
+                  text: 'Analisis Represtamo enviada exitosamente!!\n\n',
                   repeat: false,
                   isUploadingForms: true,
                   onDownloadComplete: () {

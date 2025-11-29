@@ -5007,7 +5007,7 @@
     },
     {
       "id": "30:3750081469833294035",
-      "lastPropertyId": "8:4237717279406905389",
+      "lastPropertyId": "9:3200174186147776941",
       "name": "AnalisisCuentasPorCobrarHn",
       "properties": [
         {
@@ -5050,6 +5050,11 @@
           "id": "8:4237717279406905389",
           "name": "numeroSolicitud",
           "type": 6
+        },
+        {
+          "id": "9:3200174186147776941",
+          "name": "isReprestamoForm",
+          "type": 1
         }
       ],
       "relations": []
