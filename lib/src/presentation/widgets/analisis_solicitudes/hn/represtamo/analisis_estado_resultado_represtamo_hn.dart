@@ -62,8 +62,8 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
         final porcentajeDeVentaTotalCal =
             (totalIngresos * double.parse(porcentajeDeVenta));
 
-        final totalResultadoLiquido =
-            (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
+        // final totalResultadoLiquido =
+        //     (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
 
         final totalConsumoFamiliarCalc = state.alimentacion +
             state.educacion +
@@ -75,10 +75,18 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
             state.otrosGastosImprevistos +
             state.pagoCreditosPrivados;
 
+        // final totalSaldoDisponibleUnidadFamiliarCal =
+        //     porcentajeDeVentaTotalCal -
+        //         totalCostosOperativosCal -
+        //         totalConsumoFamiliarCalc +
+        //         state.ingresosFueraNegocio;
+
+        final utilidadBruta = totalIngresos - porcentajeDeVentaTotalCal;
+
+        final totalResultadoLiquido = utilidadBruta - totalCostosOperativosCal;
+
         final totalSaldoDisponibleUnidadFamiliarCal =
-            porcentajeDeVentaTotalCal -
-                totalCostosOperativosCal -
-                totalConsumoFamiliarCalc +
+            (totalResultadoLiquido - totalConsumoFamiliarCalc) +
                 state.ingresosFueraNegocio;
 
         return SingleChildScrollView(
@@ -174,6 +182,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
                     mantissaLength: 0,
                   ),
                   textAlign: TextAlign.end,
+                  readOnly: true,
                   title: porcentajeDeVenta,
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -186,6 +195,19 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
                       ),
                     );
                   },
+                ),
+                const Gap(20),
+                OutlineTextfieldWidget(
+                  readOnly: true,
+                  hintText: utilidadBruta.toCurrencyString(
+                    mantissaLength: 0,
+                  ),
+                  textAlign: TextAlign.end,
+                  title: 'Utilidad bruta',
+                  icon: const Icon(Icons.document_scanner),
+                  textInputType: TextInputType.number,
+                  inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
+                  onChange: (value) {},
                 ),
 
                 Container(
@@ -416,6 +438,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalCostosOperativosCal.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Total costos operativos L:',
@@ -434,6 +457,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalResultadoLiquido.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Resultado líquido del negocio L:',
@@ -651,6 +675,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalConsumoFamiliarCalc.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Total consumo familiar L:',
@@ -690,6 +715,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
 
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText:
                       totalSaldoDisponibleUnidadFamiliarCal.toCurrencyString(
                     mantissaLength: 1,
@@ -739,6 +765,20 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
                     },
                     text: 'Siguiente',
                     color: Colors.green,
+                  ),
+                ),
+                const Gap(10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomElevatedButton(
+                    onPressed: () {
+                      pageController.previousPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    text: 'Anterior',
+                    color: Colors.red,
                   ),
                 ),
                 const Gap(20),

@@ -60,6 +60,7 @@ class AnalisisReprestamoHnForm extends StatelessWidget {
             Expanded(
               flex: 3,
               child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
                   AnalisisCicloVentasReprestamoHN(

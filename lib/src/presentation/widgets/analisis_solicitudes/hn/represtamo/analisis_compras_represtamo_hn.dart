@@ -116,6 +116,20 @@ class _AnalisisComprasReprestamoHNState
                   color: Colors.green,
                 ),
               ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomElevatedButton(
+                  onPressed: () {
+                    widget.pageController.previousPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  text: 'Anterior',
+                  color: Colors.red,
+                ),
+              ),
               const Gap(20),
             ],
           ),

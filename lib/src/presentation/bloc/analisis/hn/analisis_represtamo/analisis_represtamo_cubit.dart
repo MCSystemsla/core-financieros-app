@@ -131,8 +131,8 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
     final porcentajeDeVentaTotalCal =
         (totalIngresos * double.parse(porcentajeDeVenta));
 
-    final totalResultadoLiquido =
-        (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
+    // final totalResultadoLiquido =
+    //     (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
 
     final totalConsumoFamiliarCalc = state.alimentacion +
         state.educacion +
@@ -144,13 +144,21 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
         state.otrosGastosImprevistos +
         state.pagoCreditosPrivados;
 
-    final totalSaldoDisponibleUnidadFamiliarCal = porcentajeDeVentaTotalCal -
-        totalCostosOperativosCal -
-        totalConsumoFamiliarCalc +
-        state.ingresosFueraNegocio;
+    // final totalSaldoDisponibleUnidadFamiliarCal = porcentajeDeVentaTotalCal -
+    //     totalCostosOperativosCal -
+    //     totalConsumoFamiliarCalc +
+    //     state.ingresosFueraNegocio;
 
     final totalIngresosAnual =
         state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);
+
+    final utilidadBruta = totalIngresos - porcentajeDeVentaTotalCal;
+
+    final totalResultadoLiquido = utilidadBruta - totalCostosOperativosCal;
+
+    final totalSaldoDisponibleUnidadFamiliarCal =
+        (totalResultadoLiquido - totalConsumoFamiliarCalc) +
+            state.ingresosFueraNegocio;
 
     emit(state.copyWith(status: Status.inProgress));
     try {

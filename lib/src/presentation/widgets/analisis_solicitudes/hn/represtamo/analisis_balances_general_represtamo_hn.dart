@@ -203,6 +203,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalActivosCalc.toCurrencyString(
                     mantissaLength: 0,
                   ),
@@ -516,6 +517,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalInstAmigosCalc.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Total inst finac, amigos y otros:',
@@ -537,6 +539,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: totalPasivosCalc.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Total pasivos:',
@@ -580,6 +583,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   hintText: pasivosPatraimonioCalc.toCurrencyString(),
                   textAlign: TextAlign.end,
                   title: 'Pasivos + patrimonio:',
@@ -611,6 +615,20 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     },
                     text: 'Siguiente',
                     color: Colors.green,
+                  ),
+                ),
+                const Gap(10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomElevatedButton(
+                    onPressed: () {
+                      widget.pageController.previousPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    text: 'Anterior',
+                    color: Colors.red,
                   ),
                 ),
                 const Gap(20),
