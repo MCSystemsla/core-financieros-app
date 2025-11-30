@@ -8,7 +8,9 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/time_picker/time_picker_bottom_sheet.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,8 +65,9 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     esEmpresario = false;
                   });
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       esAsalariado: value,
+                      esEmpresario: false,
                     ),
                   );
                 },
@@ -81,7 +84,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         empresa: value,
                       ),
                     );
@@ -98,7 +101,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         cargo: value,
                       ),
                     );
@@ -112,11 +115,12 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   icon: const Icon(Icons.person),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         tiempoLaborar: value,
                       ),
                     );
@@ -133,7 +137,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   validator: (value) => ClassValidator.validateRequired(value),
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         lugarTrabajoAnterior: value,
                       ),
                     );
@@ -151,8 +155,9 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     esAsalariado = false;
                   });
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       esEmpresario: value,
+                      esAsalariado: false,
                     ),
                   );
                 },
@@ -169,7 +174,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         nombreNegocio: value,
                       ),
                     );
@@ -183,11 +188,12 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         tiempoNegocio: int.tryParse(value) ?? 0,
                       ),
                     );
@@ -202,7 +208,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         nivelAproximadoIngresosCodigo: value?.value,
                       ),
                     );
@@ -219,7 +225,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         puesto: value,
                       ),
                     );
@@ -234,7 +240,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   hintText: 'input_select_option'.tr(),
                   onChanged: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         condicionLocalCodigo: value?.value,
                       ),
                     );
@@ -243,33 +249,50 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Horario de visita',
-                  hintText: 'input_select_option'.tr(),
-                  icon: const Icon(Icons.person),
+                  hintText: state.horarioVisita,
+                  icon: const Icon(Icons.watch_later_sharp),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        horarioVisita: value,
+                  readOnly: true,
+                  onTap: () => {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) => TimePickerBottomSheet(
+                        initial: DateTime.now(),
+                        use24hFormat: false,
+                        onSelected: (time) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              horarioVisita: time,
+                            ),
+                          );
+                        },
                       ),
-                    );
+                    ),
                   },
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Horario de trabajo',
-                  hintText: 'input_select_option'.tr(),
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        horarioTrabajo: value,
+                  hintText: state.horarioTrabajo,
+                  icon: const Icon(Icons.watch_later_sharp),
+                  readOnly: true,
+                  onTap: () => {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) => TimePickerBottomSheet(
+                        initial: DateTime.now(),
+                        use24hFormat: false,
+                        onSelected: (time) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              horarioTrabajo: time,
+                            ),
+                          );
+                        },
                       ),
-                    );
+                    ),
                   },
                 ),
                 const Gap(20),
@@ -280,11 +303,12 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
                   ],
                   textInputType: TextInputType.number,
                   onChange: (value) {
                     cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
+                      () => state.copyWith(
                         tiempoActividad: value,
                       ),
                     );
@@ -310,7 +334,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       paisOcupacionCodigo: value?.valor,
                     ),
                   );
@@ -326,7 +350,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 where: state.paisOcupacionCodigo,
                 onChanged: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       departamentoOcupacionCodigo: value?.valor,
                     ),
                   );
@@ -342,7 +366,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       municipioOcupacionCodigo: value?.valor,
                     ),
                   );
@@ -358,7 +382,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       aldeaOcupacionCodigo: value?.valor,
                     ),
                   );
@@ -375,7 +399,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 ],
                 onChange: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       caserioOcupacion: value,
                     ),
                   );
@@ -392,7 +416,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 ],
                 onChange: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       barrioTrabajo: value,
                     ),
                   );
@@ -408,7 +432,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 ],
                 onChange: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       direccionTrabajo: value,
                     ),
                   );
@@ -425,7 +449,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 textInputType: TextInputType.phone,
                 onChange: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       telefonoTrabajo: value,
                     ),
                   );
@@ -442,7 +466,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 textInputType: TextInputType.phone,
                 onChange: (value) {
                   cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
+                    () => state.copyWith(
                       celularOcupacion: value,
                     ),
                   );

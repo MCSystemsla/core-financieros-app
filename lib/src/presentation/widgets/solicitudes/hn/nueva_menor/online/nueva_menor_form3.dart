@@ -13,6 +13,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/time_picker/time_picker_bottom_sheet.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -322,7 +324,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
-                  hintText: 'Ingresa Horario Trabajo',
+                  hintText: cubit.state.horarioTrabajo,
                   icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
@@ -331,12 +333,22 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),
                   ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        horarioTrabajo: value,
+                  readOnly: true,
+                  onTap: () => {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) => TimePickerBottomSheet(
+                        initial: DateTime.now(),
+                        use24hFormat: false,
+                        onSelected: (time) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              horarioTrabajo: time,
+                            ),
+                          );
+                        },
                       ),
-                    );
+                    ),
                   },
                 ),
                 const Gap(30),
