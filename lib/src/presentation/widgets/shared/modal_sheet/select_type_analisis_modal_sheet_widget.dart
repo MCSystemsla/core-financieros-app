@@ -3,9 +3,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +21,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   final String subtitle;
   final String description;
   final AnalisisSolicitudesInterceptorType? tipoSolicitud;
+  final String cedulaCliente;
   const SelectTypeAnalisisModalSheetWidget({
     super.key,
     required this.index,
@@ -29,6 +32,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.description,
+    required this.cedulaCliente,
   });
 
   @override
@@ -131,7 +135,21 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                       color: const Color(0xff6D28D9),
                       title: 'Registrar Garantias',
                       subtitle: 'Crear Garantias',
-                      onTap: () => Navigator.pop(context, 'analisis'),
+                      onTap: () => {
+                        context.pop(),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => GarantiaHNScreen(
+                              numeroSolicitud: int.parse(numeroSolicitud),
+                              solicitudCodigo:
+                                  tipoSolicitud?.toTypeForInterceptorString() ??
+                                      '',
+                              cedulaCliente: cedulaCliente,
+                            ),
+                          ),
+                        )
+                      },
                     ),
                   ],
                 ),

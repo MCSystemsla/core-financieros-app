@@ -51,6 +51,8 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return AnalisisCreditCardHn(
+                              cedulaCliente:
+                                  state.solicitudes[index].cedulaCliente,
                               numeroSolicitud: state.solicitudes[index].numero,
                               tipoSolicitud: getTipoSolicitud(
                                 tipoSolicitud:

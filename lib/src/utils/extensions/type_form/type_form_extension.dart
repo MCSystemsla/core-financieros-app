@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 
 extension TypeFormParser on String {
@@ -18,6 +19,18 @@ extension TypeFormIdParser on int {
       235 => 'ASAL',
       236 => 'REPRESTAMO',
       _ => throw Exception('Tipo Solicitud no reconocido: $this'),
+    };
+  }
+}
+
+extension TypeFormInterceptorParser on AnalisisSolicitudesInterceptorType {
+  String toTypeForInterceptorString() {
+    return switch (this) {
+      AnalisisSolicitudesInterceptorType.nueva => 'NUEVAMENOR',
+      AnalisisSolicitudesInterceptorType.nuevaMayorAMil => 'NUEVAMENOR',
+      AnalisisSolicitudesInterceptorType.asalariado => 'ASAL',
+      AnalisisSolicitudesInterceptorType.represtamo => 'REPRESTAMO',
+      AnalisisSolicitudesInterceptorType.represtamoMayorAMil => 'REPRESTAMO',
     };
   }
 }

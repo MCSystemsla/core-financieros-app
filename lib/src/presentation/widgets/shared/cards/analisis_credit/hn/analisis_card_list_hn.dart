@@ -21,11 +21,13 @@ class AnalisisCardListHn extends StatelessWidget {
   final List<AnalisisCardItem> items;
   final String title;
   final int maxLines;
+  final bool isLoading;
   const AnalisisCardListHn({
     super.key,
     required this.onTap,
     required this.items,
     required this.title,
+    this.isLoading = false,
     this.maxLines = 2,
   });
 
@@ -76,7 +78,7 @@ class AnalisisCardListHn extends StatelessWidget {
                       ),
                     ),
                     const Divider(),
-                    if (items.isEmpty) const Text('Ingesa items para ver'),
+                    if (items.isEmpty) const Text('Ingresa items para ver'),
                     ...items.map(
                       (e) => _buildItem(
                         icon: e.icon,
@@ -84,6 +86,7 @@ class AnalisisCardListHn extends StatelessWidget {
                         value: e.value,
                         color: e.color,
                         maxLines: maxLines,
+                        isLoading: isLoading,
                       ).fadeIn(duration: const Duration(milliseconds: 500)),
                     ),
                   ],
@@ -102,6 +105,7 @@ class AnalisisCardListHn extends StatelessWidget {
     required String value,
     required Color color,
     int maxLines = 2,
+    bool isLoading = false,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -124,19 +128,27 @@ class AnalisisCardListHn extends StatelessWidget {
             ),
           ),
         ),
-        trailing: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 120),
-          child: Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ),
+        trailing: isLoading
+            ? const SizedBox(
+                width: 15,
+                height: 15,
+                child: CircularProgressIndicator(
+                  strokeWidth: 4,
+                ),
+              )
+            : ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 120),
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+              ),
       ),
     );
   }

@@ -34,6 +34,7 @@ class SolicitudEstado {
   final String tipoSolicitud;
   final String? nombrePromotor;
   final DateTime fechaSolicitud;
+  final String cedulaCliente;
 
   SolicitudEstado({
     required this.id,
@@ -49,6 +50,7 @@ class SolicitudEstado {
     required this.tipoSolicitud,
     required this.fechaSolicitud,
     this.nombrePromotor,
+    required this.cedulaCliente,
   });
 
   factory SolicitudEstado.fromJson(Map<String, dynamic> json) =>
@@ -66,6 +68,7 @@ class SolicitudEstado {
         tipoSolicitud: json['TipoSolicitud'],
         nombrePromotor: json['NombrePromotor'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
+        cedulaCliente: (json['CedulaCliente'] ?? '') as String,
       );
 }
 

@@ -6,6 +6,8 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
@@ -30,6 +32,20 @@ abstract class AnalisisRepositoryHn {
   Future<AnalisisFiadoresSearchClientByDocument?> getAnalisisFiadorByDocument({
     required String cedula,
     required String tipoDocumentoCodigo,
+  });
+  Future<void> createAnalisisGarantias({
+    required AnalisisGarantiaCreditoHn analisisGarantiaCreditoHn,
+  });
+  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos();
+  Future<AnalisisGarantiaDataHn> getAnalisisGarantiasByNumero({
+    required int numeroSolicitud,
+  });
+  Future<void> createAnalisisGarantiasArticulo({
+    required String tipo,
+    required String descripcion,
+  });
+  Future<void> createAnalisisGarantiasDetalle({
+    required AnalisisGarantiaDetalle analisisGarantiaDetalle,
   });
 }
 
@@ -155,6 +171,109 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
 
       final data = AnalisisFiadoresSearchClientByDocument.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisGarantias({
+    required AnalisisGarantiaCreditoHn analisisGarantiaCreditoHn,
+  }) async {
+    final endpoint = CreateAnalisisGarantiasHNEndpoint(
+      analisisGarantiaCreditoHn: analisisGarantiaCreditoHn,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisGarantiasArticulo({
+    required String tipo,
+    required String descripcion,
+  }) async {
+    final endpoint = CrearArticulosGarantiasHNEndpoint(
+      tipo: tipo,
+      descripcion: descripcion,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos() async {
+    final endpoint = ObtenerArticulosGarantiasHNEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = AnalisisGarantiaArticuloHn.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaDataHn> getAnalisisGarantiasByNumero({
+    required int numeroSolicitud,
+  }) async {
+    final endpoint =
+        ObtenerGarantiaByNumeroHNEndpoint(numeroSolicitud: numeroSolicitud);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = AnalisisGarantiaDataHn.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisGarantiasDetalle({
+    required AnalisisGarantiaDetalle analisisGarantiaDetalle,
+  }) async {
+    final endpoint = CreateAnalisisGarantiasDetalleHNEndpoint(
+      analisisGarantiaCreditoHn: analisisGarantiaDetalle,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;
