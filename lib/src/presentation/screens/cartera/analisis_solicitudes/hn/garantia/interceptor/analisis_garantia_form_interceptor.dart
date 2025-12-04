@@ -26,6 +26,12 @@ class AnalisisGarantiaFormInterceptor extends StatelessWidget {
           articuloGarantiaCodigo: articuloGarantiaCodigo,
           descripcion: descripcion,
         ),
+      TipoGarantiaEnum.liquida => AnalisisGarantiaFormPrendario(
+          dpfsId: dpfsId,
+          objAnalisisGarantiaID: objAnalisisGarantiaID,
+          articuloGarantiaCodigo: articuloGarantiaCodigo,
+          descripcion: descripcion,
+        ),
       _ => const SizedBox(),
     };
   }
