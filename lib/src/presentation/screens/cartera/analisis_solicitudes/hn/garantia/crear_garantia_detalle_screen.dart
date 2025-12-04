@@ -1,77 +1,102 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_detalle/analisis_garantia_detalle_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/interceptor/analisis_garantia_form_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/crear_articulo_modal_sheet.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
-class CrearGarantiaDetalleScreen extends StatelessWidget {
+class CrearGarantiaDetalleScreen extends StatefulWidget {
   final int numeroSolicitud;
   final List<GarantiaData> garantias;
+  final String tipoPersonaCodigo;
+  final String cedulaCliente;
   const CrearGarantiaDetalleScreen({
     super.key,
     required this.numeroSolicitud,
     required this.garantias,
+    required this.tipoPersonaCodigo,
+    required this.cedulaCliente,
   });
 
   @override
+  State<CrearGarantiaDetalleScreen> createState() =>
+      _CrearGarantiaDetalleScreenState();
+}
+
+class _CrearGarantiaDetalleScreenState
+    extends State<CrearGarantiaDetalleScreen> {
+  bool showFab = false;
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => AnalisisGarantiaDetalleCubit(
-        AnalisisRepositoryHNImpl(),
-      ),
+    final repository = AnalisisRepositoryHNImpl();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => AnalisisGarantiaDetalleCubit(
+            repository,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => AnalisisDpfsCubit(
+            repository,
+          )..getDpfsByCedula(
+              tipoPersona: widget.tipoPersonaCodigo,
+              cedula: widget.cedulaCliente),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Crear Detalle de Garantía'),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (_) => BlocProvider.value(
-                value: context.read<AnalisisArticuloCubit>(),
-                child: CreateArticuloModalSheet(
-                  numeroSolicitud: numeroSolicitud,
+        floatingActionButton: showFab
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<AnalisisArticuloCubit>(),
+                      child: CreateArticuloModalSheet(
+                        numeroSolicitud: widget.numeroSolicitud,
+                      ),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.black,
+                label: const Row(
+                  children: [
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    Gap(5),
+                    Text(
+                      'Crear Articulo',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            );
-          },
-          backgroundColor: Colors.black,
-          label: const Row(
-            children: [
-              Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              Gap(5),
-              Text(
-                'Crear Articulo',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : null,
         body: _ArticuloForm(
-          garantias: garantias,
+          garantias: widget.garantias,
+          onTipoGarantiaChanged: (tipoGarantia) {
+            setState(() {
+              showFab = tipoGarantia != TipoGarantiaEnum.liquida.codigo;
+            });
+          },
         ),
       ),
     );
@@ -80,7 +105,11 @@ class CrearGarantiaDetalleScreen extends StatelessWidget {
 
 class _ArticuloForm extends StatefulWidget {
   final List<GarantiaData> garantias;
-  const _ArticuloForm({required this.garantias});
+  final void Function(String tipoGarantia) onTipoGarantiaChanged;
+  const _ArticuloForm({
+    required this.garantias,
+    required this.onTipoGarantiaChanged,
+  });
   @override
   State<_ArticuloForm> createState() => _ArticuloFormState();
 }
@@ -89,9 +118,10 @@ class _ArticuloFormState extends State<_ArticuloForm> {
   final formKey = GlobalKey<FormState>();
 
   String? objAnalisisGarantiaID;
+  String? tipoGarantiaName;
+  int? dpfsId;
   int? articuloGarantiaCodigo;
-  int? cantidad;
-  double? valorComercial;
+  String? descripcion;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +136,11 @@ class _ArticuloFormState extends State<_ArticuloForm> {
               title: 'Garantia',
               isRequired: true,
               onChanged: (v) {
-                objAnalisisGarantiaID = v?.value;
+                setState(() {
+                  objAnalisisGarantiaID = v?.value;
+                  tipoGarantiaName = v?.name;
+                });
+                widget.onTipoGarantiaChanged(tipoGarantiaName ?? '');
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -116,115 +150,73 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                   .map((e) => Item(name: e.tipoGarantia, value: e.id))
                   .toList(),
             ),
-            const Gap(20),
-            BlocBuilder<AnalisisArticuloCubit, AnalisisArticuloState>(
-              builder: (context, state) {
-                return SheetSearchDropdown(
-                  title: 'Articulo',
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value.toString()),
-                  onChanged: (v) {
-                    articuloGarantiaCodigo = v?.value;
-                  },
-                  hintText: 'Selecciona un articulo',
-                  enabled: true,
-                  items: state.analisisGarantiaArticuloHn
-                      .map((e) => Item(name: e.nombre, value: e.valor))
-                      .toList(),
-                );
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              title: 'Cantidad',
-              icon: const Icon(Icons.wallet),
-              textInputType: TextInputType.number,
-              validator: (value) => ClassValidator.validateRequired(value),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChange: (value) {
-                final newValue = toNumericString(value);
-
-                cantidad = int.tryParse(newValue) ?? 0;
-              },
-            ),
-            const Gap(20),
-            OutlineTextfieldWidget(
-              title: 'Valor Comercial',
-              icon: const Icon(Icons.wallet),
-              textInputType: TextInputType.number,
-              validator: (value) => ClassValidator.validateRequired(value),
-              inputFormatters: [
-                CurrencyInputFormatter(mantissaLength: 0),
-              ],
-              onChange: (value) {
-                final newValue = toNumericString(value);
-                valorComercial = double.tryParse(newValue);
-              },
-            ),
-            const Gap(20),
-            BlocConsumer<AnalisisGarantiaDetalleCubit,
-                AnalisisGarantiaDetalleState>(
-              listenWhen: (prev, curr) => prev.status != curr.status,
-              listener: (context, state) {
-                if (state.status == Status.done) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Detalle de Garantia creado exitosamente',
-                    onDone: () => {
-                      context.pop(),
-                      formKey.currentState?.reset(),
+            if (tipoGarantiaName == TipoGarantiaEnum.liquida.codigo) ...[
+              const Gap(20),
+              BlocBuilder<AnalisisDpfsCubit, AnalisisDpfsState>(
+                builder: (context, state) {
+                  return switch (state.status) {
+                    Status.inProgress => const LoadingWidget(),
+                    Status.error => Text('Error : ${state.errorMsg}'),
+                    Status.done => SheetSearchDropdown(
+                        title: 'DPFs',
+                        isRequired: true,
+                        validator: (value) => ClassValidator.validateRequired(
+                            value?.value.toString()),
+                        onChanged: (v) {
+                          dpfsId = v?.value;
+                        },
+                        hintText: state.data.isEmpty
+                            ? 'No hay Dpfs registrado.'
+                            : 'Selecciona un Dpf',
+                        enabled: state.data.isNotEmpty,
+                        items: state.data
+                            .map((e) => Item(
+                                  name: e.numeroCuenta,
+                                  value: e.dpfId,
+                                ))
+                            .toList(),
+                      ),
+                    _ => const SizedBox(),
+                  };
+                },
+              ),
+            ],
+            if (tipoGarantiaName != TipoGarantiaEnum.liquida.codigo &&
+                tipoGarantiaName != null) ...[
+              const Gap(20),
+              BlocBuilder<AnalisisArticuloCubit, AnalisisArticuloState>(
+                builder: (context, state) {
+                  return SheetSearchDropdown(
+                    title: 'Articulo',
+                    isRequired: true,
+                    validator: (value) => ClassValidator.validateRequired(
+                        value?.value.toString()),
+                    onChanged: (v) {
+                      articuloGarantiaCodigo = v?.value;
+                      descripcion = v?.anotherValue;
                     },
-                  ).showDialog(
-                    context,
-                    dialogType: DialogType.success,
+                    hintText: 'Selecciona un articulo',
+                    enabled: true,
+                    items: state.analisisGarantiaArticuloHn
+                        .map((e) => Item(
+                              name: e.nombre,
+                              value: e.valor,
+                              anotherValue: e.descripcion,
+                            ))
+                        .toList(),
                   );
-                }
-                if (state.status == Status.error) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: state.errorMsg,
-                    onDone: () => {
-                      context.pop(),
-                    },
-                  ).showDialog(
-                    context,
-                    dialogType: DialogType.error,
-                  );
-                }
-              },
-              builder: (context, state) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    enabled: state.status != Status.inProgress,
-                    text: state.status == Status.inProgress
-                        ? 'Creando...'
-                        : 'Crear',
-                    // ignore: deprecated_member_use
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      context
-                          .read<AnalisisGarantiaDetalleCubit>()
-                          .createAnalisisDetalle(
-                            analisisGarantiaDetalle: AnalisisGarantiaDetalle(
-                              cantidad: cantidad!,
-                              articuloGarantiaCodigo: articuloGarantiaCodigo!,
-                              valorComercial: valorComercial!,
-                              objAnalisisGarantiaID:
-                                  int.tryParse(objAnalisisGarantiaID ?? '0') ??
-                                      0,
-                            ),
-                          );
-                    },
-                  ),
-                );
-              },
-            ),
+                },
+              ),
+              if (tipoGarantiaName != null)
+                AnalisisGarantiaFormInterceptor(
+                  tipoGarantia: tipoGarantiaName!.toTipoGarantiaEnum(),
+                  dpfsId: dpfsId ?? 0,
+                  objAnalisisGarantiaID:
+                      int.tryParse(objAnalisisGarantiaID ?? '0') ?? 0,
+                  articuloGarantiaCodigo: articuloGarantiaCodigo ?? 0,
+                  descripcion: descripcion,
+                ),
+            ],
           ],
         ),
       ),

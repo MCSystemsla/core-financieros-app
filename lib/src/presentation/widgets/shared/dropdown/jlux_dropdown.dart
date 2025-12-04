@@ -11,6 +11,7 @@ class Item<T> extends Equatable {
   final String? id;
   final String name;
   final T value;
+  final T? anotherValue;
   final double? interes;
   final num? montoMinimo;
   final double? montoMaximo;
@@ -21,6 +22,7 @@ class Item<T> extends Equatable {
     required this.name,
     required this.value,
     this.interes,
+    this.anotherValue,
     this.montoMinimo,
     this.montoMaximo,
     this.isApnfd = false,

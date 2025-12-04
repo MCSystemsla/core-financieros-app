@@ -11,11 +11,13 @@ class GarantiaHNScreen extends StatelessWidget {
   final int numeroSolicitud;
   final String solicitudCodigo;
   final String cedulaCliente;
+  final String tipoPersonaCodigo;
   const GarantiaHNScreen({
     super.key,
     required this.numeroSolicitud,
     required this.solicitudCodigo,
     required this.cedulaCliente,
+    required this.tipoPersonaCodigo,
   });
 
   @override
@@ -49,6 +51,8 @@ class GarantiaHNScreen extends StatelessWidget {
               const Gap(10),
               DetalleGarantiaTableHNWidget(
                 numeroSolicitud: numeroSolicitud,
+                tipoPersonaCodigo: tipoPersonaCodigo,
+                cedulaCliente: cedulaCliente,
               ),
             ],
           ),

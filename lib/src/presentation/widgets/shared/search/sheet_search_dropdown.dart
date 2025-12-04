@@ -102,6 +102,7 @@ class _SheetSearchDropdownState extends State<SheetSearchDropdown> {
                             montoMaximo: e.montoMaximo,
                             montoMinimo: e.montoMinimo,
                             id: e.id,
+                            anotherValue: e.anotherValue,
                           ));
                         },
                       )

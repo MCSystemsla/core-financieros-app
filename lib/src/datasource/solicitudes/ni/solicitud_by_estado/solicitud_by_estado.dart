@@ -35,12 +35,14 @@ class SolicitudEstado {
   final String? nombrePromotor;
   final DateTime fechaSolicitud;
   final String cedulaCliente;
+  final String tipoPersonaCodigo;
 
   SolicitudEstado({
     required this.id,
     required this.numero,
     required this.objTipoSolicitudId,
     required this.objEstadoSolicitudId,
+    required this.tipoPersonaCodigo,
     this.monto,
     this.sucursal,
     this.observacion,
@@ -69,6 +71,7 @@ class SolicitudEstado {
         nombrePromotor: json['NombrePromotor'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
         cedulaCliente: (json['CedulaCliente'] ?? '') as String,
+        tipoPersonaCodigo: (json['TipoPersonaCodigo'] ?? '') as String,
       );
 }
 

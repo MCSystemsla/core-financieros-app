@@ -244,3 +244,28 @@ class CrearArticulosGarantiasHNEndpoint extends Endpoint {
         'Descripcion': descripcion,
       };
 }
+
+class GetDpfsByCedulaHNEndpoint extends Endpoint {
+  final String tipoPersona;
+  final String cedula;
+
+  GetDpfsByCedulaHNEndpoint({
+    required this.tipoPersona,
+    required this.cedula,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/ahorro/cuenta/dpf-garantia/get-dpfs-by-cedula-tipo-persona';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'cedula': cedula,
+        'tipoPersona': tipoPersona,
+      };
+}

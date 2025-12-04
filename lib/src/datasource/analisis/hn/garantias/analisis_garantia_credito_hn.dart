@@ -62,7 +62,7 @@ class AnalisisGarantia {
 
 class AnalisisGarantiaDetalle {
   final int cantidad;
-  final int articuloGarantiaCodigo;
+  final int? articuloGarantiaCodigo;
   final double valorComercial;
   final int objAnalisisGarantiaID;
   final String? descripcion;
@@ -92,10 +92,11 @@ class AnalisisGarantiaDetalle {
   final String? medidas;
   final String? numAsiento;
   final String? codValuadorCnbs;
+  final int? objCuentaDPFID;
 
   AnalisisGarantiaDetalle({
     required this.cantidad,
-    required this.articuloGarantiaCodigo,
+    this.articuloGarantiaCodigo,
     required this.valorComercial,
     required this.objAnalisisGarantiaID,
     this.descripcion,
@@ -125,6 +126,7 @@ class AnalisisGarantiaDetalle {
     this.medidas,
     this.numAsiento,
     this.codValuadorCnbs,
+    this.objCuentaDPFID,
   });
   factory AnalisisGarantiaDetalle.fromJson(Map<String, dynamic> json) =>
       AnalisisGarantiaDetalle(
@@ -160,6 +162,7 @@ class AnalisisGarantiaDetalle {
         numAsiento: json['NumAsiento'],
         codValuadorCnbs: json['CodValuadorCNBS'],
         objAnalisisGarantiaID: json['ObjAnalisisGarantiaID'],
+        objCuentaDPFID: json['objCuentaDPFID'],
       );
 
   Map<String, dynamic> toJson() {
@@ -196,8 +199,10 @@ class AnalisisGarantiaDetalle {
       'NumAsiento': numAsiento,
       'CodValuadorCNBS': codValuadorCnbs,
       'objAnalisisGarantiaID': objAnalisisGarantiaID,
+      'objCuentaDPFID': objCuentaDPFID,
     };
-    data.removeWhere((key, value) => value == null || value == '');
+    data.removeWhere(
+        (key, value) => value == null || value == '' || value == 0);
     return data;
   }
 }

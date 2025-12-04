@@ -8,9 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetalleGarantiaTableHNWidget extends StatelessWidget {
   final int numeroSolicitud;
+  final String tipoPersonaCodigo;
+  final String cedulaCliente;
   const DetalleGarantiaTableHNWidget({
     super.key,
     required this.numeroSolicitud,
+    required this.tipoPersonaCodigo,
+    required this.cedulaCliente,
   });
 
   @override
@@ -32,6 +36,8 @@ class DetalleGarantiaTableHNWidget extends StatelessWidget {
                         .state
                         .analisisGarantia,
                     numeroSolicitud: numeroSolicitud,
+                    tipoPersonaCodigo: tipoPersonaCodigo,
+                    cedulaCliente: cedulaCliente,
                   ),
                 ),
               ),

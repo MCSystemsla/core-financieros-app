@@ -51,9 +51,6 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
     final comprasMensuales = state.cicloDeComprasSemanales.cicloCompra
         .fold(0, (sum, e) => sum + e.cantidadCompra);
 
-    // final totalCuentasPorCobrar = state.cuentasPorCobrar
-    //     .fold<double>(0, (sum, e) => sum + e.totalMensualCredito);
-
     final totalInventario =
         state.inventario.fold(0, (sum, element) => sum + element.total);
 
@@ -131,9 +128,6 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
     final porcentajeDeVentaTotalCal =
         (totalIngresos * double.parse(porcentajeDeVenta));
 
-    // final totalResultadoLiquido =
-    //     (porcentajeDeVentaTotalCal - totalCostosOperativosCal);
-
     final totalConsumoFamiliarCalc = state.alimentacion +
         state.educacion +
         state.aguaElectricidadGas +
@@ -143,11 +137,6 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
         state.transporteFamiliar +
         state.otrosGastosImprevistos +
         state.pagoCreditosPrivados;
-
-    // final totalSaldoDisponibleUnidadFamiliarCal = porcentajeDeVentaTotalCal -
-    //     totalCostosOperativosCal -
-    //     totalConsumoFamiliarCalc +
-    //     state.ingresosFueraNegocio;
 
     final totalIngresosAnual =
         state.cicloVentaMensual.ciclo.fold(0, (sum, e) => sum + e.venta);

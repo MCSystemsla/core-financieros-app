@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
@@ -46,6 +47,10 @@ abstract class AnalisisRepositoryHn {
   });
   Future<void> createAnalisisGarantiasDetalle({
     required AnalisisGarantiaDetalle analisisGarantiaDetalle,
+  });
+  Future<AnalisisDpfsResponseHn> getAnalisisDpfs({
+    required String tipoPersona,
+    required String cedula,
   });
 }
 
@@ -274,6 +279,34 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisDpfsResponseHn> getAnalisisDpfs({
+    required String tipoPersona,
+    required String cedula,
+  }) async {
+    final endpoint = GetDpfsByCedulaHNEndpoint(
+      tipoPersona: tipoPersona,
+      cedula: cedula,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = AnalisisDpfsResponseHn.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;
