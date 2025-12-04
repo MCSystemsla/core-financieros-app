@@ -181,7 +181,7 @@ class AnalisisReprestamoCubit extends Cubit<AnalisisReprestamoState> {
           totalDisponibleActivo: totalActivosCalc,
           adelantoProveedores: state.adelantoProveedores,
           incobrables: incobrables.toInt(),
-          totalCuentasXCobrar: totalCuentasxCobrarCalc.toInt(),
+          totalCuentasXCobrar: totalCuentasxCobrarCalc,
           totalInventario: totalInventario.toDouble(),
           totalActivosFijos: totalActivosFijos,
           totalActivos: totalActivos,

@@ -53,6 +53,7 @@ class _CreateArticuloModalSheetState extends State<CreateArticuloModalSheet> {
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(15),
                     Center(
@@ -65,10 +66,36 @@ class _CreateArticuloModalSheetState extends State<CreateArticuloModalSheet> {
                         ),
                       ),
                     ),
-                    const Gap(20),
+                    const SizedBox(height: 25),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Text(
+                        'Nuevo Artículo',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    const Gap(5),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'Ingrese la información del artículo',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                    const Gap(10),
                     OutlineTextfieldWidget(
                       title: 'Tipo',
-                      icon: const Icon(Icons.comment_bank_sharp),
+                      icon: Icon(
+                        Icons.category,
+                        color: AppColors.getPrimaryColor(),
+                      ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [
@@ -81,7 +108,10 @@ class _CreateArticuloModalSheetState extends State<CreateArticuloModalSheet> {
                     const Gap(20),
                     OutlineTextfieldWidget(
                       title: 'Descripcion',
-                      icon: const Icon(Icons.comment_bank_sharp),
+                      icon: Icon(
+                        Icons.description,
+                        color: AppColors.getPrimaryColor(),
+                      ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [

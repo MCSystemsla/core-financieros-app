@@ -1,20 +1,21 @@
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/forms/analisis_garantia_form_liquida.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/forms/analisis_garantia_form_prendario.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
 
 class AnalisisGarantiaFormInterceptor extends StatelessWidget {
-  final TipoGarantiaEnum tipoGarantia;
+  final TipoGarantiaEnum? tipoGarantia;
   final int dpfsId;
   final int objAnalisisGarantiaID;
-  final int articuloGarantiaCodigo;
+  final int? articuloGarantiaCodigo;
   final String? descripcion;
   const AnalisisGarantiaFormInterceptor({
     super.key,
-    required this.tipoGarantia,
+    this.tipoGarantia,
     required this.dpfsId,
     required this.objAnalisisGarantiaID,
     required this.articuloGarantiaCodigo,
-    required this.descripcion,
+    this.descripcion,
   });
 
   @override
@@ -26,11 +27,23 @@ class AnalisisGarantiaFormInterceptor extends StatelessWidget {
           articuloGarantiaCodigo: articuloGarantiaCodigo,
           descripcion: descripcion,
         ),
-      TipoGarantiaEnum.liquida => AnalisisGarantiaFormPrendario(
+      TipoGarantiaEnum.liquida => AnalisisGarantiaFormLiquida(
           dpfsId: dpfsId,
           objAnalisisGarantiaID: objAnalisisGarantiaID,
           articuloGarantiaCodigo: articuloGarantiaCodigo,
           descripcion: descripcion,
+        ),
+      TipoGarantiaEnum.fiadorHipotecario => const Text(
+          'Hipotecario',
+        ),
+      TipoGarantiaEnum.fiadorSolidario => const Text(
+          'Solidario',
+        ),
+      TipoGarantiaEnum.fiduciario => const Text(
+          'Fiduciario',
+        ),
+      TipoGarantiaEnum.prendaAgraria => const Text(
+          'Prenda agraria',
         ),
       _ => const SizedBox(),
     };

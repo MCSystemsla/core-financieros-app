@@ -25,7 +25,7 @@ class AnalisisReprestamoHnLocalDb {
   int? totalDisponibleActivo;
   int? adelantoProveedores;
   int? incobrables;
-  int? totalCuentasXCobrar;
+  double? totalCuentasXCobrar;
   double? totalInventario;
   int? totalActivosFijos;
   double? totalActivos;

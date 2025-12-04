@@ -25,7 +25,7 @@ class AnalisisReprestamoHn {
   final int totalDisponibleActivo;
   final int adelantoProveedores;
   final int incobrables;
-  final int totalCuentasXCobrar;
+  final double totalCuentasXCobrar;
   final double totalInventario;
   final int totalActivosFijos;
   final double totalActivos;

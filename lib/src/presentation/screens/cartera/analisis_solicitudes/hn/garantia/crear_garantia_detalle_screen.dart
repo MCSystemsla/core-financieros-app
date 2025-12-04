@@ -51,7 +51,8 @@ class _CrearGarantiaDetalleScreenState
             repository,
           )..getDpfsByCedula(
               tipoPersona: widget.tipoPersonaCodigo,
-              cedula: widget.cedulaCliente),
+              cedula: widget.cedulaCliente,
+            ),
         ),
       ],
       child: Scaffold(
@@ -207,16 +208,16 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                   );
                 },
               ),
-              if (tipoGarantiaName != null)
-                AnalisisGarantiaFormInterceptor(
-                  tipoGarantia: tipoGarantiaName!.toTipoGarantiaEnum(),
-                  dpfsId: dpfsId ?? 0,
-                  objAnalisisGarantiaID:
-                      int.tryParse(objAnalisisGarantiaID ?? '0') ?? 0,
-                  articuloGarantiaCodigo: articuloGarantiaCodigo ?? 0,
-                  descripcion: descripcion,
-                ),
             ],
+            AnalisisGarantiaFormInterceptor(
+              key: ValueKey(tipoGarantiaName),
+              tipoGarantia: tipoGarantiaName?.toTipoGarantiaEnum(),
+              dpfsId: dpfsId ?? 0,
+              objAnalisisGarantiaID:
+                  int.tryParse(objAnalisisGarantiaID ?? '0') ?? 0,
+              articuloGarantiaCodigo: articuloGarantiaCodigo,
+              descripcion: descripcion,
+            ),
           ],
         ),
       ),
