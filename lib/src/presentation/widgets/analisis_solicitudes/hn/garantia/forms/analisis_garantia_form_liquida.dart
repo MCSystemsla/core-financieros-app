@@ -93,7 +93,7 @@ class _AnalisisGarantiaFormLiquidaState
             OutlineTextfieldWidget(
               title: 'Monto del DPF',
               icon: Icon(
-                Icons.monetization_on_outlined,
+                Icons.wallet,
                 color: AppColors.getPrimaryColor(),
               ),
               textInputType: TextInputType.number,
