@@ -76,7 +76,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Empresa que labora',
-                  hintText: 'input_select_option'.tr(),
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -93,7 +92,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Cargo',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -110,7 +108,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Tiempo Laborar',
-                  hintText: 'input_select_option'.tr(),
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -129,7 +126,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Lugar de trabajo anterior',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
@@ -166,7 +162,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Nombre del negocio',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -183,7 +178,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Anos de funcionamiento',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -203,7 +197,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 SearchDropdownWidget(
                   codigo: 'NIVELAPROXIMADOINGRESOS',
                   title: 'Nivel de aproximado en ingresos',
-                  hintText: 'input_select_option'.tr(),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
@@ -217,7 +210,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Puesto que desempeña',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -237,7 +229,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   title: 'Condición local del negocio',
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  hintText: 'input_select_option'.tr(),
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -298,7 +289,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Anos de experiencia',
-                  hintText: 'input_select_option'.tr(),
                   icon: const Icon(Icons.person),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -329,7 +319,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
                 title: 'Pais',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
@@ -344,7 +334,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               CatalogoValorNacionalidad(
                 codigo: 'DEP',
                 title: 'Departamento',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 where: state.paisOcupacionCodigo,
@@ -360,7 +350,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               CatalogoValorNacionalidad(
                 codigo: 'MUN',
                 title: 'Municipio',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 where: state.departamentoOcupacionCodigo,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -377,7 +367,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 codigo: 'ALD',
                 title: 'Aldea',
                 where: state.municipioOcupacionCodigo,
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
@@ -391,7 +381,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Caserio',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 icon: const Icon(Icons.person),
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
@@ -409,7 +399,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               OutlineTextfieldWidget(
                 title: 'Barrio',
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -425,7 +414,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Direccion y referencia',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -441,7 +429,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Telefono',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -458,7 +445,6 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Celular',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,

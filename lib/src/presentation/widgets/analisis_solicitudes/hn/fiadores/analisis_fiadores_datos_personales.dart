@@ -52,7 +52,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Pais:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -67,7 +67,7 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               CatalogoValorNacionalidad(
                 codigo: 'DEP',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Departamento:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -83,7 +83,7 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               CatalogoValorNacionalidad(
                 codigo: 'MUN',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Municipio:',
                 where: state.departamentoCodigo,
                 validator: (value) =>
@@ -100,7 +100,7 @@ class _AnalisisFiadoresDatosPersonalesState
               CatalogoValorNacionalidad(
                 codigo: 'ALD',
                 where: state.municipioCodigo,
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Aldea:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -115,7 +115,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Caserio',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
@@ -132,7 +131,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Barrio',
-                hintText: 'input_select_option'.tr(),
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
@@ -149,7 +147,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Direccion y Referencia',
-                hintText: 'input_select_option'.tr(),
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
@@ -179,7 +176,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Nacionalidad 2:',
                 onChanged: (value) {
                   cubit.onFieldChanged(
@@ -191,7 +188,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                hintText: 'input_select_option'.tr(),
+                hintText: 'input.select_option'.tr(),
                 title: 'Nacionalidad 3:',
                 onChanged: (value) {
                   cubit.onFieldChanged(
@@ -204,7 +201,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Telefono',
-                hintText: 'input_select_option'.tr(),
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
@@ -222,7 +218,6 @@ class _AnalisisFiadoresDatosPersonalesState
               OutlineTextfieldWidget(
                 title: 'Celular',
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -239,7 +234,6 @@ class _AnalisisFiadoresDatosPersonalesState
               OutlineTextfieldWidget(
                 validator: (value) => ClassValidator.validateEmail(value),
                 title: 'Correo Electrónico',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 onChange: (value) {
                   cubit.onFieldChanged(
@@ -294,7 +288,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Numero de dependientes',
-                hintText: 'input_select_option'.tr(),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -312,7 +305,6 @@ class _AnalisisFiadoresDatosPersonalesState
               OutlineTextfieldWidget(
                 title: 'Numero de hijos',
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'input_select_option'.tr(),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],

@@ -675,6 +675,9 @@ class _AnalisisGarantiaFormPrendarioState
                                 fechaIngreso: fechaDeIngreso,
                                 fechaVencimiento: fechaVencimiento,
                                 fechaInscripcion: fechaInscripcion,
+                                departamentoCodigo: departamento!,
+                                municipioCodigo: municipio!,
+                                aldeaCodigo: aldea!,
                               ),
                             );
                       },

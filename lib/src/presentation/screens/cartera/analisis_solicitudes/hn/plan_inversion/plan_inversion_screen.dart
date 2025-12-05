@@ -228,7 +228,10 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     OutlineTextfieldWidget(
                       initialValue: cantidad?.toString().toNullIfEmptyOrZero(),
                       title: 'Cantidad',
-                      icon: const Icon(Icons.comment_bank_sharp),
+                      icon: Icon(
+                        Icons.comment_bank_sharp,
+                        color: AppColors.getPrimaryColor(),
+                      ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       textInputType: TextInputType.number,
@@ -244,7 +247,10 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     OutlineTextfieldWidget(
                       initialValue: description,
                       title: 'Descripcion',
-                      icon: const Icon(Icons.wallet),
+                      icon: Icon(
+                        Icons.wallet,
+                        color: AppColors.getPrimaryColor(),
+                      ),
                       textInputType: TextInputType.text,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -264,7 +270,10 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                           .toNullIfEmptyOrZero(),
                       textAlign: TextAlign.end,
                       title: 'Precio Unitario ',
-                      icon: const Icon(Icons.wallet),
+                      icon: Icon(
+                        Icons.wallet,
+                        color: AppColors.getPrimaryColor(),
+                      ),
                       textInputType: TextInputType.number,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),

@@ -61,6 +61,14 @@ class AnalisisGarantia {
 }
 
 class AnalisisGarantiaDetalle {
+  final String departamentoCodigo;
+  final String municipioCodigo;
+  final String aldeaCodigo;
+  final int? valorAvaluo;
+  final int? medidasVaras2;
+  final int? anioVehiculo;
+  final String? numPlaca;
+  final int? medidaMetros2;
   final int cantidad;
   final int? articuloGarantiaCodigo;
   final double valorComercial;
@@ -95,6 +103,9 @@ class AnalisisGarantiaDetalle {
   final int? objCuentaDPFID;
 
   AnalisisGarantiaDetalle({
+    required this.municipioCodigo,
+    required this.aldeaCodigo,
+    required this.departamentoCodigo,
     required this.cantidad,
     this.articuloGarantiaCodigo,
     required this.valorComercial,
@@ -127,9 +138,17 @@ class AnalisisGarantiaDetalle {
     this.numAsiento,
     this.codValuadorCnbs,
     this.objCuentaDPFID,
+    this.valorAvaluo,
+    this.medidasVaras2,
+    this.anioVehiculo,
+    this.numPlaca,
+    this.medidaMetros2,
   });
   factory AnalisisGarantiaDetalle.fromJson(Map<String, dynamic> json) =>
       AnalisisGarantiaDetalle(
+        municipioCodigo: json['MunicipioCodigo'],
+        aldeaCodigo: json['AldeaCodigo'],
+        departamentoCodigo: json['DepartamentoCodigo'],
         cantidad: json['Cantidad'],
         articuloGarantiaCodigo: json['ArticuloGarantiaCodigo'],
         descripcion: json['Descripcion'],
@@ -163,6 +182,11 @@ class AnalisisGarantiaDetalle {
         codValuadorCnbs: json['CodValuadorCNBS'],
         objAnalisisGarantiaID: json['ObjAnalisisGarantiaID'],
         objCuentaDPFID: json['objCuentaDPFID'],
+        valorAvaluo: json['ValorAvaluo'],
+        medidasVaras2: json['MedidasVaras2'],
+        anioVehiculo: json['AnioVehiculo'],
+        numPlaca: json['NumPlaca'],
+        medidaMetros2: json['MedidaMetros2'],
       );
 
   Map<String, dynamic> toJson() {
@@ -200,9 +224,18 @@ class AnalisisGarantiaDetalle {
       'CodValuadorCNBS': codValuadorCnbs,
       'objAnalisisGarantiaID': objAnalisisGarantiaID,
       'objCuentaDPFID': objCuentaDPFID,
+      'DepartamentoCodigo': departamentoCodigo,
+      'AldeaCodigo': aldeaCodigo,
+      'MunicipioCodigo': municipioCodigo,
+      'ValorAvaluo': valorAvaluo,
+      'MedidasVaras2': medidasVaras2,
+      'AnioVehiculo': anioVehiculo,
+      'NumPlaca': numPlaca,
+      'MedidaMetros2': medidaMetros2,
     };
     data.removeWhere(
-        (key, value) => value == null || value == '' || value == 0);
+      (key, value) => value == null || value == '' || value == 0,
+    );
     return data;
   }
 }

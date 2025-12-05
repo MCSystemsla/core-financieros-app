@@ -40,9 +40,9 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.25,
-      maxChildSize: 0.65,
+      initialChildSize: 0.7,
+      minChildSize: 0.45,
+      maxChildSize: 0.75,
       expand: false,
       builder: (_, controller) {
         return Container(
@@ -117,7 +117,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                     SelectableCardItem(
                       icon: Icons.swap_horiz_rounded,
                       color: const Color(0xff0D9488),
-                      title: 'Registar Fiadores',
+                      title: 'Registrar Fiadores',
                       subtitle: 'Crear Terceros',
                       onTap: () => {
                         context.pop(),
@@ -152,6 +152,28 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                             ),
                           ),
                         )
+                      },
+                    ),
+                    SelectableCardItem(
+                      icon: Icons.assignment_turned_in,
+                      color: const Color(0xFFB91C1C),
+                      title: 'Cerrar Analisis',
+                      subtitle: 'Cerrar analisis de crédito',
+                      onTap: () => {
+                        context.pop(),
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (ctx) => GarantiaHNScreen(
+                        //       numeroSolicitud: int.parse(numeroSolicitud),
+                        //       solicitudCodigo:
+                        //           tipoSolicitud?.toTypeForInterceptorString() ??
+                        //               '',
+                        //       cedulaCliente: cedulaCliente,
+                        //       tipoPersonaCodigo: tipoPersonaCodigo,
+                        //     ),
+                        //   ),
+                        // )
                       },
                     ),
                   ],
