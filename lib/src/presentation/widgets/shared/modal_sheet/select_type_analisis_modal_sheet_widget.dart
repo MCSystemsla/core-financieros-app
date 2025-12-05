@@ -1,11 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +103,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                       icon: Icons.business_center_outlined,
                       color: const Color(0xffF6153F),
                       title: 'Registrar Plan de inversion',
-                      subtitle: 'Crar plan de inversion',
+                      subtitle: 'Crear plan de inversion',
                       onTap: () => {
                         context.pop(),
                         Navigator.push(
@@ -155,12 +157,20 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                       },
                     ),
                     SelectableCardItem(
+                      isLoading: false,
                       icon: Icons.assignment_turned_in,
                       color: const Color(0xFFB91C1C),
                       title: 'Cerrar Analisis',
                       subtitle: 'Cerrar analisis de crédito',
                       onTap: () => {
-                        context.pop(),
+                        CloseAnalisisDialog(
+                          context: context,
+                          title: '¿Estás seguro de cerrar el analisis?',
+                          onYes: () {},
+                        ).showDialog(
+                          context,
+                          dialogType: DialogType.infoReverse,
+                        )
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(

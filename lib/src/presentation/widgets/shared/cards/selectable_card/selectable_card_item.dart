@@ -8,6 +8,7 @@ class SelectableCardItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final bool isLoading;
 
   const SelectableCardItem({
     super.key,
@@ -16,6 +17,7 @@ class SelectableCardItem extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.isLoading = false,
   });
 
   @override
@@ -58,6 +60,13 @@ class SelectableCardItem extends StatelessWidget {
             color: Color(0xff6B7280),
           ),
         ),
+        trailing: isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(),
+              )
+            : null,
         onTap: onTap,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
