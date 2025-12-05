@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/forms/analisis_garantia_form_hipotecario.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/forms/analisis_garantia_form_liquida.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/forms/analisis_garantia_form_prendario.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
@@ -33,9 +34,9 @@ class AnalisisGarantiaFormInterceptor extends StatelessWidget {
           articuloGarantiaCodigo: articuloGarantiaCodigo,
           descripcion: descripcion,
         ),
-      TipoGarantiaEnum.fiadorHipotecario => const Text(
-          'Hipotecario',
-        ),
+      TipoGarantiaEnum.fiadorHipotecario =>
+        const AnalisisGarantiaFormHipotecario(),
+      TipoGarantiaEnum.hipotecario => const AnalisisGarantiaFormHipotecario(),
       TipoGarantiaEnum.fiadorSolidario => const Text(
           'Solidario',
         ),
