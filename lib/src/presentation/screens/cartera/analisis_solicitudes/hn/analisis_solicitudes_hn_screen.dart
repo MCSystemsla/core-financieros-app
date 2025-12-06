@@ -1,8 +1,11 @@
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/cerrar_analisis/cerrar_analisis_listener.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
@@ -17,13 +20,22 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => SolicitudesByEstadoHnCubit(
-        SolicitudesCreditoHnRepositoryImpl(),
-      )..getSolicitudesByEstado(
-          isAsignadaToAsesorCredito: true,
-          estadoCredito: EstadoCredito.asignada,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => SolicitudesByEstadoHnCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+          )..getSolicitudesByEstado(
+              isAsignadaToAsesorCredito: true,
+              estadoCredito: EstadoCredito.asignada,
+            ),
         ),
+        BlocProvider(
+          create: (ctx) => CerrarAnalisisCubit(
+            AnalisisRepositoryHNImpl(),
+          ),
+        ),
+      ],
       child: PopScope(
         onPopInvokedWithResult: (pop, result) {
           context.push('/');
@@ -39,6 +51,7 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
               ),
+              const CerrarAnalisisListener(),
               BlocBuilder<SolicitudesByEstadoHnCubit,
                   SolicitudesByEstadoHnState>(
                 builder: (context, state) {

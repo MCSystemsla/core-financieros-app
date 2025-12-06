@@ -52,6 +52,10 @@ abstract class AnalisisRepositoryHn {
     required String tipoPersona,
     required String cedula,
   });
+  Future<void> closeAnalisis({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
 }
 
 class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
@@ -307,6 +311,28 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
       final data = AnalisisDpfsResponseHn.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> closeAnalisis({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = CloseAnalisisEndpointHN(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;

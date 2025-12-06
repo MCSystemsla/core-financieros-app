@@ -269,3 +269,28 @@ class GetDpfsByCedulaHNEndpoint extends Endpoint {
         'tipoPersona': tipoPersona,
       };
 }
+
+class CloseAnalisisEndpointHN extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+
+  CloseAnalisisEndpointHN({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-asalariado/cerrar-analisis-asalariado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'NumeroSolicitud': numeroSolicitud,
+        'database': LocalStorage().database,
+      };
+}

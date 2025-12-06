@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/select_type_analisis_modal_sheet_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AnalisisCreditCardHn extends StatelessWidget {
@@ -50,17 +52,20 @@ class AnalisisCreditCardHn extends StatelessWidget {
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
-                        builder: (ctx) => SelectTypeAnalisisModalSheetWidget(
-                          index: index,
-                          animate: false,
-                          enabled: true,
-                          numeroSolicitud: numeroSolicitud,
-                          tipoSolicitud: tipoSolicitud,
-                          title: title,
-                          subtitle: subtitle,
-                          description: description,
-                          cedulaCliente: cedulaCliente,
-                          tipoPersonaCodigo: tipoPersonaCodigo,
+                        builder: (ctx) => BlocProvider.value(
+                          value: context.read<CerrarAnalisisCubit>(),
+                          child: SelectTypeAnalisisModalSheetWidget(
+                            index: index,
+                            animate: false,
+                            enabled: true,
+                            numeroSolicitud: numeroSolicitud,
+                            tipoSolicitud: tipoSolicitud,
+                            title: title,
+                            subtitle: subtitle,
+                            description: description,
+                            cedulaCliente: cedulaCliente,
+                            tipoPersonaCodigo: tipoPersonaCodigo,
+                          ),
                         ),
                       ),
                     }

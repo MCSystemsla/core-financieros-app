@@ -2,6 +2,8 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
@@ -11,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -156,34 +159,48 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         )
                       },
                     ),
-                    SelectableCardItem(
-                      isLoading: false,
-                      icon: Icons.assignment_turned_in,
-                      color: const Color(0xFFB91C1C),
-                      title: 'Cerrar Analisis',
-                      subtitle: 'Cerrar analisis de crédito',
-                      onTap: () => {
-                        CloseAnalisisDialog(
-                          context: context,
-                          title: '¿Estás seguro de cerrar el analisis?',
-                          onYes: () {},
-                        ).showDialog(
-                          context,
-                          dialogType: DialogType.infoReverse,
-                        )
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (ctx) => GarantiaHNScreen(
-                        //       numeroSolicitud: int.parse(numeroSolicitud),
-                        //       solicitudCodigo:
-                        //           tipoSolicitud?.toTypeForInterceptorString() ??
-                        //               '',
-                        //       cedulaCliente: cedulaCliente,
-                        //       tipoPersonaCodigo: tipoPersonaCodigo,
-                        //     ),
-                        //   ),
-                        // )
+                    BlocBuilder<CerrarAnalisisCubit, CerrarAnalisisState>(
+                      builder: (context, state) {
+                        return SelectableCardItem(
+                          isLoading: state.status == Status.inProgress,
+                          icon: Icons.assignment_turned_in,
+                          color: const Color(0xFFB91C1C),
+                          title: 'Cerrar Analisis',
+                          subtitle: 'Cerrar analisis de crédito',
+                          onTap: () => {
+                            CloseAnalisisDialog(
+                              context: context,
+                              title: '¿Estás seguro de cerrar el analisis?',
+                              onYes: () {
+                                context.pop();
+                                context
+                                    .read<CerrarAnalisisCubit>()
+                                    .closeAnalisis(
+                                      numeroSolicitud:
+                                          int.parse(numeroSolicitud),
+                                      tipoSolicitud: tipoSolicitud!
+                                          .toTypeForInterceptorString(),
+                                    );
+                              },
+                            ).showDialog(
+                              context,
+                              dialogType: DialogType.infoReverse,
+                            )
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (ctx) => GarantiaHNScreen(
+                            //       numeroSolicitud: int.parse(numeroSolicitud),
+                            //       solicitudCodigo:
+                            //           tipoSolicitud?.toTypeForInterceptorString() ??
+                            //               '',
+                            //       cedulaCliente: cedulaCliente,
+                            //       tipoPersonaCodigo: tipoPersonaCodigo,
+                            //     ),
+                            //   ),
+                            // )
+                          },
+                        );
                       },
                     ),
                   ],
