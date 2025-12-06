@@ -41,7 +41,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Tasa %',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.percent_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -54,7 +54,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Monto',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.payments_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -67,7 +67,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Monto de comisión',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.request_quote_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -80,7 +80,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Servicios',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.miscellaneous_services_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),

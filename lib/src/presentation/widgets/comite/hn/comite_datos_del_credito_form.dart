@@ -42,7 +42,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Producto',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.category_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -55,7 +55,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Interes Corriente %',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.percent_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -75,7 +75,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Plazo en meses',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.schedule_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -88,7 +88,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Monto de aprobación',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.payments_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -101,7 +101,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Fecha de desembolso',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.event_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -114,7 +114,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Fecha de primer pago',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.calendar_today_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),
@@ -127,7 +127,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           OutlineTextfieldWidget(
             title: 'Fecha de vencimiento',
             icon: Icon(
-              Icons.inventory_2_outlined,
+              Icons.event_busy_outlined,
               color: AppColors.getPrimaryColor(),
             ),
             validator: (value) => ClassValidator.validateRequired(value),

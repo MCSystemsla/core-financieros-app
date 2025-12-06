@@ -283,7 +283,7 @@ class CloseAnalisisEndpointHN extends Endpoint {
   Method get method => Method.patch;
 
   @override
-  String get path => '/cartera/analisis-asalariado/cerrar-analisis-asalariado';
+  String get path => '/cartera/solicitudes/general/analisis/cerrar';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -291,6 +291,7 @@ class CloseAnalisisEndpointHN extends Endpoint {
   @override
   Map<String, dynamic> get body => {
         'NumeroSolicitud': numeroSolicitud,
+        'TipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
       };
 }

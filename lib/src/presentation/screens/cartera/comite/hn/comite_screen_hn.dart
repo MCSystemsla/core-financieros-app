@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +44,17 @@ class ComiteScreenHn extends StatelessWidget {
                 builder: (context, state) {
                   return switch (state.status) {
                     Status.inProgress => const Expanded(child: LoadingWidget()),
-                    Status.error => Text('Error : ${state.errorMsg} '),
+                    Status.error => OnErrorWidget(
+                        errorMsg: state.errorMsg,
+                        onPressed: () {
+                          context
+                              .read<SolicitudesByEstadoHnCubit>()
+                              .getSolicitudesByEstado(
+                                isAsignadaToAsesorCredito: true,
+                                estadoCredito: EstadoCredito.enComite,
+                              );
+                        },
+                      ),
                     Status.done => Expanded(
                         flex: 4,
                         child: ListView.builder(
