@@ -50,33 +50,20 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     try {
       await saveCatalogosToDatabase();
       log('Todos los catálogos guardados correctamente.');
-      await getNacionalidadByCodigo(
-        codigo: 'PAIS',
-        isConnected: true,
-      );
-      await getNacionalidadByCodigo(
-        codigo: 'MUN',
-        isConnected: true,
-      );
-      await getNacionalidadByCodigo(
-        codigo: 'DEP',
-        isConnected: true,
-      );
-      // await getNacionalidadByCodigo(
-      //   codigo: 'BR',
-      //   isConnected: true,
-      // );
-      await getNacionalidadByCodigo(
-        codigo: 'ALD',
-        isConnected: true,
-      );
-      // await getNacionalidadByCodigo(
-      //   codigo: 'CAS',
-      //   isConnected: true,
-      // );
+
+      await Future.wait([
+        getNacionalidadByCodigo(codigo: 'PAIS', isConnected: true),
+        getNacionalidadByCodigo(codigo: 'MUN', isConnected: true),
+        getNacionalidadByCodigo(codigo: 'DEP', isConnected: true),
+        getNacionalidadByCodigo(codigo: 'ALD', isConnected: true),
+      ]);
+
       await saveCatalogoFrecuenciaPago();
+
       await getAndSaveParametros();
+
       await saveActividadesEconomicasAlias();
+
       emit(state.copyWith(status: Status.done));
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
     } catch (e, stack) {
@@ -129,42 +116,39 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           log('Saltando catálogo vacío: $codigo');
           continue;
         }
+        final items = catalogoResponse.data.map((item) {
+          return CatalogoLocalDb(
+            valor: item.valor,
+            nombre: item.nombre,
+            type: codigo,
+            interes: item.interes,
+            montoMaximo: item.montoMaximo,
+            montoMinimo: item.montoMinimo?.toInt(),
+          );
+        }).toList();
 
-        for (final item in catalogoResponse.data) {
-          try {
-            _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              type: codigo,
-              interes: item.interes,
-              montoMaximo: item.montoMaximo,
-              montoMinimo: item.montoMinimo?.toInt(),
-            ));
-          } catch (e) {
-            log('Error al guardar item $item del catálogo $codigo: $e');
-          }
-        }
+        _objectBoxService.catalogoLocalBox.putMany(items);
       }
 
-      final catalogosActividadesCNSB = await getCatalogoByCodigo(
-        codigo: 'ACTIVIDADESECONOMICASCNBS',
-      );
-      for (var item in catalogosActividadesCNSB!.data) {
-        _objectBoxService.catalogoActividadCnbsBox
-            .put(CatalogoActividadCnbsLocalDb(
-          nombre: item.nombre,
-          valor: item.valor,
-          isApnfd: item.esAPNFD,
-          isApnfdString: item.esAPNFD.toString(),
-        ));
-        if (item.esAPNFD) {
-          log('esAPNFD ${item.esAPNFD} ${item.nombre}');
-        }
+      final actividadesCNBS =
+          await getCatalogoByCodigo(codigo: 'ACTIVIDADESECONOMICASCNBS');
+
+      if (actividadesCNBS != null) {
+        final items = actividadesCNBS.data.map((item) {
+          return CatalogoActividadCnbsLocalDb(
+            nombre: item.nombre,
+            valor: item.valor,
+            isApnfd: item.esAPNFD,
+            isApnfdString: item.esAPNFD.toString(),
+          );
+        }).toList();
+
+        _objectBoxService.catalogoActividadCnbsBox.putMany(items);
       }
 
-      final catalogoProductos = await _repository.getCatalogoProducts();
-      for (var item in catalogoProductos.data) {
-        _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+      final productos = await _repository.getCatalogoProducts();
+      final productosItems = productos.data.map((item) {
+        return CatalogoLocalDb(
           valor: item.valor,
           nombre: item.nombre,
           interes: item.interes,
@@ -172,11 +156,13 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           montoMinimo: item.montoMinimo?.toInt() ?? 0,
           isRecurrente: item.isRecurrente,
           type: 'PRODUCTO',
-        ));
-      }
-      final catalogoEmpleadosActivos = await _repository.getEmpleadosActivos();
-      for (var item in catalogoEmpleadosActivos.data) {
-        _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        );
+      }).toList();
+      _objectBoxService.catalogoLocalBox.putMany(productosItems);
+
+      final empleados = await _repository.getEmpleadosActivos();
+      final empleadosItems = empleados.data.map((item) {
+        return CatalogoLocalDb(
           valor: item.valor.toString(),
           nombre: item.nombre,
           interes: 0,
@@ -184,8 +170,10 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           montoMinimo: 0,
           isRecurrente: false,
           type: 'EMPLEADOS',
-        ));
-      }
+        );
+      }).toList();
+
+      _objectBoxService.catalogoLocalBox.putMany(empleadosItems);
     } catch (e, stack) {
       log('Error general al guardar catálogos: $e\n$stack');
       rethrow;
@@ -199,93 +187,92 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     try {
       switch (codigo) {
         case 'PAIS':
-          final query =
-              _objectBoxService.catalogoNacionalidadPaisBox.query().build();
+          await _objectBoxService.catalogoNacionalidadPaisBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoNacionalidadPaisDb(
+              valor: e.valor,
+              nombre: e.nombre,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoNacionalidadPaisBox
-                .put(CatalogoNacionalidadPaisDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              // relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoNacionalidadPaisBox.putMany(list);
           break;
+
         case 'DEP':
-          final query =
-              _objectBoxService.catalogoNacionalidadDepBox.query().build();
+          await _objectBoxService.catalogoNacionalidadDepBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoNacionalidadDepDb(
+              valor: e.valor,
+              nombre: e.nombre,
+              relacion: e.relacion,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoNacionalidadDepBox
-                .put(CatalogoNacionalidadDepDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoNacionalidadDepBox.putMany(list);
           break;
+
         case 'MUN':
-          final query =
-              _objectBoxService.catalogoNacionalidadMunBox.query().build();
+          await _objectBoxService.catalogoNacionalidadMunBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoNacionalidadMunDb(
+              valor: e.valor,
+              nombre: e.nombre,
+              relacion: e.relacion,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoNacionalidadMunBox
-                .put(CatalogoNacionalidadMunDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoNacionalidadMunBox.putMany(list);
           break;
+
         case 'BR':
-          final query = _objectBoxService.catalogoBarrioBox.query().build();
+          await _objectBoxService.catalogoBarrioBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoBarrioLocalDb(
+              valor: e.valor,
+              nombre: e.nombre,
+              relacion: e.relacion,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoBarrioBox.put(CatalogoBarrioLocalDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoBarrioBox.putMany(list);
           break;
+
         case 'ALD':
-          final query = _objectBoxService.catalogoAldeaBox.query().build();
+          await _objectBoxService.catalogoAldeaBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoAldeaLocalDb(
+              valor: e.valor,
+              nombre: e.nombre,
+              relacion: e.relacion,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoAldeaBox.put(CatalogoAldeaLocalDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoAldeaBox.putMany(list);
           break;
+
         case 'CAS':
-          final query = _objectBoxService.catalogoCaserioBox.query().build();
+          await _objectBoxService.catalogoCaserioBox.removeAllAsync();
 
-          query.remove();
+          final list = items.map((e) {
+            return CatalogoCaserioLocalDb(
+              valor: e.valor,
+              nombre: e.nombre,
+              relacion: e.relacion,
+            );
+          }).toList();
 
-          for (var item in items) {
-            _objectBoxService.catalogoCaserioBox.put(CatalogoCaserioLocalDb(
-              valor: item.valor,
-              nombre: item.nombre,
-              relacion: item.relacion,
-            ));
-          }
+          _objectBoxService.catalogoCaserioBox.putMany(list);
           break;
 
         default:
           throw Exception('Código no soportado: $codigo');
       }
+      await Future(() {});
       log('Guardados los datos en la base de datos local');
     } catch (e) {
       throw Exception('Error al guardar en la base de datos: $e');
@@ -312,13 +299,16 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     final data = await _repository.getCatalogoFrecuenciaPago();
     final query = _objectBoxService.catalogoFrecuenciaPagoBox.query().build();
     query.remove();
-    for (var item in data.catalogo) {
-      _objectBoxService.catalogoFrecuenciaPagoBox.put(CatalogoFrecuenciaPagoDb(
-        valor: item.valor,
-        meses: item.meses,
-        nombre: item.nombre,
-      ));
-    }
+    final list = data.catalogo
+        .map(
+          (e) => CatalogoFrecuenciaPagoDb(
+            valor: e.valor,
+            meses: e.meses,
+            nombre: e.nombre,
+          ),
+        )
+        .toList();
+    _objectBoxService.catalogoFrecuenciaPagoBox.putMany(list);
   }
 
   Future<void> getAndSaveParametros() async {
@@ -360,16 +350,15 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           .query()
           .build();
       query.remove();
-      for (var item in resp.data) {
-        _objectBoxService.actividadesEconomicasAliasFilteredBox.put(
-          ActividadesEconomicasAliasFilteredLocalDb(
-            alias: item.alias,
-            codActividadEconomica: item.codActividadEconomica,
-            idActividadEconomica: item.id,
-            nombre: item.nombre,
-          ),
+      final list = resp.data.map((e) {
+        return ActividadesEconomicasAliasFilteredLocalDb(
+          alias: e.alias,
+          codActividadEconomica: e.codActividadEconomica,
+          idActividadEconomica: e.id,
+          nombre: e.nombre,
         );
-      }
+      }).toList();
+      _objectBoxService.actividadesEconomicasAliasFilteredBox.putMany(list);
     } catch (e, s) {
       log('Error al guardar actividades economicas alias: $e, $s');
       rethrow;
