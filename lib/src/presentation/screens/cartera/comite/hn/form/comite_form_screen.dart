@@ -1,31 +1,68 @@
+import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitud/comite_solicitud_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_comision_en_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_datos_del_credito_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_seguros_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ComiteFormScreen extends StatelessWidget {
-  const ComiteFormScreen({super.key});
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  const ComiteFormScreen({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crear Comité'),
-      ),
-      body: PageView(
-        controller: pageController,
-        children: [
-          _ComiteGeneralForm(
-            pageController: pageController,
-          ),
-          _ComiteOtrosForm(),
-        ],
+    return BlocProvider(
+      create: (ctx) => ComiteSolicitudCubit(
+        ComiteRepositoryHNImpl(),
+      )..getComiteSolicitud(
+          numeroSolicitud: numeroSolicitud,
+          tipoSolicitud: tipoSolicitud,
+        ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Crear Comité'),
+        ),
+        body: BlocBuilder<ComiteSolicitudCubit, ComiteSolicitudState>(
+          builder: (context, state) {
+            return switch (state.status) {
+              Status.inProgress => const LoadingWidget(),
+              Status.error => OnErrorWidget(
+                  errorMsg: state.errorMsg,
+                  onPressed: () {
+                    context.read<ComiteSolicitudCubit>().getComiteSolicitud(
+                          numeroSolicitud: numeroSolicitud,
+                          tipoSolicitud: tipoSolicitud,
+                        );
+                  },
+                ),
+              Status.done => PageView(
+                  controller: pageController,
+                  children: [
+                    _ComiteGeneralForm(
+                      pageController: pageController,
+                    ),
+                    _ComiteOtrosForm(),
+                  ],
+                ),
+              _ => const SizedBox(),
+            };
+          },
+        ),
       ),
     );
   }

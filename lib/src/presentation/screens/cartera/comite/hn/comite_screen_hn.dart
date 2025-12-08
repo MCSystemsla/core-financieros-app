@@ -66,7 +66,12 @@ class ComiteScreenHn extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (ctx) => const ComiteFormScreen(),
+                                    builder: (ctx) => ComiteFormScreen(
+                                      numeroSolicitud: int.parse(
+                                          state.solicitudes[index].numero),
+                                      tipoSolicitud: state
+                                          .solicitudes[index].tipoSolicitud,
+                                    ),
                                   ),
                                 );
                               },
