@@ -91,7 +91,7 @@ class AnalisisAsalariadoPasivosHn extends StatelessWidget {
                         mantissaLength: 0,
                       )
                       .toNullIfEmptyOrZero(),
-                  title: 'Prestamo banco corto plazo:',
+                  title: 'Préstamo banco corto plazo:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -116,7 +116,7 @@ class AnalisisAsalariadoPasivosHn extends StatelessWidget {
                         mantissaLength: 0,
                       )
                       .toNullIfEmptyOrZero(),
-                  title: 'Prestamo banco largo plazo:',
+                  title: 'Préstamo banco largo plazo:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,

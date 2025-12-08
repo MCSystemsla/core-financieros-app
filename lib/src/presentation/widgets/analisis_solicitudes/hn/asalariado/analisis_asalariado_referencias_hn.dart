@@ -552,7 +552,7 @@ class _AnalisisAsalariadoReferenciasHnState
                   const Gap(20),
                   OutlineTextfieldWidget(
                     initialValue: state.telefonoReferencia3,
-                    title: 'Telefono Referencia 3:',
+                    title: 'Teléfono Referencia 3:',
                     textInputType: TextInputType.number,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),

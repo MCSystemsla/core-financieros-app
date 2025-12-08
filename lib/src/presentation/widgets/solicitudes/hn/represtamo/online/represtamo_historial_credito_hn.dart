@@ -291,7 +291,7 @@ class _CreateCreditoContainerFormState
     if (picked.isAfter(today)) {
       CustomAlertDialog(
         context: context,
-        title: 'La Fecha de desembolso no puede ser despues de la fecha actual',
+        title: 'La Fecha de desembolso no puede ser después de la fecha actual',
         onDone: () => context.pop(),
       ).showDialog(context);
       return;

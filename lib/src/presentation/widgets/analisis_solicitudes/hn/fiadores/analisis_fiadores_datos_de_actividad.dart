@@ -318,7 +318,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               const Gap(20),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                title: 'Pais',
+                title: 'País',
                 hintText: 'input.select_option'.tr(),
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -428,7 +428,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                title: 'Telefono',
+                title: 'Teléfono',
                 icon: const Icon(Icons.person),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,

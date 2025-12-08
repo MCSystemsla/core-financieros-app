@@ -41,7 +41,7 @@ class _SelectSolicitud extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(left: 10, bottom: 10),
               child: Text(
-                'Seleccionar un tipo de Credito',
+                'Seleccionar un tipo de Crédito',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontSize: 19,
                     ),
@@ -83,7 +83,7 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
         Expanded(
           child: SolicitudCard(
             svgPath: ImageAsset.nuevaMenorBg5,
-            title: 'Asignacion de Solicitudes Crédito',
+            title: 'Asignación de Solicitudes Crédito',
             onPressed: () {
               Navigator.push(
                 context,

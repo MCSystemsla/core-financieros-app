@@ -104,7 +104,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   const Gap(30),
                   OutlineTextfieldWidget(
                     isRequired: true,
-                    hintText: 'Cedula Familiar Empleado',
+                    hintText: 'Cédula Familiar Empleado',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
@@ -180,7 +180,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     codigo: 'PAIS',
-                    hintText: 'Pais PEPS',
+                    hintText: 'País PEPS',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     title: 'País de la entidad PEPS',
@@ -382,7 +382,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                   const Gap(30),
                   CatalogoValorNacionalidad(
                     codigo: 'PAIS',
-                    hintText: 'Pais PEPS 2',
+                    hintText: 'País PEPS 2',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     title: 'País de residencia de la entidad del familiar PEPS',

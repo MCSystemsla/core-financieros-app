@@ -251,7 +251,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                   ),
                   codigo: 'DESTINOCREDITO',
                   hintText: 'selecciona un Destino',
-                  title: 'Destino del Credito',
+                  title: 'Destino del Crédito',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     cubit.onFieldChanged(

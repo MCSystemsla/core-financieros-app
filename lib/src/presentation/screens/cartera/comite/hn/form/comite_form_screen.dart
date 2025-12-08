@@ -16,7 +16,7 @@ class ComiteFormScreen extends StatelessWidget {
     final pageController = PageController();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crear Comite'),
+        title: const Text('Crear Comité'),
       ),
       body: PageView(
         controller: pageController,
@@ -136,12 +136,12 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
             const ComiteParametrosForm(),
             const Gap(12),
             AnalisisCardListHn(
-              title: 'Creditos a cancelar',
+              title: 'Créditos a cancelar',
               onTap: () {},
               items: [
                 AnalisisCardItem(
                   icon: Icons.credit_card,
-                  label: 'Total creditos a cancelar',
+                  label: 'Total créditos a cancelar',
                   value: 2.toString(),
                   color: Colors.green,
                 ),

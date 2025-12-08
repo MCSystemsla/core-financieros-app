@@ -64,7 +64,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                   enabled: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
-                  hintText: 'selecciona actividad economica',
+                  hintText: 'selecciona actividad económica',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
@@ -89,7 +89,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'ingresa descripcion actividad economica',
+                    hintText: 'ingresa descripcion actividad económica',
                     icon: Icon(Icons.description,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
@@ -119,7 +119,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                       ),
                     );
                   },
-                  hintText: 'selecciona actividad economica',
+                  hintText: 'selecciona actividad económica',
                   title: 'Actividad Económica CNBS 2',
                   isRequired: true,
                   enabled: true,
@@ -133,7 +133,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'ingresa descripcion actividad economica',
+                    hintText: 'ingresa descripcion actividad económica',
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
@@ -150,7 +150,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 ],
                 const Gap(30),
                 CatalogoActividadesCNBSDropdown(
-                  hintText: 'selecciona actividad economica',
+                  hintText: 'selecciona actividad económica',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
                     setState(() {
@@ -176,7 +176,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'ingresa descripcion actividad economica',
+                    hintText: 'ingresa descripcion actividad económica',
                     icon: Icon(Icons.description_outlined,
                         color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.text,
@@ -236,14 +236,14 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                       () => cubit.state.copyWith(
                         isOffline: true,
                         errorMsg:
-                            'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            'No tienes conexión a internet, La solicitud se a guardado de manera local',
                         isDone: true,
                       ),
                     );
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          'No tienes conexión a internet, La solicitud se a guardado de manera local',
                       onDone: () => context.pushReplacement('/solicitudes'),
                     ).showDialog(context, dialogType: DialogType.infoReverse);
                     return;

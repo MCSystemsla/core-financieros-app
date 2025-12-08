@@ -36,8 +36,8 @@ class ComiteParametrosForm extends StatelessWidget {
             ),
             const Gap(12),
             CustomSwitch(
-              title: 'Es Reestructuracion',
-              subtitle: 'Comite reestructurado?',
+              title: 'Es Reestructuración',
+              subtitle: 'Comité reestructurado?',
               value: false,
               onChanged: (v) {},
             ),
@@ -61,7 +61,7 @@ class ComiteParametrosForm extends StatelessWidget {
             const Gap(12),
             CustomSwitch(
               title: 'Mantener tasa interés de crédito anterior',
-              subtitle: 'Mantendra tasa interés de crédito anterior?',
+              subtitle: 'Mantendrá tasa interés de crédito anterior?',
               value: false,
               onChanged: (v) {},
             ),

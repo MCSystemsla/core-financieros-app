@@ -49,7 +49,7 @@ class CrearGarantiaScreen extends StatelessWidget {
             ),
             Gap(5),
             Text(
-              'Crear Garantia',
+              'Crear Garantía',
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -74,7 +74,7 @@ class CrearGarantiaScreen extends StatelessWidget {
                         final e = state.analisisGarantia[index];
                         return AnalisisCardVentasDay(
                           subtitle: e.tipoGarantia,
-                          title: 'Cedula Cliente ${e.cedulaCliente}',
+                          title: 'Cédula Cliente ${e.cedulaCliente}',
                           description: e.tipoPersona,
                           onTap: () {
                             showHistorialCreditoOptionsBottomSheet(

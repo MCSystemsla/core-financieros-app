@@ -53,7 +53,7 @@ class _AnalisisFiadoresDatosPersonalesState
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
                 hintText: 'input.select_option'.tr(),
-                title: 'Pais:',
+                title: 'País:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
@@ -114,7 +114,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                title: 'Caserio',
+                title: 'Caserío',
                 icon: const Icon(Icons.person),
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
@@ -200,7 +200,7 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                title: 'Telefono',
+                title: 'Teléfono',
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: const Icon(Icons.person),
                 inputFormatters: [
@@ -274,7 +274,7 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               SearchDropdownWidget(
                 codigo: 'OCUPACION',
-                title: 'Ocupacion',
+                title: 'Ocupación',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 onChanged: (value) {

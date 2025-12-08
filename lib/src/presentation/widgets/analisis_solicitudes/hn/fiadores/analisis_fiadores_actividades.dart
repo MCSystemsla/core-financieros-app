@@ -53,7 +53,7 @@ class _AnalisisFiadoresActividadesState
               enabled: true,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
-              hintText: 'selecciona actividad economica',
+              hintText: 'selecciona actividad económica',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 setState(() {
@@ -76,7 +76,7 @@ class _AnalisisFiadoresActividadesState
                   UpperCaseTextFormatter(),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'ingresa descripcion actividad economica',
+                hintText: 'ingresa descripcion actividad económica',
                 icon:
                     Icon(Icons.description, color: AppColors.getPrimaryColor()),
                 textInputType: TextInputType.text,
@@ -105,7 +105,7 @@ class _AnalisisFiadoresActividadesState
                   ),
                 );
               },
-              hintText: 'selecciona actividad economica',
+              hintText: 'selecciona actividad económica',
               title: 'Actividad Económica CNBS 2',
               isRequired: true,
               enabled: true,
@@ -118,7 +118,7 @@ class _AnalisisFiadoresActividadesState
                   UpperCaseTextFormatter(),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'ingresa descripcion actividad economica',
+                hintText: 'ingresa descripcion actividad económica',
                 icon: Icon(Icons.description_outlined,
                     color: AppColors.getPrimaryColor()),
                 textInputType: TextInputType.text,
@@ -135,7 +135,7 @@ class _AnalisisFiadoresActividadesState
             ],
             const Gap(30),
             CatalogoActividadesCNBSDropdown(
-              hintText: 'selecciona actividad economica',
+              hintText: 'selecciona actividad económica',
               onChanged: (item) {
                 if (item == null || !mounted) return;
                 setState(() {
@@ -160,7 +160,7 @@ class _AnalisisFiadoresActividadesState
                   UpperCaseTextFormatter(),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
-                hintText: 'ingresa descripcion actividad economica',
+                hintText: 'ingresa descripcion actividad económica',
                 icon: Icon(Icons.description_outlined,
                     color: AppColors.getPrimaryColor()),
                 textInputType: TextInputType.text,

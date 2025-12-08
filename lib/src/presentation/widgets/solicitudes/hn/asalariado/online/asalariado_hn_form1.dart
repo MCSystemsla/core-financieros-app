@@ -194,7 +194,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
-          title: 'La Fecha no puede ser despues a la fecha actual',
+          title: 'La Fecha no puede ser después a la fecha actual',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }

@@ -140,8 +140,8 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                     SelectableCardItem(
                       icon: Icons.pie_chart_rounded,
                       color: const Color(0xff6D28D9),
-                      title: 'Registrar Garantias',
-                      subtitle: 'Crear Garantias',
+                      title: 'Registrar Garantías',
+                      subtitle: 'Crear Garantías',
                       onTap: () => {
                         context.pop(),
                         Navigator.push(

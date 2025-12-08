@@ -155,7 +155,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                   initialValue: state.alimentacion
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Alimentacion:',
+                  title: 'Alimentación:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -178,7 +178,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                   initialValue: state.educacion
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Educacion:',
+                  title: 'Educación:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -200,7 +200,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                   initialValue: state.serviciosBasicos
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Servicios basicos (Agua, luz, teléfono, etc.):',
+                  title: 'Servicios básicos (Agua, luz, teléfono, etc.):',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -269,7 +269,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                   initialValue: state.transporteCombustibleMtto
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Transporte / Combustible / Mantenimiento Vehiculo:',
+                  title: 'Transporte / Combustible / Mantenimiento Vehículo:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -337,7 +337,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                   initialValue: state.otrosEgresos
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Otros Egresos:',
+                  title: 'Otros Egreso:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -361,7 +361,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                     mantissaLength: 0,
                   ),
                   readOnly: true,
-                  title: 'Total Egresos:',
+                  title: 'Total Egreso:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [
@@ -384,7 +384,7 @@ class AnalisisAsalariadoEstadoResultadoHn extends StatelessWidget {
                     mantissaLength: 0,
                   ),
                   readOnly: true,
-                  title: 'Disponibilidad (Ingresos Egresos):',
+                  title: 'Disponibilidad (Ingresos Egreso):',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [

@@ -21,7 +21,7 @@ void buildActividadesEconomicasAliasFilteredDropdown({
   }).toList();
   DropDownState<ActividadesEconomicasAliasFiltered>(
     dropDown: DropDown<ActividadesEconomicasAliasFiltered>(
-      searchHintText: 'Buscar actividad economica por alias, nombre o codigo',
+      searchHintText: 'Buscar actividad económica por alias, nombre o código',
       searchDelegate: (query, dataItems) {
         if (query.isEmpty) return dataItems;
 

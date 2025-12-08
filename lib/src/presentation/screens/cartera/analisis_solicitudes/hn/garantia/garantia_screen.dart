@@ -36,7 +36,7 @@ class GarantiaHNScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Garantia'),
+          title: const Text('Garantía'),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -73,7 +73,7 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Garantia de credito',
+            'Garantía de crédito',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

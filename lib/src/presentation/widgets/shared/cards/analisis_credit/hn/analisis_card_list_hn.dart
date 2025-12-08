@@ -64,7 +64,7 @@ class AnalisisCardListHn extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'Crear estadisticas',
+                            'Crear estadísticas',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.w500),

@@ -476,7 +476,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                       .toNullIfEmptyOrZero(),
                   validator: (value) => ClassValidator.validateRequired(value),
                   textAlign: TextAlign.end,
-                  title: 'Creditos inst Financiamiento:',
+                  title: 'Créditos inst Financiamiento:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [

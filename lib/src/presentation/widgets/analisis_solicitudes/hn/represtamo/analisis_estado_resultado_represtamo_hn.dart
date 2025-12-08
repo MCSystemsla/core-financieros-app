@@ -533,7 +533,7 @@ class AnalisisEstadoResultadoReprestamoHN extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Agua, Electricidad, Telefono, Gas y Kerosén L:',
+                  title: 'Agua, Electricidad, Teléfono, Gas y Kerosén L:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],

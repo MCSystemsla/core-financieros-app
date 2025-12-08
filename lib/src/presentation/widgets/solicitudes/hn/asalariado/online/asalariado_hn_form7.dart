@@ -53,7 +53,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   hintText: 'País Destino',
-                  title: 'Pais Destino',
+                  title: 'País Destino',
                   codigo: 'PAIS',
                   onChanged: (item) {
                     if (item == null || !mounted) return;
@@ -132,7 +132,7 @@ class _AsalariadoHnForm7State extends State<AsalariadoHnForm7>
                       Icon(Icons.home_work, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
-                  title: 'Caserio Destino',
+                  title: 'Caserío Destino',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(100),

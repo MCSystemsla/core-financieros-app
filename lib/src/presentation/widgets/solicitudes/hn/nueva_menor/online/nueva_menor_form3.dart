@@ -142,7 +142,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),
                   ],
-                  hintText: 'Ingresa Caserio Negocio',
+                  hintText: 'Ingresa Caserío Negocio',
                   title: 'Caserío del Negocio',
                   onChange: (value) {
                     cubit.onFieldChanged(

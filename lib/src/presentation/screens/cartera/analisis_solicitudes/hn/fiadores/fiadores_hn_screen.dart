@@ -14,8 +14,8 @@ class FiadoresHnScreen extends StatelessWidget {
       SelectableCardItem(
         color: AppColors.getPrimaryColor(),
         icon: Icons.person_pin_sharp,
-        title: 'Conyugue',
-        subtitle: 'Crear Fiador conyugue',
+        title: 'Cónyuge',
+        subtitle: 'Crear Fiador cónyuge',
         onTap: () {
           Navigator.push(
             context,

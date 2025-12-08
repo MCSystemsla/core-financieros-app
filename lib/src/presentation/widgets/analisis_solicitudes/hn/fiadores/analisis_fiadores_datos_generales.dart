@@ -151,7 +151,7 @@ class _AnalisisFiadoresDatosGeneralesState
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
-          title: 'La Fecha no puede ser despues a la fecha actual',
+          title: 'La Fecha no puede ser después a la fecha actual',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -192,7 +192,7 @@ class _AnalisisFiadoresDatosGeneralesState
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
-          title: 'La Fecha no puede ser despues a la fecha actual',
+          title: 'La Fecha no puede ser después a la fecha actual',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -231,7 +231,7 @@ class _AnalisisFiadoresDatosGeneralesState
               OutlineTextfieldWidget(
                 initialValue: widget.cedula,
                 readOnly: true,
-                title: 'Cedula Identidad:',
+                title: 'Cédula Identidad:',
                 icon: const Icon(Icons.document_scanner),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -355,7 +355,7 @@ class _AnalisisFiadoresDatosGeneralesState
               const Gap(20),
               CatalogoValorNacionalidad(
                 codigo: 'PAIS',
-                title: 'Pais de nacimiento:',
+                title: 'País de nacimiento:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
@@ -365,12 +365,12 @@ class _AnalisisFiadoresDatosGeneralesState
                     ),
                   );
                 },
-                hintText: 'Selecciona una opcion',
+                hintText: 'Selecciona una opción',
               ),
               const Gap(20),
               OutlineTextfieldWidget(
                 hintText: fechaEmisionCedula?.selectorFormat(),
-                title: 'Fecha emision cedula:',
+                title: 'Fecha emision cédula:',
                 icon: const Icon(Icons.document_scanner),
                 readOnly: true,
                 validator: (value) => ClassValidator.validateRequired(
@@ -426,7 +426,7 @@ class _AnalisisFiadoresDatosGeneralesState
               const Gap(20),
               SearchDropdownWidget(
                 codigo: 'RELACIONPERSONAS',
-                title: 'Relacion con el cliente:',
+                title: 'Relación con el cliente:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
                 onChanged: (value) {

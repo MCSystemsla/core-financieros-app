@@ -53,7 +53,7 @@ class ComiteDatosDelCreditoForm extends StatelessWidget {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
-            title: 'Interes Corriente %',
+            title: 'Interés Corriente %',
             icon: Icon(
               Icons.percent_outlined,
               color: AppColors.getPrimaryColor(),

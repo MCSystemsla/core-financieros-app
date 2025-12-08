@@ -228,7 +228,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   key: const ValueKey('tieneVinculo'),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
-                  title: 'Tiene vinculos con Estados Unidos?',
+                  title: 'Tiene vínculos con Estados Unidos?',
                   isRequired: true,
                   onChanged: (value) {
                     if (value == null || !mounted) return;
@@ -275,7 +275,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   OutlineTextfieldWidget(
                     isRequired: true,
                     key: const ValueKey('codigoUSA'),
-                    hintText: 'Codigo USA',
+                    hintText: 'Código USA',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     inputFormatters: [

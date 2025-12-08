@@ -33,7 +33,7 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 20),
               child: Text(
-                'Seguros en deseembolso en Lempiras',
+                'Seguros en desembolso en Lempiras',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -54,7 +54,7 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
             ),
             const Gap(12),
             OutlineTextfieldWidget(
-              title: 'Monto seguro agricola:',
+              title: 'Monto seguro agrícola:',
               icon: Icon(
                 Icons.agriculture_outlined,
                 color: AppColors.getPrimaryColor(),

@@ -79,7 +79,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   validator: (value) => ClassValidator.validateRequired(
                     value?.valor,
                   ),
-                  title: 'Actividad Economica CIUU1',
+                  title: 'Actividad Económica CIUU1',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -101,7 +101,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'Actividad Economica Realiza CIUU1',
+                    title: 'Actividad Económica Realiza CIUU1',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -128,7 +128,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   // validator: (value) => ClassValidator.validateRequired(
                   //   value?.valor,
                   // ),
-                  title: 'Actividad Economica CIUU2',
+                  title: 'Actividad Económica CIUU2',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -150,7 +150,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'Actividad Economica Realiza CIUU2',
+                    title: 'Actividad Económica Realiza CIUU2',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -174,7 +174,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                   isRequired: true,
                   hintText: 'Selecciona una actividad',
                   enabled: true,
-                  title: 'Actividad Economica CIUU3',
+                  title: 'Actividad Económica CIUU3',
                   onChanged: (value) {
                     if (value == null || !mounted) return;
                     setState(() {
@@ -196,7 +196,7 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
-                    title: 'Actividad Economica Realiza CIUU3',
+                    title: 'Actividad Económica Realiza CIUU3',
                     icon: Icon(
                       Icons.description,
                       color: AppColors.getPrimaryColor(),
@@ -277,14 +277,14 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         errorMsg:
-                            'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            'No tienes conexión a internet, La solicitud se a guardado de manera local',
                         isDone: true,
                       ),
                     );
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          'No tienes conexión a internet, La solicitud se a guardado de manera local',
                       onDone: () => context.pushReplacement('/solicitudes'),
                     ).showDialog(context, dialogType: DialogType.infoReverse);
                     return;

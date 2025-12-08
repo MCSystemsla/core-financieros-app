@@ -441,7 +441,7 @@ class _CreateCreditoContainerFormState
                       value: estadoCodigo,
                     ),
                     codigo: 'ESTADOPRESTAMO',
-                    title: 'Estado de Credito',
+                    title: 'Estado de Crédito',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
                     onChanged: (value) {

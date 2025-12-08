@@ -53,7 +53,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Profesión',
-                  title: 'Profesion',
+                  title: 'Profesión',
                   codigo: 'PROFESION',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -70,7 +70,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Ocupación',
-                  title: 'Ocupacion',
+                  title: 'Ocupación',
                   codigo: 'OCUPACION',
                   flavor: global<FlavorCubit>().state.flavor,
                   onChanged: (item) {
@@ -171,7 +171,7 @@ class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
-                  title: 'Telefono del Trabajo',
+                  title: 'Teléfono del Trabajo',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],

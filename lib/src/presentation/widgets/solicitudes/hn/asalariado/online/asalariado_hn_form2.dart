@@ -227,7 +227,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   hintText: 'Condición de Casa',
-                  title: 'Condicion de Casa',
+                  title: 'Condición de Casa',
                   codigo: 'TIPOVIVIENDA',
                   onChanged: (value) {
                     cubit.onFieldChanged(

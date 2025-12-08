@@ -110,7 +110,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 CustomAlertDialog(
                   context: context,
                   title: state.errorMsg.contains('Sin conexión a internet')
-                      ? 'No tienes conexion a internet, pero aun puedes crear solicitudes'
+                      ? 'No tienes conexión a internet, pero aun puedes crear solicitudes'
                       : state.errorMsg,
                   onDone: () {
                     if (state.errorMsg.contains('Sin conexión a internet')) {
@@ -166,7 +166,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                     ),
                     const Gap(30),
                     Text(
-                      'Ingresar Usuario a solicitar Solicitud de Credito',
+                      'Ingresar Usuario a solicitar Solicitud de Crédito',
                       style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),

@@ -158,7 +158,7 @@ class AnalisisAsalariadoActivosHN extends StatelessWidget {
                   initialValue: state.vehiculo
                       .toCurrencyString(mantissaLength: 0)
                       .toNullIfEmptyOrZero(),
-                  title: 'Vehiculo:',
+                  title: 'Vehículo:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,

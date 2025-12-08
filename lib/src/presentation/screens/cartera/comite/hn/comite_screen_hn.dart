@@ -30,7 +30,7 @@ class ComiteScreenHn extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Comite de Credito'),
+            title: const Text('Comité de Crédito'),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Comite de Credito',
+            'Comité de Crédito',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

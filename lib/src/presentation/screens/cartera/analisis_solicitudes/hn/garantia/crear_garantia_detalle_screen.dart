@@ -145,7 +145,7 @@ class _ArticuloFormState extends State<_ArticuloForm> {
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
-              hintText: 'Selecciona una garantia',
+              hintText: 'Selecciona una garantía',
               enabled: true,
               items: widget.garantias
                   .map((e) => Item(name: e.tipoGarantia, value: e.id))

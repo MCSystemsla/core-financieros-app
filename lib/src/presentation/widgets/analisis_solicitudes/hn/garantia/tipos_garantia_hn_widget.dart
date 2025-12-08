@@ -22,7 +22,7 @@ class TiposGarantiaHNWidget extends StatelessWidget {
       builder: (context, state) {
         return AnalisisCardListHn(
           isLoading: state.status == Status.inProgress,
-          title: 'Tipos de garantias',
+          title: 'Tipos de garantías',
           onTap: () {
             Navigator.push(
               context,
@@ -41,7 +41,7 @@ class TiposGarantiaHNWidget extends StatelessWidget {
           items: [
             AnalisisCardItem(
               icon: Icons.verified_user_rounded,
-              label: 'Total garantias',
+              label: 'Total garantías',
               value: state.analisisGarantia.length.toString(),
               color: Colors.indigo,
             ),

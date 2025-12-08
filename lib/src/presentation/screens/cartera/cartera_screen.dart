@@ -73,7 +73,7 @@ class _CarteraContentWidget extends StatelessWidget {
                   context.push('/solicitudes');
                 },
                 title: 'Solicitudes',
-                subtitle: 'Modulo Solicitudes de Credito',
+                subtitle: 'Módulo Solicitudes de Crédito',
                 firstColor: AppColors.blueIndigo,
                 secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
                 icon: const Icon(
@@ -93,7 +93,7 @@ class _CarteraContentWidget extends StatelessWidget {
                     );
                   },
                   title: 'Analisis'.tr(),
-                  subtitle: 'Analisis de solicitudes de credito',
+                  subtitle: 'Analisis de solicitudes de crédito',
                   firstColor: const Color.fromARGB(255, 48, 47, 47),
                   secondColor: const Color(0xFFBDBDBD),
                   icon: const Icon(
@@ -138,7 +138,7 @@ class _CarteraContentWidget extends StatelessWidget {
                     );
                   },
                   title: 'KIVA Histórico',
-                  subtitle: 'Modulo Solicitudes Kiva Enviadas',
+                  subtitle: 'Módulo Solicitudes Kiva Enviadas',
                   firstColor: AppColors.blueIndigo,
                   secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
                   icon: const Icon(
@@ -156,8 +156,8 @@ class _CarteraContentWidget extends StatelessWidget {
                     ),
                   );
                 },
-                title: 'Comite',
-                subtitle: 'Modulo de Comite',
+                title: 'Comité',
+                subtitle: 'Módulo de Comité',
                 firstColor: const Color(0xFF112D4E),
                 secondColor: const Color(0xFF3F72AF),
                 icon: const Icon(

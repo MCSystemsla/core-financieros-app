@@ -23,7 +23,7 @@ class DetalleGarantiaTableHNWidget extends StatelessWidget {
       builder: (context, state) {
         return AnalisisCardListHn(
           isLoading: state.status == Status.inProgress,
-          title: 'Detalle Garantia',
+          title: 'Detalle Garantía',
           onTap: () {
             Navigator.push(
               context,
@@ -52,7 +52,7 @@ class DetalleGarantiaTableHNWidget extends StatelessWidget {
             ),
             AnalisisCardItem(
               icon: Icons.inventory_2_rounded,
-              label: 'Cantidad de Articulos',
+              label: 'Cantidad de Artículos',
               value: state.analisisGarantiaArticuloHn.length.toString(),
               color: Colors.blueGrey,
             ),
