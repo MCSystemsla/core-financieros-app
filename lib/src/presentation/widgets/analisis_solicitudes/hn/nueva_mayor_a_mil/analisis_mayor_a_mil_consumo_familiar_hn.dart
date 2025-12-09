@@ -71,272 +71,312 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                 ),
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Consumo familiares mensuales',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Consumo familiares mensuales',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
+                      ),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.alimentacionFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Alimentación',
+                        icon: const Icon(Icons.food_bank),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              alimentacionFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.educacionFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Educación',
+                        icon: const Icon(Icons.school),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+                          cubit.onFieldChanged(
+                            () {
+                              return state.copyWith(
+                                  educacionFam: double.tryParse(newValue));
+                            },
+                          );
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.aguaFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Agua, electricidad, teléfono, gas, kerosén',
+                        icon: const Icon(Icons.eco),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              aguaFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.alquilerFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Alquiler',
+                        icon: const Icon(Icons.house),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              alquilerFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.aseoLimpiezaFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Aseo y limpieza',
+                        icon: const Icon(Icons.clean_hands),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              aseoLimpiezaFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.vestimentaCalzadoFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Vestimenta y calzado',
+                        icon: const Icon(Icons.emoji_objects),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              vestimentaCalzadoFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.transporteFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Transporte',
+                        icon: const Icon(Icons.emoji_transportation),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              transporteFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.otrosGastosFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Otros gastos / imprevistos (Reserva)',
+                        icon: const Icon(Icons.chalet_rounded),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              otrosGastosFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textAlign: TextAlign.end,
+                        initialValue: state.pagoCreditosFam
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Pago de créditos privados',
+                        icon: const Icon(Icons.credit_card),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              pagoCreditosFam: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        hintText: (state.alimentacionFam +
+                                state.educacionFam +
+                                state.aguaFam +
+                                state.alquilerFam +
+                                state.aseoLimpiezaFam +
+                                state.vestimentaCalzadoFam +
+                                state.transporteFam +
+                                state.otrosGastosFam +
+                                state.pagoCreditosFam)
+                            .toCurrencyString(
+                          mantissaLength: 0,
+                          thousandSeparator: ThousandSeparator.Comma,
+                        ),
+                        title: 'Total consumo familiar',
+                        icon: const Icon(Icons.wallet),
+                        readOnly: true,
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+
+                          cubit.onFieldChanged(() {
+                            return state.copyWith(
+                              totalConsumoFamiliar: double.tryParse(newValue),
+                            );
+                          });
+                        },
+                      ),
+                      const Gap(15),
+                    ],
                   ),
-                ),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.alimentacionFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Alimentación',
-                  icon: const Icon(Icons.food_bank),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        alimentacionFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.educacionFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Educación',
-                  icon: const Icon(Icons.school),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                    cubit.onFieldChanged(
-                      () {
-                        return state.copyWith(
-                            educacionFam: double.tryParse(newValue));
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.aguaFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Agua, electricidad, teléfono, gas, kerosén',
-                  icon: const Icon(Icons.eco),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        aguaFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.alquilerFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Alquiler',
-                  icon: const Icon(Icons.house),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        alquilerFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.aseoLimpiezaFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Aseo y limpieza',
-                  icon: const Icon(Icons.clean_hands),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        aseoLimpiezaFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.vestimentaCalzadoFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Vestimenta y calzado',
-                  icon: const Icon(Icons.emoji_objects),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        vestimentaCalzadoFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.transporteFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Transporte',
-                  icon: const Icon(Icons.emoji_transportation),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        transporteFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.otrosGastosFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Otros gastos / imprevistos (Reserva)',
-                  icon: const Icon(Icons.chalet_rounded),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        otrosGastosFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textAlign: TextAlign.end,
-                  initialValue: state.pagoCreditosFam
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Pago de créditos privados',
-                  icon: const Icon(Icons.credit_card),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        pagoCreditosFam: double.tryParse(newValue),
-                      );
-                    });
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  hintText: (state.alimentacionFam +
-                          state.educacionFam +
-                          state.aguaFam +
-                          state.alquilerFam +
-                          state.aseoLimpiezaFam +
-                          state.vestimentaCalzadoFam +
-                          state.transporteFam +
-                          state.otrosGastosFam +
-                          state.pagoCreditosFam)
-                      .toCurrencyString(
-                    mantissaLength: 0,
-                    thousandSeparator: ThousandSeparator.Comma,
-                  ),
-                  title: 'Total consumo familiar',
-                  icon: const Icon(Icons.wallet),
-                  readOnly: true,
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-
-                    cubit.onFieldChanged(() {
-                      return state.copyWith(
-                        totalConsumoFamiliar: double.tryParse(newValue),
-                      );
-                    });
-                  },
                 ),
                 const Gap(20),
                 Padding(

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asign_solicitud_asesor/hn/bottom_sheet/ahow_asignar_solicitud_bottom_sheet_hn.dart';
@@ -42,103 +43,105 @@ class CreditProductItemHN extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<SolicitudesByEstadoHnCubit>();
     final typeForm = tipoSolicitud?.toTypeForm();
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: InkWell(
-        onTap: onTap != null
-            ? onTap!
-            : () {
-                if (isAsesorAsignado) {
-                  CustomAlertDialog(
-                    context: context,
-                    title:
-                        'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
-                    onDone: () => context.pop(),
-                  ).showDialog(context);
-                  return;
-                }
-                if (estadoCodigo != 'REG') {
-                  CustomAlertDialog(
-                    context: context,
-                    title:
-                        'Solo se puede asignar una solicitud cuando el estado es REGISTRADA',
-                    onDone: () => context.pop(),
-                  ).showDialog(context);
-                  return;
-                }
-                showAsignarSolicitudBottomSheetHN(
-                  context,
-                  int.tryParse(solicitudId) ?? 0,
-                  title,
-                  nombreCliente ?? 'N/A',
-                  typeForm!,
-                  cubit,
-                );
-              },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.account_balance, color: Colors.indigo),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const Spacer(),
-                const Icon(Icons.chevron_right),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                _InfoTag(
-                  icon: Icons.date_range_outlined,
-                  label: 'Fecha',
-                  value: fecha.selectorFormat(),
-                ),
-                _InfoTag(icon: Icons.wallet, label: 'Monto', value: monto),
-                _InfoTag(
-                  icon: Icons.star_outline,
-                  label: 'Estado',
-                  value: estadoCodigo,
-                ),
-              ],
-            ),
-            const Gap(12),
-            _TagInfoPerson(
-              nombre: nombreCliente ?? 'N/A',
-              haveLocation: true,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-              typeForm: tipoSolicitud,
-            ),
-            const Gap(8),
-            _TagInfoPerson(
-              nombre: 'Asesor: ${nombrePromotor ?? 'N/A'}',
-              haveLocation: false,
-              icon: Icons.person_4_outlined,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
+    return FadeIn(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: InkWell(
+          onTap: onTap != null
+              ? onTap!
+              : () {
+                  if (isAsesorAsignado) {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
+                      onDone: () => context.pop(),
+                    ).showDialog(context);
+                    return;
+                  }
+                  if (estadoCodigo != 'REG') {
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'Solo se puede asignar una solicitud cuando el estado es REGISTRADA',
+                      onDone: () => context.pop(),
+                    ).showDialog(context);
+                    return;
+                  }
+                  showAsignarSolicitudBottomSheetHN(
+                    context,
+                    int.tryParse(solicitudId) ?? 0,
+                    title,
+                    nombreCliente ?? 'N/A',
+                    typeForm!,
+                    cubit,
+                  );
+                },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.account_balance, color: Colors.indigo),
+                  const SizedBox(width: 8),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  _InfoTag(
+                    icon: Icons.date_range_outlined,
+                    label: 'Fecha',
+                    value: fecha.selectorFormat(),
+                  ),
+                  _InfoTag(icon: Icons.wallet, label: 'Monto', value: monto),
+                  _InfoTag(
+                    icon: Icons.star_outline,
+                    label: 'Estado',
+                    value: estadoCodigo,
+                  ),
+                ],
+              ),
+              const Gap(12),
+              _TagInfoPerson(
+                nombre: nombreCliente ?? 'N/A',
+                haveLocation: true,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+                typeForm: tipoSolicitud,
+              ),
+              const Gap(8),
+              _TagInfoPerson(
+                nombre: 'Asesor: ${nombrePromotor ?? 'N/A'}',
+                haveLocation: false,
+                icon: Icons.person_4_outlined,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

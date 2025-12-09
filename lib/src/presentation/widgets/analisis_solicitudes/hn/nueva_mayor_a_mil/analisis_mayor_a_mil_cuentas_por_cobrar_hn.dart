@@ -100,120 +100,147 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                 ),
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Clasificación de los ingresos totales por producto de alta y baja rotación',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
                   ),
-                ),
-                OutlineTextfieldWidget(
-                  initialValue: state.porcentajeProdAltaRotacion
-                      .toCurrencyString(
-                        mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title:
-                      'Porcentaje de venta de los productos de alta rotación',
-                  icon: const Icon(Icons.percent),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  onChange: (value) {
-                    String newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () {
-                        return state.copyWith(
-                            porcentajeProdAltaRotacion:
-                                double.tryParse(newValue) ?? 0);
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.valorAltaRotacion
-                      .toString()
-                      .toNullIfEmptyOrZero()
-                      ?.toCurrencyString(
-                        mantissaLength: 0,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Clasificación de los ingresos totales por producto de alta y baja rotación',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                       ),
-                  title: 'Valor en L.',
-                  textInputType: TextInputType.number,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = toNumericString(value);
+                      OutlineTextfieldWidget(
+                        initialValue: state.porcentajeProdAltaRotacion
+                            .toCurrencyString(
+                              mantissaLength: 0,
+                            )
+                            .toNullIfEmptyOrZero(),
+                        title:
+                            'Porcentaje de venta de los productos de alta rotación',
+                        icon: const Icon(Icons.percent),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(2),
+                        ],
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        onChange: (value) {
+                          String newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () {
+                              return state.copyWith(
+                                  porcentajeProdAltaRotacion:
+                                      double.tryParse(newValue) ?? 0);
+                            },
+                          );
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.valorAltaRotacion
+                            .toString()
+                            .toNullIfEmptyOrZero()
+                            ?.toCurrencyString(
+                              mantissaLength: 0,
+                            ),
+                        title: 'Valor en L.',
+                        textInputType: TextInputType.number,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue = toNumericString(value);
 
-                    cubit.onFieldChanged(
-                      () {
-                        return state.copyWith(
-                            valorAltaRotacion: double.tryParse(newValue));
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.wallet),
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  initialValue: cubit.state.porcentajeProdBajaRotacion
-                      .toCurrencyString(
-                        mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title:
-                      'Porcentaje de venta de los productos de baja rotación',
-                  textInputType: TextInputType.number,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  icon: const Icon(Icons.percent),
-                  onChange: (value) {
-                    String newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () {
-                        return state.copyWith(
-                            porcentajeProdBajaRotacion:
-                                double.tryParse(newValue));
-                      },
-                    );
-                  },
-                ),
-                const Gap(10),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.valorBajaRotacion
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Valor en L.',
-                  icon: const Icon(Icons.wallet),
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                    cubit.onFieldChanged(
-                      () {
-                        return state.copyWith(
-                            valorBajaRotacion: double.tryParse(newValue) ?? 0);
-                      },
-                    );
-                  },
+                          cubit.onFieldChanged(
+                            () {
+                              return state.copyWith(
+                                  valorAltaRotacion: double.tryParse(newValue));
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.wallet),
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        initialValue: cubit.state.porcentajeProdBajaRotacion
+                            .toCurrencyString(
+                              mantissaLength: 0,
+                            )
+                            .toNullIfEmptyOrZero(),
+                        title:
+                            'Porcentaje de venta de los productos de baja rotación',
+                        textInputType: TextInputType.number,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(2),
+                        ],
+                        icon: const Icon(Icons.percent),
+                        onChange: (value) {
+                          String newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () {
+                              return state.copyWith(
+                                  porcentajeProdBajaRotacion:
+                                      double.tryParse(newValue));
+                            },
+                          );
+                        },
+                      ),
+                      const Gap(10),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.valorBajaRotacion
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Valor en L.',
+                        icon: const Icon(Icons.wallet),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          String newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+                          cubit.onFieldChanged(
+                            () {
+                              return state.copyWith(
+                                  valorBajaRotacion:
+                                      double.tryParse(newValue) ?? 0);
+                            },
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                    ],
+                  ),
                 ),
                 const Gap(20),
                 Padding(

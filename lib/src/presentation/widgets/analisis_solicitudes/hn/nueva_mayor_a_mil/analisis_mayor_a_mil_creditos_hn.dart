@@ -59,138 +59,204 @@ class _AnalisisMayorAMilCreditosHNState
               children: [
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Detalle del crédito',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Detalle del crédito',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
+                      ),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        hintText: totalIngresosAnual.toCurrencyString(
+                          mantissaLength: 0,
+                        ),
+                        title: 'Ingreso anual y/o volumen de venta',
+                        readOnly: true,
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                ingresoAnual: double.tryParse(value) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(15)
+                    ],
                   ),
-                ),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  hintText: totalIngresosAnual.toCurrencyString(
-                    mantissaLength: 0,
-                  ),
-                  title: 'Ingreso anual y/o volumen de venta',
-                  readOnly: true,
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          ingresoAnual: double.tryParse(value) ?? 0),
-                    );
-                  },
                 ),
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Nombre de sus principales clientes',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
                   ),
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  initialValue: state.cliente1.toNullIfEmptyOrZero(),
-                  title: 'Cliente 1',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(cliente1: value),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: state.cliente2,
-                  title: 'Cliente 2',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(cliente2: value),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: state.cliente3.toNullIfEmptyOrZero(),
-                  title: 'Cliente 3',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(cliente3: value),
-                    );
-                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Nombre de sus principales clientes',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                      ),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        initialValue: state.cliente1.toNullIfEmptyOrZero(),
+                        title: 'Cliente 1',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(cliente1: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.cliente2,
+                        title: 'Cliente 2',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(cliente2: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.cliente3.toNullIfEmptyOrZero(),
+                        title: 'Cliente 3',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(cliente3: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                    ],
+                  ),
                 ),
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Nombre de sus proveedores',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
                   ),
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  initialValue: state.proveedor1,
-                  title: 'Proveedor 1',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(proveedor1: value),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: state.proveedor2,
-                  title: 'Proveedor 2',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(proveedor2: value),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: state.proveedor3,
-                  title: 'Proveedor 3',
-                  icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(proveedor3: value),
-                    );
-                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Nombre de sus proveedores',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                      ),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        initialValue: state.proveedor1,
+                        title: 'Proveedor 1',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(proveedor1: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.proveedor2,
+                        title: 'Proveedor 2',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(proveedor2: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.proveedor3,
+                        title: 'Proveedor 3',
+                        icon: const Icon(Icons.person),
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(proveedor3: value),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                    ],
+                  ),
                 ),
                 AnalisisCardListHn(
                   title: 'Ingresos familiares fuera del negocio',

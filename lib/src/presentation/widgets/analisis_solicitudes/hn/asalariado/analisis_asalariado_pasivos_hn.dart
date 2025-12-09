@@ -41,222 +41,240 @@ class AnalisisAsalariadoPasivosHn extends StatelessWidget {
         final totalPasivosPatrimonioCalc =
             totalPasivosCalc + totalPatrimonioCalc;
 
-        return SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(20),
-                Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Pasivos:',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 2),
+              )
+            ],
+          ),
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(20),
+                  Container(
+                    margin: const EdgeInsets.all(18),
+                    child: Text(
+                      'Pasivos:',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
                   ),
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.cuentasXPagar
-                      .toCurrencyString(
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    initialValue: state.cuentasXPagar
+                        .toCurrencyString(
+                          mantissaLength: 0,
+                        )
+                        .toNullIfEmptyOrZero(),
+                    title: 'Cuentas por pagar:',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
                         mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title: 'Cuentas por pagar:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () =>
-                          state.copyWith(cuentasXPagar: int.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.prestamoBancoCp
-                      .toCurrencyString(
-                        mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title: 'Préstamo banco corto plazo:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          prestamoBancoCp: double.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.prestamoBancoLp
-                      .toCurrencyString(
-                        mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title: 'Préstamo banco largo plazo:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          prestamoBancoLp: int.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.otrasCuentasXPagar
-                      .toCurrencyString(
-                        mantissaLength: 0,
-                      )
-                      .toNullIfEmptyOrZero(),
-                  title: 'Otras cuentas por pagar:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          otrasCuentasXPagar: double.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  readOnly: true,
-                  hintText:
-                      totalPasivosCalc.toCurrencyString(mantissaLength: 0),
-                  title: 'Total pasivos:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          totalPasivo: double.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  hintText: totalPatrimonioCalc.toCurrencyString(
-                    mantissaLength: 0,
-                  ),
-                  title: 'Patrimonio:',
-                  readOnly: true,
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(patrimonio: int.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  readOnly: true,
-                  hintText: totalPasivosPatrimonioCalc.toCurrencyString(
-                    mantissaLength: 0,
-                  ),
-                  title: 'Pasivo + patrimonio:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          pasivoPatrimonio: double.tryParse(newValue)),
-                    );
-                  },
-                ),
-                const Gap(20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      CustomElevatedButton(
-                        onPressed: () {
-                          if (!formKey.currentState!.validate()) return;
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        text: 'Siguiente',
-                        color: Colors.green,
                       ),
-                      const Gap(10),
-                      CustomElevatedButton(
-                        onPressed: () {
-                          pageController.previousPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        text: 'Anterior',
-                        color: Colors.red,
-                      ),
-                      const Gap(20),
                     ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            cuentasXPagar: int.tryParse(newValue)),
+                      );
+                    },
                   ),
-                ),
-              ],
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    initialValue: state.prestamoBancoCp
+                        .toCurrencyString(
+                          mantissaLength: 0,
+                        )
+                        .toNullIfEmptyOrZero(),
+                    title: 'Préstamo banco corto plazo:',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            prestamoBancoCp: double.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    initialValue: state.prestamoBancoLp
+                        .toCurrencyString(
+                          mantissaLength: 0,
+                        )
+                        .toNullIfEmptyOrZero(),
+                    title: 'Préstamo banco largo plazo:',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            prestamoBancoLp: int.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    initialValue: state.otrasCuentasXPagar
+                        .toCurrencyString(
+                          mantissaLength: 0,
+                        )
+                        .toNullIfEmptyOrZero(),
+                    title: 'Otras cuentas por pagar:',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            otrasCuentasXPagar: double.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    readOnly: true,
+                    hintText:
+                        totalPasivosCalc.toCurrencyString(mantissaLength: 0),
+                    title: 'Total pasivos:',
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            totalPasivo: double.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    hintText: totalPatrimonioCalc.toCurrencyString(
+                      mantissaLength: 0,
+                    ),
+                    title: 'Patrimonio:',
+                    readOnly: true,
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () =>
+                            state.copyWith(patrimonio: int.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  OutlineTextfieldWidget(
+                    textAlign: TextAlign.end,
+                    readOnly: true,
+                    hintText: totalPasivosPatrimonioCalc.toCurrencyString(
+                      mantissaLength: 0,
+                    ),
+                    title: 'Pasivo + patrimonio:',
+                    icon: const Icon(Icons.document_scanner),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        mantissaLength: 0,
+                      ),
+                    ],
+                    onChange: (value) {
+                      final newValue = toNumericString(value);
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                            pasivoPatrimonio: double.tryParse(newValue)),
+                      );
+                    },
+                  ),
+                  const Gap(20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        CustomElevatedButton(
+                          onPressed: () {
+                            if (!formKey.currentState!.validate()) return;
+                            pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          text: 'Siguiente',
+                          color: Colors.green,
+                        ),
+                        const Gap(10),
+                        CustomElevatedButton(
+                          onPressed: () {
+                            pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          text: 'Anterior',
+                          color: Colors.red,
+                        ),
+                        const Gap(20),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

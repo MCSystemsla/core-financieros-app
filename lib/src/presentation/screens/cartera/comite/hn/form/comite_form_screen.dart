@@ -1,12 +1,14 @@
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitud/comite_solicitud_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_comision_en_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_datos_del_credito_form.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_seguros_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/skeleton_card/skeleton_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_widget.dart';
@@ -40,7 +42,7 @@ class ComiteFormScreen extends StatelessWidget {
         body: BlocBuilder<ComiteSolicitudCubit, ComiteSolicitudState>(
           builder: (context, state) {
             return switch (state.status) {
-              Status.inProgress => const LoadingWidget(),
+              Status.inProgress => const SkeletonCard(),
               Status.error => OnErrorWidget(
                   errorMsg: state.errorMsg,
                   onPressed: () {
@@ -55,8 +57,11 @@ class ComiteFormScreen extends StatelessWidget {
                   children: [
                     _ComiteGeneralForm(
                       pageController: pageController,
+                      data: state.data.data,
                     ),
-                    _ComiteOtrosForm(),
+                    _ComiteOtrosForm(
+                      data: state.data.data,
+                    ),
                   ],
                 ),
               _ => const SizedBox(),
@@ -69,6 +74,9 @@ class ComiteFormScreen extends StatelessWidget {
 }
 
 class _ComiteOtrosForm extends StatefulWidget {
+  final ComiteSolicitudData data;
+
+  const _ComiteOtrosForm({required this.data});
   @override
   State<_ComiteOtrosForm> createState() => _ComiteOtrosFormState();
 }
@@ -81,6 +89,7 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
     return Form(
       key: formKey,
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -134,8 +143,11 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
 
 class _ComiteGeneralForm extends StatefulWidget {
   final PageController pageController;
+  final ComiteSolicitudData data;
+
   const _ComiteGeneralForm({
     required this.pageController,
+    required this.data,
   });
   @override
   State<_ComiteGeneralForm> createState() => _ComiteGeneralFormState();
@@ -166,11 +178,17 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
             ),
             const ComiteParametrosForm(),
             const Gap(12),
-            const ComiteDatosDelCreditoForm(),
+            ComiteDatosDelCreditoForm(
+              data: widget.data,
+            ),
             const Gap(12),
-            const ComiteComisionEnDesembolsoForm(),
+            ComiteComisionEnDesembolsoForm(
+              data: widget.data,
+            ),
             const Gap(12),
-            const ComiteParametrosForm(),
+            ComiteParametrosForm2(
+              data: widget.data,
+            ),
             const Gap(12),
             AnalisisCardListHn(
               title: 'Créditos a cancelar',

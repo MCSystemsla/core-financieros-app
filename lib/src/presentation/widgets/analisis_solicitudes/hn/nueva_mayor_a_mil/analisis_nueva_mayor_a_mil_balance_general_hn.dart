@@ -139,238 +139,259 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 ),
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Activos:',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      )
+                    ],
                   ),
-                ),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.caja
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Caja:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                        caja: double.tryParse(newValue) ?? 0,
-                        totalDisponibleActivo:
-                            state.caja + state.reservas + state.cuentasAhorro,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(18),
+                        child: Text(
+                          'Activos:',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                       ),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.reservas
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Reservas:',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          reservas: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.cuentasAhorro
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Cuentas de ahorro:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          cuentasAhorro: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  title: 'Total activos disponibles:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  readOnly: true,
-                  hintText: (state.caja + state.reservas + state.cuentasAhorro)
-                      .toCurrencyString(
-                    mantissaLength: 0,
-                  ),
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          totalDisponibleActivo:
-                              double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  title: 'Total clientes:',
-                  hintText: totalClientes.toCurrencyString(
-                    mantissaLength: 0,
-                  ),
-                  readOnly: true,
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                      leadingSymbol: 'L',
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          totalClientes: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  initialValue: state.adelantoProveedores
-                      .toCurrencyString(mantissaLength: 0)
-                      .toNullIfEmptyOrZero(),
-                  title: 'Adelanto a proveedores:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          adelantoProveedores: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  title: 'Incobrables:',
-                  hintText: incobrables.toCurrencyString(),
-                  icon: const Icon(Icons.document_scanner),
-                  readOnly: true,
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          incobrables: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  hintText:
-                      (totalClientes - incobrables + state.adelantoProveedores)
-                          .toCurrencyString()
-                          .toNullIfEmptyOrZero(),
-                  title: 'Total cuentas por cobrar:',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  readOnly: true,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                      leadingSymbol: 'L',
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          totalCuentasXCobrar: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  textAlign: TextAlign.end,
-                  hintText: (totalClientes -
-                          incobrables +
-                          state.adelantoProveedores +
-                          state.caja +
-                          state.reservas +
-                          state.cuentasAhorro +
-                          totalInventario)
-                      .toCurrencyString(mantissaLength: 0),
-                  title: 'Total activos corrientes:',
-                  icon: const Icon(Icons.document_scanner),
-                  readOnly: true,
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    CurrencyInputFormatter(
-                      mantissaLength: 0,
-                    )
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value);
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                          totalActivosCorrientes:
-                              double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
-                Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Activos:',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.caja
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Caja:',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              caja: double.tryParse(newValue) ?? 0,
+                              totalDisponibleActivo: state.caja +
+                                  state.reservas +
+                                  state.cuentasAhorro,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.reservas
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Reservas:',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                reservas: double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.cuentasAhorro
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        title: 'Cuentas de ahorro:',
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                cuentasAhorro: double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        title: 'Total activos disponibles:',
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        readOnly: true,
+                        hintText:
+                            (state.caja + state.reservas + state.cuentasAhorro)
+                                .toCurrencyString(
+                          mantissaLength: 0,
                         ),
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                totalDisponibleActivo:
+                                    double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        title: 'Total clientes:',
+                        hintText: totalClientes.toCurrencyString(
+                          mantissaLength: 0,
+                        ),
+                        readOnly: true,
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                            leadingSymbol: 'L',
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                totalClientes: double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        initialValue: state.adelantoProveedores
+                            .toCurrencyString(mantissaLength: 0)
+                            .toNullIfEmptyOrZero(),
+                        title: 'Adelanto a proveedores:',
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                adelantoProveedores:
+                                    double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        title: 'Incobrables:',
+                        hintText: incobrables.toCurrencyString(),
+                        icon: const Icon(Icons.document_scanner),
+                        readOnly: true,
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                incobrables: double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        hintText: (totalClientes -
+                                incobrables +
+                                state.adelantoProveedores)
+                            .toCurrencyString()
+                            .toNullIfEmptyOrZero(),
+                        title: 'Total cuentas por cobrar:',
+                        icon: const Icon(Icons.document_scanner),
+                        textInputType: TextInputType.number,
+                        readOnly: true,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                            leadingSymbol: 'L',
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                totalCuentasXCobrar:
+                                    double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        textAlign: TextAlign.end,
+                        hintText: (totalClientes -
+                                incobrables +
+                                state.adelantoProveedores +
+                                state.caja +
+                                state.reservas +
+                                state.cuentasAhorro +
+                                totalInventario)
+                            .toCurrencyString(mantissaLength: 0),
+                        title: 'Total activos corrientes:',
+                        icon: const Icon(Icons.document_scanner),
+                        readOnly: true,
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          )
+                        ],
+                        onChange: (value) {
+                          final newValue = toNumericString(value);
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                                totalActivosCorrientes:
+                                    double.tryParse(newValue) ?? 0),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                    ],
                   ),
                 ),
                 AnalisisCardListHn(

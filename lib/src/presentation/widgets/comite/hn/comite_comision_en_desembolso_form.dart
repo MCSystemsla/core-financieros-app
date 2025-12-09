@@ -1,13 +1,19 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
 class ComiteComisionEnDesembolsoForm extends StatelessWidget {
+  final ComiteSolicitudData data;
+
   const ComiteComisionEnDesembolsoForm({
     super.key,
+    required this.data,
   });
 
   @override
@@ -39,6 +45,8 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
+            initialValue:
+                data.tasaComision?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Tasa %',
             icon: Icon(
               Icons.percent_outlined,
@@ -52,6 +60,8 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            initialValue:
+                data.montoSinComision?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Monto',
             icon: Icon(
               Icons.payments_outlined,
@@ -65,6 +75,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            initialValue: data.monto?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Monto de comisión',
             icon: Icon(
               Icons.request_quote_outlined,
