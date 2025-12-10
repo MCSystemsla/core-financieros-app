@@ -14,6 +14,8 @@ class KivaConfiguracionLocalDb {
   final int? plazoMinimo;
   final int? plazoMaximo;
   final bool? aplicaMigrantesEconomicos;
+  final bool? masculino;
+  final bool? femenino;
 
   KivaConfiguracionLocalDb({
     this.productoCodigo,
@@ -25,5 +27,7 @@ class KivaConfiguracionLocalDb {
     this.plazoMinimo,
     this.plazoMaximo,
     this.aplicaMigrantesEconomicos,
+    this.masculino,
+    this.femenino,
   });
 }

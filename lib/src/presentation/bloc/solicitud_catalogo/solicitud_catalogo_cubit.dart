@@ -82,6 +82,8 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         plazoMinimo: item.plazoMinimo,
         plazoMaximo: item.plazoMaximo,
         aplicaMigrantesEconomicos: item.aplicaMigrantesEconomicos,
+        masculino: item.masculino,
+        femenino: item.femenino,
       ));
     }
   }
