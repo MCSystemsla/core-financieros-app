@@ -310,9 +310,7 @@ class AnalisisFiadoresHn {
       'HistorialCredito':
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };
-    data.removeWhere(
-      (key, value) => value == null || value == '' || value == 0,
-    );
+    data.removeWhere((key, value) => value == null || value == '');
     return data;
   }
 }

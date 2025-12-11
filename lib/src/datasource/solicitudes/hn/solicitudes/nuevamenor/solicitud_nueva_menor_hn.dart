@@ -252,7 +252,8 @@ class SolicitudNuevaMenorHn {
       'Apellido1': apellido1,
       'Cedula': cedula,
       'PaisEmisorCedulaCodigo': paisEmisorCedulaCodigo,
-      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String() ??
+          DateTime.now().toUtc().toIso8601String(),
       'FechaVencimientoCedula':
           fechaVencimientoCedula.toUtc().toIso8601String(),
       'FechaNacimiento': fechaNacimiento.toUtc().toIso8601String(),

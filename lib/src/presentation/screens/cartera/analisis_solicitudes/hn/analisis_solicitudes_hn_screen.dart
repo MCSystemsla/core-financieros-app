@@ -1,3 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
@@ -9,11 +18,6 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisSolicitudesHnScreen extends StatelessWidget {
   const AnalisisSolicitudesHnScreen({super.key});
@@ -68,35 +72,8 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
                               );
                         },
                       ),
-                    Status.done => Expanded(
-                        flex: 4,
-                        child: ListView.builder(
-                          itemCount: state.solicitudes.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return AnalisisCreditCardHn(
-                              tipoPersonaCodigo:
-                                  state.solicitudes[index].tipoPersonaCodigo,
-                              cedulaCliente:
-                                  state.solicitudes[index].cedulaCliente,
-                              numeroSolicitud: state.solicitudes[index].numero,
-                              tipoSolicitud: getTipoSolicitud(
-                                tipoSolicitud:
-                                    state.solicitudes[index].tipoSolicitud,
-                                monto: state.solicitudes[index].monto!,
-                              ),
-                              index: index,
-                              title:
-                                  'Número Solicitud: ${state.solicitudes[index].numero} ${state.solicitudes[index].tipoSolicitud}',
-                              subtitle:
-                                  state.solicitudes[index].nombreCompleto ??
-                                      'N/A',
-                              description: state.solicitudes[index].monto
-                                      ?.toCurrencyString() ??
-                                  'N/A',
-                            );
-                          },
-                        ),
+                    Status.done => _ListDataWidget(
+                        data: state.solicitudes,
                       ),
                     _ => const SizedBox(),
                   };
@@ -109,30 +86,30 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  AnalisisSolicitudesInterceptorType getTipoSolicitud({
-    required String tipoSolicitud,
-    required String monto,
-  }) {
-    final montoInt = int.tryParse(monto) ?? 0;
+AnalisisSolicitudesInterceptorType getTipoSolicitud({
+  required String tipoSolicitud,
+  required String monto,
+}) {
+  final montoInt = int.tryParse(monto) ?? 0;
 
-    switch (tipoSolicitud) {
-      case 'NUEVAMENOR':
-        return montoInt >= 1000
-            ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
-            : AnalisisSolicitudesInterceptorType.nueva;
+  switch (tipoSolicitud) {
+    case 'NUEVAMENOR':
+      return montoInt >= 1000
+          ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
+          : AnalisisSolicitudesInterceptorType.nueva;
 
-      case 'REPRESTAMO':
-        return montoInt >= 1000
-            ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
-            : AnalisisSolicitudesInterceptorType.represtamo;
+    case 'REPRESTAMO':
+      return montoInt >= 1000
+          ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
+          : AnalisisSolicitudesInterceptorType.represtamo;
 
-      case 'ASALARIADO':
-        return AnalisisSolicitudesInterceptorType.asalariado;
+    case 'ASALARIADO':
+      return AnalisisSolicitudesInterceptorType.asalariado;
 
-      default:
-        return AnalisisSolicitudesInterceptorType.nueva;
-    }
+    default:
+      return AnalisisSolicitudesInterceptorType.nueva;
   }
 }
 
@@ -162,6 +139,49 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
                 ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ListDataWidget extends StatefulWidget {
+  final List<SolicitudEstado> data;
+  const _ListDataWidget({
+    required this.data,
+  });
+
+  @override
+  State<_ListDataWidget> createState() => _ListDataWidgetState();
+}
+
+class _ListDataWidgetState extends State<_ListDataWidget> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.data.isEmpty) {
+      return const Expanded(
+          child: EmptyListWidget(message: 'No hay solicitudes por analizar'));
+    }
+    return Expanded(
+      flex: 4,
+      child: ListView.builder(
+        itemCount: widget.data.length,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return AnalisisCreditCardHn(
+            tipoPersonaCodigo: widget.data[index].tipoPersonaCodigo,
+            cedulaCliente: widget.data[index].cedulaCliente,
+            numeroSolicitud: widget.data[index].numero,
+            tipoSolicitud: getTipoSolicitud(
+              tipoSolicitud: widget.data[index].tipoSolicitud,
+              monto: widget.data[index].monto!,
+            ),
+            index: index,
+            title:
+                'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}',
+            subtitle: widget.data[index].nombreCompleto ?? 'N/A',
+            description: widget.data[index].monto?.toCurrencyString() ?? 'N/A',
+          );
+        },
       ),
     );
   }

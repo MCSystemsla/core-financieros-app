@@ -306,173 +306,199 @@ class _CreateCreditoContainerFormState
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.65,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-          ),
-          child: SingleChildScrollView(
-            controller: scrollController,
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  const Gap(15),
-                  Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    initialValue: entidad,
-                    title: 'Nombre de Entidad',
-                    icon: const Icon(Icons.business),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                    ],
-                    onChange: (value) {
-                      entidad = value;
-                    },
-                  ),
-                  const Gap(20),
-                  SearchDropdownWidget(
-                    selectedItem: Item(
-                      name: tipoMonedaCodigo,
-                      value: tipoMonedaCodigo,
-                    ),
-                    codigo: 'MONEDA',
-                    title: 'Tipo Moneda',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      tipoMonedaCodigo = value.value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    initialValue: monto.toCurrencyString(),
-                    title: 'Monto',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.65,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            ),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const Gap(15),
+                    Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      monto = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    initialValue: cuota.toCurrencyString(),
-                    title: 'Cuota',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      initialValue: entidad,
+                      title: 'Nombre de Entidad',
+                      icon: const Icon(Icons.business),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        entidad = value;
+                      },
+                    ),
+                    const Gap(20),
+                    SearchDropdownWidget(
+                      selectedItem: Item(
+                        name: tipoMonedaCodigo,
+                        value: tipoMonedaCodigo,
                       ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                      codigo: 'MONEDA',
+                      title: 'Tipo Moneda',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        tipoMonedaCodigo = value.value;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      initialValue: monto.toCurrencyString(),
+                      title: 'Monto',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        monto = int.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      initialValue: cuota.toCurrencyString(),
+                      title: 'Cuota',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
 
-                      cuota = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    initialValue: saldo.toCurrencyString(),
-                    title: 'Saldo',
-                    icon: const Icon(Icons.wallet),
-                    textInputType: TextInputType.number,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
+                        cuota = int.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      initialValue: saldo.toCurrencyString(),
+                      title: 'Saldo',
+                      icon: const Icon(Icons.wallet),
+                      textInputType: TextInputType.number,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        String newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        saldo = int.tryParse(newValue) ?? 0;
+                      },
+                    ),
+                    const Gap(20),
+                    CatalogoFrecuenciaPagoDropdown(
+                      selectedItem: CatalogoFrecuenciaItem(
+                        valor: tipoFrecuenciaCodigo,
+                        nombre: tipoFrecuenciaCodigo,
+                        meses: 0.toString(),
                       ),
-                    ],
-                    onChange: (value) {
-                      String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      saldo = int.tryParse(newValue) ?? 0;
-                    },
-                  ),
-                  const Gap(20),
-                  CatalogoFrecuenciaPagoDropdown(
-                    selectedItem: CatalogoFrecuenciaItem(
-                      valor: tipoFrecuenciaCodigo,
-                      nombre: tipoFrecuenciaCodigo,
-                      meses: 0.toString(),
+                      title: 'Tipo Frecuencia Pago',
+                      validator: (value) => ClassValidator.validateRequired(
+                        value?.valor,
+                      ),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        tipoFrecuenciaCodigo = value.valor;
+                      },
                     ),
-                    title: 'Tipo Frecuencia Pago',
-                    validator: (value) => ClassValidator.validateRequired(
-                      value?.valor,
+                    const Gap(20),
+                    SearchDropdownWidget(
+                      selectedItem: Item(
+                        name: estadoCodigo,
+                        value: estadoCodigo,
+                      ),
+                      codigo: 'ESTADOPRESTAMO',
+                      title: 'Estado de Crédito',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        estadoCodigo = value.value;
+                      },
                     ),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      tipoFrecuenciaCodigo = value.valor;
-                    },
-                  ),
-                  const Gap(20),
-                  SearchDropdownWidget(
-                    selectedItem: Item(
-                      name: estadoCodigo,
-                      value: estadoCodigo,
+                    const Gap(20),
+                    OutlineTextfieldWidget(
+                      readOnly: true,
+                      title: 'Fecha de desembolso',
+                      icon: const Icon(Icons.calendar_month),
+                      validator: (value) => ClassValidator.validateRequired(
+                          fechaDesembolso?.selectorFormat()),
+                      hintText: fechaDesembolso?.selectorFormat() ?? '',
+                      onTap: () => selectDate(context),
                     ),
-                    codigo: 'ESTADOPRESTAMO',
-                    title: 'Estado de Crédito',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      estadoCodigo = value.value;
-                    },
-                  ),
-                  const Gap(20),
-                  OutlineTextfieldWidget(
-                    readOnly: true,
-                    title: 'Fecha de desembolso',
-                    icon: const Icon(Icons.calendar_month),
-                    validator: (value) => ClassValidator.validateRequired(
-                        fechaDesembolso?.selectorFormat()),
-                    hintText: fechaDesembolso?.selectorFormat() ?? '',
-                    onTap: () => selectDate(context),
-                  ),
-                  const Gap(20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    child: CustomElevatedButton(
-                      enabled: true,
-                      text: 'Crear Credito',
-                      color: AppColors.greenLatern.withOpacity(0.4),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        if (widget.isUpdate) {
-                          widget.cubit.updateHistorialCredito(
-                            updated: HistorialCredito(
-                              uuid: widget.uuid ?? '',
+                    const Gap(20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: true,
+                        text: 'Crear Credito',
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+
+                          if (widget.isUpdate) {
+                            widget.cubit.updateHistorialCredito(
+                              updated: HistorialCredito(
+                                uuid: widget.uuid ?? '',
+                                entidad: entidad,
+                                monto: monto,
+                                tipoMonedaCodigo: tipoMonedaCodigo,
+                                tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
+                                cuota: cuota,
+                                saldo: saldo,
+                                estadoCodigo: estadoCodigo,
+                                fechaDesembolso: fechaDesembolso!,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
+                          widget.cubit.saveHistorialCredito(
+                            historialCredito: HistorialCredito(
+                              uuid: const Uuid().v4(),
                               entidad: entidad,
                               monto: monto,
                               tipoMonedaCodigo: tipoMonedaCodigo,
@@ -483,47 +509,32 @@ class _CreateCreditoContainerFormState
                               fechaDesembolso: fechaDesembolso!,
                             ),
                           );
-                          context.pop();
-                          return;
-                        }
-                        widget.cubit.saveHistorialCredito(
-                          historialCredito: HistorialCredito(
-                            uuid: const Uuid().v4(),
-                            entidad: entidad,
-                            monto: monto,
-                            tipoMonedaCodigo: tipoMonedaCodigo,
-                            tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
-                            cuota: cuota,
-                            saldo: saldo,
-                            estadoCodigo: estadoCodigo,
-                            fechaDesembolso: fechaDesembolso!,
-                          ),
-                        );
-                        localDbProvider.saveHistorialCredito(
-                          historialCreditoLocalDb: HistorialCrediticioLocalDb(
-                            uuid: widget.cubit.state.uuid!,
-                            cuota: cuota,
-                            entidad: entidad,
-                            estadoCodigo: estadoCodigo,
-                            monto: monto,
-                            saldo: saldo,
-                            tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
-                            tipoMonedaCodigo: tipoMonedaCodigo,
-                            fechaDesembolso: fechaDesembolso,
-                          ),
-                        );
+                          localDbProvider.saveHistorialCredito(
+                            historialCreditoLocalDb: HistorialCrediticioLocalDb(
+                              uuid: widget.cubit.state.uuid!,
+                              cuota: cuota,
+                              entidad: entidad,
+                              estadoCodigo: estadoCodigo,
+                              monto: monto,
+                              saldo: saldo,
+                              tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
+                              tipoMonedaCodigo: tipoMonedaCodigo,
+                              fechaDesembolso: fechaDesembolso,
+                            ),
+                          );
 
-                        context.pop();
-                      },
+                          context.pop();
+                        },
+                      ),
                     ),
-                  ),
-                  const Gap(20),
-                ],
+                    const Gap(20),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

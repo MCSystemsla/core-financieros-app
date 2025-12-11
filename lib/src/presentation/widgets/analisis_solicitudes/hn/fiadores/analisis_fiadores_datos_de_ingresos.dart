@@ -186,7 +186,6 @@ class _AnalisisFiadoresDatosDeIngresosState
 
               OutlineTextfieldWidget(
                 textInputType: TextInputType.number,
-                readOnly: true,
                 inputFormatters: [
                   CurrencyInputFormatter(
                     mantissaLength: 0,

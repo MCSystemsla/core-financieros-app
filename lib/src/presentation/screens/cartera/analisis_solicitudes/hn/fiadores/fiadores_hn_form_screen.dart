@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_datos_de_ingresos.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_datos_generales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_datos_personales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,6 +40,14 @@ class FiadoresHnFormScreen extends StatelessWidget {
             AnalisisRepositoryHNImpl(),
           )..setRelacionCliente(type.codigo, numeroSolicitud),
           child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              child: const Icon(Icons.build),
+              onPressed: () {
+                buildActividadesEconomicasAliasFilteredDropdown(
+                  context: context,
+                );
+              },
+            ),
             appBar: AppBar(
               title: const Text('Crear Fiador'),
             ),

@@ -22,11 +22,11 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -406,7 +406,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto minimo debe ser mayor a ${montoMinimo?.toString()} L.',
+                          'El monto minimo debe ser mayor a ${montoMinimo?.toCurrencyString(mantissaLength: 0)} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -416,7 +416,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                     CustomAlertDialog(
                       context: context,
                       title:
-                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toDoubleFormat} L.',
+                          'El monto maximo debe ser menor o igual a ${montoMaximo?.toCurrencyString(mantissaLength: 0)} L.',
                       onDone: () => context.pop(),
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
@@ -446,7 +446,7 @@ class _NuevaMenorForm7State extends State<NuevaMenorForm7>
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyFormat} L.',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString(mantissaLength: 0)} L.',
                     onDone: () {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(

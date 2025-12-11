@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/f
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -55,47 +57,10 @@ class ComiteScreenHn extends StatelessWidget {
                               );
                         },
                       ),
-                    Status.done => Expanded(
-                        flex: 4,
-                        child: ListView.builder(
-                          itemCount: state.solicitudes.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return CreditProductItemHN(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => ComiteFormScreen(
-                                      numeroSolicitud: int.parse(
-                                          state.solicitudes[index].numero),
-                                      tipoSolicitud: state
-                                          .solicitudes[index].tipoSolicitud,
-                                    ),
-                                  ),
-                                );
-                              },
-                              isAsesorAsignado: state.isAsignadaToAsesorCredito,
-                              tipoSolicitud:
-                                  state.solicitudes[index].tipoSolicitud,
-                              solicitudId: state.solicitudes[index].id,
-                              title:
-                                  'Numero Solicitud: ${state.solicitudes[index].numero}',
-                              fecha: state.solicitudes[index].fechaSolicitud,
-                              monto: state.solicitudes[index].monto!
-                                  .toCurrencyString(
-                                mantissaLength: 0,
-                              ),
-                              estadoCodigo: state.solicitudes[index].estado,
-                              sucursal:
-                                  state.solicitudes[index].sucursal ?? 'N/A',
-                              nombreCliente:
-                                  state.solicitudes[index].nombreCompleto,
-                              nombrePromotor:
-                                  state.solicitudes[index].nombrePromotor,
-                            );
-                          },
-                        ),
+                    Status.done => _ListDataWidget(
+                        data: state.solicitudes,
+                        isAsignadaToAsesorCredito:
+                            state.isAsignadaToAsesorCredito,
                       ),
                     _ => const SizedBox(),
                   };
@@ -105,6 +70,58 @@ class ComiteScreenHn extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ListDataWidget extends StatelessWidget {
+  final List<SolicitudEstado> data;
+  final bool isAsignadaToAsesorCredito;
+  const _ListDataWidget({
+    required this.data,
+    required this.isAsignadaToAsesorCredito,
+  });
+  @override
+  Widget build(BuildContext context) {
+    if (data.isEmpty) {
+      return const Expanded(
+          child: EmptyListWidget(
+        message: 'No hay solicitudes en comité',
+      ));
+    }
+    return Expanded(
+      flex: 4,
+      child: ListView.builder(
+        itemCount: data.length,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return CreditProductItemHN(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => ComiteFormScreen(
+                    numeroSolicitud: int.parse(data[index].numero),
+                    tipoSolicitud: data[index].tipoSolicitud,
+                  ),
+                ),
+              );
+            },
+            isAsesorAsignado: isAsignadaToAsesorCredito,
+            tipoSolicitud: data[index].tipoSolicitud,
+            solicitudId: data[index].id,
+            title: 'Numero Solicitud: ${data[index].numero}',
+            fecha: data[index].fechaSolicitud,
+            monto: data[index].monto!.toCurrencyString(
+                  mantissaLength: 0,
+                ),
+            estadoCodigo: data[index].estado,
+            sucursal: data[index].sucursal ?? 'N/A',
+            nombreCliente: data[index].nombreCompleto,
+            nombrePromotor: data[index].nombrePromotor,
+          );
+        },
       ),
     );
   }

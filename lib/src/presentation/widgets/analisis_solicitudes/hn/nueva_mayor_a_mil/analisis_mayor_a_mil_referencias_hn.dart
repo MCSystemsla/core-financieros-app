@@ -217,7 +217,8 @@ class _AnalisisMayorAMilReferenciasHNState
                         icon: const Icon(Icons.person),
                         textInputType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(13),
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(
@@ -234,7 +235,8 @@ class _AnalisisMayorAMilReferenciasHNState
                             ClassValidator.validateRequired(value),
                         textInputType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(
@@ -413,6 +415,7 @@ class _AnalisisMayorAMilReferenciasHNState
                         icon: const Icon(Icons.person),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(13),
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(
@@ -430,6 +433,7 @@ class _AnalisisMayorAMilReferenciasHNState
                         icon: const Icon(Icons.person),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(
@@ -623,6 +627,7 @@ class _AnalisisMayorAMilReferenciasHNState
                           icon: const Icon(Icons.person),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(13),
                           ],
                           onChange: (value) {
                             cubit.onFieldChanged(
@@ -640,6 +645,7 @@ class _AnalisisMayorAMilReferenciasHNState
                           icon: const Icon(Icons.person),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(10),
                           ],
                           onChange: (value) {
                             cubit.onFieldChanged(

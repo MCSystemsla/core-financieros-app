@@ -113,7 +113,9 @@ class ClassValidator {
   }
 
   static String? hondurasDocumentValidator(
-      String? value, String tipoDocumento) {
+    String? value,
+    String tipoDocumento,
+  ) {
     if (value == null || value.trim().isEmpty) {
       return 'Este campo es obligatorio';
     }
@@ -127,7 +129,7 @@ class ClassValidator {
     final carnetRegex = RegExp(r'^[A-Za-z0-9\-]{6,15}$');
 
     switch (tipo) {
-      case 'DNI':
+      case 'CEDULAIDENTIDAD':
         if (!cedulaRegex.hasMatch(input)) {
           return 'La cédula debe tener exactamente 13 dígitos numéricos';
         }
@@ -145,14 +147,14 @@ class ClassValidator {
         }
         break;
 
-      case 'CARNETRESIDENCIA':
+      case 'CEDULARESIDENCIA':
         if (!carnetRegex.hasMatch(input)) {
-          return 'El carné de residencia debe tener entre 6 y 15 caracteres alfanuméricos';
+          return 'El carnét de residencia debe tener entre 6 y 15 caracteres alfanuméricos';
         }
         break;
 
       default:
-        return 'Tipo de documento no reconocido';
+        return 'Tipo de documento no reconocido $tipo';
     }
 
     return null;

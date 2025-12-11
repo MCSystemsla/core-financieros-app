@@ -142,7 +142,7 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.nombrePromotor,
+            initialValue: data.nombreOficialCredito,
             title: 'Promotor',
             icon: Icon(
               Icons.inventory_2_outlined,

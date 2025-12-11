@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/solicitudes/analisis_solicitudes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_credit_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -42,28 +44,8 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
                             .getSolicitudesByEstado();
                       },
                     ),
-                  Status.done => Expanded(
-                      flex: 5,
-                      child: ListView.builder(
-                        itemCount: state.data.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return AnalisisCreditCard(
-                            numeroSolicitud: state.data[index].numero,
-                            tipoSolicitud: getTipoSolicitud(
-                              tipoSolicitud: state.data[index].tipoSolicitud,
-                              monto: state.data[index].monto!,
-                            ),
-                            index: index,
-                            title:
-                                'Numero Solicitud: ${state.data[index].numero} ${state.data[index].tipoSolicitud}',
-                            subtitle: state.data[index].nombreCompleto ?? 'N/A',
-                            description:
-                                state.data[index].monto?.toCurrencyString() ??
-                                    'N/A',
-                          );
-                        },
-                      ),
+                  Status.done => _AnilisListDataWidget(
+                      data: state.data,
                     ),
                   _ => const SizedBox(),
                 };
@@ -75,30 +57,30 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  AnalisisSolicitudesInterceptorType getTipoSolicitud({
-    required String tipoSolicitud,
-    required String monto,
-  }) {
-    final montoInt = int.tryParse(monto) ?? 0;
+AnalisisSolicitudesInterceptorType getTipoSolicitud({
+  required String tipoSolicitud,
+  required String monto,
+}) {
+  final montoInt = int.tryParse(monto) ?? 0;
 
-    switch (tipoSolicitud) {
-      case 'NUEVAMENOR':
-        return montoInt >= 1000
-            ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
-            : AnalisisSolicitudesInterceptorType.nueva;
+  switch (tipoSolicitud) {
+    case 'NUEVAMENOR':
+      return montoInt >= 1000
+          ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
+          : AnalisisSolicitudesInterceptorType.nueva;
 
-      case 'REPRESTAMO':
-        return montoInt >= 1000
-            ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
-            : AnalisisSolicitudesInterceptorType.represtamo;
+    case 'REPRESTAMO':
+      return montoInt >= 1000
+          ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
+          : AnalisisSolicitudesInterceptorType.represtamo;
 
-      case 'ASALARIADO':
-        return AnalisisSolicitudesInterceptorType.asalariado;
+    case 'ASALARIADO':
+      return AnalisisSolicitudesInterceptorType.asalariado;
 
-      default:
-        return AnalisisSolicitudesInterceptorType.nueva;
-    }
+    default:
+      return AnalisisSolicitudesInterceptorType.nueva;
   }
 }
 
@@ -128,6 +110,42 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
                 ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AnilisListDataWidget extends StatelessWidget {
+  final List<SolicitudEstado> data;
+
+  const _AnilisListDataWidget({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.isEmpty) {
+      return const EmptyListWidget(
+        message: 'No hay analisis analisis pendientes.',
+      );
+    }
+    return Expanded(
+      flex: 5,
+      child: ListView.builder(
+        itemCount: data.length,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return AnalisisCreditCard(
+            numeroSolicitud: data[index].numero,
+            tipoSolicitud: getTipoSolicitud(
+              tipoSolicitud: data[index].tipoSolicitud,
+              monto: data[index].monto!,
+            ),
+            index: index,
+            title:
+                'Numero Solicitud: ${data[index].numero} ${data[index].tipoSolicitud}',
+            subtitle: data[index].nombreCompleto ?? 'N/A',
+            description: data[index].monto?.toCurrencyString() ?? 'N/A',
+          );
+        },
       ),
     );
   }

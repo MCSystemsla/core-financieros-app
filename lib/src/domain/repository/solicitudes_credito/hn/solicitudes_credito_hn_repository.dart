@@ -174,7 +174,7 @@ class SolicitudesCreditoHnRepositoryImpl
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String,
+        resp['data']['NumeroSolicitud'] as String,
       );
     } catch (e) {
       _logger.e(e.toString());

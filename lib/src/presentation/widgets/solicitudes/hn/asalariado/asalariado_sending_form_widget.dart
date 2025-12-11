@@ -32,9 +32,9 @@ class _AsalariadoSendingFormWidgetState
           // dbProvider.removeSolicitudWhenisUploaded(
           //   solicitudId: widget.solicitudId,
           // );
-          context.read<SolicitudAslariadoHnCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
-              );
+          // context.read<SolicitudAslariadoHnCubit>().sendCedulaImages(
+          //       numeroSolicitud: state.numeroSolicitud,
+          //     );
           // context
           //     .read<SolicitudNuevaMenorCubit>()
           //     .onFieldChanged(() => state.copyWith(

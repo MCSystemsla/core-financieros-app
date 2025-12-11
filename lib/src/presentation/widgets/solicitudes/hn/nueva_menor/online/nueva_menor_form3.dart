@@ -323,32 +323,38 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   },
                 ),
                 const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: cubit.state.horarioTrabajo,
-                  icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'Horario de Atención',
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
-                  ],
-                  readOnly: true,
-                  onTap: () => {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => TimePickerBottomSheet(
-                        initial: DateTime.now(),
-                        use24hFormat: false,
-                        onSelected: (time) {
-                          cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
-                              horarioTrabajo: time,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                BlocBuilder<SolicitudNuevaMenorHnCubit,
+                    SolicitudNuevaMenorHnState>(
+                  builder: (context, state) {
+                    return OutlineTextfieldWidget(
+                      hintText: state.horarioTrabajo,
+                      icon:
+                          Icon(Icons.work, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Horario de Atención',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      readOnly: true,
+                      onTap: () => {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (_) => TimePickerBottomSheet(
+                            initial: DateTime.now(),
+                            use24hFormat: false,
+                            onSelected: (time) {
+                              cubit.onFieldChanged(
+                                () => state.copyWith(
+                                  horarioTrabajo: time,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      },
+                    );
                   },
                 ),
                 const Gap(30),

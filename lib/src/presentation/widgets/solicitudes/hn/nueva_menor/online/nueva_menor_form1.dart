@@ -512,7 +512,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     );
                   },
                 ),
-                if (widget.userByDocumentHn?.tipoDocumento != 'DNI') ...[
+                if (widget.userByDocumentHn?.tipoDocumento !=
+                    'CEDULAIDENTIDAD') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
                     isRequired: true,

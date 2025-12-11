@@ -6,7 +6,6 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_d
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_detalle/analisis_garantia_detalle_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/interceptor/analisis_garantia_form_interceptor.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/crear_articulo_modal_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
@@ -35,7 +34,6 @@ class CrearGarantiaDetalleScreen extends StatefulWidget {
 
 class _CrearGarantiaDetalleScreenState
     extends State<CrearGarantiaDetalleScreen> {
-  bool showFab = false;
   @override
   Widget build(BuildContext context) {
     final repository = AnalisisRepositoryHNImpl();
@@ -59,45 +57,8 @@ class _CrearGarantiaDetalleScreenState
         appBar: AppBar(
           title: const Text('Crear Detalle de Garantía'),
         ),
-        floatingActionButton: showFab
-            ? FloatingActionButton.extended(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<AnalisisArticuloCubit>(),
-                      child: CreateArticuloModalSheet(
-                        numeroSolicitud: widget.numeroSolicitud,
-                      ),
-                    ),
-                  );
-                },
-                backgroundColor: Colors.black,
-                label: const Row(
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    Gap(5),
-                    Text(
-                      'Crear Articulo',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : null,
         body: _ArticuloForm(
           garantias: widget.garantias,
-          onTipoGarantiaChanged: (tipoGarantia) {
-            setState(() {
-              showFab = tipoGarantia != TipoGarantiaEnum.liquida.codigo;
-            });
-          },
         ),
       ),
     );
@@ -106,10 +67,8 @@ class _CrearGarantiaDetalleScreenState
 
 class _ArticuloForm extends StatefulWidget {
   final List<GarantiaData> garantias;
-  final void Function(String tipoGarantia) onTipoGarantiaChanged;
   const _ArticuloForm({
     required this.garantias,
-    required this.onTipoGarantiaChanged,
   });
   @override
   State<_ArticuloForm> createState() => _ArticuloFormState();
@@ -141,7 +100,6 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                   objAnalisisGarantiaID = v?.value;
                   tipoGarantiaName = v?.name;
                 });
-                widget.onTipoGarantiaChanged(tipoGarantiaName ?? '');
               },
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),

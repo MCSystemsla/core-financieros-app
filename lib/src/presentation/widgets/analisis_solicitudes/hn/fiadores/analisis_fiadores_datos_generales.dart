@@ -378,7 +378,7 @@ class _AnalisisFiadoresDatosGeneralesState
                 onChange: (value) {},
                 onTap: () => selectEmisionFecha(context),
               ),
-              if (widget.tipoDocumento != 'DNI') ...[
+              if (widget.tipoDocumento != 'CEDULAIDENTIDAD') ...[
                 const Gap(20),
                 OutlineTextfieldWidget(
                   hintText: fechaVencimientoCedula?.selectorFormat(),
@@ -387,7 +387,6 @@ class _AnalisisFiadoresDatosGeneralesState
                   validator: (value) => ClassValidator.validateRequired(
                       fechaVencimientoCedula?.selectorFormat()),
                   readOnly: true,
-                  onChange: (value) {},
                   onTap: () => selectDate(context),
                 ),
               ],

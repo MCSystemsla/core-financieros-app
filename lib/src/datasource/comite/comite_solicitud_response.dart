@@ -24,35 +24,57 @@ class ComiteSolicitudResponse {
 }
 
 class ComiteSolicitudData {
-  final int actaNumero;
-  final String numeroSolicitud;
-  final String nombreCompletoCliente;
-  final int? tasaInteresCorriente;
-  final int? tasaInteresMoratorio;
+  final int? actaNumero;
+  final String? numeroSolicitud;
+  final String? nombreProducto;
+  final String? nombreCompletoCliente;
+  final bool? esReestructuracion;
+  final bool? cuotaNivelada;
+  final bool? alVencimiento;
+  final bool? comisionFinanciada;
+  final String? creditoMantieneTasa;
+  final num? tasaInteresCorriente;
+  final num? tasaInteresMoratorio;
   final int? plazoSolicitud;
-  final int? monto;
+  final num? monto;
   final DateTime? fechaPrimerPagoAprobacion;
-  final int? tasaComision;
+  final num? tasaComision;
   final num? montoSinComision;
   final String? monedaCodigo;
+  final String? monedaNombre;
   final String? tipoDesembolsoCodigo;
+  final String? tipoDesembolsoNombre;
   final String? estadoComiteCodigo;
+  final String? estadoComiteNombre;
   final String? formaDePagoCodigo;
+  final String? formaDePagoNombre;
   final String? periodicidadCodigo;
+  final String? periodicidadNombre;
   final String? sectorCodigo;
+  final String? sectorNombre;
   final String? actividadCodigo;
-  final String? nombrePromotor;
+  final String? actividadNombre;
+  final String? nombreOficialCredito;
   final String? fuenteFinanciamientoCodigo;
+  final String? fuenteFinanciamientoNombre;
   final int? periodoGracia;
   final String? tipoCreditoNombre;
   final String? tipoProgramaCodigo;
+  final String? tipoProgramaNombre;
   final String? observacion;
   final double? tasaSaldoDeudor;
+  final num? montoSeguroVida;
 
   const ComiteSolicitudData({
-    required this.actaNumero,
-    required this.numeroSolicitud,
-    required this.nombreCompletoCliente,
+    this.actaNumero,
+    this.numeroSolicitud,
+    this.nombreProducto,
+    this.nombreCompletoCliente,
+    this.esReestructuracion,
+    this.cuotaNivelada,
+    this.alVencimiento,
+    this.comisionFinanciada,
+    this.creditoMantieneTasa,
     this.tasaInteresCorriente,
     this.tasaInteresMoratorio,
     this.plazoSolicitud,
@@ -61,75 +83,118 @@ class ComiteSolicitudData {
     this.tasaComision,
     this.montoSinComision,
     this.monedaCodigo,
+    this.monedaNombre,
     this.tipoDesembolsoCodigo,
+    this.tipoDesembolsoNombre,
     this.estadoComiteCodigo,
+    this.estadoComiteNombre,
     this.formaDePagoCodigo,
+    this.formaDePagoNombre,
     this.periodicidadCodigo,
+    this.periodicidadNombre,
     this.sectorCodigo,
+    this.sectorNombre,
     this.actividadCodigo,
-    this.nombrePromotor,
+    this.actividadNombre,
+    this.nombreOficialCredito,
     this.fuenteFinanciamientoCodigo,
+    this.fuenteFinanciamientoNombre,
     this.periodoGracia,
     this.tipoCreditoNombre,
     this.tipoProgramaCodigo,
+    this.tipoProgramaNombre,
     this.observacion,
     this.tasaSaldoDeudor,
+    this.montoSeguroVida,
   });
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
       ComiteSolicitudData(
-        actaNumero: (json['ActaNumero']),
+        actaNumero: json['ActaNumero'],
         numeroSolicitud: json['NumeroSolicitud'],
+        nombreProducto: json['NombreProducto'],
         nombreCompletoCliente: json['NombreCompletoCliente'],
+        esReestructuracion: json['EsReestructuracion'],
+        cuotaNivelada: json['CuotaNivelada'],
+        alVencimiento: json['AlVencimiento'],
+        comisionFinanciada: json['ComisionFinanciada'],
+        creditoMantieneTasa: json['CreditoMantieneTasa'],
         tasaInteresCorriente: json['TasaInteresCorriente'],
         tasaInteresMoratorio: json['TasaInteresMoratorio'],
         plazoSolicitud: json['PlazoSolicitud'],
         monto: json['Monto'],
-        fechaPrimerPagoAprobacion:
-            DateTime.tryParse(json['FechaPrimerPagoAprobacion'].toString()),
+        fechaPrimerPagoAprobacion: json['FechaPrimerPagoAprobacion'] == null
+            ? null
+            : DateTime.parse(json['FechaPrimerPagoAprobacion']),
         tasaComision: json['TasaComision'],
         montoSinComision: json['MontoSinComision'],
         monedaCodigo: json['MonedaCodigo'],
+        monedaNombre: json['MonedaNombre'],
         tipoDesembolsoCodigo: json['TipoDesembolsoCodigo'],
+        tipoDesembolsoNombre: json['TipoDesembolsoNombre'],
         estadoComiteCodigo: json['EstadoComiteCodigo'],
+        estadoComiteNombre: json['EstadoComiteNombre'],
         formaDePagoCodigo: json['FormaDePagoCodigo'],
+        formaDePagoNombre: json['FormaDePagoNombre'],
         periodicidadCodigo: json['PeriodicidadCodigo'],
+        periodicidadNombre: json['PeriodicidadNombre'],
         sectorCodigo: json['SectorCodigo'],
+        sectorNombre: json['SectorNombre'],
         actividadCodigo: json['ActividadCodigo'],
-        nombrePromotor: json['NombrePromotor'],
+        actividadNombre: json['ActividadNombre'],
+        nombreOficialCredito: json['NombreOficialCredito'],
         fuenteFinanciamientoCodigo: json['FuenteFinanciamientoCodigo'],
+        fuenteFinanciamientoNombre: json['FuenteFinanciamientoNombre'],
         periodoGracia: json['PeriodoGracia'],
         tipoCreditoNombre: json['TipoCreditoNombre'],
         tipoProgramaCodigo: json['TipoProgramaCodigo'],
+        tipoProgramaNombre: json['TipoProgramaNombre'],
         observacion: json['Observacion'],
         tasaSaldoDeudor: json['TasaSaldoDeudor']?.toDouble(),
+        montoSeguroVida: json['MontoSeguroVida'],
       );
 
   Map<String, dynamic> toJson() => {
         'ActaNumero': actaNumero,
         'NumeroSolicitud': numeroSolicitud,
+        'NombreProducto': nombreProducto,
         'NombreCompletoCliente': nombreCompletoCliente,
+        'EsReestructuracion': esReestructuracion,
+        'CuotaNivelada': cuotaNivelada,
+        'AlVencimiento': alVencimiento,
+        'ComisionFinanciada': comisionFinanciada,
+        'CreditoMantieneTasa': creditoMantieneTasa,
         'TasaInteresCorriente': tasaInteresCorriente,
         'TasaInteresMoratorio': tasaInteresMoratorio,
         'PlazoSolicitud': plazoSolicitud,
         'Monto': monto,
         'FechaPrimerPagoAprobacion':
-            fechaPrimerPagoAprobacion?.toUtc().toIso8601String(),
+            fechaPrimerPagoAprobacion?.toIso8601String(),
         'TasaComision': tasaComision,
         'MontoSinComision': montoSinComision,
         'MonedaCodigo': monedaCodigo,
+        'MonedaNombre': monedaNombre,
         'TipoDesembolsoCodigo': tipoDesembolsoCodigo,
+        'TipoDesembolsoNombre': tipoDesembolsoNombre,
         'EstadoComiteCodigo': estadoComiteCodigo,
+        'EstadoComiteNombre': estadoComiteNombre,
         'FormaDePagoCodigo': formaDePagoCodigo,
+        'FormaDePagoNombre': formaDePagoNombre,
         'PeriodicidadCodigo': periodicidadCodigo,
+        'PeriodicidadNombre': periodicidadNombre,
         'SectorCodigo': sectorCodigo,
+        'SectorNombre': sectorNombre,
         'ActividadCodigo': actividadCodigo,
-        'NombrePromotor': nombrePromotor,
+        'ActividadNombre': actividadNombre,
+        'NombreOficialCredito': nombreOficialCredito,
         'FuenteFinanciamientoCodigo': fuenteFinanciamientoCodigo,
+        'FuenteFinanciamientoNombre': fuenteFinanciamientoNombre,
         'PeriodoGracia': periodoGracia,
         'TipoCreditoNombre': tipoCreditoNombre,
         'TipoProgramaCodigo': tipoProgramaCodigo,
+        'TipoProgramaNombre': tipoProgramaNombre,
         'Observacion': observacion,
         'TasaSaldoDeudor': tasaSaldoDeudor,
+        'MontoSeguroVida': montoSeguroVida,
       };
 }
