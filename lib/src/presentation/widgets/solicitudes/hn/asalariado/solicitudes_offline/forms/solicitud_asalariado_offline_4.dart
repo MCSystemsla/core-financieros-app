@@ -115,7 +115,7 @@ class _SolicitudAsalariadoOffline4State
                             ClassValidator.validateRequired(value?.value),
                         codigo: 'PROFESION',
                         flavor: global<FlavorCubit>().state.flavor,
-                        hintText: 'Profesión del Cónyugue',
+                        hintText: 'Profesión del cónyuge',
                         title: 'Profesion del Conyugue',
                         onChanged: (value) {
                           if (value == null || !mounted) return;
@@ -252,12 +252,12 @@ class _SolicitudAsalariadoOffline4State
                               state.sueldoMesConyugue.toCurrencyString(),
                           validator: (value) =>
                               ClassValidator.validateRequired(value),
-                          hintText: 'Sueldo Mensual del Cónyugue',
+                          hintText: 'Sueldo Mensual del cónyuge',
                           icon: Icon(Icons.wallet,
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.number,
                           textCapitalization: TextCapitalization.none,
-                          title: 'Sueldo Mensual del Cónyugue',
+                          title: 'Sueldo Mensual del cónyuge',
                           inputFormatters: [
                             CurrencyInputFormatter(mantissaLength: 0),
                           ],
@@ -279,12 +279,12 @@ class _SolicitudAsalariadoOffline4State
                             .toCurrencyString(),
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        hintText: 'Otros Ingresos del Cónyugue',
+                        hintText: 'Otros Ingresos del cónyuge',
                         icon: Icon(Icons.payments,
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.number,
                         textCapitalization: TextCapitalization.none,
-                        title: 'Otros Ingresos del Cónyugue',
+                        title: 'Otros Ingresos del cónyuge',
                         inputFormatters: [
                           CurrencyInputFormatter(mantissaLength: 0),
                         ],
@@ -304,7 +304,7 @@ class _SolicitudAsalariadoOffline4State
                         initialValue: state.fuenteOtrosIngresosConyugue,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
-                        hintText: 'Fuente de Otros Ingresos del Cónyugue',
+                        hintText: 'Fuente de Otros Ingresos del cónyuge',
                         icon: Icon(Icons.source,
                             color: AppColors.getPrimaryColor()),
                         textInputType: TextInputType.text,
@@ -313,7 +313,7 @@ class _SolicitudAsalariadoOffline4State
                           UpperCaseTextFormatter(),
                           LengthLimitingTextInputFormatter(100),
                         ],
-                        title: 'Fuente de Otros Ingresos del Cónyugue',
+                        title: 'Fuente de Otros Ingresos del cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
@@ -332,8 +332,8 @@ class _SolicitudAsalariadoOffline4State
                         ),
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
-                        hintText: 'Nacionalidad del Cónyuge',
-                        title: 'Nacionalidad del Cónyugue',
+                        hintText: 'Nacionalidad del cónyuge',
+                        title: 'Nacionalidad del cónyuge',
                         codigo: 'PAIS',
                         onChanged: (item) {
                           if (item == null || !mounted) return;

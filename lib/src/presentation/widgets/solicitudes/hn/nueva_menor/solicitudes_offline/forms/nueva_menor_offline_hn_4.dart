@@ -161,8 +161,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.valor),
-                        hintText: 'Ingresa Nacionalidad Cónyugue',
-                        title: 'Nacionalidad del Cónyuge',
+                        hintText: 'Ingresa Nacionalidad cónyuge',
+                        title: 'Nacionalidad del cónyuge',
                         codigo: 'PAIS',
                         onChanged: (item) {
                           if (item == null || !mounted) return;
@@ -210,12 +210,12 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           ],
                           validator: (value) =>
                               ClassValidator.validateRequired(value),
-                          hintText: 'Trabajo Cónyugue',
+                          hintText: 'Trabajo cónyuge',
                           icon: Icon(Icons.work_outline,
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
-                          title: 'Centro de Trabajo del Cónyuge',
+                          title: 'Centro de Trabajo del cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(

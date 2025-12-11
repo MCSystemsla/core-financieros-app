@@ -2,6 +2,8 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_checks/analisis_checks_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
@@ -10,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
@@ -44,172 +47,210 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      minChildSize: 0.45,
-      maxChildSize: 0.75,
-      expand: false,
-      builder: (_, controller) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xfff9fafb),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(28),
+    final repository = AnalisisRepositoryHNImpl();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => AnalisisChecksCubit(repository)
+            ..checkAnalisis(
+              numeroSolicitud: int.parse(numeroSolicitud),
+              tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString() ?? '',
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.12),
-                blurRadius: 25,
-                offset: const Offset(0, -3),
+        ),
+      ],
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.45,
+        maxChildSize: 0.75,
+        expand: false,
+        builder: (_, controller) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xfff9fafb),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(28),
               ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.12),
+                  blurRadius: 25,
+                  offset: const Offset(0, -3),
                 ),
-              ),
-              const Gap(18),
-              Expanded(
-                child: ListView(
-                  controller: controller,
+              ],
+            ),
+            child: BlocBuilder<AnalisisChecksCubit, AnalisisChecksState>(
+              builder: (context, state) {
+                return Column(
                   children: [
-                    SelectableCardItem(
-                      icon: Icons.dashboard_customize_rounded,
-                      color: const Color(0xff1554F6),
-                      title: 'Registrar Analisis',
-                      subtitle: 'Crear analisis de crédito',
-                      onTap: () => {
-                        context.pop(),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AnalisisSolicitudesInterceptorHN(
-                              index: index,
-                              type: tipoSolicitud!,
-                              title: title,
-                              subtitle: subtitle,
-                              description: description,
-                              numeroSolicitud: numeroSolicitud,
-                            ),
-                          ),
-                        ),
-                      },
+                    Container(
+                      width: 42,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    SelectableCardItem(
-                      icon: Icons.business_center_outlined,
-                      color: const Color(0xffF6153F),
-                      title: 'Registrar Plan de inversion',
-                      subtitle: 'Crear plan de inversion',
-                      onTap: () => {
-                        context.pop(),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => PlanInversionScreen(
-                              numeroSolicitud: int.parse(numeroSolicitud),
-                            ),
+                    const Gap(18),
+                    Expanded(
+                      child: ListView(
+                        controller: controller,
+                        children: [
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tieneAnalisis,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.dashboard_customize_rounded,
+                            color: const Color(0xff1554F6),
+                            title: 'Registrar Analisis',
+                            subtitle: 'Crear analisis de crédito',
+                            onTap: () {
+                              if (state.tieneAnalisis) {
+                                CustomAlertDialog(
+                                  context: context,
+                                  title:
+                                      'No es posible continuar: el análisis ya figura como registrado en sistema.',
+                                  onDone: () => context.pop(),
+                                ).showDialog(
+                                  context,
+                                  dialogType: DialogType.infoReverse,
+                                );
+                                return;
+                              }
+                              context.pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      AnalisisSolicitudesInterceptorHN(
+                                    index: index,
+                                    type: tipoSolicitud!,
+                                    title: title,
+                                    subtitle: subtitle,
+                                    description: description,
+                                    numeroSolicitud: numeroSolicitud,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                      },
-                    ),
-                    SelectableCardItem(
-                      icon: Icons.swap_horiz_rounded,
-                      color: const Color(0xff0D9488),
-                      title: 'Registrar Fiadores',
-                      subtitle: 'Crear Terceros',
-                      onTap: () => {
-                        context.pop(),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => FiadoresHnScreen(
-                              numeroSolicitud:
-                                  int.tryParse(numeroSolicitud) ?? 0,
-                            ),
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tienePlanInversion,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.business_center_outlined,
+                            color: const Color(0xffF6153F),
+                            title: 'Registrar Plan de inversion',
+                            subtitle: 'Crear plan de inversion',
+                            onTap: () => {
+                              context.pop(),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => PlanInversionScreen(
+                                    numeroSolicitud: int.parse(numeroSolicitud),
+                                  ),
+                                ),
+                              ),
+                            },
                           ),
-                        )
-                      },
-                    ),
-                    SelectableCardItem(
-                      icon: Icons.pie_chart_rounded,
-                      color: const Color(0xff6D28D9),
-                      title: 'Registrar Garantías',
-                      subtitle: 'Crear Garantías',
-                      onTap: () => {
-                        context.pop(),
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => GarantiaHNScreen(
-                              numeroSolicitud: int.parse(numeroSolicitud),
-                              solicitudCodigo:
-                                  tipoSolicitud?.toTypeForInterceptorString() ??
-                                      '',
-                              cedulaCliente: cedulaCliente,
-                              tipoPersonaCodigo: tipoPersonaCodigo,
-                            ),
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tieneFiadores,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.swap_horiz_rounded,
+                            color: const Color(0xff0D9488),
+                            title: 'Registrar Fiadores',
+                            subtitle: 'Crear Terceros',
+                            onTap: () => {
+                              context.pop(),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => FiadoresHnScreen(
+                                    numeroSolicitud:
+                                        int.tryParse(numeroSolicitud) ?? 0,
+                                  ),
+                                ),
+                              )
+                            },
                           ),
-                        )
-                      },
-                    ),
-                    BlocBuilder<CerrarAnalisisCubit, CerrarAnalisisState>(
-                      builder: (context, state) {
-                        return SelectableCardItem(
-                          isLoading: state.status == Status.inProgress,
-                          icon: Icons.assignment_turned_in,
-                          color: const Color(0xFFB91C1C),
-                          title: 'Cerrar Analisis',
-                          subtitle: 'Cerrar analisis de crédito',
-                          onTap: () => {
-                            CloseAnalisisDialog(
-                              context: context,
-                              title: '¿Estás seguro de cerrar el analisis?',
-                              onYes: () {
-                                context.pop();
-                                context
-                                    .read<CerrarAnalisisCubit>()
-                                    .closeAnalisis(
-                                      numeroSolicitud:
-                                          int.parse(numeroSolicitud),
-                                      tipoSolicitud: tipoSolicitud!
-                                          .toTypeForInterceptorString(),
-                                    );
-                              },
-                            ).showDialog(
-                              context,
-                              dialogType: DialogType.infoReverse,
-                            )
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (ctx) => GarantiaHNScreen(
-                            //       numeroSolicitud: int.parse(numeroSolicitud),
-                            //       solicitudCodigo:
-                            //           tipoSolicitud?.toTypeForInterceptorString() ??
-                            //               '',
-                            //       cedulaCliente: cedulaCliente,
-                            //       tipoPersonaCodigo: tipoPersonaCodigo,
-                            //     ),
-                            //   ),
-                            // )
-                          },
-                        );
-                      },
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tieneGarantia,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.pie_chart_rounded,
+                            color: const Color(0xff6D28D9),
+                            title: 'Registrar Garantías',
+                            subtitle: 'Crear Garantías',
+                            onTap: () => {
+                              context.pop(),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => GarantiaHNScreen(
+                                    numeroSolicitud: int.parse(numeroSolicitud),
+                                    solicitudCodigo: tipoSolicitud
+                                            ?.toTypeForInterceptorString() ??
+                                        '',
+                                    cedulaCliente: cedulaCliente,
+                                    tipoPersonaCodigo: tipoPersonaCodigo,
+                                  ),
+                                ),
+                              )
+                            },
+                          ),
+                          BlocBuilder<CerrarAnalisisCubit, CerrarAnalisisState>(
+                            builder: (context, state) {
+                              return SelectableCardItem(
+                                isLoading: state.status == Status.inProgress,
+                                icon: Icons.assignment_turned_in,
+                                color: const Color(0xFFB91C1C),
+                                title: 'Cerrar Analisis',
+                                subtitle: 'Cerrar analisis de crédito',
+                                onTap: () => {
+                                  CloseAnalisisDialog(
+                                    context: context,
+                                    title:
+                                        '¿Estás seguro de cerrar el analisis?',
+                                    onYes: () {
+                                      context.pop();
+                                      context
+                                          .read<CerrarAnalisisCubit>()
+                                          .closeAnalisis(
+                                            numeroSolicitud:
+                                                int.parse(numeroSolicitud),
+                                            tipoSolicitud: tipoSolicitud!
+                                                .toTypeForInterceptorString(),
+                                          );
+                                    },
+                                  ).showDialog(
+                                    context,
+                                    dialogType: DialogType.infoReverse,
+                                  )
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (ctx) => GarantiaHNScreen(
+                                  //       numeroSolicitud: int.parse(numeroSolicitud),
+                                  //       solicitudCodigo:
+                                  //           tipoSolicitud?.toTypeForInterceptorString() ??
+                                  //               '',
+                                  //       cedulaCliente: cedulaCliente,
+                                  //       tipoPersonaCodigo: tipoPersonaCodigo,
+                                  //     ),
+                                  //   ),
+                                  // )
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-            ],
-          ),
-        ).fadeIn();
-      },
+                );
+              },
+            ),
+          ).fadeIn();
+        },
+      ),
     );
   }
 }

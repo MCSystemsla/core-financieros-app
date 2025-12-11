@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_checks_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
@@ -53,6 +54,10 @@ abstract class AnalisisRepositoryHn {
     required String cedula,
   });
   Future<void> closeAnalisis({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
+  Future<AnalisisChecksResponse> analisisChecks({
     required int numeroSolicitud,
     required String tipoSolicitud,
   });
@@ -333,6 +338,31 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisChecksResponse> analisisChecks({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = GetAnalsisChecksEndpointHN(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = AnalisisChecksResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

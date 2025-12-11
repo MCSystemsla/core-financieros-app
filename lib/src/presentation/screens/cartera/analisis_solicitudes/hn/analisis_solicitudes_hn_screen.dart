@@ -24,6 +24,7 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = AnalisisRepositoryHNImpl();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -35,9 +36,7 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (ctx) => CerrarAnalisisCubit(
-            AnalisisRepositoryHNImpl(),
-          ),
+          create: (ctx) => CerrarAnalisisCubit(repository),
         ),
       ],
       child: PopScope(

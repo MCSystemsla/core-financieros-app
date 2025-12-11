@@ -9,6 +9,7 @@ class SelectableCardItem extends StatelessWidget {
   final String subtitle;
   final VoidCallback onTap;
   final bool isLoading;
+  final bool userHaveDataAlready;
 
   const SelectableCardItem({
     super.key,
@@ -18,6 +19,7 @@ class SelectableCardItem extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.isLoading = false,
+    this.userHaveDataAlready = false,
   });
 
   @override
@@ -66,12 +68,34 @@ class SelectableCardItem extends StatelessWidget {
                 height: 20,
                 child: CircularProgressIndicator(),
               )
-            : null,
+            : IsUserHaveDataAlreadyWidget(
+                userHaveDataAlready: userHaveDataAlready,
+              ),
         onTap: onTap,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
       ),
     );
+  }
+}
+
+class IsUserHaveDataAlreadyWidget extends StatelessWidget {
+  final bool userHaveDataAlready;
+  const IsUserHaveDataAlreadyWidget({
+    super.key,
+    required this.userHaveDataAlready,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (userHaveDataAlready) {
+      true => const Icon(
+          Icons.check_circle,
+          color: Colors.green,
+          size: 28,
+        ),
+      false => const SizedBox.shrink(),
+    };
   }
 }

@@ -144,32 +144,46 @@ class _GreetingsWidget extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey.shade100,
+          width: 1,
+        ),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          icon,
-          const Gap(10),
-          Text(
-            '$greeting,',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
+          Container(
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.6), // toque sutil
+              shape: BoxShape.circle,
             ),
+            child: icon,
           ),
-          const Gap(5),
-          Text(
-            currentUserName,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.getPrimaryColor(),
-            ),
+          const Gap(14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                greeting,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const Gap(2),
+              Text(
+                currentUserName,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.getPrimaryColor(),
+                ),
+              ),
+            ],
           ),
         ],
       ),

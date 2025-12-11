@@ -295,3 +295,29 @@ class CloseAnalisisEndpointHN extends Endpoint {
         'database': LocalStorage().database,
       };
 }
+
+class GetAnalsisChecksEndpointHN extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+
+  GetAnalsisChecksEndpointHN({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/analisis/checks';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'NumeroSolicitud': numeroSolicitud.toString(),
+        'database': LocalStorage().database,
+        'TipoSolicitud': tipoSolicitud,
+      };
+}

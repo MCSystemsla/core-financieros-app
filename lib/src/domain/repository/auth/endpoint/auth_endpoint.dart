@@ -2,11 +2,6 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 class BranchTeamEndpoint extends Endpoint {
-  final String accessCode;
-  BranchTeamEndpoint({
-    required this.accessCode,
-  });
-
   @override
   Method get method => Method.get;
 

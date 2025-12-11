@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
@@ -13,7 +14,7 @@ abstract class AuthRepository {
     required String password,
     required String dbName,
   });
-  Future<BranchTeamResponse> getBranchTeam({required String accessCode});
+  Future<BranchTeamResponse> getBranchTeam();
   Future<ActionsResponse> getActions({required String database});
   Future<String> getLogo();
   Future<TutorialResponse> getTutorials();
@@ -43,11 +44,21 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<BranchTeamResponse> getBranchTeam({required String accessCode}) async {
-    final endpoint = BranchTeamEndpoint(accessCode: accessCode);
-    final resp = await _api.request(endpoint: endpoint);
-    final data = BranchTeamResponse.fromJson(resp);
-    return data;
+  Future<BranchTeamResponse> getBranchTeam() async {
+    try {
+      final endpoint = BranchTeamEndpoint();
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = BranchTeamResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 
   @override

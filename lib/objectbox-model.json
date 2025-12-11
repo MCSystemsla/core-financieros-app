@@ -2239,7 +2239,7 @@
     },
     {
       "id": "18:2473895458890891801",
-      "lastPropertyId": "10:8158607882291531379",
+      "lastPropertyId": "12:1517043372863103417",
       "name": "KivaConfiguracionLocalDb",
       "properties": [
         {
@@ -2291,6 +2291,16 @@
         {
           "id": "10:8158607882291531379",
           "name": "aplicaMigrantesEconomicos",
+          "type": 1
+        },
+        {
+          "id": "11:8220913356744023208",
+          "name": "masculino",
+          "type": 1
+        },
+        {
+          "id": "12:1517043372863103417",
+          "name": "femenino",
           "type": 1
         }
       ],

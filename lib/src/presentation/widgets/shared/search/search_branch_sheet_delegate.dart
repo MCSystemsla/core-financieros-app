@@ -101,40 +101,52 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                           );
                         },
                         data: [
-                          // ...widget.items.map(
-                          //   (e) {
-                          //     return SelectedListItem<Branch>(
-                          //         data: Branch(
-                          //       id: e.id,
-                          //       nombre: e.nombre,
-                          //       nombreDb: e.nombreDb,
-                          //     ));
-                          //   },
-                          // ),
-                          SelectedListItem<Branch>(
-                              data: Branch(
-                            id: 27,
-                            nombre: 'Tegucigalpa',
-                            nombreDb: 'MC_TEGUCIGALPA_COPIA',
-                          )),
-                          SelectedListItem<Branch>(
-                              data: Branch(
-                            id: 28,
-                            nombre: 'SANTA FE DEV',
-                            nombreDb: 'MC_SF_DEV',
-                          )),
-                          SelectedListItem<Branch>(
-                              data: Branch(
-                            id: 28,
-                            nombre: 'Choluteca',
-                            nombreDb: 'MC_CH',
-                          )),
-                          SelectedListItem<Branch>(
-                              data: Branch(
-                            id: 28,
-                            nombre: 'Metropolis',
-                            nombreDb: 'MC_MT',
-                          ))
+                          ...widget.items.map(
+                            (e) {
+                              return SelectedListItem<Branch>(
+                                  data: Branch(
+                                id: e.id,
+                                nombre: e.nombre,
+                                nombreDb: e.nombreDb,
+                              ));
+                            },
+                          ),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 39,
+                          //   nombre: 'Tegucigalpa',
+                          //   nombreDb: 'MC_TEGUCIGALPA_COPIA',
+                          // )),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 45,
+                          //   nombre: 'SANTA FE DEV',
+                          //   nombreDb: 'MC_SF_DEV',
+                          // )),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 28,
+                          //   nombre: 'Choluteca',
+                          //   nombreDb: 'MC_CH',
+                          // )),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 21,
+                          //   nombre: 'METROPOLIS',
+                          //   nombreDb: 'MC_MT',
+                          // )),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 46,
+                          //   nombre: 'Santa Fe Paralelo',
+                          //   nombreDb: 'MC_SF_TEST',
+                          // )),
+                          // SelectedListItem<Branch>(
+                          //     data: Branch(
+                          //   id: 5,
+                          //   nombre: 'OFICINA CENTRAL',
+                          //   nombreDb: 'MICREDITO_CM',
+                          // ))
                         ],
                         onSelected: (selectedItems) {
                           for (var item in selectedItems) {

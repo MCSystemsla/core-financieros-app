@@ -127,8 +127,8 @@ class _HomeScreenView extends StatelessWidget {
                       child: FloatingActionButton.extended(
                         label: const Row(
                           children: [
-                            Icon(Icons.update_rounded),
-                            Gap(5),
+                            Icon(Icons.sync_rounded),
+                            Gap(6),
                             Text('Sincronizar'),
                           ],
                         ),
@@ -150,7 +150,7 @@ class _HomeScreenView extends StatelessWidget {
                         },
                       ),
                     )
-                  : const SizedBox(),
+                  : const SizedBox.shrink(),
           body: BlocBuilder<NoImagesKivasOnHistoryCubit,
               NoImagesKivasOnHistoryState>(
             builder: (context, state) {

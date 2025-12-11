@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -68,11 +67,8 @@ class _LoginScreenViewState extends State<LoginScreenView>
             create: (ctx) =>
                 AutoupdateCubit(flavor)..verificarActualizacion(context)),
         BlocProvider(
-          create: (ctx) => BranchteamCubit(AuthRepositoryImpl())
-            ..getBranchTeam(
-              accessCode: '2wydJKIvNuO41hCZ7Y6',
-              context: context,
-            ),
+          create: (ctx) =>
+              BranchteamCubit(AuthRepositoryImpl())..getBranchTeam(),
         ),
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
@@ -230,42 +226,30 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
               const Gap(25),
-              SearchBranchSheetDelegate(
-                title: 'Selecciona una sucursal',
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.nombreDb),
-                isRequired: true,
-                onChanged: (item) {
-                  if (item == null) return;
-                  branchTeam = item.nombreDb;
-                  setState(() {});
-                },
-                enabled: true,
-                items: const [],
-                hintText: 'Selecciona una sucursal',
-              ),
-              // BlocBuilder<BranchteamCubit, BranchteamState>(
-              //   builder: (context, state) {
-              //     return SearchBranchSheetDelegate(
-              //       title: 'auth.branch'.tr(),
-              //       isRequired: true,
-              //       onChanged: (item) {
-              //         if (item == null) return;
-              //         branchTeam = item.nombreDb;
-              //         setState(() {});
-              //       },
-              //       hintText: 'auth.select_branch'.tr(),
-              //       enabled: true,
-              //       isLoading: state.status == Status.inProgress,
-              //       items: state.branchTeams,
-              //       validator: (value) {
-              //         if (value == null) return 'auth.errors.branchTeam'.tr();
+              BlocBuilder<BranchteamCubit, BranchteamState>(
+                builder: (context, state) {
+                  return SearchBranchSheetDelegate(
+                    title: 'auth.branch'.tr(),
+                    isRequired: true,
+                    onChanged: (item) {
+                      if (item == null) return;
+                      branchTeam = item.nombreDb;
+                      setState(() {});
+                    },
+                    hintText: state.status == Status.error
+                        ? state.errorMsg
+                        : 'auth.select_branch'.tr(),
+                    enabled: state.status == Status.done,
+                    isLoading: state.status == Status.inProgress,
+                    items: state.branchTeams,
+                    validator: (value) {
+                      if (value == null) return 'auth.errors.branchTeam'.tr();
 
-              //         return null;
-              //       },
-              //     );
-              //   },
-              // ),
+                      return null;
+                    },
+                  );
+                },
+              ),
               const VersionControlWidget(),
               const Gap(10),
               CloudflareTurnstile(
