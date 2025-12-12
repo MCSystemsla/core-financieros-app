@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
@@ -58,6 +59,10 @@ abstract class AnalisisRepositoryHn {
     required String tipoSolicitud,
   });
   Future<AnalisisChecksResponse> analisisChecks({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
+  Future<FiadoresCheckResponse> fiadoresChecks({
     required int numeroSolicitud,
     required String tipoSolicitud,
   });
@@ -362,6 +367,31 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
 
       final data = AnalisisChecksResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FiadoresCheckResponse> fiadoresChecks({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = GetAnalisisFiadoresChecksEndpointHN(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = FiadoresCheckResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

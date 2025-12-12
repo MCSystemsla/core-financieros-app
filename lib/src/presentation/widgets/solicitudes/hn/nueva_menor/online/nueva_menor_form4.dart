@@ -126,16 +126,41 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ],
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    hintText: 'Ingresa Nombre Cónyuge',
+                    hintText: 'Ingresa Nombres del Cónyuge',
                     icon:
                         Icon(Icons.person, color: AppColors.getPrimaryColor()),
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
-                    title: 'Nombre del Cónyuge',
+                    title: 'Nombres del Cónyuge',
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nombreConyugue: value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    isRequired: true,
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(250),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'Ingresa Apellidos del Cónyuge',
+                    icon: Icon(
+                      Icons.person,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    title: 'Apellidos del Cónyuge',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          apellidosConyugue: value,
                         ),
                       );
                     },

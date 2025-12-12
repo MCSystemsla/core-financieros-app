@@ -146,6 +146,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           barrioDestino: state.barrioDestino,
           descripcionDestino: state.descripcionDestino,
           ingresosNetos: state.ingresosNetos,
+          nombreCompletoConyugue:
+              '${state.nombreConyugue} ${state.apellidosConyugue}',
         ),
       );
       if (!isOk) {
@@ -544,6 +546,10 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         state.tipoPersonaCnbsCodigoNombre,
         prev?.tipoPersonaCnbsCodigoNombre,
       ),
+      apellidosConyugue: _prefer(
+        state.apellidosConyugue,
+        prev?.apellidosConyugue,
+      ),
     );
   }
 
@@ -734,6 +740,9 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         tipoDocumentoCodigoNombre: solicitud.tipoDocumentoCodigoNombre,
         tipoPersonaCodigoNombre: solicitud.tipoPersonaCodigoNombre,
         tipoPersonaCnbsCodigoNombre: solicitud.tipoPersonaCnbsCodigoNombre,
+        apellidosConyugue: solicitud.apellidosConyugue,
+        caserioCasa: solicitud.caserioCasa,
+        nombrePublico: solicitud.nombrePublico,
       ),
     );
   }

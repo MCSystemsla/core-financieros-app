@@ -329,6 +329,29 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   },
                 ),
                 const Gap(30),
+                OutlineTextfieldWidget(
+                  hintText: 'Nombre Publico',
+                  icon: Icon(
+                    Icons.person,
+                    color: AppColors.getPrimaryColor(),
+                  ),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(40),
+                  ],
+                  textInputType: TextInputType.name,
+                  textCapitalization: TextCapitalization.characters,
+                  title: 'Nombre Publico',
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        nombrePublico: value,
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
                 SearchDropdownWidget(
                   validator: (value) => ClassValidator.validateRequired(
                     value?.value,

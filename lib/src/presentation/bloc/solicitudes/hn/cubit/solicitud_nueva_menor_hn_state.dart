@@ -167,6 +167,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final int ingresosNetos;
   final String fechaDesembolso;
   final bool isDone;
+  final String apellidosConyugue;
   const SolicitudNuevaMenorHnState({
     this.historialCredito = const [],
     this.actividadEconomicaCnbs1CodigoNombre = '',
@@ -333,10 +334,12 @@ class SolicitudNuevaMenorHnState extends Equatable {
     this.descripcionDestino = '',
     this.ingresosNetos = 0,
     this.fechaDesembolso = '',
+    this.apellidosConyugue = '',
   });
 
   @override
   List<Object> get props => [
+        apellidosConyugue,
         historialCredito,
         actividadEconomicaCnbs1CodigoNombre,
         actividadEconomicaCnbs2CodigoNombre,
@@ -669,6 +672,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     int? ingresosNetos,
     String? fechaDesembolso,
     bool? isDone,
+    String? apellidosConyugue,
   }) {
     return SolicitudNuevaMenorHnState(
       historialCredito: historialCredito ?? this.historialCredito,
@@ -891,6 +895,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ingresosNetos: ingresosNetos ?? this.ingresosNetos,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
       isDone: isDone ?? this.isDone,
+      apellidosConyugue: apellidosConyugue ?? this.apellidosConyugue,
     );
   }
 }

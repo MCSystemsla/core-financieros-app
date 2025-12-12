@@ -559,6 +559,11 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
             solicitud.fechaPrimerPagoSolicitud?.toUtc().toIso8601String(),
         observacion: solicitud.observacion,
         totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue,
+        actividadPredominanteCodigo: solicitud.actividadPredominanteCodigo,
+        nombrePublico: solicitud.nombrePublico,
+        parentescoFamiliarCercanoCodigo:
+            solicitud.parentescoFamiliarCercanoCodigo,
+        tipoClienteCodigo: solicitud.tipoClienteCodigo,
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/snackbar/closing_analisis_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,13 @@ class CerrarAnalisisListener extends StatelessWidget {
           CustomAlertDialog(
             context: context,
             title: 'Análisis cerrado exitosamente',
-            onDone: () => context.pop(),
+            onDone: () {
+              context.pop();
+              context.read<SolicitudesByEstadoHnCubit>().getSolicitudesByEstado(
+                    isAsignadaToAsesorCredito: true,
+                    estadoCredito: EstadoCredito.asignada,
+                  );
+            },
           ).showDialog(
             context,
             dialogType: DialogType.success,

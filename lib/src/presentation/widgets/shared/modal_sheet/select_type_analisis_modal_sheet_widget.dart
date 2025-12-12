@@ -167,6 +167,8 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                   builder: (ctx) => FiadoresHnScreen(
                                     numeroSolicitud:
                                         int.tryParse(numeroSolicitud) ?? 0,
+                                    tipoSolicitud: tipoSolicitud!
+                                        .toTypeForInterceptorString(),
                                   ),
                                 ),
                               )
@@ -224,19 +226,6 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                     context,
                                     dialogType: DialogType.infoReverse,
                                   )
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (ctx) => GarantiaHNScreen(
-                                  //       numeroSolicitud: int.parse(numeroSolicitud),
-                                  //       solicitudCodigo:
-                                  //           tipoSolicitud?.toTypeForInterceptorString() ??
-                                  //               '',
-                                  //       cedulaCliente: cedulaCliente,
-                                  //       tipoPersonaCodigo: tipoPersonaCodigo,
-                                  //     ),
-                                  //   ),
-                                  // )
                                 },
                               );
                             },
