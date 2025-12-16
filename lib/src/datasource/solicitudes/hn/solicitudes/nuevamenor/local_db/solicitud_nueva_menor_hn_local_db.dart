@@ -167,6 +167,7 @@ class SolicitudNuevaMenorHnLocalDb {
   String? tieneVinculosUsa;
   bool hasVerified = false;
   String? apellidosConyugue;
+  String? tipoDocumentoConyugeCodigo;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.uuid,
@@ -329,5 +330,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.tieneVinculosUsa,
     this.hasVerified = false,
     this.apellidosConyugue,
+    this.tipoDocumentoConyugeCodigo,
   });
 }

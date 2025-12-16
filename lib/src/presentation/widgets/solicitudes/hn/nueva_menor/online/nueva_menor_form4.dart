@@ -301,6 +301,22 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     },
                   ),
                   const Gap(30),
+                  SearchDropdownWidget(
+                    codigo: 'TIPODOCUMENTOPERSONA',
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    hintText: 'Tipo Documento Cónyuge',
+                    title: 'Tipo de Documento del Cónyuge',
+                    onChanged: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          tipoDocumentoConyugue: value?.value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
                   OutlineTextfieldWidget(
                     isRequired: true,
                     inputFormatters: [

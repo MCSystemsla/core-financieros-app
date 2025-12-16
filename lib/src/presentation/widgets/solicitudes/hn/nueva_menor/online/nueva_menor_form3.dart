@@ -140,7 +140,6 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                 OutlineTextfieldWidget(
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
                   ],
                   hintText: 'Ingresa Caserío Negocio',
                   title: 'Caserío del Negocio',
@@ -157,7 +156,6 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Dirección Negocio',

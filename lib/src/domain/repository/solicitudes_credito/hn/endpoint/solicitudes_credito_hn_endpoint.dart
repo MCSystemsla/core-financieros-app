@@ -371,3 +371,27 @@ class ActividadesEconomicasAliasFilteredEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
 }
+
+class AutorizarSolicitudCreditoHNEndpoint extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  AutorizarSolicitudCreditoHNEndpoint({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/autorizar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud,
+        'TipoSolicitud': tipoSolicitud,
+      };
+}

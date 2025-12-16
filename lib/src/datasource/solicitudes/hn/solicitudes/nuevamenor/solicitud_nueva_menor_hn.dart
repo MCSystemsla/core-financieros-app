@@ -124,6 +124,7 @@ class SolicitudNuevaMenorHn {
   final String email;
   final String actividadEconomicaCnbs3Codigo;
   final String nombreCompletoConyugue;
+  final String tipoDocumentoConyugeCodigo;
   final List<HistorialCredito> historialCredito;
   SolicitudNuevaMenorHn({
     required this.actividadEconomicaCnbs3Codigo,
@@ -244,6 +245,7 @@ class SolicitudNuevaMenorHn {
     required this.email,
     required this.historialCredito,
     required this.nombreCompletoConyugue,
+    required this.tipoDocumentoConyugeCodigo,
   });
 
   Map<String, dynamic> toJson() {
@@ -367,6 +369,7 @@ class SolicitudNuevaMenorHn {
       'Nombre2': nombre2,
       'Apellido2': apellido2,
       'Email': email,
+      'TipoDocumentoConyugeCodigo': tipoDocumentoConyugeCodigo,
       'historialCredito':
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };

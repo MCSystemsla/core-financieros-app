@@ -120,6 +120,8 @@ class SolicitudAsalariadoHn {
   final String caseriCasa;
   final String aldeaCodigo;
   final String descripcionDestino;
+  final String tipoDocumentoConyugeCodigo;
+  final String cedulaConyuge;
   final List<HistorialCredito> historialCredito;
 
   SolicitudAsalariadoHn({
@@ -236,6 +238,8 @@ class SolicitudAsalariadoHn {
     required this.caseriCasa,
     required this.aldeaCodigo,
     required this.descripcionDestino,
+    required this.tipoDocumentoConyugeCodigo,
+    required this.cedulaConyuge,
     required this.historialCredito,
   });
 
@@ -357,6 +361,8 @@ class SolicitudAsalariadoHn {
       'AldeaCodigo': aldeaCodigo,
       'MedidasConocimientoCodigo': 'NORM',
       'DescripcionDestino': descripcionDestino,
+      'CedulaConyuge': cedulaConyuge,
+      'TipoDocumentoConyugeCodigo': tipoDocumentoConyugeCodigo,
       'historialCredito':
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
     };

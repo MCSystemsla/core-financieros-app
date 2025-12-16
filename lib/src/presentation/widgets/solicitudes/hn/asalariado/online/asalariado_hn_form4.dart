@@ -116,6 +116,47 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                     },
                   ),
                   const Gap(30),
+                  SearchDropdownWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    codigo: 'TIPODOCUMENTOPERSONA',
+                    flavor: global<FlavorCubit>().state.flavor,
+                    hintText: 'Tipo documento conyuge',
+                    title: 'Tipo documento conyuge',
+                    onChanged: (value) {
+                      if (value == null || !mounted) return;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          tipoDocumentoConyugeCodigo: value.value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
+                  OutlineTextfieldWidget(
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'Documento Cónyuge',
+                    icon: Icon(
+                      Icons.person,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    title: 'Documento Cónyuge',
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                      LengthLimitingTextInputFormatter(250),
+                    ],
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          cedulaConyuge: value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
                   SheetSearchDropdown(
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),

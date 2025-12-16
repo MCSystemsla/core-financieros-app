@@ -127,6 +127,8 @@ class SolicitudAsalariadoHnDbLocal {
   String? frecuenciaMeses;
   double? tasaInteres;
   bool hasVerified = false;
+  String? cedulaConyuge;
+  String? tipoDocumentoConyugeCodigo;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -250,5 +252,7 @@ class SolicitudAsalariadoHnDbLocal {
     this.frecuenciaMeses,
     this.tasaInteres,
     this.hasVerified = false,
+    this.cedulaConyuge,
+    this.tipoDocumentoConyugeCodigo,
   });
 }

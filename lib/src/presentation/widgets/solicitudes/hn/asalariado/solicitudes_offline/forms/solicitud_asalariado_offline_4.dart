@@ -127,6 +127,52 @@ class _SolicitudAsalariadoOffline4State
                         },
                       ),
                       const Gap(30),
+                      SearchDropdownWidget(
+                        selectedItem: Item(
+                          name: state.tipoDocumentoConyugeCodigo,
+                          value: state.tipoDocumentoConyugeCodigo,
+                        ),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        codigo: 'TIPODOCUMENTOPERSONA',
+                        flavor: global<FlavorCubit>().state.flavor,
+                        hintText: 'Tipo documento conyuge',
+                        title: 'Tipo documento conyuge',
+                        onChanged: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              tipoDocumentoConyugeCodigo: value.value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        initialValue: state.cedulaConyuge,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Documento Cónyuge',
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
+                        title: 'Documento Cónyuge',
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(250),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cedulaConyuge: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
                       SheetSearchDropdown(
                         selectedItem: Item(
                           name: state.trabajaConyugue,

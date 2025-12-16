@@ -128,6 +128,8 @@ class SolicitudAslariadoHnState extends Equatable {
   final String aldeaCodigo;
   final String descripcionDestino;
   final List<HistorialCredito> historialCredito;
+  final String cedulaConyuge;
+  final String tipoDocumentoConyugeCodigo;
   const SolicitudAslariadoHnState({
     this.frecuenciaMeses = '',
     this.tasaInteres = 0,
@@ -255,6 +257,8 @@ class SolicitudAslariadoHnState extends Equatable {
     this.aldeaCodigo = '',
     this.descripcionDestino = '',
     this.historialCredito = const [],
+    this.cedulaConyuge = '',
+    this.tipoDocumentoConyugeCodigo = '',
   });
 
   @override
@@ -382,6 +386,8 @@ class SolicitudAslariadoHnState extends Equatable {
         barrioDestino,
         caseriCasa,
         aldeaCodigo,
+        cedulaConyuge,
+        tipoDocumentoConyugeCodigo,
       ];
 
   SolicitudAslariadoHnState copyWith({
@@ -511,6 +517,8 @@ class SolicitudAslariadoHnState extends Equatable {
     String? aldeaCodigo,
     String? descripcionDestino,
     List<HistorialCredito>? historialCredito,
+    String? cedulaConyuge,
+    String? tipoDocumentoConyugeCodigo,
   }) {
     return SolicitudAslariadoHnState(
       frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
@@ -665,6 +673,9 @@ class SolicitudAslariadoHnState extends Equatable {
       aldeaCodigo: aldeaCodigo ?? this.aldeaCodigo,
       descripcionDestino: descripcionDestino ?? this.descripcionDestino,
       historialCredito: historialCredito ?? this.historialCredito,
+      cedulaConyuge: cedulaConyuge ?? this.cedulaConyuge,
+      tipoDocumentoConyugeCodigo:
+          tipoDocumentoConyugeCodigo ?? this.tipoDocumentoConyugeCodigo,
     );
   }
 }

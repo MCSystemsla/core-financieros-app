@@ -168,6 +168,8 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String fechaDesembolso;
   final bool isDone;
   final String apellidosConyugue;
+  final String tipoDocumentoConyugue;
+
   const SolicitudNuevaMenorHnState({
     this.historialCredito = const [],
     this.actividadEconomicaCnbs1CodigoNombre = '',
@@ -335,6 +337,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     this.ingresosNetos = 0,
     this.fechaDesembolso = '',
     this.apellidosConyugue = '',
+    this.tipoDocumentoConyugue = '',
   });
 
   @override
@@ -504,6 +507,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
         barrioDestino,
         descripcionDestino,
         ingresosNetos,
+        tipoDocumentoConyugue,
       ];
 
   SolicitudNuevaMenorHnState copyWith({
@@ -673,6 +677,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     String? fechaDesembolso,
     bool? isDone,
     String? apellidosConyugue,
+    String? tipoDocumentoConyugue,
   }) {
     return SolicitudNuevaMenorHnState(
       historialCredito: historialCredito ?? this.historialCredito,
@@ -896,6 +901,8 @@ class SolicitudNuevaMenorHnState extends Equatable {
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,
       isDone: isDone ?? this.isDone,
       apellidosConyugue: apellidosConyugue ?? this.apellidosConyugue,
+      tipoDocumentoConyugue:
+          tipoDocumentoConyugue ?? this.tipoDocumentoConyugue,
     );
   }
 }

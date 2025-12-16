@@ -2308,7 +2308,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "141:5499856262447660809",
+      "lastPropertyId": "143:7305229113475547040",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2926,13 +2926,23 @@
           "id": "141:5499856262447660809",
           "name": "hasVerified",
           "type": 1
+        },
+        {
+          "id": "142:4591299929040977818",
+          "name": "cedulaConyuge",
+          "type": 9
+        },
+        {
+          "id": "143:7305229113475547040",
+          "name": "tipoDocumentoConyugeCodigo",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "162:8929020446594256367",
+      "lastPropertyId": "163:1511711255960257124",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3744,6 +3754,11 @@
         {
           "id": "162:8929020446594256367",
           "name": "apellidosConyugue",
+          "type": 9
+        },
+        {
+          "id": "163:1511711255960257124",
+          "name": "tipoDocumentoConyugeCodigo",
           "type": 9
         }
       ],

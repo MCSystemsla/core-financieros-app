@@ -299,6 +299,26 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                       ],
                       const Gap(30),
+                      SearchDropdownWidget(
+                        selectedItem: Item(
+                          name: cubit.state.tipoDocumentoConyugue,
+                          value: cubit.state.tipoDocumentoConyugue,
+                        ),
+                        codigo: 'TIPODOCUMENTOPERSONA',
+                        isRequired: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        hintText: 'Tipo Documento Cónyuge',
+                        title: 'Tipo de Documento del Cónyuge',
+                        onChanged: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              tipoDocumentoConyugue: value?.value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
                       OutlineTextfieldWidget(
                         initialValue: cubit.state.documentoConyuge,
                         isRequired: true,

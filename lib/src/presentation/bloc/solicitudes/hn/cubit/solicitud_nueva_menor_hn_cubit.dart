@@ -148,6 +148,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           ingresosNetos: state.ingresosNetos,
           nombreCompletoConyugue:
               '${state.nombreConyugue} ${state.apellidosConyugue}',
+          tipoDocumentoConyugeCodigo: state.tipoDocumentoConyugue,
         ),
       );
       if (!isOk) {
@@ -549,6 +550,10 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       apellidosConyugue: _prefer(
         state.apellidosConyugue,
         prev?.apellidosConyugue,
+      ),
+      tipoDocumentoConyugeCodigo: _prefer(
+        state.tipoDocumentoConyugue,
+        prev?.tipoDocumentoConyugeCodigo,
       ),
     );
   }

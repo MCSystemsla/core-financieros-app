@@ -1,11 +1,14 @@
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +35,7 @@ class _SelectSolicitud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
     return Padding(
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
@@ -63,7 +67,10 @@ class _SelectSolicitud extends StatelessWidget {
             // const Gap(20),
             const _SolicitudesCardsRow3(),
             const Gap(20),
-            // const _SolicitudesCardsRow4(),
+
+            if (actions.contains(TypeAction.autorizacion.codigo)) ...[
+              const _SolicitudesCardsRow4(),
+            ],
             // const Gap(20),
           ],
         ),
@@ -128,33 +135,33 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
 //   }
 // }
 
-// class _SolicitudesCardsRow4 extends StatelessWidget {
-//   const _SolicitudesCardsRow4();
+class _SolicitudesCardsRow4 extends StatelessWidget {
+  const _SolicitudesCardsRow4();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             svgPath: ImageAsset.nuevaMenorBg6,
-//             title: 'Autorizacion de Solicitudes Crédito',
-//             onPressed: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: ((_) => const AutorizacionSolcitudScreen()),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//         const Gap(10),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg6,
+            title: 'Autorizacion de Solicitudes Crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolicitudHnScreen()),
+                ),
+              );
+            },
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
 
 class _SolicitudesCardsRow2 extends StatelessWidget {
   const _SolicitudesCardsRow2();

@@ -111,12 +111,7 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                               ));
                             },
                           ),
-                          // SelectedListItem<Branch>(
-                          //     data: Branch(
-                          //   id: 39,
-                          //   nombre: 'Tegucigalpa',
-                          //   nombreDb: 'MC_TEGUCIGALPA_COPIA',
-                          // )),
+
                           // SelectedListItem<Branch>(
                           //     data: Branch(
                           //   id: 45,

@@ -26,6 +26,8 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
+          cedulaConyuge: state.cedulaConyuge,
+          tipoDocumentoConyugeCodigo: state.tipoDocumentoConyugeCodigo,
           historialCredito: state.historialCredito,
           descripcionDestino: state.descripcionDestino,
           database: state.database,
@@ -433,6 +435,11 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       frecuenciaMeses: _prefer(state.frecuenciaMeses, prev?.frecuenciaMeses),
       tasaInteres:
           state.tasaInteres == 0 ? (prev?.tasaInteres ?? 0) : state.tasaInteres,
+      cedulaConyuge: _prefer(state.cedulaConyuge, prev?.cedulaConyuge),
+      tipoDocumentoConyugeCodigo: _prefer(
+        state.tipoDocumentoConyugeCodigo,
+        prev?.tipoDocumentoConyugeCodigo,
+      ),
     );
   }
 
@@ -564,6 +571,8 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         parentescoFamiliarCercanoCodigo:
             solicitud.parentescoFamiliarCercanoCodigo,
         tipoClienteCodigo: solicitud.tipoClienteCodigo,
+        cedulaConyuge: solicitud.cedulaConyuge,
+        tipoDocumentoConyugeCodigo: solicitud.tipoDocumentoConyugeCodigo,
       ),
     );
   }
