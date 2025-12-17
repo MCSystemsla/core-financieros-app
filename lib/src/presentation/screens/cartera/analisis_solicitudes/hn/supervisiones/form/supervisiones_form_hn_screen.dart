@@ -26,6 +26,7 @@ class SupervisionesFormHnScreen extends StatelessWidget {
           title: const Text('Crear Supervision'),
         ),
         body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: pagecontroller,
           children: [
             SupervisionFormHN1(

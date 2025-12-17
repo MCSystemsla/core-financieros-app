@@ -3,7 +3,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
-import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -14,7 +13,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/select
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
-import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -193,7 +191,6 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final actions = LocalStorage().currentActions;
     return DraggableScrollableSheet(
       initialChildSize: 0.21,
       minChildSize: 0.2,
@@ -266,33 +263,32 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     controller: controller,
                     children: [
-                      if (!actions.contains(TypeAction.autorizacion.codigo))
-                        SelectableCardItem(
-                          isLoading: state.status == Status.inProgress,
-                          icon: Icons.verified_user,
-                          color: const Color(0xFF2E7D32),
-                          title: 'Autorizar Solicitud',
-                          subtitle: 'Autorizar solicitud de crédito',
-                          onTap: () => {
-                            CloseAnalisisDialog(
-                              context: context,
-                              title:
-                                  '¿Estás seguro que desea autorizar la solicitud?',
-                              onYes: () {
-                                context.pop();
-                                context
-                                    .read<AutorizarSolicitudCubit>()
-                                    .autorizarSolicitudCredito(
-                                      numeroSolicitud: numeroSolicitud,
-                                      tipoSolicitud: tipoSolicitud,
-                                    );
-                              },
-                            ).showDialog(
-                              context,
-                              dialogType: DialogType.infoReverse,
-                            )
-                          },
-                        ),
+                      SelectableCardItem(
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.verified_user,
+                        color: const Color(0xFF2E7D32),
+                        title: 'Autorizar Solicitud',
+                        subtitle: 'Autorizar solicitud de crédito',
+                        onTap: () => {
+                          CloseAnalisisDialog(
+                            context: context,
+                            title:
+                                '¿Estás seguro que desea autorizar la solicitud?',
+                            onYes: () {
+                              context.pop();
+                              context
+                                  .read<AutorizarSolicitudCubit>()
+                                  .autorizarSolicitudCredito(
+                                    numeroSolicitud: numeroSolicitud,
+                                    tipoSolicitud: tipoSolicitud,
+                                  );
+                            },
+                          ).showDialog(
+                            context,
+                            dialogType: DialogType.infoReverse,
+                          )
+                        },
+                      ),
                     ],
                   );
                 },
