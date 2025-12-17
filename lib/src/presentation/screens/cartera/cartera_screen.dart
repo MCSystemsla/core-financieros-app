@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/c
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -123,7 +124,7 @@ class _CarteraContentWidget extends StatelessWidget {
                     size: 35,
                   ),
                 ),
-              if (actions.contains('LLENARKIVAMOVIL'))
+              if (actions.contains(TypeAction.llenarKiva.codigo))
                 ModuleCard(
                   onTap: () {
                     state.connectionStatus == ConnectionStatus.connected
@@ -148,7 +149,7 @@ class _CarteraContentWidget extends StatelessWidget {
                   ),
                 ),
               if (state.connectionStatus == ConnectionStatus.connected &&
-                  actions.contains('LLENARKIVAMOVIL'))
+                  actions.contains(TypeAction.llenarKiva.codigo))
                 ModuleCard(
                   onTap: () {
                     Navigator.push(

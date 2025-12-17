@@ -201,6 +201,16 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               )
                             },
                           ),
+                          SelectableCardItem(
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.place_rounded,
+                            color: const Color(0xFF0EA5E9),
+                            title: 'Registrar Ubicacion',
+                            subtitle: 'Crear ubicacion de cliente',
+                            onTap: () => {
+                              context.pop(),
+                            },
+                          ),
                           if (actions.contains(TypeAction.cerrar.codigo))
                             BlocBuilder<CerrarAnalisisCubit,
                                 CerrarAnalisisState>(

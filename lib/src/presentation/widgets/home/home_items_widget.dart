@@ -14,7 +14,6 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_scr
 import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -32,32 +31,32 @@ class HomeItemsWidget extends StatelessWidget {
     final flavor = global<FlavorCubit>().state.flavor;
 
     List<HomeItemCard> homeItemData = [
-      if (actions.contains(TypeAction.menuCartera.codigo))
-        HomeItemCard(
-          title: 'home.item5'.tr(),
-          subtitle: 'Descripcion'.tr(),
-          icon: const Icon(
-            Icons.wallet_rounded,
-            color: AppColors.white,
-          ),
-          color: AppColors.primaryColorWithOpacity(),
-          onTap: () async {
-            final shouldSync = CatalogoSync.needToSync();
-            if (!context.mounted) return;
-            if (shouldSync &&
-                connection.connectionStatus == ConnectionStatus.connected) {
-              CustomAlertDialog(
-                onDone: () => context.pop(),
-                context: context,
-                title: 'Es necesario sincronizar los catálogos para avanzar',
-              ).showDialog(context);
-              return;
-            }
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const CarteraScreen()),
-            );
-          },
+      // if (actions.contains(TypeAction.menuCartera.codigo))
+      HomeItemCard(
+        title: 'home.item5'.tr(),
+        subtitle: 'Descripcion'.tr(),
+        icon: const Icon(
+          Icons.wallet_rounded,
+          color: AppColors.white,
         ),
+        color: AppColors.primaryColorWithOpacity(),
+        onTap: () async {
+          final shouldSync = CatalogoSync.needToSync();
+          if (!context.mounted) return;
+          if (shouldSync &&
+              connection.connectionStatus == ConnectionStatus.connected) {
+            CustomAlertDialog(
+              onDone: () => context.pop(),
+              context: context,
+              title: 'Es necesario sincronizar los catálogos para avanzar',
+            ).showDialog(context);
+            return;
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const CarteraScreen()),
+          );
+        },
+      ),
       if (connection.connectionStatus == ConnectionStatus.connected &&
           (flavor == Flavor.nicaragua || flavor == Flavor.costaRica))
         HomeItemCard(
