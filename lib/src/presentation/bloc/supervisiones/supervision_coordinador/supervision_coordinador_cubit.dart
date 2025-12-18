@@ -12,11 +12,13 @@ class SupervisionCoordinadorCubit extends Cubit<SupervisionCoordinadorState> {
   SupervisionCoordinadorCubit(this._repository)
       : super(SupervisionCoordinadorInitial());
 
-  Future<void> createSupervisonCoordinador() async {
+  Future<void> createSupervisonCoordinador(
+      {required String tipoSolicitud}) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.createSupervisionCoordinador(
         createSupervisionCoordinador: CreateSupervisionCoordinador(
+          tipoSolicitud: tipoSolicitud,
           database: state.database,
           numeroSolicitud: state.numeroSolicitud,
           buroCreditoBueno: state.buroCreditoBueno,

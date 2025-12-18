@@ -320,6 +320,8 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
         await _repository.getParametroValor(nombre: 'INCOBRABLESDECXCOBRAR');
     final fechaOperacion =
         await _repository.getParametroValor(nombre: 'FECHAOPERACION');
+    final montoMenorAMil =
+        await _repository.getParametroValor(nombre: 'MENORMIL');
 
     _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
       valor: edadMinima.data.valor,
@@ -340,6 +342,11 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       valor: fechaOperacion.data.valor,
       type: 'FECHAOPERACION',
       nombre: 'FECHAOPERACION',
+    ));
+    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+      valor: montoMenorAMil.data.valor,
+      type: 'MENORMIL',
+      nombre: 'MENORMIL',
     ));
   }
 

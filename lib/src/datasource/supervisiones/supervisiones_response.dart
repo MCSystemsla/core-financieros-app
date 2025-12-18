@@ -8,19 +8,24 @@ String supervisionesResponseToJson(SupervisionesResponse data) =>
 
 class SupervisionesResponse {
   final List<SupervisionData> data;
+  final String nombreCoordinador;
 
   SupervisionesResponse({
     required this.data,
+    required this.nombreCoordinador,
   });
 
   factory SupervisionesResponse.fromJson(Map<String, dynamic> json) =>
       SupervisionesResponse(
         data: List<SupervisionData>.from(
-            json['data'].map((x) => SupervisionData.fromJson(x))),
+          json['data'].map((x) => SupervisionData.fromJson(x)),
+        ),
+        nombreCoordinador: json['NombreCoordinador'],
       );
 
   Map<String, dynamic> toJson() => {
         'data': List<dynamic>.from(data.map((x) => x.toJson())),
+        'NombreCoordinador': nombreCoordinador,
       };
 }
 
@@ -38,7 +43,10 @@ class SupervisionData {
   final int? objSectorId;
   final String sectorComercialCodigo;
   final String sectorComercialNombre;
-
+  final String codEstadoSol;
+  final num monto;
+  final num cuota;
+  final num razonEndeudamiento;
   SupervisionData({
     required this.tipoSolicitud,
     required this.sucursalSiglas,
@@ -53,6 +61,10 @@ class SupervisionData {
     this.objSectorId,
     required this.sectorComercialCodigo,
     required this.sectorComercialNombre,
+    required this.codEstadoSol,
+    required this.monto,
+    required this.cuota,
+    required this.razonEndeudamiento,
   });
 
   factory SupervisionData.fromJson(Map<String, dynamic> json) =>
@@ -70,6 +82,10 @@ class SupervisionData {
         objSectorId: json['objSectorID'],
         sectorComercialCodigo: json['SectorComercialCodigo'],
         sectorComercialNombre: json['SectorComercialNombre'],
+        codEstadoSol: json['CodEstadoSol'],
+        monto: json['Monto'],
+        cuota: json['Cuota'],
+        razonEndeudamiento: json['RazonEndeudamiento'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,5 +102,9 @@ class SupervisionData {
         'objSectorID': objSectorId,
         'SectorComercialCodigo': sectorComercialCodigo,
         'SectorComercialNombre': sectorComercialNombre,
+        'CodEstadoSol': codEstadoSol,
+        'Monto': monto,
+        'Cuota': cuota,
+        'RazonEndeudamiento': razonEndeudamiento,
       };
 }

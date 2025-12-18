@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SupervisionFormHN2 extends StatelessWidget {
+class SupervisionFormHN2 extends StatefulWidget {
   final PageController pageController;
   const SupervisionFormHN2({
     super.key,
@@ -20,7 +20,14 @@ class SupervisionFormHN2 extends StatelessWidget {
   });
 
   @override
+  State<SupervisionFormHN2> createState() => _SupervisionFormHN2State();
+}
+
+class _SupervisionFormHN2State extends State<SupervisionFormHN2>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final formKey = GlobalKey<FormState>();
     final cubit = context.read<SupervisionCoordinadorCubit>();
 
@@ -275,7 +282,7 @@ class SupervisionFormHN2 extends StatelessWidget {
                     CustomElevatedButton(
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
-                        pageController.nextPage(
+                        widget.pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         );
@@ -286,7 +293,7 @@ class SupervisionFormHN2 extends StatelessWidget {
                     const Gap(10),
                     CustomElevatedButton(
                       onPressed: () {
-                        pageController.previousPage(
+                        widget.pageController.previousPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         );
@@ -304,4 +311,7 @@ class SupervisionFormHN2 extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

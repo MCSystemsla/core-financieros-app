@@ -5,11 +5,13 @@ class GetSupervisionesState extends Equatable {
   final Status status;
   final List<SupervisionData> data;
   final String errorMsg;
+  final String nombreCoordinador;
 
   const GetSupervisionesState({
     this.status = Status.notStarted,
     this.data = const [],
     this.errorMsg = '',
+    this.nombreCoordinador = '',
   });
 
   @override
@@ -17,17 +19,20 @@ class GetSupervisionesState extends Equatable {
         status,
         data,
         errorMsg,
+        nombreCoordinador,
       ];
 
   GetSupervisionesState copyWith({
     Status? status,
     List<SupervisionData>? data,
     String? errorMsg,
+    String? nombreCoordinador,
   }) {
     return GetSupervisionesState(
       status: status ?? this.status,
       data: data ?? this.data,
       errorMsg: errorMsg ?? this.errorMsg,
+      nombreCoordinador: nombreCoordinador ?? this.nombreCoordinador,
     );
   }
 }

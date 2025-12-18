@@ -15,18 +15,22 @@ import 'package:go_router/go_router.dart';
 
 class SupervisionFormHN4 extends StatefulWidget {
   final PageController pageController;
+  final String tipoSolicitud;
   const SupervisionFormHN4({
     super.key,
     required this.pageController,
+    required this.tipoSolicitud,
   });
 
   @override
   State<SupervisionFormHN4> createState() => _SupervisionFormHN4State();
 }
 
-class _SupervisionFormHN4State extends State<SupervisionFormHN4> {
+class _SupervisionFormHN4State extends State<SupervisionFormHN4>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final formkey = GlobalKey<FormState>();
     final cubit = context.read<SupervisionCoordinadorCubit>();
 
@@ -159,7 +163,9 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4> {
                             if (!formkey.currentState!.validate()) return;
                             context
                                 .read<SupervisionCoordinadorCubit>()
-                                .createSupervisonCoordinador();
+                                .createSupervisonCoordinador(
+                                  tipoSolicitud: widget.tipoSolicitud,
+                                );
                           },
                           text: state.status == Status.inProgress
                               ? 'Enviando...'
@@ -189,4 +195,7 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

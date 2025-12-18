@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -91,15 +93,18 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String monto,
 }) {
   final montoInt = int.tryParse(monto) ?? 0;
+  final nuevaMenorMil =
+      global<SolicitudesHnBoxService>().getParametroByName(nombre: 'MENORMIL');
+  final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;
 
   switch (tipoSolicitud) {
     case 'NUEVAMENOR':
-      return montoInt >= 1000
+      return montoInt >= nuevaMenorMilMonto
           ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
           : AnalisisSolicitudesInterceptorType.nueva;
 
     case 'REPRESTAMO':
-      return montoInt >= 1000
+      return montoInt >= nuevaMenorMilMonto
           ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
           : AnalisisSolicitudesInterceptorType.represtamo;
 

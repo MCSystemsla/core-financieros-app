@@ -21,7 +21,11 @@ class GetSupervisionesCubit extends Cubit<GetSupervisionesState> {
         numeroSolicitud: numeroSolicitud,
         cedulaIdentidad: cedulaIdentidad,
       );
-      emit(state.copyWith(status: Status.done, data: resp.data));
+      emit(state.copyWith(
+        status: Status.done,
+        data: resp.data,
+        nombreCoordinador: resp.nombreCoordinador,
+      ));
     } on AppException catch (e) {
       emit(
         state.copyWith(status: Status.error, errorMsg: e.optionalMsg),

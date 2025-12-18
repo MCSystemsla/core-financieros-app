@@ -82,6 +82,7 @@ dependencies:
   flutter_multi_formatter: ^2.13.7
   disk_space_plus: ^0.2.6
   device_info_plus: ^11.5.0
+  google_maps_flutter: ^2.14.0
 
 
   # Intl

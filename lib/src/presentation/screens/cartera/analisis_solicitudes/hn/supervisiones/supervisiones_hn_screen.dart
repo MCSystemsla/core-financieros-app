@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/loading/load
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
 class SupervisionesHnScreen extends StatelessWidget {
@@ -42,6 +43,7 @@ class SupervisionesHnScreen extends StatelessWidget {
                 Status.done => _ListaDataWidget(
                     data: state.data,
                     numeroSolicitud: numeroSolicitud,
+                    nombreCoordinador: state.nombreCoordinador,
                   ),
                 _ => const SizedBox(),
               };
@@ -56,9 +58,11 @@ class SupervisionesHnScreen extends StatelessWidget {
 class _ListaDataWidget extends StatelessWidget {
   final String numeroSolicitud;
   final List<SupervisionData> data;
+  final String nombreCoordinador;
   const _ListaDataWidget({
     required this.data,
     required this.numeroSolicitud,
+    required this.nombreCoordinador,
   });
 
   @override
@@ -78,6 +82,10 @@ class _ListaDataWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return _ListDataItemWidget(
           data: data[index],
+          nombreCoordinador: nombreCoordinador,
+          cuota: data[index].cuota,
+          razonEndeudamiento: data[index].razonEndeudamiento,
+          tipoSolicitud: data[index].tipoSolicitud,
         );
       },
     );
@@ -86,9 +94,17 @@ class _ListaDataWidget extends StatelessWidget {
 
 class _ListDataItemWidget extends StatelessWidget {
   final SupervisionData data;
+  final String nombreCoordinador;
+  final num cuota;
+  final num razonEndeudamiento;
+  final String tipoSolicitud;
 
   const _ListDataItemWidget({
     required this.data,
+    required this.nombreCoordinador,
+    required this.cuota,
+    required this.razonEndeudamiento,
+    required this.tipoSolicitud,
   });
 
   @override
@@ -100,6 +116,10 @@ class _ListDataItemWidget extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => SupervisionesFormHnScreen(
               data: data,
+              nombreCoordinador: nombreCoordinador,
+              cuota: cuota,
+              razonEndeudamiento: razonEndeudamiento,
+              tipoSolicitud: data.tipoSolicitud,
             ),
           ),
         );
@@ -109,8 +129,8 @@ class _ListDataItemWidget extends StatelessWidget {
       solicitudId: data.numeroSolicitud,
       title: 'Numero Solicitud: ${data.numeroSolicitud}',
       fecha: data.fecha,
-      monto: '',
-      estadoCodigo: '',
+      monto: data.monto.toCurrencyString(),
+      estadoCodigo: data.codEstadoSol,
       sucursal: data.sucursalSiglas,
       nombreCliente: data.nombreCliente,
       nombrePromotor: data.nombrePromotor,

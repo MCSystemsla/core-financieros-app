@@ -21,6 +21,7 @@ class GetSolicitudesByNumeroOrCedulaEndpointHN extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+        'userId': LocalStorage().userId,
         if (numeroSolicitud != null)
           'NumeroSolicitud': numeroSolicitud.toString(),
         if (cedulaIdentidad != null) 'CedulaIdentidad': cedulaIdentidad,
@@ -44,4 +45,27 @@ class CreateSupervisionCoordinadorEndpointHN extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => createSupervisionCoordinador.toJson();
+}
+
+class ObtenerMontosSupervisoresEndpointHN extends Endpoint {
+  final int numeroSolicitud;
+
+  ObtenerMontosSupervisoresEndpointHN({
+    required this.numeroSolicitud,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/supervisiones/obtener-montos-analisis';
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud.toString(),
+      };
 }

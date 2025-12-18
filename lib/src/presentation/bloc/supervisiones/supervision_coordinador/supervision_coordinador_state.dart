@@ -113,6 +113,7 @@ class SupervisionCoordinadorState extends Equatable {
 
   @override
   List<Object> get props => [
+        errorMsg,
         status,
         database,
         numeroSolicitud,

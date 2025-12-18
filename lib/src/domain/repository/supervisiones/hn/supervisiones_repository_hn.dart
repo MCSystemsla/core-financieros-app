@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_coordinador.dart';
+import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_montos_analisis_response.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/endpoint/supervisiones_endpoint_hn.dart';
@@ -14,6 +15,9 @@ abstract class SupervisionesRepositoryHn {
   });
   Future<CreateSupervisionCoordinadorEndpointHN> createSupervisionCoordinador({
     required CreateSupervisionCoordinador createSupervisionCoordinador,
+  });
+  Future<SupervisionesMontosAnalisisResponse> getMontosSupervisores({
+    required int numeroSolicitud,
   });
 }
 
@@ -60,6 +64,28 @@ class SupervisionesRepositoryHnImpl implements SupervisionesRepositoryHn {
         throw AppException(optionalMsg: errorMsg.toString());
       }
       return endpoint;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<SupervisionesMontosAnalisisResponse> getMontosSupervisores({
+    required int numeroSolicitud,
+  }) async {
+    final endpoint = ObtenerMontosSupervisoresEndpointHN(
+      numeroSolicitud: numeroSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = SupervisionesMontosAnalisisResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

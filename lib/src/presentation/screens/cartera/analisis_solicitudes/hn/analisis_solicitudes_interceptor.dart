@@ -24,6 +24,7 @@ class AnalisisSolicitudesInterceptorHN extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (type) {
+      AnalisisSolicitudesInterceptorType.nueva => const Text('nueva menor mil'),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
         AnalisisSolicitudNuevaMayorAMilHn(
           title: title,

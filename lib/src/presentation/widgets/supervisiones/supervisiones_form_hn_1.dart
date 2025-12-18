@@ -8,18 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SupervisionFormHN1 extends StatelessWidget {
+class SupervisionFormHN1 extends StatefulWidget {
   final PageController pageController;
   final SupervisionData data;
+  final String nombreCoordinador;
 
   const SupervisionFormHN1({
     super.key,
     required this.pageController,
     required this.data,
+    required this.nombreCoordinador,
   });
 
   @override
+  State<SupervisionFormHN1> createState() => _SupervisionFormHN1State();
+}
+
+class _SupervisionFormHN1State extends State<SupervisionFormHN1>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<SupervisionCoordinadorCubit>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -51,6 +60,8 @@ class SupervisionFormHN1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: widget.nombreCoordinador,
+              readOnly: true,
               title: 'Nombre del coordinador',
               icon: const Icon(Icons.food_bank),
               inputFormatters: [
@@ -65,7 +76,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.numeroSolicitud,
+              initialValue: widget.data.numeroSolicitud,
               title: 'Numero de solicitud',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -80,7 +91,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.fecha.selectorFormat(),
+              initialValue: widget.data.fecha.selectorFormat(),
               title: 'Fecha de solicitud',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -89,7 +100,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.nombrePromotor,
+              initialValue: widget.data.nombrePromotor,
               title: 'Asesor integral del cliente',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -102,7 +113,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.nombreCliente,
+              initialValue: widget.data.nombreCliente,
               title: 'Cliente',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -115,7 +126,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.cedulaCliente,
+              initialValue: widget.data.cedulaCliente,
               title: 'Numero de cedula',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -128,7 +139,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.direccionCasa,
+              initialValue: widget.data.direccionCasa,
               title: 'Direccion del domicilio',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -141,7 +152,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.direccionNegocio,
+              initialValue: widget.data.direccionNegocio,
               title: 'Direccion del negocio',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -154,7 +165,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.destino,
+              initialValue: widget.data.destino,
               title: 'Destino del credito',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -167,7 +178,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.sectorComercialNombre,
+              initialValue: widget.data.sectorComercialNombre,
               title: 'Actividad economica',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -180,7 +191,7 @@ class SupervisionFormHN1 extends StatelessWidget {
             const Gap(10),
             OutlineTextfieldWidget(
               readOnly: true,
-              initialValue: data.sectorComercialNombre,
+              initialValue: widget.data.sectorComercialNombre,
               title: 'Sector economico',
               icon: const Icon(Icons.food_bank),
               textInputType: TextInputType.number,
@@ -197,7 +208,7 @@ class SupervisionFormHN1 extends StatelessWidget {
                 children: [
                   CustomElevatedButton(
                     onPressed: () {
-                      pageController.nextPage(
+                      widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -208,7 +219,7 @@ class SupervisionFormHN1 extends StatelessWidget {
                   const Gap(10),
                   CustomElevatedButton(
                     onPressed: () {
-                      pageController.previousPage(
+                      widget.pageController.previousPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -225,4 +236,7 @@ class SupervisionFormHN1 extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

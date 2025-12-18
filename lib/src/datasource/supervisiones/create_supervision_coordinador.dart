@@ -57,6 +57,7 @@ class CreateSupervisionCoordinador {
   final String nombreRefComunidad2;
   final String direccionRefComunidad2;
   final String tiempoNegocio;
+  final String tipoSolicitud;
 
   CreateSupervisionCoordinador({
     required this.database,
@@ -110,6 +111,7 @@ class CreateSupervisionCoordinador {
     required this.nombreRefComunidad2,
     required this.direccionRefComunidad2,
     required this.tiempoNegocio,
+    required this.tipoSolicitud,
   });
 
   Map<String, dynamic> toJson() {
@@ -165,6 +167,7 @@ class CreateSupervisionCoordinador {
       'NombreRefComunidad2': nombreRefComunidad2,
       'DireccionRefComunidad2': direccionRefComunidad2,
       'TiempoNegocio': tiempoNegocio,
+      'TipoSolicitud': tipoSolicitud,
     };
     data.removeWhere((key, value) => value == '');
     return data;
