@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:core_financiero_app/src/config/data/custom_map_style.dart';
+import 'package:core_financiero_app/src/config/helpers/google_api/places/google_places_helper.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_user_location/analisis_user_location_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/location_card_container.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/select_location_widget.dart';
@@ -32,9 +34,11 @@ class _UbiacacionClienteHnScreenState extends State<UbiacacionClienteHnScreen> {
             GeolocationService(),
           )..getCurrentLocation(),
         ),
-        // BlocProvider(
-        //   create: (ctx) => SubjectBloc(),
-        // ),
+        BlocProvider(
+          create: (ctx) => AnalisisUserLocationCubit(
+            GooglePlacesHelperImpl(),
+          ),
+        ),
       ],
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -125,7 +129,9 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
           },
         ),
         if (isUserSelectedLocation) ...[
-          const LocationCardContainer(),
+          LocationCardContainer(
+            position: widget.position,
+          ),
         ],
         Positioned(
           top: 10,
