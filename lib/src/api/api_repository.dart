@@ -28,19 +28,22 @@ class DefaultAPIRepository implements APIRepository {
   final kHttpTimeout = Duration(seconds: 40);
 
   @override
-  Future<Map<String, dynamic>> request({required Endpoint endpoint}) async {
+  Future<Map<String, dynamic>> request({
+    required Endpoint endpoint,
+  }) async {
     _logger.d('Request endpoint: ${endpoint.body}');
+    final apiUrl = endpoint.setApiUrl ?? const String.fromEnvironment('apiUrl');
     Uri url;
     try {
       if (const String.fromEnvironment('protocol') == Protocol.https.name) {
         url = Uri.https(
-          const String.fromEnvironment('apiUrl'),
+          apiUrl,
           endpoint.path,
           endpoint.queryParameters,
         );
       } else {
         url = Uri.http(
-          const String.fromEnvironment('apiUrl'),
+          apiUrl,
           endpoint.path,
           endpoint.queryParameters,
         );

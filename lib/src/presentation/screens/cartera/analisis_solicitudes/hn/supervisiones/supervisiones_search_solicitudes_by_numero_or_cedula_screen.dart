@@ -155,7 +155,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         enabled: state.status != Status.inProgress,
                         text: state.status == Status.inProgress
                             ? 'Cargando...'
-                            : 'Enviar',
+                            : 'Buscar',
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
