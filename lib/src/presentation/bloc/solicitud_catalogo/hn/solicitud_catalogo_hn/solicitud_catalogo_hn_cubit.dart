@@ -95,7 +95,8 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     'ESTADOPRESTAMO',
     'RELACIONPERSONAS',
     'TIPOGARANTIA',
-    'TIPOPERSONA'
+    'TIPOPERSONA',
+    'UBICACIONGPS',
   ];
 
   Future<void> saveCatalogosToDatabase() async {

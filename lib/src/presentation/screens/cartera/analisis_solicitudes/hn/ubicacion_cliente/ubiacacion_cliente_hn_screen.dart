@@ -1,7 +1,18 @@
 import 'dart:async';
-
+import 'package:core_financiero_app/src/config/data/custom_map_style.dart';
+import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/client_location/location_card_container.dart';
+import 'package:core_financiero_app/src/presentation/widgets/client_location/select_location_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/geolocation_permission/geolocation_permission_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UbiacacionClienteHnScreen extends StatefulWidget {
   const UbiacacionClienteHnScreen({super.key});
@@ -12,42 +23,146 @@ class UbiacacionClienteHnScreen extends StatefulWidget {
 }
 
 class _UbiacacionClienteHnScreenState extends State<UbiacacionClienteHnScreen> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => GeolocationCubit(
+            GeolocationService(),
+          )..getCurrentLocation(),
+        ),
+        // BlocProvider(
+        //   create: (ctx) => SubjectBloc(),
         // ),
-        // floatingActionButton: FloatingActionButton.extended(
-        //   onPressed: _goToTheLake,
-        //   label: const Text('To the lake!'),
-        //   icon: const Icon(Icons.directions_boat),
-        // ),
+      ],
+      child: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        body: BlocBuilder<GeolocationCubit, GeolocationState>(
+          builder: (context, state) {
+            return switch (state) {
+              OnGeolocationLoading() => const LoadingWidget(),
+              OnGeolocationPermissionDenied() => GeolocationPermissionWidget(
+                  title: 'Debes permitir el acceso a la ubicación.',
+                  onPressed: () {
+                    context.read<GeolocationCubit>().getCurrentLocation();
+                  },
+                ),
+              OnGeolocationServiceDisabled() => GeolocationPermissionWidget(
+                  title:
+                      'El servicio de ubicación no está habilitado en tu dispositivo.',
+                  onPressed: () => openAppSettings(),
+                ),
+              OnGeolocationServiceError() => OnErrorWidget(
+                  onPressed: () {
+                    context.read<GeolocationCubit>().getCurrentLocation();
+                  },
+                  errorMsg: state.errorMsg,
+                ),
+              OnGeolocationSuccess() => _MapContentWidget(
+                  position: state.position,
+                ),
+              _ => const SizedBox.shrink(),
+            };
+          },
+        ),
       ),
     );
   }
+}
 
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
+class _MapContentWidget extends StatefulWidget {
+  final Position position;
+  const _MapContentWidget({required this.position});
+
+  @override
+  State<_MapContentWidget> createState() => _MapContentWidgetState();
+}
+
+class _MapContentWidgetState extends State<_MapContentWidget> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  bool isUserSelectedLocation = false;
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(14.0998805, -87.1888407),
+    zoom: 14.4746,
+  );
+
+  getCurrentLocation({required LatLng latLng}) {
+    return CameraPosition(
+      bearing: 192.8334901395799,
+      target: latLng,
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GoogleMap(
+          style: customMapStyle,
+          zoomControlsEnabled: false,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+
+            controller.animateCamera(
+              CameraUpdate.newCameraPosition(
+                getCurrentLocation(
+                  latLng: LatLng(
+                    widget.position.latitude,
+                    widget.position.longitude,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        if (isUserSelectedLocation) ...[
+          const LocationCardContainer(),
+        ],
+        Positioned(
+          top: 10,
+          left: 10,
+          child: SafeArea(
+            child: IconButton.filled(
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new_outlined,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+        if (!isUserSelectedLocation) ...[
+          SelectLocationWidget(
+            onTap: () {
+              setState(() {
+                isUserSelectedLocation = true;
+              });
+            },
+          ),
+        ],
+        Center(
+          child: Icon(
+            Icons.location_on_rounded,
+            color: AppColors.getPrimaryColor(),
+            size: 50,
+          ),
+        ),
+      ],
+    );
+  }
 }

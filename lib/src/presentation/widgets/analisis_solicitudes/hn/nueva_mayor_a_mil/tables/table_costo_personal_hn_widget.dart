@@ -268,7 +268,7 @@ class _CompraPorArticuloSheetHnState extends State<_CompraPorArticuloSheetHn> {
                         });
                       },
                       title: 'Temporal',
-                      subtitle: 'El Empleado es temporal?',
+                      subtitle: 'El empleado es temporal?',
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
