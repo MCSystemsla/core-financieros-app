@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_cuentas_por_cobrar_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ventas_nivel_produccion_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/cuenta_por_cobrar_card_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 
@@ -250,22 +248,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                       CustomElevatedButton(
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          if (state.cuentasPorCobrar.isEmpty) {
-                            CustomAlertDialog(
-                              context: context,
-                              title: 'Las cuentas por cobrar son obligatorias',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
-                          if (state.nivelProduccion.isEmpty) {
-                            CustomAlertDialog(
-                              context: context,
-                              title: 'Nivel de produccion es obligatorio',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
+
                           widget.pageController.nextPage(
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut,

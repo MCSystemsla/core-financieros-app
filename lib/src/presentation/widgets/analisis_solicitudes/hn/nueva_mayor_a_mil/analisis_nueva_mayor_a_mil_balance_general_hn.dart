@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_activos_fijos_hn_widget.dart';
@@ -171,8 +170,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                             .toCurrencyString(mantissaLength: 0)
                             .toNullIfEmptyOrZero(),
                         title: 'Caja:',
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         icon: const Icon(Icons.document_scanner),
                         textInputType: TextInputType.number,
                         inputFormatters: [
@@ -199,8 +196,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                             .toCurrencyString(mantissaLength: 0)
                             .toNullIfEmptyOrZero(),
                         title: 'Reservas:',
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         icon: const Icon(Icons.document_scanner),
                         textInputType: TextInputType.number,
                         inputFormatters: [
@@ -222,8 +217,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                         initialValue: state.cuentasAhorro
                             .toCurrencyString(mantissaLength: 0)
                             .toNullIfEmptyOrZero(),
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         title: 'Cuentas de ahorro:',
                         icon: const Icon(Icons.document_scanner),
                         textInputType: TextInputType.number,
@@ -515,14 +508,6 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                     children: [
                       CustomElevatedButton(
                         onPressed: () {
-                          if (state.pasivos.isEmpty || state.activos.isEmpty) {
-                            CustomAlertDialog(
-                              context: context,
-                              title: 'Pasivos y Activos no pueden estar vacios',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
                           if (state.inventario.isEmpty) {
                             CustomAlertDialog(
                               context: context,

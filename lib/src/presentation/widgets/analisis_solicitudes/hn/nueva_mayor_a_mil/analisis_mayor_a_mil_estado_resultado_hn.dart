@@ -1,7 +1,7 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
   const AnalisisMayorAMilEstadoResultadoHN({
@@ -255,8 +256,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         .toNullIfEmptyOrZero(),
                     title: 'Gastos de alimentación personal:',
                     icon: const Icon(Icons.document_scanner),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     textInputType: TextInputType.number,
                     inputFormatters: [
                       CurrencyInputFormatter(
@@ -302,8 +301,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         .toCurrencyString()
                         .toNullIfEmptyOrZero(),
                     title: 'Alquiler de local / depósitos:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -326,8 +323,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     initialValue:
                         state.agua.toCurrencyString().toNullIfEmptyOrZero(),
                     title: 'Agua / Electricidad / Teléfono:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -351,8 +346,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         .toCurrencyString()
                         .toNullIfEmptyOrZero(),
                     title: 'Combustible / Lubricantes:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -376,8 +369,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         .toCurrencyString()
                         .toNullIfEmptyOrZero(),
                     title: 'Transporte / carga:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -401,8 +392,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         .toCurrencyString()
                         .toNullIfEmptyOrZero(),
                     title: 'Pago de cuotas de créditos:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -425,8 +414,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     initialValue:
                         state.impuesto.toCurrencyString().toNullIfEmptyOrZero(),
                     title: 'Impuestos / tributos / licencia:',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
                     inputFormatters: [
@@ -585,6 +572,17 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         CustomElevatedButton(
                           onPressed: () {
                             if (!formKey.currentState!.validate()) return;
+                            if (state.saldoDisponibleUf < 0 ||
+                                state.totalIngresos < 0 ||
+                                state.resultadoLiquido < 0) {
+                              CustomAlertDialog(
+                                context: context,
+                                title:
+                                    'Los Saldos Calculados no pueden ser negativos',
+                                onDone: () => context.pop(),
+                              ).showDialog(context);
+                              return;
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(

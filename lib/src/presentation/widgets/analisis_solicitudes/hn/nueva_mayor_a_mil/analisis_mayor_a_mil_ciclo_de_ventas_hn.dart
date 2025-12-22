@@ -1,14 +1,12 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ventas_card_days_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ventas_card_months_hn_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_card_days_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/ventas_months_card_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilCicloDeVentasHN extends StatefulWidget {
   const AnalisisMayorAMilCicloDeVentasHN({
@@ -98,20 +96,6 @@ class _AnalisisMayorAMilCicloDeVentasHNState
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomElevatedButton(
                   onPressed: () {
-                    final mensualVacias = state.cicloVentaMensual.ciclo
-                        .every((e) => e.venta == 0);
-
-                    final diariaVacias = state.cicloVentaDiaria.cicloVentas
-                        .every((e) => e.venta == 0);
-
-                    if (mensualVacias || diariaVacias) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Los ciclos de ventas son obligatorios',
-                        onDone: () => context.pop(),
-                      ).showDialog(context);
-                      return;
-                    }
                     widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,

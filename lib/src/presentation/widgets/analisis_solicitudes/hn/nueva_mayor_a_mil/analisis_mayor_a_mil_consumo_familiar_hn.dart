@@ -1,16 +1,13 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_costo_personal_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_costo_personal_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilConsumoFamiliares extends StatefulWidget {
   const AnalisisMayorAMilConsumoFamiliares({
@@ -101,8 +98,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                         initialValue: state.alimentacionFam
                             .toCurrencyString(mantissaLength: 0)
                             .toNullIfEmptyOrZero(),
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         title: 'Alimentación',
                         icon: const Icon(Icons.food_bank),
                         textInputType: TextInputType.number,
@@ -124,8 +119,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.educacionFam
                             .toCurrencyString(mantissaLength: 0)
@@ -151,8 +144,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.aguaFam
                             .toCurrencyString(mantissaLength: 0)
@@ -178,8 +169,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.alquilerFam
                             .toCurrencyString(mantissaLength: 0)
@@ -205,8 +194,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.aseoLimpiezaFam
                             .toCurrencyString(mantissaLength: 0)
@@ -232,8 +219,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.vestimentaCalzadoFam
                             .toCurrencyString(mantissaLength: 0)
@@ -259,8 +244,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.transporteFam
                             .toCurrencyString(mantissaLength: 0)
@@ -286,8 +269,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.otrosGastosFam
                             .toCurrencyString(mantissaLength: 0)
@@ -313,8 +294,6 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textAlign: TextAlign.end,
                         initialValue: state.pagoCreditosFam
                             .toCurrencyString(mantissaLength: 0)
@@ -386,14 +365,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       CustomElevatedButton(
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          if (state.costoDePersonal.isEmpty) {
-                            CustomAlertDialog(
-                              context: context,
-                              title: 'El costo de personal es obligatorio',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
+
                           widget.pageController.nextPage(
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut,

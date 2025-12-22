@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -167,11 +166,8 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                     ),
                   ),
                   OutlineTextfieldWidget(
-                    textAlign: TextAlign.end,
                     initialValue:
                         state.permisoOperacionNumero.toNullIfEmptyOrZero(),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     title: 'Número de permiso de operación',
                     icon: const Icon(Icons.document_scanner),
                     textInputType: TextInputType.number,
@@ -193,8 +189,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                     initialValue:
                         state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
                     title: 'Nombre de institución',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.business),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
@@ -210,8 +204,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                   OutlineTextfieldWidget(
                     hintText: fechaEmisionPermiso?.selectorFormat() ?? '',
                     title: 'Fecha de emisión de permiso',
-                    validator: (value) => ClassValidator.validateRequired(
-                        fechaEmisionPermiso?.selectorFormat()),
                     onTap: () => selectDateFechaEmision(context),
                     icon: const Icon(Icons.calendar_month),
                     readOnly: true,
@@ -219,8 +211,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                   const Gap(20),
                   OutlineTextfieldWidget(
                     onTap: () => selectDateFechaVencimiento(context),
-                    validator: (value) => ClassValidator.validateRequired(
-                        fechaVencimientoPermiso?.selectorFormat()),
                     hintText: fechaVencimientoPermiso?.selectorFormat() ?? '',
                     title: 'Fecha de vencimiento de permiso',
                     icon: const Icon(Icons.calendar_month),
@@ -239,8 +229,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                   const Gap(20),
                   OutlineTextfieldWidget(
                     initialValue: state.numeroLicencia.toNullIfEmptyOrZero(),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     title: 'Número de licencia',
                     icon: const Icon(Icons.business),
                     textInputType: TextInputType.number,
@@ -257,8 +245,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                   OutlineTextfieldWidget(
                     initialValue:
                         state.nombreInstitucionLicencia.toNullIfEmptyOrZero(),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
                     title: 'Nombre de institución',
                     icon: const Icon(Icons.business),
                     inputFormatters: [UpperCaseTextFormatter()],
@@ -272,8 +258,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                   OutlineTextfieldWidget(
                     onTap: () => selectDateFechaEmisionLicencia(context),
                     hintText: fechaEmisionLicencia?.selectorFormat() ?? '',
-                    validator: (value) => ClassValidator.validateRequired(
-                        fechaEmisionLicencia?.selectorFormat()),
                     title: 'Fecha de emisión de licencia',
                     icon: const Icon(Icons.calendar_month),
                     readOnly: true,
@@ -283,8 +267,6 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
                     onTap: () => selectDateFechaVencimientoLicencia(context),
                     hintText: fechaVencimientoLicencia?.selectorFormat() ?? '',
                     title: 'Fecha de vencimiento de licencia',
-                    validator: (value) => ClassValidator.validateRequired(
-                        fechaVencimientoLicencia?.selectorFormat()),
                     icon: const Icon(Icons.calendar_month),
                     readOnly: true,
                   ),

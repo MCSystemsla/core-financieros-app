@@ -2,13 +2,11 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_n
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_compras_a_proveedores_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_comprar_por_semana_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_compras_por_proveedor_o_articulos_hn_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/compras_week_card_per_week_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilCicloDeCompras extends StatefulWidget {
   final int numeroSolicitud;
@@ -90,26 +88,6 @@ class _AnalisisMayorAMilCicloDeComprasState
                   children: [
                     CustomElevatedButton(
                       onPressed: () {
-                        final semanasVacias = state
-                            .cicloDeComprasSemanales.cicloCompra
-                            .every((e) => e.cantidadCompra == 0);
-                        if (semanasVacias) {
-                          CustomAlertDialog(
-                            context: context,
-                            title: 'Las semanas de compras son obligatorias',
-                            onDone: () => context.pop(),
-                          ).showDialog(context);
-                          return;
-                        }
-                        if (state.comprasProveedorArticulo.isEmpty) {
-                          CustomAlertDialog(
-                            context: context,
-                            title:
-                                'Las compras por proveedor o articulo son obligatorias',
-                            onDone: () => context.pop(),
-                          ).showDialog(context);
-                          return;
-                        }
                         widget.pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,

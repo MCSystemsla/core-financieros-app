@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ingresos_familiares_fuera_negocio_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -137,8 +136,6 @@ class _AnalisisMayorAMilCreditosHNState
                         ),
                       ),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         initialValue: state.cliente1.toNullIfEmptyOrZero(),
                         title: 'Cliente 1',
                         icon: const Icon(Icons.person),
@@ -212,8 +209,6 @@ class _AnalisisMayorAMilCreditosHNState
                         ),
                       ),
                       OutlineTextfieldWidget(
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         initialValue: state.proveedor1,
                         title: 'Proveedor 1',
                         icon: const Icon(Icons.person),
