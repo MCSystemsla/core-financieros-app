@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:core_financiero_app/src/config/data/custom_map_style.dart';
 import 'package:core_financiero_app/src/config/helpers/google_api/places/google_places_helper.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
@@ -17,7 +16,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class UbiacacionClienteHnScreen extends StatefulWidget {
-  const UbiacacionClienteHnScreen({super.key});
+  final String documentoCliente;
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  const UbiacacionClienteHnScreen({
+    super.key,
+    required this.documentoCliente,
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
 
   @override
   State<UbiacacionClienteHnScreen> createState() =>
@@ -65,6 +72,9 @@ class _UbiacacionClienteHnScreenState extends State<UbiacacionClienteHnScreen> {
                 ),
               OnGeolocationSuccess() => _MapContentWidget(
                   position: state.position,
+                  documentoCliente: widget.documentoCliente,
+                  numeroSolicitud: widget.numeroSolicitud,
+                  tipoSolicitud: widget.tipoSolicitud,
                 ),
               _ => const SizedBox.shrink(),
             };
@@ -77,15 +87,23 @@ class _UbiacacionClienteHnScreenState extends State<UbiacacionClienteHnScreen> {
 
 class _MapContentWidget extends StatefulWidget {
   final Position position;
-  const _MapContentWidget({required this.position});
+  final String documentoCliente;
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  const _MapContentWidget({
+    required this.position,
+    required this.documentoCliente,
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
 
   @override
   State<_MapContentWidget> createState() => _MapContentWidgetState();
 }
 
 class _MapContentWidgetState extends State<_MapContentWidget> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  GoogleMapController? _controller;
+
   bool isUserSelectedLocation = false;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -106,31 +124,38 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GoogleMap(
-          style: customMapStyle,
-          zoomControlsEnabled: false,
-          myLocationEnabled: false,
-          myLocationButtonEnabled: false,
-          mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
+        AbsorbPointer(
+          absorbing: true,
+          child: GoogleMap(
+            style: customMapStyle,
+            zoomControlsEnabled: false,
+            myLocationEnabled: false,
+            myLocationButtonEnabled: false,
+            mapType: MapType.normal,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
 
-            controller.animateCamera(
-              CameraUpdate.newCameraPosition(
-                getCurrentLocation(
-                  latLng: LatLng(
-                    widget.position.latitude,
-                    widget.position.longitude,
+              controller.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  getCurrentLocation(
+                    latLng: LatLng(
+                      widget.position.latitude,
+                      widget.position.longitude,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         if (isUserSelectedLocation) ...[
           LocationCardContainer(
             position: widget.position,
+            controller: _controller!,
+            documentoCliente: widget.documentoCliente,
+            numeroSolicitud: widget.numeroSolicitud,
+            tipoSolicitud: widget.tipoSolicitud,
           ),
         ],
         Positioned(

@@ -212,8 +212,13 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (ctx) =>
-                                      const UbiacacionClienteHnScreen(),
+                                  builder: (ctx) => UbiacacionClienteHnScreen(
+                                    documentoCliente: cedulaCliente,
+                                    numeroSolicitud: int.parse(numeroSolicitud),
+                                    tipoSolicitud: tipoSolicitud
+                                            ?.toTypeForInterceptorString() ??
+                                        '',
+                                  ),
                                 ),
                               ),
                             },
