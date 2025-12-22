@@ -21,7 +21,6 @@ class GetSolicitudesByNumeroOrCedulaEndpointHN extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
-        'userId': LocalStorage().userId,
         if (numeroSolicitud != null)
           'NumeroSolicitud': numeroSolicitud.toString(),
         if (cedulaIdentidad != null) 'CedulaIdentidad': cedulaIdentidad,
