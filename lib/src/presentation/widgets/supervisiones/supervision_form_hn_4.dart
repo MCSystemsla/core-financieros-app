@@ -16,10 +16,20 @@ import 'package:go_router/go_router.dart';
 class SupervisionFormHN4 extends StatefulWidget {
   final PageController pageController;
   final String tipoSolicitud;
+  final int montoSolicitud;
+  final int cuotaSolicitud;
+  final int plazoSolicitud;
+  final String producto;
+  final String frecuenciaPago;
   const SupervisionFormHN4({
     super.key,
     required this.pageController,
     required this.tipoSolicitud,
+    required this.montoSolicitud,
+    required this.cuotaSolicitud,
+    required this.plazoSolicitud,
+    required this.producto,
+    required this.frecuenciaPago,
   });
 
   @override
@@ -66,7 +76,8 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                title: 'Monto',
+                title:
+                    'Monto\n Monto de solicitud: ${widget.montoSolicitud.toCurrencyString()}',
                 icon: const Icon(Icons.food_bank),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -85,7 +96,8 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                title: 'Plazo en meses',
+                title:
+                    'Plazo en meses\n Plazo de solicitud: ${widget.plazoSolicitud}',
                 icon: const Icon(Icons.food_bank),
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -103,7 +115,7 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
               const Gap(10),
               SearchDropdownWidget(
                 codigo: 'PRODUCTO',
-                title: 'Producto',
+                title: 'Producto\n Producto de solicitud: ${widget.producto}',
                 enabled: true,
                 onChanged: (v) {
                   cubit.onFieldChanged(
@@ -116,7 +128,8 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
               const Gap(10),
               CatalogoFrecuenciaPagoDropdown(
                 enabled: true,
-                title: 'Frecuencia de pago',
+                title:
+                    'Frecuencia de pago:\n Frecuencia de pago de solicitud: ${widget.frecuenciaPago}',
                 onChanged: (v) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(

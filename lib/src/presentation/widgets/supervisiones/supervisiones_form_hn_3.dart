@@ -76,7 +76,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     title:
                         'Nivel de ventas acordes con analisis asesor\nMonto: ${state.nivelVentas.toCurrencyString()}',
@@ -100,7 +100,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     title:
                         'Costo de venta adecuado\nMonto: ${state.costoVenta.toCurrencyString()}',
@@ -122,7 +122,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     title:
                         'Disponible acorde a la realidad del cliente\nMonto: ${state.disponibleCliente.toCurrencyString()}',
@@ -146,7 +146,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     title:
                         'Razon cuota aplica segun politica de credito\nMonto: ${widget.cuota.toCurrencyString()}',
@@ -169,7 +169,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     hintText: 'input.select_option'.tr(),
                     title:
@@ -195,7 +195,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     onChanged: (v) {
                       cubit.onFieldChanged(
@@ -218,7 +218,7 @@ class _SupervisionFormHN3State extends State<SupervisionFormHN3>
                     items: const [
                       Item(name: 'Si', value: SupervisionItem3.si),
                       Item(name: 'No', value: SupervisionItem3.no),
-                      Item(name: 'N/A', value: SupervisionItem3.na),
+                      Item(name: 'No aplica', value: SupervisionItem3.na),
                     ],
                     onChanged: (v) {
                       cubit.onFieldChanged(

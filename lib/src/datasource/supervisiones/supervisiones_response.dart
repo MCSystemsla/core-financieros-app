@@ -47,6 +47,9 @@ class SupervisionData {
   final num monto;
   final num cuota;
   final num razonEndeudamiento;
+  final String producto;
+  final int plazoSolicitud;
+  final String frecuenciaPago;
   SupervisionData({
     required this.tipoSolicitud,
     required this.sucursalSiglas,
@@ -65,6 +68,9 @@ class SupervisionData {
     required this.monto,
     required this.cuota,
     required this.razonEndeudamiento,
+    required this.producto,
+    required this.plazoSolicitud,
+    required this.frecuenciaPago,
   });
 
   factory SupervisionData.fromJson(Map<String, dynamic> json) =>
@@ -86,6 +92,9 @@ class SupervisionData {
         monto: json['Monto'],
         cuota: json['Cuota'],
         razonEndeudamiento: json['RazonEndeudamiento'],
+        producto: json['Producto'],
+        plazoSolicitud: json['PlazoSolicitud'],
+        frecuenciaPago: json['FrecuenciaValor'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -106,5 +115,8 @@ class SupervisionData {
         'Monto': monto,
         'Cuota': cuota,
         'RazonEndeudamiento': razonEndeudamiento,
+        'Producto': producto,
+        'PlazoSolicitud': plazoSolicitud,
+        'FrecuenciaValor': frecuenciaPago,
       };
 }

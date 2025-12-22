@@ -69,6 +69,11 @@ class SupervisionesFormHnScreen extends StatelessWidget {
             SupervisionFormHN4(
               pageController: pagecontroller,
               tipoSolicitud: tipoSolicitud,
+              montoSolicitud: data.monto.toInt(),
+              cuotaSolicitud: data.cuota.toInt(),
+              plazoSolicitud: data.plazoSolicitud,
+              producto: data.producto,
+              frecuenciaPago: data.frecuenciaPago,
             ),
           ],
         ),

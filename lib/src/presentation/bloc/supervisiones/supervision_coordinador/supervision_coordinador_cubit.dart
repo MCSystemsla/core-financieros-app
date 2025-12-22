@@ -12,8 +12,9 @@ class SupervisionCoordinadorCubit extends Cubit<SupervisionCoordinadorState> {
   SupervisionCoordinadorCubit(this._repository)
       : super(SupervisionCoordinadorInitial());
 
-  Future<void> createSupervisonCoordinador(
-      {required String tipoSolicitud}) async {
+  Future<void> createSupervisonCoordinador({
+    required String tipoSolicitud,
+  }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.createSupervisionCoordinador(
