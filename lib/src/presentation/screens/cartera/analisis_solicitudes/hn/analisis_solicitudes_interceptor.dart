@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_asalariado_hn_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_nueva_menor_mil_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_represtamo_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_solicitud_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -24,7 +25,12 @@ class AnalisisSolicitudesInterceptorHN extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (type) {
-      AnalisisSolicitudesInterceptorType.nueva => const Text('nueva menor mil'),
+      AnalisisSolicitudesInterceptorType.nueva => AnalisisNuevaMenorMilHnForm(
+          index: index,
+          title: title,
+          subtitle: subtitle,
+          description: description,
+        ),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
         AnalisisSolicitudNuevaMayorAMilHn(
           title: title,

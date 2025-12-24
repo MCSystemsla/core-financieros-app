@@ -85,6 +85,12 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
             ),
             child: BlocBuilder<AnalisisChecksCubit, AnalisisChecksState>(
               builder: (context, state) {
+                final analisisItems = {
+                  'Analisis de crédito': state.tieneAnalisis,
+                  'Plan de inversión': state.tienePlanInversion,
+                  'Fiadores': state.tieneFiadores,
+                  'Garantia': state.tieneGarantia,
+                };
                 return Column(
                   children: [
                     Container(
@@ -226,18 +232,28 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                           if (actions.contains(TypeAction.cerrar.codigo))
                             BlocBuilder<CerrarAnalisisCubit,
                                 CerrarAnalisisState>(
-                              builder: (context, state) {
+                              builder: (context, cerrarState) {
                                 return SelectableCardItem(
-                                  isLoading: state.status == Status.inProgress,
+                                  isLoading:
+                                      cerrarState.status == Status.inProgress,
                                   icon: Icons.assignment_turned_in,
                                   color: const Color(0xFFB91C1C),
                                   title: 'Cerrar Analisis',
                                   subtitle: 'Cerrar analisis de crédito',
-                                  onTap: () => {
+                                  onTap: () {
+                                    List<String> pendientes = analisisItems
+                                        .entries
+                                        .where((entry) => entry.value == false)
+                                        .map((entry) => entry.key)
+                                        .toList();
+                                    final havePendientesTitle = pendientes
+                                            .isNotEmpty
+                                        ? '\nPendientes: ${pendientes.join(', ')}'
+                                        : '';
                                     CloseAnalisisDialog(
                                       context: context,
                                       title:
-                                          '¿Estás seguro de cerrar el analisis?',
+                                          '¿Estás seguro de cerrar el analisis?$havePendientesTitle',
                                       onYes: () {
                                         context.pop();
                                         context
@@ -252,7 +268,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                     ).showDialog(
                                       context,
                                       dialogType: DialogType.infoReverse,
-                                    )
+                                    );
                                   },
                                 );
                               },

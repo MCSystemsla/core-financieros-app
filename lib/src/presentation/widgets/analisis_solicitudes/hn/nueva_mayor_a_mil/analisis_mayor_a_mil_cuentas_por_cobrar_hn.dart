@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_a_mil_nivel_produccion_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_cuentas_por_cobrar_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ventas_nivel_produccion_hn_widget.dart';
@@ -137,8 +136,6 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(2),
                         ],
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         onChange: (value) {
                           String newValue = toNumericString(value);
                           cubit.onFieldChanged(
@@ -161,8 +158,6 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                             ),
                         title: 'Valor en L.',
                         textInputType: TextInputType.number,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         inputFormatters: [
                           CurrencyInputFormatter(
                             mantissaLength: 0,
@@ -190,8 +185,6 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                         title:
                             'Porcentaje de venta de los productos de baja rotación',
                         textInputType: TextInputType.number,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(2),
@@ -216,8 +209,6 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                             .toNullIfEmptyOrZero(),
                         title: 'Valor en L.',
                         icon: const Icon(Icons.wallet),
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
                         textInputType: TextInputType.number,
                         inputFormatters: [
                           CurrencyInputFormatter(
