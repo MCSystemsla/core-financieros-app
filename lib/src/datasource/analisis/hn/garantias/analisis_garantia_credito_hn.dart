@@ -72,7 +72,7 @@ class AnalisisGarantiaDetalle {
   final int? anioVehiculo;
   final String? numPlaca;
   final int? medidaMetros2;
-  final int cantidad;
+  final int? cantidad;
   final int? articuloGarantiaCodigo;
   final double valorComercial;
   final int objAnalisisGarantiaID;
@@ -87,13 +87,11 @@ class AnalisisGarantiaDetalle {
   final String? asiento;
   final String? nombreDuenoPropiedad;
   final String? cedulaDuenoPropiedad;
-  final String? localizacion;
   final String? direccion;
   final String? numeroEscritura;
   final String? numeroEscrituraPublica;
   final DateTime? fechaElaboracionEscritura;
   final String? notarioElaboracionEscritura;
-  final String? descGeneral;
   final String? descDetallada;
   final DateTime? fechaIngreso;
   final DateTime? fechaInscripcion;
@@ -109,7 +107,7 @@ class AnalisisGarantiaDetalle {
     required this.municipioCodigo,
     required this.aldeaCodigo,
     required this.departamentoCodigo,
-    required this.cantidad,
+    this.cantidad,
     this.articuloGarantiaCodigo,
     required this.valorComercial,
     required this.objAnalisisGarantiaID,
@@ -124,13 +122,11 @@ class AnalisisGarantiaDetalle {
     this.asiento,
     this.nombreDuenoPropiedad,
     this.cedulaDuenoPropiedad,
-    this.localizacion,
     this.direccion,
     this.numeroEscritura,
     this.numeroEscrituraPublica,
     this.fechaElaboracionEscritura,
     this.notarioElaboracionEscritura,
-    this.descGeneral,
     this.descDetallada,
     this.fechaIngreso,
     this.fechaInscripcion,
@@ -166,14 +162,12 @@ class AnalisisGarantiaDetalle {
         asiento: json['Asiento'],
         nombreDuenoPropiedad: json['NombreDuenoPropiedad'],
         cedulaDuenoPropiedad: json['CedulaDuenoPropiedad'],
-        localizacion: json['Localizacion'],
         direccion: json['Direccion'],
         numeroEscritura: json['NumeroEscritura'],
         numeroEscrituraPublica: json['NumeroEscrituraPublica'],
         fechaElaboracionEscritura:
             DateTime.parse(json['FechaElaboracionEscritura']),
         notarioElaboracionEscritura: json['NotarioElaboracionEscritura'],
-        descGeneral: json['DescGeneral'],
         descDetallada: json['DescDetallada'],
         fechaIngreso: DateTime.parse(json['FechaIngreso']),
         fechaInscripcion: DateTime.parse(json['FechaInscripcion']),
@@ -208,14 +202,12 @@ class AnalisisGarantiaDetalle {
       'Asiento': asiento,
       'NombreDuenoPropiedad': nombreDuenoPropiedad,
       'CedulaDuenoPropiedad': cedulaDuenoPropiedad,
-      'Localizacion': localizacion,
       'Direccion': direccion,
       'NumeroEscritura': numeroEscritura,
       'NumeroEscrituraPublica': numeroEscrituraPublica,
       'FechaElaboracionEscritura':
           fechaElaboracionEscritura?.toUtc().toIso8601String(),
       'NotarioElaboracionEscritura': notarioElaboracionEscritura,
-      'DescGeneral': descGeneral,
       'DescDetallada': descDetallada,
       'FechaIngreso': fechaIngreso?.toUtc().toIso8601String(),
       'FechaInscripcion': fechaInscripcion?.toUtc().toIso8601String(),

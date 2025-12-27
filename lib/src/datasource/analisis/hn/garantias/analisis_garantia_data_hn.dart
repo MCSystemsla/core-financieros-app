@@ -29,12 +29,16 @@ class GarantiaData {
   final String tipoPersona;
   final String tipoGarantia;
   final String cedulaCliente;
+  final int objArticuloID;
+  final int articuloCodigo;
 
   GarantiaData({
     required this.id,
     required this.tipoPersona,
     required this.tipoGarantia,
     required this.cedulaCliente,
+    required this.objArticuloID,
+    required this.articuloCodigo,
   });
 
   factory GarantiaData.fromJson(Map<String, dynamic> json) => GarantiaData(
@@ -42,6 +46,8 @@ class GarantiaData {
         tipoPersona: json['tipoPersona'],
         tipoGarantia: json['tipoGarantia'],
         cedulaCliente: json['cedulaCliente'],
+        objArticuloID: json['objArticuloID'],
+        articuloCodigo: json['articuloCodigo'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +55,7 @@ class GarantiaData {
         'tipoPersona': tipoPersona,
         'tipoGarantia': tipoGarantia,
         'cedulaCliente': cedulaCliente,
+        'objArticuloID': objArticuloID,
+        'articuloCodigo': articuloCodigo,
       };
 }

@@ -1,7 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_detalle/analisis_garantia_detalle_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -9,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_articulo/tipo_articulo_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,6 +82,7 @@ class _ArticuloFormState extends State<_ArticuloForm> {
   int? dpfsId;
   int? articuloGarantiaCodigo;
   String? descripcion;
+  String? objArticuloCodigo;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +100,7 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                 setState(() {
                   objAnalisisGarantiaID = v?.value;
                   tipoGarantiaName = v?.name;
+                  objArticuloCodigo = v?.anotherValue.toString();
                 });
               },
               validator: (value) =>
@@ -106,7 +108,11 @@ class _ArticuloFormState extends State<_ArticuloForm> {
               hintText: 'Selecciona una garantía',
               enabled: true,
               items: widget.garantias
-                  .map((e) => Item(name: e.tipoGarantia, value: e.id))
+                  .map((e) => Item(
+                        name: e.tipoGarantia,
+                        value: e.id,
+                        anotherValue: e.articuloCodigo,
+                      ))
                   .toList(),
             ),
             if (tipoGarantiaName == TipoGarantiaEnum.liquida.codigo) ...[
@@ -140,36 +146,10 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                 },
               ),
             ],
-            if (tipoGarantiaName != TipoGarantiaEnum.liquida.codigo &&
-                tipoGarantiaName != null) ...[
-              const Gap(20),
-              BlocBuilder<AnalisisArticuloCubit, AnalisisArticuloState>(
-                builder: (context, state) {
-                  return SheetSearchDropdown(
-                    title: 'Articulo',
-                    isRequired: true,
-                    validator: (value) => ClassValidator.validateRequired(
-                        value?.value.toString()),
-                    onChanged: (v) {
-                      articuloGarantiaCodigo = v?.value;
-                      descripcion = v?.anotherValue;
-                    },
-                    hintText: 'Selecciona un articulo',
-                    enabled: true,
-                    items: state.analisisGarantiaArticuloHn
-                        .map((e) => Item(
-                              name: e.nombre,
-                              value: e.valor,
-                              anotherValue: e.descripcion,
-                            ))
-                        .toList(),
-                  );
-                },
-              ),
-            ],
             AnalisisGarantiaFormInterceptor(
               key: ValueKey(tipoGarantiaName),
-              tipoGarantia: tipoGarantiaName?.toTipoGarantiaEnum(),
+              tipoArticulo: (int.tryParse(objArticuloCodigo ?? '0') ?? 0)
+                  .toTipoArticuloEnum,
               dpfsId: dpfsId ?? 0,
               objAnalisisGarantiaID:
                   int.tryParse(objAnalisisGarantiaID ?? '0') ?? 0,

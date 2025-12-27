@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/select_date/select_date_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
@@ -11,7 +10,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
-import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,41 +18,55 @@ import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class AnalisisGarantiaFormHipotecario extends StatefulWidget {
+class AnalisisGarantiaFormVehiculo extends StatefulWidget {
   final int dpfsId;
   final int objAnalisisGarantiaID;
   final String? descripcion;
   final int? articuloGarantiaCodigo;
-  const AnalisisGarantiaFormHipotecario({
+
+  const AnalisisGarantiaFormVehiculo({
     super.key,
     required this.dpfsId,
     required this.objAnalisisGarantiaID,
-    this.descripcion,
     this.articuloGarantiaCodigo,
+    this.descripcion,
   });
 
   @override
-  State<AnalisisGarantiaFormHipotecario> createState() =>
-      _AnalisisGarantiaFormHipotecarioState();
+  State<AnalisisGarantiaFormVehiculo> createState() =>
+      _AnalisisGarantiaFormVehiculoState();
 }
 
-class _AnalisisGarantiaFormHipotecarioState
-    extends State<AnalisisGarantiaFormHipotecario> {
+class _AnalisisGarantiaFormVehiculoState
+    extends State<AnalisisGarantiaFormVehiculo> {
+  int? cantidad;
+  double? valorComercial;
+  String? marca;
+  String? modelo;
+  String? color;
+  String? serie;
+  String? anioVehiculo;
+  String? numPlaca;
+  String? direccion;
+  String? numeroEscritura;
+  String? numeroEscrituraPublica;
+  DateTime? fechaElaboracionEscritura;
+  DateTime? fechaDeIngreso;
+  DateTime? fechaInscripcion;
+  DateTime? fechaVencimiento;
+  String? notarioElaboracionEscritura;
+  String? descGeneral;
+  String? descDetallada;
+  String? numEscritura;
+  bool inscrito = false;
+  String? medidas;
+  String? numAsiento;
+  String? codValuadorCnbs;
   String? departamento;
   String? municipio;
   String? aldea;
-  String? numEscritura;
-  String? numDeLomo;
-  String? folio;
-  String? vrs2;
-  String? mts2;
-  DateTime? fechaInscripcion;
-  String? direccion;
-  double? valorComercial;
-  int? valorAvaluo;
   String? descripcion;
-  String? descDetallada;
-
+  int? valorAvaluo;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -89,7 +101,55 @@ class _AnalisisGarantiaFormHipotecarioState
               ),
               const Gap(12),
               OutlineTextfieldWidget(
-                title: 'Direccion',
+                title: 'Marca',
+                icon: Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                textInputType: TextInputType.number,
+                validator: (value) => ClassValidator.validateRequired(value),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  marca = value;
+                },
+              ),
+              const Gap(12),
+              OutlineTextfieldWidget(
+                title: 'Modelo',
+                icon: Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                textInputType: TextInputType.number,
+                validator: (value) => ClassValidator.validateRequired(value),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  modelo = value;
+                },
+              ),
+              const Gap(12),
+              OutlineTextfieldWidget(
+                title: 'Color',
+                icon: Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                textInputType: TextInputType.number,
+                validator: (value) => ClassValidator.validateRequired(value),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  color = value;
+                },
+              ),
+              const Gap(12),
+              OutlineTextfieldWidget(
+                title: 'Ano',
                 icon: Icon(
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
@@ -100,7 +160,23 @@ class _AnalisisGarantiaFormHipotecarioState
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 onChange: (value) {
-                  direccion = value;
+                  anioVehiculo = value;
+                },
+              ),
+              const Gap(12),
+              OutlineTextfieldWidget(
+                title: 'Placa',
+                icon: Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                textInputType: TextInputType.number,
+                validator: (value) => ClassValidator.validateRequired(value),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  numPlaca = value;
                 },
               ),
               const Gap(20),
@@ -154,7 +230,7 @@ class _AnalisisGarantiaFormHipotecarioState
               ],
               const Gap(20),
               OutlineTextfieldWidget(
-                title: 'Valor de mercado',
+                title: 'Valor Comercial',
                 icon: Icon(
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
@@ -232,113 +308,6 @@ class _AnalisisGarantiaFormHipotecarioState
                   descDetallada = value;
                 },
               ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'No. de escritura',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  numEscritura = value;
-                },
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'No. de tomo',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  numDeLomo = value;
-                },
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'Folio',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  folio = value;
-                },
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'Fecha de inscripcion',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(
-                    fechaInscripcion?.selectorFormat()),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                hintText: fechaInscripcion?.selectorFormat(),
-                readOnly: true,
-                onTap: () async {
-                  final pickedDate = await pickDate(
-                    context,
-                    initialDate: DateTime.now(),
-                    lastDate: DateTime.now(),
-                  );
-                  if (pickedDate == null) return;
-                  setState(() {
-                    fechaInscripcion = pickedDate;
-                  });
-                },
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'Vrs2',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  vrs2 = value;
-                },
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                title: 'Mts2',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  mts2 = value;
-                },
-              ),
               const Gap(20),
               BlocConsumer<AnalisisGarantiaDetalleCubit,
                   AnalisisGarantiaDetalleState>(
@@ -390,21 +359,20 @@ class _AnalisisGarantiaFormHipotecarioState
                                 departamentoCodigo: departamento!,
                                 municipioCodigo: municipio!,
                                 aldeaCodigo: aldea!,
+                                marca: marca,
+                                modelo: modelo,
+                                color: color,
+                                serie: serie,
+                                valorComercial: valorComercial!,
                                 objAnalisisGarantiaID:
                                     widget.objAnalisisGarantiaID,
+                                anioVehiculo: int.tryParse(anioVehiculo!),
+                                numPlaca: numPlaca,
                                 articuloGarantiaCodigo:
                                     widget.articuloGarantiaCodigo,
-                                numEscritura: numEscritura,
-                                tomo: numDeLomo,
-                                folio: folio,
-                                medidasVaras2: int.tryParse(vrs2!),
-                                medidaMetros2: int.tryParse(mts2!),
-                                fechaInscripcion: fechaInscripcion,
-                                direccion: direccion,
-                                valorComercial: valorComercial!,
-                                valorAvaluo: valorAvaluo!,
-                                descripcion: descripcion,
                                 descDetallada: descDetallada,
+                                descripcion: descripcion,
+                                valorAvaluo: valorAvaluo,
                               ),
                             );
                       },
