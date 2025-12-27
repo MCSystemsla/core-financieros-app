@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
@@ -346,4 +347,44 @@ class GetAnalisisFiadoresChecksEndpointHN extends Endpoint {
         'database': LocalStorage().database,
         'TipoSolicitud': tipoSolicitud,
       };
+}
+
+class CrearAnalisisMenorMilNuevaHNEndpoint extends Endpoint {
+  final AnalisisMenorMilHN analisisSolicitudMenorMil;
+
+  CrearAnalisisMenorMilNuevaHNEndpoint({
+    required this.analisisSolicitudMenorMil,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path =>
+      '/cartera/analisis-nueva-menor/crear-analisis-nueva-menor-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
+}
+
+class CrearAnalisisMenorMilReprestamoHNEndpoint extends Endpoint {
+  final AnalisisMenorMilHN analisisSolicitudMenorMil;
+
+  CrearAnalisisMenorMilReprestamoHNEndpoint({
+    required this.analisisSolicitudMenorMil,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path =>
+      '/cartera/analisis-represtamo/crear-analisis-represtamo-menor-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
 }

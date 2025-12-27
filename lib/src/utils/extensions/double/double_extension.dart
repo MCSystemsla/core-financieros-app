@@ -17,3 +17,12 @@ extension DoubleExtension on double {
     return esFormatter.format(this).trim();
   }
 }
+
+extension DoubleFix on double {
+  String toSafeString(int fractionDigits) {
+    if (isNaN || isInfinite) {
+      return 0.toStringAsFixed(fractionDigits);
+    }
+    return toStringAsFixed(fractionDigits);
+  }
+}

@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_checks_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
@@ -14,6 +15,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:logger/logger.dart';
 
 abstract class AnalisisRepositoryHn {
@@ -65,6 +67,16 @@ abstract class AnalisisRepositoryHn {
   Future<FiadoresCheckResponse> fiadoresChecks({
     required int numeroSolicitud,
     required String tipoSolicitud,
+  });
+  Future<void> createAnalisisNuevaMenorMil({
+    required AnalisisMenorMilHN analisis,
+  });
+  Future<void> createAnalisisReprestamoMenorMil({
+    required AnalisisMenorMilHN analisis,
+  });
+  Future<void> createAnalisisMenorMilByTipoSolicitud({
+    required AnalisisMenorMilHN analisis,
+    required AnalisisSolicitudesInterceptorType tipoSolicitud,
   });
 }
 
@@ -397,5 +409,62 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       _logger.e(e);
       rethrow;
     }
+  }
+
+  @override
+  Future<void> createAnalisisNuevaMenorMil({
+    required AnalisisMenorMilHN analisis,
+  }) async {
+    final endpoint = CrearAnalisisMenorMilNuevaHNEndpoint(
+      analisisSolicitudMenorMil: analisis,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisReprestamoMenorMil({
+    required AnalisisMenorMilHN analisis,
+  }) async {
+    final endpoint = CrearAnalisisMenorMilNuevaHNEndpoint(
+      analisisSolicitudMenorMil: analisis,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createAnalisisMenorMilByTipoSolicitud({
+    required AnalisisMenorMilHN analisis,
+    required AnalisisSolicitudesInterceptorType tipoSolicitud,
+  }) async {
+    return switch (tipoSolicitud) {
+      AnalisisSolicitudesInterceptorType.nueva => createAnalisisNuevaMenorMil(
+          analisis: analisis,
+        ),
+      AnalisisSolicitudesInterceptorType.represtamo =>
+        createAnalisisReprestamoMenorMil(
+          analisis: analisis,
+        ),
+      _ => throw Exception('Tipo Solicitud no reconocido: $tipoSolicitud'),
+    };
   }
 }

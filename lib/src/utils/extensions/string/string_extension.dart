@@ -23,7 +23,11 @@ extension CapitalizeString on String {
 
 extension EmptyOrZeroStringToNull on String? {
   String? toNullIfEmptyOrZero() {
-    if (this == null || this!.trim().isEmpty) {
+    if (this == null ||
+        this == '0' ||
+        this == '0.0' ||
+        this == '0.00' ||
+        this!.trim().isEmpty) {
       return null;
     }
     return this;

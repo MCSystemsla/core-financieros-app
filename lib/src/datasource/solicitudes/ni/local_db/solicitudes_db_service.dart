@@ -89,7 +89,9 @@ class ObjectBoxService {
           log('⚠️ Base de datos local borrada.');
         }
 
-        final store = await openStore();
+        final store = await openStore(
+          directory: '${dbDir.path}/solicitudes_db',
+        );
         return ObjectBoxService._create(store);
       }
 

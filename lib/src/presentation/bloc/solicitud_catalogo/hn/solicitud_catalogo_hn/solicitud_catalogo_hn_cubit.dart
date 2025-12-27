@@ -315,15 +315,26 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
   Future<void> getAndSaveParametros() async {
     final edadMinima =
         await _repository.getParametroValor(nombre: 'EDADMINIMACLIENTE');
+
     final edadMaxima =
         await _repository.getParametroValor(nombre: 'EDADMAXIMACLIENTE');
+
     final incobrablesxCobrar =
         await _repository.getParametroValor(nombre: 'INCOBRABLESDECXCOBRAR');
+
     final fechaOperacion =
         await _repository.getParametroValor(nombre: 'FECHAOPERACION');
+
     final montoMenorAMil =
         await _repository.getParametroValor(nombre: 'MENORMIL');
 
+    final relacionminrazoncuotarecurrente = await _repository.getParametroValor(
+        nombre: 'RELACIONMINRAZONCUOTACREDITORECURRENTE');
+
+    final relacionMinRazonCuotaCreditoNueva =
+        await _repository.getParametroValor(
+      nombre: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
+    );
     _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
       valor: edadMinima.data.valor,
       nombre: 'EDADMINIMACLIENTE',
@@ -348,6 +359,16 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       valor: montoMenorAMil.data.valor,
       type: 'MENORMIL',
       nombre: 'MENORMIL',
+    ));
+    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+      valor: relacionminrazoncuotarecurrente.data.valor,
+      type: 'RELACIONMINRAZONCUOTACREDITORECURRENTE',
+      nombre: 'RELACIONMINRAZONCUOTACREDITORECURRENTE',
+    ));
+    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+      valor: relacionMinRazonCuotaCreditoNueva.data.valor,
+      type: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
+      nombre: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
     ));
   }
 
