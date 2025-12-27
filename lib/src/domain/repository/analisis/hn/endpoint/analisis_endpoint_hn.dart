@@ -186,6 +186,11 @@ class CreateAnalisisGarantiasDetalleHNEndpoint extends Endpoint {
 }
 
 class ObtenerArticulosGarantiasHNEndpoint extends Endpoint {
+  final String tipoGarantiaCodigo;
+
+  ObtenerArticulosGarantiasHNEndpoint({
+    required this.tipoGarantiaCodigo,
+  });
   @override
   Method get method => Method.get;
 
@@ -198,6 +203,7 @@ class ObtenerArticulosGarantiasHNEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+        'tipoGarantiaCodigo': tipoGarantiaCodigo,
       };
 }
 

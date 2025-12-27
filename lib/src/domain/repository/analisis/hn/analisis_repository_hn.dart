@@ -41,7 +41,9 @@ abstract class AnalisisRepositoryHn {
   Future<void> createAnalisisGarantias({
     required AnalisisGarantiaCreditoHn analisisGarantiaCreditoHn,
   });
-  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos();
+  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos({
+    required String tipoGarantiaCodigo,
+  });
   Future<AnalisisGarantiaDataHn> getAnalisisGarantiasByNumero({
     required int numeroSolicitud,
   });
@@ -251,8 +253,11 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   }
 
   @override
-  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos() async {
-    final endpoint = ObtenerArticulosGarantiasHNEndpoint();
+  Future<AnalisisGarantiaArticuloHn> getAnalisisGarantiasArticulos(
+      {required String tipoGarantiaCodigo}) async {
+    final endpoint = ObtenerArticulosGarantiasHNEndpoint(
+      tipoGarantiaCodigo: tipoGarantiaCodigo,
+    );
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

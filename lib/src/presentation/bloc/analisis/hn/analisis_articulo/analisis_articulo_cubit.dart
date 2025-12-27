@@ -12,10 +12,14 @@ class AnalisisArticuloCubit extends Cubit<AnalisisArticuloState> {
 
   AnalisisArticuloCubit(this._repository) : super(AnalisisArticuloInitial());
 
-  Future<void> getAnalisisGarantiasArticulos() async {
+  Future<void> getAnalisisGarantiasArticulos({
+    required String tipoGarantiaCodigo,
+  }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await _repository.getAnalisisGarantiasArticulos();
+      final resp = await _repository.getAnalisisGarantiasArticulos(
+        tipoGarantiaCodigo: tipoGarantiaCodigo,
+      );
       emit(state.copyWith(
         status: Status.done,
         analisisGarantiaArticuloHn: resp.data,

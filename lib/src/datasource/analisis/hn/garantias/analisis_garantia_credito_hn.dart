@@ -31,6 +31,7 @@ class AnalisisGarantiaCreditoHn {
 class AnalisisGarantia {
   final String tipoPersonaCodigo;
   final String tipoGarantiaCodigo;
+  final int articuloCodigo;
   final int? numCredito;
   final String cedulaPropietario;
   final String? numCreditoAnterior;
@@ -39,6 +40,7 @@ class AnalisisGarantia {
   AnalisisGarantia({
     required this.tipoPersonaCodigo,
     required this.tipoGarantiaCodigo,
+    required this.articuloCodigo,
     this.numCredito,
     required this.cedulaPropietario,
     this.numCreditoAnterior,
@@ -53,6 +55,7 @@ class AnalisisGarantia {
       'CedulaPropietario': cedulaPropietario,
       'NumCreditoAnterior': numCreditoAnterior,
       'NumGarantiaAnterior': numGarantiaAnterior,
+      'ArticuloCodigo': articuloCodigo,
     };
     data.removeWhere(
         (key, value) => value == null || value == '' || value == 0);

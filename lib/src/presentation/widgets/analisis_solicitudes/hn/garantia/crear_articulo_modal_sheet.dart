@@ -131,9 +131,6 @@ class _CreateArticuloModalSheetState extends State<CreateArticuloModalSheet> {
                             context: context,
                             title: 'Articulo creado exitosamente',
                             onDone: () => {
-                              context
-                                  .read<AnalisisArticuloCubit>()
-                                  .getAnalisisGarantiasArticulos(),
                               context.pop(),
                               context.pop(),
                             },

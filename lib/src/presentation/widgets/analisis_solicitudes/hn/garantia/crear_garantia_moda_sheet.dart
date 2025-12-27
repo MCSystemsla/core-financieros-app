@@ -2,11 +2,14 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +34,9 @@ class CreateGarantiaModalSheet extends StatefulWidget {
 class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
   final formKey = GlobalKey<FormState>();
   String? tipoGarantia;
+
   String? tipoPersona;
+  String? tipoArticulo;
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
@@ -76,7 +81,15 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       onChanged: (v) {
-                        tipoGarantia = v?.value;
+                        if (v == null) return;
+                        setState(() {
+                          tipoGarantia = v.value;
+                        });
+                        context
+                            .read<AnalisisArticuloCubit>()
+                            .getAnalisisGarantiasArticulos(
+                              tipoGarantiaCodigo: v.value,
+                            );
                       },
                     ),
                     const Gap(20),
@@ -89,20 +102,34 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                         tipoPersona = v?.value;
                       },
                     ),
-                    // const Gap(20),
-                    // OutlineTextfieldWidget(
-                    //   title: 'Valor comercial total',
-                    //   icon: const Icon(Icons.comment_bank_sharp),
-                    //   validator: (value) =>
-                    //       ClassValidator.validateRequired(value),
-                    //   textInputType: TextInputType.number,
-                    //   inputFormatters: [
-                    //     CurrencyInputFormatter(
-                    //       mantissaLength: 0,
-                    //     ),
-                    //   ],
-                    //   onChange: (value) {},
-                    // ),
+                    if (tipoGarantia != null) ...[
+                      const Gap(20),
+                      BlocBuilder<AnalisisArticuloCubit, AnalisisArticuloState>(
+                        builder: (context, state) {
+                          return SheetSearchDropdown(
+                            validator: (value) =>
+                                ClassValidator.validateRequired(
+                                    value?.value.toString()),
+                            title: 'Articulo',
+                            isRequired: true,
+                            onChanged: (v) {
+                              if (v == null) return;
+                              setState(() {
+                                tipoArticulo = v.value.toString();
+                              });
+                            },
+                            hintText: 'ingresa un articulo',
+                            enabled: true,
+                            items: state.analisisGarantiaArticuloHn
+                                .map(
+                                  (e) =>
+                                      Item(name: e.descripcion, value: e.valor),
+                                )
+                                .toList(),
+                          );
+                        },
+                      ),
+                    ],
                     const Gap(20),
                     BlocConsumer<AnalisisGarantiaCubit, AnalisisGarantiaState>(
                       listenWhen: (prev, curr) =>
@@ -158,6 +185,9 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                                     analisisGarantia: AnalisisGarantia(
                                       tipoGarantiaCodigo: tipoGarantia!,
                                       tipoPersonaCodigo: tipoPersona!,
+                                      articuloCodigo:
+                                          int.tryParse(tipoArticulo ?? '0') ??
+                                              0,
                                       cedulaPropietario: widget.cedulaCliente,
                                     ),
                                   );

@@ -29,10 +29,7 @@ class GarantiaHNScreen extends StatelessWidget {
           create: (ctx) => AnalisisGarantiaCubit(repository)
             ..getGarantiasByNumero(numeroSolicitud: numeroSolicitud),
         ),
-        BlocProvider(
-          create: (ctx) => AnalisisArticuloCubit(repository)
-            ..getAnalisisGarantiasArticulos(),
-        ),
+        BlocProvider(create: (ctx) => AnalisisArticuloCubit(repository)),
       ],
       child: Scaffold(
         appBar: AppBar(

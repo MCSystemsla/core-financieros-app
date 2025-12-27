@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/crear_garantia_screen.dart';
@@ -27,8 +28,15 @@ class TiposGarantiaHNWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: context.read<AnalisisGarantiaCubit>(),
+                builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: context.read<AnalisisGarantiaCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: context.read<AnalisisArticuloCubit>(),
+                    ),
+                  ],
                   child: CrearGarantiaScreen(
                     numeroSolicitud: numeroSolicitud,
                     solicitudCodigo: solicitudCodigo,
