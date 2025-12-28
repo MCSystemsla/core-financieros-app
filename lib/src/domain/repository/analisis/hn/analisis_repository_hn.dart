@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_r
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
@@ -80,6 +81,7 @@ abstract class AnalisisRepositoryHn {
     required AnalisisMenorMilHN analisis,
     required AnalisisSolicitudesInterceptorType tipoSolicitud,
   });
+  Future<EvaluadorCnbsResponse> getEvaluadoresGarantia();
 }
 
 class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
@@ -471,5 +473,24 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         ),
       _ => throw Exception('Tipo Solicitud no reconocido: $tipoSolicitud'),
     };
+  }
+
+  @override
+  Future<EvaluadorCnbsResponse> getEvaluadoresGarantia() async {
+    final endpoint = GetEvaluadoresGarantiaHnEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = EvaluadorCnbsResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 }

@@ -394,3 +394,19 @@ class CrearAnalisisMenorMilReprestamoHNEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
 }
+
+class GetEvaluadoresGarantiaHnEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-garantias/obtener-evaluadores';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/evaluadores_cnbs_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
@@ -48,6 +49,7 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
   String? marca;
   String? modelo;
   String? serie;
+  String? evaluadorCodigo;
 
   final formKey = GlobalKey<FormState>();
   @override
@@ -225,18 +227,12 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                 },
               ),
               const Gap(20),
-              OutlineTextfieldWidget(
-                title: 'Evaluador',
-                icon: Icon(
-                  Icons.wallet,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                validator: (value) => ClassValidator.validateRequired(value),
-                inputFormatters: [
-                  CurrencyInputFormatter(mantissaLength: 0),
-                ],
-                onChange: (value) {},
+              EvaluadoresCnbsDropdownWidget(
+                onChanged: (value) {
+                  evaluadorCodigo = value?.value;
+                },
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
               ),
               const Gap(20),
               OutlineTextfieldWidget(
@@ -316,6 +312,7 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                             .read<AnalisisGarantiaDetalleCubit>()
                             .createAnalisisDetalle(
                               analisisGarantiaDetalle: AnalisisGarantiaDetalle(
+                                codValuadorCnbs: evaluadorCodigo,
                                 objAnalisisGarantiaID:
                                     widget.objAnalisisGarantiaID,
                                 articuloGarantiaCodigo:

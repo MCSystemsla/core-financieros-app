@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_detalle/analisis_garantia_detalle_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/evaluadores_cnbs/evaluadores_cnbs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/interceptor/analisis_garantia_form_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -43,6 +44,11 @@ class _CrearGarantiaDetalleScreenState
           create: (ctx) => AnalisisGarantiaDetalleCubit(
             repository,
           ),
+        ),
+        BlocProvider(
+          create: (ctx) => EvaluadoresCnbsCubit(
+            repository,
+          )..getEvaluadoresGarantia(),
         ),
         BlocProvider(
           create: (ctx) => AnalisisDpfsCubit(
