@@ -11,7 +11,6 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
@@ -89,10 +88,9 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   marca = value;
@@ -105,10 +103,9 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   modelo = value;
@@ -121,10 +118,9 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   serie = value;
@@ -137,10 +133,9 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   color = value;
@@ -250,7 +245,6 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -266,7 +260,6 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),

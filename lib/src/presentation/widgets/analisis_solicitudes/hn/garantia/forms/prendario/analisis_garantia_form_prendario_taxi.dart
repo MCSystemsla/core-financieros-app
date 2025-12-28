@@ -102,10 +102,9 @@ class _AnalisisGarantiaFormPrendarioTaxiState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   propietario = value;
@@ -215,7 +214,6 @@ class _AnalisisGarantiaFormPrendarioTaxiState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -231,7 +229,6 @@ class _AnalisisGarantiaFormPrendarioTaxiState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),

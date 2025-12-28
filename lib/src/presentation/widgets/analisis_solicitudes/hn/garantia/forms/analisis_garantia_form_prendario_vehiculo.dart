@@ -106,7 +106,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -122,7 +121,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -138,7 +136,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -158,6 +155,7 @@ class _AnalisisGarantiaFormVehiculoState
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(4),
                 ],
                 onChange: (value) {
                   anioVehiculo = value;
@@ -170,7 +168,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -283,7 +280,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -299,7 +295,6 @@ class _AnalisisGarantiaFormVehiculoState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),

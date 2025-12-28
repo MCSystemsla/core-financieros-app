@@ -94,10 +94,9 @@ class _AnalisisGarantiaFormHipotecarioState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   direccion = value;
@@ -165,7 +164,7 @@ class _AnalisisGarantiaFormHipotecarioState
                   CurrencyInputFormatter(mantissaLength: 0),
                 ],
                 onChange: (value) {
-                  final newValue = toNumericString(value);
+                  final newValue = toNumericString(value, allowPeriod: true);
                   valorComercial = double.tryParse(newValue);
                 },
               ),
@@ -207,7 +206,6 @@ class _AnalisisGarantiaFormHipotecarioState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -223,7 +221,6 @@ class _AnalisisGarantiaFormHipotecarioState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -271,10 +268,9 @@ class _AnalisisGarantiaFormHipotecarioState
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
+                  UpperCaseTextFormatter(),
                 ],
                 onChange: (value) {
                   folio = value;
@@ -290,9 +286,6 @@ class _AnalisisGarantiaFormHipotecarioState
                 textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(
                     fechaInscripcion?.selectorFormat()),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
                 hintText: fechaInscripcion?.selectorFormat(),
                 readOnly: true,
                 onTap: () async {

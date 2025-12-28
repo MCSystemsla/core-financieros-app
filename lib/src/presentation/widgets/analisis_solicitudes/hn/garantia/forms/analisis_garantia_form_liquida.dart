@@ -262,7 +262,6 @@ class _AnalisisGarantiaFormLiquidaState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -278,7 +277,6 @@ class _AnalisisGarantiaFormLiquidaState
                   Icons.wallet,
                   color: AppColors.getPrimaryColor(),
                 ),
-                textInputType: TextInputType.number,
                 validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   UpperCaseTextFormatter(),
