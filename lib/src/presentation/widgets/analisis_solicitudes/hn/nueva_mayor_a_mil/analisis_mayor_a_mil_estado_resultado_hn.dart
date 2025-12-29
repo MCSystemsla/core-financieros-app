@@ -1,7 +1,6 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
   const AnalisisMayorAMilEstadoResultadoHN({
@@ -572,17 +570,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                         CustomElevatedButton(
                           onPressed: () {
                             if (!formKey.currentState!.validate()) return;
-                            if (state.saldoDisponibleUf < 0 ||
-                                state.totalIngresos < 0 ||
-                                state.resultadoLiquido < 0) {
-                              CustomAlertDialog(
-                                context: context,
-                                title:
-                                    'Los Saldos Calculados no pueden ser negativos',
-                                onDone: () => context.pop(),
-                              ).showDialog(context);
-                              return;
-                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -24,6 +24,7 @@ class ComiteSolicitudResponse {
 }
 
 class ComiteSolicitudData {
+  final int? id;
   final int? actaNumero;
   final String? numeroSolicitud;
   final String? nombreProducto;
@@ -66,6 +67,7 @@ class ComiteSolicitudData {
   final num? montoSeguroVida;
 
   const ComiteSolicitudData({
+    this.id,
     this.actaNumero,
     this.numeroSolicitud,
     this.nombreProducto,
@@ -110,6 +112,7 @@ class ComiteSolicitudData {
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
       ComiteSolicitudData(
+        id: json['ID'],
         actaNumero: json['ActaNumero'],
         numeroSolicitud: json['NumeroSolicitud'],
         nombreProducto: json['NombreProducto'],
@@ -196,5 +199,6 @@ class ComiteSolicitudData {
         'Observacion': observacion,
         'TasaSaldoDeudor': tasaSaldoDeudor,
         'MontoSeguroVida': montoSeguroVida,
+        'ID': id,
       };
 }

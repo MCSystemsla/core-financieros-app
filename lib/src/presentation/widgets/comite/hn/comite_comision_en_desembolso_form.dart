@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -88,17 +89,17 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
             onChange: (value) {},
           ),
           const Gap(20),
-          OutlineTextfieldWidget(
-            title: 'Servicios',
-            icon: Icon(
-              Icons.miscellaneous_services_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            validator: (value) => ClassValidator.validateRequired(value),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
+          AnalisisCardListHn(
+            title: 'Cobros de servicios',
+            onTap: () {},
+            items: [
+              AnalisisCardItem(
+                icon: Icons.credit_card,
+                label: 'Total créditos a cancelar',
+                value: 2.toString(),
+                color: Colors.green,
+              ),
             ],
-            onChange: (value) {},
           ),
           const Gap(20),
         ],
