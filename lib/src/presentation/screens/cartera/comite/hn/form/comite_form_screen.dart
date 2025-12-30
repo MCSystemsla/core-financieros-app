@@ -184,6 +184,7 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
             const Gap(12),
             ComiteComisionEnDesembolsoForm(
               data: widget.data,
+              numeroSolicitud: int.tryParse(widget.data.numeroSolicitud!) ?? 0,
             ),
             const Gap(12),
             ComiteParametrosForm2(
