@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
@@ -371,7 +372,8 @@ class _CreateCreditoContainerFormState
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: monto.toCurrencyString(),
+                      initialValue:
+                          monto.toCurrencyString().toNullIfEmptyOrZero(),
                       title: 'Monto',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -390,7 +392,8 @@ class _CreateCreditoContainerFormState
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: cuota.toCurrencyString(),
+                      initialValue:
+                          cuota.toCurrencyString().toNullIfEmptyOrZero(),
                       title: 'Cuota',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -410,7 +413,8 @@ class _CreateCreditoContainerFormState
                     ),
                     const Gap(20),
                     OutlineTextfieldWidget(
-                      initialValue: saldo.toCurrencyString(),
+                      initialValue:
+                          saldo.toCurrencyString().toNullIfEmptyOrZero(),
                       title: 'Saldo',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
@@ -478,6 +482,22 @@ class _CreateCreditoContainerFormState
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
+                          if (cuota > monto) {
+                            CustomAlertDialog(
+                              context: context,
+                              title: 'Cuota no puede ser mayor al monto',
+                              onDone: () => context.pop(),
+                            ).showDialog(context);
+                            return;
+                          }
+                          if (saldo > monto) {
+                            CustomAlertDialog(
+                              context: context,
+                              title: 'Saldo no puede ser mayor al monto',
+                              onDone: () => context.pop(),
+                            ).showDialog(context);
+                            return;
+                          }
 
                           if (widget.isUpdate) {
                             widget.cubit.updateHistorialCredito(

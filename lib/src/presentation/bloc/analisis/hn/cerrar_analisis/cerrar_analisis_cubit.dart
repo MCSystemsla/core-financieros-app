@@ -13,7 +13,6 @@ class CerrarAnalisisCubit extends Cubit<CerrarAnalisisState> {
   Future<void> closeAnalisis({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   }) async {
     emit(state.copyWith(
       status: Status.inProgress,
@@ -23,7 +22,6 @@ class CerrarAnalisisCubit extends Cubit<CerrarAnalisisState> {
       await _repository.closeAnalisis(
         numeroSolicitud: numeroSolicitud,
         tipoSolicitud: tipoSolicitud,
-        esMayorAMil: esMayorAMil,
       );
       emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {

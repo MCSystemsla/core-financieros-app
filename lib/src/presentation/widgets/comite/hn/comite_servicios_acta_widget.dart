@@ -62,6 +62,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
               esMayorA60: esMayorA60,
               esDPF: esDPF,
               esCreditoHipotecario: esCreditoHipotecario,
+              comiteId: comiteId,
             ),
         ),
         BlocProvider(
@@ -88,6 +89,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
                   errorMsg: state.errorMsg,
                   onPressed: () {
                     context.read<ComiteServiciosCubit>().getComiteServicios(
+                          comiteId: comiteId,
                           numeroSolicitud: numeroSolicitud,
                           plazoCredito: plazoCredito,
                           montoCredito: montoCredito,

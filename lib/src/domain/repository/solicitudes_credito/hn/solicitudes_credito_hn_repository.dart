@@ -112,7 +112,9 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
-        return (false, resp.toString(), null);
+        final errorMsg = resp['message']?.toString() ??
+            'Error de validacion ${resp.toString()}';
+        return (false, errorMsg, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
@@ -167,10 +169,13 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
-        return (false, resp.toString(), null);
+        final errorMsg = resp['message']?.toString() ??
+            'Error de validacion ${resp.toString()}';
+        return (false, errorMsg, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
+
         final (errorMsg, errorCode) = getErrorMessage(resp);
 
         return (false, errorMsg, null);
@@ -283,7 +288,9 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
-        return (false, resp.toString());
+        final errorMsg = resp['message']?.toString() ??
+            'Error de validacion ${resp.toString()}';
+        return (false, errorMsg);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);

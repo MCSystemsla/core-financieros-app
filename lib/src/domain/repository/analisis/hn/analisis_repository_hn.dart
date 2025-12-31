@@ -62,12 +62,10 @@ abstract class AnalisisRepositoryHn {
   Future<void> closeAnalisis({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   });
   Future<AnalisisChecksResponse> analisisChecks({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   });
   Future<FiadoresCheckResponse> fiadoresChecks({
     required int numeroSolicitud,
@@ -352,12 +350,10 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   Future<void> closeAnalisis({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   }) async {
     final endpoint = CloseAnalisisEndpointHN(
       numeroSolicitud: numeroSolicitud,
       tipoSolicitud: tipoSolicitud,
-      esMayorAMil: esMayorAMil,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -376,12 +372,10 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   Future<AnalisisChecksResponse> analisisChecks({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   }) async {
     final endpoint = GetAnalsisChecksEndpointHN(
       numeroSolicitud: numeroSolicitud,
       tipoSolicitud: tipoSolicitud,
-      esMayorAMil: esMayorAMil,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

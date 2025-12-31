@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 
 String analisisNuevaMayorMilHnToJson(AnalisisNuevaMayorMilHn data) =>
     json.encode(data.toJson());
@@ -349,7 +350,7 @@ class AnalisisNuevaMayorMilHn {
       'Recuperaciones': recuperaciones,
       'TotalIngresos': totalIngresos,
       'CostoVentaProduccion': costoVentaProduccion,
-      'UtilidadBruta': utilidadBruta,
+      'UtilidadBruta': num.tryParse(utilidadBruta.toDouble().toSafeString(2)),
       'GastosPersonalAlimentacion': gastosPersonalAlimentacion,
       'SubContratos': subContratos,
       'Alquilerlocal': alquilerlocal,
@@ -360,13 +361,14 @@ class AnalisisNuevaMayorMilHn {
       'Impuesto': impuesto,
       'Otros': otros,
       'TotalCostosOperativos': totalCostosOperativos,
-      'ResultadoLiquido': resultadoLiquido,
+      'ResultadoLiquido':
+          num.tryParse(resultadoLiquido.toDouble().toSafeString(2)),
       'ConsumoFamiliar': consumoFamiliar,
       'IngresosFueraNegocio': ingresosFueraNegocio,
-      'SaldoDisponibleUF': saldoDisponibleUf,
-      'CostoVentaPorcentaje': costoVentaPorcentaje.isNaN
-          ? 0
-          : double.parse(costoVentaPorcentaje.toStringAsFixed(2)),
+      'SaldoDisponibleUF':
+          num.tryParse(saldoDisponibleUf.toDouble().toSafeString(2)),
+      'CostoVentaPorcentaje':
+          double.tryParse(costoVentaPorcentaje.toSafeString(2)),
       'FechaVerificacion3': fechaVerificacion3.toUtc().toIso8601String(),
       'NombreReferencia3': nombreReferencia3,
       'CedulaReferencia3': cedulaReferencia3,

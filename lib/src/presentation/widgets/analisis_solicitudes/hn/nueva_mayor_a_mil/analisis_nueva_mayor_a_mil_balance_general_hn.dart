@@ -6,9 +6,9 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_otros_creditos_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_pasivos_fijos_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,6 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class AnalisisMayorAMilBalanceGeneralHN extends StatefulWidget {
   const AnalisisMayorAMilBalanceGeneralHN({
@@ -131,7 +130,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                     AnalisisCardItem(
                       icon: Icons.percent,
                       label: 'Costo de ventas promedio',
-                      value: '${costoPorcentajeVenta.toStringAsFixed(2)} %',
+                      value: '${costoPorcentajeVenta.toSafeString(2)} %',
                       color: Colors.blueGrey,
                     ),
                   ],
@@ -508,14 +507,14 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                     children: [
                       CustomElevatedButton(
                         onPressed: () {
-                          if (state.inventario.isEmpty) {
-                            CustomAlertDialog(
-                              context: context,
-                              title: 'El inventario es obligatorio',
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
+                          // if (state.inventario.isEmpty) {
+                          //   CustomAlertDialog(
+                          //     context: context,
+                          //     title: 'El inventario es obligatorio',
+                          //     onDone: () => context.pop(),
+                          //   ).showDialog(context);
+                          //   return;
+                          // }
                           if (!formKey.currentState!.validate()) return;
                           widget.pageController.nextPage(
                             duration: const Duration(milliseconds: 500),

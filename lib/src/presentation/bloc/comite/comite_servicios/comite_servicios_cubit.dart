@@ -12,6 +12,7 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
   ComiteServiciosCubit(this._repository) : super(ComiteServiciosInitial());
 
   Future<void> getComiteServicios({
+    required int comiteId,
     required int numeroSolicitud,
     required int plazoCredito,
     required double montoCredito,
@@ -25,7 +26,7 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
     emit(state.copyWith(status: Status.inProgress));
     try {
       final data = await _repository.obtenerServicios(
-        comiteID: numeroSolicitud,
+        comiteID: comiteId,
         plazoCredito: plazoCredito,
         montoCredito: montoCredito,
         capitalAdeudado: capitalAdeudado,

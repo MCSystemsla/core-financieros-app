@@ -37,6 +37,13 @@ enum ErrorNetworkCode {
     );
   }
 
+  if (msg.contains('validation failed')) {
+    return (
+      '${resp['message']['message']} algunos campos no cumplen con el formato requerido',
+      ErrorNetworkCode.unauthorized
+    );
+  }
+
   return (
     resp['message']?.toString() ?? resp.toString(),
     ErrorNetworkCode.unknownError

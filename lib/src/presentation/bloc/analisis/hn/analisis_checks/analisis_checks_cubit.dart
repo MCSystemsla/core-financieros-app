@@ -13,14 +13,12 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
   Future<void> checkAnalisis({
     required int numeroSolicitud,
     required String tipoSolicitud,
-    required bool esMayorAMil,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       final data = await _repository.analisisChecks(
         numeroSolicitud: numeroSolicitud,
         tipoSolicitud: tipoSolicitud,
-        esMayorAMil: esMayorAMil,
       );
       emit(state.copyWith(
         status: Status.done,

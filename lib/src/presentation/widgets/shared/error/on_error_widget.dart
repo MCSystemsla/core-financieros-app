@@ -43,10 +43,30 @@ class OnErrorWidget extends StatelessWidget {
             Lottie.asset(
               ImageAsset.error,
               width: 280,
+              delegates: LottieDelegates(
+                values: [
+                  ValueDelegate.color(
+                    const ['circle', '**', 'Fill 1'],
+                    value: const Color(0xFFFFC107), // amarillo warning
+                  ),
+                  ValueDelegate.color(
+                    const ['stroke circle', '**', 'Stroke 1'],
+                    value: const Color(0xFFFFC107),
+                  ),
+                  ValueDelegate.color(
+                    const ['stroke circle 2', '**', 'Stroke 1'],
+                    value: const Color(0xFFFFC107),
+                  ),
+                  ValueDelegate.color(
+                    const ['exclamation', '**', 'Fill 1'],
+                    value: Colors.white,
+                  ),
+                ],
+              ),
             ),
             const Gap(5),
             Text(
-              'Ha ocurrido un error. Por favor, inténtalo de nuevo.',
+              '',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleLarge,
             ),

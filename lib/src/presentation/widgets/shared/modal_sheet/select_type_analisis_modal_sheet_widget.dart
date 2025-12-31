@@ -2,9 +2,7 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_checks/analisis_checks_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
@@ -49,7 +47,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     required this.description,
     required this.cedulaCliente,
     required this.tipoPersonaCodigo,
-    this.monto = '0',
+    required this.monto,
   });
 
   @override
@@ -57,14 +55,6 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     final actions = LocalStorage().currentActions;
     final repository = AnalisisRepositoryHNImpl();
 
-    final montoInt = int.parse(monto);
-
-    final nuevaMenorMil = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'MENORMIL');
-
-    final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;
-
-    final isMayorAMil = montoInt > nuevaMenorMilMonto;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -72,7 +62,6 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
             ..checkAnalisis(
               numeroSolicitud: int.parse(numeroSolicitud),
               tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString() ?? '',
-              esMayorAMil: isMayorAMil,
             ),
         ),
       ],
@@ -260,10 +249,22 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                         .where((entry) => entry.value == false)
                                         .map((entry) => entry.key)
                                         .toList();
+
                                     final havePendientesTitle = pendientes
                                             .isNotEmpty
                                         ? '\nPendientes: ${pendientes.join(', ')}'
                                         : '';
+
+                                    if (!state.tieneAnalisis) {
+                                      CustomAlertDialog(
+                                        context: context,
+                                        title:
+                                            'Para cerrar el analisis es necesario haber realizado el analisis de credito',
+                                        onDone: () => context.pop(),
+                                      ).showDialog(context);
+                                      return;
+                                    }
+
                                     CloseAnalisisDialog(
                                       context: context,
                                       title:
@@ -277,7 +278,6 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                                   int.parse(numeroSolicitud),
                                               tipoSolicitud: tipoSolicitud!
                                                   .toTypeForInterceptorString(),
-                                              esMayorAMil: isMayorAMil,
                                             );
                                       },
                                     ).showDialog(

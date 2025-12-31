@@ -171,6 +171,7 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return AnalisisCreditCardHn(
+            monto: widget.data[index].monto!,
             tipoPersonaCodigo: widget.data[index].tipoPersonaCodigo,
             cedulaCliente: widget.data[index].cedulaCliente,
             numeroSolicitud: widget.data[index].numero,

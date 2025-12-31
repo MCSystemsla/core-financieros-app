@@ -280,12 +280,10 @@ class GetDpfsByCedulaHNEndpoint extends Endpoint {
 class CloseAnalisisEndpointHN extends Endpoint {
   final int numeroSolicitud;
   final String tipoSolicitud;
-  final bool esMayorAMil;
 
   CloseAnalisisEndpointHN({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
-    required this.esMayorAMil,
   });
 
   @override
@@ -302,19 +300,16 @@ class CloseAnalisisEndpointHN extends Endpoint {
         'NumeroSolicitud': numeroSolicitud,
         'TipoSolicitud': tipoSolicitud,
         'database': LocalStorage().database,
-        'EsMayorAMil': esMayorAMil,
       };
 }
 
 class GetAnalsisChecksEndpointHN extends Endpoint {
   final int numeroSolicitud;
   final String tipoSolicitud;
-  final bool esMayorAMil;
 
   GetAnalsisChecksEndpointHN({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
-    required this.esMayorAMil,
   });
 
   @override
@@ -331,7 +326,6 @@ class GetAnalsisChecksEndpointHN extends Endpoint {
         'NumeroSolicitud': numeroSolicitud.toString(),
         'database': LocalStorage().database,
         'TipoSolicitud': tipoSolicitud,
-        'EsMayorAMil': esMayorAMil.toString(),
       };
 }
 

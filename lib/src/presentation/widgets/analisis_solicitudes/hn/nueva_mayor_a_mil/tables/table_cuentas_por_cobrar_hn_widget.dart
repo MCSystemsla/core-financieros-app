@@ -59,7 +59,7 @@ class TableCuentasPorCobrarHnWidget extends StatelessWidget {
             backgroundColor: Colors.black,
           ),
           appBar: AppBar(
-            title: const Text('Ventas por cobrar'),
+            title: const Text('Cuentas por cobrar'),
           ),
           body: SingleChildScrollView(
             child: Column(
