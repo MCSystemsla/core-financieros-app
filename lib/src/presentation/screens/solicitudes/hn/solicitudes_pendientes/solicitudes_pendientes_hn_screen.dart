@@ -8,17 +8,32 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/solicitudes_pendientes_nueva.dart';
 
-class SolicitudesPendientesScreenHN extends StatelessWidget {
+class SolicitudesPendientesScreenHN extends StatefulWidget {
   const SolicitudesPendientesScreenHN({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<SolicitudesPendientesScreenHN> createState() =>
+      _SolicitudesPendientesScreenHNState();
+}
+
+class _SolicitudesPendientesScreenHNState
+    extends State<SolicitudesPendientesScreenHN> {
+  List<SolicitudNuevaMenorHnLocalDb> solicitudesNuevasOffline = [];
+  List<SolicitudReprestamoHnLocalDb> solicitudesReprestamoOffline = [];
+  List<SolicitudAsalariadoHnDbLocal> solicitudesAsalariadoOffline = [];
+
+  @override
+  void initState() {
+    super.initState();
     final localDbProvider = global<SolicitudesHnBoxService>();
-    final solicitudesNuevasOffline = localDbProvider.getSolicitudesNueva();
-    final solicitudesAsalariadoOffline =
-        localDbProvider.getSolicitudesAsalariado();
-    final solicitudesReprestamoOffline =
-        localDbProvider.getSolicitudesReprestamo();
+    localDbProvider.deleteRowsByDeterminateTime();
+    solicitudesNuevasOffline = localDbProvider.getSolicitudesNueva();
+    solicitudesReprestamoOffline = localDbProvider.getSolicitudesReprestamo();
+    solicitudesAsalariadoOffline = localDbProvider.getSolicitudesAsalariado();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Solicitudes en proceso offline'),

@@ -529,7 +529,8 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   },
                   title: 'Pais Emisor Documento',
                 ),
-                if (widget.userByDocumentHnData?.tipoDocumento != 'DNI') ...[
+                if (widget.userByDocumentHnData?.tipoDocumento !=
+                    'CEDULAIDENTIDAD') ...[
                   const Gap(30),
                   OutlineTextfieldWidget(
                     initialValue: fechaEmisionCedula?.selectorFormat(),

@@ -437,4 +437,25 @@ class SolicitudesHnBoxService {
 
     historialCrediticioBox.remove(item.id);
   }
+
+  void deleteRowsByDeterminateTime({
+    Duration duration = const Duration(days: 30),
+  }) {
+    final now = DateTime.now().subtract(duration);
+    solicitudesNuevaMenorBox
+        .query(SolicitudNuevaMenorHnLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesReprestamoBox
+        .query(SolicitudReprestamoHnLocalDb_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+    solicitudesAsalariadoBox
+        .query(SolicitudAsalariadoHnDbLocal_.createdAt
+            .lessThan(now.millisecondsSinceEpoch))
+        .build()
+        .remove();
+  }
 }

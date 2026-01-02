@@ -110,8 +110,10 @@ class ObjectBoxService {
     _store.close(); // Cierra la conexión con la base de datos.
   }
 
-  void deleteRowsByDeterminateTime() {
-    final now = DateTime.now().subtract(const Duration(days: 30));
+  void deleteRowsByDeterminateTime({
+    Duration duration = const Duration(days: 30),
+  }) {
+    final now = DateTime.now().subtract(duration);
     solicitudesResponsesBox
         .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
         .build()

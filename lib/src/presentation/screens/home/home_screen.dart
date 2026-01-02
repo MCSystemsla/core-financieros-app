@@ -39,19 +39,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final bioCubit = global<BiometricCubit>();
     final connection = context.read<InternetConnectionCubit>().state;
 
-    final shouldSync = CatalogoSync.needToSync();
-
-    setState(() {
-      _shouldSync = shouldSync && connection.isConnected;
-    });
-
-    if (!_shouldSync && !bioCubit.state.isAuthenticated) {
+    if (!bioCubit.state.isAuthenticated) {
       await bioCubit.authenticate(context);
     }
 
-    setState(() {
-      _isChecking = false;
-    });
+    if (bioCubit.state.isAuthenticated) {
+      final needsSync = CatalogoSync.needToSync();
+
+      setState(() {
+        _shouldSync = needsSync && connection.isConnected;
+        _isChecking = false;
+      });
+    }
   }
 
   @override
@@ -68,14 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         flavor: flavor,
         onDownloadComplete: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
           setState(() {
             _shouldSync = false;
+            _isChecking = false;
           });
         },
       );

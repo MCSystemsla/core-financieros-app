@@ -485,7 +485,7 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                         );
                       },
                     ),
-                    if (state.tipoDocumentoCodigo != 'DNI') ...[
+                    if (state.tipoDocumentoCodigo != 'CEDULAIDENTIDAD') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
                         initialValue: cubit.state.fechaEmisionCedula,

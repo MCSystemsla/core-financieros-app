@@ -516,7 +516,7 @@ class _SolicitudAsalariadoOffline1State
                       },
                       title: 'Pais Emisor Documento',
                     ),
-                    if (state.tipoDocumentoCodigo != 'DNI') ...[
+                    if (state.tipoDocumentoCodigo != 'CEDULAIDENTIDAD') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
                         readOnly: true,
