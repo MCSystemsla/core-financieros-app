@@ -187,6 +187,6 @@ Widget saveCatalogoByFlavor(
     Flavor.honduras => DownloadCatalogosDialogHn(
         onDownloadComplete: onDownloadComplete,
       ),
-    _ => throw Exception('No se reconoce el flavor'),
+    _ => throw Exception('No se reconoce el flavor: $flavor'),
   };
 }
