@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 enum CatalogoType {
   tipoPersonaCredito('TIPOSPERSONACREDITO'),
   sexo('SEXO'),
