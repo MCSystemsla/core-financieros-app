@@ -39,6 +39,7 @@ class _DownloadCatalogosDialogHnState extends State<DownloadCatalogosDialogHn> {
                 repeat: false,
                 isSucess: true,
                 onDownloadComplete: widget.onDownloadComplete,
+                unsyncedCatalogos: state.unsyncedCatalogos,
               ),
             Status.error => OnErrorWidget(
                 onPressed: () {

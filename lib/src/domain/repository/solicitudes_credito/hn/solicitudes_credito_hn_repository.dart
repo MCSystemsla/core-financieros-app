@@ -250,7 +250,6 @@ class SolicitudesCreditoHnRepositoryImpl
         throw AppException(optionalMsg: errorMsg);
       }
       final data = CatalogoFrecuenciaPago.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       rethrow;
@@ -644,7 +643,6 @@ class SolicitudesCreditoHnRepositoryImpl
         throw AppException(optionalMsg: errorMsg);
       }
       final data = ActividadesEconomicasAliasFilteredResponse.fromJson(resp);
-      _logger.i(resp);
       return data;
     } catch (e) {
       _logger.e(e);

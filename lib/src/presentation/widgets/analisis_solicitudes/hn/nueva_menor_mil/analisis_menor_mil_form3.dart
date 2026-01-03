@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -178,7 +179,9 @@ class _LicenciaFormState extends State<_LicenciaForm> {
               OutlineTextfieldWidget(
                 initialValue: state.nombreInstitucionLicencia,
                 title: 'Nombre de institución',
-                textInputType: TextInputType.number,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 icon: const Icon(Icons.account_balance),
                 onChange: (value) {
                   cubit.onFieldChanged(
@@ -311,7 +314,9 @@ class _MatriculaFormState extends State<_MatriculaForm> {
               OutlineTextfieldWidget(
                 initialValue: state.nombreInstitucionMatricula,
                 title: 'Nombre de institución',
-                textInputType: TextInputType.number,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => state.copyWith(
@@ -443,7 +448,9 @@ class _RucFormState extends State<_RucForm> {
               OutlineTextfieldWidget(
                 initialValue: state.nombreInstitucionRuc,
                 title: 'Nombre de institución',
-                textInputType: TextInputType.number,
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => state.copyWith(

@@ -11,7 +11,12 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catal
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/catalogo_nacionalidad.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
+import 'package:core_financiero_app/src/utils/extensions/ubicacion_type/ubicacion_type.dart';
 import 'package:equatable/equatable.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo/catalogo_valor.dart';
@@ -45,58 +50,98 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     }
   }
 
+  /// Guarda todos los catálogos generales, ubicaciones, actividades economicas, etc. en BD Local
   Future<void> saveAllCatalogos() async {
-    emit(state.copyWith(status: Status.inProgress));
+    emit(state.copyWith(status: Status.inProgress, unsyncedCatalogos: []));
     try {
       await saveCatalogosToDatabase();
-      log('Todos los catálogos guardados correctamente.');
+      log('Todos los catálogos generales guardados correctamente.');
 
       await Future.wait([
-        getNacionalidadByCodigo(codigo: 'PAIS', isConnected: true),
-        getNacionalidadByCodigo(codigo: 'MUN', isConnected: true),
-        getNacionalidadByCodigo(codigo: 'DEP', isConnected: true),
-        getNacionalidadByCodigo(codigo: 'ALD', isConnected: true),
+        getNacionalidadByCodigo(codigo: UbicacionType.pais),
+        getNacionalidadByCodigo(codigo: UbicacionType.municipio),
+        getNacionalidadByCodigo(codigo: UbicacionType.departamento),
+        getNacionalidadByCodigo(codigo: UbicacionType.aldea),
       ]);
+
+      await saveActividadesEconomicasAlias();
 
       await saveCatalogoFrecuenciaPago();
 
       await getAndSaveParametros();
-
-      await saveActividadesEconomicasAlias();
-
-      emit(state.copyWith(status: Status.done));
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
+      emit(state.copyWith(status: Status.done));
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          errorMsg:
+              'No se pudieron sincronizar los catálogos. Intente de nuevo. ${e.optionalMsg}',
+          status: Status.error,
+        ),
+      );
     } catch (e, stack) {
       log('Error al guardar catálogos: $e\n$stack');
-      emit(state.copyWith(errorMsg: e.toString(), status: Status.error));
+      emit(
+        state.copyWith(
+          errorMsg:
+              'No se pudieron sincronizar los catálogos. Intente de nuevo. $e',
+          status: Status.error,
+        ),
+      );
     }
   }
 
-  static const List<String> _codigos = [
-    'TIPOSPERSONACREDITO',
-    'SEXO',
-    'MONEDA',
-    'TIPODOCUMENTOPERSONA',
-    'TIPOVIVIENDA',
-    'ESTADOCIVIL',
-    'ESCOLARIDAD',
-    'TIPOPERSONACNBS',
-    'TIPOCLIENTE',
-    'OCUPACION',
-    'NIVELAPROXIMADOINGRESOS',
-    'TIPOSOLICITUDCREDITO',
-    'ESTATUSCLIENTE',
-    'PROFESION',
-    'DESTINOCREDITO',
-    'SECTORECONOMICO',
-    'ACTIVIDADECONOMICA',
-    'MEDIDASCONOCIMIENTO',
-    'PARENTESCO',
-    'ESTADOPRESTAMO',
-    'RELACIONPERSONAS',
-    'TIPOGARANTIA',
-    'TIPOPERSONA',
-    'UBICACIONGPS',
+  // static const List<String> _codigos = [
+  //   'TIPOSPERSONACREDITO',
+  //   'SEXO',
+  //   'MONEDA',
+  //   'TIPODOCUMENTOPERSONA',
+  //   'TIPOVIVIENDA',
+  //   'ESTADOCIVIL',
+  //   'ESCOLARIDAD',
+  //   'TIPOPERSONACNBS',
+  //   'TIPOCLIENTE',
+  //   'OCUPACION',
+  //   'NIVELAPROXIMADOINGRESOS',
+  //   'TIPOSOLICITUDCREDITO',
+  //   'ESTATUSCLIENTE',
+  //   'PROFESION',
+  //   'DESTINOCREDITO',
+  //   'SECTORECONOMICO',
+  //   'ACTIVIDADECONOMICA',
+  //   'MEDIDASCONOCIMIENTO',
+  //   'PARENTESCO',
+  //   'ESTADOPRESTAMO',
+  //   'RELACIONPERSONAS',
+  //   'TIPOGARANTIA',
+  //   'TIPOPERSONA',
+  //   'UBICACIONGPS',
+  // ];
+  static const List<CatalogoType> _codigos = [
+    CatalogoType.tipoPersonaCredito,
+    CatalogoType.sexo,
+    CatalogoType.moneda,
+    CatalogoType.tipoDocumentoPersona,
+    CatalogoType.tipoVivienda,
+    CatalogoType.estadoCivil,
+    CatalogoType.escolaridad,
+    CatalogoType.tipoPersonaCNBS,
+    CatalogoType.tipoCliente,
+    CatalogoType.ocupacion,
+    CatalogoType.nivelaproximadoIngresos,
+    CatalogoType.tipoSolicitudCredito,
+    CatalogoType.estatusCliente,
+    CatalogoType.profesion,
+    CatalogoType.destinoCredito,
+    CatalogoType.sectorEconomico,
+    CatalogoType.actividadEconomica,
+    CatalogoType.medidasConocimiento,
+    CatalogoType.parentesco,
+    CatalogoType.estadoPrestamo,
+    CatalogoType.relacionPersonas,
+    CatalogoType.tipoGarantia,
+    CatalogoType.tipoPersona,
+    CatalogoType.ubicacionGPS,
   ];
 
   Future<void> saveCatalogosToDatabase() async {
@@ -111,7 +156,8 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       }
 
       for (final codigo in _codigos) {
-        final catalogoResponse = await getCatalogoByCodigo(codigo: codigo);
+        final catalogoResponse =
+            await getCatalogoByCodigo(codigo: codigo.codigo);
 
         if (catalogoResponse?.data == null || catalogoResponse!.data.isEmpty) {
           log('Saltando catálogo vacío: $codigo');
@@ -121,7 +167,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           return CatalogoLocalDb(
             valor: item.valor,
             nombre: item.nombre,
-            type: codigo,
+            type: codigo.codigo,
             interes: item.interes,
             montoMaximo: item.montoMaximo,
             montoMinimo: item.montoMinimo?.toInt(),
@@ -131,8 +177,9 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
         _objectBoxService.catalogoLocalBox.putMany(items);
       }
 
-      final actividadesCNBS =
-          await getCatalogoByCodigo(codigo: 'ACTIVIDADESECONOMICASCNBS');
+      final actividadesCNBS = await getCatalogoByCodigo(
+        codigo: CatalogoType.actividadesEconomicasCNBS.codigo,
+      );
 
       if (actividadesCNBS != null) {
         final items = actividadesCNBS.data.map((item) {
@@ -156,7 +203,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           montoMaximo: item.montoMaximo,
           montoMinimo: item.montoMinimo?.toInt() ?? 0,
           isRecurrente: item.isRecurrente,
-          type: 'PRODUCTO',
+          type: CatalogoType.producto.codigo,
         );
       }).toList();
       _objectBoxService.catalogoLocalBox.putMany(productosItems);
@@ -170,11 +217,20 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
           montoMaximo: 0,
           montoMinimo: 0,
           isRecurrente: false,
-          type: 'EMPLEADOS',
+          type: CatalogoType.empleados.codigo,
         );
       }).toList();
 
       _objectBoxService.catalogoLocalBox.putMany(empleadosItems);
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          unsyncedCatalogos: [
+            'No se pudo sincronizar catalogo: ${e.optionalMsg}',
+            ...state.unsyncedCatalogos
+          ],
+        ),
+      );
     } catch (e, stack) {
       log('Error general al guardar catálogos: $e\n$stack');
       rethrow;
@@ -281,95 +337,156 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
   }
 
   Future<void> getNacionalidadByCodigo({
-    required String codigo,
-    required bool isConnected,
+    required UbicacionType codigo,
   }) async {
     try {
-      final data = await _repository.getCatalogoUbicaciones(codigo: codigo);
+      final data =
+          await _repository.getCatalogoUbicaciones(codigo: codigo.codigo);
 
-      if (isConnected) {
-        await _saveToDatabaseUbicaciones(
-          codigo: codigo,
-          items: data.data,
-        );
-      }
+      await _saveToDatabaseUbicaciones(
+        codigo: codigo.codigo,
+        items: data.data,
+      );
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          unsyncedCatalogos: [
+            'No se pudo sincronizar catalogo ubicacion ${codigo.codigo}: ${e.optionalMsg}',
+            ...state.unsyncedCatalogos
+          ],
+        ),
+      );
     } catch (_) {}
   }
 
   Future<void> saveCatalogoFrecuenciaPago() async {
-    final data = await _repository.getCatalogoFrecuenciaPago();
-    final query = _objectBoxService.catalogoFrecuenciaPagoBox.query().build();
-    query.remove();
-    final list = data.catalogo
-        .map(
-          (e) => CatalogoFrecuenciaPagoDb(
-            valor: e.valor,
-            meses: e.meses,
-            nombre: e.nombre,
-          ),
-        )
-        .toList();
-    _objectBoxService.catalogoFrecuenciaPagoBox.putMany(list);
+    try {
+      final data = await _repository.getCatalogoFrecuenciaPago();
+      final query = _objectBoxService.catalogoFrecuenciaPagoBox.query().build();
+      query.remove();
+      final list = data.catalogo
+          .map(
+            (e) => CatalogoFrecuenciaPagoDb(
+              valor: e.valor,
+              meses: e.meses,
+              nombre: e.nombre,
+            ),
+          )
+          .toList();
+      _objectBoxService.catalogoFrecuenciaPagoBox.putMany(list);
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          unsyncedCatalogos: [
+            'No se pudo sincronizar el catalogo frecuencia de pago: ${e.optionalMsg}',
+            ...state.unsyncedCatalogos
+          ],
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> getAndSaveParametros() async {
-    final edadMinima =
-        await _repository.getParametroValor(nombre: 'EDADMINIMACLIENTE');
+    try {
+      final edadMinima = await saveParametroByParamName(
+        paramName: ParametroType.edadMinimaCliente,
+      );
 
-    final edadMaxima =
-        await _repository.getParametroValor(nombre: 'EDADMAXIMACLIENTE');
+      final edadMaxima = await saveParametroByParamName(
+        paramName: ParametroType.edadMaximaCliente,
+      );
 
-    final incobrablesxCobrar =
-        await _repository.getParametroValor(nombre: 'INCOBRABLESDECXCOBRAR');
+      final incobrablesxCobrar = await saveParametroByParamName(
+        paramName: ParametroType.incobrablesDeCXCobrar,
+      );
 
-    final fechaOperacion =
-        await _repository.getParametroValor(nombre: 'FECHAOPERACION');
+      final fechaOperacion = await saveParametroByParamName(
+        paramName: ParametroType.fechaOperacion,
+      );
 
-    final montoMenorAMil =
-        await _repository.getParametroValor(nombre: 'MENORMIL');
+      final montoMenorAMil = await saveParametroByParamName(
+        paramName: ParametroType.menorMil,
+      );
 
-    final relacionminrazoncuotarecurrente = await _repository.getParametroValor(
-        nombre: 'RELACIONMINRAZONCUOTACREDITORECURRENTE');
+      final relacionminrazoncuotarecurrente = await saveParametroByParamName(
+        paramName: ParametroType.relacionMinimaRazonCuotaCredtioRecurrente,
+      );
 
-    final relacionMinRazonCuotaCreditoNueva =
-        await _repository.getParametroValor(
-      nombre: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
-    );
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: edadMinima.data.valor,
-      nombre: 'EDADMINIMACLIENTE',
-      type: 'EDADMINIMACLIENTE',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: edadMaxima.data.valor,
-      type: 'EDADMAXIMACLIENTE',
-      nombre: 'EDADMAXIMACLIENTE',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: incobrablesxCobrar.data.valor,
-      type: 'INCOBRABLESDECXCOBRAR',
-      nombre: 'INCOBRABLESDECXCOBRAR',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: fechaOperacion.data.valor,
-      type: 'FECHAOPERACION',
-      nombre: 'FECHAOPERACION',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: montoMenorAMil.data.valor,
-      type: 'MENORMIL',
-      nombre: 'MENORMIL',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: relacionminrazoncuotarecurrente.data.valor,
-      type: 'RELACIONMINRAZONCUOTACREDITORECURRENTE',
-      nombre: 'RELACIONMINRAZONCUOTACREDITORECURRENTE',
-    ));
-    _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
-      valor: relacionMinRazonCuotaCreditoNueva.data.valor,
-      type: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
-      nombre: 'RELACIONMAXRAZONCUOTACREDITONUEVO',
-    ));
+      final relacionMinRazonCuotaCreditoNueva = await saveParametroByParamName(
+        paramName: ParametroType.relacionMaximaRazonCuotaCreditoNuevo,
+      );
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: edadMinima.valor,
+        nombre: ParametroType.edadMinimaCliente.codigo,
+        type: ParametroType.edadMinimaCliente.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: edadMaxima.valor,
+        type: ParametroType.edadMaximaCliente.codigo,
+        nombre: ParametroType.edadMaximaCliente.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: incobrablesxCobrar.valor,
+        type: ParametroType.incobrablesDeCXCobrar.codigo,
+        nombre: ParametroType.incobrablesDeCXCobrar.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: fechaOperacion.valor,
+        type: ParametroType.fechaOperacion.codigo,
+        nombre: ParametroType.fechaOperacion.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: montoMenorAMil.valor,
+        type: ParametroType.menorMil.codigo,
+        nombre: ParametroType.menorMil.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: relacionminrazoncuotarecurrente.valor,
+        type: ParametroType.relacionMinimaRazonCuotaCredtioRecurrente.codigo,
+        nombre: ParametroType.relacionMinimaRazonCuotaCredtioRecurrente.codigo,
+      ));
+
+      _objectBoxService.catalogoLocalBox.put(CatalogoLocalDb(
+        valor: relacionMinRazonCuotaCreditoNueva.valor,
+        type: ParametroType.relacionMaximaRazonCuotaCreditoNuevo.codigo,
+        nombre: ParametroType.relacionMaximaRazonCuotaCreditoNuevo.codigo,
+      ));
+    } on AppException catch (e) {
+      log('Error al guardar parametro: $e');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ParametroData> saveParametroByParamName({
+    required ParametroType paramName,
+  }) async {
+    try {
+      final parametro = await _repository.getParametroValor(
+        nombre: paramName.codigo,
+      );
+      return parametro.data;
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          unsyncedCatalogos: [
+            'No se pudo sincronizar el parametro ${paramName.codigo}: ${e.optionalMsg}',
+            ...state.unsyncedCatalogos
+          ],
+        ),
+      );
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> saveActividadesEconomicasAlias() async {
@@ -388,6 +505,16 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
         );
       }).toList();
       _objectBoxService.actividadesEconomicasAliasFilteredBox.putMany(list);
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          unsyncedCatalogos: [
+            'No se pudo sincronizar el catalogo actividades economicas alias: ${e.optionalMsg}',
+            ...state.unsyncedCatalogos
+          ],
+        ),
+      );
+      rethrow;
     } catch (e, s) {
       log('Error al guardar actividades economicas alias: $e, $s');
       rethrow;
