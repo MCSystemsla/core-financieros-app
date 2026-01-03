@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
 import 'package:core_financiero_app/src/config/helpers/greeting/greeting.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -12,12 +11,13 @@ import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.da
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/push_with_sync_check/push_with_sync_check.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeItemsWidget extends StatelessWidget {
   const HomeItemsWidget({
@@ -31,82 +31,47 @@ class HomeItemsWidget extends StatelessWidget {
     final flavor = global<FlavorCubit>().state.flavor;
 
     List<HomeItemCard> homeItemData = [
-      // if (actions.contains(TypeAction.menuCartera.codigo))
       HomeItemCard(
+        visible: actions.contains(TypeAction.menuCartera.codigo),
         title: 'home.item5'.tr(),
-        subtitle: 'Descripcion'.tr(),
+        subtitle: 'Descripcion',
         icon: const Icon(
           Icons.wallet_rounded,
           color: AppColors.white,
         ),
         color: AppColors.primaryColorWithOpacity(),
-        onTap: () async {
-          final shouldSync = CatalogoSync.needToSync();
-          if (!context.mounted) return;
-          if (shouldSync &&
-              connection.connectionStatus == ConnectionStatus.connected) {
-            CustomAlertDialog(
-              onDone: () => context.pop(),
-              context: context,
-              title: 'Es necesario sincronizar los catálogos para avanzar',
-            ).showDialog(context);
-            return;
-          }
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const CarteraScreen()),
+        onTap: () => context.pushWithSyncCheck(
+          connectionStatus: connection.connectionStatus,
+          destination: const CarteraScreen(),
+        ),
+      ),
+      HomeItemCard(
+        visible: (connection.connectionStatus == ConnectionStatus.connected &&
+            (flavor == Flavor.nicaragua || flavor == Flavor.costaRica)),
+        title: 'Tutoriales',
+        subtitle: 'Descripcion',
+        icon: const Icon(
+          Icons.assignment,
+          color: AppColors.white,
+        ),
+        color: AppColors.blueIndigo,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const TutorialsScreen(),
+            ),
           );
         },
       ),
-      if (connection.connectionStatus == ConnectionStatus.connected &&
-          (flavor == Flavor.nicaragua || flavor == Flavor.costaRica))
-        HomeItemCard(
-          title: 'Tutoriales'.tr(),
-          subtitle: 'Descripcion'.tr(),
-          icon: const Icon(
-            Icons.assignment,
-            color: AppColors.white,
-          ),
-          color: AppColors.blueIndigo,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const TutorialsScreen(),
-              ),
-            );
-          },
-        ),
-      // HomeItemCard(
-      //   title: 'Tutoriales'.tr(),
-      //   subtitle: 'Descripcion'.tr(),
-      //   icon: const Icon(
-      //     Icons.account_balance,
-      //     color: AppColors.white,
-      //   ),
-      //   color: AppColors.purple,
-      //   onTap: () {},
-      // ),
-      // HomeItemCard(
-      //   title: 'home.item2'.tr(),
-      //   subtitle: 'Descripcion'.tr(),
-      //   icon: const Icon(
-      //     Icons.savings,
-      //     color: AppColors.white,
-      //   ),
-      //   color: AppColors.cian,
-      //   onTap: () => context.push('/ahorro'),
-      // ),
-      // HomeItemCard(
-      //   title: 'home.item3'.tr(),
-      //   subtitle: 'Descripcion'.tr(),
-      //   icon: const Icon(
-      //     Icons.calculate_rounded,
-      //     color: AppColors.white,
-      //   ),
-      //   color: AppColors.getFourthgColorWithOpacity(),
-      //   onTap: () => context.push('/pla'),
-      // ),
     ];
+
+    if (homeItemData.where((e) => e.visible).isEmpty) {
+      return const EmptyListWidget(
+        message:
+            'No tienes ningun permiso para acceder a los servicios de la aplicación.',
+      );
+    }
 
     return SingleChildScrollView(
       child: Column(
@@ -122,7 +87,7 @@ class HomeItemsWidget extends StatelessWidget {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
-              itemCount: homeItemData.length,
+              itemCount: homeItemData.where((e) => e.visible).length,
               itemBuilder: (BuildContext context, int index) => _ItemWidget(
                 homeItemCard: homeItemData[index],
               ),

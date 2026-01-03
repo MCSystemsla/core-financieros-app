@@ -6,6 +6,7 @@ class HomeItemCard {
   final Icon icon;
   final Color color;
   final VoidCallback onTap;
+  final bool visible;
 
   HomeItemCard({
     required this.title,
@@ -13,5 +14,6 @@ class HomeItemCard {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.visible = true,
   });
 }

@@ -69,8 +69,9 @@ class _CarteraContentWidget extends StatelessWidget {
                       ),
                 ),
               ),
-              // if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
               ModuleCard(
+                visible: (!isProdMode &&
+                    actions.contains(TypeAction.llenarSolicitudes.codigo)),
                 onTap: () {
                   context.push('/solicitudes');
                 },
@@ -84,91 +85,86 @@ class _CarteraContentWidget extends StatelessWidget {
                   size: 35,
                 ),
               ),
-              if (!isProdMode)
-                ModuleCard(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AnalisisInterceptorByFlavor(),
-                      ),
-                    );
-                  },
-                  title: 'Analisis'.tr(),
-                  subtitle: 'Analisis de solicitudes de crédito',
-                  secondColor: const Color.fromARGB(255, 48, 47, 47),
-                  firstColor: const Color(0xFFBDBDBD),
-                  icon: const Icon(
-                    Icons.analytics,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ModuleCard(
+                visible: (!isProdMode),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AnalisisInterceptorByFlavor(),
+                    ),
+                  );
+                },
+                title: 'Analisis'.tr(),
+                subtitle: 'Analisis de solicitudes de crédito',
+                secondColor: const Color.fromARGB(255, 48, 47, 47),
+                firstColor: const Color(0xFFBDBDBD),
+                icon: const Icon(
+                  Icons.analytics,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (!isProdMode)
-                ModuleCard(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const SelectTipoSupervisionHnScreen(),
-                      ),
-                    );
-                  },
-                  title: 'Supervisiones'.tr(),
-                  subtitle: 'Supervisiones de crédito',
-                  secondColor: const Color(0xFF283593),
-                  firstColor: const Color(0xFFC5CAE9),
-                  icon: const Icon(
-                    Icons.supervised_user_circle,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible: (!isProdMode),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SelectTipoSupervisionHnScreen(),
+                    ),
+                  );
+                },
+                title: 'Supervisiones'.tr(),
+                subtitle: 'Supervisiones de crédito',
+                secondColor: const Color(0xFF283593),
+                firstColor: const Color(0xFFC5CAE9),
+                icon: const Icon(
+                  Icons.supervised_user_circle,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (actions.contains(TypeAction.llenarKiva.codigo))
-                ModuleCard(
-                  onTap: () {
-                    state.connectionStatus == ConnectionStatus.connected
-                        ? context.push('/cartera/formulario-kiva')
-                        : context.push('/cartera/kiva-offline');
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const SelectTypeKivaScreen(),
-                    //   ),
-                    // );
-                  },
-                  title: 'cartera.kiva'.tr(),
-                  subtitle: 'cartera.kiva_description'.tr(),
-                  firstColor: AppColors.blueIndigo,
-                  secondColor:
-                      AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-                  icon: const Icon(
-                    Icons.dynamic_form_outlined,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible: (actions.contains(TypeAction.llenarKiva.codigo)),
+                onTap: () {
+                  state.connectionStatus == ConnectionStatus.connected
+                      ? context.push('/cartera/formulario-kiva')
+                      : context.push('/cartera/kiva-offline');
+                },
+                title: 'cartera.kiva'.tr(),
+                subtitle: 'cartera.kiva_description'.tr(),
+                firstColor: AppColors.blueIndigo,
+                secondColor:
+                    AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.dynamic_form_outlined,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (state.connectionStatus == ConnectionStatus.connected &&
-                  actions.contains(TypeAction.llenarKiva.codigo))
-                ModuleCard(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const KivaHistoryRequestScreen(),
-                      ),
-                    );
-                  },
-                  title: 'KIVA Histórico',
-                  subtitle: 'Módulo Solicitudes Kiva Enviadas',
-                  firstColor: AppColors.blueIndigo,
-                  secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
-                  icon: const Icon(
-                    Icons.send_to_mobile_rounded,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible:
+                    (state.connectionStatus == ConnectionStatus.connected &&
+                        actions.contains(TypeAction.llenarKiva.codigo)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const KivaHistoryRequestScreen(),
+                    ),
+                  );
+                },
+                title: 'KIVA Histórico',
+                subtitle: 'Módulo Solicitudes Kiva Enviadas',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.send_to_mobile_rounded,
+                  color: AppColors.white,
+                  size: 35,
                 ),
+              ),
               ModuleCard(
                 onTap: () {
                   Navigator.push(
@@ -203,6 +199,7 @@ class ModuleCard extends StatelessWidget {
   final Color firstColor;
   final Color secondColor;
   final VoidCallback onTap;
+  final bool visible;
   const ModuleCard({
     super.key,
     required this.title,
@@ -211,12 +208,13 @@ class ModuleCard extends StatelessWidget {
     required this.firstColor,
     required this.secondColor,
     required this.onTap,
+    this.visible = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-
+    if (!visible) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.all(14),
       width: size.width,
