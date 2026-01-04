@@ -100,7 +100,7 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double estimatedTotalBytes = 37 * 1024 * 1024; // 37 MB aprox
+    const double estimatedTotalBytes = 40 * 1024 * 1024; // 40 MB aprox
 
     final double percentage =
         (_progress / estimatedTotalBytes * 100).clamp(0, 100);
@@ -110,6 +110,12 @@ class _AutoupdateScreenState extends State<AutoupdateScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        floatingActionButton: resultType == ResultType.done
+            ? FloatingActionButton(
+                onPressed: _retryUpdate,
+                child: const Icon(Icons.refresh),
+              )
+            : null,
         backgroundColor: Colors.white,
         body: Center(
           child: Padding(

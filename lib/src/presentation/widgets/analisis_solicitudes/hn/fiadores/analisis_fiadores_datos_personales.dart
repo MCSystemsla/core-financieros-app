@@ -304,7 +304,6 @@ class _AnalisisFiadoresDatosPersonalesState
               const Gap(20),
               OutlineTextfieldWidget(
                 title: 'Numero de hijos',
-                validator: (value) => ClassValidator.validateRequired(value),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
@@ -320,6 +319,8 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 codigo: 'TIPOPERSONACNBS',
                 title: 'Tipo persona CNBS',
                 onChanged: (value) {
@@ -332,6 +333,8 @@ class _AnalisisFiadoresDatosPersonalesState
               ),
               const Gap(20),
               SearchDropdownWidget(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 codigo: 'ESTATUSCLIENTE',
                 title: 'Estatus',
                 onChanged: (value) {

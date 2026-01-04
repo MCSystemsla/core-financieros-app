@@ -367,29 +367,29 @@ class _AnalisisFiadoresDatosGeneralesState
                 },
                 hintText: 'Selecciona una opción',
               ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                hintText: fechaEmisionCedula?.selectorFormat(),
-                title: 'Fecha emision cédula:',
-                icon: const Icon(Icons.document_scanner),
-                readOnly: true,
-                validator: (value) => ClassValidator.validateRequired(
-                    fechaEmisionCedula?.selectorFormat()),
-                onChange: (value) {},
-                onTap: () => selectEmisionFecha(context),
-              ),
               if (widget.tipoDocumento != 'CEDULAIDENTIDAD') ...[
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  hintText: fechaVencimientoCedula?.selectorFormat(),
-                  title: 'Fecha Vencimiento cedula:',
+                  hintText: fechaEmisionCedula?.selectorFormat(),
+                  title: 'Fecha emision cédula:',
                   icon: const Icon(Icons.document_scanner),
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaVencimientoCedula?.selectorFormat()),
                   readOnly: true,
-                  onTap: () => selectDate(context),
+                  validator: (value) => ClassValidator.validateRequired(
+                      fechaEmisionCedula?.selectorFormat()),
+                  onChange: (value) {},
+                  onTap: () => selectEmisionFecha(context),
                 ),
               ],
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaVencimientoCedula?.selectorFormat(),
+                title: 'Fecha Vencimiento cedula:',
+                icon: const Icon(Icons.document_scanner),
+                validator: (value) => ClassValidator.validateRequired(
+                    fechaVencimientoCedula?.selectorFormat()),
+                readOnly: true,
+                onTap: () => selectDate(context),
+              ),
               const Gap(20),
               SearchDropdownWidget(
                 selectedItem: Item(
