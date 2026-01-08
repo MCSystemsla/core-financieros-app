@@ -38,13 +38,19 @@ class SupervisionesSearchSolicitudesByNumeroOrCedulaScreen
       ),
       child: Scaffold(
         appBar: AppBar(),
-        body: _UserCedulaForm(),
+        body: _UserCedulaForm(
+          tipoSupervisor: tipoSupervisor,
+        ),
       ),
     );
   }
 }
 
 class _UserCedulaForm extends StatefulWidget {
+  final TipoSupervisorEnum tipoSupervisor;
+  const _UserCedulaForm({
+    required this.tipoSupervisor,
+  });
   @override
   State<_UserCedulaForm> createState() => _UserCedulaFormState();
 }
@@ -66,6 +72,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                 value: context.read<GetSupervisionesCubit>(),
                 child: SupervisionesHnScreen(
                   numeroSolicitud: typeVal ?? '',
+                  tipoSupervisor: widget.tipoSupervisor,
                 ),
               ),
             ),

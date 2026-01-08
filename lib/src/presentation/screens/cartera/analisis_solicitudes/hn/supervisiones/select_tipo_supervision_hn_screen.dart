@@ -42,15 +42,15 @@ class SelectTipoSupervisionHnScreen extends StatelessWidget {
               title: 'Regional',
               subtitle: 'Crear Supervisión de Regional',
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) =>
-                //         const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
-                //       tipoSupervisor: TipoSupervisorEnum.regional,
-                //     ),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
+                      tipoSupervisor: TipoSupervisorEnum.regional,
+                    ),
+                  ),
+                );
               },
             ),
             const Gap(10),
@@ -60,15 +60,15 @@ class SelectTipoSupervisionHnScreen extends StatelessWidget {
               title: 'Credito',
               subtitle: 'Crear Supervisión de Credito',
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) =>
-                //         const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
-                //       tipoSupervisor: TipoSupervisorEnum.credito,
-                //     ),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
+                      tipoSupervisor: TipoSupervisorEnum.credito,
+                    ),
+                  ),
+                );
               },
             ),
             const Gap(10),

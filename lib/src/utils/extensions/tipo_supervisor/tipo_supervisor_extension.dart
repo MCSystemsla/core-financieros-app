@@ -25,3 +25,16 @@ enum SupervisionItem3 {
   no,
   na,
 }
+
+enum SupervisionItem4 {
+  buenas,
+  malas,
+}
+
+enum SupervisionItem5 {
+  hipotecariaPropia,
+  fiador,
+  fiadorHipotecaria,
+  garantiaPrendaria,
+  sinGarantia
+}

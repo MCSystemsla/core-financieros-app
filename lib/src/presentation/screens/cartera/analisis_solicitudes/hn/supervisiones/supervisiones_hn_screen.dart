@@ -1,11 +1,13 @@
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/get_supervisiones/get_supervisiones_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_credito_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_dynamic_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_supervisor/tipo_supervisor_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -13,9 +15,11 @@ import 'package:gap/gap.dart';
 
 class SupervisionesHnScreen extends StatelessWidget {
   final String numeroSolicitud;
+  final TipoSupervisorEnum tipoSupervisor;
   const SupervisionesHnScreen({
     super.key,
     required this.numeroSolicitud,
+    required this.tipoSupervisor,
   });
 
   @override
@@ -44,6 +48,7 @@ class SupervisionesHnScreen extends StatelessWidget {
                     data: state.data,
                     numeroSolicitud: numeroSolicitud,
                     nombreCoordinador: state.nombreCoordinador,
+                    tipoSupervisor: tipoSupervisor,
                   ),
                 _ => const SizedBox(),
               };
@@ -59,10 +64,12 @@ class _ListaDataWidget extends StatelessWidget {
   final String numeroSolicitud;
   final List<SupervisionData> data;
   final String nombreCoordinador;
+  final TipoSupervisorEnum tipoSupervisor;
   const _ListaDataWidget({
     required this.data,
     required this.numeroSolicitud,
     required this.nombreCoordinador,
+    required this.tipoSupervisor,
   });
 
   @override
@@ -86,6 +93,7 @@ class _ListaDataWidget extends StatelessWidget {
           cuota: data[index].cuota,
           razonEndeudamiento: data[index].razonEndeudamiento,
           tipoSolicitud: data[index].tipoSolicitud,
+          tipoSupervisor: tipoSupervisor,
         );
       },
     );
@@ -98,6 +106,7 @@ class _ListDataItemWidget extends StatelessWidget {
   final num cuota;
   final num razonEndeudamiento;
   final String tipoSolicitud;
+  final TipoSupervisorEnum tipoSupervisor;
 
   const _ListDataItemWidget({
     required this.data,
@@ -105,6 +114,7 @@ class _ListDataItemWidget extends StatelessWidget {
     required this.cuota,
     required this.razonEndeudamiento,
     required this.tipoSolicitud,
+    required this.tipoSupervisor,
   });
 
   @override
@@ -114,12 +124,13 @@ class _ListDataItemWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => SupervisionesFormHnScreen(
+            builder: (_) => SupervisionsHnIncerptorHn(
               data: data,
               nombreCoordinador: nombreCoordinador,
               cuota: cuota,
               razonEndeudamiento: razonEndeudamiento,
               tipoSolicitud: data.tipoSolicitud,
+              tipoSupervisor: tipoSupervisor,
             ),
           ),
         );
@@ -166,5 +177,39 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class SupervisionsHnIncerptorHn extends StatelessWidget {
+  final TipoSupervisorEnum tipoSupervisor;
+  final SupervisionData data;
+  final String nombreCoordinador;
+  final num cuota;
+  final num razonEndeudamiento;
+  final String tipoSolicitud;
+
+  const SupervisionsHnIncerptorHn({
+    super.key,
+    required this.tipoSupervisor,
+    required this.data,
+    required this.nombreCoordinador,
+    required this.cuota,
+    required this.razonEndeudamiento,
+    required this.tipoSolicitud,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (tipoSupervisor) {
+      TipoSupervisorEnum.coordinador => SupervisionesFormHnScreen(
+          data: data,
+          nombreCoordinador: nombreCoordinador,
+          cuota: cuota,
+          razonEndeudamiento: razonEndeudamiento,
+          tipoSolicitud: tipoSolicitud,
+        ),
+      TipoSupervisorEnum.credito => const SupervisionesFormCreditoHnScreen(),
+      _ => const SizedBox.shrink(),
+    };
   }
 }
