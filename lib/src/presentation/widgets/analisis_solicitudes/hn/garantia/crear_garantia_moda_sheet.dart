@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -37,6 +38,8 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
 
   String? tipoPersona;
   String? tipoArticulo;
+  String? cedulaFiador;
+  String? fiadorId;
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
@@ -99,9 +102,48 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       onChanged: (v) {
-                        tipoPersona = v?.value;
+                        setState(() {
+                          tipoPersona = v?.value;
+                        });
+                        context
+                            .read<FiadoresGarantiaCubit>()
+                            .getFiadoresByNumeroSolicitud(
+                              numeroSolicitud:
+                                  widget.numeroSolicitud.toString(),
+                              tipoFiadorCodigo: v?.value,
+                            );
                       },
                     ),
+                    if (tipoPersona != null && tipoPersona != 'DEUDOR') ...[
+                      const Gap(20),
+                      BlocBuilder<FiadoresGarantiaCubit, FiadoresGarantiaState>(
+                        builder: (context, state) {
+                          return SheetSearchDropdown(
+                            title: 'Fiador',
+                            isRequired: true,
+                            validator: (value) =>
+                                ClassValidator.validateRequired(value?.value),
+                            onChanged: (v) {
+                              setState(() {
+                                fiadorId = v?.value;
+                                cedulaFiador = v?.anotherValue;
+                              });
+                            },
+                            hintText: 'Selecciona fiador de garantia ',
+                            enabled: true,
+                            items: state.data
+                                .map(
+                                  (e) => Item(
+                                    name: e.fiadorInfo,
+                                    value: e.fiadorId,
+                                    anotherValue: e.fiadorCedula,
+                                  ),
+                                )
+                                .toList(),
+                          );
+                        },
+                      )
+                    ],
                     if (tipoGarantia != null) ...[
                       const Gap(20),
                       BlocBuilder<AnalisisArticuloCubit, AnalisisArticuloState>(
@@ -188,7 +230,9 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                                       articuloCodigo:
                                           int.tryParse(tipoArticulo ?? '0') ??
                                               0,
-                                      cedulaPropietario: widget.cedulaCliente,
+                                      cedulaPropietario: cedulaFiador!,
+                                      fiadorId:
+                                          int.tryParse(fiadorId ?? '0') ?? 0,
                                     ),
                                   );
                             },

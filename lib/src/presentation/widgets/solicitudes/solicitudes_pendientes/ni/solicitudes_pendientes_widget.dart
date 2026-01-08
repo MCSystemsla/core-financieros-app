@@ -155,9 +155,8 @@ class SolicitudesPendientesNIWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }
@@ -304,9 +303,8 @@ class SolciitudesEnviadasNiWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }
@@ -405,9 +403,8 @@ class SolicitudesReprestamoPendientesWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }
@@ -506,9 +503,8 @@ class SolciitudesEnviadasReprestamoWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }
@@ -670,9 +666,8 @@ class SolicitudesAsalariadoPendientesWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }
@@ -831,9 +826,8 @@ class SolicitudesEnviadasAsalariadoWidget extends StatelessWidget {
             .toLocal()
             .add(const Duration(days: 30))
             .formatDateToTimePeriod(),
-        percentage: (solicitud.isDone ?? false)
-            ? 100
-            : calcularPorcentajeLlenado(solicitud),
+        percentage:
+            (solicitud.isDone) ? 100 : calcularPorcentajeLlenado(solicitud),
       ),
     );
   }

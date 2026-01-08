@@ -40,14 +40,14 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
     return BlocConsumer<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
-          context.read<SolicitudAsalariadoCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
-              );
           context.read<SolicitudAsalariadoCubit>().onFieldChanged(
                 () => state.copyWith(
                   hasVerified: true,
                   isDone: true,
                 ),
+              );
+          context.read<SolicitudAsalariadoCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
               );
           // dbProvider.removeSolicitudAsalariadoWhenisUploaded(
           //   solicitudId: widget.solicitudId,

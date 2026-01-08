@@ -64,8 +64,9 @@ class _LoginScreenViewState extends State<LoginScreenView>
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (ctx) =>
-                AutoupdateCubit(flavor)..verificarActualizacion(context)),
+          create: (ctx) =>
+              AutoupdateCubit(flavor)..verificarActualizacion(context),
+        ),
         BlocProvider(
           create: (ctx) =>
               BranchteamCubit(AuthRepositoryImpl())..getBranchTeam(),

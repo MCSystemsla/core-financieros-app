@@ -410,3 +410,24 @@ class GetEvaluadoresGarantiaHnEndpoint extends Endpoint {
         'database': LocalStorage().database,
       };
 }
+
+class GetFiadoresByNumeroSolicitudHNEndpoint extends Endpoint {
+  final String tipoFiadorCodigo;
+
+  GetFiadoresByNumeroSolicitudHNEndpoint({required this.tipoFiadorCodigo});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/cartera/analisis-garantias/obtener-fiadores-relacionados';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'TipoFiadorCodigo': tipoFiadorCodigo,
+      };
+}

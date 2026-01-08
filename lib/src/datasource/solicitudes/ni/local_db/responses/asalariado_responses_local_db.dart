@@ -142,9 +142,9 @@ class AsalariadoResponsesLocalDb {
   double? totalIngresoMes;
   double? totalIngresoMesConyugue;
   String? errorMsg;
-  bool? isDone;
-  bool? isOffline;
-  bool? hasVerified;
+  bool isDone = false;
+  bool isOffline = false;
+  bool hasVerified = false;
   DateTime? fechaDesembolso;
   double? tasaInteres;
   int? montoMinimo;
@@ -301,9 +301,9 @@ class AsalariadoResponsesLocalDb {
     this.totalIngresoMes,
     this.totalIngresoMesConyugue,
     this.errorMsg,
-    this.isDone,
-    this.isOffline,
-    this.hasVerified,
+    this.isDone = false,
+    this.isOffline = false,
+    this.hasVerified = false,
     this.fechaDesembolso,
     this.tasaInteres,
     this.montoMinimo,

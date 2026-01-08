@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/detalle_garantia_table_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/tipos_garantia_hn_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,12 @@ class GarantiaHNScreen extends StatelessWidget {
           create: (ctx) => AnalisisGarantiaCubit(repository)
             ..getGarantiasByNumero(numeroSolicitud: numeroSolicitud),
         ),
-        BlocProvider(create: (ctx) => AnalisisArticuloCubit(repository)),
+        BlocProvider(
+          create: (ctx) => AnalisisArticuloCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => FiadoresGarantiaCubit(repository),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(

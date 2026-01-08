@@ -77,10 +77,10 @@ class ReprestamoResponsesLocalDb {
   DateTime? fechaDesembolso;
   @Property(type: PropertyType.date)
   DateTime? createdAt;
-  bool? isDone;
+  bool isDone = false;
   String? errorMsg;
-  bool? hasVerified;
-  bool? isOffline;
+  bool hasVerified = false;
+  bool isOffline = false;
   String? objOrigenSolicitudIdVer;
   String? objFrecuenciaIdVer2;
   String? objTipoPersonaIdVer;

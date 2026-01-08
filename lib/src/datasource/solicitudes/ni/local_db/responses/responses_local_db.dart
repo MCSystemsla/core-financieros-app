@@ -141,15 +141,15 @@ class ResponseLocalDb {
   double? prestamoInteres;
   @Property(type: PropertyType.date)
   DateTime? createdAt;
-  bool? isDone;
+  bool isDone = false;
   String? errorMsg;
-  bool? hasVerified;
+  bool hasVerified = false;
   int? montoMinimo;
   int? montoMaximo;
   String? frecuenciaPagoMeses;
   String? departamentoNegocio;
   String? departamentoNegocioVer;
-  bool isOffline;
+  bool isOffline = false;
   String? nombreFormularioKiva;
   ResponseLocalDb({
     required this.id,

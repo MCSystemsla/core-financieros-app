@@ -44,7 +44,10 @@ import 'package:signature/signature.dart';
 
 class EstandarScreen extends StatelessWidget {
   final String typeProduct;
-  const EstandarScreen({super.key, required this.typeProduct});
+  const EstandarScreen({
+    super.key,
+    required this.typeProduct,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +344,8 @@ class _EstandarSignState extends State<EstandarSign> {
                               final localPath =
                                   await KivaFile.saveImageSignature(
                                 controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
                               );
                               if (!context.mounted) return;
                               await saveOfflineResponses(

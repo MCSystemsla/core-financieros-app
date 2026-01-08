@@ -235,6 +235,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 validator: (value) => ClassValidator.validateEmail(value),
                 title: 'Correo Electrónico',
                 icon: const Icon(Icons.person),
+                textInputType: TextInputType.emailAddress,
+                textCapitalization: TextCapitalization.none,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(

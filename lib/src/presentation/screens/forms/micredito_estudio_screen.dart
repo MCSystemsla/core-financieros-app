@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/kiva/kiva_file.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/micredi_estudio_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/micredi_estudio/recurrente_micredi_estudio_db_local.dart';
@@ -337,34 +337,13 @@ class _RecurrentSigntatureState extends State<_RecurrentSigntature> {
                                         .state
                                         .solicitudId,
                                   );
-                              final directory =
-                                  await getApplicationDocumentsDirectory();
-                              final customDir =
-                                  Directory('${directory.path}/MySignatures');
-
-                              // Crea el directorio si no existe
-                              if (!await customDir.exists()) {
-                                await customDir.create(recursive: true);
-                                log('Directorio creado: ${customDir.path}');
-                              }
-
-                              // Define la ruta de la imagen directamente en el directorio
                               final localPath =
-                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+                                  await KivaFile.saveImageSignature(
+                                controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
+                              );
 
-                              // Genera la imagen de la firma
-                              final signatureImage =
-                                  await controller.toPngBytes();
-
-                              if (signatureImage != null) {
-                                // Guarda la imagen directamente en el directorio
-                                final file = File(localPath);
-                                await file.writeAsBytes(signatureImage);
-                                log('Firma guardada en: $localPath');
-                              } else {
-                                log('No se pudo generar la imagen de la firma.');
-                                return;
-                              }
                               if (!context.mounted) return;
 
                               await saveFormAnswers(
@@ -691,34 +670,13 @@ class _SignUserSignatureState extends State<_SignUserSignature> {
                                         .state
                                         .solicitudId,
                                   );
-                              final directory =
-                                  await getApplicationDocumentsDirectory();
-                              final customDir =
-                                  Directory('${directory.path}/MySignatures');
-
-                              // Crea el directorio si no existe
-                              if (!await customDir.exists()) {
-                                await customDir.create(recursive: true);
-                                log('Directorio creado: ${customDir.path}');
-                              }
-
-                              // Define la ruta de la imagen directamente en el directorio
                               final localPath =
-                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+                                  await KivaFile.saveImageSignature(
+                                controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
+                              );
 
-                              // Genera la imagen de la firma
-                              final signatureImage =
-                                  await controller.toPngBytes();
-
-                              if (signatureImage != null) {
-                                // Guarda la imagen directamente en el directorio
-                                final file = File(localPath);
-                                await file.writeAsBytes(signatureImage);
-                                log('Firma guardada en: $localPath');
-                              } else {
-                                log('No se pudo generar la imagen de la firma.');
-                                return;
-                              }
                               if (!context.mounted) return;
 
                               await saveOnLocalDB(

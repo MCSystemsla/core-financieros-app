@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiadores_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
@@ -82,6 +83,9 @@ abstract class AnalisisRepositoryHn {
     required AnalisisSolicitudesInterceptorType tipoSolicitud,
   });
   Future<EvaluadorCnbsResponse> getEvaluadoresGarantia();
+  Future<FiadoresResponse> getFiadoresByNumeroSolicitud({
+    required String tipoFiadorCodigo,
+  });
 }
 
 class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
@@ -487,6 +491,29 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
 
       final data = EvaluadorCnbsResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FiadoresResponse> getFiadoresByNumeroSolicitud({
+    required String tipoFiadorCodigo,
+  }) async {
+    final endpoint = GetFiadoresByNumeroSolicitudHNEndpoint(
+      tipoFiadorCodigo: tipoFiadorCodigo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = FiadoresResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

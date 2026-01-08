@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
@@ -26,6 +27,9 @@ abstract class ComiteRepositoryHN {
   });
   Future<void> crearServicios({
     required ComiteCreateServiceSchema data,
+  });
+  Future<void> crearAprobacion({
+    required ComiteAprobacion data,
   });
 }
 
@@ -98,6 +102,22 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
   @override
   Future<void> crearServicios({required ComiteCreateServiceSchema data}) async {
     final endpoint = ComiteCrearServiciosHNEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> crearAprobacion({required ComiteAprobacion data}) async {
+    final endpoint = ComiteCrearAprobacionEndpoint(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {

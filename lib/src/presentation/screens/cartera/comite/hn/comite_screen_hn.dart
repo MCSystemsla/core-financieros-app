@@ -1,7 +1,9 @@
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
@@ -19,13 +21,22 @@ class ComiteScreenHn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => SolicitudesByEstadoHnCubit(
-        SolicitudesCreditoHnRepositoryImpl(),
-      )..getSolicitudesByEstado(
-          isAsignadaToAsesorCredito: true,
-          estadoCredito: EstadoCredito.enComite,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => SolicitudesByEstadoHnCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+          )..getSolicitudesByEstado(
+              isAsignadaToAsesorCredito: true,
+              estadoCredito: EstadoCredito.enComite,
+            ),
         ),
+        BlocProvider(
+          create: (ctx) => ComiteAprobacionCubit(
+            ComiteRepositoryHNImpl(),
+          ),
+        ),
+      ],
       child: PopScope(
         onPopInvokedWithResult: (pop, result) {
           context.push('/');

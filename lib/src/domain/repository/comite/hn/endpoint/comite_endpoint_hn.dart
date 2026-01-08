@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 
 class ComiteObtenerDataSolicitudEndpointHN extends Endpoint {
@@ -84,6 +85,23 @@ class ComiteCrearServiciosHNEndpoint extends Endpoint {
 
   @override
   String get path => '/cartera/comite/upsert-servicios';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class ComiteCrearAprobacionEndpoint extends Endpoint {
+  final ComiteAprobacion data;
+  ComiteCrearAprobacionEndpoint({required this.data});
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/comite/aprobar';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

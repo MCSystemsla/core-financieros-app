@@ -13,9 +13,8 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
   Future<void> getInternetStatusConnection() async {
     emit(state.copyWith(connectionStatus: ConnectionStatus.checking));
     final isReachable = await _hasValidInternetAccess();
+    await Future.delayed(const Duration(seconds: 3));
     try {
-      await Future.delayed(const Duration(seconds: 3));
-
       if (!isReachable) {
         emit(state.copyWith(
           isConnected: false,
@@ -29,7 +28,6 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
         connectionStatus: ConnectionStatus.connected,
         lastCheck: DateTime.now().toIso8601String(),
       ));
-      return;
     } catch (e) {
       _logger.e('Error al verificar la conexión a Internet: $e');
       emit(state.copyWith(

@@ -1,12 +1,9 @@
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/kiva/kiva_proccess_solicitud/kiva_proccess_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/solicitudes_asesor/solicitudes_asesor_screen.dart';
@@ -28,42 +25,43 @@ class SelectSolicitudScreenNi extends StatelessWidget {
   Widget build(BuildContext context) {
     final localDbProvider = global<ObjectBoxService>();
     final repository = SolicitudCreditoRepositoryImpl();
-    final kivaRepository = ResponsesRepositoryImpl();
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
-    final kivaProvider = context.read<SolicitudesPendientesLocalDbCubit>();
+    // final kivaRepository = ResponsesRepositoryImpl();
+    // final isConnected =
+    // context.read<InternetConnectionCubit>().state.isConnected;
+    // final kivaProvider = context.read<SolicitudesPendientesLocalDbCubit>();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
-            localDbProvider,
-            repository,
-          )..sendSolicitudWhenIsDone(
-              isConnected: isConnected,
-              onSolicitudCreditoIsKivaFn: ({
-                required String solicitudId,
-                required String numeroSolicitud,
-                required String uuid,
-                required String tipoProducto,
-                required String nombreFomularioKiva,
-                required String cedula,
-                required int tipoSolicitudId,
-              }) async {
-                return processSolicitud(
-                  uuid: uuid,
-                  numeroSolicitud: numeroSolicitud,
-                  solicitudId: solicitudId,
-                  tipoProducto: tipoProducto,
-                  tipoSolicitudId: tipoSolicitudId,
-                  nombreFomularioKiva: nombreFomularioKiva,
-                  cedula: cedula,
-                  kivaRepository: kivaRepository,
-                  kivaProvider: kivaProvider,
-                );
-              },
+            create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
+                  localDbProvider,
+                  repository,
+                )
+            // ..sendSolicitudWhenIsDone(
+            //     isConnected: isConnected,
+            //     onSolicitudCreditoIsKivaFn: ({
+            //       required String solicitudId,
+            //       required String numeroSolicitud,
+            //       required String uuid,
+            //       required String tipoProducto,
+            //       required String nombreFomularioKiva,
+            //       required String cedula,
+            //       required int tipoSolicitudId,
+            //     }) async {
+            //       return processSolicitud(
+            //         uuid: uuid,
+            //         numeroSolicitud: numeroSolicitud,
+            //         solicitudId: solicitudId,
+            //         tipoProducto: tipoProducto,
+            //         tipoSolicitudId: tipoSolicitudId,
+            //         nombreFomularioKiva: nombreFomularioKiva,
+            //         cedula: cedula,
+            //         kivaRepository: kivaRepository,
+            //         kivaProvider: kivaProvider,
+            //       );
+            //     },
+            //   ),
             ),
-        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -96,32 +94,32 @@ class SelectSolicitudScreenNi extends StatelessWidget {
               OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                   errorMsg: state.msgError,
                   onPressed: () {
-                    context
-                        .read<EnviarSolicitudWhenIsdoneCubit>()
-                        .sendSolicitudWhenIsDone(
-                          isConnected: isConnected,
-                          onSolicitudCreditoIsKivaFn: ({
-                            required String solicitudId,
-                            required String numeroSolicitud,
-                            required String uuid,
-                            required String tipoProducto,
-                            required String nombreFomularioKiva,
-                            required String cedula,
-                            required int tipoSolicitudId,
-                          }) async {
-                            return await processSolicitud(
-                              uuid: uuid,
-                              numeroSolicitud: numeroSolicitud,
-                              solicitudId: solicitudId,
-                              tipoProducto: tipoProducto,
-                              tipoSolicitudId: tipoSolicitudId,
-                              nombreFomularioKiva: nombreFomularioKiva,
-                              cedula: cedula,
-                              kivaRepository: kivaRepository,
-                              kivaProvider: kivaProvider,
-                            );
-                          },
-                        );
+                    // context
+                    //     .read<EnviarSolicitudWhenIsdoneCubit>()
+                    //     .sendSolicitudWhenIsDone(
+                    //       isConnected: isConnected,
+                    //       onSolicitudCreditoIsKivaFn: ({
+                    //         required String solicitudId,
+                    //         required String numeroSolicitud,
+                    //         required String uuid,
+                    //         required String tipoProducto,
+                    //         required String nombreFomularioKiva,
+                    //         required String cedula,
+                    //         required int tipoSolicitudId,
+                    //       }) async {
+                    //         return await processSolicitud(
+                    //           uuid: uuid,
+                    //           numeroSolicitud: numeroSolicitud,
+                    //           solicitudId: solicitudId,
+                    //           tipoProducto: tipoProducto,
+                    //           tipoSolicitudId: tipoSolicitudId,
+                    //           nombreFomularioKiva: nombreFomularioKiva,
+                    //           cedula: cedula,
+                    //           kivaRepository: kivaRepository,
+                    //           kivaProvider: kivaProvider,
+                    //         );
+                    //       },
+                    //     );
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(

@@ -36,6 +36,7 @@ class AnalisisGarantia {
   final String cedulaPropietario;
   final String? numCreditoAnterior;
   final String? numGarantiaAnterior;
+  final int? fiadorId;
 
   AnalisisGarantia({
     required this.tipoPersonaCodigo,
@@ -45,6 +46,7 @@ class AnalisisGarantia {
     required this.cedulaPropietario,
     this.numCreditoAnterior,
     this.numGarantiaAnterior,
+    this.fiadorId,
   });
 
   Map<String, dynamic> toJson() {
@@ -56,6 +58,7 @@ class AnalisisGarantia {
       'NumCreditoAnterior': numCreditoAnterior,
       'NumGarantiaAnterior': numGarantiaAnterior,
       'ArticuloCodigo': articuloCodigo,
+      'FiadorID': fiadorId,
     };
     data.removeWhere(
         (key, value) => value == null || value == '' || value == 0);

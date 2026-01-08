@@ -70,8 +70,8 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
-                visible: (!isProdMode &&
-                    actions.contains(TypeAction.llenarSolicitudes.codigo)),
+                // visible: (!isProdMode &&
+                //     actions.contains(TypeAction.llenarSolicitudes.codigo)),
                 onTap: () {
                   context.push('/solicitudes');
                 },

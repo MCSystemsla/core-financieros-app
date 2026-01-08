@@ -244,7 +244,7 @@ class EnviarSolicitudWhenIsdoneCubit
 
   SolicitudNuevaMenor _mapToSolicitudNuevaMenor(ResponseLocalDb solicitud) {
     return SolicitudNuevaMenor(
-      isOffline: solicitud.isDone ?? false,
+      isOffline: solicitud.isDone,
       objOrigenSolicitudId: solicitud.objOrigenSolicitudId ?? '',
       nombre1: solicitud.nombre1 ?? '',
       nombre2: solicitud.nombre2 ?? '',
@@ -352,7 +352,7 @@ class EnviarSolicitudWhenIsdoneCubit
   SolicitudReprestamo _mapToSolicitudReprestamo(
       ReprestamoResponsesLocalDb solicitud) {
     return SolicitudReprestamo(
-      isOffline: solicitud.isOffline ?? false,
+      isOffline: solicitud.isOffline,
       sucursal: solicitud.sucursal ?? '',
       ubicacion: solicitud.ubicacion ?? '',
       ubicacionLatitud: solicitud.ubicacionLatitud ?? '',
@@ -414,7 +414,7 @@ class EnviarSolicitudWhenIsdoneCubit
     AsalariadoResponsesLocalDb solicitud,
   ) {
     return SolicitudAsalariado(
-      isOffline: solicitud.isOffline ?? false,
+      isOffline: solicitud.isOffline,
       objOrigenSolicitudId: solicitud.objOrigenSolicitudId ?? '',
       database: solicitud.database ?? '',
       nombre1: solicitud.nombre1 ?? '',

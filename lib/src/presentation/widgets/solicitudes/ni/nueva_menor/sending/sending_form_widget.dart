@@ -32,15 +32,15 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
           // dbProvider.removeSolicitudWhenisUploaded(
           //   solicitudId: widget.solicitudId,
           // );
-          context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
-              );
           context
               .read<SolicitudNuevaMenorCubit>()
               .onFieldChanged(() => state.copyWith(
                     hasVerified: true,
                     isDone: true,
                   ));
+          context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+              );
         }
       },
       builder: (context, state) {

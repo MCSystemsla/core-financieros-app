@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/helpers/historial_credito/hisoria
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/crear_garantia_moda_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
@@ -40,6 +41,9 @@ class CrearGarantiaScreen extends StatelessWidget {
                 ),
                 BlocProvider.value(
                   value: context.read<AnalisisArticuloCubit>(),
+                ),
+                BlocProvider.value(
+                  value: context.read<FiadoresGarantiaCubit>(),
                 ),
               ],
               child: CreateGarantiaModalSheet(

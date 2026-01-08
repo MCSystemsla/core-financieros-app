@@ -48,14 +48,14 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
     return BlocConsumer<SolicitudReprestamoCubit, SolicitudReprestamoState>(
       listener: (context, state) {
         if (state.status == Status.done) {
-          context.read<SolicitudReprestamoCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
-              );
           context.read<SolicitudReprestamoCubit>().onFieldChanged(
                 () => state.copyWith(
                   hasVerified: true,
                   isDone: true,
                 ),
+              );
+          context.read<SolicitudReprestamoCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
               );
           // dbProvider.removeSolicitudReprestamoWhenisUploaded(
           //   solicitudId: widget.solicitudId,

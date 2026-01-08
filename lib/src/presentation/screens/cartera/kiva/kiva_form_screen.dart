@@ -6,20 +6,23 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes/solicitudes_pendientes_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/skeleton_loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/kiva_search_delegate.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_formulario_kiva/tipo_formulario_kiva_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../datasource/local_db/solicitudes_pendientes.dart';
 import '../../../bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -142,6 +145,11 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.solicitudesPendienteResponse.isEmpty) {
+      return const EmptyListWidget(
+        message: 'No hay solicitudes KIVA pendientes',
+      );
+    }
     return RefreshIndicator(
       onRefresh: () async {
         context.read<SolicitudesPendientesCubit>().getSolicitudesPendientes();
@@ -259,7 +267,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
     return ListTile(
       title: Text(
           '${widget.solicitud.numero} - ${widget.solicitud.nombre.capitalizeAll}'),
-      onTap: () async {
+      onTap: () {
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               nombreFormularioKiva: widget.solicitud.nombreFormulario,
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -272,6 +280,25 @@ class _RequestWidgetState extends State<_RequestWidget> {
               motivoAnterior: widget.solicitud.motivoAnterior ??
                   'Motivo Anterior no registrado',
             );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => KivaInterceptor(
+              currentRoute: widget.solicitud.producto,
+              solicitudId: widget.solicitud.id,
+              nombre: widget.solicitud.nombre,
+              tipoSolicitud: widget.solicitud.tipoSolicitud,
+              numero: widget.solicitud.numero,
+              cedula: widget.solicitud.cedula ?? '',
+              nombreFormularioKiva:
+                  widget.solicitud.nombreFormulario.toFormularioKival()!,
+              solicitudCreditoId: widget.solicitud.id,
+              motivoAnterior: widget.solicitud.motivoAnterior ?? '',
+              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+            ),
+          ),
+        );
         if (isMatching) {
           Navigator.push(
             context,
@@ -283,12 +310,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
               ),
             ),
           );
-          // context.push('/online/form/offline-confirmation',
-          //     extra: widget.solicitud.id);
           return;
         }
-
-        context.push('/online', extra: widget.solicitud.nombreFormulario);
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),
@@ -297,7 +320,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${NumberFormat('#,##0.00', 'en_US').format(widget.solicitud.monto)} ${widget.solicitud.moneda}',
+            '${widget.solicitud.monto.toString().toCurrencyString()} ${widget.solicitud.moneda}',
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
