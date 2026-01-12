@@ -22,6 +22,7 @@ class CreateSupervisionCredito {
   final int monto;
   final int plazo;
   final String productoCodigo;
+  final String tipoSolicitud;
 
   CreateSupervisionCredito({
     required this.numeroSolicitud,
@@ -40,6 +41,7 @@ class CreateSupervisionCredito {
     required this.monto,
     required this.plazo,
     required this.productoCodigo,
+    required this.tipoSolicitud,
   });
 
   Map<String, dynamic> toJson() => {
@@ -60,5 +62,6 @@ class CreateSupervisionCredito {
         'Monto': monto,
         'Plazo': plazo,
         'ProductoCodigo': productoCodigo,
+        'TipoSolicitud': tipoSolicitud,
       };
 }

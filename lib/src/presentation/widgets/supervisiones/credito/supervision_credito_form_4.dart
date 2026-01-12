@@ -1,11 +1,13 @@
+import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_credito/supervision_credito_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_supervisor/tipo_supervisor_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SupervisionCreditoForm4 extends StatelessWidget {
+class SupervisionCreditoForm4 extends StatefulWidget {
   const SupervisionCreditoForm4({
     super.key,
     required this.pagecontroller,
@@ -14,7 +16,17 @@ class SupervisionCreditoForm4 extends StatelessWidget {
   final PageController pagecontroller;
 
   @override
+  State<SupervisionCreditoForm4> createState() =>
+      _SupervisionCreditoForm4State();
+}
+
+class _SupervisionCreditoForm4State extends State<SupervisionCreditoForm4>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SupervisionCreditoCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -46,7 +58,16 @@ class SupervisionCreditoForm4 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Controles de Riesgo',
               isRequired: true,
-              onChanged: (v) {},
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    buroCreditoBueno: v.value == SupervisionItem1.bueno,
+                    buroCreditoRegular: v.value == SupervisionItem1.regular,
+                    buroCreditoMalas: v.value == SupervisionItem1.malo,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -71,7 +92,7 @@ class SupervisionCreditoForm4 extends StatelessWidget {
                 children: [
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.nextPage(
+                      widget.pagecontroller.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -82,7 +103,7 @@ class SupervisionCreditoForm4 extends StatelessWidget {
                   const Gap(10),
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.previousPage(
+                      widget.pagecontroller.previousPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -99,4 +120,7 @@ class SupervisionCreditoForm4 extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

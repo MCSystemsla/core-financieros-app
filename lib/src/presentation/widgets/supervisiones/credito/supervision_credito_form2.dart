@@ -1,22 +1,36 @@
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
+import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_credito/supervision_credito_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_supervisor/tipo_supervisor_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SupervisionCreditoForm2 extends StatelessWidget {
+class SupervisionCreditoForm2 extends StatefulWidget {
+  final PageController pagecontroller;
+  final SupervisionData data;
+
   const SupervisionCreditoForm2({
     super.key,
     required this.pagecontroller,
+    required this.data,
   });
 
-  final PageController pagecontroller;
+  @override
+  State<SupervisionCreditoForm2> createState() =>
+      _SupervisionCreditoForm2State();
+}
 
+class _SupervisionCreditoForm2State extends State<SupervisionCreditoForm2>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SupervisionCreditoCubit>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -47,20 +61,18 @@ class SupervisionCreditoForm2 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: widget.data.tiempoActividad.toString(),
               readOnly: true,
               title: 'Tiempo en la actividad',
               icon: const Icon(Icons.food_bank),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
+              onChange: (value) {},
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: widget.data.tipoVivienda,
               readOnly: true,
               title: 'Tipo de vivienda',
               icon: const Icon(Icons.food_bank),
@@ -76,7 +88,16 @@ class SupervisionCreditoForm2 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Referencias en la comunidad',
               isRequired: false,
-              onChanged: (v) {},
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    referenciaComunidadBuena:
+                        v.value == SupervisionItem4.buenas,
+                    referenciaComunidadMala: v.value == SupervisionItem4.malas,
+                  ),
+                );
+              },
               hintText: 'seleccione una opcion',
               enabled: true,
               items: const [
@@ -97,7 +118,7 @@ class SupervisionCreditoForm2 extends StatelessWidget {
                 children: [
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.nextPage(
+                      widget.pagecontroller.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -108,7 +129,7 @@ class SupervisionCreditoForm2 extends StatelessWidget {
                   const Gap(10),
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.previousPage(
+                      widget.pagecontroller.previousPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -125,4 +146,7 @@ class SupervisionCreditoForm2 extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

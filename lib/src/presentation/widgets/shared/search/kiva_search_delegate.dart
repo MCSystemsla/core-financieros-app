@@ -2,9 +2,11 @@ import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pe
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_form_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_formulario_kiva/tipo_formulario_kiva_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -156,9 +158,23 @@ class _RequestKivaWidgetState extends State<_RequestKivaWidget> {
           return;
         }
 
-        context.pushReplacement(
-          '/online',
-          extra: widget.solicitud.nombreFormulario,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => KivaInterceptor(
+              currentRoute: widget.solicitud.producto,
+              solicitudId: widget.solicitud.id,
+              nombre: widget.solicitud.nombre,
+              tipoSolicitud: widget.solicitud.tipoSolicitud,
+              numero: widget.solicitud.numero,
+              cedula: widget.solicitud.cedula ?? '',
+              nombreFormularioKiva:
+                  widget.solicitud.nombreFormulario.toFormularioKival()!,
+              solicitudCreditoId: widget.solicitud.id,
+              motivoAnterior: widget.solicitud.motivoAnterior ?? '',
+              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+            ),
+          ),
         );
       },
       subtitle: Text(

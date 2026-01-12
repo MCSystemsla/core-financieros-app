@@ -208,7 +208,13 @@ class SupervisionsHnIncerptorHn extends StatelessWidget {
           razonEndeudamiento: razonEndeudamiento,
           tipoSolicitud: tipoSolicitud,
         ),
-      TipoSupervisorEnum.credito => const SupervisionesFormCreditoHnScreen(),
+      TipoSupervisorEnum.credito => SupervisionesFormCreditoHnScreen(
+          data: data,
+          nombreCoordinador: nombreCoordinador,
+          cuota: cuota,
+          razonEndeudamiento: razonEndeudamiento,
+          tipoSolicitud: tipoSolicitud,
+        ),
       _ => const SizedBox.shrink(),
     };
   }

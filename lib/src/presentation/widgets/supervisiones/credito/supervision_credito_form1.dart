@@ -1,16 +1,19 @@
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class SupervisionCreditoForm1 extends StatelessWidget {
+  final PageController pagecontroller;
+  final SupervisionData data;
+
   const SupervisionCreditoForm1({
     super.key,
     required this.pagecontroller,
+    required this.data,
   });
-
-  final PageController pagecontroller;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.nombreCliente,
               readOnly: true,
               title: 'Cliente',
               icon: const Icon(Icons.food_bank),
@@ -58,6 +62,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.cedulaCliente,
               readOnly: true,
               title: 'Numero de Cedula',
               icon: const Icon(Icons.food_bank),
@@ -72,6 +77,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.direccionCasa,
               readOnly: true,
               title: 'Direccion del Domicilio',
               icon: const Icon(Icons.food_bank),
@@ -86,6 +92,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.direccionNegocio,
               readOnly: true,
               title: 'Direccion del negocio',
               icon: const Icon(Icons.food_bank),
@@ -100,6 +107,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.sectorComercialNombre,
               readOnly: true,
               title: 'Actividad economica',
               icon: const Icon(Icons.food_bank),
@@ -114,6 +122,7 @@ class SupervisionCreditoForm1 extends StatelessWidget {
             ),
             const Gap(10),
             OutlineTextfieldWidget(
+              initialValue: data.destino,
               readOnly: true,
               title: 'Destino del credito',
               icon: const Icon(Icons.food_bank),

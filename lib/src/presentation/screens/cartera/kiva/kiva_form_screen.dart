@@ -281,6 +281,19 @@ class _RequestWidgetState extends State<_RequestWidget> {
                   'Motivo Anterior no registrado',
             );
 
+        if (isMatching) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ConfirmationOfflineResponsesScreen(
+                typeProduct: widget.solicitud.nombreFormulario,
+                solicitudId: widget.solicitud.id,
+                nombre: widget.solicitud.nombre,
+              ),
+            ),
+          );
+          return;
+        }
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -299,19 +312,6 @@ class _RequestWidgetState extends State<_RequestWidget> {
             ),
           ),
         );
-        if (isMatching) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ConfirmationOfflineResponsesScreen(
-                typeProduct: widget.solicitud.nombreFormulario,
-                solicitudId: widget.solicitud.id,
-                nombre: widget.solicitud.nombre,
-              ),
-            ),
-          );
-          return;
-        }
       },
       subtitle: Text(
         widget.solicitud.fecha.formatDateV2(),

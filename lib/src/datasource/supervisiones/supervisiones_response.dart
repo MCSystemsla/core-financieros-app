@@ -50,6 +50,10 @@ class SupervisionData {
   final String producto;
   final int plazoSolicitud;
   final String frecuenciaPago;
+  final String tipoGarantiaNombre;
+  final int planInversionMonto;
+  final int tiempoActividad;
+  final String tipoVivienda;
   SupervisionData({
     required this.tipoSolicitud,
     required this.sucursalSiglas,
@@ -71,6 +75,10 @@ class SupervisionData {
     required this.producto,
     required this.plazoSolicitud,
     required this.frecuenciaPago,
+    this.tipoGarantiaNombre = 'N/A',
+    this.planInversionMonto = 0,
+    this.tiempoActividad = 0,
+    required this.tipoVivienda,
   });
 
   factory SupervisionData.fromJson(Map<String, dynamic> json) =>
@@ -95,6 +103,10 @@ class SupervisionData {
         producto: json['Producto'],
         plazoSolicitud: json['PlazoSolicitud'],
         frecuenciaPago: json['FrecuenciaValor'],
+        tipoGarantiaNombre: (json['TipoGarantiaNombre'] ?? '').toString(),
+        planInversionMonto: json['PlanInversionMonto'],
+        tiempoActividad: (json['TiempoActividad'] ?? ''),
+        tipoVivienda: json['TipoVivienda'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -118,5 +130,9 @@ class SupervisionData {
         'Producto': producto,
         'PlazoSolicitud': plazoSolicitud,
         'FrecuenciaValor': frecuenciaPago,
+        'TipoGarantiaNombre': tipoGarantiaNombre,
+        'PlanInversionMonto': planInversionMonto,
+        'TiempoActividad': tiempoActividad,
+        'TipoVivienda': tipoVivienda,
       };
 }

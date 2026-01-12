@@ -2,6 +2,7 @@
 part of 'supervision_credito_cubit.dart';
 
 class SupervisionCreditoState extends Equatable {
+  final String tipoSolicitud;
   final String errorMsg;
   final Status status;
   final int numeroSolicitud;
@@ -39,10 +40,14 @@ class SupervisionCreditoState extends Equatable {
     this.monto = 0,
     this.plazo = 0,
     this.productoCodigo = '',
+    this.tipoSolicitud = '',
   });
 
   @override
   List<Object> get props => [
+        tipoSolicitud,
+        status,
+        errorMsg,
         numeroSolicitud,
         razonCuota,
         endeudamientoFuturo,
@@ -62,6 +67,7 @@ class SupervisionCreditoState extends Equatable {
       ];
 
   SupervisionCreditoState copyWith({
+    String? tipoSolicitud,
     String? errorMsg,
     Status? status,
     int? numeroSolicitud,
@@ -82,6 +88,7 @@ class SupervisionCreditoState extends Equatable {
     String? productoCodigo,
   }) {
     return SupervisionCreditoState(
+      tipoSolicitud: tipoSolicitud ?? this.tipoSolicitud,
       errorMsg: errorMsg ?? this.errorMsg,
       status: status ?? this.status,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,

@@ -1,11 +1,14 @@
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_credito/supervision_credito_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_supervisor/tipo_supervisor_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SupervisionCreditoForm5 extends StatelessWidget {
+class SupervisionCreditoForm5 extends StatefulWidget {
   const SupervisionCreditoForm5({
     super.key,
     required this.pagecontroller,
@@ -14,7 +17,17 @@ class SupervisionCreditoForm5 extends StatelessWidget {
   final PageController pagecontroller;
 
   @override
+  State<SupervisionCreditoForm5> createState() =>
+      _SupervisionCreditoForm5State();
+}
+
+class _SupervisionCreditoForm5State extends State<SupervisionCreditoForm5>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SupervisionCreditoCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -46,7 +59,16 @@ class SupervisionCreditoForm5 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Cumple razon cuota',
               isRequired: true,
-              onChanged: (v) {},
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value.toString()),
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    razonCuota: v.value == SupervisionItem3.si,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -63,7 +85,16 @@ class SupervisionCreditoForm5 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Cumple con razon endeudamiento futuro',
               isRequired: true,
-              onChanged: (v) {},
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value.toString()),
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    razonCuota: v.value == SupervisionItem3.si,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -78,9 +109,18 @@ class SupervisionCreditoForm5 extends StatelessWidget {
               ],
             ),
             SheetSearchDropdown(
-              title: 'Matriculas y/o licencias y/o fierros vigentes',
+              title: 'Tiene Matriculas y/o licencias y/o fierros vigentes',
               isRequired: true,
-              onChanged: (v) {},
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value.toString()),
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    documentos: v.value == SupervisionItem3.si,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -97,7 +137,16 @@ class SupervisionCreditoForm5 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Cuenta con ingresos fuera del negocio',
               isRequired: true,
-              onChanged: (v) {},
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value.toString()),
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    ingresosFueraNegocio: v.value == SupervisionItem3.si,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -114,7 +163,16 @@ class SupervisionCreditoForm5 extends StatelessWidget {
             SheetSearchDropdown(
               title: 'Dictamen legal',
               isRequired: true,
-              onChanged: (v) {},
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value.toString()),
+              onChanged: (v) {
+                if (v == null) return;
+                cubit.onFieldChanged(
+                  () => cubit.state.copyWith(
+                    garantiaDictamenLegal: v.value == SupervisionItem3.si,
+                  ),
+                );
+              },
               hintText: 'selecciona una opcion',
               enabled: true,
               items: const [
@@ -135,7 +193,7 @@ class SupervisionCreditoForm5 extends StatelessWidget {
                 children: [
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.nextPage(
+                      widget.pagecontroller.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -146,7 +204,7 @@ class SupervisionCreditoForm5 extends StatelessWidget {
                   const Gap(10),
                   CustomElevatedButton(
                     onPressed: () {
-                      pagecontroller.previousPage(
+                      widget.pagecontroller.previousPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
@@ -163,4 +221,7 @@ class SupervisionCreditoForm5 extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

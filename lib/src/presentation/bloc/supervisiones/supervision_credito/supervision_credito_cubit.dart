@@ -17,6 +17,7 @@ class SupervisionCreditoCubit extends Cubit<SupervisionCreditoState> {
     try {
       await _repository.createSupervisionCredito(
         createSupervisionCredito: CreateSupervisionCredito(
+          tipoSolicitud: state.tipoSolicitud,
           numeroSolicitud: state.numeroSolicitud,
           razonCuota: state.razonCuota,
           endeudamientoFuturo: state.endeudamientoFuturo,
@@ -47,5 +48,19 @@ class SupervisionCreditoCubit extends Cubit<SupervisionCreditoState> {
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  void onFieldChanged(SupervisionCreditoState Function() copyWithFn) {
+    emit(copyWithFn());
+  }
+
+  void setSolicitudSolicitudCreditoInfor({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) {
+    emit(state.copyWith(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    ));
   }
 }
