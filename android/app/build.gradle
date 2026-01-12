@@ -52,7 +52,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
         // ndk { 
@@ -110,7 +110,7 @@ android {
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.ni"
             signingConfig signingConfigs.release
-            versionName "1.2.2"
+            versionName "1.3.3"
             versionCode flutterVersionCode.toInteger() + 1
         }
         micreditoHonduras {
@@ -120,7 +120,7 @@ android {
             applicationId "com.mcsystem.core_financiero_app.hn"
             signingConfig signingConfigs.debug
             versionName "0.0.85"
-            versionCode flutterVersionCode.toInteger() + 1
+            versionCode 4
         }
         micreditoCostaRica {
             dimension "country"

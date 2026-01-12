@@ -70,8 +70,8 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
-                // visible: (!isProdMode &&
-                //     actions.contains(TypeAction.llenarSolicitudes.codigo)),
+                visible:
+                    (actions.contains(TypeAction.llenarSolicitudes.codigo)),
                 onTap: () {
                   context.push('/solicitudes');
                 },
@@ -166,6 +166,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
+                visible: (!isProdMode),
                 onTap: () {
                   Navigator.push(
                     context,
