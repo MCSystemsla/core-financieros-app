@@ -152,15 +152,17 @@ class _MujerEmprendeEntornoSocialWidgetState
                     ),
                   ),
                   CommentaryWidget(
-                    title: 'Cantdad de hijos:',
+                    title: 'Cantidad de hijos:',
                     readOnly: true,
                     initialValue: cantidadHijos.toString(),
                   ),
                   if (cantidadHijos > 0) ...[
+                    const Gap(20),
                     CommentaryWidget(
                       title: '¿Que edades tienen sus hijos?',
                       textEditingController: question2,
                     ),
+                    const Gap(20),
                     WhiteCard(
                       padding: const EdgeInsets.all(5),
                       child: JLuxDropdown(
