@@ -82,7 +82,7 @@ class ObjectBoxService {
         log('⚠️ Error de modelo detectado. Borrando base de datos local...');
 
         final dir = await getApplicationDocumentsDirectory();
-        final dbDir = Directory('${dir.path}/database');
+        final dbDir = Directory('${dir.path}/solicitudes_db');
 
         if (await dbDir.exists()) {
           await dbDir.delete(recursive: true);

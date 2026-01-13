@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
@@ -36,9 +37,9 @@ class SolicitudesPendientesLocalDbCubit
       : super(SolicitudesPendientesLocalDbInitial());
   final _logger = Logger();
   Future<void> initDB() async {
+    final dir = await getApplicationDocumentsDirectory();
     try {
       // Obtén el directorio para almacenar la base de datos
-      final dir = await getApplicationDocumentsDirectory();
 
       // Intenta abrir la base de datos Isar
       final isar = await Isar.open(
@@ -67,16 +68,27 @@ class SolicitudesPendientesLocalDbCubit
         directory: dir.path,
       );
 
-      emit(state.copyWith(isar: isar));
       _logger.i('La base de datos Isar está activa.');
+      emit(state.copyWith(isar: isar));
     } catch (e) {
-      _logger.e('Error al inicializar la base de datos Isar: $e');
+      _logger.e('Error Isar: $e');
+
+      final isSchemaError = e.toString().contains('SchemaError') ||
+          e.toString().contains('Incompatible');
+
+      if (!isSchemaError) return;
+
+      final isarFile = File('${dir.path}/default.isar');
+      if (await isarFile.exists()) {
+        await isarFile.delete();
+      }
+
       await ErrorReporter.registerError(
         errorMessage: 'Error Inesperado BD Local: $e',
         statusCode: '400',
         username: LocalStorage().currentUserName,
       );
-      throw Exception('Error Inesperado BD Local: $e');
+      return initDB();
     }
   }
 
