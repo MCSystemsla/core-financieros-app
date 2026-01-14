@@ -465,6 +465,22 @@ class _CreateCreditoContainerFormState
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
+                        if (cuota > monto) {
+                          CustomAlertDialog(
+                            context: context,
+                            title: 'Cuota no puede ser mayor al monto',
+                            onDone: () => context.pop(),
+                          ).showDialog(context);
+                          return;
+                        }
+                        if (saldo > monto) {
+                          CustomAlertDialog(
+                            context: context,
+                            title: 'Saldo no puede ser mayor al monto',
+                            onDone: () => context.pop(),
+                          ).showDialog(context);
+                          return;
+                        }
                         if (widget.isUpdate) {
                           widget.cubit.updateHistorialCredito(
                             updated: HistorialCredito(
